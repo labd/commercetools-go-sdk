@@ -1,0 +1,9 @@
+vendor/
+coverage.txt
+run.sh
+
+# Temporary files
+commercetools-go-sdk
+NOTES.txt
+/main.go
+/api.go
