@@ -1,6 +1,10 @@
 package extension
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/mitchellh/mapstructure"
+)
 
 type SubscriptionDeleteInput struct {
 	ID      string
@@ -13,6 +17,8 @@ func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	result.Destination = convertSubscriptionDestination(result.Destination)
 	return &result, nil
 }
 
@@ -27,4 +33,23 @@ func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription,
 
 func (svc *Service) SubscriptionDelete(input *SubscriptionDeleteInput) (*Subscription, error) {
 	return nil, nil
+}
+
+func convertSubscriptionDestination(input SubscriptionDestination) SubscriptionDestination {
+	DestinationType := input.(map[string]interface{})["type"]
+	switch DestinationType {
+	case "IronMQ":
+		new := SubscriptionIronMQDestination{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "SNS":
+		new := SubscriptionAWSSNSDestination{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "SQS":
+		new := SubscriptionAWSSQSDestination{}
+		mapstructure.Decode(input, &new)
+		return new
+	}
+	return nil
 }

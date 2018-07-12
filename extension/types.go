@@ -1,6 +1,8 @@
 package extension
 
-import "time"
+import (
+	"time"
+)
 
 type MessageSubscription struct {
 	ResourceTypeID string   `json:"resourceTypeId"`
@@ -24,6 +26,11 @@ type SubscriptionAWSSNSDestination struct {
 	TopicArn     string `json:"topicArn"`
 	AccessKey    string `json:"accessKey"`
 	AccessSecret string `json:"accessSecret"`
+}
+
+type SubscriptionIronMQDestination struct {
+	Type string `json:"type"`
+	URI  string `json:"uri"`
 }
 
 type SubscriptionDestination interface {
