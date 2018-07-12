@@ -1,6 +1,10 @@
 vendor/
-coverage.txt
 run.sh
+/.vscode/
+
+# Test files
+coverage.txt
+debug.test
 
 # Temporary files
 commercetools-go-sdk
