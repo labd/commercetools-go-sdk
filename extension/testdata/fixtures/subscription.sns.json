@@ -1,0 +1,21 @@
+{
+    "id": "8062243c-46fc-40b5-88a4-75e2216aef75",
+    "version": 1,
+    "destination": {
+        "type": "SNS",
+        "topicArn": "arn:aws:sns:eu-central-1:123456789012345678:example:1",
+        "accessKey": "AKIAIOSFODNN7EXAMPLE",
+        "accessSecret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "messages": [
+        {
+            "resourceTypeId": "product",
+            "types": []
+        }
+    ],
+    "changes": [],
+    "createdAt": "2017-01-25T14:14:22.417Z",
+    "key": "test-queue",
+    "lastModifiedAt": "2017-01-25T14:14:22.417Z",
+    "lastMessageSequenceNumber": 0
+}

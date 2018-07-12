@@ -1,18 +1,14 @@
 package catalog_test
 
 import (
-	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/labd/commercetools-go-sdk/catalog"
 	"github.com/labd/commercetools-go-sdk/common"
-	"github.com/labd/commercetools-go-sdk/credentials"
+	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
 func fixture(path string) string {
@@ -23,31 +19,10 @@ func fixture(path string) string {
 	return string(b)
 }
 
-func TestCreateProduct(t *testing.T) {
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, fixture("product.example.json"))
+func TestCreateProductNew(t *testing.T) {
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil)
+	defer server.Close()
 
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Fatal(err)
-		}
-		var result map[string]interface{}
-		json.Unmarshal(body, &result)
-	}
-
-	ts := httptest.NewServer(http.HandlerFunc(handler))
-	defer ts.Close()
-
-	client, err := common.NewClient(&common.Config{
-		ProjectKey:   "unittest",
-		Region:       ts.URL,
-		AuthProvider: credentials.NewDummyCredentialsProvider("Bearer unittest"),
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
 	svc := catalog.New(client)
 
 	draft := &catalog.ProductDraft{
@@ -67,27 +42,14 @@ func TestCreateProduct(t *testing.T) {
 	}
 	product, err := svc.ProductCreate(draft)
 
+	assert.Equal(t, nil, err)
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", product.MasterData.Current.Description["en"])
 }
 
 func TestGetProductByID(t *testing.T) {
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, fixture("product.example.json"))
-	}
-	ts := httptest.NewServer(http.HandlerFunc(handler))
-	defer ts.Close()
-
-	client, err := common.NewClient(&common.Config{
-		ProjectKey:   "unittest",
-		Region:       ts.URL,
-		AuthProvider: credentials.NewDummyCredentialsProvider("Bearer unittest"),
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil)
+	defer server.Close()
 	svc := catalog.New(client)
 
 	product, err := svc.ProductGetByID(100)
@@ -101,30 +63,8 @@ func TestGetProductByID(t *testing.T) {
 }
 
 func TestProductUpdate(t *testing.T) {
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, fixture("product.example.json"))
-
-		body, err := ioutil.ReadAll(r.Body)
-		if err != nil {
-			t.Fatal(err)
-		}
-		var result map[string]interface{}
-		json.Unmarshal(body, &result)
-	}
-
-	ts := httptest.NewServer(http.HandlerFunc(handler))
-	defer ts.Close()
-
-	client, err := common.NewClient(&common.Config{
-		ProjectKey:   "unittest",
-		Region:       ts.URL,
-		AuthProvider: credentials.NewDummyCredentialsProvider("Bearer unittest"),
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil)
+	defer server.Close()
 	svc := catalog.New(client)
 
 	product, err := svc.ProductUpdate(&catalog.ProductUpdateInput{
@@ -136,6 +76,7 @@ func TestProductUpdate(t *testing.T) {
 		Actions: common.UpdateActions{
 			catalog.ProductAddPrice{
 				VariantID: 1,
+				Price:     1000,
 			},
 		},
 	})
