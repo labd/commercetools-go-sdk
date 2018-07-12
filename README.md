@@ -1,5 +1,6 @@
 # commercetools-go-sdk
 
+Note: This is currently **NOT** ready for production usage
 
 ## Using the SDK
 
