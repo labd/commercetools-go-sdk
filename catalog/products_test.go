@@ -41,7 +41,6 @@ func TestCreateProductNew(t *testing.T) {
 		},
 	}
 	product, err := svc.ProductCreate(draft)
-
 	assert.Equal(t, nil, err)
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", product.MasterData.Current.Description["en"])
@@ -87,4 +86,38 @@ func TestProductUpdate(t *testing.T) {
 
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", product.MasterData.Current.Description["en"])
+}
+
+func TestProductDeleteByID(t *testing.T) {
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	defer server.Close()
+	svc := catalog.New(client)
+
+	product, err := svc.ProductDeleteByID(&catalog.ProductDeleteInput{
+		ID:      "foobar",
+		Version: 2,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := createExampleProduct()
+	assert.Equal(t, expected, product)
+}
+
+func TestProductDeleteByKey(t *testing.T) {
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	defer server.Close()
+	svc := catalog.New(client)
+
+	product, err := svc.ProductDeleteByKey(&catalog.ProductDeleteInput{
+		Key:     "foobar",
+		Version: 2,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := createExampleProduct()
+	assert.Equal(t, expected, product)
 }
