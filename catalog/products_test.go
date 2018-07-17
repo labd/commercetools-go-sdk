@@ -20,7 +20,7 @@ func fixture(path string) string {
 }
 
 func TestCreateProductNew(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil)
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
 	svc := catalog.New(client)
@@ -48,7 +48,7 @@ func TestCreateProductNew(t *testing.T) {
 }
 
 func TestGetProductByID(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil)
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
 	defer server.Close()
 	svc := catalog.New(client)
 
@@ -63,7 +63,7 @@ func TestGetProductByID(t *testing.T) {
 }
 
 func TestProductUpdate(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil)
+	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
 	defer server.Close()
 	svc := catalog.New(client)
 

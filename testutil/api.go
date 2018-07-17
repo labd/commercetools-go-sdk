@@ -12,7 +12,7 @@ import (
 	"github.com/labd/commercetools-go-sdk/credentials"
 )
 
-func MockClient(t *testing.T, fixture string, callback func([]byte)) (*common.Client, *httptest.Server) {
+func MockClient(t *testing.T, fixture string, output *map[string]interface{}, callback func([]byte)) (*common.Client, *httptest.Server) {
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -22,8 +22,7 @@ func MockClient(t *testing.T, fixture string, callback func([]byte)) (*common.Cl
 		if err != nil {
 			t.Fatal(err)
 		}
-		var result map[string]interface{}
-		json.Unmarshal(body, &result)
+		json.Unmarshal(body, &output)
 	}
 
 	ts := httptest.NewServer(http.HandlerFunc(handler))

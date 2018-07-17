@@ -20,7 +20,7 @@ func fixture(path string) string {
 }
 
 func TestSubscriptionCreate(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil)
+	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
 	svc := extension.New(client)
 
@@ -45,7 +45,7 @@ func TestSubscriptionCreate(t *testing.T) {
 }
 
 func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.ironmq.json"), nil)
+	client, server := testutil.MockClient(t, fixture("subscription.ironmq.json"), nil, nil)
 	defer server.Close()
 
 	svc := extension.New(client)
@@ -58,7 +58,7 @@ func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 }
 
 func TestSubscriptionGetDestinationSNS(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil)
+	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
 
 	svc := extension.New(client)
