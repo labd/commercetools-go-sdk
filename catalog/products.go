@@ -80,7 +80,7 @@ func (svc *Service) ProductGetByKey(key string) (*Product, error) {
 func (svc *Service) ProductUpdate(input *ProductUpdateInput) (*Product, error) {
 	var result Product
 
-	endpoint := fmt.Sprintf("/products/%s", input.ID)
+	endpoint := fmt.Sprintf("products/%s", input.ID)
 	params := input.PriceSelection.GetQueryParameters()
 
 	err := svc.client.Update(endpoint, params, input.Version, input.Actions, &result)
@@ -95,7 +95,7 @@ func (svc *Service) ProductDeleteByID(input *ProductDeleteInput) (*Product, erro
 		return nil, errors.New("Missing required field ID")
 	}
 	var result Product
-	endpoint := fmt.Sprintf("/products/%s", input.ID)
+	endpoint := fmt.Sprintf("products/%s", input.ID)
 	params := input.GetQueryParameters()
 	err := svc.client.Delete(endpoint, params, &result)
 
@@ -110,7 +110,7 @@ func (svc *Service) ProductDeleteByKey(input *ProductDeleteInput) (*Product, err
 		return nil, errors.New("Missing required field Key")
 	}
 	var result Product
-	endpoint := fmt.Sprintf("/products/key=%s", input.Key)
+	endpoint := fmt.Sprintf("products/key=%s", input.Key)
 	params := input.GetQueryParameters()
 	err := svc.client.Delete(endpoint, params, &result)
 
