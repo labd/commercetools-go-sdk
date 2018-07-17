@@ -1,7 +1,10 @@
 package extension
 
 import (
+	"encoding/json"
 	"time"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 type MessageSubscription struct {
@@ -45,6 +48,34 @@ type Subscription struct {
 	Changes        []ChangeSubscription    `json:"changes"`
 	CreatedAt      time.Time               `json:"createdAt"`
 	LastModifiedAt time.Time               `json:"lastModifiedAt"`
+}
+
+func (s *Subscription) UnmarshalJSON(data []byte) error {
+	type SubscriptionClone Subscription
+	if err := json.Unmarshal(data, (*SubscriptionClone)(s)); err != nil {
+		return err
+	}
+	s.Destination = convertSubscriptionDestination(s.Destination)
+	return nil
+}
+
+func convertSubscriptionDestination(input SubscriptionDestination) SubscriptionDestination {
+	DestinationType := input.(map[string]interface{})["type"]
+	switch DestinationType {
+	case "IronMQ":
+		new := SubscriptionIronMQDestination{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "SNS":
+		new := SubscriptionAWSSNSDestination{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "SQS":
+		new := SubscriptionAWSSQSDestination{}
+		mapstructure.Decode(input, &new)
+		return new
+	}
+	return nil
 }
 
 type SubscriptionDraft struct {

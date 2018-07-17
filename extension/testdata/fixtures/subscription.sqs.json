@@ -1,0 +1,22 @@
+{
+    "id": "8062243c-46fc-40b5-88a4-75e2216aef75",
+    "version": 1,
+    "destination": {
+        "type": "SQS",
+        "uri": "https://queue-uri",
+        "queueUrl": "https://queue.amazonaws.com/80398EXAMPLE/MyQueue",
+        "accessKey": "AKIAIOSFODNN7EXAMPLE",
+        "accessSecret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    },
+    "messages": [
+        {
+            "resourceTypeId": "product",
+            "types": []
+        }
+    ],
+    "changes": [],
+    "createdAt": "2017-01-25T14:14:22.417Z",
+    "key": "test-queue",
+    "lastModifiedAt": "2017-01-25T14:14:22.417Z",
+    "lastMessageSequenceNumber": 0
+}
