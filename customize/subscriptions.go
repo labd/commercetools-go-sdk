@@ -1,11 +1,25 @@
-package extension
+package customize
 
 import (
 	"encoding/json"
+	"fmt"
+	"net/url"
 	"time"
 
+	"github.com/labd/commercetools-go-sdk/common"
 	"github.com/mitchellh/mapstructure"
 )
+
+type SubscriptionDeleteInput struct {
+	ID      string
+	Version int
+}
+
+type SubscriptionUpdateInput struct {
+	ID      string
+	Version int
+	Actions common.UpdateActions
+}
 
 type MessageSubscription struct {
 	ResourceTypeID string   `json:"resourceTypeId"`
@@ -59,6 +73,68 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+type SubscriptionDraft struct {
+	Key         string                  `json:"key"`
+	Destination SubscriptionDestination `json:"destination"`
+	Messages    []MessageSubscription   `json:"messages"`
+	Changes     []ChangeSubscription    `json:"changes"`
+}
+
+func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
+	var result Subscription
+	err := svc.client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription, error) {
+	var result Subscription
+	err := svc.client.Create("subscriptions", nil, draft, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (svc *Service) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
+	var result Subscription
+
+	endpoint := fmt.Sprintf("products/%s", input.ID)
+	err := svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (svc *Service) SubscriptionDeleteByID(id string, version int) (*Subscription, error) {
+	var result Subscription
+	endpoint := fmt.Sprintf("subscriptions/%s", id)
+	params := url.Values{}
+	params.Set("version", string(version))
+	err := svc.client.Delete(endpoint, params, &result)
+
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (svc *Service) SubscriptionDeleteByKey(key string, version int) (*Subscription, error) {
+	var result Subscription
+	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
+	params := url.Values{}
+	params.Set("version", string(version))
+	err := svc.client.Delete(endpoint, params, &result)
+
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
 func convertSubscriptionDestination(input SubscriptionDestination) SubscriptionDestination {
 	DestinationType := input.(map[string]interface{})["type"]
 	switch DestinationType {
@@ -76,11 +152,4 @@ func convertSubscriptionDestination(input SubscriptionDestination) SubscriptionD
 		return new
 	}
 	return nil
-}
-
-type SubscriptionDraft struct {
-	Key         string                  `json:"key"`
-	Destination SubscriptionDestination `json:"destination"`
-	Messages    []MessageSubscription   `json:"messages"`
-	Changes     []ChangeSubscription    `json:"changes"`
 }

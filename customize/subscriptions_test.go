@@ -1,41 +1,32 @@
-package extension_test
+package customize_test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/labd/commercetools-go-sdk/common"
-	"github.com/labd/commercetools-go-sdk/extension"
+	"github.com/labd/commercetools-go-sdk/customize"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
-
-func fixture(path string) string {
-	b, err := ioutil.ReadFile("testdata/fixtures/" + path)
-	if err != nil {
-		panic(err)
-	}
-	return string(b)
-}
 
 func TestSubscriptionCreate(t *testing.T) {
 	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
-	svc := extension.New(client)
+	svc := customize.New(client)
 
-	draft := &extension.SubscriptionDraft{
+	draft := &customize.SubscriptionDraft{
 		Key: "test",
-		Destination: extension.SubscriptionAWSSQSDestination{
+		Destination: customize.SubscriptionAWSSQSDestination{
 			Type:         "SQS",
 			QueueURL:     "http://example.com/",
 			AccessKey:    "A1234567890",
 			AccessSecret: "S1234567800",
 			Region:       "eu-central-1",
 		},
-		Messages: []extension.MessageSubscription{
-			extension.MessageSubscription{
+		Messages: []customize.MessageSubscription{
+			customize.MessageSubscription{
 				ResourceTypeID: "product",
 			},
 		},
@@ -50,17 +41,17 @@ func TestSubscriptionUpdate(t *testing.T) {
 
 	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
-	svc := extension.New(client)
+	svc := customize.New(client)
 
-	input := &extension.SubscriptionUpdateInput{
+	input := &customize.SubscriptionUpdateInput{
 		Version: 2,
 		Actions: common.UpdateActions{
-			&extension.SubscriptionSetKey{
+			&customize.SubscriptionSetKey{
 				Key: "123456",
 			},
-			&extension.SubscriptionSetMessages{
-				Messages: []extension.MessageSubscription{
-					extension.MessageSubscription{
+			&customize.SubscriptionSetMessages{
+				Messages: []customize.MessageSubscription{
+					customize.MessageSubscription{
 						ResourceTypeID: "product",
 					},
 				},
@@ -77,7 +68,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 func TestSubscriptionDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
-	svc := extension.New(client)
+	svc := customize.New(client)
 
 	_, err := svc.SubscriptionDeleteByID("1234", 2)
 	assert.Equal(t, nil, err)
@@ -86,7 +77,7 @@ func TestSubscriptionDeleteByID(t *testing.T) {
 func TestSubscriptionDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
-	svc := extension.New(client)
+	svc := customize.New(client)
 
 	_, err := svc.SubscriptionDeleteByKey("1234", 2)
 	assert.Equal(t, nil, err)
@@ -96,12 +87,12 @@ func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 	client, server := testutil.MockClient(t, fixture("subscription.ironmq.json"), nil, nil)
 	defer server.Close()
 
-	svc := extension.New(client)
+	svc := customize.New(client)
 	subscription, err := svc.SubscriptionGetByID("100")
 	assert.Equal(t, nil, err)
 
-	destination := subscription.Destination.(extension.SubscriptionIronMQDestination)
-	expected := extension.SubscriptionIronMQDestination{
+	destination := subscription.Destination.(customize.SubscriptionIronMQDestination)
+	expected := customize.SubscriptionIronMQDestination{
 		Type: "IronMQ",
 		URI:  "https://queue-uri",
 	}
@@ -112,12 +103,12 @@ func TestSubscriptionGetDestinationSNS(t *testing.T) {
 	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
 
-	svc := extension.New(client)
+	svc := customize.New(client)
 	subscription, err := svc.SubscriptionGetByID("100")
 	assert.Equal(t, nil, err)
 
-	destination := subscription.Destination.(extension.SubscriptionAWSSNSDestination)
-	expected := extension.SubscriptionAWSSNSDestination{
+	destination := subscription.Destination.(customize.SubscriptionAWSSNSDestination)
+	expected := customize.SubscriptionAWSSNSDestination{
 		Type:         "SNS",
 		TopicArn:     "arn:aws:sns:eu-central-1:123456789012345678:example:1",
 		AccessKey:    "AKIAIOSFODNN7EXAMPLE",
@@ -130,12 +121,12 @@ func TestSubscriptionGetDestinationSQS(t *testing.T) {
 	client, server := testutil.MockClient(t, fixture("subscription.sqs.json"), nil, nil)
 	defer server.Close()
 
-	svc := extension.New(client)
+	svc := customize.New(client)
 	subscription, err := svc.SubscriptionGetByID("100")
 	assert.Equal(t, nil, err)
 
-	destination := subscription.Destination.(extension.SubscriptionAWSSQSDestination)
-	expected := extension.SubscriptionAWSSQSDestination{
+	destination := subscription.Destination.(customize.SubscriptionAWSSQSDestination)
+	expected := customize.SubscriptionAWSSQSDestination{
 		Type:         "SQS",
 		QueueURL:     "https://queue.amazonaws.com/80398EXAMPLE/MyQueue",
 		AccessKey:    "AKIAIOSFODNN7EXAMPLE",
