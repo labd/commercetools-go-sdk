@@ -1,13 +1,10 @@
 package customize
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/url"
-	"time"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
-	"github.com/mitchellh/mapstructure"
 )
 
 type SubscriptionDeleteInput struct {
@@ -21,65 +18,6 @@ type SubscriptionUpdateInput struct {
 	Actions commercetools.UpdateActions
 }
 
-type MessageSubscription struct {
-	ResourceTypeID string   `json:"resourceTypeId"`
-	Types          []string `json:"types"`
-}
-
-type ChangeSubscription struct {
-	resourceTypeID string
-}
-
-type SubscriptionAWSSQSDestination struct {
-	Type         string `json:"type"`
-	QueueURL     string `json:"queueUrl"`
-	AccessKey    string `json:"accessKey"`
-	AccessSecret string `json:"accessSecret"`
-	Region       string `json:"region"`
-}
-
-type SubscriptionAWSSNSDestination struct {
-	Type         string `json:"type"`
-	TopicArn     string `json:"topicArn"`
-	AccessKey    string `json:"accessKey"`
-	AccessSecret string `json:"accessSecret"`
-}
-
-type SubscriptionIronMQDestination struct {
-	Type string `json:"type"`
-	URI  string `json:"uri"`
-}
-
-type SubscriptionDestination interface {
-}
-
-type Subscription struct {
-	ID             string                  `json:"id"`
-	Version        int                     `json:"version"`
-	Key            string                  `json:"key"`
-	Destination    SubscriptionDestination `json:"destination"`
-	Messages       []MessageSubscription   `json:"messages"`
-	Changes        []ChangeSubscription    `json:"changes"`
-	CreatedAt      time.Time               `json:"createdAt"`
-	LastModifiedAt time.Time               `json:"lastModifiedAt"`
-}
-
-func (s *Subscription) UnmarshalJSON(data []byte) error {
-	type SubscriptionClone Subscription
-	if err := json.Unmarshal(data, (*SubscriptionClone)(s)); err != nil {
-		return err
-	}
-	s.Destination = convertSubscriptionDestination(s.Destination)
-	return nil
-}
-
-type SubscriptionDraft struct {
-	Key         string                  `json:"key"`
-	Destination SubscriptionDestination `json:"destination"`
-	Messages    []MessageSubscription   `json:"messages"`
-	Changes     []ChangeSubscription    `json:"changes"`
-}
-
 func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
 	var result Subscription
 	err := svc.client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
@@ -89,6 +27,15 @@ func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
 	return &result, nil
 }
 
+// SubscriptionCreate creates a new Subscription. It is eventually consistent,
+// it may take up to a minute before it becomes fully active.
+//
+// In order to test that the destination is correctly configured, a test message
+// will be put into the queue. If the message could not be delivered, the
+// subscription will not be created. The payload of the test message is a
+// notification of type ResourceCreated for the resourceTypeId subscription.
+//
+// Currently, a maximum of 25 subscriptions can be created per project.
 func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription, error) {
 	var result Subscription
 	err := svc.client.Create("subscriptions", nil, draft, &result)
@@ -98,6 +45,8 @@ func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription,
 	return &result, nil
 }
 
+// SubscriptionUpdate updates a Subscription. It is eventually consistent, it
+// may take up to a minute before changes becomes fully active.
 func (svc *Service) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
 	var result Subscription
 
@@ -133,23 +82,4 @@ func (svc *Service) SubscriptionDeleteByKey(key string, version int) (*Subscript
 		return nil, err
 	}
 	return &result, nil
-}
-
-func convertSubscriptionDestination(input SubscriptionDestination) SubscriptionDestination {
-	DestinationType := input.(map[string]interface{})["type"]
-	switch DestinationType {
-	case "IronMQ":
-		new := SubscriptionIronMQDestination{}
-		mapstructure.Decode(input, &new)
-		return new
-	case "SNS":
-		new := SubscriptionAWSSNSDestination{}
-		mapstructure.Decode(input, &new)
-		return new
-	case "SQS":
-		new := SubscriptionAWSSQSDestination{}
-		mapstructure.Decode(input, &new)
-		return new
-	}
-	return nil
 }

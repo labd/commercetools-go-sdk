@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/labd/commercetools-go-sdk/commercetools"
+
 	"github.com/stretchr/testify/assert"
 
 	"github.com/labd/commercetools-go-sdk/commercetools/customize"
@@ -20,8 +22,8 @@ func TestExtensionCreate(t *testing.T) {
 		Destination: customize.ExtensionDestinationHTTP{
 			URL: "http://example.com",
 		},
-		Triggers: []customize.Trigger{
-			customize.Trigger{
+		Triggers: []customize.ExtensionTrigger{
+			customize.ExtensionTrigger{
 				ResourceTypeID: "product",
 				Actions:        []string{"Create"},
 			},
@@ -33,18 +35,45 @@ func TestExtensionCreate(t *testing.T) {
 }
 
 func TestExtensionUpdate(t *testing.T) {
-	var output map[string]interface{}
+	output := testutil.RequestData{}
 
 	client, server := testutil.MockClient(t, fixture("extension.azure.json"), &output, nil)
 	defer server.Close()
 	svc := customize.New(client)
 
-	input := &customize.ExtensionUpdateInput{}
+	input := &customize.ExtensionUpdateInput{
+		Version: 2,
+		Actions: commercetools.UpdateActions{
+			customize.ExtensionChangeDestination{
+				Destination: customize.ExtensionDestinationAWSLambda{
+					ARN:          "arn:aws:lambda:<region>:<accountid>:function:<functionName>",
+					AccessKey:    "qwer",
+					AccessSecret: "secret",
+				},
+			},
+		},
+	}
 
 	fmt.Println(output)
 
 	_, err := svc.ExtensionUpdate(input)
 	assert.Equal(t, nil, err)
+
+	expectedBody := `{
+		"version": 2,
+		"actions": [
+			{
+				"action": "changeDestination",
+				"destination": {
+					"type": "AWSLambda",
+					"arn": "arn:aws:lambda:<region>:<accountid>:function:<functionName>",
+					"accessKey": "qwer",
+					"accessSecret": "secret"
+				}
+			}
+		]
+	 }`
+	assert.JSONEq(t, expectedBody, string(output.Body))
 }
 
 func TestExtensionDeleteByID(t *testing.T) {

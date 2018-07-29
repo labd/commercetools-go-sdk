@@ -3,17 +3,18 @@ package commercetools
 type LocalizedString map[string]string
 
 type Reference struct {
-	TypeID string `json:"typeId`
+	TypeID string `json:"typeId"`
 	ID     string `json:"id"`
 }
 
 type ResourceIdentifier struct {
 	ID     string `json:"id,omitempty"`
-	Key    string `json:"key,omitempty`
-	TypeID string `json:"typeId,omitempty`
+	Key    string `json:"key,omitempty"`
+	TypeID string `json:"typeId,omitempty"`
 }
 
 type UpdateAction interface {
+	Action() string
 }
 
 type UpdateActions []UpdateAction

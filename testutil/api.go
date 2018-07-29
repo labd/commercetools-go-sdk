@@ -6,16 +6,23 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
 )
 
+type RequestData struct {
+	URL    string
+	Body   []byte
+	Params url.Values
+}
+
 func MockClient(
 	t *testing.T,
 	fixture string,
-	output *map[string]interface{},
+	output *RequestData,
 	callback func([]byte)) (*commercetools.Client, *httptest.Server) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
@@ -26,6 +33,9 @@ func MockClient(
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			t.Fatal(err)
+		}
+		if output != nil {
+			output.Body = body
 		}
 		json.Unmarshal(body, &output)
 	}
