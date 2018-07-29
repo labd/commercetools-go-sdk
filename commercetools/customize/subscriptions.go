@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/labd/commercetools-go-sdk/common"
+	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -18,7 +18,7 @@ type SubscriptionDeleteInput struct {
 type SubscriptionUpdateInput struct {
 	ID      string
 	Version int
-	Actions common.UpdateActions
+	Actions commercetools.UpdateActions
 }
 
 type MessageSubscription struct {

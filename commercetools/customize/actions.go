@@ -1,18 +1,18 @@
 package customize
 
-import "github.com/labd/commercetools-go-sdk/common"
+import "github.com/labd/commercetools-go-sdk/commercetools"
 
 type SubscriptionSetKey struct {
-	common.UpdateAction
+	commercetools.UpdateAction
 	Key string `json:"key,omitempty"`
 }
 
 type SubscriptionSetMessages struct {
-	common.UpdateAction
+	commercetools.UpdateAction
 	Messages []MessageSubscription `json:"messages"`
 }
 
 type SubscriptionSetChanges struct {
-	common.UpdateAction
+	commercetools.UpdateAction
 	Changes []ChangeSubscription `json:"changes"`
 }

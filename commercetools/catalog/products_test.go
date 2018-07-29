@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/labd/commercetools-go-sdk/catalog"
-	"github.com/labd/commercetools-go-sdk/common"
+	"github.com/labd/commercetools-go-sdk/commercetools"
+	"github.com/labd/commercetools-go-sdk/commercetools/catalog"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
@@ -27,15 +27,15 @@ func TestCreateProductNew(t *testing.T) {
 
 	draft := &catalog.ProductDraft{
 		Key: "product-test",
-		Name: common.LocalizedString{
+		Name: commercetools.LocalizedString{
 			"nl": "Een product",
 			"en": "Some product",
 		},
-		ProductType: common.Reference{
+		ProductType: commercetools.Reference{
 			TypeID: "product-type",
 			ID:     "8750e1fd-f431-481f-9296-967b1e56bf49",
 		},
-		Slug: common.LocalizedString{
+		Slug: commercetools.LocalizedString{
 			"nl": "een-product",
 			"en": "some-product",
 		},
@@ -72,7 +72,7 @@ func TestProductUpdate(t *testing.T) {
 		PriceSelection: catalog.PriceSelection{
 			Currency: "EUR",
 		},
-		Actions: common.UpdateActions{
+		Actions: commercetools.UpdateActions{
 			catalog.ProductAddPrice{
 				VariantID: 1,
 				Price:     1000,

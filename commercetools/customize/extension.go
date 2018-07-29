@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/labd/commercetools-go-sdk/common"
+	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
 type ExtensionDeleteInput struct {
@@ -17,7 +17,7 @@ type ExtensionDeleteInput struct {
 type ExtensionUpdateInput struct {
 	ID      string
 	Version int
-	Actions common.UpdateActions
+	Actions commercetools.UpdateActions
 }
 
 type Extension struct {

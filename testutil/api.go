@@ -8,11 +8,16 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/labd/commercetools-go-sdk/common"
-	"github.com/labd/commercetools-go-sdk/credentials"
+	"github.com/labd/commercetools-go-sdk/commercetools"
+	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
 )
 
-func MockClient(t *testing.T, fixture string, output *map[string]interface{}, callback func([]byte)) (*common.Client, *httptest.Server) {
+func MockClient(
+	t *testing.T,
+	fixture string,
+	output *map[string]interface{},
+	callback func([]byte)) (*commercetools.Client, *httptest.Server) {
+
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
@@ -27,7 +32,7 @@ func MockClient(t *testing.T, fixture string, output *map[string]interface{}, ca
 
 	ts := httptest.NewServer(http.HandlerFunc(handler))
 
-	client, err := common.NewClient(&common.Config{
+	client, err := commercetools.NewClient(&commercetools.Config{
 		ProjectKey:   "unittest",
 		Region:       ts.URL,
 		AuthProvider: credentials.NewDummyCredentialsProvider("Bearer unittest"),

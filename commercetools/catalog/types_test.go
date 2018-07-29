@@ -3,8 +3,8 @@ package catalog_test
 import (
 	"time"
 
-	"github.com/labd/commercetools-go-sdk/catalog"
-	"github.com/labd/commercetools-go-sdk/common"
+	"github.com/labd/commercetools-go-sdk/commercetools"
+	"github.com/labd/commercetools-go-sdk/commercetools/catalog"
 )
 
 func createExampleProduct() *catalog.Product {
@@ -15,19 +15,19 @@ func createExampleProduct() *catalog.Product {
 		LastModifiedAt: time.Date(1970, 1, 1, 0, 0, 0, 1000000, time.UTC),
 		MasterData: catalog.ProductCatalogData{
 			Current: catalog.ProductData{
-				Name: common.LocalizedString{
+				Name: commercetools.LocalizedString{
 					"en": "MB PREMIUM TECH T",
 				},
-				Categories: []common.Reference{
+				Categories: []commercetools.Reference{
 					{
 						ID:     "cf6d790a-f027-4f46-9a2b-4bc9a31066fb",
 						TypeID: "category",
 					},
 				},
-				Description: common.LocalizedString{
+				Description: commercetools.LocalizedString{
 					"en": "Sample description",
 				},
-				Slug: common.LocalizedString{
+				Slug: commercetools.LocalizedString{
 					"en": "mb-premium-tech-t1369226795424",
 				},
 				MasterVariant: catalog.ProductVariant{
@@ -46,7 +46,7 @@ func createExampleProduct() *catalog.Product {
 					Prices: []catalog.Price{
 						catalog.Price{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
-							Value: common.Money{
+							Value: commercetools.Money{
 								Type:           "centPrecision",
 								FractionDigits: 2,
 								CentAmount:     10000,
@@ -60,19 +60,19 @@ func createExampleProduct() *catalog.Product {
 			HasStagedChanged: false,
 			Published:        true,
 			Staged: catalog.ProductData{
-				Name: common.LocalizedString{
+				Name: commercetools.LocalizedString{
 					"en": "MB PREMIUM TECH T",
 				},
-				Categories: []common.Reference{
+				Categories: []commercetools.Reference{
 					{
 						ID:     "cf6d790a-f027-4f46-9a2b-4bc9a31066fb",
 						TypeID: "category",
 					},
 				},
-				Description: common.LocalizedString{
+				Description: commercetools.LocalizedString{
 					"en": "Sample description",
 				},
-				Slug: common.LocalizedString{
+				Slug: commercetools.LocalizedString{
 					"en": "mb-premium-tech-t1369226795424",
 				},
 				MasterVariant: catalog.ProductVariant{
@@ -91,7 +91,7 @@ func createExampleProduct() *catalog.Product {
 					Prices: []catalog.Price{
 						catalog.Price{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
-							Value: common.Money{
+							Value: commercetools.Money{
 								Type:           "centPrecision",
 								FractionDigits: 2,
 								CentAmount:     10000,
@@ -103,11 +103,11 @@ func createExampleProduct() *catalog.Product {
 				Variants: []catalog.ProductVariant{},
 			},
 		},
-		ProductType: common.Reference{
+		ProductType: commercetools.Reference{
 			ID:     "24f510c3-f334-4099-94e2-d6224a8eb919",
 			TypeID: "product-type",
 		},
-		TaxCategory: common.Reference{
+		TaxCategory: commercetools.Reference{
 			ID:     "f1e10e3a-45eb-49d8-ad0b-fdf984202f59",
 			TypeID: "tax-category",
 		},

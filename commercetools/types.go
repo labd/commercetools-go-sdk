@@ -1,4 +1,4 @@
-package common
+package commercetools
 
 type LocalizedString map[string]string
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/labd/commercetools-go-sdk/customize"
+	"github.com/labd/commercetools-go-sdk/commercetools/customize"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 

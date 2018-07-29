@@ -1,4 +1,4 @@
-package common
+package commercetools
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 	"os"
 
 	"github.com/hashicorp/go-cleanhttp"
-	"github.com/labd/commercetools-go-sdk/credentials"
+	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
 )
 
 type Client struct {

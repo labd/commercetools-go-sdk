@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/labd/commercetools-go-sdk/common"
-	"github.com/labd/commercetools-go-sdk/customize"
+	"github.com/labd/commercetools-go-sdk/commercetools"
+	"github.com/labd/commercetools-go-sdk/commercetools/customize"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
@@ -45,7 +45,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 
 	input := &customize.SubscriptionUpdateInput{
 		Version: 2,
-		Actions: common.UpdateActions{
+		Actions: commercetools.UpdateActions{
 			&customize.SubscriptionSetKey{
 				Key: "123456",
 			},

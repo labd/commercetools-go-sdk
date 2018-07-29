@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/labd/commercetools-go-sdk/common"
+	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
 type PriceSelection struct {
@@ -19,7 +19,7 @@ type ProductUpdateInput struct {
 	ID             string
 	Version        int
 	PriceSelection PriceSelection
-	Actions        common.UpdateActions
+	Actions        commercetools.UpdateActions
 }
 
 type ProductDeleteInput struct {
