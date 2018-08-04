@@ -14,12 +14,12 @@ package main
 import (
   "log"
 
-  "github.com/labd/commercetools-go-sdk/catalog"
-  "github.com/labd/commercetools-go-sdk/common"
-  "github.com/labd/commercetools-go-sdk/credentials"
+  "github.com/labd/commercetools-go-sdk/commercetools"
+  "github.com/labd/commercetools-go-sdk/commercetools/catalog"
+  "github.com/labd/commercetools-go-sdk/commercetools/credentials"
 )
 
-client, err := common.NewClient(&common.Config{
+client, err := commercetools.NewClient(&commercetools.Config{
   ProjectKey:   "<your-project>",
   Region:       "https://api.sphere.io",
   AuthProvider: credentials.NewClientCredentialsProvider(
@@ -33,15 +33,15 @@ if err != nil {
 svc := catalog.New(client)
 product, err := svc.ProductCreate(&catalog.ProductDraft{
   Key: "test-product",
-  Name: common.LocalizedString{
+  Name: commercetools.LocalizedString{
     "nl": "Een test product",
     "en": "A test product",
   },
-  ProductType: common.Reference{
+  ProductType: commercetools.Reference{
     TypeID: "product-type",
     ID:     "8750e1fd-f431-481f-9296-967b1e56bf49",
   },
-  Slug: common.LocalizedString{
+  Slug: commercetools.LocalizedString{
     "nl": "een-test-product",
     "en": "a-test-product",
   },
