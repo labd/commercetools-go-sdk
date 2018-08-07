@@ -3,6 +3,7 @@ package customize
 import (
 	"fmt"
 	"net/url"
+	"strconv"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
 )
@@ -50,7 +51,11 @@ func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription,
 func (svc *Service) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
 	var result Subscription
 
-	endpoint := fmt.Sprintf("products/%s", input.ID)
+	if input.ID == "" {
+		return nil, fmt.Errorf("No valid subscription id passed")
+	}
+
+	endpoint := fmt.Sprintf("subscriptions/%s", input.ID)
 	err := svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -62,7 +67,7 @@ func (svc *Service) SubscriptionDeleteByID(id string, version int) (*Subscriptio
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
 	params := url.Values{}
-	params.Set("version", string(version))
+	params.Set("version", strconv.Itoa(version))
 	err := svc.client.Delete(endpoint, params, &result)
 
 	if err != nil {
@@ -75,7 +80,7 @@ func (svc *Service) SubscriptionDeleteByKey(key string, version int) (*Subscript
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
 	params := url.Values{}
-	params.Set("version", string(version))
+	params.Set("version", strconv.Itoa(version))
 	err := svc.client.Delete(endpoint, params, &result)
 
 	if err != nil {

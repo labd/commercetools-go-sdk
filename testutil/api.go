@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -14,9 +15,9 @@ import (
 )
 
 type RequestData struct {
-	URL    string
-	Body   []byte
-	Params url.Values
+	URL  url.URL
+	Body []byte
+	JSON string
 }
 
 func MockClient(
@@ -34,10 +35,17 @@ func MockClient(
 		if err != nil {
 			t.Fatal(err)
 		}
-		if output != nil {
-			output.Body = body
+
+		// Check if the body is valid JSON
+		var dummy map[string]interface{}
+		if err := json.Unmarshal(body, &dummy); err != nil {
+			log.Println(err)
 		}
-		json.Unmarshal(body, &output)
+
+		if output != nil {
+			output.JSON = string(body)
+			output.URL = *r.URL
+		}
 	}
 
 	ts := httptest.NewServer(http.HandlerFunc(handler))

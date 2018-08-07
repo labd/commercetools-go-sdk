@@ -73,7 +73,7 @@ func TestExtensionUpdate(t *testing.T) {
 			}
 		]
 	 }`
-	assert.JSONEq(t, expectedBody, string(output.Body))
+	assert.JSONEq(t, expectedBody, output.JSON)
 }
 
 func TestExtensionDeleteByID(t *testing.T) {

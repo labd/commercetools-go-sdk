@@ -2,6 +2,7 @@ package customize_test
 
 import (
 	"fmt"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,46 +13,99 @@ import (
 )
 
 func TestSubscriptionCreate(t *testing.T) {
-	output := testutil.RequestData{}
-
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
-	defer server.Close()
-	svc := customize.New(client)
-
-	draft := &customize.SubscriptionDraft{
-		Key: "test",
-		Destination: customize.SubscriptionAWSSQSDestination{
-			QueueURL:     "http://example.com/",
-			AccessKey:    "A1234567890",
-			AccessSecret: "S1234567800",
-			Region:       "eu-central-1",
-		},
-		Messages: []customize.MessageSubscription{
-			customize.MessageSubscription{
-				ResourceTypeID: "product",
+	testCases := []struct {
+		desc        string
+		input       *customize.SubscriptionDraft
+		requestBody string
+	}{
+		{
+			desc: "SQS",
+			input: &customize.SubscriptionDraft{
+				Key: "test",
+				Destination: customize.SubscriptionAWSSQSDestination{
+					QueueURL:     "http://example.com/",
+					AccessKey:    "A1234567890",
+					AccessSecret: "S1234567800",
+					Region:       "eu-central-1",
+				},
+				Messages: []customize.MessageSubscription{
+					customize.MessageSubscription{
+						ResourceTypeID: "product",
+					},
+				},
 			},
+			requestBody: `{
+				"key": "test",
+				"destination": {
+					"type": "SQS",
+					"queueUrl": "http://example.com/",
+					"accessKey": "A1234567890",
+					"accessSecret": "S1234567800",
+					"region": "eu-central-1"
+				},
+				"messages": [
+					{
+						"resourceTypeId": "product"
+					}
+				]
+			}`,
+		},
+		{
+			desc: "SNS",
+			input: &customize.SubscriptionDraft{
+				Key: "test",
+				Destination: customize.SubscriptionAWSSNSDestination{
+					TopicArn:     "x",
+					AccessKey:    "A1234567890",
+					AccessSecret: "S1234567800",
+				},
+				Changes: []customize.ChangeSubscription{
+					customize.ChangeSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+				Messages: []customize.MessageSubscription{
+					customize.MessageSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+			},
+			requestBody: `{
+				"key": "test",
+				"destination": {
+					"type": "SNS",
+					"topicArn": "x",
+					"accessKey": "A1234567890",
+					"accessSecret": "S1234567800"
+				},
+				"messages": [
+					{
+						"resourceTypeId": "product"
+					}
+				],
+				"changes": [
+					{
+						"resourceTypeId": "product"
+					}
+				]
+			}`,
 		},
 	}
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			output := testutil.RequestData{}
 
-	_, err := svc.SubscriptionCreate(draft)
-	assert.Equal(t, nil, err)
+			client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
+			defer server.Close()
+			svc := customize.New(client)
 
-	expectedBody := `{
-		"key": "test",
-		"destination": {
-		   "type": "SQS",
-		   "queueUrl": "http://example.com/",
-		   "accessKey": "A1234567890",
-		   "accessSecret": "S1234567800",
-		   "region": "eu-central-1"
-		},
-		"messages": [
-			{
-				"resourceTypeId": "product"
-			}
-		]
-	 }`
-	assert.JSONEq(t, expectedBody, string(output.Body))
+			_, err := svc.SubscriptionCreate(tC.input)
+			assert.Equal(t, nil, err)
+			assert.JSONEq(t, tC.requestBody, output.JSON)
+
+		})
+	}
+
 }
 
 func TestSubscriptionUpdate(t *testing.T) {
@@ -62,6 +116,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 	svc := customize.New(client)
 
 	input := &customize.SubscriptionUpdateInput{
+		ID:      "1234",
 		Version: 2,
 		Actions: commercetools.UpdateActions{
 			&customize.SubscriptionSetKey{
@@ -98,26 +153,40 @@ func TestSubscriptionUpdate(t *testing.T) {
 				]
 			}
 		]
-	 }`
-	assert.JSONEq(t, expectedBody, string(output.Body))
+	}`
+	assert.JSONEq(t, expectedBody, output.JSON)
+	assert.Equal(t, "/unittest/subscriptions/1234", output.URL.Path)
 }
 
 func TestSubscriptionDeleteByID(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
+	output := testutil.RequestData{}
+	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
 	svc := customize.New(client)
 
 	_, err := svc.SubscriptionDeleteByID("1234", 2)
 	assert.Equal(t, nil, err)
+
+	params := url.Values{}
+	params.Add("version", "2")
+	assert.Equal(t, params, output.URL.Query())
+	assert.Equal(t, "/unittest/subscriptions/1234", output.URL.Path)
 }
 
 func TestSubscriptionDeleteByKey(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
+	output := testutil.RequestData{}
+
+	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
 	svc := customize.New(client)
 
 	_, err := svc.SubscriptionDeleteByKey("1234", 2)
 	assert.Equal(t, nil, err)
+
+	params := url.Values{}
+	params.Add("version", "2")
+	assert.Equal(t, params, output.URL.Query())
+	assert.Equal(t, "/unittest/subscriptions/key=1234", output.URL.Path)
 }
 
 func TestSubscriptionGetDestinationIronMQ(t *testing.T) {

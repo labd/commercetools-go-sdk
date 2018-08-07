@@ -7,13 +7,47 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+type Subscription struct {
+	ID             string                  `json:"id"`
+	Version        int                     `json:"version"`
+	Key            string                  `json:"key"`
+	Destination    SubscriptionDestination `json:"destination"`
+	Messages       []MessageSubscription   `json:"messages,omitempty"`
+	Changes        []ChangeSubscription    `json:"changes,omitempty"`
+	CreatedAt      time.Time               `json:"createdAt"`
+	LastModifiedAt time.Time               `json:"lastModifiedAt"`
+}
+
+func (s *Subscription) UnmarshalJSON(data []byte) error {
+	type Alias Subscription
+	if err := json.Unmarshal(data, (*Alias)(s)); err != nil {
+		return err
+	}
+	s.Destination = subscriptionDestinationMapping(s.Destination)
+	return nil
+}
+
+// SubscriptionDraft is used to create new subscriptions. It is a stripped
+// version of the regular Subscription struct.
+type SubscriptionDraft struct {
+	Key         string                  `json:"key"`
+	Destination SubscriptionDestination `json:"destination"`
+	Messages    []MessageSubscription   `json:"messages"`
+	Changes     []ChangeSubscription    `json:"changes,omitempty"`
+}
+
+// MessageSubscription allows you to subscribe to messages on a specific
+// resource type and type combination. You can for example subscribe on the
+// resourceType 'product' to the type 'ProductPublished'.
 type MessageSubscription struct {
 	ResourceTypeID string   `json:"resourceTypeId"`
 	Types          []string `json:"types,omitempty"`
 }
 
+// ChangeSubscription allows you to subscribe to changes on a specific resource
+// type.
 type ChangeSubscription struct {
-	resourceTypeID string
+	ResourceTypeID string `json:"resourceTypeId"`
 }
 
 // SubscriptionAWSSQSDestination is for the AWS SQS as a destination. AWS SQS is
@@ -105,33 +139,6 @@ func (sd SubscriptionIronMQDestination) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionDestination interface{}
-
-type Subscription struct {
-	ID             string                  `json:"id"`
-	Version        int                     `json:"version"`
-	Key            string                  `json:"key"`
-	Destination    SubscriptionDestination `json:"destination"`
-	Messages       []MessageSubscription   `json:"messages,omitempty"`
-	Changes        []ChangeSubscription    `json:"changes,omitempty"`
-	CreatedAt      time.Time               `json:"createdAt"`
-	LastModifiedAt time.Time               `json:"lastModifiedAt"`
-}
-
-func (s *Subscription) UnmarshalJSON(data []byte) error {
-	type Alias Subscription
-	if err := json.Unmarshal(data, (*Alias)(s)); err != nil {
-		return err
-	}
-	s.Destination = subscriptionDestinationMapping(s.Destination)
-	return nil
-}
-
-type SubscriptionDraft struct {
-	Key         string                  `json:"key"`
-	Destination SubscriptionDestination `json:"destination"`
-	Messages    []MessageSubscription   `json:"messages"`
-	Changes     []ChangeSubscription    `json:"changes,omitempty"`
-}
 
 func subscriptionDestinationMapping(input SubscriptionDestination) SubscriptionDestination {
 	DestinationType := input.(map[string]interface{})["type"]

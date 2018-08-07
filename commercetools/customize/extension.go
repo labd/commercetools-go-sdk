@@ -28,6 +28,8 @@ func (svc *Service) ExtensionGetByID(id string) (*Extension, error) {
 	return &result, nil
 }
 
+// ExtensionCreate creates a new API extension.
+// Currently, a maximum of 25 extensions can be created per project.
 func (svc *Service) ExtensionCreate(draft *ExtensionDraft) (*Extension, error) {
 	var result Extension
 	err := svc.client.Create("extensions", nil, draft, &result)
