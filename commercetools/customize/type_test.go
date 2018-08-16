@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"log"
+
 	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/labd/commercetools-go-sdk/commercetools/customize"
 	"github.com/labd/commercetools-go-sdk/testutil"
@@ -29,7 +31,7 @@ func TestTypeCreate(t *testing.T) {
 		},
 		ResourceTypeIds: []string{"line-item"},
 		FieldDefinitions: []customize.FieldDefinition{
-			customize.FieldDefinition{
+			{
 				Type: customize.StringType{},
 				Name: "offer_name",
 				Label: commercetools.LocalizedString{
@@ -427,6 +429,8 @@ func TestTypeTypeGetByID(t *testing.T) {
 	result, err := svc.TypeGetByID("1234")
 	assert.Equal(t, nil, err)
 
+	log.Println(output.JSON)
+
 	timestamp, _ := time.Parse(time.RFC3339, "2015-10-07T06:56:19.217Z")
 
 	expected := &customize.Type{
@@ -441,11 +445,130 @@ func TestTypeTypeGetByID(t *testing.T) {
 		},
 		ResourceTypeIds: []string{"line-item"},
 		FieldDefinitions: []customize.FieldDefinition{
-			customize.FieldDefinition{
+			{
+				Type: customize.BooleanType{},
+				Name: "is_special",
+				Label: commercetools.LocalizedString{
+					"en": "is_special",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
 				Type: customize.StringType{},
 				Name: "offer_name",
 				Label: commercetools.LocalizedString{
 					"en": "offer_name",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.LocalizedStringType{},
+				Name: "translated_offer_name",
+				Label: commercetools.LocalizedString{
+					"en": "translated_offer_name",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.EnumType{
+					Values: []customize.EnumValue{
+						{
+							Key:   "enum",
+							Label: "enum",
+						},
+					},
+				},
+				Name: "offer_enum",
+				Label: commercetools.LocalizedString{
+					"en": "offer_enum",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.LocalizedEnumType{
+					Values: []customize.LocalizedEnumValue{
+						{
+							Key: "enum",
+							Label: commercetools.LocalizedString{
+								"en": "enum",
+							},
+						},
+					},
+				},
+				Name: "translated_offer_enum",
+				Label: commercetools.LocalizedString{
+					"en": "translated_offer_enum",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.NumberType{},
+				Name: "offer_number",
+				Label: commercetools.LocalizedString{
+					"en": "offer_number",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.MoneyType{},
+				Name: "offer_price",
+				Label: commercetools.LocalizedString{
+					"en": "offer_price",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.DateType{},
+				Name: "offer_date",
+				Label: commercetools.LocalizedString{
+					"en": "offer_date",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.TimeType{},
+				Name: "offer_time",
+				Label: commercetools.LocalizedString{
+					"en": "offer_time",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.DateTimeType{},
+				Name: "offer_date_time",
+				Label: commercetools.LocalizedString{
+					"en": "offer_date_time",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.ReferenceType{
+					ReferenceTypeId: "product",
+				},
+				Name: "offer_reference",
+				Label: commercetools.LocalizedString{
+					"en": "offer_reference",
+				},
+				Required:  false,
+				InputHint: customize.SingleLineTextInputHint,
+			},
+			{
+				Type: customize.SetType{
+					ElementType: customize.StringType{},
+				},
+				Name: "offer_set",
+				Label: commercetools.LocalizedString{
+					"en": "offer_set",
 				},
 				Required:  false,
 				InputHint: customize.SingleLineTextInputHint,
@@ -490,7 +613,7 @@ func TestFieldTypes(t *testing.T) {
 			desc: "Enum type",
 			input: customize.EnumType{
 				Values: []customize.EnumValue{
-					customize.EnumValue{
+					{
 						Key:   "test",
 						Label: "test",
 					},
@@ -510,7 +633,7 @@ func TestFieldTypes(t *testing.T) {
 			desc: "Localized enum type",
 			input: customize.LocalizedEnumType{
 				Values: []customize.LocalizedEnumValue{
-					customize.LocalizedEnumValue{
+					{
 						Key: "test",
 						Label: commercetools.LocalizedString{
 							"en": "test",
