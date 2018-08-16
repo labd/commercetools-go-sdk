@@ -1,16 +1,10 @@
 language: go
 
 go:
-  - 1.10.x
-
-before_install:
-  - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-
-install:
-  - dep ensure
+  - "1.11rc1"
 
 script:
-  - go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+  - env GO111MODULE=on go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
