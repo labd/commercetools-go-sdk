@@ -553,7 +553,7 @@ func TestTypeTypeGetByID(t *testing.T) {
 			},
 			{
 				Type: customize.ReferenceType{
-					ReferenceTypeId: "product",
+					ReferenceTypeID: "product",
 				},
 				Name: "offer_reference",
 				Label: commercetools.LocalizedString{
@@ -691,7 +691,7 @@ func TestFieldTypes(t *testing.T) {
 		{
 			desc: "Reference type",
 			input: customize.ReferenceType{
-				ReferenceTypeId: "product",
+				ReferenceTypeID: "product",
 			},
 			output: `{
 				"name": "Reference",

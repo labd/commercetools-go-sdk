@@ -8,17 +8,20 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
+// TypeDeleteInput provides the data required to delete a type.
 type TypeDeleteInput struct {
 	ID      string
 	Version int
 }
 
+// TypeUpdateInput provides the data required to update a type.
 type TypeUpdateInput struct {
 	ID      string
 	Version int
 	Actions commercetools.UpdateActions
 }
 
+// TypeGetByID will return a type matching the provided ID.
 // OAuth2 Scopes: view_types:{projectKey}
 func (svc *Service) TypeGetByID(id string) (result *Type, err error) {
 	err = svc.client.Get(fmt.Sprintf("types/%s", id), nil, &result)
@@ -28,6 +31,7 @@ func (svc *Service) TypeGetByID(id string) (result *Type, err error) {
 	return result, nil
 }
 
+// TypeCreate will create a new type from a draft, and return the newly created type.
 // OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 	err = svc.client.Create("types", nil, draft, &result)
@@ -37,6 +41,7 @@ func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 	return result, nil
 }
 
+// TypeUpdate will update a type matching the provided ID with the defined UpdateActions.
 // The expected version of the type on which the changes should be applied.
 // If the expected version does not match the actual version, a 409 Conflict will be returned.
 // OAuth2 Scopes: manage_types:{projectKey}
@@ -53,6 +58,7 @@ func (svc *Service) TypeUpdate(input *TypeUpdateInput) (result *Type, err error)
 	return result, nil
 }
 
+// TypeDeleteByID will delete a type matching the provided ID.
 // These requests delete a type only if it’s not referenced by other entities.
 // OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeDeleteByID(id string, version int) (result *Type, err error) {
@@ -67,6 +73,7 @@ func (svc *Service) TypeDeleteByID(id string, version int) (result *Type, err er
 	return result, nil
 }
 
+// TypeDeleteByKey will delete a type matching the provided key.
 // These requests delete a type only if it’s not referenced by other entities.
 // OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeDeleteByKey(key string, version int) (result *Type, err error) {

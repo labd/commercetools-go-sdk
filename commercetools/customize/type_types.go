@@ -14,11 +14,13 @@ import (
 type TextInputHint string
 
 const (
+	// SingleLineTextInputHint allows a single line hint.
 	SingleLineTextInputHint TextInputHint = "SingleLine"
-	MultiLineTextInputHint  TextInputHint = "MultiLine"
+	// MultiLineTextInputHint allows a multi line hint.
+	MultiLineTextInputHint TextInputHint = "MultiLine"
 )
 
-// Types define custom fields that are used to enhance resources as you need.
+// Type defines custom fields that are used to enhance resources as you need.
 type Type struct {
 	ID               string                        `json:"id"`
 	Version          int                           `json:"version"`
@@ -31,7 +33,7 @@ type Type struct {
 	LastModifiedAt   time.Time                     `json:"lastModifiedAt"`
 }
 
-// TypeDrafts are given as payload for Create Type requests.
+// TypeDraft is given as payload for Create Type requests.
 type TypeDraft struct {
 	Key              string                        `json:"key"`
 	Name             commercetools.LocalizedString `json:"name"`
@@ -40,7 +42,7 @@ type TypeDraft struct {
 	FieldDefinitions []FieldDefinition             `json:"fieldDefinitions"`
 }
 
-// Field definitions describe custom fields and allow you to define some meta-information associated with the field.
+// FieldDefinition describe custom fields and allow you to define some meta-information associated with the field.
 type FieldDefinition struct {
 	Type      FieldType                     `json:"type"`
 	Name      string                        `json:"name"`
@@ -49,6 +51,7 @@ type FieldDefinition struct {
 	InputHint TextInputHint                 `json:"inputHint"`
 }
 
+// UnmarshalJSON override to map the field type to the corresponding struct.
 func (f *FieldDefinition) UnmarshalJSON(data []byte) error {
 	type Alias FieldDefinition
 	if err := json.Unmarshal(data, (*Alias)(f)); err != nil {
@@ -58,14 +61,16 @@ func (f *FieldDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// BooleanType will allow the storage of a boolan value.
 // Valid values for the field are true and false (JSON Boolean).
 type BooleanType struct{}
 
+// Name override to provide the expected name of this field.
 func (t BooleanType) Name() string {
 	return "Boolean"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t BooleanType) MarshalJSON() ([]byte, error) {
 	type Alias BooleanType
 
@@ -78,13 +83,15 @@ func (t BooleanType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// StringType will allow the storage of a string value.
 type StringType struct{}
 
+// Name override to provide the expected name of this field.
 func (t StringType) Name() string {
 	return "String"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t StringType) MarshalJSON() ([]byte, error) {
 	type Alias StringType
 
@@ -97,13 +104,15 @@ func (t StringType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// LocalizedStringType will allow the storage of a localized string value.
 type LocalizedStringType struct{}
 
+// Name override to provide the expected name of this field.
 func (t LocalizedStringType) Name() string {
 	return "LocalizedString"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t LocalizedStringType) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedStringType
 
@@ -116,15 +125,17 @@ func (t LocalizedStringType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// EnumType will allow the storage of an enum value.
 type EnumType struct {
 	Values []EnumValue `json:"values"`
 }
 
+// Name override to provide the expected name of this field.
 func (t EnumType) Name() string {
 	return "Enum"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t EnumType) MarshalJSON() ([]byte, error) {
 	type Alias EnumType
 
@@ -137,15 +148,17 @@ func (t EnumType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// LocalizedEnumType will allow the storage of a localized enum value.
 type LocalizedEnumType struct {
 	Values []LocalizedEnumValue `json:"values"`
 }
 
+// Name override to provide the expected name of this field.
 func (t LocalizedEnumType) Name() string {
 	return "LocalizedEnum"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t LocalizedEnumType) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedEnumType
 
@@ -158,13 +171,15 @@ func (t LocalizedEnumType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// NumberType will allow the storage of a number value.
 type NumberType struct{}
 
+// Name override to provide the expected name of this field.
 func (t NumberType) Name() string {
 	return "Number"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t NumberType) MarshalJSON() ([]byte, error) {
 	type Alias NumberType
 
@@ -177,13 +192,15 @@ func (t NumberType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// MoneyType will allow the storage of a money value.
 type MoneyType struct{}
 
+// Name override to provide the expected name of this field.
 func (t MoneyType) Name() string {
 	return "Money"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t MoneyType) MarshalJSON() ([]byte, error) {
 	type Alias MoneyType
 
@@ -196,13 +213,15 @@ func (t MoneyType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// DateType will allow the storage of a date value.
 type DateType struct{}
 
+// Name override to provide the expected name of this field.
 func (t DateType) Name() string {
 	return "Date"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t DateType) MarshalJSON() ([]byte, error) {
 	type Alias DateType
 
@@ -215,13 +234,15 @@ func (t DateType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// TimeType will allow the storage of a time value.
 type TimeType struct{}
 
+// Name override to provide the expected name of this field.
 func (t TimeType) Name() string {
 	return "Time"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t TimeType) MarshalJSON() ([]byte, error) {
 	type Alias TimeType
 
@@ -234,13 +255,15 @@ func (t TimeType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// DateTimeType will allow the storage of a date-time value.
 type DateTimeType struct{}
 
+// Name override to provide the expected name of this field.
 func (t DateTimeType) Name() string {
 	return "DateTime"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t DateTimeType) MarshalJSON() ([]byte, error) {
 	type Alias DateTimeType
 
@@ -253,15 +276,17 @@ func (t DateTimeType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// ReferenceType will allow the storage of a reference value.
 type ReferenceType struct {
-	ReferenceTypeId string `json:"referenceTypeId"`
+	ReferenceTypeID string `json:"referenceTypeId"`
 }
 
+// Name override to provide the expected name of this field.
 func (t ReferenceType) Name() string {
 	return "Reference"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t ReferenceType) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceType
 
@@ -274,16 +299,18 @@ func (t ReferenceType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// SetType will allow the storage of a set of fields.
 // The set field type defines a set (array without duplicates) with values of the given elementType.
 type SetType struct {
 	ElementType FieldType `json:"elementType"`
 }
 
+// Name override to provide the expected name of this field.
 func (t SetType) Name() string {
 	return "Set"
 }
 
-// MarshalJSON override to add the Name() value
+// MarshalJSON override to add the Name() value.
 func (t SetType) MarshalJSON() ([]byte, error) {
 	type Alias SetType
 
@@ -296,6 +323,7 @@ func (t SetType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// FieldType interface to allow configuration of various field types.
 type FieldType interface{}
 
 func fieldTypeMapping(input FieldType) FieldType {
@@ -353,11 +381,13 @@ func fieldTypeMapping(input FieldType) FieldType {
 	return nil
 }
 
+// EnumValue stores enums in field types.
 type EnumValue struct {
 	Key   string `json:"key"`
 	Label string `json:"label"`
 }
 
+// LocalizedEnumValue stores localized enums in field types.
 type LocalizedEnumValue struct {
 	Key   string                        `json:"key"`
 	Label commercetools.LocalizedString `json:"label"`
