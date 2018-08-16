@@ -48,6 +48,7 @@ func (ua TypeChangeName) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// If left blank, the description is removed.
 type TypeSetDescription struct {
 	Description commercetools.LocalizedString `json:"description,omitempty"`
 }
@@ -90,6 +91,8 @@ func (ua TypeAddFieldDefinition) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// The name of the field to remove.
+// The removal of a field definition deletes asynchronously all custom fields using this definition as well.
 type TypeRemoveFieldDefinition struct {
 	FieldName string `json:"fieldName"`
 }
@@ -133,6 +136,8 @@ func (ua TypeChangeLabel) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// Adds an enum to the values of EnumType.
+// It can update an EnumType field definition or a Set of EnumType field definition.
 type TypeAddEnumValue struct {
 	FieldName string    `json:"fieldName"`
 	Value     EnumValue `json:"value"`
@@ -155,6 +160,8 @@ func (ua TypeAddEnumValue) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// Adds an localized enum to the values of LocalizedEnumType.
+// It can update a LocalizedEnumType field definition or a Set of LocalizedEnumType field definition.
 type TypeAddLocalizedEnumValue struct {
 	FieldName string             `json:"fieldName"`
 	Value     LocalizedEnumValue `json:"value"`
@@ -198,6 +205,8 @@ func (ua TypeChangeFieldDefinitionsOrder) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// This action changes the order of enum values in an EnumType field definition.
+// It can update an EnumType field definition or a Set of EnumType field definition.
 type TypeChangeEnumValuesOrder struct {
 	FieldName string   `json:"fieldName"`
 	Keys      []string `json:"keys"`
@@ -220,6 +229,8 @@ func (ua TypeChangeEnumValuesOrder) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// This action changes the order of localized enum values in a LocalizedEnumType field definition.
+// It can update a LocalizedEnumType field definition or a Set of LocalizedEnumType field definition.
 type TypeChangeLocalizedEnumValuesOrder struct {
 	FieldName string   `json:"fieldName"`
 	Keys      []string `json:"keys"`

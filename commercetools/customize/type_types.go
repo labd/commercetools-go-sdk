@@ -9,6 +9,16 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
+// TextInputHint provides a visual representation type for a field.
+// It is only relevant for string-based field types like StringType and LocalizedStringType.
+type TextInputHint string
+
+const (
+	SingleLineTextInputHint TextInputHint = "SingleLine"
+	MultiLineTextInputHint  TextInputHint = "MultiLine"
+)
+
+// Types define custom fields that are used to enhance resources as you need.
 type Type struct {
 	ID               string                        `json:"id"`
 	Version          int                           `json:"version"`
@@ -21,6 +31,7 @@ type Type struct {
 	LastModifiedAt   time.Time                     `json:"lastModifiedAt"`
 }
 
+// TypeDrafts are given as payload for Create Type requests.
 type TypeDraft struct {
 	Key              string                        `json:"key"`
 	Name             commercetools.LocalizedString `json:"name"`
@@ -29,6 +40,7 @@ type TypeDraft struct {
 	FieldDefinitions []FieldDefinition             `json:"fieldDefinitions"`
 }
 
+// Field definitions describe custom fields and allow you to define some meta-information associated with the field.
 type FieldDefinition struct {
 	Type      FieldType                     `json:"type"`
 	Name      string                        `json:"name"`
@@ -46,6 +58,7 @@ func (f *FieldDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// Valid values for the field are true and false (JSON Boolean).
 type BooleanType struct{}
 
 func (t BooleanType) Name() string {
@@ -261,6 +274,7 @@ func (t ReferenceType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// The set field type defines a set (array without duplicates) with values of the given elementType.
 type SetType struct {
 	ElementType FieldType `json:"elementType"`
 }
@@ -288,53 +302,53 @@ func fieldTypeMapping(input FieldType) FieldType {
 	FieldType := input.(map[string]interface{})["name"]
 	switch FieldType {
 	case "Boolean":
-		new := BooleanType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := BooleanType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "String":
-		new := StringType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := StringType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "LocalizedString":
-		new := LocalizedStringType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := LocalizedStringType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Enum":
-		new := EnumType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := EnumType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "LocalizedEnum":
-		new := LocalizedEnumType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := LocalizedEnumType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Number":
-		new := NumberType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := NumberType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Money":
-		new := MoneyType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := MoneyType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Date":
-		new := DateType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := DateType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Time":
-		new := TimeType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := TimeType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "DateTime":
-		new := DateTimeType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := DateTimeType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Reference":
-		new := ReferenceType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := ReferenceType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	case "Set":
-		new := SetType{}
-		mapstructure.Decode(input, &new)
-		return new
+		newType := SetType{}
+		mapstructure.Decode(input, &newType)
+		return newType
 	}
 	return nil
 }
@@ -348,10 +362,3 @@ type LocalizedEnumValue struct {
 	Key   string                        `json:"key"`
 	Label commercetools.LocalizedString `json:"label"`
 }
-
-type TextInputHint string
-
-const (
-	SingleLineTextInputHint TextInputHint = "SingleLine"
-	MultiLineTextInputHint  TextInputHint = "MultiLine"
-)

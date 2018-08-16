@@ -19,6 +19,7 @@ type TypeUpdateInput struct {
 	Actions commercetools.UpdateActions
 }
 
+// OAuth2 Scopes: view_types:{projectKey}
 func (svc *Service) TypeGetByID(id string) (result *Type, err error) {
 	err = svc.client.Get(fmt.Sprintf("types/%s", id), nil, &result)
 	if err != nil {
@@ -27,6 +28,7 @@ func (svc *Service) TypeGetByID(id string) (result *Type, err error) {
 	return result, nil
 }
 
+// OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 	err = svc.client.Create("types", nil, draft, &result)
 	if err != nil {
@@ -35,9 +37,12 @@ func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 	return result, nil
 }
 
+// The expected version of the type on which the changes should be applied.
+// If the expected version does not match the actual version, a 409 Conflict will be returned.
+// OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeUpdate(input *TypeUpdateInput) (result *Type, err error) {
 	if input.ID == "" {
-		return nil, fmt.Errorf("No valid type id passed")
+		return nil, fmt.Errorf("no valid type id passed")
 	}
 
 	endpoint := fmt.Sprintf("types/%s", input.ID)
@@ -48,6 +53,8 @@ func (svc *Service) TypeUpdate(input *TypeUpdateInput) (result *Type, err error)
 	return result, nil
 }
 
+// These requests delete a type only if it’s not referenced by other entities.
+// OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeDeleteByID(id string, version int) (result *Type, err error) {
 	endpoint := fmt.Sprintf("types/%s", id)
 	params := url.Values{}
@@ -60,6 +67,8 @@ func (svc *Service) TypeDeleteByID(id string, version int) (result *Type, err er
 	return result, nil
 }
 
+// These requests delete a type only if it’s not referenced by other entities.
+// OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeDeleteByKey(key string, version int) (result *Type, err error) {
 	endpoint := fmt.Sprintf("types/key=%s", key)
 	params := url.Values{}
