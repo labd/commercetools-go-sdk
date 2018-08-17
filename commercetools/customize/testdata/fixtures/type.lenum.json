@@ -1,0 +1,35 @@
+{
+    "id": "1234",
+    "version": 1,
+    "key": "lineitemtype",
+    "name": {
+        "en": "lineitem"
+    },
+    "description": {
+        "en": "description"
+    },
+    "resourceTypeIds": [
+        "line-item"
+    ],
+    "fieldDefinitions": [
+        {
+            "name": "translated_offer_enum",
+            "label": {
+                "en": "translated_offer_enum"
+            },
+            "required": false,
+            "type": {
+                "name": "LocalizedEnum",
+                "values": [{
+                    "key": "enum",
+                    "label": {
+                        "en": "enum"
+                    }
+                }]
+            },
+            "inputHint": "SingleLine"
+        }
+    ],
+    "createdAt": "2015-10-07T06:56:19.217Z",
+    "lastModifiedAt": "2015-10-07T06:56:19.217Z"
+}

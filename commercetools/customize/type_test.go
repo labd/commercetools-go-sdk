@@ -6,8 +6,6 @@ import (
 	"testing"
 	"time"
 
-	"log"
-
 	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/labd/commercetools-go-sdk/commercetools/customize"
 	"github.com/labd/commercetools-go-sdk/testutil"
@@ -390,7 +388,7 @@ func TestTypeUpdate(t *testing.T) {
 
 func TestTypeDeleteByID(t *testing.T) {
 	output := testutil.RequestData{}
-	client, server := testutil.MockClient(t, fixture("type.json"), &output, nil)
+	client, server := testutil.MockClient(t, fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 	svc := customize.New(client)
 
@@ -406,7 +404,7 @@ func TestTypeDeleteByID(t *testing.T) {
 func TestTypeDeleteByKey(t *testing.T) {
 	output := testutil.RequestData{}
 
-	client, server := testutil.MockClient(t, fixture("type.json"), &output, nil)
+	client, server := testutil.MockClient(t, fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 	svc := customize.New(client)
 
@@ -419,165 +417,395 @@ func TestTypeDeleteByKey(t *testing.T) {
 	assert.Equal(t, "/unittest/types/key=1234", output.URL.Path)
 }
 
-func TestTypeTypeGetByID(t *testing.T) {
-	output := testutil.RequestData{}
-
-	client, server := testutil.MockClient(t, fixture("type.json"), &output, nil)
-	defer server.Close()
-	svc := customize.New(client)
-
-	result, err := svc.TypeGetByID("1234")
-	assert.Equal(t, nil, err)
-
-	log.Println(output.JSON)
-
+func TestTypeGetByID(t *testing.T) {
 	timestamp, _ := time.Parse(time.RFC3339, "2015-10-07T06:56:19.217Z")
 
-	expected := &customize.Type{
-		ID:      "1234",
-		Version: 1,
-		Key:     "lineitemtype",
-		Name: commercetools.LocalizedString{
-			"en": "lineitem",
-		},
-		Description: commercetools.LocalizedString{
-			"en": "description",
-		},
-		ResourceTypeIds: []string{"line-item"},
-		FieldDefinitions: []customize.FieldDefinition{
-			{
-				Type: customize.BooleanType{},
-				Name: "is_special",
-				Label: commercetools.LocalizedString{
-					"en": "is_special",
+	testCases := []struct {
+		desc    string
+		input   *customize.Type
+		fixture string
+	}{
+		{
+			desc: "Type with boolean field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
 				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.StringType{},
-				Name: "offer_name",
-				Label: commercetools.LocalizedString{
-					"en": "offer_name",
+				Description: commercetools.LocalizedString{
+					"en": "description",
 				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.LocalizedStringType{},
-				Name: "translated_offer_name",
-				Label: commercetools.LocalizedString{
-					"en": "translated_offer_name",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.EnumType{
-					Values: []customize.EnumValue{
-						{
-							Key:   "enum",
-							Label: "enum",
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.BooleanType{},
+						Name: "is_special",
+						Label: commercetools.LocalizedString{
+							"en": "is_special",
 						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
 					},
 				},
-				Name: "offer_enum",
-				Label: commercetools.LocalizedString{
-					"en": "offer_enum",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
 			},
-			{
-				Type: customize.LocalizedEnumType{
-					Values: []customize.LocalizedEnumValue{
-						{
-							Key: "enum",
-							Label: commercetools.LocalizedString{
-								"en": "enum",
+			fixture: "type.boolean.json",
+		},
+		{
+			desc: "Type with string field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.StringType{},
+						Name: "offer_name",
+						Label: commercetools.LocalizedString{
+							"en": "offer_name",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.string.json",
+		},
+		{
+			desc: "Type with localized string field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.LocalizedStringType{},
+						Name: "translated_offer_name",
+						Label: commercetools.LocalizedString{
+							"en": "translated_offer_name",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.lstring.json",
+		},
+		{
+			desc: "Type with enum field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.EnumType{
+							Values: []customize.EnumValue{
+								{
+									Key:   "enum",
+									Label: "enum",
+								},
 							},
 						},
+						Name: "offer_enum",
+						Label: commercetools.LocalizedString{
+							"en": "offer_enum",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
 					},
 				},
-				Name: "translated_offer_enum",
-				Label: commercetools.LocalizedString{
-					"en": "translated_offer_enum",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
 			},
-			{
-				Type: customize.NumberType{},
-				Name: "offer_number",
-				Label: commercetools.LocalizedString{
-					"en": "offer_number",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.MoneyType{},
-				Name: "offer_price",
-				Label: commercetools.LocalizedString{
-					"en": "offer_price",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.DateType{},
-				Name: "offer_date",
-				Label: commercetools.LocalizedString{
-					"en": "offer_date",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.TimeType{},
-				Name: "offer_time",
-				Label: commercetools.LocalizedString{
-					"en": "offer_time",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.DateTimeType{},
-				Name: "offer_date_time",
-				Label: commercetools.LocalizedString{
-					"en": "offer_date_time",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.ReferenceType{
-					ReferenceTypeID: "product",
-				},
-				Name: "offer_reference",
-				Label: commercetools.LocalizedString{
-					"en": "offer_reference",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
-			{
-				Type: customize.SetType{
-					ElementType: customize.StringType{},
-				},
-				Name: "offer_set",
-				Label: commercetools.LocalizedString{
-					"en": "offer_set",
-				},
-				Required:  false,
-				InputHint: customize.SingleLineTextInputHint,
-			},
+			fixture: "type.enum.json",
 		},
-		CreatedAt:      timestamp,
-		LastModifiedAt: timestamp,
+		{
+			desc: "Type with localized enum field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.LocalizedEnumType{
+							Values: []customize.LocalizedEnumValue{
+								{
+									Key: "enum",
+									Label: commercetools.LocalizedString{
+										"en": "enum",
+									},
+								},
+							},
+						},
+						Name: "translated_offer_enum",
+						Label: commercetools.LocalizedString{
+							"en": "translated_offer_enum",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.lenum.json",
+		},
+		{
+			desc: "Type with number field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.NumberType{},
+						Name: "offer_number",
+						Label: commercetools.LocalizedString{
+							"en": "offer_number",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.number.json",
+		},
+		{
+			desc: "Type with money field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.MoneyType{},
+						Name: "offer_price",
+						Label: commercetools.LocalizedString{
+							"en": "offer_price",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.money.json",
+		},
+		{
+			desc: "Type with date field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.DateType{},
+						Name: "offer_date",
+						Label: commercetools.LocalizedString{
+							"en": "offer_date",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.date.json",
+		},
+		{
+			desc: "Type with time field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.TimeType{},
+						Name: "offer_time",
+						Label: commercetools.LocalizedString{
+							"en": "offer_time",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.time.json",
+		},
+		{
+			desc: "Type with date-time field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.DateTimeType{},
+						Name: "offer_date_time",
+						Label: commercetools.LocalizedString{
+							"en": "offer_date_time",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.datetime.json",
+		},
+		{
+			desc: "Type with reference field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.ReferenceType{
+							ReferenceTypeID: "product",
+						},
+						Name: "offer_reference",
+						Label: commercetools.LocalizedString{
+							"en": "offer_reference",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.reference.json",
+		},
+		{
+			desc: "Type with set field definition",
+			input: &customize.Type{
+				ID:      "1234",
+				Version: 1,
+				Key:     "lineitemtype",
+				Name: commercetools.LocalizedString{
+					"en": "lineitem",
+				},
+				Description: commercetools.LocalizedString{
+					"en": "description",
+				},
+				ResourceTypeIds: []string{"line-item"},
+				FieldDefinitions: []customize.FieldDefinition{
+					{
+						Type: customize.SetType{
+							ElementType: customize.StringType{},
+						},
+						Name: "offer_set",
+						Label: commercetools.LocalizedString{
+							"en": "offer_set",
+						},
+						Required:  false,
+						InputHint: customize.SingleLineTextInputHint,
+					},
+				},
+				CreatedAt:      timestamp,
+				LastModifiedAt: timestamp,
+			},
+			fixture: "type.set.json",
+		},
 	}
-	assert.Equal(t, result, expected)
+
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			client, server := testutil.MockClient(t, fixture(tC.fixture), nil, nil)
+			defer server.Close()
+
+			svc := customize.New(client)
+			result, err := svc.TypeGetByID("1234")
+			assert.Nil(t, err)
+			assert.Equal(t, tC.input, result)
+		})
+	}
 }
 
 func TestFieldTypes(t *testing.T) {
