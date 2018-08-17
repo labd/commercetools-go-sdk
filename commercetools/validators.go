@@ -3,13 +3,10 @@ package commercetools
 import (
 	"fmt"
 	"reflect"
-	"regexp"
 	"strings"
 )
 
 const tagName = "validate"
-
-var fnameRe = regexp.MustCompile(`^[a-zA-Z0-9\-\_]+$`)
 
 // Validator is a generic interface for struct field validators.
 type Validator interface {
@@ -90,31 +87,6 @@ func (v NumberValidator) Validate(value interface{}) (bool, error) {
 	return true, nil
 }
 
-// FieldNameValidator checks if string is a valid field name.
-type FieldNameValidator struct {
-	Min int
-	Max int
-}
-
-// Validate verifies the supplied value and returns it's results.
-func (v FieldNameValidator) Validate(value interface{}) (bool, error) {
-	l := len(value.(string))
-
-	if l < v.Min {
-		return false, fmt.Errorf("should be at least %v chars long", v.Min)
-	}
-
-	if v.Max >= v.Min && l > v.Max {
-		return false, fmt.Errorf("should be less than %v chars long", v.Max)
-	}
-
-	if !fnameRe.MatchString(value.(string)) {
-		return false, fmt.Errorf("is not a valid field name")
-	}
-
-	return true, nil
-}
-
 // Returns validator struct corresponding to validation type
 func getValidatorFromTag(tag string) Validator {
 	args := strings.Split(tag, ",")
@@ -130,10 +102,6 @@ func getValidatorFromTag(tag string) Validator {
 		return validator
 	case "lstring":
 		validator := LStringValidator{}
-		fmt.Sscanf(strings.Join(args[1:], ","), "min=%d,max=%d", &validator.Min, &validator.Max)
-		return validator
-	case "fname":
-		validator := FieldNameValidator{}
 		fmt.Sscanf(strings.Join(args[1:], ","), "min=%d,max=%d", &validator.Min, &validator.Max)
 		return validator
 	}
