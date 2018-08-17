@@ -16,8 +16,11 @@ type TypeDeleteInput struct {
 
 // TypeUpdateInput provides the data required to update a type.
 type TypeUpdateInput struct {
-	ID      string
+	ID string
+	// The expected version of the type on which the changes should be applied.
+	// If the expected version does not match the actual version, a 409 Conflict will be returned.
 	Version int
+	// The list of update actions to be performed on the type.
 	Actions commercetools.UpdateActions
 }
 
@@ -42,8 +45,6 @@ func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 }
 
 // TypeUpdate will update a type matching the provided ID with the defined UpdateActions.
-// The expected version of the type on which the changes should be applied.
-// If the expected version does not match the actual version, a 409 Conflict will be returned.
 // OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeUpdate(input *TypeUpdateInput) (result *Type, err error) {
 	if input.ID == "" {

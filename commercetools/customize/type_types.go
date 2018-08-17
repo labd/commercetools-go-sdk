@@ -22,33 +22,49 @@ const (
 
 // Type defines custom fields that are used to enhance resources as you need.
 type Type struct {
-	ID               string                        `json:"id"`
-	Version          int                           `json:"version"`
-	Key              string                        `json:"key"`
-	Name             commercetools.LocalizedString `json:"name"`
-	Description      commercetools.LocalizedString `json:"description,omitempty"`
-	ResourceTypeIds  []string                      `json:"resourceTypeIds"`
-	FieldDefinitions []FieldDefinition             `json:"fieldDefinitions"`
-	CreatedAt        time.Time                     `json:"createdAt"`
-	LastModifiedAt   time.Time                     `json:"lastModifiedAt"`
+	// The unique ID of the type.
+	ID string `json:"id"`
+	// The current version of the type.
+	Version int `json:"version"`
+	// Identifier for the type (max. 256 characters).
+	Key         string                        `json:"key"`
+	Name        commercetools.LocalizedString `json:"name"`
+	Description commercetools.LocalizedString `json:"description,omitempty"`
+	// Defines for which resource(s) the type is valid.
+	ResourceTypeIds  []string          `json:"resourceTypeIds"`
+	FieldDefinitions []FieldDefinition `json:"fieldDefinitions"`
+	CreatedAt        time.Time         `json:"createdAt"`
+	LastModifiedAt   time.Time         `json:"lastModifiedAt"`
 }
 
 // TypeDraft is given as payload for Create Type requests.
 type TypeDraft struct {
-	Key              string                        `json:"key"`
-	Name             commercetools.LocalizedString `json:"name"`
-	Description      commercetools.LocalizedString `json:"description,omitempty"`
-	ResourceTypeIds  []string                      `json:"resourceTypeIds"`
-	FieldDefinitions []FieldDefinition             `json:"fieldDefinitions"`
+	// Identifier for the type (max. 256 characters).
+	Key         string                        `json:"key"`
+	Name        commercetools.LocalizedString `json:"name"`
+	Description commercetools.LocalizedString `json:"description,omitempty"`
+	// The IDs of the resources that can be customized with this type.
+	ResourceTypeIds  []string          `json:"resourceTypeIds"`
+	FieldDefinitions []FieldDefinition `json:"fieldDefinitions,omitempty"`
 }
 
 // FieldDefinition describe custom fields and allow you to define some meta-information associated with the field.
 type FieldDefinition struct {
-	Type      FieldType                     `json:"type"`
-	Name      string                        `json:"name"`
-	Label     commercetools.LocalizedString `json:"label"`
-	Required  bool                          `json:"required"`
-	InputHint TextInputHint                 `json:"inputHint"`
+	// Describes the type of the field.
+	Type FieldType `json:"type"`
+	// The name of the field.
+	// The name must be between two and 36 characters long and can contain the ASCII letters A to Z
+	// in lowercase or uppercase, digits, underscores (_) and the hyphen-minus (-).
+	// The name must be unique for a given resource type ID. In case there is a field with the same
+	// name in another type it has to have the same FieldType also.
+	Name string `json:"name"`
+	// A human-readable label for the field.
+	Label commercetools.LocalizedString `json:"label"`
+	//  Whether the field is required to have a value.
+	Required bool `json:"required"`
+	// Provides a visual representation type for this field. It is only relevant for string-based
+	// field types like StringType and LocalizedStringType.
+	InputHint TextInputHint `json:"inputHint"`
 }
 
 // UnmarshalJSON override to map the field type to the corresponding struct.
@@ -384,12 +400,16 @@ func fieldTypeMapping(input FieldType) FieldType {
 
 // EnumValue stores enums in field types.
 type EnumValue struct {
-	Key   string `json:"key"`
+	// The key of the value used as a programmatic identifier.
+	Key string `json:"key"`
+	// A descriptive label of the value.
 	Label string `json:"label"`
 }
 
 // LocalizedEnumValue stores localized enums in field types.
 type LocalizedEnumValue struct {
+	// The key of the value used as a programmatic identifier.
 	Key   string                        `json:"key"`
+	// A descriptive, localized label of the value.
 	Label commercetools.LocalizedString `json:"label"`
 }
