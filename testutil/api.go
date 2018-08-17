@@ -15,9 +15,10 @@ import (
 )
 
 type RequestData struct {
-	URL  url.URL
-	Body []byte
-	JSON string
+	URL    url.URL
+	Body   []byte
+	Method string
+	JSON   string
 }
 
 func MockClient(
@@ -36,15 +37,22 @@ func MockClient(
 			t.Fatal(err)
 		}
 
-		// Check if the body is valid JSON
-		var dummy map[string]interface{}
-		if err := json.Unmarshal(body, &dummy); err != nil {
-			log.Println(err)
+		if output != nil {
+			output.Method = r.Method
+			output.URL = *r.URL
 		}
 
-		if output != nil {
-			output.JSON = string(body)
-			output.URL = *r.URL
+		if r.Method == "POST" || r.Method == "PATCH" {
+
+			// Check if the body is valid JSON
+			var dummy map[string]interface{}
+			if err := json.Unmarshal(body, &dummy); err != nil {
+				log.Printf("Error on unmarshal: %v\n", body)
+			}
+
+			if output != nil {
+				output.JSON = string(body)
+			}
 		}
 	}
 
