@@ -31,7 +31,7 @@ func TestTypeCreate(t *testing.T) {
 		FieldDefinitions: []customize.FieldDefinition{
 			{
 				Type: customize.StringType{},
-				Name: "offer_name",
+				Name: "offer_name%",
 				Label: commercetools.LocalizedString{
 					"en": "offer_name",
 				},
@@ -59,7 +59,7 @@ func TestTypeCreate(t *testing.T) {
 		],
 		"fieldDefinitions": [
 			{
-				"name": "offer_name",
+				"name": "offer_name%",
 				"label": {
 					"en": "offer_name"
 				},
@@ -799,6 +799,10 @@ func TestTypeGetByID(t *testing.T) {
 		t.Run(tC.desc, func(t *testing.T) {
 			client, server := testutil.MockClient(t, fixture(tC.fixture), nil, nil)
 			defer server.Close()
+
+			for i, err := range commercetools.ValidateStruct(*tC.input) {
+				fmt.Printf("\t%d. %s\n", i+1, err.Error())
+			}
 
 			svc := customize.New(client)
 			result, err := svc.TypeGetByID("1234")

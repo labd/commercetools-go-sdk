@@ -27,7 +27,7 @@ type Type struct {
 	// The current version of the type.
 	Version int `json:"version"`
 	// Identifier for the type (max. 256 characters).
-	Key         string                        `json:"key"`
+	Key         string                        `json:"key" validate:"string,min=0,max=256"`
 	Name        commercetools.LocalizedString `json:"name"`
 	Description commercetools.LocalizedString `json:"description,omitempty"`
 	// Defines for which resource(s) the type is valid.
@@ -40,7 +40,7 @@ type Type struct {
 // TypeDraft is given as payload for Create Type requests.
 type TypeDraft struct {
 	// Identifier for the type (max. 256 characters).
-	Key         string                        `json:"key"`
+	Key         string                        `json:"key" validate:"string,min=1,max=256"`
 	Name        commercetools.LocalizedString `json:"name"`
 	Description commercetools.LocalizedString `json:"description,omitempty"`
 	// The IDs of the resources that can be customized with this type.
@@ -57,7 +57,7 @@ type FieldDefinition struct {
 	// in lowercase or uppercase, digits, underscores (_) and the hyphen-minus (-).
 	// The name must be unique for a given resource type ID. In case there is a field with the same
 	// name in another type it has to have the same FieldType also.
-	Name string `json:"name"`
+	Name string `json:"name" validate:"fname,min=2,max=36"`
 	// A human-readable label for the field.
 	Label commercetools.LocalizedString `json:"label"`
 	//  Whether the field is required to have a value.
@@ -409,7 +409,7 @@ type EnumValue struct {
 // LocalizedEnumValue stores localized enums in field types.
 type LocalizedEnumValue struct {
 	// The key of the value used as a programmatic identifier.
-	Key   string                        `json:"key"`
+	Key string `json:"key"`
 	// A descriptive, localized label of the value.
 	Label commercetools.LocalizedString `json:"label"`
 }

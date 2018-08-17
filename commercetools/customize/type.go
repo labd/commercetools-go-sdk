@@ -37,6 +37,10 @@ func (svc *Service) TypeGetByID(id string) (result *Type, err error) {
 // TypeCreate will create a new type from a draft, and return the newly created type.
 // OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
+	for _, err := range commercetools.ValidateStruct(*draft) {
+		return nil, err
+	}
+
 	err = svc.client.Create("types", nil, draft, &result)
 	if err != nil {
 		return nil, err
@@ -47,6 +51,10 @@ func (svc *Service) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 // TypeUpdate will update a type matching the provided ID with the defined UpdateActions.
 // OAuth2 Scopes: manage_types:{projectKey}
 func (svc *Service) TypeUpdate(input *TypeUpdateInput) (result *Type, err error) {
+	for _, err := range commercetools.ValidateStruct(*input) {
+		return nil, err
+	}
+
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid type id passed")
 	}
