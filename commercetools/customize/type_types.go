@@ -376,6 +376,7 @@ func fieldTypeMapping(input FieldType) FieldType {
 	case "Set":
 		newType := SetType{}
 		mapstructure.Decode(input, &newType)
+		newType.ElementType = fieldTypeMapping(newType.ElementType)
 		return newType
 	}
 	return nil
