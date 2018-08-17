@@ -41,17 +41,13 @@ type ExtensionDestinationHTTP struct {
 	URL string `json:"url"`
 }
 
-func (ed *ExtensionDestinationHTTP) Type() string {
-	return "HTTP"
-}
-
 func (ed ExtensionDestinationHTTP) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionDestinationHTTP
 	return json.Marshal(struct {
 		Type string `json:"type"`
 		*Alias
 	}{
-		Type:  ed.Type(),
+		Type:  "HTTP",
 		Alias: (*Alias)(&ed),
 	})
 }
@@ -73,17 +69,13 @@ type ExtensionDestinationAWSLambda struct {
 	AccessSecret string `json:"accessSecret"`
 }
 
-func (ed *ExtensionDestinationAWSLambda) Type() string {
-	return "AWSLambda"
-}
-
 func (ed ExtensionDestinationAWSLambda) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionDestinationAWSLambda
 	return json.Marshal(struct {
 		Type string `json:"type"`
 		*Alias
 	}{
-		Type:  ed.Type(),
+		Type:  "AWSLambda",
 		Alias: (*Alias)(&ed),
 	})
 }
@@ -115,10 +107,6 @@ type ExtensionChangeTriggers struct {
 	Messages []ExtensionTrigger `json:"messages"`
 }
 
-func (ua ExtensionChangeTriggers) Action() string {
-	return "changeTriggers"
-}
-
 func (ua ExtensionChangeTriggers) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionChangeTriggers
 
@@ -126,7 +114,7 @@ func (ua ExtensionChangeTriggers) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{
-		Action: ua.Action(),
+		Action: "changeTriggers",
 		Alias:  (*Alias)(&ua),
 	})
 }
@@ -137,10 +125,6 @@ type ExtensionChangeDestination struct {
 	Destination ExtensionDestination `json:"destination"`
 }
 
-func (ua ExtensionChangeDestination) Action() string {
-	return "changeDestination"
-}
-
 func (ua ExtensionChangeDestination) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionChangeDestination
 
@@ -148,7 +132,7 @@ func (ua ExtensionChangeDestination) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{
-		Action: ua.Action(),
+		Action: "changeDestination",
 		Alias:  (*Alias)(&ua),
 	})
 }

@@ -14,7 +14,7 @@ type ResourceIdentifier struct {
 }
 
 type UpdateAction interface {
-	Action() string
+	MarshalJSON() ([]byte, error)
 }
 
 type UpdateActions []UpdateAction

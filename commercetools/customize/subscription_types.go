@@ -64,10 +64,6 @@ type SubscriptionAWSSQSDestination struct {
 	Region       string `json:"region"`
 }
 
-func (sd SubscriptionAWSSQSDestination) Type() string {
-	return "SQS"
-}
-
 // MarshalJSON override to add the Type() value
 func (sd SubscriptionAWSSQSDestination) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionAWSSQSDestination
@@ -76,7 +72,7 @@ func (sd SubscriptionAWSSQSDestination) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{
-		Type:  sd.Type(),
+		Type:  "SQS",
 		Alias: (*Alias)(&sd),
 	})
 }
@@ -94,10 +90,6 @@ type SubscriptionAWSSNSDestination struct {
 	AccessSecret string `json:"accessSecret"`
 }
 
-func (sd SubscriptionAWSSNSDestination) Type() string {
-	return "SNS"
-}
-
 // MarshalJSON override to add the Type() value
 func (sd SubscriptionAWSSNSDestination) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionAWSSNSDestination
@@ -106,7 +98,7 @@ func (sd SubscriptionAWSSNSDestination) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{
-		Type:  sd.Type(),
+		Type:  "SNS",
 		Alias: (*Alias)(&sd),
 	})
 }
@@ -121,10 +113,6 @@ type SubscriptionIronMQDestination struct {
 	URI string `json:"uri"`
 }
 
-func (sd SubscriptionIronMQDestination) Type() string {
-	return "IronMQ"
-}
-
 // MarshalJSON override to add the Type() value
 func (sd SubscriptionIronMQDestination) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionIronMQDestination
@@ -133,7 +121,7 @@ func (sd SubscriptionIronMQDestination) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{
-		Type:  sd.Type(),
+		Type:  "IronMQ",
 		Alias: (*Alias)(&sd),
 	})
 }
@@ -163,10 +151,6 @@ type SubscriptionSetKey struct {
 	Key string `json:"key,omitempty"`
 }
 
-func (ua SubscriptionSetKey) Action() string {
-	return "setKey"
-}
-
 // MarshalJSON override to add the Action() value
 func (ua SubscriptionSetKey) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionSetKey
@@ -175,17 +159,13 @@ func (ua SubscriptionSetKey) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{
-		Action: ua.Action(),
+		Action: "setKey",
 		Alias:  (*Alias)(&ua),
 	})
 }
 
 type SubscriptionSetMessages struct {
 	Messages []MessageSubscription `json:"messages"`
-}
-
-func (ua SubscriptionSetMessages) Action() string {
-	return "setMessages"
 }
 
 // MarshalJSON override to add the Action() value
@@ -196,17 +176,13 @@ func (ua SubscriptionSetMessages) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{
-		Action: ua.Action(),
+		Action: "setMessages",
 		Alias:  (*Alias)(&ua),
 	})
 }
 
 type SubscriptionSetChanges struct {
 	Changes []ChangeSubscription `json:"changes"`
-}
-
-func (ua SubscriptionSetChanges) Action() string {
-	return "setChanges"
 }
 
 // MarshalJSON override to add the Action() value
@@ -217,7 +193,7 @@ func (ua SubscriptionSetChanges) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{
-		Action: ua.Action(),
+		Action: "setChanges",
 		Alias:  (*Alias)(&ua),
 	})
 }
