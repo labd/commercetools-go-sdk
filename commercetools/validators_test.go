@@ -8,10 +8,12 @@ import (
 )
 
 type ValidatorTestCase struct {
-	Number    int                           `validate:"number,min=1,max=10"`
-	String    string                        `validate:"string,min=2,max=12"`
-	LString   commercetools.LocalizedString `validate:"lstring,min=2,max=13"`
-	FieldName string                        `validate:"fname,min=2,max=8"`
+	Number      int                           `validate:"number,min=1,max=10"`
+	String      string                        `validate:"string,min=2,max=12"`
+	LString     commercetools.LocalizedString `validate:"lstring,min=2,max=13"`
+	FieldName   string                        `validate:"fname,min=2,max=8"`
+	Skipped     bool                          `validate:"-"`
+	Nonexistent bool                          `validate:"nonexistent"`
 }
 
 func TestValidators(t *testing.T) {
