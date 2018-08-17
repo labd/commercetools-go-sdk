@@ -582,36 +582,36 @@ func TestTypeTypeGetByID(t *testing.T) {
 
 func TestFieldTypes(t *testing.T) {
 	testCases := []struct {
-		desc  string
-		input interface {
+		desc   string
+		object interface {
 			MarshalJSON() ([]byte, error)
 		}
-		output string
+		json string
 	}{
 		{
-			desc:  "Boolean type",
-			input: customize.BooleanType{},
-			output: `{
+			desc:   "Boolean type",
+			object: customize.BooleanType{},
+			json: `{
 				"name": "Boolean"
 			}`,
 		},
 		{
-			desc:  "String type",
-			input: customize.StringType{},
-			output: `{
+			desc:   "String type",
+			object: customize.StringType{},
+			json: `{
 				"name": "String"
 			}`,
 		},
 		{
-			desc:  "Localized string type",
-			input: customize.LocalizedStringType{},
-			output: `{
+			desc:   "Localized string type",
+			object: customize.LocalizedStringType{},
+			json: `{
 				"name": "LocalizedString"
 			}`,
 		},
 		{
 			desc: "Enum type",
-			input: customize.EnumType{
+			object: customize.EnumType{
 				Values: []customize.EnumValue{
 					{
 						Key:   "test",
@@ -619,7 +619,7 @@ func TestFieldTypes(t *testing.T) {
 					},
 				},
 			},
-			output: `{
+			json: `{
 				"name": "Enum",
 				"values": [
 					{
@@ -631,7 +631,7 @@ func TestFieldTypes(t *testing.T) {
 		},
 		{
 			desc: "Localized enum type",
-			input: customize.LocalizedEnumType{
+			object: customize.LocalizedEnumType{
 				Values: []customize.LocalizedEnumValue{
 					{
 						Key: "test",
@@ -641,7 +641,7 @@ func TestFieldTypes(t *testing.T) {
 					},
 				},
 			},
-			output: `{
+			json: `{
 				"name": "LocalizedEnum",
 				"values": [
 					{
@@ -654,56 +654,56 @@ func TestFieldTypes(t *testing.T) {
 			}`,
 		},
 		{
-			desc:  "Number type",
-			input: customize.NumberType{},
-			output: `{
+			desc:   "Number type",
+			object: customize.NumberType{},
+			json: `{
 				"name": "Number"
 			}`,
 		},
 		{
-			desc:  "Money type",
-			input: customize.MoneyType{},
-			output: `{
+			desc:   "Money type",
+			object: customize.MoneyType{},
+			json: `{
 				"name": "Money"
 			}`,
 		},
 		{
-			desc:  "Date type",
-			input: customize.DateType{},
-			output: `{
+			desc:   "Date type",
+			object: customize.DateType{},
+			json: `{
 				"name": "Date"
 			}`,
 		},
 		{
-			desc:  "Time type",
-			input: customize.TimeType{},
-			output: `{
+			desc:   "Time type",
+			object: customize.TimeType{},
+			json: `{
 				"name": "Time"
 			}`,
 		},
 		{
-			desc:  "Date time type",
-			input: customize.DateTimeType{},
-			output: `{
+			desc:   "Date time type",
+			object: customize.DateTimeType{},
+			json: `{
 				"name": "DateTime"
 			}`,
 		},
 		{
 			desc: "Reference type",
-			input: customize.ReferenceType{
+			object: customize.ReferenceType{
 				ReferenceTypeID: "product",
 			},
-			output: `{
+			json: `{
 				"name": "Reference",
 				"referenceTypeId": "product"
 			}`,
 		},
 		{
 			desc: "Set type",
-			input: customize.SetType{
+			object: customize.SetType{
 				ElementType: customize.BooleanType{},
 			},
-			output: `{
+			json: `{
 				"name": "Set",
 				"elementType": {
 					"name": "Boolean"
@@ -713,10 +713,33 @@ func TestFieldTypes(t *testing.T) {
 	}
 
 	for _, tC := range testCases {
+
+		// Validate Marshalling (object -> json)
 		t.Run(tC.desc, func(t *testing.T) {
-			output, err := tC.input.MarshalJSON()
+			output, err := tC.object.MarshalJSON()
 			assert.Equal(t, nil, err)
-			assert.JSONEq(t, tC.output, string(output))
+			assert.JSONEq(t, tC.json, string(output))
+		})
+
+		// Validate Umarshalling (json -> object)
+		t.Run(tC.desc, func(t *testing.T) {
+			buf := fmt.Sprintf(`
+			{
+				"name": "test",
+				"label": {
+					"en": "test"
+				},
+				"required": false,
+				"type": %s,
+				"inputHint": "SingleLine"
+			}`, tC.json)
+
+			fd := customize.FieldDefinition{}
+
+			err := fd.UnmarshalJSON([]byte(buf))
+
+			assert.Equal(t, nil, err)
+			assert.Equal(t, tC.object, fd.Type)
 		})
 	}
 }
