@@ -1,7 +1,6 @@
 package customize_test
 
 import (
-	"fmt"
 	"net/url"
 	"testing"
 
@@ -131,8 +130,6 @@ func TestSubscriptionUpdate(t *testing.T) {
 			},
 		},
 	}
-
-	fmt.Println(output)
 
 	_, err := svc.SubscriptionUpdate(input)
 	assert.Equal(t, nil, err)
