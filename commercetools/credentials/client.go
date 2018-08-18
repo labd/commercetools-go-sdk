@@ -14,6 +14,7 @@ import (
 )
 
 type ClientCredentialsProvider struct {
+	authURL      string
 	clientID     string
 	clientSecret string
 	scope        string
@@ -22,11 +23,12 @@ type ClientCredentialsProvider struct {
 }
 
 // TODO: Re-use client ?
-func NewClientCredentialsProvider(clientID string, clientSecret string, scope string) AuthProvider {
+func NewClientCredentialsProvider(clientID, clientSecret, scope, authURL string) AuthProvider {
 	return &ClientCredentialsProvider{
-		clientID:     getConfigValue(clientID, "CT_CLIENT_ID"),
-		clientSecret: getConfigValue(clientSecret, "CT_CLIENT_SECRET"),
-		scope:        scope,
+		clientID:     getConfigValue(clientID, "CTP_CLIENT_ID"),
+		clientSecret: getConfigValue(clientSecret, "CTP_CLIENT_SECRET"),
+		scope:        getConfigValue(scope, "CTP_SCOPES"),
+		authURL:      getConfigValue(authURL, "CTP_AUTH_URL"),
 	}
 }
 

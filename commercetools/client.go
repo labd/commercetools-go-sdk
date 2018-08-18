@@ -18,7 +18,7 @@ import (
 
 type Client struct {
 	HTTPClient *http.Client
-	region     string
+	apiURL     string
 	projectKey string
 	auth       credentials.AuthProvider
 	logLevel   int
@@ -27,16 +27,15 @@ type Client struct {
 type Config struct {
 	ProjectKey   string
 	AuthProvider credentials.AuthProvider
-	Region       string
+	ApiURL       string
 	LogLevel     int
 }
 
 func NewClient(cfg *Config) (*Client, error) {
-
 	client := &Client{
 		auth:       cfg.AuthProvider,
-		projectKey: getConfigValue(cfg.ProjectKey, "CT_PROJECT_KEY"),
-		region:     getConfigValue(cfg.Region, "CT_REGION"),
+		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
+		apiURL:     getConfigValue(cfg.ApiURL, "CTP_API_URL"),
 		HTTPClient: cleanhttp.DefaultClient(),
 		logLevel:   cfg.LogLevel,
 	}
@@ -44,11 +43,11 @@ func NewClient(cfg *Config) (*Client, error) {
 	if client.projectKey == "" {
 		return nil, errors.New("Missing ProjectKey")
 	}
-	if client.region == "" {
-		return nil, errors.New("Missing Region")
+	if client.apiURL == "" {
+		return nil, errors.New("Missing API url")
 	}
 
-	if os.Getenv("CT_DEBUG") != "" {
+	if os.Getenv("CTP_DEBUG") != "" {
 		client.logLevel = 1
 
 	}
@@ -60,10 +59,6 @@ func getConfigValue(value string, envName string) string {
 		return value
 	}
 	return os.Getenv(envName)
-}
-
-func (c *Client) CreateURL(endpoint string) string {
-	return c.region + "/" + c.projectKey + "/" + endpoint
 }
 
 func (c *Client) Get(endpoint string, queryParams url.Values, output interface{}) error {
@@ -107,7 +102,7 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 		return err
 	}
 
-	url := c.CreateURL(endpoint)
+	url := c.apiURL + "/" + c.projectKey + "/" + endpoint
 	req, err := http.NewRequest(method, url, data)
 	req.Header.Add("Authorization", authToken)
 
