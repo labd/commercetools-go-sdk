@@ -21,17 +21,15 @@ type RequestData struct {
 	JSON   string
 }
 
+type HttpHandler func(w http.ResponseWriter, r *http.Request)
+
 func MockClient(
 	t *testing.T,
 	fixture string,
 	output *RequestData,
-	callback func([]byte)) (*commercetools.Client, *httptest.Server) {
+	callback HttpHandler) (*commercetools.Client, *httptest.Server) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, fixture)
-
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			t.Fatal(err)
@@ -54,6 +52,15 @@ func MockClient(
 				output.JSON = string(body)
 			}
 		}
+
+		if callback != nil {
+			callback(w, r)
+		} else {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			fmt.Fprint(w, fixture)
+		}
+
 	}
 
 	ts := httptest.NewServer(http.HandlerFunc(handler))

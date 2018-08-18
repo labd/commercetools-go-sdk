@@ -101,15 +101,6 @@ func (c *Client) Delete(endpoint string, queryParams url.Values, output interfac
 	return err
 }
 
-func serializeInput(input interface{}) (io.Reader, error) {
-	m, err := json.MarshalIndent(input, "", "\t")
-	if err != nil {
-		return nil, err
-	}
-	data := bytes.NewReader(m)
-	return data, nil
-}
-
 func (c *Client) doRequest(method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
 	authToken, err := c.auth.GetAuthToken()
 	if err != nil {
@@ -127,44 +118,45 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 	if c.logLevel > 0 {
 		logRequest(req)
 	}
+
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer resp.Body.Close()
+
 	if c.logLevel > 0 {
 		logResponse(resp)
 	}
-	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 
 	switch resp.StatusCode {
-	case 404:
-		{
-			return errors.New("HTTP Not Found")
-		}
-	case 400:
-		{
-			data := make(map[string]interface{})
-			json.Unmarshal(body, &data)
-			return errors.New(data["message"].(string))
-		}
-	case 401:
-		{
-			data := make(map[string]interface{})
-			json.Unmarshal(body, &data)
-			return fmt.Errorf(
-				"Authentication error: %s", data["message"].(string))
-		}
-
 	case 200, 201:
-		{
-			err := json.Unmarshal(body, output)
-			return err
-		}
+		return json.Unmarshal(body, output)
 	default:
-		{
-			return fmt.Errorf("Unhandled status code (%d)", resp.StatusCode)
-		}
+		return processErrorResponse(resp.StatusCode, body)
 	}
+}
+
+func processErrorResponse(statusCode int, body []byte) error {
+	data := make(map[string]interface{})
+	err := json.Unmarshal(body, &data)
+	st := http.StatusText(statusCode)
+	if err == nil {
+		if val, ok := data["message"]; ok {
+			return fmt.Errorf("HTTP %s: %s", st, val.(string))
+		}
+		return fmt.Errorf("HTTP %s: %s", st, string(body))
+	}
+	return fmt.Errorf("HTTP %s: %v", st, err)
+}
+
+func serializeInput(input interface{}) (io.Reader, error) {
+	m, err := json.MarshalIndent(input, "", "\t")
+	if err != nil {
+		return nil, err
+	}
+	data := bytes.NewReader(m)
+	return data, nil
 }
