@@ -21,12 +21,14 @@ type Client struct {
 	region     string
 	projectKey string
 	auth       credentials.AuthProvider
+	logLevel   int
 }
 
 type Config struct {
 	ProjectKey   string
 	AuthProvider credentials.AuthProvider
 	Region       string
+	LogLevel     int
 }
 
 func NewClient(cfg *Config) (*Client, error) {
@@ -36,6 +38,7 @@ func NewClient(cfg *Config) (*Client, error) {
 		projectKey: getConfigValue(cfg.ProjectKey, "CT_PROJECT_KEY"),
 		region:     getConfigValue(cfg.Region, "CT_REGION"),
 		HTTPClient: cleanhttp.DefaultClient(),
+		logLevel:   cfg.LogLevel,
 	}
 
 	if client.projectKey == "" {
@@ -43,6 +46,11 @@ func NewClient(cfg *Config) (*Client, error) {
 	}
 	if client.region == "" {
 		return nil, errors.New("Missing Region")
+	}
+
+	if os.Getenv("CT_DEBUG") != "" {
+		client.logLevel = 1
+
 	}
 	return client, nil
 }
@@ -116,9 +124,15 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 		req.URL.RawQuery = params.Encode()
 	}
 
+	if c.logLevel > 0 {
+		logRequest(req)
+	}
 	resp, err := c.HTTPClient.Do(req)
 	if err != nil {
 		log.Fatal(err)
+	}
+	if c.logLevel > 0 {
+		logResponse(resp)
 	}
 	defer resp.Body.Close()
 
