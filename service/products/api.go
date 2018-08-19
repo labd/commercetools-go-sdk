@@ -1,4 +1,4 @@
-package catalog
+package products
 
 import (
 	"errors"
@@ -15,14 +15,14 @@ type PriceSelection struct {
 	Channel       string
 }
 
-type ProductUpdateInput struct {
+type UpdateInput struct {
 	ID             string
 	Version        int
 	PriceSelection PriceSelection
 	Actions        commercetools.UpdateActions
 }
 
-type ProductDeleteInput struct {
+type DeleteInput struct {
 	ID             string
 	Key            string
 	Version        int
@@ -47,7 +47,7 @@ func (ps *PriceSelection) GetQueryParameters() url.Values {
 	return result
 }
 
-func (i *ProductDeleteInput) GetQueryParameters() url.Values {
+func (i *DeleteInput) GetQueryParameters() url.Values {
 	result := i.PriceSelection.GetQueryParameters()
 	if i.Version > 0 {
 		result.Add("version", string(i.Version))
@@ -55,7 +55,7 @@ func (i *ProductDeleteInput) GetQueryParameters() url.Values {
 	return result
 }
 
-func (svc *Service) ProductCreate(draft *ProductDraft) (*Product, error) {
+func (svc *Service) Create(draft *ProductDraft) (*Product, error) {
 	var result Product
 	err := svc.client.Create("products", nil, draft, &result)
 	if err != nil {
@@ -64,7 +64,7 @@ func (svc *Service) ProductCreate(draft *ProductDraft) (*Product, error) {
 	return &result, nil
 }
 
-func (svc *Service) ProductGetByID(id int) (*Product, error) {
+func (svc *Service) GetByID(id int) (*Product, error) {
 	var result Product
 	err := svc.client.Get(fmt.Sprintf("products/%d", id), nil, &result)
 	if err != nil {
@@ -73,11 +73,11 @@ func (svc *Service) ProductGetByID(id int) (*Product, error) {
 	return &result, nil
 }
 
-func (svc *Service) ProductGetByKey(key string) (*Product, error) {
+func (svc *Service) GetByKey(key string) (*Product, error) {
 	return &Product{}, nil
 }
 
-func (svc *Service) ProductUpdate(input *ProductUpdateInput) (*Product, error) {
+func (svc *Service) Update(input *UpdateInput) (*Product, error) {
 	var result Product
 
 	endpoint := fmt.Sprintf("products/%s", input.ID)
@@ -90,7 +90,7 @@ func (svc *Service) ProductUpdate(input *ProductUpdateInput) (*Product, error) {
 	return &result, nil
 }
 
-func (svc *Service) ProductDeleteByID(input *ProductDeleteInput) (*Product, error) {
+func (svc *Service) DeleteByID(input *DeleteInput) (*Product, error) {
 	if input.ID == "" {
 		return nil, errors.New("Missing required field ID")
 	}
@@ -105,7 +105,7 @@ func (svc *Service) ProductDeleteByID(input *ProductDeleteInput) (*Product, erro
 	return &result, nil
 }
 
-func (svc *Service) ProductDeleteByKey(input *ProductDeleteInput) (*Product, error) {
+func (svc *Service) DeleteByKey(input *DeleteInput) (*Product, error) {
 	if input.Key == "" {
 		return nil, errors.New("Missing required field Key")
 	}

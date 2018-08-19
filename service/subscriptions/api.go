@@ -1,4 +1,4 @@
-package customize
+package subscriptions
 
 import (
 	"fmt"
@@ -8,18 +8,18 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
-type SubscriptionDeleteInput struct {
+type DeleteInput struct {
 	ID      string
 	Version int
 }
 
-type SubscriptionUpdateInput struct {
+type UpdateInput struct {
 	ID      string
 	Version int
 	Actions commercetools.UpdateActions
 }
 
-func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
+func (svc *Service) GetByID(id string) (*Subscription, error) {
 	var result Subscription
 	err := svc.client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
 	if err != nil {
@@ -28,7 +28,7 @@ func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
 	return &result, nil
 }
 
-// SubscriptionCreate creates a new Subscription. It is eventually consistent,
+// Create creates a new Subscription. It is eventually consistent,
 // it may take up to a minute before it becomes fully active.
 //
 // In order to test that the destination is correctly configured, a test message
@@ -37,7 +37,7 @@ func (svc *Service) SubscriptionGetByID(id string) (*Subscription, error) {
 // notification of type ResourceCreated for the resourceTypeId subscription.
 //
 // Currently, a maximum of 25 subscriptions can be created per project.
-func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription, error) {
+func (svc *Service) Create(draft *SubscriptionDraft) (*Subscription, error) {
 	var result Subscription
 	err := svc.client.Create("subscriptions", nil, draft, &result)
 	if err != nil {
@@ -46,9 +46,9 @@ func (svc *Service) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription,
 	return &result, nil
 }
 
-// SubscriptionUpdate updates a Subscription. It is eventually consistent, it
+// Update updates a Subscription. It is eventually consistent, it
 // may take up to a minute before changes becomes fully active.
-func (svc *Service) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
+func (svc *Service) Update(input *UpdateInput) (*Subscription, error) {
 	var result Subscription
 
 	if input.ID == "" {
@@ -63,7 +63,7 @@ func (svc *Service) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscri
 	return &result, nil
 }
 
-func (svc *Service) SubscriptionDeleteByID(id string, version int) (*Subscription, error) {
+func (svc *Service) DeleteByID(id string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
 	params := url.Values{}
@@ -76,7 +76,7 @@ func (svc *Service) SubscriptionDeleteByID(id string, version int) (*Subscriptio
 	return &result, nil
 }
 
-func (svc *Service) SubscriptionDeleteByKey(key string, version int) (*Subscription, error) {
+func (svc *Service) DeleteByKey(key string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
 	params := url.Values{}

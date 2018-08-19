@@ -15,8 +15,8 @@ import (
   "log"
 
   "github.com/labd/commercetools-go-sdk/commercetools"
-  "github.com/labd/commercetools-go-sdk/commercetools/catalog"
   "github.com/labd/commercetools-go-sdk/commercetools/credentials"
+  "github.com/labd/commercetools-go-sdk/service/products"
 )
 
 client, err := commercetools.NewClient(&commercetools.Config{
@@ -30,8 +30,8 @@ if err != nil {
   log.Fatal(err)
 }
 
-svc := catalog.New(client)
-product, err := svc.ProductCreate(&catalog.ProductDraft{
+svc := products.New(client)
+product, err := svc.ProductCreate(&products.ProductDraft{
   Key: "test-product",
   Name: commercetools.LocalizedString{
     "nl": "Een test product",

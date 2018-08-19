@@ -1,4 +1,4 @@
-package catalog
+package extensions
 
 import "github.com/labd/commercetools-go-sdk/commercetools"
 

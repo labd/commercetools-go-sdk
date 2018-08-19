@@ -1,31 +1,22 @@
-package catalog_test
+package products_test
 
 import (
-	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
-	"github.com/labd/commercetools-go-sdk/commercetools/catalog"
+	"github.com/labd/commercetools-go-sdk/service/products"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
-func fixture(path string) string {
-	b, err := ioutil.ReadFile("testdata/fixtures/" + path)
-	if err != nil {
-		panic(err)
-	}
-	return string(b)
-}
-
 func TestCreateProductNew(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	svc := catalog.New(client)
+	svc := products.New(client)
 
-	draft := &catalog.ProductDraft{
+	draft := &products.ProductDraft{
 		Key: "product-test",
 		Name: commercetools.LocalizedString{
 			"nl": "Een product",
@@ -40,18 +31,18 @@ func TestCreateProductNew(t *testing.T) {
 			"en": "some-product",
 		},
 	}
-	product, err := svc.ProductCreate(draft)
+	product, err := svc.Create(draft)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", product.MasterData.Current.Description["en"])
 }
 
 func TestGetProductByID(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
-	svc := catalog.New(client)
+	svc := products.New(client)
 
-	product, err := svc.ProductGetByID(100)
+	product, err := svc.GetByID(100)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,18 +53,18 @@ func TestGetProductByID(t *testing.T) {
 }
 
 func TestProductUpdate(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
-	svc := catalog.New(client)
+	svc := products.New(client)
 
-	product, err := svc.ProductUpdate(&catalog.ProductUpdateInput{
+	product, err := svc.Update(&products.UpdateInput{
 		ID:      "1",
 		Version: 2,
-		PriceSelection: catalog.PriceSelection{
+		PriceSelection: products.PriceSelection{
 			Currency: "EUR",
 		},
 		Actions: commercetools.UpdateActions{
-			catalog.ProductAddPrice{
+			products.ProductAddPrice{
 				VariantID: 1,
 				Price:     1000,
 			},
@@ -89,11 +80,11 @@ func TestProductUpdate(t *testing.T) {
 }
 
 func TestProductDeleteByID(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
-	svc := catalog.New(client)
+	svc := products.New(client)
 
-	product, err := svc.ProductDeleteByID(&catalog.ProductDeleteInput{
+	product, err := svc.DeleteByID(&products.DeleteInput{
 		ID:      "foobar",
 		Version: 2,
 	})
@@ -106,11 +97,11 @@ func TestProductDeleteByID(t *testing.T) {
 }
 
 func TestProductDeleteByKey(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("product.example.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
-	svc := catalog.New(client)
+	svc := products.New(client)
 
-	product, err := svc.ProductDeleteByKey(&catalog.ProductDeleteInput{
+	product, err := svc.DeleteByKey(&products.DeleteInput{
 		Key:     "foobar",
 		Version: 2,
 	})

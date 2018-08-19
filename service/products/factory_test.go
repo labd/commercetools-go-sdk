@@ -1,20 +1,20 @@
-package catalog_test
+package products_test
 
 import (
 	"time"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
-	"github.com/labd/commercetools-go-sdk/commercetools/catalog"
+	"github.com/labd/commercetools-go-sdk/service/products"
 )
 
-func createExampleProduct() *catalog.Product {
-	return &catalog.Product{
+func createExampleProduct() *products.Product {
+	return &products.Product{
 		ID:             "e7ba4c75-b1bb-483d-94d8-2c4a10f78472",
 		Version:        2,
 		CreatedAt:      time.Date(1970, 1, 1, 0, 0, 0, 1000000, time.UTC),
 		LastModifiedAt: time.Date(1970, 1, 1, 0, 0, 0, 1000000, time.UTC),
-		MasterData: catalog.ProductCatalogData{
-			Current: catalog.ProductData{
+		MasterData: products.ProductCatalogData{
+			Current: products.ProductData{
 				Name: commercetools.LocalizedString{
 					"en": "MB PREMIUM TECH T",
 				},
@@ -30,21 +30,21 @@ func createExampleProduct() *catalog.Product {
 				Slug: commercetools.LocalizedString{
 					"en": "mb-premium-tech-t1369226795424",
 				},
-				MasterVariant: catalog.ProductVariant{
+				MasterVariant: products.ProductVariant{
 					ID:         1,
 					Sku:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
-					Attributes: []catalog.Attribute{},
-					Images: []catalog.Image{
-						catalog.Image{
-							Dimensions: catalog.ImageDimensions{
+					Attributes: []products.Attribute{},
+					Images: []products.Image{
+						products.Image{
+							Dimensions: products.ImageDimensions{
 								H: 1400,
 								W: 1400,
 							},
 							URL: "https://sphere.io/cli/data/253245821_1.jpg",
 						},
 					},
-					Prices: []catalog.Price{
-						catalog.Price{
+					Prices: []products.Price{
+						products.Price{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
 							Value: commercetools.Money{
 								Type:           "centPrecision",
@@ -55,11 +55,11 @@ func createExampleProduct() *catalog.Product {
 						},
 					},
 				},
-				Variants: []catalog.ProductVariant{},
+				Variants: []products.ProductVariant{},
 			},
 			HasStagedChanged: false,
 			Published:        true,
-			Staged: catalog.ProductData{
+			Staged: products.ProductData{
 				Name: commercetools.LocalizedString{
 					"en": "MB PREMIUM TECH T",
 				},
@@ -75,21 +75,21 @@ func createExampleProduct() *catalog.Product {
 				Slug: commercetools.LocalizedString{
 					"en": "mb-premium-tech-t1369226795424",
 				},
-				MasterVariant: catalog.ProductVariant{
+				MasterVariant: products.ProductVariant{
 					ID:         1,
 					Sku:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
-					Attributes: []catalog.Attribute{},
-					Images: []catalog.Image{
-						catalog.Image{
-							Dimensions: catalog.ImageDimensions{
+					Attributes: []products.Attribute{},
+					Images: []products.Image{
+						products.Image{
+							Dimensions: products.ImageDimensions{
 								H: 1400,
 								W: 1400,
 							},
 							URL: "https://sphere.io/cli/data/253245821_1.jpg",
 						},
 					},
-					Prices: []catalog.Price{
-						catalog.Price{
+					Prices: []products.Price{
+						products.Price{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
 							Value: commercetools.Money{
 								Type:           "centPrecision",
@@ -100,7 +100,7 @@ func createExampleProduct() *catalog.Product {
 						},
 					},
 				},
-				Variants: []catalog.ProductVariant{},
+				Variants: []products.ProductVariant{},
 			},
 		},
 		ProductType: commercetools.Reference{

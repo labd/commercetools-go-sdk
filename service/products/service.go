@@ -1,4 +1,4 @@
-package customize
+package products
 
 import "github.com/labd/commercetools-go-sdk/commercetools"
 
