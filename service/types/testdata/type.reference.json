@@ -1,0 +1,30 @@
+{
+    "id": "1234",
+    "version": 1,
+    "key": "lineitemtype",
+    "name": {
+        "en": "lineitem"
+    },
+    "description": {
+        "en": "description"
+    },
+    "resourceTypeIds": [
+        "line-item"
+    ],
+    "fieldDefinitions": [
+        {
+            "name": "offer_reference",
+            "label": {
+                "en": "offer_reference"
+            },
+            "required": false,
+            "type": {
+                "name": "Reference",
+                "referenceTypeId": "product"
+            },
+            "inputHint": "SingleLine"
+        }
+    ],
+    "createdAt": "2015-10-07T06:56:19.217Z",
+    "lastModifiedAt": "2015-10-07T06:56:19.217Z"
+}
