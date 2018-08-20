@@ -1,51 +1,51 @@
-package customize_test
+package extensions_test
 
 import (
 	"fmt"
 	"testing"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
+	"github.com/labd/commercetools-go-sdk/service/extensions"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/labd/commercetools-go-sdk/commercetools/customize"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
 func TestExtensionCreate(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("extension.azure.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := extensions.New(client)
 
-	draft := &customize.ExtensionDraft{
+	draft := &extensions.ExtensionDraft{
 		Key: "test",
-		Destination: customize.ExtensionDestinationHTTP{
+		Destination: extensions.DestinationHTTP{
 			URL: "http://example.com",
 		},
-		Triggers: []customize.ExtensionTrigger{
-			customize.ExtensionTrigger{
+		Triggers: []extensions.Trigger{
+			extensions.Trigger{
 				ResourceTypeID: "product",
 				Actions:        []string{"Create"},
 			},
 		},
 	}
 
-	_, err := svc.ExtensionCreate(draft)
+	_, err := svc.Create(draft)
 	assert.Equal(t, nil, err)
 }
 
 func TestExtensionUpdate(t *testing.T) {
 	output := testutil.RequestData{}
 
-	client, server := testutil.MockClient(t, fixture("extension.azure.json"), &output, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), &output, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := extensions.New(client)
 
-	input := &customize.ExtensionUpdateInput{
+	input := &extensions.UpdateInput{
 		Version: 2,
 		Actions: commercetools.UpdateActions{
-			customize.ExtensionChangeDestination{
-				Destination: customize.ExtensionDestinationAWSLambda{
+			extensions.ChangeDestination{
+				Destination: extensions.DestinationAWSLambda{
 					ARN:          "arn:aws:lambda:<region>:<accountid>:function:<functionName>",
 					AccessKey:    "qwer",
 					AccessSecret: "secret",
@@ -56,7 +56,7 @@ func TestExtensionUpdate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := svc.ExtensionUpdate(input)
+	_, err := svc.Update(input)
 	assert.Equal(t, nil, err)
 
 	expectedBody := `{
@@ -77,19 +77,19 @@ func TestExtensionUpdate(t *testing.T) {
 }
 
 func TestExtensionDeleteByID(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("extension.azure.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := extensions.New(client)
 
-	_, err := svc.ExtensionDeleteByID("1234", 2)
+	_, err := svc.DeleteByID("1234", 2)
 	assert.Equal(t, nil, err)
 }
 
 func TestExtensionDeleteByKey(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("extension.azure.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := extensions.New(client)
 
-	_, err := svc.ExtensionDeleteByKey("1234", 2)
+	_, err := svc.DeleteByKey("1234", 2)
 	assert.Equal(t, nil, err)
 }

@@ -1,4 +1,4 @@
-package customize
+package subscriptions
 
 import (
 	"encoding/json"
@@ -8,14 +8,14 @@ import (
 )
 
 type Subscription struct {
-	ID             string                  `json:"id"`
-	Version        int                     `json:"version"`
-	Key            string                  `json:"key"`
-	Destination    SubscriptionDestination `json:"destination"`
-	Messages       []MessageSubscription   `json:"messages,omitempty"`
-	Changes        []ChangeSubscription    `json:"changes,omitempty"`
-	CreatedAt      time.Time               `json:"createdAt"`
-	LastModifiedAt time.Time               `json:"lastModifiedAt"`
+	ID             string                `json:"id"`
+	Version        int                   `json:"version"`
+	Key            string                `json:"key"`
+	Destination    Destination           `json:"destination"`
+	Messages       []MessageSubscription `json:"messages,omitempty"`
+	Changes        []ChangeSubscription  `json:"changes,omitempty"`
+	CreatedAt      time.Time             `json:"createdAt"`
+	LastModifiedAt time.Time             `json:"lastModifiedAt"`
 }
 
 func (s *Subscription) UnmarshalJSON(data []byte) error {
@@ -23,17 +23,17 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(s)); err != nil {
 		return err
 	}
-	s.Destination = subscriptionDestinationMapping(s.Destination)
+	s.Destination = destinationMapping(s.Destination)
 	return nil
 }
 
 // SubscriptionDraft is used to create new subscriptions. It is a stripped
 // version of the regular Subscription struct.
 type SubscriptionDraft struct {
-	Key         string                  `json:"key"`
-	Destination SubscriptionDestination `json:"destination"`
-	Messages    []MessageSubscription   `json:"messages"`
-	Changes     []ChangeSubscription    `json:"changes,omitempty"`
+	Key         string                `json:"key"`
+	Destination Destination           `json:"destination"`
+	Messages    []MessageSubscription `json:"messages"`
+	Changes     []ChangeSubscription  `json:"changes,omitempty"`
 }
 
 // MessageSubscription allows you to subscribe to messages on a specific
@@ -50,14 +50,14 @@ type ChangeSubscription struct {
 	ResourceTypeID string `json:"resourceTypeId"`
 }
 
-// SubscriptionAWSSQSDestination is for the AWS SQS as a destination. AWS SQS is
+// DestinationAWSSQS is for the AWS SQS as a destination. AWS SQS is
 // a pull-queue on AWS. We support the Standard queue type (the FIFO queue type
 // is not supported).
 //
 // The queue needs to exist beforehand. It is recommended to create an IAM user
 // with an accessKey and accessSecret pair specifically for each subscription
 // that only has the sqs:SendMessage permission on this queue.
-type SubscriptionAWSSQSDestination struct {
+type DestinationAWSSQS struct {
 	QueueURL     string `json:"queueUrl"`
 	AccessKey    string `json:"accessKey"`
 	AccessSecret string `json:"accessSecret"`
@@ -65,8 +65,8 @@ type SubscriptionAWSSQSDestination struct {
 }
 
 // MarshalJSON override to add the Type() value
-func (sd SubscriptionAWSSQSDestination) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionAWSSQSDestination
+func (sd DestinationAWSSQS) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAWSSQS
 
 	return json.Marshal(struct {
 		Type string `json:"type"`
@@ -77,22 +77,22 @@ func (sd SubscriptionAWSSQSDestination) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SubscriptionAWSSNSDestination is for the AWS SNS destination. AWS SNS can be
+// DestinationAWSSNS is for the AWS SNS destination. AWS SNS can be
 // used to push messages to AWS Lambda, HTTP endpoints (webhooks) or fan-out
 // messages to SQS queues.
 //
 // The topic needs to exist beforehand. It is recommended to create an IAM user
 // with an accessKey and accessSecret pair specifically for each subscription
 // that only has the sns:Publish permission on this topic.
-type SubscriptionAWSSNSDestination struct {
+type DestinationAWSSNS struct {
 	TopicArn     string `json:"topicArn"`
 	AccessKey    string `json:"accessKey"`
 	AccessSecret string `json:"accessSecret"`
 }
 
 // MarshalJSON override to add the Type() value
-func (sd SubscriptionAWSSNSDestination) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionAWSSNSDestination
+func (sd DestinationAWSSNS) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAWSSNS
 
 	return json.Marshal(struct {
 		Type string `json:"type"`
@@ -103,19 +103,19 @@ func (sd SubscriptionAWSSNSDestination) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SubscriptionIronMQDestination is for the IronMQ destination. IronMQ can be
+// DestinationIronMQ is for the IronMQ destination. IronMQ can be
 // used both as a pull-queue, and to push messages to IronWorkers or HTTP
 // endpoints (webhooks) or fan-out messages to other IronMQ queues.
 //
 // The webhook URI must contain a valid OAuth token. It roughly looks like this:
 // https://...iron.io/.../queues/.../webhook?oauth=....
-type SubscriptionIronMQDestination struct {
+type DestinationIronMQ struct {
 	URI string `json:"uri"`
 }
 
 // MarshalJSON override to add the Type() value
-func (sd SubscriptionIronMQDestination) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionIronMQDestination
+func (sd DestinationIronMQ) MarshalJSON() ([]byte, error) {
+	type Alias DestinationIronMQ
 
 	return json.Marshal(struct {
 		Type string `json:"type"`
@@ -126,74 +126,23 @@ func (sd SubscriptionIronMQDestination) MarshalJSON() ([]byte, error) {
 	})
 }
 
-type SubscriptionDestination interface{}
+type Destination interface{}
 
-func subscriptionDestinationMapping(input SubscriptionDestination) SubscriptionDestination {
+func destinationMapping(input Destination) Destination {
 	DestinationType := input.(map[string]interface{})["type"]
 	switch DestinationType {
 	case "IronMQ":
-		new := SubscriptionIronMQDestination{}
+		new := DestinationIronMQ{}
 		mapstructure.Decode(input, &new)
 		return new
 	case "SNS":
-		new := SubscriptionAWSSNSDestination{}
+		new := DestinationAWSSNS{}
 		mapstructure.Decode(input, &new)
 		return new
 	case "SQS":
-		new := SubscriptionAWSSQSDestination{}
+		new := DestinationAWSSQS{}
 		mapstructure.Decode(input, &new)
 		return new
 	}
 	return nil
-}
-
-type SubscriptionSetKey struct {
-	Key string `json:"key,omitempty"`
-}
-
-// MarshalJSON override to add the Action() value
-func (ua SubscriptionSetKey) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionSetKey
-
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{
-		Action: "setKey",
-		Alias:  (*Alias)(&ua),
-	})
-}
-
-type SubscriptionSetMessages struct {
-	Messages []MessageSubscription `json:"messages"`
-}
-
-// MarshalJSON override to add the Action() value
-func (ua SubscriptionSetMessages) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionSetMessages
-
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{
-		Action: "setMessages",
-		Alias:  (*Alias)(&ua),
-	})
-}
-
-type SubscriptionSetChanges struct {
-	Changes []ChangeSubscription `json:"changes"`
-}
-
-// MarshalJSON override to add the Action() value
-func (ua SubscriptionSetChanges) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionSetChanges
-
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{
-		Action: "setChanges",
-		Alias:  (*Alias)(&ua),
-	})
 }

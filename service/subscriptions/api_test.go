@@ -1,4 +1,4 @@
-package customize_test
+package subscriptions_test
 
 import (
 	"net/url"
@@ -7,28 +7,28 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
-	"github.com/labd/commercetools-go-sdk/commercetools/customize"
+	"github.com/labd/commercetools-go-sdk/service/subscriptions"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
 func TestSubscriptionCreate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *customize.SubscriptionDraft
+		input       *subscriptions.SubscriptionDraft
 		requestBody string
 	}{
 		{
 			desc: "SQS",
-			input: &customize.SubscriptionDraft{
+			input: &subscriptions.SubscriptionDraft{
 				Key: "test",
-				Destination: customize.SubscriptionAWSSQSDestination{
+				Destination: subscriptions.DestinationAWSSQS{
 					QueueURL:     "http://example.com/",
 					AccessKey:    "A1234567890",
 					AccessSecret: "S1234567800",
 					Region:       "eu-central-1",
 				},
-				Messages: []customize.MessageSubscription{
-					customize.MessageSubscription{
+				Messages: []subscriptions.MessageSubscription{
+					subscriptions.MessageSubscription{
 						ResourceTypeID: "product",
 					},
 				},
@@ -51,20 +51,20 @@ func TestSubscriptionCreate(t *testing.T) {
 		},
 		{
 			desc: "SNS",
-			input: &customize.SubscriptionDraft{
+			input: &subscriptions.SubscriptionDraft{
 				Key: "test",
-				Destination: customize.SubscriptionAWSSNSDestination{
+				Destination: subscriptions.DestinationAWSSNS{
 					TopicArn:     "x",
 					AccessKey:    "A1234567890",
 					AccessSecret: "S1234567800",
 				},
-				Changes: []customize.ChangeSubscription{
-					customize.ChangeSubscription{
+				Changes: []subscriptions.ChangeSubscription{
+					subscriptions.ChangeSubscription{
 						ResourceTypeID: "product",
 					},
 				},
-				Messages: []customize.MessageSubscription{
-					customize.MessageSubscription{
+				Messages: []subscriptions.MessageSubscription{
+					subscriptions.MessageSubscription{
 						ResourceTypeID: "product",
 					},
 				},
@@ -94,11 +94,11 @@ func TestSubscriptionCreate(t *testing.T) {
 		t.Run(tC.desc, func(t *testing.T) {
 			output := testutil.RequestData{}
 
-			client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
+			client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 			defer server.Close()
-			svc := customize.New(client)
+			svc := subscriptions.New(client)
 
-			_, err := svc.SubscriptionCreate(tC.input)
+			_, err := svc.Create(tC.input)
 			assert.Equal(t, nil, err)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
 
@@ -110,20 +110,20 @@ func TestSubscriptionCreate(t *testing.T) {
 func TestSubscriptionUpdate(t *testing.T) {
 	output := testutil.RequestData{}
 
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := subscriptions.New(client)
 
-	input := &customize.SubscriptionUpdateInput{
+	input := &subscriptions.UpdateInput{
 		ID:      "1234",
 		Version: 2,
 		Actions: commercetools.UpdateActions{
-			&customize.SubscriptionSetKey{
+			&subscriptions.SetKey{
 				Key: "123456",
 			},
-			&customize.SubscriptionSetMessages{
-				Messages: []customize.MessageSubscription{
-					customize.MessageSubscription{
+			&subscriptions.SetMessages{
+				Messages: []subscriptions.MessageSubscription{
+					subscriptions.MessageSubscription{
 						ResourceTypeID: "product",
 					},
 				},
@@ -131,7 +131,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 		},
 	}
 
-	_, err := svc.SubscriptionUpdate(input)
+	_, err := svc.Update(input)
 	assert.Equal(t, nil, err)
 
 	expectedBody := `{
@@ -157,11 +157,11 @@ func TestSubscriptionUpdate(t *testing.T) {
 
 func TestSubscriptionDeleteByID(t *testing.T) {
 	output := testutil.RequestData{}
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := subscriptions.New(client)
 
-	_, err := svc.SubscriptionDeleteByID("1234", 2)
+	_, err := svc.DeleteByID("1234", 2)
 	assert.Equal(t, nil, err)
 
 	params := url.Values{}
@@ -173,11 +173,11 @@ func TestSubscriptionDeleteByID(t *testing.T) {
 func TestSubscriptionDeleteByKey(t *testing.T) {
 	output := testutil.RequestData{}
 
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), &output, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
-	svc := customize.New(client)
+	svc := subscriptions.New(client)
 
-	_, err := svc.SubscriptionDeleteByKey("1234", 2)
+	_, err := svc.DeleteByKey("1234", 2)
 	assert.Equal(t, nil, err)
 
 	params := url.Values{}
@@ -187,30 +187,30 @@ func TestSubscriptionDeleteByKey(t *testing.T) {
 }
 
 func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.ironmq.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.ironmq.json"), nil, nil)
 	defer server.Close()
 
-	svc := customize.New(client)
-	subscription, err := svc.SubscriptionGetByID("100")
+	svc := subscriptions.New(client)
+	subscription, err := svc.GetByID("100")
 	assert.Equal(t, nil, err)
 
-	destination := subscription.Destination.(customize.SubscriptionIronMQDestination)
-	expected := customize.SubscriptionIronMQDestination{
+	destination := subscription.Destination.(subscriptions.DestinationIronMQ)
+	expected := subscriptions.DestinationIronMQ{
 		URI: "https://queue-uri",
 	}
 	assert.Equal(t, destination, expected)
 }
 
 func TestSubscriptionGetDestinationSNS(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.sns.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
 
-	svc := customize.New(client)
-	subscription, err := svc.SubscriptionGetByID("100")
+	svc := subscriptions.New(client)
+	subscription, err := svc.GetByID("100")
 	assert.Equal(t, nil, err)
 
-	destination := subscription.Destination.(customize.SubscriptionAWSSNSDestination)
-	expected := customize.SubscriptionAWSSNSDestination{
+	destination := subscription.Destination.(subscriptions.DestinationAWSSNS)
+	expected := subscriptions.DestinationAWSSNS{
 		TopicArn:     "arn:aws:sns:eu-central-1:123456789012345678:example:1",
 		AccessKey:    "AKIAIOSFODNN7EXAMPLE",
 		AccessSecret: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
@@ -219,15 +219,15 @@ func TestSubscriptionGetDestinationSNS(t *testing.T) {
 }
 
 func TestSubscriptionGetDestinationSQS(t *testing.T) {
-	client, server := testutil.MockClient(t, fixture("subscription.sqs.json"), nil, nil)
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sqs.json"), nil, nil)
 	defer server.Close()
 
-	svc := customize.New(client)
-	subscription, err := svc.SubscriptionGetByID("100")
+	svc := subscriptions.New(client)
+	subscription, err := svc.GetByID("100")
 	assert.Equal(t, nil, err)
 
-	destination := subscription.Destination.(customize.SubscriptionAWSSQSDestination)
-	expected := customize.SubscriptionAWSSQSDestination{
+	destination := subscription.Destination.(subscriptions.DestinationAWSSQS)
+	expected := subscriptions.DestinationAWSSQS{
 		QueueURL:     "https://queue.amazonaws.com/80398EXAMPLE/MyQueue",
 		AccessKey:    "AKIAIOSFODNN7EXAMPLE",
 		AccessSecret: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
