@@ -60,3 +60,19 @@ type AssetDimensions struct {
 	H int `json:"h"`
 	W int `json:"w"`
 }
+
+// EnumValue stores enums in field types.
+type EnumValue struct {
+	// The key of the value used as a programmatic identifier.
+	Key string `json:"key"`
+	// A descriptive label of the value.
+	Label string `json:"label"`
+}
+
+// LocalizedEnumValue stores localized enums in field types.
+type LocalizedEnumValue struct {
+	// The key of the value used as a programmatic identifier.
+	Key string `json:"key"`
+	// A descriptive, localized label of the value.
+	Label LocalizedString `json:"label"`
+}
