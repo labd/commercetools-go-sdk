@@ -76,3 +76,14 @@ type LocalizedEnumValue struct {
 	// A descriptive, localized label of the value.
 	Label LocalizedString `json:"label"`
 }
+
+// TextInputHint provides a visual representation type for a field.
+// It is only relevant for string-based field types like StringType and LocalizedStringType.
+type TextInputHint string
+
+const (
+	// SingleLineTextInputHint allows a single line hint.
+	SingleLineTextInputHint TextInputHint = "SingleLine"
+	// MultiLineTextInputHint allows a multi line hint.
+	MultiLineTextInputHint TextInputHint = "MultiLine"
+)

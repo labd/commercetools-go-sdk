@@ -1,0 +1,23 @@
+{
+  "id": "1234",
+  "version": 1,
+  "name": "another-test_product_type",
+  "description": "Another test product type.",
+  "attributes": [
+    {
+      "type": {
+        "name": "ltext"
+      },
+      "isSearchable": false,
+      "inputHint": "SingleLine",
+      "name": "color",
+      "label": {
+        "en": "The right color is important."
+      },
+      "isRequired": false,
+      "attributeConstraint": "CombinationUnique"
+    }
+  ],
+  "createdAt": "1970-01-01T00:00:00.001Z",
+  "lastModifiedAt": "1970-01-01T00:00:00.001Z"
+}
