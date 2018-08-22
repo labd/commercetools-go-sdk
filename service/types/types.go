@@ -9,17 +9,6 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
-// TextInputHint provides a visual representation type for a field.
-// It is only relevant for string-based field types like StringType and LocalizedStringType.
-type TextInputHint string
-
-const (
-	// SingleLineTextInputHint allows a single line hint.
-	SingleLineTextInputHint TextInputHint = "SingleLine"
-	// MultiLineTextInputHint allows a multi line hint.
-	MultiLineTextInputHint TextInputHint = "MultiLine"
-)
-
 // Type defines custom fields that are used to enhance resources as you need.
 type Type struct {
 	// The unique ID of the type.
@@ -64,7 +53,7 @@ type FieldDefinition struct {
 	Required bool `json:"required"`
 	// Provides a visual representation type for this field. It is only relevant for string-based
 	// field types like StringType and LocalizedStringType.
-	InputHint TextInputHint `json:"inputHint"`
+	InputHint commercetools.TextInputHint `json:"inputHint"`
 }
 
 // UnmarshalJSON override to map the field type to the corresponding struct.
