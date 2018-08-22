@@ -238,7 +238,7 @@ func TestShippingRateInputType(t *testing.T) {
 		// Validate Marshalling (object -> json)
 		t.Run(tC.desc, func(t *testing.T) {
 			output, err := tC.object.MarshalJSON()
-			assert.Equal(t, nil, err)
+			assert.Nil(t, err)
 			assert.JSONEq(t, tC.json, string(output))
 		})
 
@@ -265,7 +265,7 @@ func TestShippingRateInputType(t *testing.T) {
 
 			err := p.UnmarshalJSON([]byte(buf))
 
-			assert.Equal(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, tC.object, p.ShippingRateInputType)
 		})
 	}

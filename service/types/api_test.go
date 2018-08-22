@@ -44,7 +44,7 @@ func TestTypeCreate(t *testing.T) {
 	fmt.Println(output)
 
 	_, err := svc.Create(input)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	expectedBody := `{
 		"key": "lineitemtype",
@@ -379,7 +379,7 @@ func TestTypeUpdate(t *testing.T) {
 			svc := types.New(client)
 
 			_, err := svc.Update(tC.input)
-			assert.Equal(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/types/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
 		})
@@ -393,7 +393,7 @@ func TestTypeDeleteByID(t *testing.T) {
 	svc := types.New(client)
 
 	_, err := svc.DeleteByID("1234", 2)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	params := url.Values{}
 	params.Add("version", "2")
@@ -409,7 +409,7 @@ func TestTypeDeleteByKey(t *testing.T) {
 	svc := types.New(client)
 
 	_, err := svc.DeleteByKey("1234", 2)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	params := url.Values{}
 	params.Add("version", "2")
@@ -945,7 +945,7 @@ func TestFieldTypes(t *testing.T) {
 		// Validate Marshalling (object -> json)
 		t.Run(tC.desc, func(t *testing.T) {
 			output, err := tC.object.MarshalJSON()
-			assert.Equal(t, nil, err)
+			assert.Nil(t, err)
 			assert.JSONEq(t, tC.json, string(output))
 		})
 
@@ -966,7 +966,7 @@ func TestFieldTypes(t *testing.T) {
 
 			err := fd.UnmarshalJSON([]byte(buf))
 
-			assert.Equal(t, nil, err)
+			assert.Nil(t, err)
 			assert.Equal(t, tC.object, fd.Type)
 		})
 	}

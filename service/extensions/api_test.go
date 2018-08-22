@@ -31,7 +31,7 @@ func TestExtensionCreate(t *testing.T) {
 	}
 
 	_, err := svc.Create(draft)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 }
 
 func TestExtensionUpdate(t *testing.T) {
@@ -57,7 +57,7 @@ func TestExtensionUpdate(t *testing.T) {
 	fmt.Println(output)
 
 	_, err := svc.Update(input)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	expectedBody := `{
 		"version": 2,
@@ -82,7 +82,7 @@ func TestExtensionDeleteByID(t *testing.T) {
 	svc := extensions.New(client)
 
 	_, err := svc.DeleteByID("1234", 2)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 }
 
 func TestExtensionDeleteByKey(t *testing.T) {
@@ -91,5 +91,5 @@ func TestExtensionDeleteByKey(t *testing.T) {
 	svc := extensions.New(client)
 
 	_, err := svc.DeleteByKey("1234", 2)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 }

@@ -32,7 +32,7 @@ func TestCreateProductNew(t *testing.T) {
 		},
 	}
 	product, err := svc.Create(draft)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", product.MasterData.Current.Description["en"])
 }

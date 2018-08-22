@@ -99,7 +99,7 @@ func TestSubscriptionCreate(t *testing.T) {
 			svc := subscriptions.New(client)
 
 			_, err := svc.Create(tC.input)
-			assert.Equal(t, nil, err)
+			assert.Nil(t, err)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
 
 		})
@@ -132,7 +132,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 	}
 
 	_, err := svc.Update(input)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	expectedBody := `{
 		"version": 2,
@@ -162,7 +162,7 @@ func TestSubscriptionDeleteByID(t *testing.T) {
 	svc := subscriptions.New(client)
 
 	_, err := svc.DeleteByID("1234", 2)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	params := url.Values{}
 	params.Add("version", "2")
@@ -178,7 +178,7 @@ func TestSubscriptionDeleteByKey(t *testing.T) {
 	svc := subscriptions.New(client)
 
 	_, err := svc.DeleteByKey("1234", 2)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	params := url.Values{}
 	params.Add("version", "2")
@@ -192,7 +192,7 @@ func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 
 	svc := subscriptions.New(client)
 	subscription, err := svc.GetByID("100")
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	destination := subscription.Destination.(subscriptions.DestinationIronMQ)
 	expected := subscriptions.DestinationIronMQ{
@@ -207,7 +207,7 @@ func TestSubscriptionGetDestinationSNS(t *testing.T) {
 
 	svc := subscriptions.New(client)
 	subscription, err := svc.GetByID("100")
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	destination := subscription.Destination.(subscriptions.DestinationAWSSNS)
 	expected := subscriptions.DestinationAWSSNS{
@@ -224,7 +224,7 @@ func TestSubscriptionGetDestinationSQS(t *testing.T) {
 
 	svc := subscriptions.New(client)
 	subscription, err := svc.GetByID("100")
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	destination := subscription.Destination.(subscriptions.DestinationAWSSQS)
 	expected := subscriptions.DestinationAWSSQS{
