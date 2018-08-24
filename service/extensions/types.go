@@ -10,7 +10,7 @@ type Extension struct {
 	Version        int         `json:"version"`
 	Key            string      `json:"key"`
 	Destination    Destination `json:"destination"`
-	Triggers       []Trigger   `json:"messages"`
+	Triggers       []Trigger   `json:"triggers"`
 	CreatedAt      time.Time   `json:"createdAt"`
 	LastModifiedAt time.Time   `json:"lastModifiedAt"`
 }
@@ -27,18 +27,18 @@ func (e *Extension) UnmarshalJSON(data []byte) error {
 type ExtensionDraft struct {
 	Key         string      `json:"key"`
 	Destination Destination `json:"destination"`
-	Triggers    []Trigger   `json:"messages"`
+	Triggers    []Trigger   `json:"triggers"`
 }
 
-type Destination interface {
-}
+type Destination interface{}
 
 // DestinationHTTP implementation
 // An encrypted https connection is strongly recommended for production setups,
 // but we accept unencrypted http connections for development purposes. HTTP
 // redirects will not be followed. Cache headers will be ignored.
 type DestinationHTTP struct {
-	URL string `json:"url"`
+	URL            string                    `json:"url"`
+	Authentication DestinationAuthentication `json:"authentication"`
 }
 
 func (ed DestinationHTTP) MarshalJSON() ([]byte, error) {
@@ -79,15 +79,21 @@ func (ed DestinationAWSLambda) MarshalJSON() ([]byte, error) {
 	})
 }
 
-type DestinationAuthentication struct{}
+type DestinationAuthentication interface {
+	Type() string
+}
 
-type DestinationAuthenticationAzure struct{}
+type DestinationAuthenticationAzure struct {
+	Key string
+}
 
 func (ed *DestinationAuthenticationAzure) Type() string {
 	return "AzureFunctions"
 }
 
-type DestinationAuthenticationAuth struct{}
+type DestinationAuthenticationAuth struct {
+	HeaderValue string
+}
 
 func (ed *DestinationAuthenticationAuth) Type() string {
 	return "AuthorizationHeader"
