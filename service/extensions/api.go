@@ -49,7 +49,7 @@ func (svc *Service) Update(input *UpdateInput) (result *Extension, err error) {
 func (svc *Service) DeleteByID(id string, version int) (result *Extension, err error) {
 	endpoint := fmt.Sprintf("extensions/%s", id)
 	params := url.Values{}
-	params.Set("version", string(version))
+	params.Set("version", fmt.Sprintf("%d", version))
 	err = svc.client.Delete(endpoint, params, &result)
 
 	if err != nil {
