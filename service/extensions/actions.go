@@ -23,7 +23,7 @@ func (ua SetKey) MarshalJSON() ([]byte, error) {
 // ChangeTriggers is used to update an existing API Extension with
 // a new triggers.
 type ChangeTriggers struct {
-	Messages []Trigger `json:"messages"`
+	Triggers []Trigger `json:"triggers"`
 }
 
 func (ua ChangeTriggers) MarshalJSON() ([]byte, error) {
