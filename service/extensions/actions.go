@@ -2,6 +2,24 @@ package extensions
 
 import "encoding/json"
 
+// SetKey will set a new key on the type being updated.
+type SetKey struct {
+	Key string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to add the Action() value
+func (ua SetKey) MarshalJSON() ([]byte, error) {
+	type Alias SetKey
+
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{
+		Action: "setKey",
+		Alias:  (*Alias)(&ua),
+	})
+}
+
 // ChangeTriggers is used to update an existing API Extension with
 // a new triggers.
 type ChangeTriggers struct {
