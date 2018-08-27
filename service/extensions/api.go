@@ -38,7 +38,7 @@ func (svc *Service) Create(draft *ExtensionDraft) (result *Extension, err error)
 }
 
 func (svc *Service) Update(input *UpdateInput) (result *Extension, err error) {
-	endpoint := fmt.Sprintf("products/%s", input.ID)
+	endpoint := fmt.Sprintf("extensions/%s", input.ID)
 	err = svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
