@@ -79,24 +79,36 @@ func (ed DestinationAWSLambda) MarshalJSON() ([]byte, error) {
 	})
 }
 
-type DestinationAuthentication interface {
-	Type() string
-}
+type DestinationAuthentication interface{}
 
 type DestinationAuthenticationAzure struct {
-	Key string
+	Key string `json:"key"`
 }
 
-func (ed *DestinationAuthenticationAzure) Type() string {
-	return "AzureFunctions"
+func (ed DestinationAuthenticationAzure) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAuthenticationAzure
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "AzureFunctions",
+		Alias: (*Alias)(&ed),
+	})
 }
 
 type DestinationAuthenticationAuth struct {
-	HeaderValue string
+	HeaderValue string `json:"headerValue"`
 }
 
-func (ed *DestinationAuthenticationAuth) Type() string {
-	return "AuthorizationHeader"
+func (ed DestinationAuthenticationAuth) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAuthenticationAuth
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "AuthorizationHeader",
+		Alias: (*Alias)(&ed),
+	})
 }
 
 type Trigger struct {
