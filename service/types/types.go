@@ -53,7 +53,7 @@ type FieldDefinition struct {
 	Required bool `json:"required"`
 	// Provides a visual representation type for this field. It is only relevant for string-based
 	// field types like StringType and LocalizedStringType.
-	InputHint commercetools.TextInputHint `json:"inputHint"`
+	InputHint commercetools.TextInputHint `json:"inputHint,omitempty"`
 }
 
 // UnmarshalJSON override to map the field type to the corresponding struct.
