@@ -1,7 +1,7 @@
 language: go
 
 go:
-  - "1.11rc1"
+  - "1.11"
 
 script:
   - env GO111MODULE=on go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
