@@ -51,3 +51,61 @@ product, err := svc.ProductCreate(&products.ProductDraft{
 log.Print(product)
 
 ```
+
+## Service implementation
+
+### Product Catalog
+
+ - [ ] Categories
+ - [x] Products
+ - [ ] Product Projections
+ - [ ] Product Projections Search
+ - [ ] Product Suggestions
+ - [ ] Inventory
+ - [ ] Reviews
+
+### Pricing & Discounts
+
+ - [x] Tax Categories
+ - [ ] Product Discounts
+ - [ ] Cart Discounts
+ - [ ] Discount Codes
+
+### Carts, Orders & Shopping Lists
+
+ - [ ] Shopping Lists beta
+ - [ ] My Shopping Lists beta
+ - [ ] Carts
+ - [ ] My Carts beta
+ - [ ] Shipping Methods
+ - [ ] Shipping Zones
+ - [ ] Payments
+ - [ ] My Payments beta
+ - [ ] Orders
+ - [ ] My Orders beta
+ - [ ] Order Import
+
+### Customers
+
+ - [ ] Customers
+ - [ ] My Customer Profile beta
+ - [ ] Customer Groups
+
+### Configuration
+
+ - [x] Project Settings
+ - [x] Channels
+ - [x] State Machines
+
+### Customize Data
+
+ - [x] Product Types
+ - [x] Types
+ - [x] Custom Fields
+ - [ ] Custom Objects
+
+### Customize Behavior
+
+ - [x] API Extensions beta
+ - [x] Subscriptions beta
+ - [ ] Messages Query
