@@ -1,5 +1,11 @@
 package commercetools
 
+import (
+	"encoding/json"
+
+	"github.com/mitchellh/mapstructure"
+)
+
 type LocalizedString map[string]string
 
 type Reference struct {
@@ -87,3 +93,65 @@ const (
 	// MultiLineTextInputHint allows a multi line hint.
 	MultiLineTextInputHint TextInputHint = "MultiLine"
 )
+
+// Address is a JSON object representation of a postal address.
+type Address struct {
+	ID                   string `json:"id,omitempty"`
+	Key                  string `json:"key,omitempty"`
+	Title                string `json:"title,omitempty"`
+	Salutation           string `json:"salutation,omitempty"`
+	FirstName            string `json:"firstName,omitempty"`
+	LastName             string `json:"lastName,omitempty"`
+	StreetName           string `json:"streetName,omitempty"`
+	StreetNumber         string `json:"streetNumber,omitempty"`
+	AdditionalStreetInfo string `json:"additionalStreetInfo,omitempty"`
+	PostalCode           string `json:"postalCode,omitempty"`
+	City                 string `json:"city,omitempty"`
+	Region               string `json:"region,omitempty"`
+	State                string `json:"state,omitempty"`
+	// A two-digit country code as per ISO 3166-1 alpha-2
+	Country               string `json:"country,omitempty"`
+	Company               string `json:"company,omitempty"`
+	Department            string `json:"department,omitempty"`
+	Building              string `json:"building,omitempty"`
+	Apartment             string `json:"apartment,omitempty"`
+	POBox                 string `json:"pOBox,omitempty"`
+	Phone                 string `json:"phone,omitempty"`
+	Mobile                string `json:"mobile,omitempty"`
+	Email                 string `json:"email,omitempty"`
+	Fax                   string `json:"fax,omitempty"`
+	AdditionalAddressInfo string `json:"additionalAddressInfo,omitempty"`
+	ExternalID            string `json:"externalId,omitempty"`
+}
+
+// Point indicates a single position.
+type Point struct {
+	Coordinates []float64 `json:"coordinates"`
+}
+
+// MarshalJSON override to add the type value.
+func (t Point) MarshalJSON() ([]byte, error) {
+	type Alias Point
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "Point",
+		Alias: (*Alias)(&t),
+	})
+}
+
+// GeoJSONGeometry represents a Geometry Object as defined in the GeoJSON standard.
+type GeoJSONGeometry interface{}
+
+func GeoJSONGeometryMapping(input GeoJSONGeometry) GeoJSONGeometry {
+	FieldType := input.(map[string]interface{})["type"]
+	switch FieldType {
+	case "Point":
+		newType := Point{}
+		mapstructure.Decode(input, &newType)
+		return newType
+	}
+	return nil
+}

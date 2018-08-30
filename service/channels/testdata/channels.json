@@ -1,0 +1,8 @@
+{
+  "id": "1234",
+  "key": "commercetools",
+  "version": 1,
+  "roles": ["InventorySupply"],
+  "createdAt": "2015-05-28T09:48:35.023Z",
+  "lastModifiedAt": "2015-05-28T09:48:35.023Z"
+}
