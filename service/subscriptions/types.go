@@ -7,6 +7,8 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+// Subscription allows you to be notified of new messages or changes via a
+// Message Queue of your choice.
 type Subscription struct {
 	ID             string                `json:"id"`
 	Version        int                   `json:"version"`
@@ -18,6 +20,7 @@ type Subscription struct {
 	LastModifiedAt time.Time             `json:"lastModifiedAt"`
 }
 
+// UnmarshalJSON override to map the destination to the corresponding struct.
 func (s *Subscription) UnmarshalJSON(data []byte) error {
 	type Alias Subscription
 	if err := json.Unmarshal(data, (*Alias)(s)); err != nil {
@@ -50,9 +53,9 @@ type ChangeSubscription struct {
 	ResourceTypeID string `json:"resourceTypeId"`
 }
 
-// DestinationAWSSQS is for the AWS SQS as a destination. AWS SQS is
-// a pull-queue on AWS. We support the Standard queue type (the FIFO queue type
-// is not supported).
+// DestinationAWSSQS is for the AWS SQS as a destination. AWS SQS is a
+// pull-queue on AWS. We support the Standard queue type (the FIFO queue type is
+// not supported).
 //
 // The queue needs to exist beforehand. It is recommended to create an IAM user
 // with an accessKey and accessSecret pair specifically for each subscription
@@ -64,7 +67,7 @@ type DestinationAWSSQS struct {
 	Region       string `json:"region"`
 }
 
-// MarshalJSON override to add the Type() value
+// MarshalJSON override to add the type value
 func (sd DestinationAWSSQS) MarshalJSON() ([]byte, error) {
 	type Alias DestinationAWSSQS
 
@@ -77,9 +80,9 @@ func (sd DestinationAWSSQS) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// DestinationAWSSNS is for the AWS SNS destination. AWS SNS can be
-// used to push messages to AWS Lambda, HTTP endpoints (webhooks) or fan-out
-// messages to SQS queues.
+// DestinationAWSSNS is for the AWS SNS destination. AWS SNS can be used to push
+// messages to AWS Lambda, HTTP endpoints (webhooks) or fan-out messages to SQS
+// queues.
 //
 // The topic needs to exist beforehand. It is recommended to create an IAM user
 // with an accessKey and accessSecret pair specifically for each subscription
@@ -90,7 +93,7 @@ type DestinationAWSSNS struct {
 	AccessSecret string `json:"accessSecret"`
 }
 
-// MarshalJSON override to add the Type() value
+// MarshalJSON override to add the type value
 func (sd DestinationAWSSNS) MarshalJSON() ([]byte, error) {
 	type Alias DestinationAWSSNS
 
@@ -103,9 +106,9 @@ func (sd DestinationAWSSNS) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// DestinationIronMQ is for the IronMQ destination. IronMQ can be
-// used both as a pull-queue, and to push messages to IronWorkers or HTTP
-// endpoints (webhooks) or fan-out messages to other IronMQ queues.
+// DestinationIronMQ is for the IronMQ destination. IronMQ can be used both as a
+// pull-queue, and to push messages to IronWorkers or HTTP endpoints (webhooks)
+// or fan-out messages to other IronMQ queues.
 //
 // The webhook URI must contain a valid OAuth token. It roughly looks like this:
 // https://...iron.io/.../queues/.../webhook?oauth=....
@@ -126,6 +129,9 @@ func (sd DestinationIronMQ) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// Destination contains all info necessary for the commercetools platform to
+// deliver a message onto your Message Queue. Message Queues can be
+// differentiated by the type field.
 type Destination interface{}
 
 func destinationMapping(input Destination) Destination {

@@ -16,6 +16,7 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
 )
 
+// Client bundles the logic for sending requests to the CommerceTools platform.
 type Client struct {
 	HTTPClient *http.Client
 	apiURL     string
@@ -24,18 +25,20 @@ type Client struct {
 	logLevel   int
 }
 
+// Config provides the client with the required configuration variables.
 type Config struct {
 	ProjectKey   string
 	AuthProvider credentials.AuthProvider
-	ApiURL       string
+	APIURL       string
 	LogLevel     int
 }
 
+// NewClient creates a new client based on the provided Config.
 func NewClient(cfg *Config) (*Client, error) {
 	client := &Client{
 		auth:       cfg.AuthProvider,
 		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
-		apiURL:     getConfigValue(cfg.ApiURL, "CTP_API_URL"),
+		apiURL:     getConfigValue(cfg.APIURL, "CTP_API_URL"),
 		HTTPClient: cleanhttp.DefaultClient(),
 		logLevel:   cfg.LogLevel,
 	}
@@ -61,15 +64,19 @@ func getConfigValue(value string, envName string) string {
 	return os.Getenv(envName)
 }
 
+// Get accomodates get requests tot the CommerceTools platform.
 func (c *Client) Get(endpoint string, queryParams url.Values, output interface{}) error {
 	err := c.doRequest("GET", endpoint, queryParams, nil, output)
 	return err
 }
 
+// Query accomodates query requests tot the CommerceTools platform.
 func (c *Client) Query(endpoint string, queryParams url.Values, output interface{}) error {
 	return errors.New("NOT IMPLEMENTED")
 }
 
+// Create accomodates post intended for creation requests tot the CommerceTools
+// platform.
 func (c *Client) Create(endpoint string, queryParams url.Values, input interface{}, output interface{}) error {
 	data, err := serializeInput(input)
 	if err != nil {
@@ -79,6 +86,8 @@ func (c *Client) Create(endpoint string, queryParams url.Values, input interface
 	return err
 }
 
+// Update accomodates post requests intended for updates tot the CommerceTools
+// platform.
 func (c *Client) Update(endpoint string, queryParams url.Values, version int, actions UpdateActions, output interface{}) error {
 	data, err := serializeInput(&map[string]interface{}{
 		"version": version,
@@ -91,6 +100,7 @@ func (c *Client) Update(endpoint string, queryParams url.Values, version int, ac
 	return err
 }
 
+// Delete accomodates delete requests tot the CommerceTools platform.
 func (c *Client) Delete(endpoint string, queryParams url.Values, output interface{}) error {
 	err := c.doRequest("DELETE", endpoint, queryParams, nil, output)
 	return err
@@ -104,6 +114,7 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 
 	url := c.apiURL + "/" + c.projectKey + "/" + endpoint
 	req, err := http.NewRequest(method, url, data)
+
 	req.Header.Add("Authorization", authToken)
 
 	if params != nil {

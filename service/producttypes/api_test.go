@@ -184,7 +184,7 @@ func TestProductTypeUpdate(t *testing.T) {
 			}`,
 		},
 		{
-			desc: "Remove attribute defintion",
+			desc: "Remove attribute definition",
 			input: &producttypes.UpdateInput{
 				ID:      "1234",
 				Version: 3,
@@ -205,7 +205,7 @@ func TestProductTypeUpdate(t *testing.T) {
 			}`,
 		},
 		{
-			desc: "Change attribute defintion name",
+			desc: "Change attribute definition name",
 			input: &producttypes.UpdateInput{
 				ID:      "1234",
 				Version: 3,
@@ -228,7 +228,7 @@ func TestProductTypeUpdate(t *testing.T) {
 			}`,
 		},
 		{
-			desc: "Change attribute defintion label",
+			desc: "Change attribute definition label",
 			input: &producttypes.UpdateInput{
 				ID:      "1234",
 				Version: 3,
@@ -255,7 +255,7 @@ func TestProductTypeUpdate(t *testing.T) {
 			}`,
 		},
 		{
-			desc: "Set attribute defintion input tip",
+			desc: "Set attribute definition input tip",
 			input: &producttypes.UpdateInput{
 				ID:      "1234",
 				Version: 3,
@@ -905,7 +905,7 @@ func TestAttributeTypes(t *testing.T) {
 	}
 
 	for _, tC := range testCases {
-		// Validate Marshalling (object -> json)
+		// Validate Marshaling (object -> json)
 		t.Run(tC.desc, func(t *testing.T) {
 			output, err := tC.object.MarshalJSON()
 			assert.Nil(t, err)
