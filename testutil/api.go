@@ -67,7 +67,7 @@ func MockClient(
 
 	client, err := commercetools.NewClient(&commercetools.Config{
 		ProjectKey:   "unittest",
-		ApiURL:       ts.URL,
+		APIURL:       ts.URL,
 		AuthProvider: credentials.NewDummyCredentialsProvider("Bearer unittest"),
 	})
 	if err != nil {

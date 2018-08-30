@@ -20,12 +20,13 @@ func (ua SetKey) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeTriggers is used to update an existing API Extension with
-// a new triggers.
+// ChangeTriggers is used to update an existing API Extension with a new
+// triggers.
 type ChangeTriggers struct {
 	Triggers []Trigger `json:"triggers"`
 }
 
+// MarshalJSON override to add the action value.
 func (ua ChangeTriggers) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTriggers
 
@@ -38,12 +39,13 @@ func (ua ChangeTriggers) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeDestination is used to update an existing API Extension with
-// a new destination.
+// ChangeDestination is used to update an existing API Extension with a new
+// destination.
 type ChangeDestination struct {
 	Destination Destination `json:"destination"`
 }
 
+// MarshalJSON override to add the action value.
 func (ua ChangeDestination) MarshalJSON() ([]byte, error) {
 	type Alias ChangeDestination
 

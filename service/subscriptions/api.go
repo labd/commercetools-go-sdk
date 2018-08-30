@@ -8,17 +8,20 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 )
 
+// DeleteInput provides the data required to delete a subscription.
 type DeleteInput struct {
 	ID      string
 	Version int
 }
 
+// UpdateInput provides the data required to update a subscription.
 type UpdateInput struct {
 	ID      string
 	Version int
 	Actions commercetools.UpdateActions
 }
 
+// GetByID will return a subscription matching the provided ID.
 func (svc *Service) GetByID(id string) (*Subscription, error) {
 	var result Subscription
 	err := svc.client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
@@ -28,8 +31,8 @@ func (svc *Service) GetByID(id string) (*Subscription, error) {
 	return &result, nil
 }
 
-// Create creates a new Subscription. It is eventually consistent,
-// it may take up to a minute before it becomes fully active.
+// Create creates a new Subscription. It is eventually consistent, it may take
+// up to a minute before it becomes fully active.
 //
 // In order to test that the destination is correctly configured, a test message
 // will be put into the queue. If the message could not be delivered, the
@@ -46,8 +49,8 @@ func (svc *Service) Create(draft *SubscriptionDraft) (*Subscription, error) {
 	return &result, nil
 }
 
-// Update updates a Subscription. It is eventually consistent, it
-// may take up to a minute before changes becomes fully active.
+// Update updates a Subscription. It is eventually consistent, it may take up to
+// a minute before changes becomes fully active.
 func (svc *Service) Update(input *UpdateInput) (*Subscription, error) {
 	var result Subscription
 
@@ -63,6 +66,7 @@ func (svc *Service) Update(input *UpdateInput) (*Subscription, error) {
 	return &result, nil
 }
 
+// DeleteByID will delete a subscription matching the provided ID.
 func (svc *Service) DeleteByID(id string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
@@ -76,6 +80,7 @@ func (svc *Service) DeleteByID(id string, version int) (*Subscription, error) {
 	return &result, nil
 }
 
+// DeleteByKey will delete a subscription matching the provided key.
 func (svc *Service) DeleteByKey(key string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/key=%s", key)

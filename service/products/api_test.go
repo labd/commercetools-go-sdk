@@ -64,7 +64,7 @@ func TestProductUpdate(t *testing.T) {
 			Currency: "EUR",
 		},
 		Actions: commercetools.UpdateActions{
-			products.ProductAddPrice{
+			products.AddPrice{
 				VariantID: 1,
 				Price:     1000,
 			},

@@ -42,8 +42,8 @@ func (ua ChangeName) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SetDescription will set the description of the type being updated.
-// If left blank, the description is removed.
+// SetDescription will set the description of the type being updated. If left
+// blank, the description is removed.
 type SetDescription struct {
 	Description commercetools.LocalizedString `json:"description,omitempty"`
 }
@@ -79,9 +79,9 @@ func (ua AddFieldDefinition) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// RemoveFieldDefinition will remove a field definition to the type being updated.
-// The name of the field to remove.
-// The removal of a field definition deletes asynchronously all custom fields using this definition as well.
+// RemoveFieldDefinition will remove a field definition to the type being
+// updated. The name of the field to remove. The removal of a field definition
+// deletes asynchronously all custom fields using this definition as well.
 type RemoveFieldDefinition struct {
 	FieldName string `json:"fieldName"`
 }
@@ -118,9 +118,9 @@ func (ua ChangeLabel) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddEnumValue will add an enum value to the type being updated.
-// Adds an enum to the values of EnumType.
-// It can update an EnumType field definition or a Set of EnumType field definition.
+// AddEnumValue will add an enum value to the type being updated. Adds an enum
+// to the values of EnumType. It can update an EnumType field definition or a
+// Set of EnumType field definition.
 type AddEnumValue struct {
 	FieldName string                  `json:"fieldName"`
 	Value     commercetools.EnumValue `json:"value"`
@@ -139,9 +139,10 @@ func (ua AddEnumValue) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddLocalizedEnumValue will add a localized enum value to the type being updated.
-// Adds an localized enum to the values of LocalizedEnumType.
-// It can update a LocalizedEnumType field definition or a Set of LocalizedEnumType field definition.
+// AddLocalizedEnumValue will add a localized enum value to the type being
+// updated. Adds an localized enum to the values of LocalizedEnumType. It can
+// update a LocalizedEnumType field definition or a Set of LocalizedEnumType
+// field definition.
 type AddLocalizedEnumValue struct {
 	FieldName string                           `json:"fieldName"`
 	Value     commercetools.LocalizedEnumValue `json:"value"`
@@ -160,7 +161,8 @@ func (ua AddLocalizedEnumValue) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeFieldDefinitionsOrder will reorder the fields on the type being updated.
+// ChangeFieldDefinitionsOrder will reorder the fields on the type being
+// updated.
 type ChangeFieldDefinitionsOrder struct {
 	FieldNames []string `json:"fieldNames"`
 }
@@ -180,7 +182,8 @@ func (ua ChangeFieldDefinitionsOrder) MarshalJSON() ([]byte, error) {
 
 // ChangeEnumValuesOrder will reorder the enum values on the type being updated.
 // This action changes the order of enum values in an EnumType field definition.
-// It can update an EnumType field definition or a Set of EnumType field definition.
+// It can update an EnumType field definition or a Set of EnumType field
+// definition.
 type ChangeEnumValuesOrder struct {
 	FieldName string   `json:"fieldName"`
 	Keys      []string `json:"keys"`
@@ -199,9 +202,10 @@ func (ua ChangeEnumValuesOrder) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeLocalizedEnumValuesOrder will reorder the localized enum values on the type being updated.
-// This action changes the order of localized enum values in a LocalizedEnumType field definition.
-// It can update a LocalizedEnumType field definition or a Set of LocalizedEnumType field definition.
+// ChangeLocalizedEnumValuesOrder will reorder the localized enum values on the
+// type being updated. This action changes the order of localized enum values in
+// a LocalizedEnumType field definition. It can update a LocalizedEnumType field
+// definition or a Set of LocalizedEnumType field definition.
 type ChangeLocalizedEnumValuesOrder struct {
 	FieldName string   `json:"fieldName"`
 	Keys      []string `json:"keys"`

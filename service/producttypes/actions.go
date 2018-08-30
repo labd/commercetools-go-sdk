@@ -8,8 +8,8 @@ import (
 
 // SetKey will set the key of the product type being updated.
 type SetKey struct {
-	// If key is absent or null, this field will be removed if it exists.
-	// Min. 2 and max. 256 characters
+	// If key is absent or null, this field will be removed if it exists. Min. 2
+	// and max. 256 characters
 	Key string `json:"key,omitempty"`
 }
 
@@ -44,7 +44,8 @@ func (ua ChangeName) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeDescription will change the description of the product type being updated.
+// ChangeDescription will change the description of the product type being
+// updated.
 type ChangeDescription struct {
 	Description string `json:"description"`
 }
@@ -62,7 +63,8 @@ func (ua ChangeDescription) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddAttributeDefinition will add an attribute definition to the product type being updated.
+// AddAttributeDefinition will add an attribute definition to the product type
+// being updated.
 type AddAttributeDefinition struct {
 	Attribute AttributeDefinitionDraft `json:"attribute"`
 }
@@ -80,9 +82,10 @@ func (ua AddAttributeDefinition) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// RemoveAttributeDefinition will remove an attribute definition to the product type being updated.
-// This removal also deletes all corresponding attributes on all Products with this product type.
-// The removal of the attributes is eventually consistent.
+// RemoveAttributeDefinition will remove an attribute definition to the product
+// type being updated. This removal also deletes all corresponding attributes on
+// all Products with this product type. The removal of the attributes is
+// eventually consistent.
 type RemoveAttributeDefinition struct {
 	// The name of the attribute to remove.
 	Name string `json:"name"`
@@ -101,22 +104,24 @@ func (ua RemoveAttributeDefinition) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeAttributeDefinitionName will change the name of an attribute definition.
-// This action also renames all corresponding attributes on all Products with this product type.
-// The renaming of the attributes is eventually consistent.
-// warning:
-// When renaming several attributes at the same time beware of the following effects on updates
-// on the affected products:
+// ChangeAttributeDefinitionName will change the name of an attribute
+// definition. This action also renames all corresponding attributes on all
+// Products with this product type. The renaming of the attributes is eventually
+// consistent. warning: When renaming several attributes at the same time beware
+// of the following effects on updates on the affected products:
 // - let’s say we have a product type with 2 attribute definitions: aa and bb.
-// - we send a first command to update bb to cc.
-// - and then we send a second command to update aa to bb.
-// - when updating the products the order is not guaranteed as they are 2 separated commands.
-//   It’s possible (even if unlikely) that the products are updated in the wrong order:
-//   the attribute aa is renamed to bb, and then to cc.
-// To avoid that, send multiple "changeAttributeName" updates in one command.
+// - we send a first command to update bb to cc. - and then we send a second
+//   command to update aa to bb.
+// - when updating the products the order is not guaranteed as they are 2
+//   separated commands.
+//
+// It’s possible (even if unlikely) that the products are updated in the wrong
+// order: the attribute aa is renamed to bb, and then to cc. To avoid that, send
+// multiple "changeAttributeName" updates in one command.
 type ChangeAttributeDefinitionName struct {
 	// The name of the attribute definition to update.
 	AttributeName string `json:"attributeName"`
+
 	// The new name attribute definition name.
 	NewAttributeName string `json:"newAttributeName"`
 }
@@ -134,11 +139,13 @@ func (ua ChangeAttributeDefinitionName) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeAttributeDefinitionLabel will change the label of an attribute definition.
+// ChangeAttributeDefinitionLabel will change the label of an attribute
+// definition.
 type ChangeAttributeDefinitionLabel struct {
 	// The name of the attribute definition to update.
-	AttributeName string                        `json:"attributeName"`
-	Label         commercetools.LocalizedString `json:"label"`
+	AttributeName string `json:"attributeName"`
+
+	Label commercetools.LocalizedString `json:"label"`
 }
 
 // MarshalJSON override to add the action value
@@ -154,9 +161,9 @@ func (ua ChangeAttributeDefinitionLabel) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SetAttributeDefinitionInputTip will set the input tip on an attribute definition.
-// Allows to set additional information about the specified attribute that aids
-// content managers when setting product details.
+// SetAttributeDefinitionInputTip will set the input tip on an attribute
+// definition. Allows to set additional information about the specified
+// attribute that aids content managers when setting product details.
 type SetAttributeDefinitionInputTip struct {
 	AttributeName string                        `json:"attributeName"`
 	InputTip      commercetools.LocalizedString `json:"inputTip,omitempty"`
@@ -175,12 +182,14 @@ func (ua SetAttributeDefinitionInputTip) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddPlainEnumValue will add a plain enum value to an enum type attribute definition.
-// It can update an EnumType attribute definition or a Set of EnumType attribute definition.
+// AddPlainEnumValue will add a plain enum value to an enum type attribute
+// definition. It can update an EnumType attribute definition or a Set of
+// EnumType attribute definition.
 type AddPlainEnumValue struct {
 	// The name of the attribute definition to update.
-	AttributeName string                  `json:"attributeName"`
-	Value         commercetools.EnumValue `json:"value"`
+	AttributeName string `json:"attributeName"`
+
+	Value commercetools.EnumValue `json:"value"`
 }
 
 // MarshalJSON override to add the action value
@@ -196,8 +205,9 @@ func (ua AddPlainEnumValue) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AddLocalizedEnumValue will add a localized enum value to a localizd enum type attribute definition.
-// It can update a LocalizableEnum attribute definition or a Set of LocalizableEnumType attribute definition.
+// AddLocalizedEnumValue will add a localized enum value to a localizd enum type
+// attribute definition. It can update a LocalizableEnum attribute definition or
+// a Set of LocalizableEnumType attribute definition.
 type AddLocalizedEnumValue struct {
 	AttributeName string                           `json:"attributeName"`
 	Value         commercetools.LocalizedEnumValue `json:"value"`
@@ -217,12 +227,14 @@ func (ua AddLocalizedEnumValue) MarshalJSON() ([]byte, error) {
 }
 
 // RemoveEnumValues will remove an enum value of an attribute definition.
-// Removes enum values from an attribute definition of EnumType or LocalizableEnumType
-// or Set of EnumType or Set of LocalizableEnum.
-// All attributes of all products using those enum keys will also be removed in an eventually consistent way.
+// Removes enum values from an attribute definition of EnumType or
+// LocalizableEnumType or Set of EnumType or Set of LocalizableEnum. All
+// attributes of all products using those enum keys will also be removed in an
+// eventually consistent way.
 type RemoveEnumValues struct {
 	// The name of the attribute definition to update.
 	AttributeName string `json:"attributeName"`
+
 	// The keys of the EnumType or LocalizableEnumType to remove.
 	Keys []string `json:"keys"`
 }
@@ -240,9 +252,11 @@ func (ua RemoveEnumValues) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeAttributeDefinitionsOrder will reorder the attributes on the product type being updated.
+// ChangeAttributeDefinitionsOrder will reorder the attributes on the product
+// type being updated.
 type ChangeAttributeDefinitionsOrder struct {
-	// The attributes must be equal to the product type attributes (except for the order).
+	// The attributes must be equal to the product type attributes (except for
+	// the order).
 	Attributes []AttributeDefinition `json:"attributes"`
 }
 
@@ -259,12 +273,14 @@ func (ua ChangeAttributeDefinitionsOrder) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangePlainEnumValuesOrder will reorder the plain enums on an attribute definition.
-// It can update an EnumType attribute definition or a Set of EnumType attribute definition.
+// ChangePlainEnumValuesOrder will reorder the plain enums on an attribute
+// definition. It can update an EnumType attribute definition or a Set of
+// EnumType attribute definition.
 type ChangePlainEnumValuesOrder struct {
 	AttributeName string `json:"attributeName"`
-	// The values must be equal to the values of the attribute enum values (except for the order).
-	// If not a EnumValuesMustMatch error code will be returned.
+	// The values must be equal to the values of the attribute enum values
+	// (except for the order). If not a EnumValuesMustMatch error code will be
+	// returned.
 	Values []commercetools.EnumValue `json:"values"`
 }
 
@@ -281,12 +297,14 @@ func (ua ChangePlainEnumValuesOrder) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeLocalizedEnumValuesOrder will reorder the localized enums on an attribute definition.
-// It can update a LocalizableEnumType attribute definition or a Set of LocalizableEnumType attribute definition.
+// ChangeLocalizedEnumValuesOrder will reorder the localized enums on an
+// attribute definition. It can update a LocalizableEnumType attribute
+// definition or a Set of LocalizableEnumType attribute definition.
 type ChangeLocalizedEnumValuesOrder struct {
 	AttributeName string `json:"attributeName"`
-	// The values must be equal to the values of the attribute enum values (except for the order).
-	// If not a EnumValuesMustMatch error code will be returned.
+	// The values must be equal to the values of the attribute enum values
+	// (except for the order). If not a EnumValuesMustMatch error code will be
+	// returned.
 	Values []commercetools.LocalizedEnumValue `json:"values"`
 }
 
@@ -303,11 +321,12 @@ func (ua ChangeLocalizedEnumValuesOrder) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangePlainEnumValueKey will change the key of an enum value.
-// This action changes the key of a single enum value in an EnumType or LocalizableEnumType attribute definition.
-// It can update an EnumType attribute definition or a LocalizableEnumType attribute definition or a
-// Set of EnumType attribute definition or a Set of LocalizableEnumType attribute definition.
-// All products will be updated to the new key in an eventually consistent way.
+// ChangePlainEnumValueKey will change the key of an enum value. This action
+// changes the key of a single enum value in an EnumType or LocalizableEnumType
+// attribute definition. It can update an EnumType attribute definition or a
+// LocalizableEnumType attribute definition or a Set of EnumType attribute
+// definition or a Set of LocalizableEnumType attribute definition. All products
+// will be updated to the new key in an eventually consistent way.
 type ChangePlainEnumValueKey struct {
 	AttributeName string `json:"attributeName"`
 	Key           string `json:"key"`
@@ -327,11 +346,13 @@ func (ua ChangePlainEnumValueKey) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangePlainEnumValueLabel will change the label of an enum value.
-// It can update an EnumType attribute definition or a Set of EnumType attribute definition.
-// All products will be updated to the new label in an eventually consistent way.
+// ChangePlainEnumValueLabel will change the label of an enum value. It can
+// update an EnumType attribute definition or a Set of EnumType attribute
+// definition. All products will be updated to the new label in an eventually
+// consistent way.
 type ChangePlainEnumValueLabel struct {
 	AttributeName string `json:"attributeName"`
+
 	// The new value must be different from the existing value.
 	NewValue commercetools.EnumValue `json:"newValue"`
 }
@@ -349,11 +370,13 @@ func (ua ChangePlainEnumValueLabel) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeLocalizedEnumValueLabel will change the label of a localized enum value.
-// It can update a LocalizableEnumType attribute definition or a Set of LocalizableEnumType attribute definition.
-// All products will be updated to the new label in an eventually consistent way.
+// ChangeLocalizedEnumValueLabel will change the label of a localized enum
+// value. It can update a LocalizableEnumType attribute definition or a Set of
+// LocalizableEnumType attribute definition. All products will be updated to the
+// new label in an eventually consistent way.
 type ChangeLocalizedEnumValueLabel struct {
 	AttributeName string `json:"attributeName"`
+
 	// The new value must be different from the existing value.
 	NewValue commercetools.LocalizedEnumValue `json:"newValue"`
 }
@@ -372,14 +395,17 @@ func (ua ChangeLocalizedEnumValueLabel) MarshalJSON() ([]byte, error) {
 }
 
 // ChangeIsSearchable changes whether an attribute definition is searchable.
-// Following this update the products are reindexed asynchronously to reflect this change on the search endpoint.
-// When enabling search on an existing attribute type definition, the constraint regarding the maximum size
-// of a searchable attribute will not be enforced. Instead, product attribute definitions exceeding this limit
-// will be treated as not searchable and will not be available for full-text search.
+// Following this update the products are reindexed asynchronously to reflect
+// this change on the search endpoint. When enabling search on an existing
+// attribute type definition, the constraint regarding the maximum size of a
+// searchable attribute will not be enforced. Instead, product attribute
+// definitions exceeding this limit will be treated as not searchable and will
+// not be available for full-text search.
 type ChangeIsSearchable struct {
 	// The name of the attribute definition to update.
 	AttributeName string `json:"attributeName"`
-	IsSearchable  bool   `json:"isSearchable"`
+
+	IsSearchable bool `json:"isSearchable"`
 }
 
 // MarshalJSON override to add the action value
@@ -397,10 +423,11 @@ func (ua ChangeIsSearchable) MarshalJSON() ([]byte, error) {
 
 // ChangeInputHint Changes the input hint on an attribute definition.
 type ChangeInputHint struct {
-	// The name of the attribute definition to update.
-	// Must be of TextType, LocalizableTextType or SetType of TextType/LocalizableTextType.
-	AttributeName string                      `json:"attributeName"`
-	NewValue      commercetools.TextInputHint `json:"newValue"`
+	// The name of the attribute definition to update. Must be of TextType,
+	// LocalizableTextType or SetType of TextType/LocalizableTextType.
+	AttributeName string `json:"attributeName"`
+
+	NewValue commercetools.TextInputHint `json:"newValue"`
 }
 
 // MarshalJSON override to add the action value
@@ -416,11 +443,13 @@ func (ua ChangeInputHint) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeAttributeConstraint changes the attribute constraint on an attribute definition.
-// For now only following changes are supported: SameForAll to None and Unique to None.
+// ChangeAttributeConstraint changes the attribute constraint on an attribute
+// definition. For now only following changes are supported: SameForAll to None
+// and Unique to None.
 type ChangeAttributeConstraint struct {
 	// The name of the attribute definition to update.
 	AttributeName string `json:"attributeName"`
+
 	// For now only None is supported.
 	NewValue AttributeConstraint `json:"newValue"`
 }

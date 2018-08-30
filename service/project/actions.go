@@ -77,8 +77,8 @@ func (ua ChangeLanguages) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// ChangeMessagesEnabled will change the state of the enabled messages value
-// for the project being updated.
+// ChangeMessagesEnabled will change the state of the enabled messages value for
+// the project being updated.
 type ChangeMessagesEnabled struct {
 	// Setting to true enables creation of Messages for the project.
 	MessagesEnabled bool `json:"messagesEnabled"`
@@ -97,7 +97,8 @@ func (ua ChangeMessagesEnabled) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SetShippingRateInputType will set the shipping rate input type for the project being updated.
+// SetShippingRateInputType will set the shipping rate input type for the
+// project being updated.
 type SetShippingRateInputType struct {
 	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType"`
 }

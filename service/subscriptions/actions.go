@@ -2,6 +2,7 @@ package subscriptions
 
 import "encoding/json"
 
+// SetKey will change the key of the subscription being updated.
 type SetKey struct {
 	Key string `json:"key,omitempty"`
 }
@@ -19,6 +20,7 @@ func (ua SetKey) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// SetMessages will set the messages of the subscription being updated.
 type SetMessages struct {
 	Messages []MessageSubscription `json:"messages"`
 }
@@ -36,6 +38,7 @@ func (ua SetMessages) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// SetChanges will set the changes of the subscription being updated.
 type SetChanges struct {
 	Changes []ChangeSubscription `json:"changes"`
 }

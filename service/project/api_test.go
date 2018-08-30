@@ -235,7 +235,7 @@ func TestShippingRateInputType(t *testing.T) {
 
 	for _, tC := range testCases {
 
-		// Validate Marshalling (object -> json)
+		// Validate Marshaling (object -> json)
 		t.Run(tC.desc, func(t *testing.T) {
 			output, err := tC.object.MarshalJSON()
 			assert.Nil(t, err)

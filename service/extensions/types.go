@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// Extension extends the behavior of an API with your business logic.
 type Extension struct {
 	ID             string      `json:"id"`
 	Version        int         `json:"version"`
@@ -15,6 +16,7 @@ type Extension struct {
 	LastModifiedAt time.Time   `json:"lastModifiedAt"`
 }
 
+// UnmarshalJSON override to map the destination to the corresponding struct.
 func (e *Extension) UnmarshalJSON(data []byte) error {
 	type ExtensionClone Extension
 	if err := json.Unmarshal(data, (*ExtensionClone)(e)); err != nil {
@@ -24,23 +26,27 @@ func (e *Extension) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// ExtensionDraft is given as payload for Create Extension requests.
 type ExtensionDraft struct {
 	Key         string      `json:"key"`
 	Destination Destination `json:"destination"`
 	Triggers    []Trigger   `json:"triggers"`
 }
 
+// Destination contains all info necessary for the commercetools platform to
+// call the extension. Destinations can be differentiated by the type field.
 type Destination interface{}
 
-// DestinationHTTP implementation
-// An encrypted https connection is strongly recommended for production setups,
-// but we accept unencrypted http connections for development purposes. HTTP
-// redirects will not be followed. Cache headers will be ignored.
+// DestinationHTTP implementation An encrypted https connection is strongly
+// recommended for production setups, but we accept unencrypted http connections
+// for development purposes. HTTP redirects will not be followed. Cache headers
+// will be ignored.
 type DestinationHTTP struct {
 	URL            string                    `json:"url"`
 	Authentication DestinationAuthentication `json:"authentication"`
 }
 
+// MarshalJSON override to add the type value.
 func (ed DestinationHTTP) MarshalJSON() ([]byte, error) {
 	type Alias DestinationHTTP
 	return json.Marshal(struct {
@@ -68,6 +74,7 @@ type DestinationAWSLambda struct {
 	AccessSecret string `json:"accessSecret"`
 }
 
+// MarshalJSON override to add the type value.
 func (ed DestinationAWSLambda) MarshalJSON() ([]byte, error) {
 	type Alias DestinationAWSLambda
 	return json.Marshal(struct {

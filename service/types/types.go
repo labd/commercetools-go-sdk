@@ -13,14 +13,19 @@ import (
 type Type struct {
 	// The unique ID of the type.
 	ID string `json:"id"`
+
 	// The current version of the type.
 	Version int `json:"version"`
+
 	// Identifier for the type (max. 256 characters).
-	Key         string                        `json:"key"`
+	Key string `json:"key"`
+
 	Name        commercetools.LocalizedString `json:"name"`
 	Description commercetools.LocalizedString `json:"description,omitempty"`
+
 	// Defines for which resource(s) the type is valid.
-	ResourceTypeIds  []string          `json:"resourceTypeIds"`
+	ResourceTypeIds []string `json:"resourceTypeIds"`
+
 	FieldDefinitions []FieldDefinition `json:"fieldDefinitions"`
 	CreatedAt        time.Time         `json:"createdAt"`
 	LastModifiedAt   time.Time         `json:"lastModifiedAt"`
@@ -29,30 +34,38 @@ type Type struct {
 // TypeDraft is given as payload for Create Type requests.
 type TypeDraft struct {
 	// Identifier for the type (max. 256 characters).
-	Key         string                        `json:"key"`
+	Key string `json:"key"`
+
 	Name        commercetools.LocalizedString `json:"name"`
 	Description commercetools.LocalizedString `json:"description,omitempty"`
+
 	// The IDs of the resources that can be customized with this type.
-	ResourceTypeIds  []string          `json:"resourceTypeIds"`
+	ResourceTypeIds []string `json:"resourceTypeIds"`
+
 	FieldDefinitions []FieldDefinition `json:"fieldDefinitions,omitempty"`
 }
 
-// FieldDefinition describe custom fields and allow you to define some meta-information associated with the field.
+// FieldDefinition describe custom fields and allow you to define some
+// meta-information associated with the field.
 type FieldDefinition struct {
 	// Describes the type of the field.
 	Type FieldType `json:"type"`
-	// The name of the field.
-	// The name must be between two and 36 characters long and can contain the ASCII letters A to Z
-	// in lowercase or uppercase, digits, underscores (_) and the hyphen-minus (-).
-	// The name must be unique for a given resource type ID. In case there is a field with the same
-	// name in another type it has to have the same FieldType also.
+
+	// The name of the field. The name must be between two and 36 characters
+	// long and can contain the ASCII letters A to Z in lowercase or uppercase,
+	// digits, underscores (_) and the hyphen-minus (-). The name must be unique
+	// for a given resource type ID. In case there is a field with the same name
+	// in another type it has to have the same FieldType also.
 	Name string `json:"name"`
+
 	// A human-readable label for the field.
 	Label commercetools.LocalizedString `json:"label"`
+
 	//  Whether the field is required to have a value.
 	Required bool `json:"required"`
-	// Provides a visual representation type for this field. It is only relevant for string-based
-	// field types like StringType and LocalizedStringType.
+
+	// Provides a visual representation type for this field. It is only relevant
+	// for string-based field types like StringType and LocalizedStringType.
 	InputHint commercetools.TextInputHint `json:"inputHint,omitempty"`
 }
 
@@ -66,8 +79,8 @@ func (f *FieldDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// BooleanType will allow the storage of a boolan value.
-// Valid values for the field are true and false (JSON Boolean).
+// BooleanType will allow the storage of a boolan value. Valid values for the
+// field are true and false (JSON Boolean).
 type BooleanType struct{}
 
 // MarshalJSON override to add the name value.
@@ -249,8 +262,8 @@ func (t ReferenceType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SetType will allow the storage of a set of fields.
-// The set field type defines a set (array without duplicates) with values of the given elementType.
+// SetType will allow the storage of a set of fields. The set field type defines
+// a set (array without duplicates) with values of the given elementType.
 type SetType struct {
 	ElementType FieldType `json:"elementType"`
 }

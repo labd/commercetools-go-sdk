@@ -13,26 +13,37 @@ import (
 type AttributeConstraint string
 
 const (
-	// NoneAttributeConstraint indicates no constraints are applied to the attribute.
+	// NoneAttributeConstraint indicates no constraints are applied to the
+	// attribute.
 	NoneAttributeConstraint AttributeConstraint = "None"
-	// UniqueAttributeConstraint indicates attribute values should be different in each variant.
+
+	// UniqueAttributeConstraint indicates attribute values should be different
+	// in each variant.
 	UniqueAttributeConstraint AttributeConstraint = "Unique"
+
 	// CombinationUniqueAttributeConstraint indicates that a set of attributes,
-	// that have this constraint, should have different combinations in each variant.
+	// that have this constraint, should have different combinations in each
+	// variant.
 	CombinationUniqueAttributeConstraint AttributeConstraint = "CombinationUnique"
-	// SameForAllAttributeConstraint indicates attribute values should be the same in all variants.
+
+	// SameForAllAttributeConstraint indicates attribute values should be the
+	// same in all variants.
 	SameForAllAttributeConstraint AttributeConstraint = "SameForAll"
 )
 
-// ProductType is used to describe common characteristics,
-// most importantly common custom attributes, of many concrete products.
+// ProductType is used to describe common characteristics, most importantly
+// common custom attributes, of many concrete products.
 type ProductType struct {
 	// The unique ID of the product type.
 	ID string `json:"id"`
+
 	// The current version of the product type.
 	Version int `json:"version"`
-	// User-specific unique identifier for the product type (max. 256 characters).
-	Key            string                `json:"key,omitempty"`
+
+	// User-specific unique identifier for the product type (max. 256
+	// characters).
+	Key string `json:"key,omitempty"`
+
 	Name           string                `json:"name"`
 	Description    string                `json:"description"`
 	Attributes     []AttributeDefinition `json:"attributes"`
@@ -43,47 +54,65 @@ type ProductType struct {
 // ProductTypeDraft is given as payload for Create Product Type requests.
 type ProductTypeDraft struct {
 	Name string `json:"name"`
-	// User-specific unique identifier for the product type (min. 2 and max. 256 characters).
-	Key         string                `json:"key,omitempty"`
+
+	// User-specific unique identifier for the product type (min. 2 and max. 256
+	// characters).
+	Key string `json:"key,omitempty"`
+
 	Description string                `json:"description"`
 	Attributes  []AttributeDefinition `json:"attributes,omitempty"`
 }
 
-// AttributeDefinition describes a product attribute and allow you to define some meta-information
-// associated with the attribute (like whether it should be searchable or its constraints).
+// AttributeDefinition describes a product attribute and allow you to define
+// some meta-information associated with the attribute (like whether it should
+// be searchable or its constraints).
 type AttributeDefinition struct {
 	// Describes the type of the attribute.
 	Type AttributeType `json:"type"`
-	// The unique name of the attribute used in the API.
-	// The name must be between two and 256 characters long and can contain the ASCII letters A to Z
-	// in lowercase or uppercase, digits, underscores (_) and the hyphen-minus (-).
-	// When using the same name for an attribute in two or more product types all fields of the
-	// AttributeDefinition of this attribute need to be the same across the product types,
-	// otherwise an AttributeDefinitionAlreadyExists error code will be returned.
-	// An exception to this are the values of an enum or lenum type and sets thereof.
+
+	// The unique name of the attribute used in the API. The name must be
+	// between two and 256 characters long and can contain the ASCII letters A
+	// to Z in lowercase or uppercase, digits, underscores (_) and the
+	// hyphen-minus (-). When using the same name for an attribute in two or
+	// more product types all fields of the AttributeDefinition of this
+	// attribute need to be the same across the product types, otherwise an
+	// AttributeDefinitionAlreadyExists error code will be returned. An
+	// exception to this are the values of an enum or lenum type and sets
+	// thereof.
 	Name string `json:"name"`
+
 	// A human-readable label for the attribute.
 	Label commercetools.LocalizedString `json:"label"`
+
 	// Whether the attribute is required to have a value.
 	IsRequired bool `json:"isRequired"`
-	// Describes how an attribute or a set of attributes should be validated across all variants of a product.
+
+	// Describes how an attribute or a set of attributes should be validated
+	// across all variants of a product.
 	AttributeConstraint AttributeConstraint `json:"attributeConstraint"`
-	// Additional information about the attribute that aids content managers when setting product details.
+
+	// Additional information about the attribute that aids content managers
+	// when setting product details.
 	InputTip commercetools.LocalizedString `json:"inputTip,omitempty"`
-	// Provides a visual representation type for this attribute.
-	// Only relevant for text-based attribute types like TextType and LocalizableTextType.
+
+	// Provides a visual representation type for this attribute. Only relevant
+	// for text-based attribute types like TextType and LocalizableTextType.
 	InputHint commercetools.TextInputHint `json:"inputHint"`
-	// Whether the attribute’s values should generally be enabled in product search.
-	// This determines whether the value is stored in products for matching terms in the context of
-	// full-text search queries and can be used in facets & filters as part of product search queries.
-	// The exact features that are enabled/disabled with this flag depend on the concrete attribute type
-	// and are described there. The max size of a searchable field is restricted to 10922 characters.
-	// This constraint is enforced at both product creation and product update.
-	// If the length of the input exceeds the maximum size an InvalidField error is returned.
+
+	// Whether the attribute’s values should generally be enabled in product
+	// search. This determines whether the value is stored in products for
+	// matching terms in the context of full-text search queries and can be used
+	// in facets & filters as part of product search queries. The exact features
+	// that are enabled/disabled with this flag depend on the concrete attribute
+	// type and are described there. The max size of a searchable field is
+	// restricted to 10922 characters. This constraint is enforced at both
+	// product creation and product update. If the length of the input exceeds
+	// the maximum size an InvalidField error is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
 
-// UnmarshalJSON override to map the attribute definition to the corresponding struct.
+// UnmarshalJSON override to map the attribute definition to the corresponding
+// struct.
 func (a *AttributeDefinition) UnmarshalJSON(data []byte) error {
 	type Alias AttributeDefinition
 	if err := json.Unmarshal(data, (*Alias)(a)); err != nil {
@@ -93,36 +122,49 @@ func (a *AttributeDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// AttributeDefinitionDraft is given as payload for Create Attribute Definition requests.
+// AttributeDefinitionDraft is given as payload for Create Attribute Definition
+// requests.
 type AttributeDefinitionDraft struct {
 	// Describes the type of the attribute.
 	Type AttributeType `json:"type"`
-	// The unique name of the attribute used in the API.
-	// The name must be between two and 256 characters long and can contain the ASCII letters A to Z
-	// in lowercase or uppercase, digits, underscores (_) and the hyphen-minus (-).
-	// When using the same name for an attribute in two or more product types all fields
-	// of the AttributeDefinition of this attribute need to be the same across the product types.
+
+	// The unique name of the attribute used in the API. The name must be
+	// between two and 256 characters long and can contain the ASCII letters A
+	// to Z in lowercase or uppercase, digits, underscores (_) and the
+	// hyphen-minus (-). When using the same name for an attribute in two or
+	// more product types all fields of the AttributeDefinition of this
+	// attribute need to be the same across the product types.
 	Name string `json:"name"`
+
 	// A human-readable label for the attribute.
 	Label commercetools.LocalizedString `json:"label"`
+
 	// Whether the attribute is required to have a value.
 	IsRequired bool `json:"isRequired"`
-	// Describes how an attribute or a set of attributes should be validated across all variants of a product.
+
+	// Describes how an attribute or a set of attributes should be validated
+	// across all variants of a product.
 	AttributeConstraint AttributeConstraint `json:"attributeConstraint"`
-	// Additional information about the attribute that aids content managers when setting product details.
+
+	// Additional information about the attribute that aids content managers
+	// when setting product details.
 	InputTip commercetools.LocalizedString `json:"inputTip,omitempty"`
-	// Provides a visual representation type for this attribute.
-	// Only relevant for text-based attribute types like TextType and LocalizableTextType.
+
+	// Provides a visual representation type for this attribute. Only relevant
+	// for text-based attribute types like TextType and LocalizableTextType.
 	InputHint commercetools.TextInputHint `json:"inputHint,omitempty"`
-	// Whether the attribute’s values should generally be enabled in product search.
-	// This determines whether the value is stored in products for matching terms in the context
-	// of full-text search queries and can be used in facets & filters as part of product search queries.
-	// The exact features that are enabled/disabled with this flag depend on the concrete attribute type
-	// and are described there.
+
+	// Whether the attribute’s values should generally be enabled in product
+	// search. This determines whether the value is stored in products for
+	// matching terms in the context of full-text search queries and can be used
+	// in facets & filters as part of product search queries. The exact features
+	// that are enabled/disabled with this flag depend on the concrete attribute
+	// type and are described there.
 	IsSearchable bool `json:"isSearchable"`
 }
 
-// UnmarshalJSON override to map the attribute definition draft to the corresponding struct.
+// UnmarshalJSON override to map the attribute definition draft to the
+// corresponding struct.
 func (a *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 	type Alias AttributeDefinitionDraft
 	if err := json.Unmarshal(data, (*Alias)(a)); err != nil {
@@ -132,8 +174,8 @@ func (a *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// BooleanType indicates the attribute can store a boolean.
-// Valid values for the attribute are true and false (JSON Boolean).
+// BooleanType indicates the attribute can store a boolean. Valid values for the
+// attribute are true and false (JSON Boolean).
 type BooleanType struct{}
 
 // MarshalJSON override to add the name value
@@ -307,8 +349,8 @@ func (t ReferenceType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// SetType defines a set (array without duplicates) with values of the given elementType.
-// It does not support isRequired.
+// SetType defines a set (array without duplicates) with values of the given
+// elementType. It does not support isRequired.
 type SetType struct {
 	ElementType AttributeType `json:"elementType"`
 }
@@ -326,18 +368,18 @@ func (t SetType) MarshalJSON() ([]byte, error) {
 }
 
 // NestedType allows you to nest attributes based on some existing product type.
-// It does not support isSearchable nor it is supported in queries at the moment.
-// The only supported AttributeConstraint is None.
-// The value of the nested attribute is an array of values.
-// It reflects the structure of the attributes property of product variant,
-// where every element of array is a JSON object with properties name and value.
+// It does not support isSearchable nor it is supported in queries at the
+// moment. The only supported AttributeConstraint is None. The value of the
+// nested attribute is an array of values. It reflects the structure of the
+// attributes property of product variant, where every element of array is a
+// JSON object with properties name and value.
 type NestedType struct {
-	// ProductType defines, which attributes are allowed to be stored as a nested attributes of the current attribute.
+	// ProductType defines, which attributes are allowed to be stored as a
+	// nested attributes of the current attribute.
 	TypeReference string `json:"typeReference"`
 }
 
-// MarshalJSON override to add the name value
-// TODO: Test with nested response.
+// MarshalJSON override to add the name value TODO: Test with nested response.
 func (t NestedType) MarshalJSON() ([]byte, error) {
 	type Alias NestedType
 	return json.Marshal(struct {
@@ -349,7 +391,8 @@ func (t NestedType) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// AttributeType all have a name. Some have additional fields such as values in enums or elementType in sets.
+// AttributeType all have a name. Some have additional fields such as values in
+// enums or elementType in sets.
 type AttributeType interface{}
 
 func attributeTypeMapping(input AttributeType) AttributeType {
