@@ -155,3 +155,30 @@ func GeoJSONGeometryMapping(input GeoJSONGeometry) GeoJSONGeometry {
 	}
 	return nil
 }
+
+// PagedQueryResult for query responses of requests supporting paging via limit
+// and offset.
+type PagedQueryResult struct {
+	// The offset supplied by the client or the server default. It is the number
+	// of elements skipped, not a page number.
+	Offset int `json:"offset"`
+
+	Limit int `json:"limit"`
+
+	// The actual number of results returned in results.
+	Count int `json:"count"`
+
+	// The total number of results matching the query. This field is returned by
+	// default. For improved performance, calculating this field can be
+	// deactivated by using the query parameter withTotal=false.
+	Total int `json:"total,omitempty"`
+
+	Results []interface{} `json:"results"`
+
+	Facets map[string]FacetResult `json:"facets,omitempty"`
+}
+
+type FacetResult struct {
+	Type  string `json:"type"`
+	Count int    `json:"count"`
+}

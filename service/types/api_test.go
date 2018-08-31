@@ -808,6 +808,82 @@ func TestTypeGetByID(t *testing.T) {
 	}
 }
 
+func TestTypeQuery(t *testing.T) {
+	testCases := []struct {
+		desc     string
+		input    *types.QueryInput
+		query    url.Values
+		rawQuery string
+	}{
+		{
+			desc: "Where",
+			input: &types.QueryInput{
+				Where: "not (name = 'Peter' and age < 42)",
+			},
+			query: url.Values{
+				"where": []string{"not (name = 'Peter' and age < 42)"},
+			},
+			rawQuery: "where=not+%28name+%3D+%27Peter%27+and+age+%3C+42%29",
+		},
+		{
+			desc: "Sort",
+			input: &types.QueryInput{
+				Sort: []string{"name desc", "dog.age asc"},
+			},
+			query: url.Values{
+				"sort": []string{"name desc", "dog.age asc"},
+			},
+			rawQuery: "sort=name+desc&sort=dog.age+asc",
+		},
+		{
+			desc: "Expand",
+			input: &types.QueryInput{
+				Expand: "taxCategory",
+			},
+			query: url.Values{
+				"expand": []string{"taxCategory"},
+			},
+			rawQuery: "expand=taxCategory",
+		},
+		{
+			desc: "Limit",
+			input: &types.QueryInput{
+				Limit: 20,
+			},
+			query: url.Values{
+				"limit": []string{"20"},
+			},
+			rawQuery: "limit=20",
+		},
+		{
+			desc: "Offset",
+			input: &types.QueryInput{
+				Offset: 20,
+			},
+			query: url.Values{
+				"offset": []string{"20"},
+			},
+			rawQuery: "offset=20",
+		},
+	}
+
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			output := testutil.RequestData{}
+
+			client, server := testutil.MockClient(t, "{}", &output, nil)
+			defer server.Close()
+
+			svc := types.New(client)
+			_, err := svc.Query(tC.input)
+
+			assert.Nil(t, err)
+			assert.Equal(t, tC.query, output.URL.Query())
+			assert.Equal(t, tC.rawQuery, output.URL.RawQuery)
+		})
+	}
+}
+
 func TestFieldTypes(t *testing.T) {
 	testCases := []struct {
 		desc   string

@@ -67,7 +67,8 @@ func (c *Client) Get(endpoint string, queryParams url.Values, output interface{}
 }
 
 func (c *Client) Query(endpoint string, queryParams url.Values, output interface{}) error {
-	return errors.New("NOT IMPLEMENTED")
+	err := c.doRequest("GET", endpoint, queryParams, nil, output)
+	return err
 }
 
 func (c *Client) Create(endpoint string, queryParams url.Values, input interface{}, output interface{}) error {
