@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"time"
 
 	cleanhttp "github.com/hashicorp/go-cleanhttp"
@@ -23,12 +24,45 @@ type ClientCredentialsProvider struct {
 }
 
 // TODO: Re-use client ?
-func NewClientCredentialsProvider(clientID, clientSecret, scope, authURL string) AuthProvider {
-	return &ClientCredentialsProvider{
-		clientID:     getConfigValue(clientID, "CTP_CLIENT_ID"),
-		clientSecret: getConfigValue(clientSecret, "CTP_CLIENT_SECRET"),
-		scope:        getConfigValue(scope, "CTP_SCOPES"),
-		authURL:      getConfigValue(authURL, "CTP_AUTH_URL"),
+func NewClientCredentials(options ...func(*ClientCredentialsProvider) error) AuthProvider {
+	provider := &ClientCredentialsProvider{
+		clientID:     os.Getenv("CTP_CLIENT_ID"),
+		clientSecret: os.Getenv("CTP_CLIENT_SECRET"),
+		scope:        os.Getenv("CTP_SCOPES"),
+		authURL:      os.Getenv("CTP_AUTH_URL"),
+	}
+
+	for _, option := range options {
+		option(provider)
+	}
+	return provider
+}
+
+func ClientID(value string) func(*ClientCredentialsProvider) error {
+	return func(c *ClientCredentialsProvider) error {
+		c.clientID = value
+		return nil
+	}
+}
+
+func ClientSecret(value string) func(*ClientCredentialsProvider) error {
+	return func(c *ClientCredentialsProvider) error {
+		c.clientSecret = value
+		return nil
+	}
+}
+
+func Scope(value string) func(*ClientCredentialsProvider) error {
+	return func(c *ClientCredentialsProvider) error {
+		c.scope = value
+		return nil
+	}
+}
+
+func AuthURL(value string) func(*ClientCredentialsProvider) error {
+	return func(c *ClientCredentialsProvider) error {
+		c.authURL = value
+		return nil
 	}
 }
 

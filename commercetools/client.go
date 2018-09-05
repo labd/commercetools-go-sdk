@@ -12,7 +12,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/hashicorp/go-cleanhttp"
+	cleanhttp "github.com/hashicorp/go-cleanhttp"
 	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
 )
 
@@ -25,36 +25,57 @@ type Client struct {
 	logLevel   int
 }
 
-// Config provides the client with the required configuration variables.
-type Config struct {
-	ProjectKey   string
-	AuthProvider credentials.AuthProvider
-	APIURL       string
-	LogLevel     int
-}
-
 // NewClient creates a new client based on the provided Config.
-func NewClient(cfg *Config) (*Client, error) {
+func NewClient(options ...func(*Client) error) (*Client, error) {
 	client := &Client{
-		auth:       cfg.AuthProvider,
-		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
-		apiURL:     getConfigValue(cfg.APIURL, "CTP_API_URL"),
+		auth:       credentials.NewClientCredentials(),
+		projectKey: os.Getenv("CTP_PROJECT_KEY"),
+		apiURL:     os.Getenv("CTP_API_URL"),
 		HTTPClient: cleanhttp.DefaultClient(),
-		logLevel:   cfg.LogLevel,
-	}
-
-	if client.projectKey == "" {
-		return nil, errors.New("Missing ProjectKey")
-	}
-	if client.apiURL == "" {
-		return nil, errors.New("Missing API url")
 	}
 
 	if os.Getenv("CTP_DEBUG") != "" {
 		client.logLevel = 1
-
 	}
+
+	// Apply the functional options
+	for _, option := range options {
+		option(client)
+	}
+
 	return client, nil
+}
+
+func Debug(value bool) func(*Client) error {
+	return func(c *Client) error {
+		if value {
+			c.logLevel = 1
+		} else {
+			c.logLevel = 0
+		}
+		return nil
+	}
+}
+
+func ProjectKey(value string) func(*Client) error {
+	return func(c *Client) error {
+		c.projectKey = value
+		return nil
+	}
+}
+
+func ApiURL(value string) func(*Client) error {
+	return func(c *Client) error {
+		c.apiURL = value
+		return nil
+	}
+}
+
+func AuthProvider(value credentials.AuthProvider) func(*Client) error {
+	return func(c *Client) error {
+		c.auth = value
+		return nil
+	}
 }
 
 func getConfigValue(value string, envName string) string {
