@@ -65,11 +65,12 @@ func MockClient(
 
 	ts := httptest.NewServer(http.HandlerFunc(handler))
 
-	client, err := commercetools.NewClient(&commercetools.Config{
-		ProjectKey:   "unittest",
-		APIURL:       ts.URL,
-		AuthProvider: credentials.NewDummyCredentialsProvider("Bearer unittest"),
-	})
+	client, err := commercetools.NewClient(
+		commercetools.ProjectKey("unittest"),
+		commercetools.ApiURL(ts.URL),
+		commercetools.AuthProvider(
+			credentials.NewDummyCredentialsProvider("Bearer unittest"),
+		))
 	if err != nil {
 		t.Fatal(err)
 	}
