@@ -42,7 +42,7 @@ func TestGetProductByID(t *testing.T) {
 	defer server.Close()
 	svc := products.New(client)
 
-	product, err := svc.GetByID(100)
+	product, err := svc.GetByID("foo-bar")
 	if err != nil {
 		t.Fatal(err)
 	}

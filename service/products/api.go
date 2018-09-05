@@ -64,9 +64,9 @@ func (svc *Service) Create(draft *ProductDraft) (*Product, error) {
 	return &result, nil
 }
 
-func (svc *Service) GetByID(id int) (*Product, error) {
+func (svc *Service) GetByID(id string) (*Product, error) {
 	var result Product
-	err := svc.client.Get(fmt.Sprintf("products/%d", id), nil, &result)
+	err := svc.client.Get(fmt.Sprintf("products/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
