@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
@@ -14,6 +12,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/pkg/errors"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -107,6 +106,9 @@ func (c *Client) Delete(endpoint string, queryParams url.Values, output interfac
 func (c *Client) doRequest(method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
 	url := c.url + "/" + c.projectKey + "/" + endpoint
 	req, err := http.NewRequest(method, url, data)
+	if err != nil {
+		return errors.Wrap(err, "Creating new request")
+	}
 
 	if params != nil {
 		req.URL.RawQuery = params.Encode()
@@ -132,27 +134,15 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 	case 200, 201:
 		return json.Unmarshal(body, output)
 	default:
-		return processErrorResponse(resp.StatusCode, body)
+		return parseErrorResponse(resp, body)
 	}
-}
 
-func processErrorResponse(statusCode int, body []byte) error {
-	data := make(map[string]interface{})
-	err := json.Unmarshal(body, &data)
-	st := http.StatusText(statusCode)
-	if err == nil {
-		if val, ok := data["message"]; ok {
-			return fmt.Errorf("HTTP %s: %s", st, val.(string))
-		}
-		return fmt.Errorf("HTTP %s: %s", st, string(body))
-	}
-	return fmt.Errorf("HTTP %s: %v", st, err)
 }
 
 func serializeInput(input interface{}) (io.Reader, error) {
 	m, err := json.MarshalIndent(input, "", "\t")
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Unable to serialize content")
 	}
 	data := bytes.NewReader(m)
 	return data, nil
