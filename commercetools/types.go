@@ -6,6 +6,30 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
+// Used for commercetools.Reference
+const (
+	RefCart             = "cart"
+	RefCartDiscount     = "cart-discount"
+	RefCategory         = "category"
+	RefChannel          = "channel"
+	RefCustomer         = "customer"
+	RefCustomerGroup    = "customer-group"
+	RefDiscountCode     = "discount-code"
+	RefKeyValueDocument = "key-value-document"
+	RefPayment          = "payment"
+	RefProduct          = "product"
+	RefProductDiscount  = "product-discount"
+	RefProductPrice     = "product-price"
+	RefProductType      = "product-type"
+	RefOrder            = "order"
+	RefShippingMethod   = "shipping-method"
+	RefShoppingList     = "shopping-list"
+	RefState            = "state"
+	RefTaxCategory      = "tax-category"
+	RefType             = "type"
+	RefZone             = "zone"
+)
+
 // LocalizedString is a JSON object where the keys are of IETF language tag, and
 // the values the corresponding strings used for that language.
 type LocalizedString map[string]string
