@@ -1,6 +1,7 @@
 package testutil
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -11,7 +12,7 @@ import (
 	"testing"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
-	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
+	"golang.org/x/oauth2"
 )
 
 type RequestData struct {
@@ -65,15 +66,16 @@ func MockClient(
 
 	ts := httptest.NewServer(http.HandlerFunc(handler))
 
-	client, err := commercetools.NewClient(
-		commercetools.ProjectKey("unittest"),
-		commercetools.ApiURL(ts.URL),
-		commercetools.AuthProvider(
-			credentials.NewDummyCredentialsProvider("Bearer unittest"),
-		))
-	if err != nil {
-		t.Fatal(err)
-	}
+	httpClient := oauth2.NewClient(context.TODO(), oauth2.StaticTokenSource(&oauth2.Token{
+		AccessToken: "unittest",
+	}),
+	)
+
+	client := commercetools.New(&commercetools.Config{
+		ProjectKey: "unittest",
+		URL:        ts.URL,
+		HTTPClient: httpClient,
+	})
 
 	return client, ts
 }

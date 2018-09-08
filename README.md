@@ -14,57 +14,53 @@ Note: This is currently **NOT** ready for production usage
 package main
 
 import (
-  "log"
+    "log"
 
-  "github.com/labd/commercetools-go-sdk/commercetools"
-  "github.com/labd/commercetools-go-sdk/commercetools/credentials"
-  "github.com/labd/commercetools-go-sdk/service/products"
+    "golang.org/x/oauth2/clientcredentials"
+    "github.com/labd/commercetools-go-sdk/commercetools"
+    "github.com/labd/commercetools-go-sdk/service/products"
 )
 
 func main() {
 
-  // The NewClient and NewClientCredentialsProvider use functional options for
-  // passing values. When no option is passed it uses the CTP_* environment
-  // variables.
-  client, err := commercetools.NewClient(
-		commercetools.ProjectKey("<project-key>"),
-		commercetools.ApiURL("https://api.sphere.io"),
-		commercetools.Debug(false),
-		commercetools.AuthProvider(
-			credentials.NewClientCredentialsProvider(
-				credentials.ClientID("<client-id>"),
-				credentials.ClientSecret("<client-secret>"),
-				credentials.AuthURL("<auth-url>"),
-				credentials.Scope("manage_project:<project-key>"),
-			),
-    ),
-  )
+    oauth2Config := &clientcredentials.Config{
+        ClientID:     "<client-id>",
+        ClientSecret: "<client-secret>",
+        Scopes:       []string{"manage_project:<scopes>"},
+        TokenURL:     "https://auth.sphere.io/oauth/token",
+    }
+    httpClient := oauth2Config.Client(context.TODO())
 
-  if err != nil {
-    log.Fatal(err)
-  }
+    // Create the new client. When an empty value is passed it will use the CTP_*
+    // environment variables to get the value. The HTTPClient arg is optional,
+    // and when empty will automatically be created using the env values.
+    client := commercetools.New(&commercetools.Config{
+        ProjectKey: "<project-key>",
+        URL:        "https://api.sphere.io",
+        HTTPClient: httpClient,
+    })
 
-  svc := products.New(client)
-  product, err := svc.ProductCreate(&products.ProductDraft{
-    Key: "test-product",
-    Name: commercetools.LocalizedString{
-      "nl": "Een test product",
-      "en": "A test product",
-    },
-    ProductType: commercetools.Reference{
-      TypeID: "product-type",
-      ID:     "8750e1fd-f431-481f-9296-967b1e56bf49",
-    },
-    Slug: commercetools.LocalizedString{
-      "nl": "een-test-product",
-      "en": "a-test-product",
-    },
-  }
-  if err != nil {
-    log.Fatal(err)
-  }
+    svc := products.New(client)
+    product, err := svc.ProductCreate(&products.ProductDraft{
+        Key: "test-product",
+        Name: commercetools.LocalizedString{
+            "nl": "Een test product",
+            "en": "A test product",
+        },
+        ProductType: commercetools.Reference{
+            TypeID: "product-type",
+            ID:     "8750e1fd-f431-481f-9296-967b1e56bf49",
+        },
+        Slug: commercetools.LocalizedString{
+            "nl": "een-test-product",
+            "en": "a-test-product",
+        },
+    }
+    if err != nil {
+        log.Fatal(err)
+    }
 
-  log.Print(product)
+    log.Print(product)
 }
 ```
 

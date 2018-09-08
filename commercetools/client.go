@@ -2,6 +2,7 @@ package commercetools
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,71 +12,47 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
-	cleanhttp "github.com/hashicorp/go-cleanhttp"
-	"github.com/labd/commercetools-go-sdk/commercetools/credentials"
+	"golang.org/x/oauth2/clientcredentials"
 )
+
+type Config struct {
+	ProjectKey string
+	URL        string
+	HTTPClient *http.Client
+}
 
 // Client bundles the logic for sending requests to the CommerceTools platform.
 type Client struct {
-	HTTPClient *http.Client
-	apiURL     string
+	httpClient *http.Client
+	url        string
 	projectKey string
-	auth       credentials.AuthProvider
 	logLevel   int
 }
 
-// NewClient creates a new client based on the provided Config.
-func NewClient(options ...func(*Client) error) (*Client, error) {
+// New creates a new client based on the provided Config.
+func New(cfg *Config) *Client {
 	client := &Client{
-		auth:       credentials.NewClientCredentials(),
-		projectKey: os.Getenv("CTP_PROJECT_KEY"),
-		apiURL:     os.Getenv("CTP_API_URL"),
-		HTTPClient: cleanhttp.DefaultClient(),
+		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
+		url:        getConfigValue(cfg.URL, "CTP_API_URL"),
+		httpClient: cfg.HTTPClient,
+	}
+
+	if client.httpClient == nil {
+		auth := &clientcredentials.Config{
+			ClientID:     os.Getenv("CTP_CLIENT_ID"),
+			ClientSecret: os.Getenv("CTP_CLIENT_SECRET"),
+			Scopes:       strings.Split(os.Getenv("CTP_SCOPES"), ","),
+			TokenURL:     os.Getenv("CTP_AUTH_URL"),
+		}
+		client.httpClient = auth.Client(context.TODO())
 	}
 
 	if os.Getenv("CTP_DEBUG") != "" {
 		client.logLevel = 1
 	}
-
-	// Apply the functional options
-	for _, option := range options {
-		option(client)
-	}
-
-	return client, nil
-}
-
-func Debug(value bool) func(*Client) error {
-	return func(c *Client) error {
-		if value {
-			c.logLevel = 1
-		} else {
-			c.logLevel = 0
-		}
-		return nil
-	}
-}
-
-func ProjectKey(value string) func(*Client) error {
-	return func(c *Client) error {
-		c.projectKey = value
-		return nil
-	}
-}
-
-func ApiURL(value string) func(*Client) error {
-	return func(c *Client) error {
-		c.apiURL = value
-		return nil
-	}
-}
-
-func AuthProvider(value credentials.AuthProvider) func(*Client) error {
-	return func(c *Client) error {
-		c.auth = value
-		return nil
-	}
+	return client
 }
 
 func getConfigValue(value string, envName string) string {
@@ -128,15 +105,8 @@ func (c *Client) Delete(endpoint string, queryParams url.Values, output interfac
 }
 
 func (c *Client) doRequest(method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
-	authToken, err := c.auth.GetAuthToken()
-	if err != nil {
-		return err
-	}
-
-	url := c.apiURL + "/" + c.projectKey + "/" + endpoint
+	url := c.url + "/" + c.projectKey + "/" + endpoint
 	req, err := http.NewRequest(method, url, data)
-
-	req.Header.Add("Authorization", authToken)
 
 	if params != nil {
 		req.URL.RawQuery = params.Encode()
@@ -146,7 +116,7 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 		logRequest(req)
 	}
 
-	resp, err := c.HTTPClient.Do(req)
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
