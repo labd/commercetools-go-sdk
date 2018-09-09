@@ -137,6 +137,9 @@ func (e ErrorObject) Extra() map[string]string {
 }
 
 func (e ErrorObject) Message() string {
+	if e.message == "" {
+		return e.code
+	}
 	return fmt.Sprintf("%s - %s", e.code, e.message)
 }
 
@@ -154,7 +157,10 @@ func (e ErrorInvalidJson) DetailedErrorMessage() string {
 
 func parseErrorResponse(response *http.Response, body []byte) error {
 	if len(body) == 0 {
-		return Error{statusCode: response.StatusCode}
+		return Error{
+			statusCode: response.StatusCode,
+			Errors:     []ErrorItem{ErrorObject{code: ErrResourceNotFound}},
+		}
 	}
 
 	data := make(map[string]interface{})

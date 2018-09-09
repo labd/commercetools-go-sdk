@@ -39,7 +39,11 @@ func TestClientNotFound(t *testing.T) {
 	output := OutputData{}
 
 	err := client.Get("/", nil, &output)
-	assert.Equal(t, "Not Found (404)", err.Error())
+	assert.Equal(t, "Not Found (404): ResourceNotFound", err.Error())
+
+	ctErr, ok := err.(commercetools.Error)
+	assert.Equal(t, true, ok)
+	assert.Equal(t, commercetools.ErrResourceNotFound, ctErr.Code())
 }
 
 func TestAuthError(t *testing.T) {
