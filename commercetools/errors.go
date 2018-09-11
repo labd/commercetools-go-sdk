@@ -119,20 +119,20 @@ func (e Error) Error() string {
 type ErrorItem interface {
 	Code() string
 	Message() string
-	Extra() map[string]string
+	Extra() map[string]interface{}
 }
 
 type ErrorObject struct {
 	code    string
 	message string
-	extra   map[string]string
+	extra   map[string]interface{}
 }
 
 func (e ErrorObject) Code() string {
 	return e.code
 }
 
-func (e ErrorObject) Extra() map[string]string {
+func (e ErrorObject) Extra() map[string]interface{} {
 	return e.extra
 }
 
@@ -152,7 +152,7 @@ func (e ErrorInvalidJson) Message() string {
 }
 
 func (e ErrorInvalidJson) DetailedErrorMessage() string {
-	return e.Extra()["detailedErrorMessage"]
+	return e.Extra()["detailedErrorMessage"].(string)
 }
 
 func parseErrorResponse(response *http.Response, body []byte) error {
@@ -194,10 +194,10 @@ func parseErrorResponseObjects(errors interface{}) []ErrorItem {
 		msg := data["message"].(string)
 
 		// Extra error fields
-		extra := map[string]string{}
+		extra := make(map[string]interface{})
 		for k, v := range data {
 			if k != "code" && k != "message" {
-				extra[k] = v.(string)
+				extra[k] = v
 			}
 		}
 
