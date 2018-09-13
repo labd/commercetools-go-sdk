@@ -127,6 +127,42 @@ func TestSubscriptionCreate(t *testing.T) {
 				]
 			}`,
 		},
+		{
+			desc: "AzureServiceBus",
+			input: &subscriptions.SubscriptionDraft{
+				Key: "test",
+				Destination: subscriptions.DestinationAzureServiceBus{
+					ConnectionString: "Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<key-name>;SharedAccessKey=<key>;EntityPath=<queue-name>",
+				},
+				Changes: []subscriptions.ChangeSubscription{
+					subscriptions.ChangeSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+				Messages: []subscriptions.MessageSubscription{
+					subscriptions.MessageSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+			},
+			requestBody: `{
+				"key": "test",
+				"destination": {
+					"type": "AzureServiceBus",
+					"connectionString": "Endpoint=sb:\/\/<namespace>.servicebus.windows.net\/;SharedAccessKeyName=<key-name>;SharedAccessKey=<key>;EntityPath=<queue-name>"
+				},
+				"messages": [
+					{
+						"resourceTypeId": "product"
+					}
+				],
+				"changes": [
+					{
+						"resourceTypeId": "product"
+					}
+				]
+			}`,
+		},
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
