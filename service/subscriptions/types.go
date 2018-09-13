@@ -129,7 +129,7 @@ func (sd DestinationIronMQ) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// DestinationGCPPubSub Google Cloud Pub/Sub can be used both as a pull-queue,
+// DestinationGooglePubSub Google Cloud Pub/Sub can be used both as a pull-queue,
 // and to push messages to e.g. Google Cloud Functions or HTTP endpoints
 // (webhooks).
 type DestinationGooglePubSub struct {
