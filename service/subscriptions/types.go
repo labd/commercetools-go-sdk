@@ -150,6 +150,25 @@ func (sd DestinationGooglePubSub) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// DestinationAzureServiceBus Azure Service Bus can be used as a pull-queue
+// with Queues or to fan-out messages with Topics and Subscriptions.
+type DestinationAzureServiceBus struct {
+	ConnectionString string `json:"connectionString"`
+}
+
+// MarshalJSON override to add the Type() value
+func (sd DestinationAzureServiceBus) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAzureServiceBus
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "AzureServiceBus",
+		Alias: (*Alias)(&sd),
+	})
+}
+
 // Destination contains all info necessary for the commercetools platform to
 // deliver a message onto your Message Queue. Message Queues can be
 // differentiated by the type field.
@@ -172,6 +191,10 @@ func destinationMapping(input Destination) Destination {
 		return new
 	case "GoogleCloudPubSub":
 		new := DestinationGooglePubSub{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "AzureServiceBus":
+		new := DestinationAzureServiceBus{}
 		mapstructure.Decode(input, &new)
 		return new
 	}
