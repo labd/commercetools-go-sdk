@@ -89,6 +89,44 @@ func TestSubscriptionCreate(t *testing.T) {
 				]
 			}`,
 		},
+		{
+			desc: "GooglePubSub",
+			input: &subscriptions.SubscriptionDraft{
+				Key: "test",
+				Destination: subscriptions.DestinationGooglePubSub{
+					ProjectID: "project-id",
+					Topic:     "topic",
+				},
+				Changes: []subscriptions.ChangeSubscription{
+					subscriptions.ChangeSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+				Messages: []subscriptions.MessageSubscription{
+					subscriptions.MessageSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+			},
+			requestBody: `{
+				"key": "test",
+				"destination": {
+					"type": "GoogleCloudPubSub",
+					"topic": "topic",
+					"projectId": "project-id"
+				},
+				"messages": [
+					{
+						"resourceTypeId": "product"
+					}
+				],
+				"changes": [
+					{
+						"resourceTypeId": "product"
+					}
+				]
+			}`,
+		},
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {

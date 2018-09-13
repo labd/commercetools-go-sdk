@@ -129,6 +129,27 @@ func (sd DestinationIronMQ) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// DestinationGCPPubSub Google Cloud Pub/Sub can be used both as a pull-queue,
+// and to push messages to e.g. Google Cloud Functions or HTTP endpoints
+// (webhooks).
+type DestinationGooglePubSub struct {
+	ProjectID string `json:"projectId"`
+	Topic     string `json:"topic"`
+}
+
+// MarshalJSON override to add the Type() value
+func (sd DestinationGooglePubSub) MarshalJSON() ([]byte, error) {
+	type Alias DestinationGooglePubSub
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "GoogleCloudPubSub",
+		Alias: (*Alias)(&sd),
+	})
+}
+
 // Destination contains all info necessary for the commercetools platform to
 // deliver a message onto your Message Queue. Message Queues can be
 // differentiated by the type field.
@@ -147,6 +168,10 @@ func destinationMapping(input Destination) Destination {
 		return new
 	case "SQS":
 		new := DestinationAWSSQS{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "GoogleCloudPubSub":
+		new := DestinationGooglePubSub{}
 		mapstructure.Decode(input, &new)
 		return new
 	}
