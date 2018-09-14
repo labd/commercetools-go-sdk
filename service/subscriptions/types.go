@@ -18,6 +18,7 @@ type Subscription struct {
 	Changes        []ChangeSubscription  `json:"changes,omitempty"`
 	CreatedAt      time.Time             `json:"createdAt"`
 	LastModifiedAt time.Time             `json:"lastModifiedAt"`
+	Format         Format                `json:"format,omitempty"`
 }
 
 // UnmarshalJSON override to map the destination to the corresponding struct.
@@ -27,6 +28,9 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.Destination = destinationMapping(s.Destination)
+	if s.Format != nil {
+		s.Format = formatMapping(s.Format)
+	}
 	return nil
 }
 
@@ -35,8 +39,9 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 type SubscriptionDraft struct {
 	Key         string                `json:"key"`
 	Destination Destination           `json:"destination"`
-	Messages    []MessageSubscription `json:"messages"`
+	Messages    []MessageSubscription `json:"messages,omitempty"`
 	Changes     []ChangeSubscription  `json:"changes,omitempty"`
+	Format      Format                `json:"format,omitempty"`
 }
 
 // MessageSubscription allows you to subscribe to messages on a specific
@@ -51,6 +56,61 @@ type MessageSubscription struct {
 // type.
 type ChangeSubscription struct {
 	ResourceTypeID string `json:"resourceTypeId"`
+}
+
+// Format in which the payload is delivered.
+type Format interface{}
+
+// PlatformFormat uses constructs that are similar to the ones used in the REST API
+type PlatformFormat struct{}
+
+// MarshalJSON override to add the type value
+func (f PlatformFormat) MarshalJSON() ([]byte, error) {
+	type Alias PlatformFormat
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "Platform",
+		Alias: (*Alias)(&f),
+	})
+}
+
+// CloudEventsFormat is a specification for describing event data in a
+// common way. CloudEvents seeks to ease event declaration and delivery across
+// services, platforms and beyond. It is hosted by the Cloud Native
+// Computing Foundation.
+type CloudEventsFormat struct {
+	CloudEventsVersion string `json:"cloudEventsVersion"`
+}
+
+// MarshalJSON override to add the type value
+func (f CloudEventsFormat) MarshalJSON() ([]byte, error) {
+	type Alias CloudEventsFormat
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "CloudEvents",
+		Alias: (*Alias)(&f),
+	})
+}
+
+func formatMapping(input Format) Format {
+	FormatType := input.(map[string]interface{})["type"]
+	switch FormatType {
+	case "Platform":
+		new := PlatformFormat{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "CloudEvents":
+		new := CloudEventsFormat{}
+		mapstructure.Decode(input, &new)
+		return new
+	}
+	return nil
 }
 
 // DestinationAWSSQS is for the AWS SQS as a destination. AWS SQS is a
@@ -169,6 +229,27 @@ func (sd DestinationAzureServiceBus) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// DestinationAzureEventGrid Azure Event Grid can be used to push messages to Azure Functions,
+// HTTP endpoints (webhooks), and several other Azure tools.
+// Event Grid can only be used with the CloudEvents Format (Preview).
+type DestinationAzureEventGrid struct {
+	URI       string `json:"uri"`
+	AccessKey string `json:"accessKey"`
+}
+
+// MarshalJSON override to add the Type() value
+func (sd DestinationAzureEventGrid) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAzureEventGrid
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "EventGrid",
+		Alias: (*Alias)(&sd),
+	})
+}
+
 // Destination contains all info necessary for the commercetools platform to
 // deliver a message onto your Message Queue. Message Queues can be
 // differentiated by the type field.
@@ -195,6 +276,10 @@ func destinationMapping(input Destination) Destination {
 		return new
 	case "AzureServiceBus":
 		new := DestinationAzureServiceBus{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "EventGrid":
+		new := DestinationAzureEventGrid{}
 		mapstructure.Decode(input, &new)
 		return new
 	}
