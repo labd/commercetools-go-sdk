@@ -166,6 +166,13 @@ func TestSubscriptionUpdate(t *testing.T) {
 					},
 				},
 			},
+			&subscriptions.ChangeDestination{
+				Destination: subscriptions.DestinationAWSSNS{
+					TopicArn:     "arn:aws:sns:eu-central-1:123456789012345678:example:1",
+					AccessKey:    "AKIAIOSFODNN7EXAMPLE",
+					AccessSecret: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+				},
+			},
 		},
 	}
 
@@ -173,22 +180,31 @@ func TestSubscriptionUpdate(t *testing.T) {
 	assert.Nil(t, err)
 
 	expectedBody := `{
-		"version": 2,
-		"actions": [
-			{
-				"action": "setKey",
-				"key": "123456"
-			},
-			{
-				"action": "setMessages",
-				"messages": [
-					{
-						"resourceTypeId": "product"
-					}
-				]
+	"actions": [
+		{
+			"action": "setKey",
+			"key": "123456"
+		},
+		{
+			"action": "setMessages",
+			"messages": [
+				{
+					"resourceTypeId": "product"
+				}
+			]
+		},
+		{
+			"action": "changeDestination",
+			"destination": {
+				"type": "SNS",
+				"topicArn": "arn:aws:sns:eu-central-1:123456789012345678:example:1",
+				"accessKey": "AKIAIOSFODNN7EXAMPLE",
+				"accessSecret": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 			}
-		]
-	}`
+		}
+	],
+	"version": 2
+}`
 	assert.JSONEq(t, expectedBody, output.JSON)
 	assert.Equal(t, "/unittest/subscriptions/1234", output.URL.Path)
 }
