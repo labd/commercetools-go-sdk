@@ -18,6 +18,7 @@ type Subscription struct {
 	Changes        []ChangeSubscription  `json:"changes,omitempty"`
 	CreatedAt      time.Time             `json:"createdAt"`
 	LastModifiedAt time.Time             `json:"lastModifiedAt"`
+	Format         Format                `json:"format"`
 }
 
 // UnmarshalJSON override to map the destination to the corresponding struct.
@@ -27,6 +28,7 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.Destination = destinationMapping(s.Destination)
+	s.Format = formatMapping(s.Format)
 	return nil
 }
 
@@ -35,8 +37,9 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 type SubscriptionDraft struct {
 	Key         string                `json:"key"`
 	Destination Destination           `json:"destination"`
-	Messages    []MessageSubscription `json:"messages"`
+	Messages    []MessageSubscription `json:"messages,omitempty"`
 	Changes     []ChangeSubscription  `json:"changes,omitempty"`
+	Format      Format                `json:"format,omitempty"`
 }
 
 // MessageSubscription allows you to subscribe to messages on a specific
@@ -51,6 +54,61 @@ type MessageSubscription struct {
 // type.
 type ChangeSubscription struct {
 	ResourceTypeID string `json:"resourceTypeId"`
+}
+
+// Format in which the payload is delivered.
+type Format interface{}
+
+// PlatformFormat uses constructs that are similar to the ones used in the REST API
+type PlatformFormat struct{}
+
+// MarshalJSON override to add the type value
+func (f PlatformFormat) MarshalJSON() ([]byte, error) {
+	type Alias PlatformFormat
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "Platform",
+		Alias: (*Alias)(&f),
+	})
+}
+
+// CloudEventsFormat is a specification for describing event data in a
+// common way. CloudEvents seeks to ease event declaration and delivery across
+// services, platforms and beyond. It is hosted by the Cloud Native
+// Computing Foundation.
+type CloudEventsFormat struct {
+	CloudEventsVersion string `json:"cloudEventsVersion"`
+}
+
+// MarshalJSON override to add the type value
+func (f CloudEventsFormat) MarshalJSON() ([]byte, error) {
+	type Alias CloudEventsFormat
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "CloudEvents",
+		Alias: (*Alias)(&f),
+	})
+}
+
+func formatMapping(input Format) Format {
+	FormatType := input.(map[string]interface{})["type"]
+	switch FormatType {
+	case "Platform":
+		new := PlatformFormat{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "CloudEvents":
+		new := CloudEventsFormat{}
+		mapstructure.Decode(input, &new)
+		return new
+	}
+	return nil
 }
 
 // DestinationAWSSQS is for the AWS SQS as a destination. AWS SQS is a
