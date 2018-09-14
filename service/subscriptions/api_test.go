@@ -163,6 +163,51 @@ func TestSubscriptionCreate(t *testing.T) {
 				]
 			}`,
 		},
+		{
+			desc: "AzureEventGrid",
+			input: &subscriptions.SubscriptionDraft{
+				Key: "test",
+				Destination: subscriptions.DestinationAzureEventGrid{
+					URI:       "https://example.com/",
+					AccessKey: "exampleAccessKey",
+				},
+				Changes: []subscriptions.ChangeSubscription{
+					subscriptions.ChangeSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+				Format: subscriptions.CloudEventsFormat{
+					CloudEventsVersion: "0.1",
+				},
+				Messages: []subscriptions.MessageSubscription{
+					subscriptions.MessageSubscription{
+						ResourceTypeID: "product",
+					},
+				},
+			},
+			requestBody: `{
+				"key": "test",
+				"destination": {
+					"type": "EventGrid",
+					"uri": "https://example.com/",
+					"accessKey": "exampleAccessKey"
+				},
+				"messages": [
+					{
+						"resourceTypeId": "product"
+					}
+				],
+				"changes": [
+					{
+						"resourceTypeId": "product"
+					}
+				],
+				"format": {
+					"type": "CloudEvents",
+					"cloudEventsVersion": "0.1"
+				}
+			}`,
+		},
 	}
 	for _, tC := range testCases {
 		t.Run(tC.desc, func(t *testing.T) {
@@ -175,7 +220,6 @@ func TestSubscriptionCreate(t *testing.T) {
 			_, err := svc.Create(tC.input)
 			assert.Nil(t, err)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
-
 		})
 	}
 

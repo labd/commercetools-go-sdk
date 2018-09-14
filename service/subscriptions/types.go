@@ -229,6 +229,27 @@ func (sd DestinationAzureServiceBus) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// DestinationAzureEventGrid Azure Event Grid can be used to push messages to Azure Functions,
+// HTTP endpoints (webhooks), and several other Azure tools.
+// Event Grid can only be used with the CloudEvents Format (Preview).
+type DestinationAzureEventGrid struct {
+	URI       string `json:"uri"`
+	AccessKey string `json:"accessKey"`
+}
+
+// MarshalJSON override to add the Type() value
+func (sd DestinationAzureEventGrid) MarshalJSON() ([]byte, error) {
+	type Alias DestinationAzureEventGrid
+
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{
+		Type:  "EventGrid",
+		Alias: (*Alias)(&sd),
+	})
+}
+
 // Destination contains all info necessary for the commercetools platform to
 // deliver a message onto your Message Queue. Message Queues can be
 // differentiated by the type field.
@@ -255,6 +276,10 @@ func destinationMapping(input Destination) Destination {
 		return new
 	case "AzureServiceBus":
 		new := DestinationAzureServiceBus{}
+		mapstructure.Decode(input, &new)
+		return new
+	case "EventGrid":
+		new := DestinationAzureEventGrid{}
 		mapstructure.Decode(input, &new)
 		return new
 	}
