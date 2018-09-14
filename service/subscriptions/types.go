@@ -18,7 +18,7 @@ type Subscription struct {
 	Changes        []ChangeSubscription  `json:"changes,omitempty"`
 	CreatedAt      time.Time             `json:"createdAt"`
 	LastModifiedAt time.Time             `json:"lastModifiedAt"`
-	Format         Format                `json:"format"`
+	Format         Format                `json:"format,omitempty"`
 }
 
 // UnmarshalJSON override to map the destination to the corresponding struct.
@@ -28,7 +28,9 @@ func (s *Subscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	s.Destination = destinationMapping(s.Destination)
-	s.Format = formatMapping(s.Format)
+	if s.Format != nil {
+		s.Format = formatMapping(s.Format)
+	}
 	return nil
 }
 
