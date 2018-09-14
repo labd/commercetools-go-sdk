@@ -55,3 +55,24 @@ func (ua SetChanges) MarshalJSON() ([]byte, error) {
 		Alias:  (*Alias)(&ua),
 	})
 }
+
+// ChangeDestination Updating the destination is eventually consistent,
+// it may take up to a minute before it becomes fully active. During this time,
+// messages may be delivered simultaneously to both the old and the
+// new destination.
+type ChangeDestination struct {
+	Destination Destination `json:"destination"`
+}
+
+// MarshalJSON override to add the Action() value
+func (ua ChangeDestination) MarshalJSON() ([]byte, error) {
+	type Alias ChangeDestination
+
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{
+		Action: "changeDestination",
+		Alias:  (*Alias)(&ua),
+	})
+}
