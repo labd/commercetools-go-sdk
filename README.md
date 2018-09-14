@@ -5,7 +5,9 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/labd/commercetools-go-sdk)](https://goreportcard.com/report/github.com/labd/commercetools-go-sdk)
 [![GoDoc](https://godoc.org/github.com/labd/commercetools-go-sdk?status.svg)](https://godoc.org/github.com/labd/commercetools-go-sdk)
 
-Note: This is currently **NOT** ready for production usage
+The Commercetools Go SDK was created for enabling the creation of the [Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools). That provider enables you to use infrastructure-as-code principles with Commercetools.
+
+This means that the SDK is not feature complete at the moment. The SDK is currently not meant for building an e-commerce front-ends with it, but aimed at maintaining the configuration of such a site. A front-end can be built using [one of the existing SDK's, provided and maintained by commercetools](https://docs.commercetools.com/software-development-kits).
 
 ## Using the SDK
 
@@ -65,6 +67,8 @@ func main() {
 ```
 
 ## Service implementation
+
+At the moment the SDK has service coverage for primarily Terraform configuration use-cases, for example declaring API Extensions, Subscriptions and Project Settings. Broader coverage will be implemented if our use-cases require it or via contributions of course!
 
 ### Product Catalog
 
