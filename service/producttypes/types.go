@@ -122,58 +122,6 @@ func (a *AttributeDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// AttributeDefinitionDraft is given as payload for Create Attribute Definition
-// requests.
-type AttributeDefinitionDraft struct {
-	// Describes the type of the attribute.
-	Type AttributeType `json:"type"`
-
-	// The unique name of the attribute used in the API. The name must be
-	// between two and 256 characters long and can contain the ASCII letters A
-	// to Z in lowercase or uppercase, digits, underscores (_) and the
-	// hyphen-minus (-). When using the same name for an attribute in two or
-	// more product types all fields of the AttributeDefinition of this
-	// attribute need to be the same across the product types.
-	Name string `json:"name"`
-
-	// A human-readable label for the attribute.
-	Label commercetools.LocalizedString `json:"label"`
-
-	// Whether the attribute is required to have a value.
-	IsRequired bool `json:"isRequired"`
-
-	// Describes how an attribute or a set of attributes should be validated
-	// across all variants of a product.
-	AttributeConstraint AttributeConstraint `json:"attributeConstraint"`
-
-	// Additional information about the attribute that aids content managers
-	// when setting product details.
-	InputTip commercetools.LocalizedString `json:"inputTip,omitempty"`
-
-	// Provides a visual representation type for this attribute. Only relevant
-	// for text-based attribute types like TextType and LocalizableTextType.
-	InputHint commercetools.TextInputHint `json:"inputHint,omitempty"`
-
-	// Whether the attribute’s values should generally be enabled in product
-	// search. This determines whether the value is stored in products for
-	// matching terms in the context of full-text search queries and can be used
-	// in facets & filters as part of product search queries. The exact features
-	// that are enabled/disabled with this flag depend on the concrete attribute
-	// type and are described there.
-	IsSearchable bool `json:"isSearchable"`
-}
-
-// UnmarshalJSON override to map the attribute definition draft to the
-// corresponding struct.
-func (a *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
-	type Alias AttributeDefinitionDraft
-	if err := json.Unmarshal(data, (*Alias)(a)); err != nil {
-		return err
-	}
-	a.Type = attributeTypeMapping(a.Type)
-	return nil
-}
-
 // BooleanType indicates the attribute can store a boolean. Valid values for the
 // attribute are true and false (JSON Boolean).
 type BooleanType struct{}

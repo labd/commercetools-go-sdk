@@ -66,7 +66,7 @@ func (ua ChangeDescription) MarshalJSON() ([]byte, error) {
 // AddAttributeDefinition will add an attribute definition to the product type
 // being updated.
 type AddAttributeDefinition struct {
-	Attribute AttributeDefinitionDraft `json:"attribute"`
+	Attribute AttributeDefinition `json:"attribute"`
 }
 
 // MarshalJSON override to add the action value
