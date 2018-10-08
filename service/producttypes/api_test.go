@@ -23,7 +23,7 @@ func TestProductTypeCreate(t *testing.T) {
 	input := &producttypes.ProductTypeDraft{
 		Name:        "test_product_type",
 		Description: "Test product type.",
-		Attributes: []producttypes.AttributeDefinition{
+		Attributes: []producttypes.AttributeDefinitionDraft{
 			{
 				Type:         producttypes.TextType{},
 				IsSearchable: false,

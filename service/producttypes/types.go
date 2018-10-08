@@ -59,8 +59,8 @@ type ProductTypeDraft struct {
 	// characters).
 	Key string `json:"key,omitempty"`
 
-	Description string                `json:"description"`
-	Attributes  []AttributeDefinition `json:"attributes,omitempty"`
+	Description string                     `json:"description"`
+	Attributes  []AttributeDefinitionDraft `json:"attributes,omitempty"`
 }
 
 // AttributeDefinition describes a product attribute and allow you to define
