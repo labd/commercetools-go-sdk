@@ -141,7 +141,7 @@ func TestProductTypeUpdate(t *testing.T) {
 				Version: 3,
 				Actions: commercetools.UpdateActions{
 					&producttypes.AddAttributeDefinition{
-						Attribute: producttypes.AttributeDefinitionDraft{
+						Attribute: producttypes.AttributeDefinition{
 							Type: producttypes.BooleanType{},
 							Name: "attribute",
 							Label: commercetools.LocalizedString{
