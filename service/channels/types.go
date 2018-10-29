@@ -95,10 +95,10 @@ type ChannelDraft struct {
 
 	Name        commercetools.LocalizedString `json:"name,omitempty"`
 	Description commercetools.LocalizedString `json:"description,omitempty"`
-	Address     commercetools.Address         `json:"address,omitempty"`
+	Address     *commercetools.Address        `json:"address,omitempty"`
 
 	// The custom fields.
-	Custom customfields.CustomFieldsDraft `json:"custom,omitempty"`
+	Custom *customfields.CustomFieldsDraft `json:"custom,omitempty"`
 
-	GeoLocation commercetools.GeoJSONGeometry `json:"geoLocation,omitempty"`
+	GeoLocation *commercetools.GeoJSONGeometry `json:"geoLocation,omitempty"`
 }

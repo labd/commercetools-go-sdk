@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/labd/commercetools-go-sdk/service/channels"
-	"github.com/labd/commercetools-go-sdk/service/customfields"
 	"github.com/labd/commercetools-go-sdk/testutil"
 )
 
@@ -30,16 +29,6 @@ func TestChannelCreate(t *testing.T) {
 		Description: commercetools.LocalizedString{
 			"en": "This is the channel description.",
 		},
-		Address: commercetools.Address{},
-		Custom: customfields.CustomFieldsDraft{
-			Type: commercetools.ResourceIdentifier{
-				ID:     "1",
-				TypeID: "1",
-			},
-		},
-		GeoLocation: commercetools.Point{
-			Coordinates: []float64{52.068439, 5.1075891},
-		},
 	}
 
 	fmt.Println(output)
@@ -55,17 +44,6 @@ func TestChannelCreate(t *testing.T) {
 		},
 		"description": {
 			"en": "This is the channel description."
-		},
-		"address": {},
-		"custom": {
-			"type": {
-				"id": "1",
-				"typeId": "1"
-			}
-		},
-		"geoLocation": {
-			"type": "Point",
-			"coordinates": [52.068439, 5.1075891]
 		}
 	}`
 
