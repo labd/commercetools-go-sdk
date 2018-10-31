@@ -1,6 +1,9 @@
 vendor/
 run.sh
-/.vscode/
+
+# IDE
+.vscode
+.idea
 
 # Test files
 coverage.txt
