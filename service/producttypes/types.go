@@ -367,6 +367,23 @@ func (t SetType) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// ProductTypeReference defines a reference to a product type.
+type ProductTypeReference struct {
+	ID string `json:"id"`
+}
+
+// MarshalJSON override to fixate type id
+func (t ProductTypeReference) MarshalJSON() ([]byte, error) {
+	type Alias ProductTypeReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{
+		TypeID: "product-type",
+		Alias:  (*Alias)(&t),
+	})
+}
+
 // NestedType allows you to nest attributes based on some existing product type.
 // It does not support isSearchable nor it is supported in queries at the
 // moment. The only supported AttributeConstraint is None. The value of the
@@ -376,10 +393,10 @@ func (t SetType) MarshalJSON() ([]byte, error) {
 type NestedType struct {
 	// ProductType defines, which attributes are allowed to be stored as a
 	// nested attributes of the current attribute.
-	TypeReference string `json:"typeReference"`
+	TypeReference ProductTypeReference `json:"typeReference"`
 }
 
-// MarshalJSON override to add the name value TODO: Test with nested response.
+// MarshalJSON override to add the name value
 func (t NestedType) MarshalJSON() ([]byte, error) {
 	type Alias NestedType
 	return json.Marshal(struct {
