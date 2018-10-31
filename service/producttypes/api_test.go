@@ -895,11 +895,14 @@ func TestAttributeTypes(t *testing.T) {
 		{
 			desc: "Nested type",
 			object: producttypes.NestedType{
-				TypeReference: "my-type",
+				TypeReference: producttypes.ProductTypeReference{ID: "b2ad48b7-c65b-4743-810c-dc898bf934cc"},
 			},
 			json: `{
 				"name": "nested",
-				"typeReference": "my-type"
+				"typeReference": {
+					"id": "b2ad48b7-c65b-4743-810c-dc898bf934cc",
+					"typeId": "product-type"
+				}
 			}`,
 		},
 	}
