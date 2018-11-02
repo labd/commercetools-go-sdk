@@ -7,7 +7,7 @@
 
 The Commercetools Go SDK was created for enabling the creation of the [Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools). That provider enables you to use infrastructure-as-code principles with Commercetools.
 
-This means that the SDK is not feature complete at the moment. The SDK is currently not meant for building e-commerce front-ends with it, but aimed at maintaining the configuration of such a site. A front-end can be built using [one of the existing SDK's, provided and maintained by commercetools](https://docs.commercetools.com/software-development-kits).
+This means that the SDK is not feature complete at the moment. The SDK is currently not meant for building e-commerce front-ends with it, but aimed at maintaining the configuration of such a site. A front-end can be built using [one of the existing SDK's, provided and maintained by commercetools](https://docs.commercetools.com/software-development-kits). Or use our [unofficial Python SDK for Commercetools](https://github.com/labd/commercetools-python-sdk)!
 
 ## Using the SDK
 
