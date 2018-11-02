@@ -35,7 +35,7 @@ type ProductDraft struct {
 	Variants           []ProductVariantDraft              `json:"variants,omitempty"`
 	TaxCategory        commercetools.Reference            `json:"taxCategory,omitempty"`
 	SearchKeywords     []SearchKeyword                    `json:"searchKeywords,omitempty"`
-	State              commercetools.Reference            `json:"state,omitempty"`
+	State              *commercetools.Reference           `json:"state,omitempty"`
 	Publish            bool                               `json:"publish"`
 }
 
