@@ -1,0 +1,8 @@
+{
+  "name": "shipping-zone",
+  "locations": [
+    {
+      "country": "DE"
+    }
+  ]
+}

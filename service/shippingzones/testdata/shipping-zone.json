@@ -1,0 +1,12 @@
+{
+  "id": "c60f7377-2643-4e99-adb5-b2909657444d",
+  "version": 1,
+  "name": "shipping-zone",
+  "locations": [
+    {
+      "country": "DE"
+    }
+  ],
+  "createdAt": "2016-02-24T15:33:40.811Z",
+  "lastModifiedAt": "2016-02-24T15:33:40.811Z"
+}
