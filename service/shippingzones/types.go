@@ -31,4 +31,5 @@ type ShippingZoneDraft struct {
 
 type Location struct {
 	Country string `json:"country"`
+	State   string `json:"country,omitempty"`
 }
