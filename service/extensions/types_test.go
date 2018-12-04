@@ -83,3 +83,38 @@ func TestExtensionMarshall_azurekey(t *testing.T) {
 	"createdAt":"0001-01-01T00:00:00Z",
 	"lastModifiedAt":"0001-01-01T00:00:00Z"}`, string(result))
 }
+
+func TestExtensionMarshall_awslambda(t *testing.T) {
+	obj := extensions.Extension{
+		Key: "my-key",
+		Destination: extensions.DestinationAWSLambda{
+			ARN:          "arn:some:arn",
+			AccessKey:    "12331232131",
+			AccessSecret: "somesecret",
+		},
+		Triggers: []extensions.Trigger{
+			extensions.Trigger{
+				ResourceTypeID: "product",
+				Actions:        []string{"Create"},
+			},
+		},
+	}
+
+	result, err := json.Marshal(obj)
+	assert.Nil(t, err)
+	assert.JSONEq(t, `{
+	"id":"",
+	"version":0,
+	"key":"my-key",
+	"destination":{
+		"type":"AWSLambda",
+		"arn": "arn:some:arn",
+		"accessKey": "12331232131",
+		"accessSecret": "somesecret"
+	},
+	"triggers":[
+		{"resourceTypeId":"product","actions":["Create"]}
+	],
+	"createdAt":"0001-01-01T00:00:00Z",
+	"lastModifiedAt":"0001-01-01T00:00:00Z"}`, string(result))
+}

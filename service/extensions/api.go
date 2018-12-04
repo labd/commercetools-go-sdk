@@ -84,9 +84,13 @@ func destinationMapping(input Destination) Destination {
 	inputType := input.(map[string]interface{})["type"]
 	switch inputType {
 	case "HTTP":
-		new := DestinationHTTP{}
-		mapstructure.Decode(input, &new)
-		return new
+		httpDestination := DestinationHTTP{}
+		mapstructure.Decode(input, &httpDestination)
+		return httpDestination
+	case "AWSLambda":
+		lambdaDestination := DestinationAWSLambda{}
+		mapstructure.Decode(input, &lambdaDestination)
+		return lambdaDestination
 	}
 	return nil
 }
