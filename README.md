@@ -5,9 +5,15 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/labd/commercetools-go-sdk)](https://goreportcard.com/report/github.com/labd/commercetools-go-sdk)
 [![GoDoc](https://godoc.org/github.com/labd/commercetools-go-sdk?status.svg)](https://godoc.org/github.com/labd/commercetools-go-sdk)
 
-The Commercetools Go SDK was created for enabling the creation of the [Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools). That provider enables you to use infrastructure-as-code principles with Commercetools.
+The Commercetools Go SDK was created for enabling the creation of the
+[Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools).
+That provider enables you to use infrastructure-as-code principles with Commercetools.
 
-This means that the SDK is not feature complete at the moment. The SDK is currently not meant for building e-commerce front-ends with it, but aimed at maintaining the configuration of such a site. A front-end can be built using [one of the existing SDK's, provided and maintained by commercetools](https://docs.commercetools.com/software-development-kits). Or use our [unofficial Python SDK for Commercetools](https://github.com/labd/commercetools-python-sdk)!
+This means that the SDK is not feature complete at the moment. The SDK is
+currently not meant for building e-commerce front-ends with it, but aimed at
+maintaining the configuration of such a site. A front-end can be built using
+[one of the existing SDK's, provided and maintained by commercetools](https://docs.commercetools.com/software-development-kits). Or
+use our [unofficial Python SDK for Commercetools](https://github.com/labd/commercetools-python-sdk)!
 
 ## Using the SDK
 
@@ -20,7 +26,6 @@ import (
 
     "golang.org/x/oauth2/clientcredentials"
     "github.com/labd/commercetools-go-sdk/commercetools"
-    "github.com/labd/commercetools-go-sdk/service/products"
 )
 
 func main() {
@@ -42,15 +47,13 @@ func main() {
         HTTPClient: httpClient,
     })
 
-    svc := products.New(client)
-    product, err := svc.ProductCreate(&products.ProductDraft{
+    product, err := client.Products.Create(&commercetools.ProductDraft{
         Key: "test-product",
         Name: commercetools.LocalizedString{
             "nl": "Een test product",
             "en": "A test product",
         },
-        ProductType: commercetools.Reference{
-            TypeID: "product-type",
+        ProductType: commercetools.ProductTypeReference{
             ID:     "8750e1fd-f431-481f-9296-967b1e56bf49",
         },
         Slug: commercetools.LocalizedString{
@@ -72,7 +75,7 @@ At the moment the SDK has service coverage for primarily Terraform configuration
 
 ### Product Catalog
 
- - [ ] Categories
+ - [x] Categories
  - [x] Products
  - [ ] Product Projections
  - [ ] Product Projections Search

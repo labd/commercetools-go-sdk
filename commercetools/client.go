@@ -28,6 +28,18 @@ type Client struct {
 	url        string
 	projectKey string
 	logLevel   int
+
+	// Define the services
+	Channels      ChannelService
+	Extensions    ExtensionService
+	Products      ProductService
+	ProductTypes  ProductTypeService
+	Project       ProjectService
+	ShippingZones ShippingZoneService
+	StateMachines StateMachinesService
+	Subscriptions SubscriptionService
+	TaxCategories TaxCategoryService
+	Types         TypeService
 }
 
 // New creates a new client based on the provided Config.
@@ -51,6 +63,17 @@ func New(cfg *Config) *Client {
 	if os.Getenv("CTP_DEBUG") != "" {
 		client.logLevel = 1
 	}
+
+	client.Channels = ChannelService{client}
+	client.Extensions = ExtensionService{client}
+	client.Products = ProductService{client}
+	client.ProductTypes = ProductTypeService{client}
+	client.Project = ProjectService{client}
+	client.ShippingZones = ShippingZoneService{client}
+	client.StateMachines = StateMachinesService{client}
+	client.Subscriptions = SubscriptionService{client}
+	client.TaxCategories = TaxCategoryService{client}
+	client.Types = TypeService{client}
 	return client
 }
 
@@ -85,7 +108,7 @@ func (c *Client) Create(endpoint string, queryParams url.Values, input interface
 
 // Update accomodates post requests intended for updates tot the CommerceTools
 // platform.
-func (c *Client) Update(endpoint string, queryParams url.Values, version int, actions UpdateActions, output interface{}) error {
+func (c *Client) Update(endpoint string, queryParams url.Values, version int, actions interface{}, output interface{}) error {
 	data, err := serializeInput(&map[string]interface{}{
 		"version": version,
 		"actions": actions,
@@ -134,9 +157,19 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 	case 200, 201:
 		return json.Unmarshal(body, output)
 	default:
-		return parseErrorResponse(resp, body)
+		if resp.StatusCode == 404 && len(body) == 0 {
+			return ErrorResponse{
+				StatusCode: resp.StatusCode,
+				Message:    "Not Found (404): ResourceNotFound",
+			}
+		}
+		customErr := ErrorResponse{}
+		err = json.Unmarshal(body, &customErr)
+		if err != nil {
+			return err
+		}
+		return customErr
 	}
-
 }
 
 func serializeInput(input interface{}) (io.Reader, error) {
