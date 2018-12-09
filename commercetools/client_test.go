@@ -27,7 +27,7 @@ func TestClientGetBadRequestJson(t *testing.T) {
 	output := OutputData{}
 
 	err := client.Get("/", nil, &output)
-	assert.Equal(t, "Unmarshalling error response failed: invalid character ',' looking for beginning of value", err.Error())
+	assert.Equal(t, "invalid character ',' looking for beginning of value", err.Error())
 }
 
 func TestClientNotFound(t *testing.T) {
@@ -41,9 +41,9 @@ func TestClientNotFound(t *testing.T) {
 	err := client.Get("/", nil, &output)
 	assert.Equal(t, "Not Found (404): ResourceNotFound", err.Error())
 
-	ctErr, ok := err.(commercetools.Error)
+	ctErr, ok := err.(commercetools.ErrorResponse)
 	assert.Equal(t, true, ok)
-	assert.Equal(t, commercetools.ErrResourceNotFound, ctErr.Code())
+	assert.Equal(t, 404, ctErr.StatusCode)
 }
 
 func TestAuthError(t *testing.T) {
@@ -68,13 +68,14 @@ func TestAuthError(t *testing.T) {
 
 	err := client.Get("/", nil, &output)
 
-	assert.Equal(t, "Forbidden (403): insufficient_scope - Insufficient scope", err.Error())
+	assert.Equal(t, "Insufficient scope", err.Error())
 
-	ctErr, ok := err.(commercetools.Error)
+	ctErr, ok := err.(commercetools.ErrorResponse)
 	assert.Equal(t, true, ok)
 
-	assert.Equal(t, "insufficient_scope", ctErr.Errors[0].Code())
-	assert.Equal(t, "insufficient_scope - Insufficient scope", ctErr.Errors[0].Message())
+	ctChildErr, ok := ctErr.Errors[0].(commercetools.InsufficientScopeError)
+	assert.Equal(t, true, ok)
+	assert.Equal(t, "Insufficient scope", ctChildErr.Message)
 }
 
 func TestInvalidJsonError(t *testing.T) {
@@ -98,11 +99,12 @@ func TestInvalidJsonError(t *testing.T) {
 
 	err := client.Get("/", nil, &output)
 
-	assert.Equal(t, "Bad Request (400): InvalidJsonInput - Request body does not contain valid JSON. (No content to map due to end-of-input)", err.Error())
+	assert.Equal(t, "Request body does not contain valid JSON.", err.Error())
 
-	ctErr, ok := err.(commercetools.Error)
+	ctErr, ok := err.(commercetools.ErrorResponse)
 	assert.Equal(t, true, ok)
 
-	assert.Equal(t, commercetools.ErrInvalidJSONInput, ctErr.Code())
-	assert.Equal(t, commercetools.ErrInvalidJSONInput, ctErr.Errors[0].Code())
+	ctChildErr, ok := ctErr.Errors[0].(commercetools.InvalidJsonInputError)
+	assert.Equal(t, "Request body does not contain valid JSON.", ctChildErr.Error())
+	// assert.Equal(t, commercetools.ErrInvalidJSONInput, ctErr.Errors[0].Code())
 }

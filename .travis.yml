@@ -4,7 +4,8 @@ go:
   - "1.11"
 
 script:
-  - env GO111MODULE=on go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
+  - go get -t -v ./...
+  - go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
