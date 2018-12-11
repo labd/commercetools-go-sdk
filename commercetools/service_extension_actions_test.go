@@ -23,7 +23,7 @@ func TestSetKeyMarshall(t *testing.T) {
 func TestChangeTriggersMarshall(t *testing.T) {
 	obj := commercetools.ExtensionChangeTriggersAction{
 		Triggers: []commercetools.ExtensionTrigger{
-			commercetools.ExtensionTrigger{
+			{
 				ResourceTypeID: "product",
 				Actions:        []commercetools.ExtensionAction{"Create", "Change"},
 			},

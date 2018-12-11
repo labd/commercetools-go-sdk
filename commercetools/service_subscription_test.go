@@ -27,7 +27,7 @@ func TestSubscriptionCreate(t *testing.T) {
 					Region:       "eu-central-1",
 				},
 				Messages: []commercetools.MessageSubscription{
-					commercetools.MessageSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
@@ -58,12 +58,12 @@ func TestSubscriptionCreate(t *testing.T) {
 					AccessSecret: "S1234567800",
 				},
 				Changes: []commercetools.ChangeSubscription{
-					commercetools.ChangeSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
 				Messages: []commercetools.MessageSubscription{
-					commercetools.MessageSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
@@ -97,12 +97,12 @@ func TestSubscriptionCreate(t *testing.T) {
 					Topic:     "topic",
 				},
 				Changes: []commercetools.ChangeSubscription{
-					commercetools.ChangeSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
 				Messages: []commercetools.MessageSubscription{
-					commercetools.MessageSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
@@ -134,12 +134,12 @@ func TestSubscriptionCreate(t *testing.T) {
 					ConnectionString: "Endpoint=sb://<namespace>.servicebus.windows.net/;SharedAccessKeyName=<key-name>;SharedAccessKey=<key>;EntityPath=<queue-name>",
 				},
 				Changes: []commercetools.ChangeSubscription{
-					commercetools.ChangeSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
 				Messages: []commercetools.MessageSubscription{
-					commercetools.MessageSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
@@ -171,7 +171,7 @@ func TestSubscriptionCreate(t *testing.T) {
 					AccessKey: "exampleAccessKey",
 				},
 				Changes: []commercetools.ChangeSubscription{
-					commercetools.ChangeSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
@@ -179,7 +179,7 @@ func TestSubscriptionCreate(t *testing.T) {
 					CloudEventsVersion: "0.1",
 				},
 				Messages: []commercetools.MessageSubscription{
-					commercetools.MessageSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},
@@ -238,7 +238,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 			},
 			&commercetools.SubscriptionSetMessagesAction{
 				Messages: []commercetools.MessageSubscription{
-					commercetools.MessageSubscription{
+					{
 						ResourceTypeID: "product",
 					},
 				},

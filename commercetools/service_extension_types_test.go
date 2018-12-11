@@ -18,7 +18,7 @@ func TestExtensionMarshall_basicauth(t *testing.T) {
 			},
 		},
 		Triggers: []commercetools.ExtensionTrigger{
-			commercetools.ExtensionTrigger{
+			{
 				ResourceTypeID: "product",
 				Actions:        []commercetools.ExtensionAction{"Create"},
 			},
@@ -56,7 +56,7 @@ func TestExtensionMarshall_azurekey(t *testing.T) {
 			},
 		},
 		Triggers: []commercetools.ExtensionTrigger{
-			commercetools.ExtensionTrigger{
+			{
 				ResourceTypeID: "product",
 				Actions:        []commercetools.ExtensionAction{"Create"},
 			},
@@ -93,7 +93,7 @@ func TestExtensionMarshall_awslambda(t *testing.T) {
 			AccessSecret: "somesecret",
 		},
 		Triggers: []commercetools.ExtensionTrigger{
-			commercetools.ExtensionTrigger{
+			{
 				ResourceTypeID: "product",
 				Actions:        []commercetools.ExtensionAction{"Create"},
 			},

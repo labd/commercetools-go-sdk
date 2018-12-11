@@ -33,7 +33,7 @@ func createExampleProduct() *commercetools.Product {
 					Sku:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
 					Attributes: []commercetools.Attribute{},
 					Images: []commercetools.Image{
-						commercetools.Image{
+						{
 							Dimensions: &commercetools.ImageDimensions{
 								H: 1400,
 								W: 1400,
@@ -42,7 +42,7 @@ func createExampleProduct() *commercetools.Product {
 						},
 					},
 					Prices: []commercetools.Price{
-						commercetools.Price{
+						{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
 							Value: &commercetools.Money{
 								CentAmount:   10000,
@@ -75,7 +75,7 @@ func createExampleProduct() *commercetools.Product {
 					Sku:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
 					Attributes: []commercetools.Attribute{},
 					Images: []commercetools.Image{
-						commercetools.Image{
+						{
 							Dimensions: &commercetools.ImageDimensions{
 								H: 1400,
 								W: 1400,
@@ -84,7 +84,7 @@ func createExampleProduct() *commercetools.Product {
 						},
 					},
 					Prices: []commercetools.Price{
-						commercetools.Price{
+						{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
 							Value: &commercetools.Money{
 								CentAmount:   10000,

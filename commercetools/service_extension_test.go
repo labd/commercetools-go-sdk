@@ -21,7 +21,7 @@ func TestExtensionCreate(t *testing.T) {
 			URL: "http://example.com",
 		},
 		Triggers: []commercetools.ExtensionTrigger{
-			commercetools.ExtensionTrigger{
+			{
 				ResourceTypeID: "product",
 				Actions:        []commercetools.ExtensionAction{"Create"},
 			},
