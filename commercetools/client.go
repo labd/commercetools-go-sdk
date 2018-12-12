@@ -28,18 +28,6 @@ type Client struct {
 	url        string
 	projectKey string
 	logLevel   int
-
-	// Define the services
-	Channels      ChannelService
-	Extensions    ExtensionService
-	Products      ProductService
-	ProductTypes  ProductTypeService
-	Project       ProjectService
-	ShippingZones ShippingZoneService
-	StateMachines StateMachinesService
-	Subscriptions SubscriptionService
-	TaxCategories TaxCategoryService
-	Types         TypeService
 }
 
 // New creates a new client based on the provided Config.
@@ -63,17 +51,6 @@ func New(cfg *Config) *Client {
 	if os.Getenv("CTP_DEBUG") != "" {
 		client.logLevel = 1
 	}
-
-	client.Channels = ChannelService{client}
-	client.Extensions = ExtensionService{client}
-	client.Products = ProductService{client}
-	client.ProductTypes = ProductTypeService{client}
-	client.Project = ProjectService{client}
-	client.ShippingZones = ShippingZoneService{client}
-	client.StateMachines = StateMachinesService{client}
-	client.Subscriptions = SubscriptionService{client}
-	client.TaxCategories = TaxCategoryService{client}
-	client.Types = TypeService{client}
 	return client
 }
 

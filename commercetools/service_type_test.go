@@ -42,7 +42,7 @@ func TestTypeCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.Types.Create(input)
+	_, err := client.TypeCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -376,7 +376,7 @@ func TestTypeUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("type.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.Types.Update(tC.input)
+			_, err := client.TypeUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/types/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -389,7 +389,7 @@ func TestTypeDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.Types.DeleteByID("1234", 2)
+	_, err := client.TypeDeleteByID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -404,7 +404,7 @@ func TestTypeDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.Types.DeleteByKey("1234", 2)
+	_, err := client.TypeDeleteByKey("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -796,7 +796,7 @@ func TestTypeGetByID(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture(tC.fixture), nil, nil)
 			defer server.Close()
 
-			result, err := client.Types.GetByID("1234")
+			result, err := client.TypeGetByID("1234")
 			assert.Nil(t, err)
 			assert.Equal(t, tC.input, result)
 		})

@@ -27,7 +27,7 @@ func TestCreateProductNew(t *testing.T) {
 			"en": "some-product",
 		},
 	}
-	product, err := client.Products.Create(draft)
+	product, err := client.ProductCreate(draft)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", (*product.MasterData.Current.Description)["en"])
@@ -37,7 +37,7 @@ func TestGetProductByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.Products.GetByID("foo-bar")
+	product, err := client.ProductGetByID("foo-bar")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -51,7 +51,7 @@ func TestProductUpdate(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.Products.Update(&commercetools.ProductUpdateInput{
+	product, err := client.ProductUpdate(&commercetools.ProductUpdateInput{
 		ID:      "1",
 		Version: 2,
 		PriceSelection: commercetools.ProductPriceSelection{
@@ -77,7 +77,7 @@ func TestProductDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.Products.DeleteByID(&commercetools.ProductDeleteInput{
+	product, err := client.ProductDeleteByID(&commercetools.ProductDeleteInput{
 		ID:      "foobar",
 		Version: 2,
 	})
@@ -93,7 +93,7 @@ func TestProductDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.Products.DeleteByKey(&commercetools.ProductDeleteInput{
+	product, err := client.ProductDeleteByKey(&commercetools.ProductDeleteInput{
 		Key:     "foobar",
 		Version: 2,
 	})

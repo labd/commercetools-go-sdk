@@ -25,15 +25,10 @@ type TaxCategoryUpdateInput struct {
 	Actions []TaxCategoryUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type TaxCategoryService struct {
-	client *Client
-}
-
 // GetByID will return a tax category matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
-func (svc *TaxCategoryService) GetByID(id string) (result *TaxCategory, err error) {
-	err = svc.client.Get(fmt.Sprintf("tax-categories/%s", id), nil, &result)
+func (client *Client) TaxCategoryGetByID(id string) (result *TaxCategory, err error) {
+	err = client.Get(fmt.Sprintf("tax-categories/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +37,8 @@ func (svc *TaxCategoryService) GetByID(id string) (result *TaxCategory, err erro
 
 // Create will create a new tax category from a draft, and return the newly
 // created tax category. OAuth2 Scopes: manage_products:{projectKey}
-func (svc *TaxCategoryService) Create(draft *TaxCategoryDraft) (result *TaxCategory, err error) {
-	err = svc.client.Create("tax-categories", nil, draft, &result)
+func (client *Client) TaxCategoryCreate(draft *TaxCategoryDraft) (result *TaxCategory, err error) {
+	err = client.Create("tax-categories", nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +47,13 @@ func (svc *TaxCategoryService) Create(draft *TaxCategoryDraft) (result *TaxCateg
 
 // Update will update a tax category matching the provided ID with the defined
 // UpdateActions. OAuth2 Scopes: manage_products:{projectKey}
-func (svc *TaxCategoryService) Update(input *TaxCategoryUpdateInput) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryUpdate(input *TaxCategoryUpdateInput) (result *TaxCategory, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
 	endpoint := fmt.Sprintf("tax-categories/%s", input.ID)
-	err = svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +62,11 @@ func (svc *TaxCategoryService) Update(input *TaxCategoryUpdateInput) (result *Ta
 
 // DeleteByID will delete a tax category matching the provided ID. OAuth2
 // Scopes: manage_products:{projectKey}
-func (svc *TaxCategoryService) DeleteByID(id string, version int) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryDeleteByID(id string, version int) (result *TaxCategory, err error) {
 	endpoint := fmt.Sprintf("tax-categories/%s", id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err
@@ -81,11 +76,11 @@ func (svc *TaxCategoryService) DeleteByID(id string, version int) (result *TaxCa
 
 // DeleteByKey will delete a tax category matching the provided key. OAuth2
 // Scopes: manage_products:{projectKey}
-func (svc *TaxCategoryService) DeleteByKey(key string, version int) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryDeleteByKey(key string, version int) (result *TaxCategory, err error) {
 	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err

@@ -38,7 +38,7 @@ func TestProductTypeCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.ProductTypes.Create(input)
+	_, err := client.ProductTypeCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -645,7 +645,7 @@ func TestProductTypeUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("producttype.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ProductTypes.Update(tC.input)
+			_, err := client.ProductTypeUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/product-types/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -659,7 +659,7 @@ func TestProductTypeDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ProductTypes.DeleteByID("1234", 3)
+	_, err := client.ProductTypeDeleteByID("1234", 3)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -674,7 +674,7 @@ func TestProductTypeDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ProductTypes.DeleteByKey("1234", 3)
+	_, err := client.ProductTypeDeleteByKey("1234", 3)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -748,7 +748,7 @@ func TestProductTypeGetByID(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture(tC.fixture), nil, nil)
 			defer server.Close()
 
-			result, err := client.ProductTypes.GetByID("1234")
+			result, err := client.ProductTypeGetByID("1234")
 			assert.Nil(t, err)
 			assert.Equal(t, tC.input, result)
 		})

@@ -25,15 +25,10 @@ type ChannelUpdateInput struct {
 	Actions []ChannelUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type ChannelService struct {
-	client *Client
-}
-
 // GetByID will return a channel matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
-func (svc *ChannelService) GetByID(id string) (result *Channel, err error) {
-	err = svc.client.Get(fmt.Sprintf("channels/%s", id), nil, &result)
+func (client *Client) ChannelGetByID(id string) (result *Channel, err error) {
+	err = client.Get(fmt.Sprintf("channels/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +37,8 @@ func (svc *ChannelService) GetByID(id string) (result *Channel, err error) {
 
 // Create will create a new channel from a draft, and return the newly created
 // channel. OAuth2 Scopes: manage_products:{projectKey}
-func (svc *ChannelService) Create(draft *ChannelDraft) (result *Channel, err error) {
-	err = svc.client.Create("channels", nil, draft, &result)
+func (client *Client) ChannelCreate(draft *ChannelDraft) (result *Channel, err error) {
+	err = client.Create("channels", nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +47,13 @@ func (svc *ChannelService) Create(draft *ChannelDraft) (result *Channel, err err
 
 // Update will update a channel matching the provided ID with the defined
 // UpdateActions. OAuth2 Scopes: manage_products:{projectKey}
-func (svc *ChannelService) Update(input *ChannelUpdateInput) (result *Channel, err error) {
+func (client *Client) ChannelUpdate(input *ChannelUpdateInput) (result *Channel, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
 	endpoint := fmt.Sprintf("channels/%s", input.ID)
-	err = svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,11 +63,11 @@ func (svc *ChannelService) Update(input *ChannelUpdateInput) (result *Channel, e
 // Delete will delete a type matching the provided ID. These requests delete a
 // type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
-func (svc *ChannelService) Delete(id string, version int) (result *Channel, err error) {
+func (client *Client) ChannelDelete(id string, version int) (result *Channel, err error) {
 	endpoint := fmt.Sprintf("channels/%s", id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err

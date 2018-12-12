@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestShippingZoneCreate(t *testing.T) {
+func TestZoneCreate(t *testing.T) {
 	output := testutil.RequestData{}
 
 	client, server := testutil.MockClient(t, testutil.Fixture("shipping-zone.create.json"), &output, nil)
@@ -31,7 +31,7 @@ func TestShippingZoneCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.ShippingZones.Create(input)
+	_, err := client.ZoneCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -50,15 +50,15 @@ func TestShippingZoneCreate(t *testing.T) {
 	assert.JSONEq(t, expectedBody, output.JSON)
 }
 
-func TestShippingZoneUpdate(t *testing.T) {
+func TestZoneUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.ShippingZoneUpdateInput
+		input       *commercetools.ZoneUpdateInput
 		requestBody string
 	}{
 		{
 			desc: "Change name",
-			input: &commercetools.ShippingZoneUpdateInput{
+			input: &commercetools.ZoneUpdateInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -79,7 +79,7 @@ func TestShippingZoneUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set description",
-			input: &commercetools.ShippingZoneUpdateInput{
+			input: &commercetools.ZoneUpdateInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -100,7 +100,7 @@ func TestShippingZoneUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add location ",
-			input: &commercetools.ShippingZoneUpdateInput{
+			input: &commercetools.ZoneUpdateInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -125,7 +125,7 @@ func TestShippingZoneUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove location",
-			input: &commercetools.ShippingZoneUpdateInput{
+			input: &commercetools.ZoneUpdateInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -157,7 +157,7 @@ func TestShippingZoneUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("shipping-zone.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ShippingZones.Update(tC.input)
+			_, err := client.ZoneUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/zones/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -165,12 +165,12 @@ func TestShippingZoneUpdate(t *testing.T) {
 	}
 }
 
-func TestShippingZoneDeleteByID(t *testing.T) {
+func TestZoneDeleteByID(t *testing.T) {
 	output := testutil.RequestData{}
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ShippingZones.DeleteByID("1234", 2)
+	_, err := client.ZoneDeleteByID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -179,7 +179,7 @@ func TestShippingZoneDeleteByID(t *testing.T) {
 	assert.Equal(t, "/unittest/zones/1234", output.URL.Path)
 }
 
-func TestShippingZoneGetByID(t *testing.T) {
+func TestZoneGetByID(t *testing.T) {
 	timestamp, _ := time.Parse(time.RFC3339, "2016-02-24T15:33:40.811Z")
 
 	client, server := testutil.MockClient(t, testutil.Fixture("shipping-zone.json"), nil, nil)
@@ -198,7 +198,7 @@ func TestShippingZoneGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ShippingZones.GetByID("1234")
+	result, err := client.ZoneGetByID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

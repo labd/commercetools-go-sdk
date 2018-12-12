@@ -11,15 +11,10 @@ type ProjectUpdateInput struct {
 	Actions []ProjectUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type ProjectService struct {
-	client *Client
-}
-
 // Get will return the current project. OAuth2 Scopes:
 // view_project_settings:{projectKey}
-func (svc *ProjectService) Get() (result *Project, err error) {
-	err = svc.client.Get("", nil, &result)
+func (client *Client) ProjectGet() (result *Project, err error) {
+	err = client.Get("", nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,8 +23,8 @@ func (svc *ProjectService) Get() (result *Project, err error) {
 
 // Update will update the current project with the defined UpdateActions. OAuth2
 // Scopes: manage_project:{projectKey}
-func (svc *ProjectService) Update(input *ProjectUpdateInput) (result *Project, err error) {
-	err = svc.client.Update("", nil, input.Version, input.Actions, &result)
+func (client *Client) ProjectUpdate(input *ProjectUpdateInput) (result *Project, err error) {
+	err = client.Update("", nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

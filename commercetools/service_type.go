@@ -25,15 +25,10 @@ type TypeUpdateInput struct {
 	Actions []TypeUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type TypeService struct {
-	client *Client
-}
-
 // GetByID will return a type matching the provided ID. OAuth2 Scopes:
 // view_types:{projectKey}
-func (svc *TypeService) GetByID(id string) (result *Type, err error) {
-	err = svc.client.Get(fmt.Sprintf("types/%s", id), nil, &result)
+func (client *Client) TypeGetByID(id string) (result *Type, err error) {
+	err = client.Get(fmt.Sprintf("types/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +37,8 @@ func (svc *TypeService) GetByID(id string) (result *Type, err error) {
 
 // Create will create a new type from a draft, and return the newly created
 // type. OAuth2 Scopes: manage_types:{projectKey}
-func (svc *TypeService) Create(draft *TypeDraft) (result *Type, err error) {
-	err = svc.client.Create("types", nil, draft, &result)
+func (client *Client) TypeCreate(draft *TypeDraft) (result *Type, err error) {
+	err = client.Create("types", nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +47,13 @@ func (svc *TypeService) Create(draft *TypeDraft) (result *Type, err error) {
 
 // Update will update a type matching the provided ID with the defined
 // UpdateActions. OAuth2 Scopes: manage_types:{projectKey}
-func (svc *TypeService) Update(input *TypeUpdateInput) (result *Type, err error) {
+func (client *Client) TypeUpdate(input *TypeUpdateInput) (result *Type, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
 	endpoint := fmt.Sprintf("types/%s", input.ID)
-	err = svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,11 +63,11 @@ func (svc *TypeService) Update(input *TypeUpdateInput) (result *Type, err error)
 // DeleteByID will delete a type matching the provided ID. These requests delete
 // a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
-func (svc *TypeService) DeleteByID(id string, version int) (result *Type, err error) {
+func (client *Client) TypeDeleteByID(id string, version int) (result *Type, err error) {
 	endpoint := fmt.Sprintf("types/%s", id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err
@@ -83,11 +78,11 @@ func (svc *TypeService) DeleteByID(id string, version int) (result *Type, err er
 // DeleteByKey will delete a type matching the provided key. These requests
 // delete a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
-func (svc *TypeService) DeleteByKey(key string, version int) (result *Type, err error) {
+func (client *Client) TypeDeleteByKey(key string, version int) (result *Type, err error) {
 	endpoint := fmt.Sprintf("types/key=%s", key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err

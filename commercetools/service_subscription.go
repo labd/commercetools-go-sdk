@@ -19,15 +19,10 @@ type SubscriptionUpdateInput struct {
 	Actions []SubscriptionUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type SubscriptionService struct {
-	client *Client
-}
-
 // GetByID will return a subscription matching the provided ID.
-func (svc *SubscriptionService) GetByID(id string) (*Subscription, error) {
+func (client *Client) SubscriptionGetByID(id string) (*Subscription, error) {
 	var result Subscription
-	err := svc.client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
+	err := client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -43,9 +38,9 @@ func (svc *SubscriptionService) GetByID(id string) (*Subscription, error) {
 // notification of type ResourceCreated for the resourceTypeId subscription.
 //
 // Currently, a maximum of 25 subscriptions can be created per project.
-func (svc *SubscriptionService) Create(draft *SubscriptionDraft) (*Subscription, error) {
+func (client *Client) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription, error) {
 	var result Subscription
-	err := svc.client.Create("subscriptions", nil, draft, &result)
+	err := client.Create("subscriptions", nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +49,7 @@ func (svc *SubscriptionService) Create(draft *SubscriptionDraft) (*Subscription,
 
 // Update updates a Subscription. It is eventually consistent, it may take up to
 // a minute before changes becomes fully active.
-func (svc *SubscriptionService) Update(input *SubscriptionUpdateInput) (*Subscription, error) {
+func (client *Client) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
 	var result Subscription
 
 	if input.ID == "" {
@@ -62,7 +57,7 @@ func (svc *SubscriptionService) Update(input *SubscriptionUpdateInput) (*Subscri
 	}
 
 	endpoint := fmt.Sprintf("subscriptions/%s", input.ID)
-	err := svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	err := client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -70,12 +65,12 @@ func (svc *SubscriptionService) Update(input *SubscriptionUpdateInput) (*Subscri
 }
 
 // DeleteByID will delete a subscription matching the provided ID.
-func (svc *SubscriptionService) DeleteByID(id string, version int) (*Subscription, error) {
+func (client *Client) SubscriptionDeleteByID(id string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err := svc.client.Delete(endpoint, params, &result)
+	err := client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err
@@ -84,12 +79,12 @@ func (svc *SubscriptionService) DeleteByID(id string, version int) (*Subscriptio
 }
 
 // DeleteByKey will delete a subscription matching the provided key.
-func (svc *SubscriptionService) DeleteByKey(key string, version int) (*Subscription, error) {
+func (client *Client) SubscriptionDeleteByKey(key string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err := svc.client.Delete(endpoint, params, &result)
+	err := client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err

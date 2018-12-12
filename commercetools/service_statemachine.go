@@ -25,15 +25,10 @@ type StateUpdateInput struct {
 	Actions []StateUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type StateMachinesService struct {
-	client *Client
-}
-
 // GetByID will return a state matching the provided ID. OAuth2 Scopes:
 // view_states:{projectKey} (or, deprecated: view_orders:{projectKey})
-func (svc *StateMachinesService) GetByID(id string) (result *State, err error) {
-	err = svc.client.Get(fmt.Sprintf("states/%s", id), nil, &result)
+func (client *Client) StateMachineGetByID(id string) (result *State, err error) {
+	err = client.Get(fmt.Sprintf("states/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -43,8 +38,8 @@ func (svc *StateMachinesService) GetByID(id string) (result *State, err error) {
 // Create will create a new state from a draft, and return the newly created
 // state. OAuth2 Scopes: manage_states:{projectKey} (or, deprecated:
 // manage_orders:{projectKey})
-func (svc *StateMachinesService) Create(draft *StateDraft) (result *State, err error) {
-	err = svc.client.Create("states", nil, draft, &result)
+func (client *Client) StateMachineCreate(draft *StateDraft) (result *State, err error) {
+	err = client.Create("states", nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -54,13 +49,13 @@ func (svc *StateMachinesService) Create(draft *StateDraft) (result *State, err e
 // Update will update a state matching the provided ID with the defined
 // UpdateActions. OAuth2 Scopes: manage_states:{projectKey} (or, deprecated:
 // manage_orders:{projectKey})
-func (svc *StateMachinesService) Update(input *StateUpdateInput) (result *State, err error) {
+func (client *Client) StateMachineUpdate(input *StateUpdateInput) (result *State, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid state id passed")
 	}
 
 	endpoint := fmt.Sprintf("states/%s", input.ID)
-	err = svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -69,11 +64,11 @@ func (svc *StateMachinesService) Update(input *StateUpdateInput) (result *State,
 
 // DeleteByID will delete a state matching the provided ID. OAuth2 Scopes:
 // manage_states:{projectKey} (or, deprecated: manage_orders:{projectKey})
-func (svc *StateMachinesService) DeleteByID(id string, version int) (result *State, err error) {
+func (client *Client) StateMachineDeleteByID(id string, version int) (result *State, err error) {
 	endpoint := fmt.Sprintf("states/%s", id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err

@@ -25,15 +25,10 @@ type ProductTypeUpdateInput struct {
 	Actions []ProductTypeUpdateAction
 }
 
-// Service contains client information and bundles all actions.
-type ProductTypeService struct {
-	client *Client
-}
-
 // GetByID will return a product type matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
-func (svc *ProductTypeService) GetByID(id string) (result *ProductType, err error) {
-	err = svc.client.Get(fmt.Sprintf("product-types/%s", id), nil, &result)
+func (client *Client) ProductTypeGetByID(id string) (result *ProductType, err error) {
+	err = client.Get(fmt.Sprintf("product-types/%s", id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +37,8 @@ func (svc *ProductTypeService) GetByID(id string) (result *ProductType, err erro
 
 // Create will create a new product type from a draft, and return the newly
 // created product type. OAuth2 Scopes: manage_products:{projectKey}
-func (svc *ProductTypeService) Create(draft *ProductTypeDraft) (result *ProductType, err error) {
-	err = svc.client.Create("product-types", nil, draft, &result)
+func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *ProductType, err error) {
+	err = client.Create("product-types", nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +47,13 @@ func (svc *ProductTypeService) Create(draft *ProductTypeDraft) (result *ProductT
 
 // Update will update a product type matching the provided ID with the defined
 // UpdateActions. OAuth2 Scopes: manage_products:{projectKey}
-func (svc *ProductTypeService) Update(input *ProductTypeUpdateInput) (result *ProductType, err error) {
+func (client *Client) ProductTypeUpdate(input *ProductTypeUpdateInput) (result *ProductType, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("No valid product type id passed")
 	}
 
 	endpoint := fmt.Sprintf("product-types/%s", input.ID)
-	err = svc.client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,11 +63,11 @@ func (svc *ProductTypeService) Update(input *ProductTypeUpdateInput) (result *Pr
 // DeleteByID will delete a product type matching the provided ID. This request
 // deletes a product type only if it’s not referenced by a product. OAuth2
 // Scopes: manage_products:{projectKey}
-func (svc *ProductTypeService) DeleteByID(id string, version int) (result *ProductType, err error) {
+func (client *Client) ProductTypeDeleteByID(id string, version int) (result *ProductType, err error) {
 	endpoint := fmt.Sprintf("product-types/%s", id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err
@@ -83,11 +78,11 @@ func (svc *ProductTypeService) DeleteByID(id string, version int) (result *Produ
 // DeleteByKey will delete a product type matching the provided key. This
 // request deletes a product type only if it’s not referenced by a product.
 // OAuth2 Scopes: manage_products:{projectKey}
-func (svc *ProductTypeService) DeleteByKey(key string, version int) (result *ProductType, err error) {
+func (client *Client) ProductTypeDeleteByKey(key string, version int) (result *ProductType, err error) {
 	endpoint := fmt.Sprintf("product-types/key=%s", key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
-	err = svc.client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, params, &result)
 
 	if err != nil {
 		return nil, err

@@ -31,7 +31,7 @@ func TestChannelCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.Channels.Create(input)
+	_, err := client.ChannelCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -315,7 +315,7 @@ func TestChannelUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.Channels.Update(tC.input)
+			_, err := client.ChannelUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/channels/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -328,7 +328,7 @@ func TestChannelDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.Channels.Delete("1234", 2)
+	_, err := client.ChannelDelete("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -352,7 +352,7 @@ func TestChannelGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.Channels.GetByID("1234")
+	result, err := client.ChannelGetByID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

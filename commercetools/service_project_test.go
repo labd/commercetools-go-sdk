@@ -31,7 +31,7 @@ func TestProjectGet(t *testing.T) {
 		ShippingRateInputType: commercetools.CartScoreType{},
 	}
 
-	result, err := client.Project.Get()
+	result, err := client.ProjectGet()
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -177,7 +177,7 @@ func TestProjectUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.Project.Update(tC.input)
+			_, err := client.ProjectUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)

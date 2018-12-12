@@ -28,7 +28,7 @@ func TestExtensionCreate(t *testing.T) {
 		},
 	}
 
-	_, err := client.Extensions.Create(draft)
+	_, err := client.ExtensionCreate(draft)
 	assert.Nil(t, err)
 }
 
@@ -53,7 +53,7 @@ func TestExtensionUpdate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.Extensions.Update(input)
+	_, err := client.ExtensionUpdate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -77,7 +77,7 @@ func TestExtensionDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
 
-	_, err := client.Extensions.DeleteByID("1234", 2)
+	_, err := client.ExtensionDeleteByID("1234", 2)
 	assert.Nil(t, err)
 }
 
@@ -85,6 +85,6 @@ func TestExtensionDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
 
-	_, err := client.Extensions.DeleteByKey("1234", 2)
+	_, err := client.ExtensionDeleteByKey("1234", 2)
 	assert.Nil(t, err)
 }

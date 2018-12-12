@@ -215,7 +215,7 @@ func TestSubscriptionCreate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.Subscriptions.Create(tC.input)
+			_, err := client.SubscriptionCreate(tC.input)
 			assert.Nil(t, err)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
 		})
@@ -253,7 +253,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 		},
 	}
 
-	_, err := client.Subscriptions.Update(input)
+	_, err := client.SubscriptionUpdate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -291,7 +291,7 @@ func TestSubscriptionDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.Subscriptions.DeleteByID("1234", 2)
+	_, err := client.SubscriptionDeleteByID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -306,7 +306,7 @@ func TestSubscriptionDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.Subscriptions.DeleteByKey("1234", 2)
+	_, err := client.SubscriptionDeleteByKey("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -319,7 +319,7 @@ func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.ironmq.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.Subscriptions.GetByID("100")
+	subscription, err := client.SubscriptionGetByID("100")
 	assert.Nil(t, err)
 
 	destination := subscription.Destination.(commercetools.IronMqDestination)
@@ -333,7 +333,7 @@ func TestSubscriptionGetDestinationSNS(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.Subscriptions.GetByID("100")
+	subscription, err := client.SubscriptionGetByID("100")
 	assert.Nil(t, err)
 
 	destination := subscription.Destination.(commercetools.SnsDestination)
@@ -349,7 +349,7 @@ func TestSubscriptionGetDestinationSQS(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sqs.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.Subscriptions.GetByID("100")
+	subscription, err := client.SubscriptionGetByID("100")
 	assert.Nil(t, err)
 
 	destination := subscription.Destination.(commercetools.SqsDestination)

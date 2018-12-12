@@ -39,7 +39,7 @@ func TestTaxCategoryCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.TaxCategories.Create(input)
+	_, err := client.TaxCategoryCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -228,7 +228,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("tax-category.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.TaxCategories.Update(tC.input)
+			_, err := client.TaxCategoryUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/tax-categories/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -241,7 +241,7 @@ func TestTaxCategoryDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.TaxCategories.DeleteByID("1234", 2)
+	_, err := client.TaxCategoryDeleteByID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -256,7 +256,7 @@ func TestTaxCategoryDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.TaxCategories.DeleteByKey("1234", 2)
+	_, err := client.TaxCategoryDeleteByKey("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -289,7 +289,7 @@ func TestTaxCategoryGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.TaxCategories.GetByID("1234")
+	result, err := client.TaxCategoryGetByID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

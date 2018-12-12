@@ -1,7 +1,6 @@
 package commercetools_test
 
 import (
-	"fmt"
 	"net/url"
 	"testing"
 	"time"
@@ -34,9 +33,7 @@ func TestStateCreate(t *testing.T) {
 		},
 	}
 
-	fmt.Println(output)
-
-	_, err := client.StateMachines.Create(input)
+	_, err := client.StateMachineCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -295,7 +292,7 @@ func TestStateUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("state.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.StateMachines.Update(tC.input)
+			_, err := client.StateMachineUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/states/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -308,7 +305,7 @@ func TestStateDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StateMachines.DeleteByID("1234", 2)
+	_, err := client.StateMachineDeleteByID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -341,7 +338,7 @@ func TestStateGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.StateMachines.GetByID("1234")
+	result, err := client.StateMachineGetByID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
