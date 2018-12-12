@@ -30,7 +30,7 @@ func createExampleProduct() *commercetools.Product {
 				},
 				MasterVariant: &commercetools.ProductVariant{
 					ID:         1,
-					Sku:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
+					SKU:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
 					Attributes: []commercetools.Attribute{},
 					Images: []commercetools.Image{
 						{
@@ -72,7 +72,7 @@ func createExampleProduct() *commercetools.Product {
 				},
 				MasterVariant: &commercetools.ProductVariant{
 					ID:         1,
-					Sku:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
+					SKU:        "sku_MB_PREMIUM_TECH_T_variant1_1369226795424",
 					Attributes: []commercetools.Attribute{},
 					Images: []commercetools.Image{
 						{

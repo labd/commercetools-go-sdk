@@ -4,16 +4,35 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/iancoleman/strcase"
+
 	yaml "gopkg.in/mikefarah/yaml.v2"
 )
 
+// Generate a go identifier for the given value. We also do some extra
+// modifications to make golint happy.
 func createCodeName(value string) string {
-	result := strings.ToUpper(value[:1]) + value[1:]
-	r := regexp.MustCompile("Id$")
-	result = r.ReplaceAllString(result, "ID")
+	if strings.HasPrefix(value, "/") {
+		return value
+	}
 
-	r = regexp.MustCompile("Url$")
-	result = r.ReplaceAllString(result, "URL")
+	result := strcase.ToCamel(value)
+	translateMap := map[string]string{
+		"Id$":      "ID",
+		"Sku$":     "SKU",
+		"Uri$":     "URI",
+		"Url$":     "URL",
+		"Json":     "JSON",
+		"IdAction": "IDAction",
+		"Ttl":      "TTL",
+		"Http":     "HTTP",
+		"^Api":     "API",
+	}
+
+	for key, value := range translateMap {
+		r := regexp.MustCompile(key)
+		result = r.ReplaceAllString(result, value)
+	}
 
 	return result
 }

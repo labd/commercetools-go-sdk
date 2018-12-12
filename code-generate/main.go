@@ -55,6 +55,22 @@ func (r *RamlType) resolve(types map[string]*RamlType) {
 	}
 }
 
+func (r *RamlType) isInterface() bool {
+	// TODO; check if 1 attribute and that is the discriminator
+	if len(r.Attributes) == 1 {
+		for _, attr := range r.Children {
+			if attr.Discriminator != "" {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (r *RamlType) discriminatorFunctionName() string {
+	return "mapDiscriminator" + r.InterfaceName
+}
+
 func (r *RamlType) getAllAttributes() (result []RamlTypeAttribute) {
 	parent := r
 	temp := []RamlTypeAttribute{}

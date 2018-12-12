@@ -6,13 +6,13 @@ import (
 	"strconv"
 )
 
-// DeleteInput provides the data required to delete a product type.
+// ProductTypeDeleteInput provides the data required to delete a product type.
 type ProductTypeDeleteInput struct {
 	ID      string
 	Version int
 }
 
-// UpdateInput provides the data required to update a product type.
+// ProductTypeUpdateInput provides the data required to update a product type.
 type ProductTypeUpdateInput struct {
 	ID string
 
@@ -25,7 +25,7 @@ type ProductTypeUpdateInput struct {
 	Actions []ProductTypeUpdateAction
 }
 
-// GetByID will return a product type matching the provided ID. OAuth2 Scopes:
+// ProductTypeGetByID will return a product type matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
 func (client *Client) ProductTypeGetByID(id string) (result *ProductType, err error) {
 	err = client.Get(fmt.Sprintf("product-types/%s", id), nil, &result)
@@ -35,8 +35,8 @@ func (client *Client) ProductTypeGetByID(id string) (result *ProductType, err er
 	return result, nil
 }
 
-// Create will create a new product type from a draft, and return the newly
-// created product type. OAuth2 Scopes: manage_products:{projectKey}
+// ProductTypeCreate will create a new product type from a draft, and return the
+// newly created product type. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *ProductType, err error) {
 	err = client.Create("product-types", nil, draft, &result)
 	if err != nil {
@@ -45,8 +45,9 @@ func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *Produc
 	return result, nil
 }
 
-// Update will update a product type matching the provided ID with the defined
-// UpdateActions. OAuth2 Scopes: manage_products:{projectKey}
+// ProductTypeUpdate will update a product type matching the provided ID with
+// the defined ProductTypeUpdateActions. OAuth2 Scopes:
+// manage_products:{projectKey}
 func (client *Client) ProductTypeUpdate(input *ProductTypeUpdateInput) (result *ProductType, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("No valid product type id passed")
@@ -60,9 +61,9 @@ func (client *Client) ProductTypeUpdate(input *ProductTypeUpdateInput) (result *
 	return result, nil
 }
 
-// DeleteByID will delete a product type matching the provided ID. This request
-// deletes a product type only if it’s not referenced by a product. OAuth2
-// Scopes: manage_products:{projectKey}
+// ProductTypeDeleteByID will delete a product type matching the provided ID.
+// This request deletes a product type only if it’s not referenced by a product.
+// OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductTypeDeleteByID(id string, version int) (result *ProductType, err error) {
 	endpoint := fmt.Sprintf("product-types/%s", id)
 	params := url.Values{}
@@ -75,8 +76,8 @@ func (client *Client) ProductTypeDeleteByID(id string, version int) (result *Pro
 	return result, nil
 }
 
-// DeleteByKey will delete a product type matching the provided key. This
-// request deletes a product type only if it’s not referenced by a product.
+// ProductTypeDeleteByKey will delete a product type matching the provided key.
+// This request deletes a product type only if it’s not referenced by a product.
 // OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductTypeDeleteByKey(key string, version int) (result *ProductType, err error) {
 	endpoint := fmt.Sprintf("product-types/key=%s", key)

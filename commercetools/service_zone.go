@@ -6,13 +6,13 @@ import (
 	"strconv"
 )
 
-// DeleteInput provides the data required to delete a shipping zone.
+// ZoneDeleteInput provides the data required to delete a shipping zone.
 type ZoneDeleteInput struct {
 	ID      string
 	Version int
 }
 
-// UpdateInput provides the data required to update a shipping zone.
+// ZoneUpdateInput provides the data required to update a shipping zone.
 type ZoneUpdateInput struct {
 	ID string
 
@@ -25,7 +25,7 @@ type ZoneUpdateInput struct {
 	Actions []ZoneUpdateAction
 }
 
-// GetByID will return a shipping zone matching the provided ID. OAuth2 Scopes:
+// ZoneGetByID will return a shipping zone matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
 func (client *Client) ZoneGetByID(id string) (result *Zone, err error) {
 	err = client.Get(fmt.Sprintf("zones/%s", id), nil, &result)
@@ -35,7 +35,7 @@ func (client *Client) ZoneGetByID(id string) (result *Zone, err error) {
 	return result, nil
 }
 
-// Create will create a new shipping zone from a draft, and return the newly
+// ZoneCreate will create a new shipping zone from a draft, and return the newly
 // created shipping zone. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
 	err = client.Create("zones", nil, draft, &result)
@@ -45,8 +45,8 @@ func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
 	return result, nil
 }
 
-// Update will update a shipping zone matching the provided ID with the defined
-// UpdateActions. OAuth2 Scopes: manage_products:{projectKey}
+// ZoneUpdate will update a shipping zone matching the provided ID with the defined
+// ZoneUpdateActions. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ZoneUpdate(input *ZoneUpdateInput) (result *Zone, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid type id passed")
@@ -60,7 +60,7 @@ func (client *Client) ZoneUpdate(input *ZoneUpdateInput) (result *Zone, err erro
 	return result, nil
 }
 
-// DeleteByID will delete a shipping zone matching the provided ID. OAuth2
+// ZoneDeleteByID will delete a shipping zone matching the provided ID. OAuth2
 // Scopes: manage_products:{projectKey}
 func (client *Client) ZoneDeleteByID(id string, version int) (result *Zone, err error) {
 	endpoint := fmt.Sprintf("zones/%s", id)

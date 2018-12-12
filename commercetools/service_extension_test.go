@@ -17,7 +17,7 @@ func TestExtensionCreate(t *testing.T) {
 
 	draft := &commercetools.ExtensionDraft{
 		Key: "test",
-		Destination: commercetools.ExtensionHttpDestination{
+		Destination: commercetools.ExtensionHTTPDestination{
 			URL: "http://example.com",
 		},
 		Triggers: []commercetools.ExtensionTrigger{

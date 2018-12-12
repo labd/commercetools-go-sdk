@@ -6,20 +6,20 @@ import (
 	"strconv"
 )
 
-// DeleteInput provides the data required to delete a subscription.
+// SubscriptionDeleteInput provides the data required to delete a subscription.
 type SubscriptionDeleteInput struct {
 	ID      string
 	Version int
 }
 
-// UpdateInput provides the data required to update a subscription.
+// SubscriptionUpdateInput provides the data required to update a subscription.
 type SubscriptionUpdateInput struct {
 	ID      string
 	Version int
 	Actions []SubscriptionUpdateAction
 }
 
-// GetByID will return a subscription matching the provided ID.
+// SubscriptionGetByID will return a subscription matching the provided ID.
 func (client *Client) SubscriptionGetByID(id string) (*Subscription, error) {
 	var result Subscription
 	err := client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
@@ -29,8 +29,8 @@ func (client *Client) SubscriptionGetByID(id string) (*Subscription, error) {
 	return &result, nil
 }
 
-// Create creates a new Subscription. It is eventually consistent, it may take
-// up to a minute before it becomes fully active.
+// SubscriptionCreate creates a new Subscription. It is eventually consistent,
+// it may take up to a minute before it becomes fully active.
 //
 // In order to test that the destination is correctly configured, a test message
 // will be put into the queue. If the message could not be delivered, the
@@ -47,8 +47,8 @@ func (client *Client) SubscriptionCreate(draft *SubscriptionDraft) (*Subscriptio
 	return &result, nil
 }
 
-// Update updates a Subscription. It is eventually consistent, it may take up to
-// a minute before changes becomes fully active.
+// SubscriptionUpdate updates a Subscription. It is eventually consistent, it
+// may take up to a minute before changes becomes fully active.
 func (client *Client) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
 	var result Subscription
 
@@ -64,7 +64,7 @@ func (client *Client) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subsc
 	return &result, nil
 }
 
-// DeleteByID will delete a subscription matching the provided ID.
+// SubscriptionDeleteByID will delete a subscription matching the provided ID.
 func (client *Client) SubscriptionDeleteByID(id string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
@@ -78,7 +78,7 @@ func (client *Client) SubscriptionDeleteByID(id string, version int) (*Subscript
 	return &result, nil
 }
 
-// DeleteByKey will delete a subscription matching the provided key.
+// SubscriptionDeleteByKey will delete a subscription matching the provided key.
 func (client *Client) SubscriptionDeleteByKey(key string, version int) (*Subscription, error) {
 	var result Subscription
 	endpoint := fmt.Sprintf("subscriptions/key=%s", key)

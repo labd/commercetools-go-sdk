@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// CustomObject is of type Resource
 type CustomObject struct {
 	Version        int         `json:"version"`
 	LastModifiedAt time.Time   `json:"lastModifiedAt"`
@@ -17,6 +18,7 @@ type CustomObject struct {
 	Container      string      `json:"container"`
 }
 
+// CustomObjectDraft is a standalone struct
 type CustomObjectDraft struct {
 	Version   int         `json:"version,omitempty"`
 	Value     interface{} `json:"value"`
@@ -24,6 +26,7 @@ type CustomObjectDraft struct {
 	Container string      `json:"container"`
 }
 
+// CustomObjectPagedQueryResponse is of type PagedQueryResponse
 type CustomObjectPagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
 	Offset  int            `json:"offset"`
@@ -31,12 +34,14 @@ type CustomObjectPagedQueryResponse struct {
 	Results []CustomObject `json:"results"`
 }
 
+// CustomObjectReference implements the interface Reference
 type CustomObjectReference struct {
 	Key string        `json:"key,omitempty"`
 	ID  string        `json:"id,omitempty"`
 	Obj *CustomObject `json:"obj,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj CustomObjectReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomObjectReference
 	return json.Marshal(struct {

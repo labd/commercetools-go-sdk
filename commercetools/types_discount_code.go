@@ -9,254 +9,10 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
-type DiscountCode struct {
-	Version                    int                     `json:"version"`
-	LastModifiedAt             time.Time               `json:"lastModifiedAt"`
-	ID                         string                  `json:"id"`
-	CreatedAt                  time.Time               `json:"createdAt"`
-	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
-	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
-	References                 []Reference             `json:"references"`
-	Name                       *LocalizedString        `json:"name,omitempty"`
-	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
-	MaxApplications            int                     `json:"maxApplications,omitempty"`
-	IsActive                   bool                    `json:"isActive"`
-	Groups                     []string                `json:"groups"`
-	Description                *LocalizedString        `json:"description,omitempty"`
-	Custom                     *CustomFields           `json:"custom,omitempty"`
-	Code                       string                  `json:"code"`
-	CartPredicate              string                  `json:"cartPredicate,omitempty"`
-	CartDiscounts              []CartDiscountReference `json:"cartDiscounts"`
-}
-
-func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
-	type Alias DiscountCode
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.References {
-		obj.References[i] = AbstractReferenceDiscriminatorMapping(obj.References[i])
-	}
-
-	return nil
-}
-
-type DiscountCodeChangeCartDiscountsAction struct {
-	CartDiscounts []CartDiscountReference `json:"cartDiscounts"`
-}
-
-func (obj DiscountCodeChangeCartDiscountsAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeChangeCartDiscountsAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeCartDiscounts", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeChangeGroupsAction struct {
-	Groups []string `json:"groups"`
-}
-
-func (obj DiscountCodeChangeGroupsAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeChangeGroupsAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeGroups", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeChangeIsActiveAction struct {
-	IsActive bool `json:"isActive"`
-}
-
-func (obj DiscountCodeChangeIsActiveAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeChangeIsActiveAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeIsActive", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeDraft struct {
-	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
-	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
-	Name                       *LocalizedString        `json:"name,omitempty"`
-	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
-	MaxApplications            int                     `json:"maxApplications,omitempty"`
-	IsActive                   bool                    `json:"isActive,omitempty"`
-	Groups                     []string                `json:"groups,omitempty"`
-	Description                *LocalizedString        `json:"description,omitempty"`
-	Custom                     *CustomFieldsDraft      `json:"custom,omitempty"`
-	Code                       string                  `json:"code"`
-	CartPredicate              string                  `json:"cartPredicate,omitempty"`
-	CartDiscounts              []CartDiscountReference `json:"cartDiscounts"`
-}
-
-type DiscountCodePagedQueryResponse struct {
-	Total   int            `json:"total,omitempty"`
-	Offset  int            `json:"offset"`
-	Count   int            `json:"count"`
-	Results []DiscountCode `json:"results"`
-}
-
-type DiscountCodeReference struct {
-	Key string        `json:"key,omitempty"`
-	ID  string        `json:"id,omitempty"`
-	Obj *DiscountCode `json:"obj,omitempty"`
-}
-
-func (obj DiscountCodeReference) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeReference
-	return json.Marshal(struct {
-		TypeID string `json:"typeId"`
-		*Alias
-	}{TypeID: "discount-code", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetCartPredicateAction struct {
-	CartPredicate string `json:"cartPredicate,omitempty"`
-}
-
-func (obj DiscountCodeSetCartPredicateAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetCartPredicateAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCartPredicate", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetCustomFieldAction struct {
-	Value interface{} `json:"value,omitempty"`
-	Name  string      `json:"name"`
-}
-
-func (obj DiscountCodeSetCustomFieldAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetCustomFieldAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
-}
-
-func (obj DiscountCodeSetCustomTypeAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetCustomTypeAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetDescriptionAction struct {
-	Description *LocalizedString `json:"description,omitempty"`
-}
-
-func (obj DiscountCodeSetDescriptionAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetDescriptionAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setDescription", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetMaxApplicationsAction struct {
-	MaxApplications int `json:"maxApplications,omitempty"`
-}
-
-func (obj DiscountCodeSetMaxApplicationsAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetMaxApplicationsAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setMaxApplications", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetMaxApplicationsPerCustomerAction struct {
-	MaxApplicationsPerCustomer int `json:"maxApplicationsPerCustomer,omitempty"`
-}
-
-func (obj DiscountCodeSetMaxApplicationsPerCustomerAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetMaxApplicationsPerCustomerAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setMaxApplicationsPerCustomer", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetNameAction struct {
-	Name *LocalizedString `json:"name,omitempty"`
-}
-
-func (obj DiscountCodeSetNameAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetNameAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setName", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetValidFromAction struct {
-	ValidFrom time.Time `json:"validFrom,omitempty"`
-}
-
-func (obj DiscountCodeSetValidFromAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetValidFromAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setValidFrom", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetValidFromAndUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-	ValidFrom  time.Time `json:"validFrom,omitempty"`
-}
-
-func (obj DiscountCodeSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetValidFromAndUntilAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setValidFromAndUntil", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeSetValidUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-}
-
-func (obj DiscountCodeSetValidUntilAction) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeSetValidUntilAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
-}
-
-type DiscountCodeUpdate struct {
-	Version int                        `json:"version"`
-	Actions []DiscountCodeUpdateAction `json:"actions"`
-}
-
-func (obj *DiscountCodeUpdate) UnmarshalJSON(data []byte) error {
-	type Alias DiscountCodeUpdate
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Actions {
-		obj.Actions[i] = AbstractDiscountCodeUpdateActionDiscriminatorMapping(obj.Actions[i])
-	}
-
-	return nil
-}
-
+// DiscountCodeUpdateAction uses action as discriminator attribute
 type DiscountCodeUpdateAction interface{}
-type AbstractDiscountCodeUpdateAction struct{}
 
-func AbstractDiscountCodeUpdateActionDiscriminatorMapping(input DiscountCodeUpdateAction) DiscountCodeUpdateAction {
+func mapDiscriminatorDiscountCodeUpdateAction(input DiscountCodeUpdateAction) DiscountCodeUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeCartDiscounts":
@@ -312,5 +68,285 @@ func AbstractDiscountCodeUpdateActionDiscriminatorMapping(input DiscountCodeUpda
 		mapstructure.Decode(input, &new)
 		return new
 	}
+	return nil
+}
+
+// DiscountCode is of type Resource
+type DiscountCode struct {
+	Version                    int                     `json:"version"`
+	LastModifiedAt             time.Time               `json:"lastModifiedAt"`
+	ID                         string                  `json:"id"`
+	CreatedAt                  time.Time               `json:"createdAt"`
+	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
+	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
+	References                 []Reference             `json:"references"`
+	Name                       *LocalizedString        `json:"name,omitempty"`
+	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
+	MaxApplications            int                     `json:"maxApplications,omitempty"`
+	IsActive                   bool                    `json:"isActive"`
+	Groups                     []string                `json:"groups"`
+	Description                *LocalizedString        `json:"description,omitempty"`
+	Custom                     *CustomFields           `json:"custom,omitempty"`
+	Code                       string                  `json:"code"`
+	CartPredicate              string                  `json:"cartPredicate,omitempty"`
+	CartDiscounts              []CartDiscountReference `json:"cartDiscounts"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
+	type Alias DiscountCode
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.References {
+		obj.References[i] = mapDiscriminatorReference(obj.References[i])
+	}
+
+	return nil
+}
+
+// DiscountCodeChangeCartDiscountsAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeChangeCartDiscountsAction struct {
+	CartDiscounts []CartDiscountReference `json:"cartDiscounts"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeChangeCartDiscountsAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeChangeCartDiscountsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCartDiscounts", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeChangeGroupsAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeChangeGroupsAction struct {
+	Groups []string `json:"groups"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeChangeGroupsAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeChangeGroupsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeGroups", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeChangeIsActiveAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeChangeIsActiveAction struct {
+	IsActive bool `json:"isActive"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeChangeIsActiveAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeChangeIsActiveAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeIsActive", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeDraft is a standalone struct
+type DiscountCodeDraft struct {
+	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
+	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
+	Name                       *LocalizedString        `json:"name,omitempty"`
+	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
+	MaxApplications            int                     `json:"maxApplications,omitempty"`
+	IsActive                   bool                    `json:"isActive,omitempty"`
+	Groups                     []string                `json:"groups,omitempty"`
+	Description                *LocalizedString        `json:"description,omitempty"`
+	Custom                     *CustomFieldsDraft      `json:"custom,omitempty"`
+	Code                       string                  `json:"code"`
+	CartPredicate              string                  `json:"cartPredicate,omitempty"`
+	CartDiscounts              []CartDiscountReference `json:"cartDiscounts"`
+}
+
+// DiscountCodePagedQueryResponse is of type PagedQueryResponse
+type DiscountCodePagedQueryResponse struct {
+	Total   int            `json:"total,omitempty"`
+	Offset  int            `json:"offset"`
+	Count   int            `json:"count"`
+	Results []DiscountCode `json:"results"`
+}
+
+// DiscountCodeReference implements the interface Reference
+type DiscountCodeReference struct {
+	Key string        `json:"key,omitempty"`
+	ID  string        `json:"id,omitempty"`
+	Obj *DiscountCode `json:"obj,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeReference) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "discount-code", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetCartPredicateAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetCartPredicateAction struct {
+	CartPredicate string `json:"cartPredicate,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetCartPredicateAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetCartPredicateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCartPredicate", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetCustomFieldAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetCustomTypeAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetCustomTypeAction struct {
+	Type   *TypeReference  `json:"type,omitempty"`
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetDescriptionAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetDescriptionAction struct {
+	Description *LocalizedString `json:"description,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetDescriptionAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetDescriptionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetMaxApplicationsAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetMaxApplicationsAction struct {
+	MaxApplications int `json:"maxApplications,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetMaxApplicationsAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetMaxApplicationsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMaxApplications", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetMaxApplicationsPerCustomerAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetMaxApplicationsPerCustomerAction struct {
+	MaxApplicationsPerCustomer int `json:"maxApplicationsPerCustomer,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetMaxApplicationsPerCustomerAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetMaxApplicationsPerCustomerAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMaxApplicationsPerCustomer", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetNameAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetNameAction struct {
+	Name *LocalizedString `json:"name,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetNameAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setName", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetValidFromAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetValidFromAction struct {
+	ValidFrom time.Time `json:"validFrom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetValidFromAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetValidFromAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidFrom", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetValidFromAndUntilAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetValidFromAndUntilAction struct {
+	ValidUntil time.Time `json:"validUntil,omitempty"`
+	ValidFrom  time.Time `json:"validFrom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetValidFromAndUntilAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidFromAndUntil", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeSetValidUntilAction implements the interface DiscountCodeUpdateAction
+type DiscountCodeSetValidUntilAction struct {
+	ValidUntil time.Time `json:"validUntil,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeSetValidUntilAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetValidUntilAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeUpdate is of type Update
+type DiscountCodeUpdate struct {
+	Version int                        `json:"version"`
+	Actions []DiscountCodeUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountCodeUpdate) UnmarshalJSON(data []byte) error {
+	type Alias DiscountCodeUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		obj.Actions[i] = mapDiscriminatorDiscountCodeUpdateAction(obj.Actions[i])
+	}
+
 	return nil
 }

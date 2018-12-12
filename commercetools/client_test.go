@@ -104,7 +104,7 @@ func TestInvalidJsonError(t *testing.T) {
 	ctErr, ok := err.(commercetools.ErrorResponse)
 	assert.Equal(t, true, ok)
 
-	ctChildErr, ok := ctErr.Errors[0].(commercetools.InvalidJsonInputError)
+	ctChildErr, ok := ctErr.Errors[0].(commercetools.InvalidJSONInputError)
 	assert.Equal(t, "Request body does not contain valid JSON.", ctChildErr.Error())
 	// assert.Equal(t, commercetools.ErrInvalidJSONInput, ctErr.Errors[0].Code())
 }

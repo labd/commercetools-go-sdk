@@ -4,7 +4,8 @@ package commercetools
 
 import "time"
 
-type ApiClient struct {
+// APIClient is a standalone struct
+type APIClient struct {
 	Secret     string      `json:"secret,omitempty"`
 	Scope      string      `json:"scope"`
 	Name       string      `json:"name"`
@@ -13,14 +14,16 @@ type ApiClient struct {
 	CreatedAt  time.Time   `json:"createdAt"`
 }
 
-type ApiClientDraft struct {
+// APIClientDraft is a standalone struct
+type APIClientDraft struct {
 	Scope string `json:"scope"`
 	Name  string `json:"name"`
 }
 
-type ApiClientPagedQueryResponse struct {
+// APIClientPagedQueryResponse is a standalone struct
+type APIClientPagedQueryResponse struct {
 	Total   int         `json:"total,omitempty"`
-	Results []ApiClient `json:"results"`
+	Results []APIClient `json:"results"`
 	Offset  int         `json:"offset"`
 	Count   int         `json:"count"`
 }

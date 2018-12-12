@@ -9,179 +9,10 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
-type OrderEdit struct {
-	Version        int                       `json:"version"`
-	ID             string                    `json:"id"`
-	StagedActions  []StagedOrderUpdateAction `json:"stagedActions"`
-	Result         OrderEditResult           `json:"result"`
-	Resource       *OrderReference           `json:"resource"`
-	LastModifiedAt time.Time                 `json:"lastModifiedAt"`
-	Key            string                    `json:"key,omitempty"`
-	Custom         *CustomFields             `json:"custom,omitempty"`
-	CreatedAt      time.Time                 `json:"createdAt"`
-	Comment        string                    `json:"comment,omitempty"`
-}
-
-func (obj *OrderEdit) UnmarshalJSON(data []byte) error {
-	type Alias OrderEdit
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Result != nil {
-		obj.Result = AbstractOrderEditResultDiscriminatorMapping(obj.Result)
-	}
-	for i := range obj.StagedActions {
-		obj.StagedActions[i] = AbstractStagedOrderUpdateActionDiscriminatorMapping(obj.StagedActions[i])
-	}
-
-	return nil
-}
-
-type OrderEditAddStagedActionAction struct {
-	StagedAction StagedOrderUpdateAction `json:"stagedAction"`
-}
-
-func (obj OrderEditAddStagedActionAction) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditAddStagedActionAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "addStagedAction", Alias: (*Alias)(&obj)})
-}
-func (obj *OrderEditAddStagedActionAction) UnmarshalJSON(data []byte) error {
-	type Alias OrderEditAddStagedActionAction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.StagedAction != nil {
-		obj.StagedAction = AbstractStagedOrderUpdateActionDiscriminatorMapping(obj.StagedAction)
-	}
-
-	return nil
-}
-
-type OrderEditApplied struct {
-	ExcerptBeforeEdit *OrderExcerpt `json:"excerptBeforeEdit"`
-	ExcerptAfterEdit  *OrderExcerpt `json:"excerptAfterEdit"`
-	AppliedAt         time.Time     `json:"appliedAt"`
-}
-
-func (obj OrderEditApplied) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditApplied
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "Applied", Alias: (*Alias)(&obj)})
-}
-
-type OrderEditApply struct {
-	ResourceVersion int `json:"resourceVersion"`
-	EditVersion     int `json:"editVersion"`
-}
-
-type OrderEditDraft struct {
-	StagedActions []StagedOrderUpdateAction `json:"stagedActions,omitempty"`
-	Resource      *OrderReference           `json:"resource"`
-	Key           string                    `json:"key,omitempty"`
-	DryRun        bool                      `json:"dryRun,omitempty"`
-	Custom        *CustomFieldsDraft        `json:"custom,omitempty"`
-	Comment       string                    `json:"comment,omitempty"`
-}
-
-func (obj *OrderEditDraft) UnmarshalJSON(data []byte) error {
-	type Alias OrderEditDraft
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.StagedActions {
-		obj.StagedActions[i] = AbstractStagedOrderUpdateActionDiscriminatorMapping(obj.StagedActions[i])
-	}
-
-	return nil
-}
-
-type OrderEditNotProcessed struct{}
-
-func (obj OrderEditNotProcessed) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditNotProcessed
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "NotProcessed", Alias: (*Alias)(&obj)})
-}
-
-type OrderEditPagedQueryResponse struct {
-	Total   int         `json:"total,omitempty"`
-	Offset  int         `json:"offset"`
-	Count   int         `json:"count"`
-	Results []OrderEdit `json:"results"`
-}
-
-type OrderEditPreviewFailure struct {
-	Errors []ErrorObject `json:"errors"`
-}
-
-func (obj OrderEditPreviewFailure) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditPreviewFailure
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "PreviewFailure", Alias: (*Alias)(&obj)})
-}
-func (obj *OrderEditPreviewFailure) UnmarshalJSON(data []byte) error {
-	type Alias OrderEditPreviewFailure
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Errors {
-		obj.Errors[i] = AbstractErrorObjectDiscriminatorMapping(obj.Errors[i])
-	}
-
-	return nil
-}
-
-type OrderEditPreviewSuccess struct {
-	Preview         *StagedOrder     `json:"preview"`
-	MessagePayloads []MessagePayload `json:"messagePayloads"`
-}
-
-func (obj OrderEditPreviewSuccess) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditPreviewSuccess
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "PreviewSuccess", Alias: (*Alias)(&obj)})
-}
-func (obj *OrderEditPreviewSuccess) UnmarshalJSON(data []byte) error {
-	type Alias OrderEditPreviewSuccess
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.MessagePayloads {
-		obj.MessagePayloads[i] = AbstractMessagePayloadDiscriminatorMapping(obj.MessagePayloads[i])
-	}
-
-	return nil
-}
-
-type OrderEditReference struct {
-	Key string     `json:"key,omitempty"`
-	ID  string     `json:"id,omitempty"`
-	Obj *OrderEdit `json:"obj,omitempty"`
-}
-
-func (obj OrderEditReference) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditReference
-	return json.Marshal(struct {
-		TypeID string `json:"typeId"`
-		*Alias
-	}{TypeID: "order-edit", Alias: (*Alias)(&obj)})
-}
-
+// OrderEditResult uses type as discriminator attribute
 type OrderEditResult interface{}
-type AbstractOrderEditResult struct{}
 
-func AbstractOrderEditResultDiscriminatorMapping(input OrderEditResult) OrderEditResult {
+func mapDiscriminatorOrderEditResult(input OrderEditResult) OrderEditResult {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "Applied":
@@ -196,7 +27,7 @@ func AbstractOrderEditResultDiscriminatorMapping(input OrderEditResult) OrderEdi
 		new := OrderEditPreviewFailure{}
 		mapstructure.Decode(input, &new)
 		for i := range new.Errors {
-			new.Errors[i] = AbstractErrorObjectDiscriminatorMapping(new.Errors[i])
+			new.Errors[i] = mapDiscriminatorErrorObject(new.Errors[i])
 		}
 
 		return new
@@ -204,7 +35,7 @@ func AbstractOrderEditResultDiscriminatorMapping(input OrderEditResult) OrderEdi
 		new := OrderEditPreviewSuccess{}
 		mapstructure.Decode(input, &new)
 		for i := range new.MessagePayloads {
-			new.MessagePayloads[i] = AbstractMessagePayloadDiscriminatorMapping(new.MessagePayloads[i])
+			new.MessagePayloads[i] = mapDiscriminatorMessagePayload(new.MessagePayloads[i])
 		}
 
 		return new
@@ -212,108 +43,17 @@ func AbstractOrderEditResultDiscriminatorMapping(input OrderEditResult) OrderEdi
 	return nil
 }
 
-type OrderEditSetCommentAction struct {
-	Comment string `json:"comment,omitempty"`
-}
-
-func (obj OrderEditSetCommentAction) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditSetCommentAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setComment", Alias: (*Alias)(&obj)})
-}
-
-type OrderEditSetCustomFieldAction struct {
-	Value interface{} `json:"value,omitempty"`
-	Name  string      `json:"name"`
-}
-
-func (obj OrderEditSetCustomFieldAction) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditSetCustomFieldAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
-}
-
-type OrderEditSetCustomTypeAction struct {
-	Type   *TypeReference `json:"type,omitempty"`
-	Fields interface{}    `json:"fields,omitempty"`
-}
-
-func (obj OrderEditSetCustomTypeAction) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditSetCustomTypeAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
-}
-
-type OrderEditSetKeyAction struct {
-	Key string `json:"key,omitempty"`
-}
-
-func (obj OrderEditSetKeyAction) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditSetKeyAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setKey", Alias: (*Alias)(&obj)})
-}
-
-type OrderEditSetStagedActionsAction struct {
-	StagedActions []StagedOrderUpdateAction `json:"stagedActions"`
-}
-
-func (obj OrderEditSetStagedActionsAction) MarshalJSON() ([]byte, error) {
-	type Alias OrderEditSetStagedActionsAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setStagedActions", Alias: (*Alias)(&obj)})
-}
-func (obj *OrderEditSetStagedActionsAction) UnmarshalJSON(data []byte) error {
-	type Alias OrderEditSetStagedActionsAction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.StagedActions {
-		obj.StagedActions[i] = AbstractStagedOrderUpdateActionDiscriminatorMapping(obj.StagedActions[i])
-	}
-
-	return nil
-}
-
-type OrderEditUpdate struct {
-	Version int                     `json:"version"`
-	DryRun  bool                    `json:"dryRun"`
-	Actions []OrderEditUpdateAction `json:"actions"`
-}
-
-func (obj *OrderEditUpdate) UnmarshalJSON(data []byte) error {
-	type Alias OrderEditUpdate
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Actions {
-		obj.Actions[i] = AbstractOrderEditUpdateActionDiscriminatorMapping(obj.Actions[i])
-	}
-
-	return nil
-}
-
+// OrderEditUpdateAction uses action as discriminator attribute
 type OrderEditUpdateAction interface{}
-type AbstractOrderEditUpdateAction struct{}
 
-func AbstractOrderEditUpdateActionDiscriminatorMapping(input OrderEditUpdateAction) OrderEditUpdateAction {
+func mapDiscriminatorOrderEditUpdateAction(input OrderEditUpdateAction) OrderEditUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addStagedAction":
 		new := OrderEditAddStagedActionAction{}
 		mapstructure.Decode(input, &new)
 		if new.StagedAction != nil {
-			new.StagedAction = AbstractStagedOrderUpdateActionDiscriminatorMapping(new.StagedAction)
+			new.StagedAction = mapDiscriminatorStagedOrderUpdateAction(new.StagedAction)
 		}
 
 		return new
@@ -337,7 +77,7 @@ func AbstractOrderEditUpdateActionDiscriminatorMapping(input OrderEditUpdateActi
 		new := OrderEditSetStagedActionsAction{}
 		mapstructure.Decode(input, &new)
 		for i := range new.StagedActions {
-			new.StagedActions[i] = AbstractStagedOrderUpdateActionDiscriminatorMapping(new.StagedActions[i])
+			new.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(new.StagedActions[i])
 		}
 
 		return new
@@ -345,12 +85,319 @@ func AbstractOrderEditUpdateActionDiscriminatorMapping(input OrderEditUpdateActi
 	return nil
 }
 
+// OrderEdit is of type Resource
+type OrderEdit struct {
+	Version        int                       `json:"version"`
+	ID             string                    `json:"id"`
+	StagedActions  []StagedOrderUpdateAction `json:"stagedActions"`
+	Result         OrderEditResult           `json:"result"`
+	Resource       *OrderReference           `json:"resource"`
+	LastModifiedAt time.Time                 `json:"lastModifiedAt"`
+	Key            string                    `json:"key,omitempty"`
+	Custom         *CustomFields             `json:"custom,omitempty"`
+	CreatedAt      time.Time                 `json:"createdAt"`
+	Comment        string                    `json:"comment,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEdit) UnmarshalJSON(data []byte) error {
+	type Alias OrderEdit
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Result != nil {
+		obj.Result = mapDiscriminatorOrderEditResult(obj.Result)
+	}
+	for i := range obj.StagedActions {
+		obj.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+	}
+
+	return nil
+}
+
+// OrderEditAddStagedActionAction implements the interface OrderEditUpdateAction
+type OrderEditAddStagedActionAction struct {
+	StagedAction StagedOrderUpdateAction `json:"stagedAction"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditAddStagedActionAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditAddStagedActionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addStagedAction", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEditAddStagedActionAction) UnmarshalJSON(data []byte) error {
+	type Alias OrderEditAddStagedActionAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.StagedAction != nil {
+		obj.StagedAction = mapDiscriminatorStagedOrderUpdateAction(obj.StagedAction)
+	}
+
+	return nil
+}
+
+// OrderEditApplied implements the interface OrderEditResult
+type OrderEditApplied struct {
+	ExcerptBeforeEdit *OrderExcerpt `json:"excerptBeforeEdit"`
+	ExcerptAfterEdit  *OrderExcerpt `json:"excerptAfterEdit"`
+	AppliedAt         time.Time     `json:"appliedAt"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditApplied) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditApplied
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "Applied", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditApply is a standalone struct
+type OrderEditApply struct {
+	ResourceVersion int `json:"resourceVersion"`
+	EditVersion     int `json:"editVersion"`
+}
+
+// OrderEditDraft is a standalone struct
+type OrderEditDraft struct {
+	StagedActions []StagedOrderUpdateAction `json:"stagedActions,omitempty"`
+	Resource      *OrderReference           `json:"resource"`
+	Key           string                    `json:"key,omitempty"`
+	DryRun        bool                      `json:"dryRun,omitempty"`
+	Custom        *CustomFieldsDraft        `json:"custom,omitempty"`
+	Comment       string                    `json:"comment,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEditDraft) UnmarshalJSON(data []byte) error {
+	type Alias OrderEditDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.StagedActions {
+		obj.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+	}
+
+	return nil
+}
+
+// OrderEditNotProcessed implements the interface OrderEditResult
+type OrderEditNotProcessed struct{}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditNotProcessed) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditNotProcessed
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "NotProcessed", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditPagedQueryResponse is of type PagedQueryResponse
+type OrderEditPagedQueryResponse struct {
+	Total   int         `json:"total,omitempty"`
+	Offset  int         `json:"offset"`
+	Count   int         `json:"count"`
+	Results []OrderEdit `json:"results"`
+}
+
+// OrderEditPreviewFailure implements the interface OrderEditResult
+type OrderEditPreviewFailure struct {
+	Errors []ErrorObject `json:"errors"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditPreviewFailure) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditPreviewFailure
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "PreviewFailure", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEditPreviewFailure) UnmarshalJSON(data []byte) error {
+	type Alias OrderEditPreviewFailure
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Errors {
+		obj.Errors[i] = mapDiscriminatorErrorObject(obj.Errors[i])
+	}
+
+	return nil
+}
+
+// OrderEditPreviewSuccess implements the interface OrderEditResult
+type OrderEditPreviewSuccess struct {
+	Preview         *StagedOrder     `json:"preview"`
+	MessagePayloads []MessagePayload `json:"messagePayloads"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditPreviewSuccess) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditPreviewSuccess
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "PreviewSuccess", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEditPreviewSuccess) UnmarshalJSON(data []byte) error {
+	type Alias OrderEditPreviewSuccess
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.MessagePayloads {
+		obj.MessagePayloads[i] = mapDiscriminatorMessagePayload(obj.MessagePayloads[i])
+	}
+
+	return nil
+}
+
+// OrderEditReference implements the interface Reference
+type OrderEditReference struct {
+	Key string     `json:"key,omitempty"`
+	ID  string     `json:"id,omitempty"`
+	Obj *OrderEdit `json:"obj,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditReference) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "order-edit", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetCommentAction implements the interface OrderEditUpdateAction
+type OrderEditSetCommentAction struct {
+	Comment string `json:"comment,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetCommentAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetCommentAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setComment", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetCustomFieldAction implements the interface OrderEditUpdateAction
+type OrderEditSetCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetCustomTypeAction implements the interface OrderEditUpdateAction
+type OrderEditSetCustomTypeAction struct {
+	Type   *TypeReference `json:"type,omitempty"`
+	Fields interface{}    `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetKeyAction implements the interface OrderEditUpdateAction
+type OrderEditSetKeyAction struct {
+	Key string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetStagedActionsAction implements the interface OrderEditUpdateAction
+type OrderEditSetStagedActionsAction struct {
+	StagedActions []StagedOrderUpdateAction `json:"stagedActions"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetStagedActionsAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetStagedActionsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setStagedActions", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEditSetStagedActionsAction) UnmarshalJSON(data []byte) error {
+	type Alias OrderEditSetStagedActionsAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.StagedActions {
+		obj.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+	}
+
+	return nil
+}
+
+// OrderEditUpdate is of type Update
+type OrderEditUpdate struct {
+	Version int                     `json:"version"`
+	DryRun  bool                    `json:"dryRun"`
+	Actions []OrderEditUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderEditUpdate) UnmarshalJSON(data []byte) error {
+	type Alias OrderEditUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		obj.Actions[i] = mapDiscriminatorOrderEditUpdateAction(obj.Actions[i])
+	}
+
+	return nil
+}
+
+// OrderExcerpt is a standalone struct
 type OrderExcerpt struct {
 	Version    int         `json:"version"`
 	TotalPrice *Money      `json:"totalPrice"`
 	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
 }
 
+// StagedOrder is of type Order
 type StagedOrder struct {
 	Version                   int                     `json:"version"`
 	LastModifiedAt            time.Time               `json:"lastModifiedAt"`
@@ -391,6 +438,7 @@ type StagedOrder struct {
 	AnonymousID               string                  `json:"anonymousId,omitempty"`
 }
 
+// StagedOrderAddCustomLineItemAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddCustomLineItemAction struct {
 	TaxCategory     *TaxCategoryReference `json:"taxCategory,omitempty"`
 	Slug            string                `json:"slug"`
@@ -401,6 +449,7 @@ type StagedOrderAddCustomLineItemAction struct {
 	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddCustomLineItemAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddCustomLineItemAction
 	return json.Marshal(struct {
@@ -409,12 +458,14 @@ func (obj StagedOrderAddCustomLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addCustomLineItem", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddDeliveryAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddDeliveryAction struct {
 	Parcels []ParcelDraft  `json:"parcels,omitempty"`
 	Items   []DeliveryItem `json:"items,omitempty"`
 	Address *Address       `json:"address,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddDeliveryAction
 	return json.Marshal(struct {
@@ -423,10 +474,12 @@ func (obj StagedOrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addDelivery", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddDiscountCodeAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddDiscountCodeAction struct {
 	Code string `json:"code"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddDiscountCodeAction
 	return json.Marshal(struct {
@@ -435,10 +488,12 @@ func (obj StagedOrderAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addDiscountCode", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddItemShippingAddressAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddItemShippingAddressAction struct {
 	Address *Address `json:"address"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddItemShippingAddressAction
 	return json.Marshal(struct {
@@ -447,10 +502,11 @@ func (obj StagedOrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error)
 	}{Action: "addItemShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddLineItemAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddLineItemAction struct {
 	VariantID           int                         `json:"variantId,omitempty"`
 	SupplyChannel       *ChannelReference           `json:"supplyChannel,omitempty"`
-	Sku                 string                      `json:"sku,omitempty"`
+	SKU                 string                      `json:"sku,omitempty"`
 	ShippingDetails     *ItemShippingDetailsDraft   `json:"shippingDetails,omitempty"`
 	Quantity            float64                     `json:"quantity,omitempty"`
 	ProductID           string                      `json:"productId,omitempty"`
@@ -461,6 +517,7 @@ type StagedOrderAddLineItemAction struct {
 	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddLineItemAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddLineItemAction
 	return json.Marshal(struct {
@@ -469,6 +526,7 @@ func (obj StagedOrderAddLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addLineItem", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddParcelToDeliveryAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddParcelToDeliveryAction struct {
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
@@ -476,6 +534,7 @@ type StagedOrderAddParcelToDeliveryAction struct {
 	DeliveryID   string              `json:"deliveryId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddParcelToDeliveryAction
 	return json.Marshal(struct {
@@ -484,10 +543,12 @@ func (obj StagedOrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addParcelToDelivery", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddPaymentAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddPaymentAction struct {
 	Payment *PaymentReference `json:"payment"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddPaymentAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddPaymentAction
 	return json.Marshal(struct {
@@ -496,12 +557,14 @@ func (obj StagedOrderAddPaymentAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addPayment", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddReturnInfoAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddReturnInfoAction struct {
 	ReturnTrackingID string            `json:"returnTrackingId,omitempty"`
 	ReturnDate       time.Time         `json:"returnDate,omitempty"`
 	Items            []ReturnItemDraft `json:"items"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddReturnInfoAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddReturnInfoAction
 	return json.Marshal(struct {
@@ -510,12 +573,14 @@ func (obj StagedOrderAddReturnInfoAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addReturnInfo", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderAddShoppingListAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddShoppingListAction struct {
 	SupplyChannel       *ChannelReference      `json:"supplyChannel,omitempty"`
 	ShoppingList        *ShoppingListReference `json:"shoppingList"`
 	DistributionChannel *ChannelReference      `json:"distributionChannel,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderAddShoppingListAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderAddShoppingListAction
 	return json.Marshal(struct {
@@ -524,11 +589,13 @@ func (obj StagedOrderAddShoppingListAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addShoppingList", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeCustomLineItemMoneyAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeCustomLineItemMoneyAction struct {
 	Money            *Money `json:"money"`
 	CustomLineItemID string `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeCustomLineItemMoneyAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeCustomLineItemMoneyAction
 	return json.Marshal(struct {
@@ -537,11 +604,13 @@ func (obj StagedOrderChangeCustomLineItemMoneyAction) MarshalJSON() ([]byte, err
 	}{Action: "changeCustomLineItemMoney", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeCustomLineItemQuantityAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeCustomLineItemQuantityAction struct {
 	Quantity         float64 `json:"quantity"`
 	CustomLineItemID string  `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeCustomLineItemQuantityAction
 	return json.Marshal(struct {
@@ -550,6 +619,7 @@ func (obj StagedOrderChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, 
 	}{Action: "changeCustomLineItemQuantity", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeLineItemQuantityAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeLineItemQuantityAction struct {
 	Quantity           float64                     `json:"quantity"`
 	LineItemID         string                      `json:"lineItemId"`
@@ -557,6 +627,7 @@ type StagedOrderChangeLineItemQuantityAction struct {
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeLineItemQuantityAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeLineItemQuantityAction
 	return json.Marshal(struct {
@@ -565,10 +636,12 @@ func (obj StagedOrderChangeLineItemQuantityAction) MarshalJSON() ([]byte, error)
 	}{Action: "changeLineItemQuantity", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeOrderStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeOrderStateAction struct {
 	OrderState OrderState `json:"orderState"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeOrderStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeOrderStateAction
 	return json.Marshal(struct {
@@ -577,10 +650,12 @@ func (obj StagedOrderChangeOrderStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeOrderState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangePaymentStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangePaymentStateAction struct {
 	PaymentState PaymentState `json:"paymentState,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangePaymentStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangePaymentStateAction
 	return json.Marshal(struct {
@@ -589,10 +664,12 @@ func (obj StagedOrderChangePaymentStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changePaymentState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeShipmentStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeShipmentStateAction struct {
 	ShipmentState ShipmentState `json:"shipmentState,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeShipmentStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeShipmentStateAction
 	return json.Marshal(struct {
@@ -601,10 +678,12 @@ func (obj StagedOrderChangeShipmentStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeShipmentState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeTaxCalculationModeAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeTaxCalculationModeAction struct {
 	TaxCalculationMode TaxCalculationMode `json:"taxCalculationMode"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeTaxCalculationModeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeTaxCalculationModeAction
 	return json.Marshal(struct {
@@ -613,10 +692,12 @@ func (obj StagedOrderChangeTaxCalculationModeAction) MarshalJSON() ([]byte, erro
 	}{Action: "changeTaxCalculationMode", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeTaxModeAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeTaxModeAction struct {
 	TaxMode TaxMode `json:"taxMode"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeTaxModeAction
 	return json.Marshal(struct {
@@ -625,10 +706,12 @@ func (obj StagedOrderChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeTaxMode", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderChangeTaxRoundingModeAction implements the interface StagedOrderUpdateAction
 type StagedOrderChangeTaxRoundingModeAction struct {
 	TaxRoundingMode RoundingMode `json:"taxRoundingMode"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderChangeTaxRoundingModeAction
 	return json.Marshal(struct {
@@ -637,11 +720,13 @@ func (obj StagedOrderChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) 
 	}{Action: "changeTaxRoundingMode", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderImportCustomLineItemStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderImportCustomLineItemStateAction struct {
 	State            []ItemState `json:"state"`
 	CustomLineItemID string      `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderImportCustomLineItemStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderImportCustomLineItemStateAction
 	return json.Marshal(struct {
@@ -650,11 +735,13 @@ func (obj StagedOrderImportCustomLineItemStateAction) MarshalJSON() ([]byte, err
 	}{Action: "importCustomLineItemState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderImportLineItemStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderImportLineItemStateAction struct {
 	State      []ItemState `json:"state"`
 	LineItemID string      `json:"lineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderImportLineItemStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderImportLineItemStateAction
 	return json.Marshal(struct {
@@ -663,10 +750,12 @@ func (obj StagedOrderImportLineItemStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "importLineItemState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemoveCustomLineItemAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemoveCustomLineItemAction struct {
 	CustomLineItemID string `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemoveCustomLineItemAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemoveCustomLineItemAction
 	return json.Marshal(struct {
@@ -675,10 +764,12 @@ func (obj StagedOrderRemoveCustomLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeCustomLineItem", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemoveDeliveryAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemoveDeliveryAction struct {
 	DeliveryID string `json:"deliveryId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemoveDeliveryAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemoveDeliveryAction
 	return json.Marshal(struct {
@@ -687,10 +778,12 @@ func (obj StagedOrderRemoveDeliveryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeDelivery", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemoveDiscountCodeAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemoveDiscountCodeAction struct {
 	DiscountCode *DiscountCodeReference `json:"discountCode"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemoveDiscountCodeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemoveDiscountCodeAction
 	return json.Marshal(struct {
@@ -699,10 +792,12 @@ func (obj StagedOrderRemoveDiscountCodeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeDiscountCode", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemoveItemShippingAddressAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemoveItemShippingAddressAction struct {
 	AddressKey string `json:"addressKey"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemoveItemShippingAddressAction
 	return json.Marshal(struct {
@@ -711,6 +806,7 @@ func (obj StagedOrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, err
 	}{Action: "removeItemShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemoveLineItemAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemoveLineItemAction struct {
 	ShippingDetailsToRemove *ItemShippingDetailsDraft   `json:"shippingDetailsToRemove,omitempty"`
 	Quantity                float64                     `json:"quantity,omitempty"`
@@ -719,6 +815,7 @@ type StagedOrderRemoveLineItemAction struct {
 	ExternalPrice           *Money                      `json:"externalPrice,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemoveLineItemAction
 	return json.Marshal(struct {
@@ -727,10 +824,12 @@ func (obj StagedOrderRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeLineItem", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemoveParcelFromDeliveryAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemoveParcelFromDeliveryAction struct {
 	ParcelID string `json:"parcelId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemoveParcelFromDeliveryAction
 	return json.Marshal(struct {
@@ -739,10 +838,12 @@ func (obj StagedOrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, erro
 	}{Action: "removeParcelFromDelivery", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderRemovePaymentAction implements the interface StagedOrderUpdateAction
 type StagedOrderRemovePaymentAction struct {
 	Payment *PaymentReference `json:"payment"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderRemovePaymentAction
 	return json.Marshal(struct {
@@ -751,10 +852,12 @@ func (obj StagedOrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removePayment", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetBillingAddressAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetBillingAddressAction struct {
 	Address *Address `json:"address,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetBillingAddressAction
 	return json.Marshal(struct {
@@ -763,10 +866,12 @@ func (obj StagedOrderSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setBillingAddress", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCountryAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCountryAction struct {
 	Country string `json:"country,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCountryAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCountryAction
 	return json.Marshal(struct {
@@ -775,11 +880,13 @@ func (obj StagedOrderSetCountryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCountry", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomFieldAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 	Name  string      `json:"name"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomFieldAction
 	return json.Marshal(struct {
@@ -788,12 +895,14 @@ func (obj StagedOrderSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomLineItemCustomFieldAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomLineItemCustomFieldAction struct {
 	Value            interface{} `json:"value,omitempty"`
 	Name             string      `json:"name"`
 	CustomLineItemID string      `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomLineItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomLineItemCustomFieldAction
 	return json.Marshal(struct {
@@ -802,12 +911,14 @@ func (obj StagedOrderSetCustomLineItemCustomFieldAction) MarshalJSON() ([]byte, 
 	}{Action: "setCustomLineItemCustomField", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomLineItemCustomTypeAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomLineItemCustomTypeAction struct {
 	Type             *TypeReference  `json:"type,omitempty"`
 	Fields           *FieldContainer `json:"fields,omitempty"`
 	CustomLineItemID string          `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomLineItemCustomTypeAction
 	return json.Marshal(struct {
@@ -816,11 +927,13 @@ func (obj StagedOrderSetCustomLineItemCustomTypeAction) MarshalJSON() ([]byte, e
 	}{Action: "setCustomLineItemCustomType", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomLineItemShippingDetailsAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomLineItemShippingDetailsAction struct {
 	ShippingDetails  *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 	CustomLineItemID string                    `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomLineItemShippingDetailsAction
 	return json.Marshal(struct {
@@ -829,11 +942,13 @@ func (obj StagedOrderSetCustomLineItemShippingDetailsAction) MarshalJSON() ([]by
 	}{Action: "setCustomLineItemShippingDetails", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomLineItemTaxAmountAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomLineItemTaxAmountAction struct {
 	ExternalTaxAmount *ExternalTaxAmountDraft `json:"externalTaxAmount,omitempty"`
 	CustomLineItemID  string                  `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomLineItemTaxAmountAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomLineItemTaxAmountAction
 	return json.Marshal(struct {
@@ -842,11 +957,13 @@ func (obj StagedOrderSetCustomLineItemTaxAmountAction) MarshalJSON() ([]byte, er
 	}{Action: "setCustomLineItemTaxAmount", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomLineItemTaxRateAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomLineItemTaxRateAction struct {
 	ExternalTaxRate  *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 	CustomLineItemID string                `json:"customLineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomLineItemTaxRateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomLineItemTaxRateAction
 	return json.Marshal(struct {
@@ -855,6 +972,7 @@ func (obj StagedOrderSetCustomLineItemTaxRateAction) MarshalJSON() ([]byte, erro
 	}{Action: "setCustomLineItemTaxRate", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomShippingMethodAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomShippingMethodAction struct {
 	TaxCategory        *TaxCategoryReference `json:"taxCategory,omitempty"`
 	ShippingRate       *ShippingRateDraft    `json:"shippingRate"`
@@ -862,6 +980,7 @@ type StagedOrderSetCustomShippingMethodAction struct {
 	ExternalTaxRate    *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomShippingMethodAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomShippingMethodAction
 	return json.Marshal(struct {
@@ -870,11 +989,13 @@ func (obj StagedOrderSetCustomShippingMethodAction) MarshalJSON() ([]byte, error
 	}{Action: "setCustomShippingMethod", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomTypeAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomTypeAction struct {
 	Type   *TypeReference  `json:"type,omitempty"`
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomTypeAction
 	return json.Marshal(struct {
@@ -883,10 +1004,12 @@ func (obj StagedOrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomerEmailAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomerEmailAction struct {
 	Email string `json:"email,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomerEmailAction
 	return json.Marshal(struct {
@@ -895,10 +1018,12 @@ func (obj StagedOrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomerEmail", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetCustomerGroupAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetCustomerGroupAction struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetCustomerGroupAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetCustomerGroupAction
 	return json.Marshal(struct {
@@ -907,23 +1032,27 @@ func (obj StagedOrderSetCustomerGroupAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomerGroup", Alias: (*Alias)(&obj)})
 }
 
-type StagedOrderSetCustomerIdAction struct {
+// StagedOrderSetCustomerIDAction implements the interface StagedOrderUpdateAction
+type StagedOrderSetCustomerIDAction struct {
 	CustomerID string `json:"customerId,omitempty"`
 }
 
-func (obj StagedOrderSetCustomerIdAction) MarshalJSON() ([]byte, error) {
-	type Alias StagedOrderSetCustomerIdAction
+// MarshalJSON override to set the discriminator value
+func (obj StagedOrderSetCustomerIDAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetCustomerIDAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomerId", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetDeliveryAddressAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetDeliveryAddressAction struct {
 	DeliveryID string   `json:"deliveryId"`
 	Address    *Address `json:"address,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetDeliveryAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetDeliveryAddressAction
 	return json.Marshal(struct {
@@ -932,11 +1061,13 @@ func (obj StagedOrderSetDeliveryAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDeliveryAddress", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetDeliveryItemsAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetDeliveryItemsAction struct {
 	Items      []DeliveryItem `json:"items"`
 	DeliveryID string         `json:"deliveryId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetDeliveryItemsAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetDeliveryItemsAction
 	return json.Marshal(struct {
@@ -945,12 +1076,14 @@ func (obj StagedOrderSetDeliveryItemsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDeliveryItems", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemCustomFieldAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemCustomFieldAction struct {
 	Value      interface{} `json:"value,omitempty"`
 	Name       string      `json:"name"`
 	LineItemID string      `json:"lineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemCustomFieldAction
 	return json.Marshal(struct {
@@ -959,12 +1092,14 @@ func (obj StagedOrderSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error)
 	}{Action: "setLineItemCustomField", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemCustomTypeAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemCustomTypeAction struct {
 	Type       *TypeReference  `json:"type,omitempty"`
 	LineItemID string          `json:"lineItemId"`
 	Fields     *FieldContainer `json:"fields,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemCustomTypeAction
 	return json.Marshal(struct {
@@ -973,11 +1108,13 @@ func (obj StagedOrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setLineItemCustomType", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemPriceAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemPriceAction struct {
 	LineItemID    string `json:"lineItemId"`
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemPriceAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemPriceAction
 	return json.Marshal(struct {
@@ -986,11 +1123,13 @@ func (obj StagedOrderSetLineItemPriceAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setLineItemPrice", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemShippingDetailsAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemShippingDetailsAction struct {
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 	LineItemID      string                    `json:"lineItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemShippingDetailsAction
 	return json.Marshal(struct {
@@ -999,11 +1138,13 @@ func (obj StagedOrderSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, er
 	}{Action: "setLineItemShippingDetails", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemTaxAmountAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemTaxAmountAction struct {
 	LineItemID        string                  `json:"lineItemId"`
 	ExternalTaxAmount *ExternalTaxAmountDraft `json:"externalTaxAmount,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemTaxAmountAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemTaxAmountAction
 	return json.Marshal(struct {
@@ -1012,11 +1153,13 @@ func (obj StagedOrderSetLineItemTaxAmountAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setLineItemTaxAmount", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemTaxRateAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemTaxRateAction struct {
 	LineItemID      string                `json:"lineItemId"`
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemTaxRateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemTaxRateAction
 	return json.Marshal(struct {
@@ -1025,11 +1168,13 @@ func (obj StagedOrderSetLineItemTaxRateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setLineItemTaxRate", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLineItemTotalPriceAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLineItemTotalPriceAction struct {
 	LineItemID         string                      `json:"lineItemId"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLineItemTotalPriceAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLineItemTotalPriceAction
 	return json.Marshal(struct {
@@ -1038,10 +1183,12 @@ func (obj StagedOrderSetLineItemTotalPriceAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setLineItemTotalPrice", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetLocaleAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetLocaleAction struct {
 	Locale string `json:"locale,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetLocaleAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetLocaleAction
 	return json.Marshal(struct {
@@ -1050,10 +1197,12 @@ func (obj StagedOrderSetLocaleAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setLocale", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetOrderNumberAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetOrderNumberAction struct {
 	OrderNumber string `json:"orderNumber,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetOrderNumberAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetOrderNumberAction
 	return json.Marshal(struct {
@@ -1062,11 +1211,13 @@ func (obj StagedOrderSetOrderNumberAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setOrderNumber", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetOrderTotalTaxAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetOrderTotalTaxAction struct {
 	ExternalTotalGross  *Money       `json:"externalTotalGross"`
 	ExternalTaxPortions []TaxPortion `json:"externalTaxPortions,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetOrderTotalTaxAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetOrderTotalTaxAction
 	return json.Marshal(struct {
@@ -1075,11 +1226,13 @@ func (obj StagedOrderSetOrderTotalTaxAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setOrderTotalTax", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetParcelItemsAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetParcelItemsAction struct {
 	ParcelID string         `json:"parcelId"`
 	Items    []DeliveryItem `json:"items"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetParcelItemsAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetParcelItemsAction
 	return json.Marshal(struct {
@@ -1088,11 +1241,13 @@ func (obj StagedOrderSetParcelItemsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setParcelItems", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetParcelMeasurementsAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetParcelMeasurementsAction struct {
 	ParcelID     string              `json:"parcelId"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetParcelMeasurementsAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetParcelMeasurementsAction
 	return json.Marshal(struct {
@@ -1101,11 +1256,13 @@ func (obj StagedOrderSetParcelMeasurementsAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setParcelMeasurements", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetParcelTrackingDataAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetParcelTrackingDataAction struct {
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
 	ParcelID     string        `json:"parcelId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetParcelTrackingDataAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetParcelTrackingDataAction
 	return json.Marshal(struct {
@@ -1114,11 +1271,13 @@ func (obj StagedOrderSetParcelTrackingDataAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setParcelTrackingData", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetReturnPaymentStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetReturnPaymentStateAction struct {
 	ReturnItemID string             `json:"returnItemId"`
 	PaymentState ReturnPaymentState `json:"paymentState"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetReturnPaymentStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetReturnPaymentStateAction
 	return json.Marshal(struct {
@@ -1127,11 +1286,13 @@ func (obj StagedOrderSetReturnPaymentStateAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setReturnPaymentState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetReturnShipmentStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetReturnShipmentStateAction struct {
 	ShipmentState ReturnShipmentState `json:"shipmentState"`
 	ReturnItemID  string              `json:"returnItemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetReturnShipmentStateAction
 	return json.Marshal(struct {
@@ -1140,10 +1301,12 @@ func (obj StagedOrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error)
 	}{Action: "setReturnShipmentState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingAddressAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingAddressAction struct {
 	Address *Address `json:"address,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingAddressAction
 	return json.Marshal(struct {
@@ -1152,6 +1315,7 @@ func (obj StagedOrderSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingAddressAndCustomShippingMethodAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingAddressAndCustomShippingMethodAction struct {
 	TaxCategory        *TaxCategoryReference `json:"taxCategory,omitempty"`
 	ShippingRate       *ShippingRateDraft    `json:"shippingRate"`
@@ -1160,6 +1324,7 @@ type StagedOrderSetShippingAddressAndCustomShippingMethodAction struct {
 	Address            *Address              `json:"address"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingAddressAndCustomShippingMethodAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingAddressAndCustomShippingMethodAction
 	return json.Marshal(struct {
@@ -1168,12 +1333,14 @@ func (obj StagedOrderSetShippingAddressAndCustomShippingMethodAction) MarshalJSO
 	}{Action: "setShippingAddressAndCustomShippingMethod", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingAddressAndShippingMethodAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingAddressAndShippingMethodAction struct {
 	ShippingMethod  *ShippingMethodReference `json:"shippingMethod,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft    `json:"externalTaxRate,omitempty"`
 	Address         *Address                 `json:"address"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingAddressAndShippingMethodAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingAddressAndShippingMethodAction
 	return json.Marshal(struct {
@@ -1182,11 +1349,13 @@ func (obj StagedOrderSetShippingAddressAndShippingMethodAction) MarshalJSON() ([
 	}{Action: "setShippingAddressAndShippingMethod", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingMethodAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingMethodAction struct {
 	ShippingMethod  *TypeReference        `json:"shippingMethod,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingMethodAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingMethodAction
 	return json.Marshal(struct {
@@ -1195,10 +1364,12 @@ func (obj StagedOrderSetShippingMethodAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setShippingMethod", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingMethodTaxAmountAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingMethodTaxAmountAction struct {
 	ExternalTaxAmount *ExternalTaxAmountDraft `json:"externalTaxAmount,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingMethodTaxAmountAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingMethodTaxAmountAction
 	return json.Marshal(struct {
@@ -1207,10 +1378,12 @@ func (obj StagedOrderSetShippingMethodTaxAmountAction) MarshalJSON() ([]byte, er
 	}{Action: "setShippingMethodTaxAmount", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingMethodTaxRateAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingMethodTaxRateAction struct {
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingMethodTaxRateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingMethodTaxRateAction
 	return json.Marshal(struct {
@@ -1219,10 +1392,12 @@ func (obj StagedOrderSetShippingMethodTaxRateAction) MarshalJSON() ([]byte, erro
 	}{Action: "setShippingMethodTaxRate", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderSetShippingRateInputAction implements the interface StagedOrderUpdateAction
 type StagedOrderSetShippingRateInputAction struct {
 	ShippingRateInput ShippingRateInputDraft `json:"shippingRateInput,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderSetShippingRateInputAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderSetShippingRateInputAction
 	return json.Marshal(struct {
@@ -1230,18 +1405,22 @@ func (obj StagedOrderSetShippingRateInputAction) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "setShippingRateInput", Alias: (*Alias)(&obj)})
 }
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
 func (obj *StagedOrderSetShippingRateInputAction) UnmarshalJSON(data []byte) error {
 	type Alias StagedOrderSetShippingRateInputAction
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
 	if obj.ShippingRateInput != nil {
-		obj.ShippingRateInput = AbstractShippingRateInputDraftDiscriminatorMapping(obj.ShippingRateInput)
+		obj.ShippingRateInput = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
 	}
 
 	return nil
 }
 
+// StagedOrderTransitionCustomLineItemStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderTransitionCustomLineItemStateAction struct {
 	ToState              *StateReference `json:"toState"`
 	Quantity             int             `json:"quantity"`
@@ -1250,6 +1429,7 @@ type StagedOrderTransitionCustomLineItemStateAction struct {
 	ActualTransitionDate time.Time       `json:"actualTransitionDate,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderTransitionCustomLineItemStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderTransitionCustomLineItemStateAction
 	return json.Marshal(struct {
@@ -1258,6 +1438,7 @@ func (obj StagedOrderTransitionCustomLineItemStateAction) MarshalJSON() ([]byte,
 	}{Action: "transitionCustomLineItemState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderTransitionLineItemStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderTransitionLineItemStateAction struct {
 	ToState              *StateReference `json:"toState"`
 	Quantity             int             `json:"quantity"`
@@ -1266,6 +1447,7 @@ type StagedOrderTransitionLineItemStateAction struct {
 	ActualTransitionDate time.Time       `json:"actualTransitionDate,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderTransitionLineItemStateAction
 	return json.Marshal(struct {
@@ -1274,11 +1456,13 @@ func (obj StagedOrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error
 	}{Action: "transitionLineItemState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderTransitionStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderTransitionStateAction struct {
 	State *StateReference `json:"state"`
 	Force bool            `json:"force,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderTransitionStateAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderTransitionStateAction
 	return json.Marshal(struct {
@@ -1287,10 +1471,12 @@ func (obj StagedOrderTransitionStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderUpdateItemShippingAddressAction implements the interface StagedOrderUpdateAction
 type StagedOrderUpdateItemShippingAddressAction struct {
 	Address *Address `json:"address"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderUpdateItemShippingAddressAction
 	return json.Marshal(struct {
@@ -1299,12 +1485,14 @@ func (obj StagedOrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, err
 	}{Action: "updateItemShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+// StagedOrderUpdateSyncInfoAction implements the interface StagedOrderUpdateAction
 type StagedOrderUpdateSyncInfoAction struct {
 	SyncedAt   time.Time         `json:"syncedAt,omitempty"`
 	ExternalID string            `json:"externalId,omitempty"`
 	Channel    *ChannelReference `json:"channel"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj StagedOrderUpdateSyncInfoAction) MarshalJSON() ([]byte, error) {
 	type Alias StagedOrderUpdateSyncInfoAction
 	return json.Marshal(struct {

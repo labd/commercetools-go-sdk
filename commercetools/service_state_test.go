@@ -33,7 +33,7 @@ func TestStateCreate(t *testing.T) {
 		},
 	}
 
-	_, err := client.StateMachineCreate(input)
+	_, err := client.StateCreate(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -292,7 +292,7 @@ func TestStateUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("state.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.StateMachineUpdate(tC.input)
+			_, err := client.StateUpdate(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/states/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -305,7 +305,7 @@ func TestStateDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StateMachineDeleteByID("1234", 2)
+	_, err := client.StateDeleteByID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -338,7 +338,7 @@ func TestStateGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.StateMachineGetByID("1234")
+	result, err := client.StateGetByID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

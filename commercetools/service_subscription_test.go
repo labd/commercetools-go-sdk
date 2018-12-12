@@ -167,7 +167,7 @@ func TestSubscriptionCreate(t *testing.T) {
 			input: &commercetools.SubscriptionDraft{
 				Key: "test",
 				Destination: commercetools.AzureEventGridDestination{
-					Uri:       "https://example.com/",
+					URI:       "https://example.com/",
 					AccessKey: "exampleAccessKey",
 				},
 				Changes: []commercetools.ChangeSubscription{
@@ -324,7 +324,7 @@ func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 
 	destination := subscription.Destination.(commercetools.IronMqDestination)
 	expected := commercetools.IronMqDestination{
-		Uri: "https://queue-uri",
+		URI: "https://queue-uri",
 	}
 	assert.Equal(t, destination, expected)
 }

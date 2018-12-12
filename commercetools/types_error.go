@@ -8,147 +8,10 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
-type AccessDeniedError struct {
-	Message string `json:"message"`
-}
-
-func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
-	type Alias AccessDeniedError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "access_denied", Alias: (*Alias)(&obj)})
-}
-
-func (e AccessDeniedError) Error() string {
-	return e.Message
-}
-
-type ConcurrentModificationError struct {
-	Message        string `json:"message"`
-	CurrentVersion int    `json:"currentVersion,omitempty"`
-}
-
-func (obj ConcurrentModificationError) MarshalJSON() ([]byte, error) {
-	type Alias ConcurrentModificationError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "ConcurrentModification", Alias: (*Alias)(&obj)})
-}
-
-func (e ConcurrentModificationError) Error() string {
-	return e.Message
-}
-
-type DiscountCodeNonApplicableError struct {
-	Message string `json:"message"`
-}
-
-func (obj DiscountCodeNonApplicableError) MarshalJSON() ([]byte, error) {
-	type Alias DiscountCodeNonApplicableError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "DiscountCodeNonApplicable", Alias: (*Alias)(&obj)})
-}
-
-func (e DiscountCodeNonApplicableError) Error() string {
-	return e.Message
-}
-
-type DuplicateAttributeValueError struct {
-	Message   string     `json:"message"`
-	Attribute *Attribute `json:"attribute"`
-}
-
-func (obj DuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
-	type Alias DuplicateAttributeValueError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "DuplicateAttributeValue", Alias: (*Alias)(&obj)})
-}
-
-func (e DuplicateAttributeValueError) Error() string {
-	return e.Message
-}
-
-type DuplicateAttributeValuesError struct {
-	Message    string      `json:"message"`
-	Attributes []Attribute `json:"attributes"`
-}
-
-func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
-	type Alias DuplicateAttributeValuesError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "DuplicateAttributeValues", Alias: (*Alias)(&obj)})
-}
-
-func (e DuplicateAttributeValuesError) Error() string {
-	return e.Message
-}
-
-type DuplicateFieldError struct {
-	Message        string      `json:"message"`
-	Field          string      `json:"field,omitempty"`
-	DuplicateValue interface{} `json:"duplicateValue,omitempty"`
-}
-
-func (obj DuplicateFieldError) MarshalJSON() ([]byte, error) {
-	type Alias DuplicateFieldError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "DuplicateField", Alias: (*Alias)(&obj)})
-}
-
-func (e DuplicateFieldError) Error() string {
-	return e.Message
-}
-
-type DuplicatePriceScopeError struct {
-	Message           string  `json:"message"`
-	ConflictingPrices []Price `json:"conflictingPrices"`
-}
-
-func (obj DuplicatePriceScopeError) MarshalJSON() ([]byte, error) {
-	type Alias DuplicatePriceScopeError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "DuplicatePriceScope", Alias: (*Alias)(&obj)})
-}
-
-func (e DuplicatePriceScopeError) Error() string {
-	return e.Message
-}
-
-type DuplicateVariantValuesError struct {
-	Message       string         `json:"message"`
-	VariantValues *VariantValues `json:"variantValues"`
-}
-
-func (obj DuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
-	type Alias DuplicateVariantValuesError
-	return json.Marshal(struct {
-		Code string `json:"code"`
-		*Alias
-	}{Code: "DuplicateVariantValues", Alias: (*Alias)(&obj)})
-}
-
-func (e DuplicateVariantValuesError) Error() string {
-	return e.Message
-}
-
+// ErrorObject uses code as discriminator attribute
 type ErrorObject interface{}
-type AbstractErrorObject struct {
-	Message string `json:"message"`
-}
 
-func AbstractErrorObjectDiscriminatorMapping(input ErrorObject) ErrorObject {
+func mapDiscriminatorErrorObject(input ErrorObject) ErrorObject {
 	discriminator := input.(map[string]interface{})["code"]
 	switch discriminator {
 	case "access_denied":
@@ -208,7 +71,7 @@ func AbstractErrorObjectDiscriminatorMapping(input ErrorObject) ErrorObject {
 		mapstructure.Decode(input, &new)
 		return new
 	case "InvalidJsonInput":
-		new := InvalidJsonInputError{}
+		new := InvalidJSONInputError{}
 		mapstructure.Decode(input, &new)
 		return new
 	case "InvalidOperation":
@@ -259,34 +122,190 @@ func AbstractErrorObjectDiscriminatorMapping(input ErrorObject) ErrorObject {
 	return nil
 }
 
-type ErrorResponse struct {
-	StatusCode        int           `json:"statusCode"`
-	Message           string        `json:"message"`
-	Errors            []ErrorObject `json:"errors,omitempty"`
-	Error_description string        `json:"error_description,omitempty"`
-	_Error            string        `json:"error,omitempty"`
+// AccessDeniedError implements the interface ErrorObject
+type AccessDeniedError struct {
+	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
+func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
+	type Alias AccessDeniedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "access_denied", Alias: (*Alias)(&obj)})
+}
+
+func (obj AccessDeniedError) Error() string {
+	return obj.Message
+}
+
+// ConcurrentModificationError implements the interface ErrorObject
+type ConcurrentModificationError struct {
+	Message        string `json:"message"`
+	CurrentVersion int    `json:"currentVersion,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ConcurrentModificationError) MarshalJSON() ([]byte, error) {
+	type Alias ConcurrentModificationError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ConcurrentModification", Alias: (*Alias)(&obj)})
+}
+
+func (obj ConcurrentModificationError) Error() string {
+	return obj.Message
+}
+
+// DiscountCodeNonApplicableError implements the interface ErrorObject
+type DiscountCodeNonApplicableError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeNonApplicableError) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeNonApplicableError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DiscountCodeNonApplicable", Alias: (*Alias)(&obj)})
+}
+
+func (obj DiscountCodeNonApplicableError) Error() string {
+	return obj.Message
+}
+
+// DuplicateAttributeValueError implements the interface ErrorObject
+type DuplicateAttributeValueError struct {
+	Message   string     `json:"message"`
+	Attribute *Attribute `json:"attribute"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateAttributeValueError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicateAttributeValue", Alias: (*Alias)(&obj)})
+}
+
+func (obj DuplicateAttributeValueError) Error() string {
+	return obj.Message
+}
+
+// DuplicateAttributeValuesError implements the interface ErrorObject
+type DuplicateAttributeValuesError struct {
+	Message    string      `json:"message"`
+	Attributes []Attribute `json:"attributes"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateAttributeValuesError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicateAttributeValues", Alias: (*Alias)(&obj)})
+}
+
+func (obj DuplicateAttributeValuesError) Error() string {
+	return obj.Message
+}
+
+// DuplicateFieldError implements the interface ErrorObject
+type DuplicateFieldError struct {
+	Message        string      `json:"message"`
+	Field          string      `json:"field,omitempty"`
+	DuplicateValue interface{} `json:"duplicateValue,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicateFieldError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateFieldError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicateField", Alias: (*Alias)(&obj)})
+}
+
+func (obj DuplicateFieldError) Error() string {
+	return obj.Message
+}
+
+// DuplicatePriceScopeError implements the interface ErrorObject
+type DuplicatePriceScopeError struct {
+	Message           string  `json:"message"`
+	ConflictingPrices []Price `json:"conflictingPrices"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicatePriceScopeError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicatePriceScopeError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicatePriceScope", Alias: (*Alias)(&obj)})
+}
+
+func (obj DuplicatePriceScopeError) Error() string {
+	return obj.Message
+}
+
+// DuplicateVariantValuesError implements the interface ErrorObject
+type DuplicateVariantValuesError struct {
+	Message       string         `json:"message"`
+	VariantValues *VariantValues `json:"variantValues"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateVariantValuesError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicateVariantValues", Alias: (*Alias)(&obj)})
+}
+
+func (obj DuplicateVariantValuesError) Error() string {
+	return obj.Message
+}
+
+// ErrorResponse is a standalone struct
+type ErrorResponse struct {
+	StatusCode       int           `json:"statusCode"`
+	Message          string        `json:"message"`
+	Errors           []ErrorObject `json:"errors,omitempty"`
+	ErrorDescription string        `json:"error_description,omitempty"`
+	_Error           string        `json:"error,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
 func (obj *ErrorResponse) UnmarshalJSON(data []byte) error {
 	type Alias ErrorResponse
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
 	for i := range obj.Errors {
-		obj.Errors[i] = AbstractErrorObjectDiscriminatorMapping(obj.Errors[i])
+		obj.Errors[i] = mapDiscriminatorErrorObject(obj.Errors[i])
 	}
 
 	return nil
 }
 
-func (e ErrorResponse) Error() string {
-	return e.Message
+func (obj ErrorResponse) Error() string {
+	return obj.Message
 }
 
+// InsufficientScopeError implements the interface ErrorObject
 type InsufficientScopeError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 	type Alias InsufficientScopeError
 	return json.Marshal(struct {
@@ -295,14 +314,16 @@ func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 	}{Code: "insufficient_scope", Alias: (*Alias)(&obj)})
 }
 
-func (e InsufficientScopeError) Error() string {
-	return e.Message
+func (obj InsufficientScopeError) Error() string {
+	return obj.Message
 }
 
+// InvalidCredentialsError implements the interface ErrorObject
 type InvalidCredentialsError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidCredentialsError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidCredentialsError
 	return json.Marshal(struct {
@@ -311,14 +332,16 @@ func (obj InvalidCredentialsError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidCredentials", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidCredentialsError) Error() string {
-	return e.Message
+func (obj InvalidCredentialsError) Error() string {
+	return obj.Message
 }
 
+// InvalidCurrentPasswordError implements the interface ErrorObject
 type InvalidCurrentPasswordError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidCurrentPasswordError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidCurrentPasswordError
 	return json.Marshal(struct {
@@ -327,10 +350,11 @@ func (obj InvalidCurrentPasswordError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidCurrentPassword", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidCurrentPasswordError) Error() string {
-	return e.Message
+func (obj InvalidCurrentPasswordError) Error() string {
+	return obj.Message
 }
 
+// InvalidFieldError implements the interface ErrorObject
 type InvalidFieldError struct {
 	Message       string        `json:"message"`
 	InvalidValue  interface{}   `json:"invalidValue"`
@@ -338,6 +362,7 @@ type InvalidFieldError struct {
 	AllowedValues []interface{} `json:"allowedValues,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidFieldError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidFieldError
 	return json.Marshal(struct {
@@ -346,14 +371,16 @@ func (obj InvalidFieldError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidField", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidFieldError) Error() string {
-	return e.Message
+func (obj InvalidFieldError) Error() string {
+	return obj.Message
 }
 
+// InvalidInputError implements the interface ErrorObject
 type InvalidInputError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidInputError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidInputError
 	return json.Marshal(struct {
@@ -362,16 +389,18 @@ func (obj InvalidInputError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidInput", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidInputError) Error() string {
-	return e.Message
+func (obj InvalidInputError) Error() string {
+	return obj.Message
 }
 
+// InvalidItemShippingDetailsError implements the interface ErrorObject
 type InvalidItemShippingDetailsError struct {
 	Message string `json:"message"`
 	Subject string `json:"subject"`
 	ItemID  string `json:"itemId"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidItemShippingDetailsError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidItemShippingDetailsError
 	return json.Marshal(struct {
@@ -380,30 +409,34 @@ func (obj InvalidItemShippingDetailsError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidItemShippingDetails", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidItemShippingDetailsError) Error() string {
-	return e.Message
+func (obj InvalidItemShippingDetailsError) Error() string {
+	return obj.Message
 }
 
-type InvalidJsonInputError struct {
+// InvalidJSONInputError implements the interface ErrorObject
+type InvalidJSONInputError struct {
 	Message string `json:"message"`
 }
 
-func (obj InvalidJsonInputError) MarshalJSON() ([]byte, error) {
-	type Alias InvalidJsonInputError
+// MarshalJSON override to set the discriminator value
+func (obj InvalidJSONInputError) MarshalJSON() ([]byte, error) {
+	type Alias InvalidJSONInputError
 	return json.Marshal(struct {
 		Code string `json:"code"`
 		*Alias
 	}{Code: "InvalidJsonInput", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidJsonInputError) Error() string {
-	return e.Message
+func (obj InvalidJSONInputError) Error() string {
+	return obj.Message
 }
 
+// InvalidOperationError implements the interface ErrorObject
 type InvalidOperationError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidOperationError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidOperationError
 	return json.Marshal(struct {
@@ -412,14 +445,16 @@ func (obj InvalidOperationError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidOperation", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidOperationError) Error() string {
-	return e.Message
+func (obj InvalidOperationError) Error() string {
+	return obj.Message
 }
 
+// InvalidSubjectError implements the interface ErrorObject
 type InvalidSubjectError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidSubjectError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidSubjectError
 	return json.Marshal(struct {
@@ -428,14 +463,16 @@ func (obj InvalidSubjectError) MarshalJSON() ([]byte, error) {
 	}{Code: "InvalidSubject", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidSubjectError) Error() string {
-	return e.Message
+func (obj InvalidSubjectError) Error() string {
+	return obj.Message
 }
 
+// InvalidTokenError implements the interface ErrorObject
 type InvalidTokenError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidTokenError
 	return json.Marshal(struct {
@@ -444,14 +481,16 @@ func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 	}{Code: "invalid_token", Alias: (*Alias)(&obj)})
 }
 
-func (e InvalidTokenError) Error() string {
-	return e.Message
+func (obj InvalidTokenError) Error() string {
+	return obj.Message
 }
 
+// MissingTaxRateForCountryError implements the interface ErrorObject
 type MissingTaxRateForCountryError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj MissingTaxRateForCountryError) MarshalJSON() ([]byte, error) {
 	type Alias MissingTaxRateForCountryError
 	return json.Marshal(struct {
@@ -460,14 +499,16 @@ func (obj MissingTaxRateForCountryError) MarshalJSON() ([]byte, error) {
 	}{Code: "MissingTaxRateForCountry", Alias: (*Alias)(&obj)})
 }
 
-func (e MissingTaxRateForCountryError) Error() string {
-	return e.Message
+func (obj MissingTaxRateForCountryError) Error() string {
+	return obj.Message
 }
 
+// NoMatchingProductDiscountFoundError implements the interface ErrorObject
 type NoMatchingProductDiscountFoundError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj NoMatchingProductDiscountFoundError) MarshalJSON() ([]byte, error) {
 	type Alias NoMatchingProductDiscountFoundError
 	return json.Marshal(struct {
@@ -476,16 +517,18 @@ func (obj NoMatchingProductDiscountFoundError) MarshalJSON() ([]byte, error) {
 	}{Code: "NoMatchingProductDiscountFound", Alias: (*Alias)(&obj)})
 }
 
-func (e NoMatchingProductDiscountFoundError) Error() string {
-	return e.Message
+func (obj NoMatchingProductDiscountFoundError) Error() string {
+	return obj.Message
 }
 
+// OutOfStockError implements the interface ErrorObject
 type OutOfStockError struct {
 	Message   string   `json:"message"`
 	Skus      []string `json:"skus"`
 	LineItems []string `json:"lineItems"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj OutOfStockError) MarshalJSON() ([]byte, error) {
 	type Alias OutOfStockError
 	return json.Marshal(struct {
@@ -494,16 +537,18 @@ func (obj OutOfStockError) MarshalJSON() ([]byte, error) {
 	}{Code: "OutOfStock", Alias: (*Alias)(&obj)})
 }
 
-func (e OutOfStockError) Error() string {
-	return e.Message
+func (obj OutOfStockError) Error() string {
+	return obj.Message
 }
 
+// PriceChangedError implements the interface ErrorObject
 type PriceChangedError struct {
 	Message   string   `json:"message"`
 	Shipping  bool     `json:"shipping"`
 	LineItems []string `json:"lineItems"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj PriceChangedError) MarshalJSON() ([]byte, error) {
 	type Alias PriceChangedError
 	return json.Marshal(struct {
@@ -512,15 +557,17 @@ func (obj PriceChangedError) MarshalJSON() ([]byte, error) {
 	}{Code: "PriceChanged", Alias: (*Alias)(&obj)})
 }
 
-func (e PriceChangedError) Error() string {
-	return e.Message
+func (obj PriceChangedError) Error() string {
+	return obj.Message
 }
 
+// ReferenceExistsError implements the interface ErrorObject
 type ReferenceExistsError struct {
 	Message      string          `json:"message"`
 	ReferencedBy ReferenceTypeID `json:"referencedBy,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj ReferenceExistsError) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceExistsError
 	return json.Marshal(struct {
@@ -529,15 +576,17 @@ func (obj ReferenceExistsError) MarshalJSON() ([]byte, error) {
 	}{Code: "ReferenceExists", Alias: (*Alias)(&obj)})
 }
 
-func (e ReferenceExistsError) Error() string {
-	return e.Message
+func (obj ReferenceExistsError) Error() string {
+	return obj.Message
 }
 
+// RequiredFieldError implements the interface ErrorObject
 type RequiredFieldError struct {
 	Message string `json:"message"`
 	Field   string `json:"field"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj RequiredFieldError) MarshalJSON() ([]byte, error) {
 	type Alias RequiredFieldError
 	return json.Marshal(struct {
@@ -546,14 +595,16 @@ func (obj RequiredFieldError) MarshalJSON() ([]byte, error) {
 	}{Code: "RequiredField", Alias: (*Alias)(&obj)})
 }
 
-func (e RequiredFieldError) Error() string {
-	return e.Message
+func (obj RequiredFieldError) Error() string {
+	return obj.Message
 }
 
+// ResourceNotFoundError implements the interface ErrorObject
 type ResourceNotFoundError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj ResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceNotFoundError
 	return json.Marshal(struct {
@@ -562,14 +613,16 @@ func (obj ResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	}{Code: "ResourceNotFound", Alias: (*Alias)(&obj)})
 }
 
-func (e ResourceNotFoundError) Error() string {
-	return e.Message
+func (obj ResourceNotFoundError) Error() string {
+	return obj.Message
 }
 
+// ShippingMethodDoesNotMatchCartError implements the interface ErrorObject
 type ShippingMethodDoesNotMatchCartError struct {
 	Message string `json:"message"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj ShippingMethodDoesNotMatchCartError) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodDoesNotMatchCartError
 	return json.Marshal(struct {
@@ -578,12 +631,13 @@ func (obj ShippingMethodDoesNotMatchCartError) MarshalJSON() ([]byte, error) {
 	}{Code: "ShippingMethodDoesNotMatchCart", Alias: (*Alias)(&obj)})
 }
 
-func (e ShippingMethodDoesNotMatchCartError) Error() string {
-	return e.Message
+func (obj ShippingMethodDoesNotMatchCartError) Error() string {
+	return obj.Message
 }
 
+// VariantValues is a standalone struct
 type VariantValues struct {
-	Sku        string      `json:"sku,omitempty"`
+	SKU        string      `json:"sku,omitempty"`
 	Prices     []Price     `json:"prices"`
 	Attributes []Attribute `json:"attributes"`
 }

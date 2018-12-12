@@ -11,7 +11,7 @@ import (
 func TestExtensionMarshall_basicauth(t *testing.T) {
 	obj := commercetools.Extension{
 		Key: "my-key",
-		Destination: commercetools.ExtensionHttpDestination{
+		Destination: commercetools.ExtensionHTTPDestination{
 			URL: "http://example.com",
 			Authentication: commercetools.ExtensionAuthorizationHeaderAuthentication{
 				HeaderValue: "Basic 12345",
@@ -49,7 +49,7 @@ func TestExtensionMarshall_basicauth(t *testing.T) {
 func TestExtensionMarshall_azurekey(t *testing.T) {
 	obj := commercetools.Extension{
 		Key: "my-key",
-		Destination: commercetools.ExtensionHttpDestination{
+		Destination: commercetools.ExtensionHTTPDestination{
 			URL: "http://example.com",
 			Authentication: commercetools.ExtensionAzureFunctionsAuthentication{
 				Key: "MyAzureKey000",

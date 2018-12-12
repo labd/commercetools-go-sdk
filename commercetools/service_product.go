@@ -6,6 +6,8 @@ import (
 	"net/url"
 )
 
+// ProductPriceSelection is used to select a price from the Product prices array
+// for displaying it to the user.
 type ProductPriceSelection struct {
 	Currency      string
 	Country       string
@@ -13,6 +15,7 @@ type ProductPriceSelection struct {
 	Channel       string
 }
 
+// ProductUpdateInput provides the data required to update a product.
 type ProductUpdateInput struct {
 	ID             string
 	Version        int
@@ -20,6 +23,7 @@ type ProductUpdateInput struct {
 	Actions        []ProductUpdateAction
 }
 
+// ProductDeleteInput provides the data required to delete a product.
 type ProductDeleteInput struct {
 	ID             string
 	Key            string
@@ -27,7 +31,7 @@ type ProductDeleteInput struct {
 	PriceSelection ProductPriceSelection
 }
 
-func (ps *ProductPriceSelection) GetQueryParameters() url.Values {
+func (ps *ProductPriceSelection) getQueryParameters() url.Values {
 	result := url.Values{}
 
 	if ps.Currency != "" {
@@ -45,14 +49,16 @@ func (ps *ProductPriceSelection) GetQueryParameters() url.Values {
 	return result
 }
 
-func (i *ProductDeleteInput) GetQueryParameters() url.Values {
-	result := i.PriceSelection.GetQueryParameters()
+func (i *ProductDeleteInput) getQueryParameters() url.Values {
+	result := i.PriceSelection.getQueryParameters()
 	if i.Version > 0 {
 		result.Add("version", string(i.Version))
 	}
 	return result
 }
 
+// ProductCreate will create a new product from a draft, and return the newly
+// created product. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductCreate(draft *ProductDraft) (*Product, error) {
 	var result Product
 	err := client.Create("products", nil, draft, &result)
@@ -62,6 +68,8 @@ func (client *Client) ProductCreate(draft *ProductDraft) (*Product, error) {
 	return &result, nil
 }
 
+// ProductGetByID will return a product matching the provided ID. OAuth2 Scopes:
+// view_products:{projectKey}
 func (client *Client) ProductGetByID(id string) (*Product, error) {
 	var result Product
 	err := client.Get(fmt.Sprintf("products/%s", id), nil, &result)
@@ -71,15 +79,19 @@ func (client *Client) ProductGetByID(id string) (*Product, error) {
 	return &result, nil
 }
 
+// ProductGetByKey will return a product matching the provided Key. OAuth2 Scopes:
+// view_products:{projectKey}
 func (client *Client) ProductGetByKey(key string) (*Product, error) {
 	return &Product{}, nil
 }
 
+// ProductUpdate will update a product matching the provided ID with the
+// defined ProductUpdateActions. OAuth2 Scopes: manage_product:{projectKey}
 func (client *Client) ProductUpdate(input *ProductUpdateInput) (*Product, error) {
 	var result Product
 
 	endpoint := fmt.Sprintf("products/%s", input.ID)
-	params := input.PriceSelection.GetQueryParameters()
+	params := input.PriceSelection.getQueryParameters()
 
 	err := client.Update(endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -88,13 +100,15 @@ func (client *Client) ProductUpdate(input *ProductUpdateInput) (*Product, error)
 	return &result, nil
 }
 
+// ProductDeleteByID will delete a product matching the provided ID. OAuth2
+// Scopes: manage_products:{projectKey}
 func (client *Client) ProductDeleteByID(input *ProductDeleteInput) (*Product, error) {
 	if input.ID == "" {
 		return nil, errors.New("Missing required field ID")
 	}
 	var result Product
 	endpoint := fmt.Sprintf("products/%s", input.ID)
-	params := input.GetQueryParameters()
+	params := input.getQueryParameters()
 	err := client.Delete(endpoint, params, &result)
 
 	if err != nil {
@@ -103,13 +117,15 @@ func (client *Client) ProductDeleteByID(input *ProductDeleteInput) (*Product, er
 	return &result, nil
 }
 
+// ProductDeleteByKey will delete a product matching the provided Key. OAuth2
+// Scopes: manage_products:{projectKey}
 func (client *Client) ProductDeleteByKey(input *ProductDeleteInput) (*Product, error) {
 	if input.Key == "" {
 		return nil, errors.New("Missing required field Key")
 	}
 	var result Product
 	endpoint := fmt.Sprintf("products/key=%s", input.Key)
-	params := input.GetQueryParameters()
+	params := input.getQueryParameters()
 	err := client.Delete(endpoint, params, &result)
 
 	if err != nil {

@@ -42,7 +42,7 @@ func TestChangeTriggersMarshall(t *testing.T) {
 
 func TestChangeDestinationMarshall(t *testing.T) {
 	obj := commercetools.ExtensionChangeDestinationAction{
-		Destination: commercetools.ExtensionHttpDestination{
+		Destination: commercetools.ExtensionHTTPDestination{
 			URL: "http://example.com",
 		},
 	}

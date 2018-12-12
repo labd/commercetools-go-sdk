@@ -16,6 +16,7 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
+// Config is used to pass settings for creating a new Client object
 type Config struct {
 	ProjectKey string
 	URL        string

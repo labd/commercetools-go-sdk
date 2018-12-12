@@ -6,13 +6,13 @@ import (
 	"strconv"
 )
 
-// DeleteInput provides the data required to delete a type.
+// TypeDeleteInput provides the data required to delete a type.
 type TypeDeleteInput struct {
 	ID      string
 	Version int
 }
 
-// UpdateInput provides the data required to update a type.
+// TypeUpdateInput provides the data required to update a type.
 type TypeUpdateInput struct {
 	ID string
 
@@ -25,7 +25,7 @@ type TypeUpdateInput struct {
 	Actions []TypeUpdateAction
 }
 
-// GetByID will return a type matching the provided ID. OAuth2 Scopes:
+// TypeGetByID will return a type matching the provided ID. OAuth2 Scopes:
 // view_types:{projectKey}
 func (client *Client) TypeGetByID(id string) (result *Type, err error) {
 	err = client.Get(fmt.Sprintf("types/%s", id), nil, &result)
@@ -35,7 +35,7 @@ func (client *Client) TypeGetByID(id string) (result *Type, err error) {
 	return result, nil
 }
 
-// Create will create a new type from a draft, and return the newly created
+// TypeCreate will create a new type from a draft, and return the newly created
 // type. OAuth2 Scopes: manage_types:{projectKey}
 func (client *Client) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 	err = client.Create("types", nil, draft, &result)
@@ -45,8 +45,8 @@ func (client *Client) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 	return result, nil
 }
 
-// Update will update a type matching the provided ID with the defined
-// UpdateActions. OAuth2 Scopes: manage_types:{projectKey}
+// TypeUpdate will update a type matching the provided ID with the defined
+// TypeUpdateActions. OAuth2 Scopes: manage_types:{projectKey}
 func (client *Client) TypeUpdate(input *TypeUpdateInput) (result *Type, err error) {
 	if input.ID == "" {
 		return nil, fmt.Errorf("no valid type id passed")
@@ -60,7 +60,7 @@ func (client *Client) TypeUpdate(input *TypeUpdateInput) (result *Type, err erro
 	return result, nil
 }
 
-// DeleteByID will delete a type matching the provided ID. These requests delete
+// TypeDeleteByID will delete a type matching the provided ID. These requests delete
 // a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
 func (client *Client) TypeDeleteByID(id string, version int) (result *Type, err error) {
@@ -75,7 +75,7 @@ func (client *Client) TypeDeleteByID(id string, version int) (result *Type, err 
 	return result, nil
 }
 
-// DeleteByKey will delete a type matching the provided key. These requests
+// TypeDeleteByKey will delete a type matching the provided key. These requests
 // delete a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
 func (client *Client) TypeDeleteByKey(key string, version int) (result *Type, err error) {

@@ -287,7 +287,7 @@ func TestChannelUpdate(t *testing.T) {
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
 					&commercetools.ChannelSetGeoLocationAction{
-						GeoLocation: &commercetools.GeoJsonPoint{
+						GeoLocation: &commercetools.GeoJSONPoint{
 							Coordinates: []float64{52.068439, 5.1075891},
 						},
 					},

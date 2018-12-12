@@ -9,144 +9,10 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
-type SubRate struct {
-	Name   string  `json:"name"`
-	Amount float64 `json:"amount"`
-}
-
-type TaxCategory struct {
-	Version        int       `json:"version"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	ID             string    `json:"id"`
-	CreatedAt      time.Time `json:"createdAt"`
-	Rates          []TaxRate `json:"rates"`
-	Name           string    `json:"name"`
-	Key            string    `json:"key,omitempty"`
-	Description    string    `json:"description,omitempty"`
-}
-
-type TaxCategoryAddTaxRateAction struct {
-	TaxRate *TaxRateDraft `json:"taxRate"`
-}
-
-func (obj TaxCategoryAddTaxRateAction) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategoryAddTaxRateAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "addTaxRate", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategoryChangeNameAction struct {
-	Name string `json:"name"`
-}
-
-func (obj TaxCategoryChangeNameAction) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategoryChangeNameAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeName", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategoryDraft struct {
-	Rates       []TaxRateDraft `json:"rates"`
-	Name        string         `json:"name"`
-	Key         string         `json:"key,omitempty"`
-	Description string         `json:"description,omitempty"`
-}
-
-type TaxCategoryPagedQueryResponse struct {
-	Total   int           `json:"total,omitempty"`
-	Offset  int           `json:"offset"`
-	Count   int           `json:"count"`
-	Results []TaxCategory `json:"results"`
-}
-
-type TaxCategoryReference struct {
-	Key string       `json:"key,omitempty"`
-	ID  string       `json:"id,omitempty"`
-	Obj *TaxCategory `json:"obj,omitempty"`
-}
-
-func (obj TaxCategoryReference) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategoryReference
-	return json.Marshal(struct {
-		TypeID string `json:"typeId"`
-		*Alias
-	}{TypeID: "tax-category", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategoryRemoveTaxRateAction struct {
-	TaxRateID string `json:"taxRateId"`
-}
-
-func (obj TaxCategoryRemoveTaxRateAction) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategoryRemoveTaxRateAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "removeTaxRate", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategoryReplaceTaxRateAction struct {
-	TaxRateID string        `json:"taxRateId"`
-	TaxRate   *TaxRateDraft `json:"taxRate"`
-}
-
-func (obj TaxCategoryReplaceTaxRateAction) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategoryReplaceTaxRateAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "replaceTaxRate", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategorySetDescriptionAction struct {
-	Description string `json:"description,omitempty"`
-}
-
-func (obj TaxCategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategorySetDescriptionAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setDescription", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategorySetKeyAction struct {
-	Key string `json:"key,omitempty"`
-}
-
-func (obj TaxCategorySetKeyAction) MarshalJSON() ([]byte, error) {
-	type Alias TaxCategorySetKeyAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setKey", Alias: (*Alias)(&obj)})
-}
-
-type TaxCategoryUpdate struct {
-	Version int                       `json:"version"`
-	Actions []TaxCategoryUpdateAction `json:"actions"`
-}
-
-func (obj *TaxCategoryUpdate) UnmarshalJSON(data []byte) error {
-	type Alias TaxCategoryUpdate
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Actions {
-		obj.Actions[i] = AbstractTaxCategoryUpdateActionDiscriminatorMapping(obj.Actions[i])
-	}
-
-	return nil
-}
-
+// TaxCategoryUpdateAction uses action as discriminator attribute
 type TaxCategoryUpdateAction interface{}
-type AbstractTaxCategoryUpdateAction struct{}
 
-func AbstractTaxCategoryUpdateActionDiscriminatorMapping(input TaxCategoryUpdateAction) TaxCategoryUpdateAction {
+func mapDiscriminatorTaxCategoryUpdateAction(input TaxCategoryUpdateAction) TaxCategoryUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addTaxRate":
@@ -177,6 +43,162 @@ func AbstractTaxCategoryUpdateActionDiscriminatorMapping(input TaxCategoryUpdate
 	return nil
 }
 
+// SubRate is a standalone struct
+type SubRate struct {
+	Name   string  `json:"name"`
+	Amount float64 `json:"amount"`
+}
+
+// TaxCategory is of type Resource
+type TaxCategory struct {
+	Version        int       `json:"version"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	ID             string    `json:"id"`
+	CreatedAt      time.Time `json:"createdAt"`
+	Rates          []TaxRate `json:"rates"`
+	Name           string    `json:"name"`
+	Key            string    `json:"key,omitempty"`
+	Description    string    `json:"description,omitempty"`
+}
+
+// TaxCategoryAddTaxRateAction implements the interface TaxCategoryUpdateAction
+type TaxCategoryAddTaxRateAction struct {
+	TaxRate *TaxRateDraft `json:"taxRate"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategoryAddTaxRateAction) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryAddTaxRateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addTaxRate", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategoryChangeNameAction implements the interface TaxCategoryUpdateAction
+type TaxCategoryChangeNameAction struct {
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategoryChangeNameAction) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryChangeNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeName", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategoryDraft is a standalone struct
+type TaxCategoryDraft struct {
+	Rates       []TaxRateDraft `json:"rates"`
+	Name        string         `json:"name"`
+	Key         string         `json:"key,omitempty"`
+	Description string         `json:"description,omitempty"`
+}
+
+// TaxCategoryPagedQueryResponse is of type PagedQueryResponse
+type TaxCategoryPagedQueryResponse struct {
+	Total   int           `json:"total,omitempty"`
+	Offset  int           `json:"offset"`
+	Count   int           `json:"count"`
+	Results []TaxCategory `json:"results"`
+}
+
+// TaxCategoryReference implements the interface Reference
+type TaxCategoryReference struct {
+	Key string       `json:"key,omitempty"`
+	ID  string       `json:"id,omitempty"`
+	Obj *TaxCategory `json:"obj,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategoryReference) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "tax-category", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategoryRemoveTaxRateAction implements the interface TaxCategoryUpdateAction
+type TaxCategoryRemoveTaxRateAction struct {
+	TaxRateID string `json:"taxRateId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategoryRemoveTaxRateAction) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryRemoveTaxRateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeTaxRate", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategoryReplaceTaxRateAction implements the interface TaxCategoryUpdateAction
+type TaxCategoryReplaceTaxRateAction struct {
+	TaxRateID string        `json:"taxRateId"`
+	TaxRate   *TaxRateDraft `json:"taxRate"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategoryReplaceTaxRateAction) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryReplaceTaxRateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "replaceTaxRate", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategorySetDescriptionAction implements the interface TaxCategoryUpdateAction
+type TaxCategorySetDescriptionAction struct {
+	Description string `json:"description,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategorySetDescriptionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategorySetKeyAction implements the interface TaxCategoryUpdateAction
+type TaxCategorySetKeyAction struct {
+	Key string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategorySetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategorySetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+// TaxCategoryUpdate is of type Update
+type TaxCategoryUpdate struct {
+	Version int                       `json:"version"`
+	Actions []TaxCategoryUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *TaxCategoryUpdate) UnmarshalJSON(data []byte) error {
+	type Alias TaxCategoryUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		obj.Actions[i] = mapDiscriminatorTaxCategoryUpdateAction(obj.Actions[i])
+	}
+
+	return nil
+}
+
+// TaxRate is a standalone struct
 type TaxRate struct {
 	SubRates        []SubRate   `json:"subRates,omitempty"`
 	State           string      `json:"state,omitempty"`
@@ -187,6 +209,7 @@ type TaxRate struct {
 	Amount          float64     `json:"amount"`
 }
 
+// TaxRateDraft is a standalone struct
 type TaxRateDraft struct {
 	SubRates        []SubRate   `json:"subRates,omitempty"`
 	State           string      `json:"state,omitempty"`

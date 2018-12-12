@@ -2,6 +2,7 @@
 
 package commercetools
 
+// MyCartDraft is a standalone struct
 type MyCartDraft struct {
 	TaxMode                         TaxMode                  `json:"taxMode,omitempty"`
 	ShippingMethod                  *ShippingMethodReference `json:"shippingMethod,omitempty"`
@@ -18,6 +19,7 @@ type MyCartDraft struct {
 	BillingAddress                  *Address                 `json:"billingAddress,omitempty"`
 }
 
+// MyCustomerDraft is a standalone struct
 type MyCustomerDraft struct {
 	VatID                  string        `json:"vatId,omitempty"`
 	Title                  string        `json:"title,omitempty"`
@@ -35,6 +37,7 @@ type MyCustomerDraft struct {
 	Addresses              []Address     `json:"addresses,omitempty"`
 }
 
+// MyLineItemDraft is a standalone struct
 type MyLineItemDraft struct {
 	VariantID           int                       `json:"variantId"`
 	SupplyChannel       *ChannelReference         `json:"supplyChannel,omitempty"`
@@ -45,6 +48,7 @@ type MyLineItemDraft struct {
 	Custom              *CustomFieldsDraft        `json:"custom,omitempty"`
 }
 
+// MyOrderFromCartDraft is a standalone struct
 type MyOrderFromCartDraft struct {
 	Version int    `json:"version"`
 	ID      string `json:"id"`

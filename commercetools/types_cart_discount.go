@@ -9,326 +9,28 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
-type CartDiscount struct {
-	Version              int                `json:"version"`
-	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
-	ID                   string             `json:"id"`
-	CreatedAt            time.Time          `json:"createdAt"`
-	Value                CartDiscountValue  `json:"value"`
-	ValidUntil           time.Time          `json:"validUntil,omitempty"`
-	ValidFrom            time.Time          `json:"validFrom,omitempty"`
-	Target               CartDiscountTarget `json:"target,omitempty"`
-	StackingMode         StackingMode       `json:"stackingMode"`
-	SortOrder            string             `json:"sortOrder"`
-	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
-	References           []Reference        `json:"references"`
-	Name                 *LocalizedString   `json:"name"`
-	IsActive             bool               `json:"isActive"`
-	Description          *LocalizedString   `json:"description,omitempty"`
-	Custom               *CustomFields      `json:"custom,omitempty"`
-	CartPredicate        string             `json:"cartPredicate"`
-}
+// SelectionMode is an enum type
+type SelectionMode string
 
-func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscount
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.References {
-		obj.References[i] = AbstractReferenceDiscriminatorMapping(obj.References[i])
-	}
-	if obj.Target != nil {
-		obj.Target = AbstractCartDiscountTargetDiscriminatorMapping(obj.Target)
-	}
-	if obj.Value != nil {
-		obj.Value = AbstractCartDiscountValueDiscriminatorMapping(obj.Value)
-	}
+// Enum values for SelectionMode
+const (
+	SelectionModeCheapest      SelectionMode = "Cheapest"
+	SelectionModeMostExpensive SelectionMode = "MostExpensive"
+)
 
-	return nil
-}
+// StackingMode is an enum type
+type StackingMode string
 
-type CartDiscountChangeCartPredicateAction struct {
-	CartPredicate string `json:"cartPredicate"`
-}
+// Enum values for StackingMode
+const (
+	StackingModeStacking              StackingMode = "Stacking"
+	StackingModeStopAfterThisDiscount StackingMode = "StopAfterThisDiscount"
+)
 
-func (obj CartDiscountChangeCartPredicateAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeCartPredicateAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeCartPredicate", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountChangeIsActiveAction struct {
-	IsActive bool `json:"isActive"`
-}
-
-func (obj CartDiscountChangeIsActiveAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeIsActiveAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeIsActive", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountChangeNameAction struct {
-	Name *LocalizedString `json:"name"`
-}
-
-func (obj CartDiscountChangeNameAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeNameAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeName", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountChangeRequiresDiscountCodeAction struct {
-	RequiresDiscountCode bool `json:"requiresDiscountCode"`
-}
-
-func (obj CartDiscountChangeRequiresDiscountCodeAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeRequiresDiscountCodeAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeRequiresDiscountCode", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountChangeSortOrderAction struct {
-	SortOrder string `json:"sortOrder"`
-}
-
-func (obj CartDiscountChangeSortOrderAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeSortOrderAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeSortOrder", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountChangeStackingModeAction struct {
-	StackingMode StackingMode `json:"stackingMode"`
-}
-
-func (obj CartDiscountChangeStackingModeAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeStackingModeAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeStackingMode", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountChangeTargetAction struct {
-	Target CartDiscountTarget `json:"target"`
-}
-
-func (obj CartDiscountChangeTargetAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeTargetAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeTarget", Alias: (*Alias)(&obj)})
-}
-func (obj *CartDiscountChangeTargetAction) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscountChangeTargetAction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Target != nil {
-		obj.Target = AbstractCartDiscountTargetDiscriminatorMapping(obj.Target)
-	}
-
-	return nil
-}
-
-type CartDiscountChangeValueAction struct {
-	Value CartDiscountValue `json:"value"`
-}
-
-func (obj CartDiscountChangeValueAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountChangeValueAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeValue", Alias: (*Alias)(&obj)})
-}
-func (obj *CartDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscountChangeValueAction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Value != nil {
-		obj.Value = AbstractCartDiscountValueDiscriminatorMapping(obj.Value)
-	}
-
-	return nil
-}
-
-type CartDiscountCustomLineItemsTarget struct {
-	Predicate string `json:"predicate"`
-}
-
-func (obj CartDiscountCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountCustomLineItemsTarget
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "customLineItems", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountDraft struct {
-	Value                CartDiscountValue  `json:"value"`
-	ValidUntil           time.Time          `json:"validUntil,omitempty"`
-	ValidFrom            time.Time          `json:"validFrom,omitempty"`
-	Target               CartDiscountTarget `json:"target,omitempty"`
-	StackingMode         StackingMode       `json:"stackingMode,omitempty"`
-	SortOrder            string             `json:"sortOrder"`
-	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
-	Name                 *LocalizedString   `json:"name"`
-	IsActive             bool               `json:"isActive,omitempty"`
-	Description          *LocalizedString   `json:"description,omitempty"`
-	Custom               *CustomFields      `json:"custom,omitempty"`
-	CartPredicate        string             `json:"cartPredicate"`
-}
-
-func (obj *CartDiscountDraft) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscountDraft
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Target != nil {
-		obj.Target = AbstractCartDiscountTargetDiscriminatorMapping(obj.Target)
-	}
-	if obj.Value != nil {
-		obj.Value = AbstractCartDiscountValueDiscriminatorMapping(obj.Value)
-	}
-
-	return nil
-}
-
-type CartDiscountLineItemsTarget struct {
-	Predicate string `json:"predicate"`
-}
-
-func (obj CartDiscountLineItemsTarget) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountLineItemsTarget
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "lineItems", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountPagedQueryResponse struct {
-	Total   int            `json:"total,omitempty"`
-	Offset  int            `json:"offset"`
-	Count   int            `json:"count"`
-	Results []CartDiscount `json:"results"`
-}
-
-type CartDiscountReference struct {
-	Key string        `json:"key,omitempty"`
-	ID  string        `json:"id,omitempty"`
-	Obj *CartDiscount `json:"obj,omitempty"`
-}
-
-func (obj CartDiscountReference) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountReference
-	return json.Marshal(struct {
-		TypeID string `json:"typeId"`
-		*Alias
-	}{TypeID: "cart-discount", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountSetCustomFieldAction struct {
-	Value interface{} `json:"value,omitempty"`
-	Name  string      `json:"name"`
-}
-
-func (obj CartDiscountSetCustomFieldAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountSetCustomFieldAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountSetCustomTypeAction struct {
-	Type   *TypeReference `json:"type,omitempty"`
-	Fields interface{}    `json:"fields,omitempty"`
-}
-
-func (obj CartDiscountSetCustomTypeAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountSetCustomTypeAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountSetDescriptionAction struct {
-	Description *LocalizedString `json:"description,omitempty"`
-}
-
-func (obj CartDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountSetDescriptionAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setDescription", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountSetValidFromAction struct {
-	ValidFrom time.Time `json:"validFrom,omitempty"`
-}
-
-func (obj CartDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountSetValidFromAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setValidFrom", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountSetValidFromAndUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-	ValidFrom  time.Time `json:"validFrom,omitempty"`
-}
-
-func (obj CartDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountSetValidFromAndUntilAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setValidFromAndUntil", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountSetValidUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-}
-
-func (obj CartDiscountSetValidUntilAction) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountSetValidUntilAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
-}
-
-type CartDiscountShippingCostTarget struct{}
-
-func (obj CartDiscountShippingCostTarget) MarshalJSON() ([]byte, error) {
-	type Alias CartDiscountShippingCostTarget
-	return json.Marshal(struct {
-		Type string `json:"type"`
-		*Alias
-	}{Type: "shipping", Alias: (*Alias)(&obj)})
-}
-
+// CartDiscountTarget uses type as discriminator attribute
 type CartDiscountTarget interface{}
-type AbstractCartDiscountTarget struct{}
 
-func AbstractCartDiscountTargetDiscriminatorMapping(input CartDiscountTarget) CartDiscountTarget {
+func mapDiscriminatorCartDiscountTarget(input CartDiscountTarget) CartDiscountTarget {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "customLineItems":
@@ -355,27 +57,10 @@ func AbstractCartDiscountTargetDiscriminatorMapping(input CartDiscountTarget) Ca
 	return nil
 }
 
-type CartDiscountUpdate struct {
-	Version int                        `json:"version"`
-	Actions []CartDiscountUpdateAction `json:"actions"`
-}
-
-func (obj *CartDiscountUpdate) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscountUpdate
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Actions {
-		obj.Actions[i] = AbstractCartDiscountUpdateActionDiscriminatorMapping(obj.Actions[i])
-	}
-
-	return nil
-}
-
+// CartDiscountUpdateAction uses action as discriminator attribute
 type CartDiscountUpdateAction interface{}
-type AbstractCartDiscountUpdateAction struct{}
 
-func AbstractCartDiscountUpdateActionDiscriminatorMapping(input CartDiscountUpdateAction) CartDiscountUpdateAction {
+func mapDiscriminatorCartDiscountUpdateAction(input CartDiscountUpdateAction) CartDiscountUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeCartPredicate":
@@ -406,7 +91,7 @@ func AbstractCartDiscountUpdateActionDiscriminatorMapping(input CartDiscountUpda
 		new := CartDiscountChangeTargetAction{}
 		mapstructure.Decode(input, &new)
 		if new.Target != nil {
-			new.Target = AbstractCartDiscountTargetDiscriminatorMapping(new.Target)
+			new.Target = mapDiscriminatorCartDiscountTarget(new.Target)
 		}
 
 		return new
@@ -414,7 +99,7 @@ func AbstractCartDiscountUpdateActionDiscriminatorMapping(input CartDiscountUpda
 		new := CartDiscountChangeValueAction{}
 		mapstructure.Decode(input, &new)
 		if new.Value != nil {
-			new.Value = AbstractCartDiscountValueDiscriminatorMapping(new.Value)
+			new.Value = mapDiscriminatorCartDiscountValue(new.Value)
 		}
 
 		return new
@@ -446,10 +131,10 @@ func AbstractCartDiscountUpdateActionDiscriminatorMapping(input CartDiscountUpda
 	return nil
 }
 
+// CartDiscountValue uses type as discriminator attribute
 type CartDiscountValue interface{}
-type AbstractCartDiscountValue struct{}
 
-func AbstractCartDiscountValueDiscriminatorMapping(input CartDiscountValue) CartDiscountValue {
+func mapDiscriminatorCartDiscountValue(input CartDiscountValue) CartDiscountValue {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "absolute":
@@ -468,10 +153,397 @@ func AbstractCartDiscountValueDiscriminatorMapping(input CartDiscountValue) Cart
 	return nil
 }
 
+// CartDiscount is of type Resource
+type CartDiscount struct {
+	Version              int                `json:"version"`
+	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
+	ID                   string             `json:"id"`
+	CreatedAt            time.Time          `json:"createdAt"`
+	Value                CartDiscountValue  `json:"value"`
+	ValidUntil           time.Time          `json:"validUntil,omitempty"`
+	ValidFrom            time.Time          `json:"validFrom,omitempty"`
+	Target               CartDiscountTarget `json:"target,omitempty"`
+	StackingMode         StackingMode       `json:"stackingMode"`
+	SortOrder            string             `json:"sortOrder"`
+	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
+	References           []Reference        `json:"references"`
+	Name                 *LocalizedString   `json:"name"`
+	IsActive             bool               `json:"isActive"`
+	Description          *LocalizedString   `json:"description,omitempty"`
+	Custom               *CustomFields      `json:"custom,omitempty"`
+	CartPredicate        string             `json:"cartPredicate"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
+	type Alias CartDiscount
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.References {
+		obj.References[i] = mapDiscriminatorReference(obj.References[i])
+	}
+	if obj.Target != nil {
+		obj.Target = mapDiscriminatorCartDiscountTarget(obj.Target)
+	}
+	if obj.Value != nil {
+		obj.Value = mapDiscriminatorCartDiscountValue(obj.Value)
+	}
+
+	return nil
+}
+
+// CartDiscountChangeCartPredicateAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeCartPredicateAction struct {
+	CartPredicate string `json:"cartPredicate"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeCartPredicateAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeCartPredicateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCartPredicate", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountChangeIsActiveAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeIsActiveAction struct {
+	IsActive bool `json:"isActive"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeIsActiveAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeIsActiveAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeIsActive", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountChangeNameAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeNameAction struct {
+	Name *LocalizedString `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeNameAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeName", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountChangeRequiresDiscountCodeAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeRequiresDiscountCodeAction struct {
+	RequiresDiscountCode bool `json:"requiresDiscountCode"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeRequiresDiscountCodeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeRequiresDiscountCodeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeRequiresDiscountCode", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountChangeSortOrderAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeSortOrderAction struct {
+	SortOrder string `json:"sortOrder"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeSortOrderAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeSortOrderAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeSortOrder", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountChangeStackingModeAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeStackingModeAction struct {
+	StackingMode StackingMode `json:"stackingMode"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeStackingModeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeStackingModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeStackingMode", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountChangeTargetAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeTargetAction struct {
+	Target CartDiscountTarget `json:"target"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeTargetAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeTargetAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeTarget", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartDiscountChangeTargetAction) UnmarshalJSON(data []byte) error {
+	type Alias CartDiscountChangeTargetAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Target != nil {
+		obj.Target = mapDiscriminatorCartDiscountTarget(obj.Target)
+	}
+
+	return nil
+}
+
+// CartDiscountChangeValueAction implements the interface CartDiscountUpdateAction
+type CartDiscountChangeValueAction struct {
+	Value CartDiscountValue `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountChangeValueAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountChangeValueAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeValue", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
+	type Alias CartDiscountChangeValueAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		obj.Value = mapDiscriminatorCartDiscountValue(obj.Value)
+	}
+
+	return nil
+}
+
+// CartDiscountCustomLineItemsTarget implements the interface CartDiscountTarget
+type CartDiscountCustomLineItemsTarget struct {
+	Predicate string `json:"predicate"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountCustomLineItemsTarget
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "customLineItems", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountDraft is a standalone struct
+type CartDiscountDraft struct {
+	Value                CartDiscountValue  `json:"value"`
+	ValidUntil           time.Time          `json:"validUntil,omitempty"`
+	ValidFrom            time.Time          `json:"validFrom,omitempty"`
+	Target               CartDiscountTarget `json:"target,omitempty"`
+	StackingMode         StackingMode       `json:"stackingMode,omitempty"`
+	SortOrder            string             `json:"sortOrder"`
+	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
+	Name                 *LocalizedString   `json:"name"`
+	IsActive             bool               `json:"isActive,omitempty"`
+	Description          *LocalizedString   `json:"description,omitempty"`
+	Custom               *CustomFields      `json:"custom,omitempty"`
+	CartPredicate        string             `json:"cartPredicate"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartDiscountDraft) UnmarshalJSON(data []byte) error {
+	type Alias CartDiscountDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Target != nil {
+		obj.Target = mapDiscriminatorCartDiscountTarget(obj.Target)
+	}
+	if obj.Value != nil {
+		obj.Value = mapDiscriminatorCartDiscountValue(obj.Value)
+	}
+
+	return nil
+}
+
+// CartDiscountLineItemsTarget implements the interface CartDiscountTarget
+type CartDiscountLineItemsTarget struct {
+	Predicate string `json:"predicate"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountLineItemsTarget) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountLineItemsTarget
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "lineItems", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountPagedQueryResponse is of type PagedQueryResponse
+type CartDiscountPagedQueryResponse struct {
+	Total   int            `json:"total,omitempty"`
+	Offset  int            `json:"offset"`
+	Count   int            `json:"count"`
+	Results []CartDiscount `json:"results"`
+}
+
+// CartDiscountReference implements the interface Reference
+type CartDiscountReference struct {
+	Key string        `json:"key,omitempty"`
+	ID  string        `json:"id,omitempty"`
+	Obj *CartDiscount `json:"obj,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountReference) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "cart-discount", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetCustomFieldAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetCustomTypeAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetCustomTypeAction struct {
+	Type   *TypeReference `json:"type,omitempty"`
+	Fields interface{}    `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetDescriptionAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetDescriptionAction struct {
+	Description *LocalizedString `json:"description,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetDescriptionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetValidFromAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetValidFromAction struct {
+	ValidFrom time.Time `json:"validFrom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetValidFromAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidFrom", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetValidFromAndUntilAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetValidFromAndUntilAction struct {
+	ValidUntil time.Time `json:"validUntil,omitempty"`
+	ValidFrom  time.Time `json:"validFrom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetValidFromAndUntilAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidFromAndUntil", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetValidUntilAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetValidUntilAction struct {
+	ValidUntil time.Time `json:"validUntil,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetValidUntilAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetValidUntilAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountShippingCostTarget implements the interface CartDiscountTarget
+type CartDiscountShippingCostTarget struct{}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountShippingCostTarget) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountShippingCostTarget
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "shipping", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountUpdate is of type Update
+type CartDiscountUpdate struct {
+	Version int                        `json:"version"`
+	Actions []CartDiscountUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartDiscountUpdate) UnmarshalJSON(data []byte) error {
+	type Alias CartDiscountUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		obj.Actions[i] = mapDiscriminatorCartDiscountUpdateAction(obj.Actions[i])
+	}
+
+	return nil
+}
+
+// CartDiscountValueAbsolute implements the interface CartDiscountValue
 type CartDiscountValueAbsolute struct {
 	Money []Money `json:"money"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj CartDiscountValueAbsolute) MarshalJSON() ([]byte, error) {
 	type Alias CartDiscountValueAbsolute
 	return json.Marshal(struct {
@@ -480,6 +552,7 @@ func (obj CartDiscountValueAbsolute) MarshalJSON() ([]byte, error) {
 	}{Type: "absolute", Alias: (*Alias)(&obj)})
 }
 
+// CartDiscountValueGiftLineItem implements the interface CartDiscountValue
 type CartDiscountValueGiftLineItem struct {
 	VariantID           int               `json:"variantId"`
 	SupplyChannel       *ChannelReference `json:"supplyChannel,omitempty"`
@@ -487,6 +560,7 @@ type CartDiscountValueGiftLineItem struct {
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj CartDiscountValueGiftLineItem) MarshalJSON() ([]byte, error) {
 	type Alias CartDiscountValueGiftLineItem
 	return json.Marshal(struct {
@@ -495,10 +569,12 @@ func (obj CartDiscountValueGiftLineItem) MarshalJSON() ([]byte, error) {
 	}{Type: "giftLineItem", Alias: (*Alias)(&obj)})
 }
 
+// CartDiscountValueRelative implements the interface CartDiscountValue
 type CartDiscountValueRelative struct {
 	Permyriad int `json:"permyriad"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj CartDiscountValueRelative) MarshalJSON() ([]byte, error) {
 	type Alias CartDiscountValueRelative
 	return json.Marshal(struct {
@@ -507,6 +583,7 @@ func (obj CartDiscountValueRelative) MarshalJSON() ([]byte, error) {
 	}{Type: "relative", Alias: (*Alias)(&obj)})
 }
 
+// MultiBuyCustomLineItemsTarget implements the interface CartDiscountTarget
 type MultiBuyCustomLineItemsTarget struct {
 	TriggerQuantity    int           `json:"triggerQuantity"`
 	SelectionMode      SelectionMode `json:"selectionMode"`
@@ -515,6 +592,7 @@ type MultiBuyCustomLineItemsTarget struct {
 	DiscountedQuantity int           `json:"discountedQuantity"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj MultiBuyCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 	type Alias MultiBuyCustomLineItemsTarget
 	return json.Marshal(struct {
@@ -523,6 +601,7 @@ func (obj MultiBuyCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 	}{Type: "multiBuyCustomLineItems", Alias: (*Alias)(&obj)})
 }
 
+// MultiBuyLineItemsTarget implements the interface CartDiscountTarget
 type MultiBuyLineItemsTarget struct {
 	TriggerQuantity    int           `json:"triggerQuantity"`
 	SelectionMode      SelectionMode `json:"selectionMode"`
@@ -531,6 +610,7 @@ type MultiBuyLineItemsTarget struct {
 	DiscountedQuantity int           `json:"discountedQuantity"`
 }
 
+// MarshalJSON override to set the discriminator value
 func (obj MultiBuyLineItemsTarget) MarshalJSON() ([]byte, error) {
 	type Alias MultiBuyLineItemsTarget
 	return json.Marshal(struct {
@@ -538,17 +618,3 @@ func (obj MultiBuyLineItemsTarget) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Type: "multiBuyLineItems", Alias: (*Alias)(&obj)})
 }
-
-type SelectionMode string
-
-const (
-	SelectionModeCheapest      SelectionMode = "Cheapest"
-	SelectionModeMostExpensive SelectionMode = "MostExpensive"
-)
-
-type StackingMode string
-
-const (
-	StackingModeStacking              StackingMode = "Stacking"
-	StackingModeStopAfterThisDiscount StackingMode = "StopAfterThisDiscount"
-)
