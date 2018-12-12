@@ -62,7 +62,7 @@ type LocalizedString map[string]string
 // GeoJSON uses type as discriminator attribute
 type GeoJSON interface{}
 
-func mapDiscriminatorGeoJSON(input GeoJSON) GeoJSON {
+func mapDiscriminatorGeoJSON(input interface{}) GeoJSON {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "Point":
@@ -76,7 +76,7 @@ func mapDiscriminatorGeoJSON(input GeoJSON) GeoJSON {
 // Reference uses typeId as discriminator attribute
 type Reference interface{}
 
-func mapDiscriminatorReference(input Reference) Reference {
+func mapDiscriminatorReference(input interface{}) Reference {
 	discriminator := input.(map[string]interface{})["typeId"]
 	switch discriminator {
 	case "cart-discount":
@@ -174,7 +174,7 @@ func mapDiscriminatorReference(input Reference) Reference {
 // TypedMoney uses type as discriminator attribute
 type TypedMoney interface{}
 
-func mapDiscriminatorTypedMoney(input TypedMoney) TypedMoney {
+func mapDiscriminatorTypedMoney(input interface{}) TypedMoney {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "centPrecision":

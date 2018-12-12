@@ -35,7 +35,7 @@ const (
 // PaymentUpdateAction uses action as discriminator attribute
 type PaymentUpdateAction interface{}
 
-func mapDiscriminatorPaymentUpdateAction(input PaymentUpdateAction) PaymentUpdateAction {
+func mapDiscriminatorPaymentUpdateAction(input interface{}) PaymentUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addInterfaceInteraction":

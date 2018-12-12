@@ -30,7 +30,7 @@ const (
 // CartDiscountTarget uses type as discriminator attribute
 type CartDiscountTarget interface{}
 
-func mapDiscriminatorCartDiscountTarget(input CartDiscountTarget) CartDiscountTarget {
+func mapDiscriminatorCartDiscountTarget(input interface{}) CartDiscountTarget {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "customLineItems":
@@ -60,7 +60,7 @@ func mapDiscriminatorCartDiscountTarget(input CartDiscountTarget) CartDiscountTa
 // CartDiscountUpdateAction uses action as discriminator attribute
 type CartDiscountUpdateAction interface{}
 
-func mapDiscriminatorCartDiscountUpdateAction(input CartDiscountUpdateAction) CartDiscountUpdateAction {
+func mapDiscriminatorCartDiscountUpdateAction(input interface{}) CartDiscountUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeCartPredicate":
@@ -134,7 +134,7 @@ func mapDiscriminatorCartDiscountUpdateAction(input CartDiscountUpdateAction) Ca
 // CartDiscountValue uses type as discriminator attribute
 type CartDiscountValue interface{}
 
-func mapDiscriminatorCartDiscountValue(input CartDiscountValue) CartDiscountValue {
+func mapDiscriminatorCartDiscountValue(input interface{}) CartDiscountValue {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "absolute":

@@ -12,7 +12,7 @@ import (
 // ReviewUpdateAction uses action as discriminator attribute
 type ReviewUpdateAction interface{}
 
-func mapDiscriminatorReviewUpdateAction(input ReviewUpdateAction) ReviewUpdateAction {
+func mapDiscriminatorReviewUpdateAction(input interface{}) ReviewUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "setAuthorName":

@@ -70,7 +70,7 @@ const (
 // OrderUpdateAction uses action as discriminator attribute
 type OrderUpdateAction interface{}
 
-func mapDiscriminatorOrderUpdateAction(input OrderUpdateAction) OrderUpdateAction {
+func mapDiscriminatorOrderUpdateAction(input interface{}) OrderUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addDelivery":
@@ -240,7 +240,7 @@ func mapDiscriminatorOrderUpdateAction(input OrderUpdateAction) OrderUpdateActio
 // StagedOrderUpdateAction uses action as discriminator attribute
 type StagedOrderUpdateAction interface{}
 
-func mapDiscriminatorStagedOrderUpdateAction(input StagedOrderUpdateAction) StagedOrderUpdateAction {
+func mapDiscriminatorStagedOrderUpdateAction(input interface{}) StagedOrderUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addCustomLineItem":

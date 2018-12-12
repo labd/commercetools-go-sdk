@@ -12,7 +12,7 @@ import (
 // MessagePayload uses type as discriminator attribute
 type MessagePayload interface{}
 
-func mapDiscriminatorMessagePayload(input MessagePayload) MessagePayload {
+func mapDiscriminatorMessagePayload(input interface{}) MessagePayload {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "CategoryCreated":

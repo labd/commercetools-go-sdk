@@ -12,7 +12,7 @@ import (
 // ShoppingListUpdateAction uses action as discriminator attribute
 type ShoppingListUpdateAction interface{}
 
-func mapDiscriminatorShoppingListUpdateAction(input ShoppingListUpdateAction) ShoppingListUpdateAction {
+func mapDiscriminatorShoppingListUpdateAction(input interface{}) ShoppingListUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addLineItem":

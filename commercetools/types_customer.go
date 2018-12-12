@@ -21,7 +21,7 @@ const (
 // CustomerUpdateAction uses action as discriminator attribute
 type CustomerUpdateAction interface{}
 
-func mapDiscriminatorCustomerUpdateAction(input CustomerUpdateAction) CustomerUpdateAction {
+func mapDiscriminatorCustomerUpdateAction(input interface{}) CustomerUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addAddress":

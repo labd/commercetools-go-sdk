@@ -12,7 +12,7 @@ import (
 // OrderEditResult uses type as discriminator attribute
 type OrderEditResult interface{}
 
-func mapDiscriminatorOrderEditResult(input OrderEditResult) OrderEditResult {
+func mapDiscriminatorOrderEditResult(input interface{}) OrderEditResult {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "Applied":
@@ -46,7 +46,7 @@ func mapDiscriminatorOrderEditResult(input OrderEditResult) OrderEditResult {
 // OrderEditUpdateAction uses action as discriminator attribute
 type OrderEditUpdateAction interface{}
 
-func mapDiscriminatorOrderEditUpdateAction(input OrderEditUpdateAction) OrderEditUpdateAction {
+func mapDiscriminatorOrderEditUpdateAction(input interface{}) OrderEditUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addStagedAction":

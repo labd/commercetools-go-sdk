@@ -40,7 +40,7 @@ type FieldContainer map[string]string
 // FieldType uses name as discriminator attribute
 type FieldType interface{}
 
-func mapDiscriminatorFieldType(input FieldType) FieldType {
+func mapDiscriminatorFieldType(input interface{}) FieldType {
 	discriminator := input.(map[string]interface{})["name"]
 	switch discriminator {
 	case "Boolean":
@@ -102,7 +102,7 @@ func mapDiscriminatorFieldType(input FieldType) FieldType {
 // TypeUpdateAction uses action as discriminator attribute
 type TypeUpdateAction interface{}
 
-func mapDiscriminatorTypeUpdateAction(input TypeUpdateAction) TypeUpdateAction {
+func mapDiscriminatorTypeUpdateAction(input interface{}) TypeUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addEnumValue":

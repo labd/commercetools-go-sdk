@@ -12,7 +12,7 @@ import (
 // InventoryUpdateAction uses action as discriminator attribute
 type InventoryUpdateAction interface{}
 
-func mapDiscriminatorInventoryUpdateAction(input InventoryUpdateAction) InventoryUpdateAction {
+func mapDiscriminatorInventoryUpdateAction(input interface{}) InventoryUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addQuantity":

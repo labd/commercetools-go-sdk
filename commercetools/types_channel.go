@@ -24,7 +24,7 @@ const (
 // ChannelUpdateAction uses action as discriminator attribute
 type ChannelUpdateAction interface{}
 
-func mapDiscriminatorChannelUpdateAction(input ChannelUpdateAction) ChannelUpdateAction {
+func mapDiscriminatorChannelUpdateAction(input interface{}) ChannelUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addRoles":

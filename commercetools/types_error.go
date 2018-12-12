@@ -11,7 +11,7 @@ import (
 // ErrorObject uses code as discriminator attribute
 type ErrorObject interface{}
 
-func mapDiscriminatorErrorObject(input ErrorObject) ErrorObject {
+func mapDiscriminatorErrorObject(input interface{}) ErrorObject {
 	discriminator := input.(map[string]interface{})["code"]
 	switch discriminator {
 	case "access_denied":

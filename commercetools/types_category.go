@@ -12,7 +12,7 @@ import (
 // CategoryUpdateAction uses action as discriminator attribute
 type CategoryUpdateAction interface{}
 
-func mapDiscriminatorCategoryUpdateAction(input CategoryUpdateAction) CategoryUpdateAction {
+func mapDiscriminatorCategoryUpdateAction(input interface{}) CategoryUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addAsset":

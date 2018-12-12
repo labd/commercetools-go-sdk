@@ -12,7 +12,7 @@ import (
 // ProjectUpdateAction uses action as discriminator attribute
 type ProjectUpdateAction interface{}
 
-func mapDiscriminatorProjectUpdateAction(input ProjectUpdateAction) ProjectUpdateAction {
+func mapDiscriminatorProjectUpdateAction(input interface{}) ProjectUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeCountries":
@@ -54,7 +54,7 @@ func mapDiscriminatorProjectUpdateAction(input ProjectUpdateAction) ProjectUpdat
 // ShippingRateInputType uses type as discriminator attribute
 type ShippingRateInputType interface{}
 
-func mapDiscriminatorShippingRateInputType(input ShippingRateInputType) ShippingRateInputType {
+func mapDiscriminatorShippingRateInputType(input interface{}) ShippingRateInputType {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "CartClassification":

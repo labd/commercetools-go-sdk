@@ -12,7 +12,7 @@ import (
 // DeliveryFormat uses type as discriminator attribute
 type DeliveryFormat interface{}
 
-func mapDiscriminatorDeliveryFormat(input DeliveryFormat) DeliveryFormat {
+func mapDiscriminatorDeliveryFormat(input interface{}) DeliveryFormat {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "CloudEvents":
@@ -30,7 +30,7 @@ func mapDiscriminatorDeliveryFormat(input DeliveryFormat) DeliveryFormat {
 // Destination uses type as discriminator attribute
 type Destination interface{}
 
-func mapDiscriminatorDestination(input Destination) Destination {
+func mapDiscriminatorDestination(input interface{}) Destination {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "EventGrid":
@@ -64,7 +64,7 @@ func mapDiscriminatorDestination(input Destination) Destination {
 // SubscriptionDelivery uses notificationType as discriminator attribute
 type SubscriptionDelivery interface{}
 
-func mapDiscriminatorSubscriptionDelivery(input SubscriptionDelivery) SubscriptionDelivery {
+func mapDiscriminatorSubscriptionDelivery(input interface{}) SubscriptionDelivery {
 	discriminator := input.(map[string]interface{})["notificationType"]
 	switch discriminator {
 	case "Message":
@@ -90,7 +90,7 @@ func mapDiscriminatorSubscriptionDelivery(input SubscriptionDelivery) Subscripti
 // SubscriptionUpdateAction uses action as discriminator attribute
 type SubscriptionUpdateAction interface{}
 
-func mapDiscriminatorSubscriptionUpdateAction(input SubscriptionUpdateAction) SubscriptionUpdateAction {
+func mapDiscriminatorSubscriptionUpdateAction(input interface{}) SubscriptionUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeDestination":

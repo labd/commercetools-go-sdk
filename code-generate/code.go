@@ -189,7 +189,7 @@ func generateStructDiscriminatorMapping(object *RamlType) *jen.Statement {
 
 	interfaceName := object.InterfaceName
 	c := jen.Line()
-	c = c.Func().Id(object.discriminatorFunctionName()).Params(jen.Id("input").Id(interfaceName)).Parens(jen.Id(interfaceName)).Block(
+	c = c.Func().Id(object.discriminatorFunctionName()).Params(jen.Id("input").Interface()).Parens(jen.Id(interfaceName)).Block(
 		jen.Id("discriminator").Op(":=").Id("input").Assert(jen.Map(jen.String()).Interface()).Index(jen.Lit(object.Discriminator)),
 		jen.Switch(jen.Id("discriminator")).BlockFunc(func(g *jen.Group) {
 			for _, child := range object.Children {

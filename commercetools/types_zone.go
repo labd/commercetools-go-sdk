@@ -12,7 +12,7 @@ import (
 // ZoneUpdateAction uses action as discriminator attribute
 type ZoneUpdateAction interface{}
 
-func mapDiscriminatorZoneUpdateAction(input ZoneUpdateAction) ZoneUpdateAction {
+func mapDiscriminatorZoneUpdateAction(input interface{}) ZoneUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addLocation":

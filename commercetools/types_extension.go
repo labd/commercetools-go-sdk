@@ -32,7 +32,7 @@ const (
 // ExtensionDestination uses type as discriminator attribute
 type ExtensionDestination interface{}
 
-func mapDiscriminatorExtensionDestination(input ExtensionDestination) ExtensionDestination {
+func mapDiscriminatorExtensionDestination(input interface{}) ExtensionDestination {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "AWSLambda":
@@ -54,7 +54,7 @@ func mapDiscriminatorExtensionDestination(input ExtensionDestination) ExtensionD
 // ExtensionHTTPDestinationAuthentication uses type as discriminator attribute
 type ExtensionHTTPDestinationAuthentication interface{}
 
-func mapDiscriminatorExtensionHTTPDestinationAuthentication(input ExtensionHTTPDestinationAuthentication) ExtensionHTTPDestinationAuthentication {
+func mapDiscriminatorExtensionHTTPDestinationAuthentication(input interface{}) ExtensionHTTPDestinationAuthentication {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "AuthorizationHeader":
@@ -72,7 +72,7 @@ func mapDiscriminatorExtensionHTTPDestinationAuthentication(input ExtensionHTTPD
 // ExtensionUpdateAction uses action as discriminator attribute
 type ExtensionUpdateAction interface{}
 
-func mapDiscriminatorExtensionUpdateAction(input ExtensionUpdateAction) ExtensionUpdateAction {
+func mapDiscriminatorExtensionUpdateAction(input interface{}) ExtensionUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeDestination":

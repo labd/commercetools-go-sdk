@@ -32,7 +32,7 @@ const (
 // StateUpdateAction uses action as discriminator attribute
 type StateUpdateAction interface{}
 
-func mapDiscriminatorStateUpdateAction(input StateUpdateAction) StateUpdateAction {
+func mapDiscriminatorStateUpdateAction(input interface{}) StateUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addRoles":

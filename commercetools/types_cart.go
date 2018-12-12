@@ -119,7 +119,7 @@ const (
 // CartUpdateAction uses action as discriminator attribute
 type CartUpdateAction interface{}
 
-func mapDiscriminatorCartUpdateAction(input CartUpdateAction) CartUpdateAction {
+func mapDiscriminatorCartUpdateAction(input interface{}) CartUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addCustomLineItem":
@@ -333,7 +333,7 @@ func mapDiscriminatorCartUpdateAction(input CartUpdateAction) CartUpdateAction {
 // ShippingRateInput uses type as discriminator attribute
 type ShippingRateInput interface{}
 
-func mapDiscriminatorShippingRateInput(input ShippingRateInput) ShippingRateInput {
+func mapDiscriminatorShippingRateInput(input interface{}) ShippingRateInput {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "Classification":
@@ -351,7 +351,7 @@ func mapDiscriminatorShippingRateInput(input ShippingRateInput) ShippingRateInpu
 // ShippingRateInputDraft uses type as discriminator attribute
 type ShippingRateInputDraft interface{}
 
-func mapDiscriminatorShippingRateInputDraft(input ShippingRateInputDraft) ShippingRateInputDraft {
+func mapDiscriminatorShippingRateInputDraft(input interface{}) ShippingRateInputDraft {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "Classification":

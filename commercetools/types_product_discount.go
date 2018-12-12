@@ -12,7 +12,7 @@ import (
 // ProductDiscountUpdateAction uses action as discriminator attribute
 type ProductDiscountUpdateAction interface{}
 
-func mapDiscriminatorProductDiscountUpdateAction(input ProductDiscountUpdateAction) ProductDiscountUpdateAction {
+func mapDiscriminatorProductDiscountUpdateAction(input interface{}) ProductDiscountUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeIsActive":
@@ -62,7 +62,7 @@ func mapDiscriminatorProductDiscountUpdateAction(input ProductDiscountUpdateActi
 // ProductDiscountValue uses type as discriminator attribute
 type ProductDiscountValue interface{}
 
-func mapDiscriminatorProductDiscountValue(input ProductDiscountValue) ProductDiscountValue {
+func mapDiscriminatorProductDiscountValue(input interface{}) ProductDiscountValue {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "absolute":

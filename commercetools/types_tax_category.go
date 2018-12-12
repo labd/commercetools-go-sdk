@@ -12,7 +12,7 @@ import (
 // TaxCategoryUpdateAction uses action as discriminator attribute
 type TaxCategoryUpdateAction interface{}
 
-func mapDiscriminatorTaxCategoryUpdateAction(input TaxCategoryUpdateAction) TaxCategoryUpdateAction {
+func mapDiscriminatorTaxCategoryUpdateAction(input interface{}) TaxCategoryUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addTaxRate":

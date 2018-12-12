@@ -40,7 +40,7 @@ const (
 // AttributeType uses name as discriminator attribute
 type AttributeType interface{}
 
-func mapDiscriminatorAttributeType(input AttributeType) AttributeType {
+func mapDiscriminatorAttributeType(input interface{}) AttributeType {
 	discriminator := input.(map[string]interface{})["name"]
 	switch discriminator {
 	case "boolean":
@@ -106,7 +106,7 @@ func mapDiscriminatorAttributeType(input AttributeType) AttributeType {
 // ProductTypeUpdateAction uses action as discriminator attribute
 type ProductTypeUpdateAction interface{}
 
-func mapDiscriminatorProductTypeUpdateAction(input ProductTypeUpdateAction) ProductTypeUpdateAction {
+func mapDiscriminatorProductTypeUpdateAction(input interface{}) ProductTypeUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addAttributeDefinition":

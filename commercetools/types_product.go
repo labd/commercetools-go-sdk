@@ -38,7 +38,7 @@ type CategoryOrderHints map[string]string
 // FacetResult uses type as discriminator attribute
 type FacetResult interface{}
 
-func mapDiscriminatorFacetResult(input FacetResult) FacetResult {
+func mapDiscriminatorFacetResult(input interface{}) FacetResult {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "filter":
@@ -60,7 +60,7 @@ func mapDiscriminatorFacetResult(input FacetResult) FacetResult {
 // ProductUpdateAction uses action as discriminator attribute
 type ProductUpdateAction interface{}
 
-func mapDiscriminatorProductUpdateAction(input ProductUpdateAction) ProductUpdateAction {
+func mapDiscriminatorProductUpdateAction(input interface{}) ProductUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "addAsset":
@@ -254,7 +254,7 @@ func mapDiscriminatorProductUpdateAction(input ProductUpdateAction) ProductUpdat
 // SuggestTokenizer uses type as discriminator attribute
 type SuggestTokenizer interface{}
 
-func mapDiscriminatorSuggestTokenizer(input SuggestTokenizer) SuggestTokenizer {
+func mapDiscriminatorSuggestTokenizer(input interface{}) SuggestTokenizer {
 	discriminator := input.(map[string]interface{})["type"]
 	switch discriminator {
 	case "custom":

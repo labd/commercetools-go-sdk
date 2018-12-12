@@ -12,7 +12,7 @@ import (
 // CustomerGroupUpdateAction uses action as discriminator attribute
 type CustomerGroupUpdateAction interface{}
 
-func mapDiscriminatorCustomerGroupUpdateAction(input CustomerGroupUpdateAction) CustomerGroupUpdateAction {
+func mapDiscriminatorCustomerGroupUpdateAction(input interface{}) CustomerGroupUpdateAction {
 	discriminator := input.(map[string]interface{})["action"]
 	switch discriminator {
 	case "changeName":
