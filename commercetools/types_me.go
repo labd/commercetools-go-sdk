@@ -31,7 +31,7 @@ type MyCustomerDraft struct {
 	Email                  string        `json:"email"`
 	DefaultShippingAddress int           `json:"defaultShippingAddress,omitempty"`
 	DefaultBillingAddress  int           `json:"defaultBillingAddress,omitempty"`
-	DateOfBirth            interface{}   `json:"dateOfBirth,omitempty"`
+	DateOfBirth            Date          `json:"dateOfBirth,omitempty"`
 	Custom                 *CustomFields `json:"custom,omitempty"`
 	CompanyName            string        `json:"companyName,omitempty"`
 	Addresses              []Address     `json:"addresses,omitempty"`

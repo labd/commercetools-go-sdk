@@ -508,20 +508,20 @@ func (obj CustomerCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerDateOfBirthSetMessage is of type Message
 type CustomerDateOfBirthSetMessage struct {
-	Version         int         `json:"version"`
-	LastModifiedAt  time.Time   `json:"lastModifiedAt"`
-	ID              string      `json:"id"`
-	CreatedAt       time.Time   `json:"createdAt"`
-	Type            string      `json:"type"`
-	SequenceNumber  int         `json:"sequenceNumber"`
-	ResourceVersion int         `json:"resourceVersion"`
-	Resource        Reference   `json:"resource"`
-	DateOfBirth     interface{} `json:"dateOfBirth"`
+	Version         int       `json:"version"`
+	LastModifiedAt  time.Time `json:"lastModifiedAt"`
+	ID              string    `json:"id"`
+	CreatedAt       time.Time `json:"createdAt"`
+	Type            string    `json:"type"`
+	SequenceNumber  int       `json:"sequenceNumber"`
+	ResourceVersion int       `json:"resourceVersion"`
+	Resource        Reference `json:"resource"`
+	DateOfBirth     Date      `json:"dateOfBirth"`
 }
 
 // CustomerDateOfBirthSetMessagePayload implements the interface MessagePayload
 type CustomerDateOfBirthSetMessagePayload struct {
-	DateOfBirth interface{} `json:"dateOfBirth"`
+	DateOfBirth Date `json:"dateOfBirth"`
 }
 
 // MarshalJSON override to set the discriminator value

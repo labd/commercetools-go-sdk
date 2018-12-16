@@ -34,6 +34,15 @@ const (
 	ResourceTypeIDCustomerGroup               ResourceTypeID = "customer-group"
 )
 
+// TypeTextInputHint is an enum type
+type TypeTextInputHint string
+
+// Enum values for TypeTextInputHint
+const (
+	TypeTextInputHintSingleLine TypeTextInputHint = "SingleLine"
+	TypeTextInputHintMultiLine  TypeTextInputHint = "MultiLine"
+)
+
 // FieldContainer is a map
 type FieldContainer map[string]string
 
@@ -349,11 +358,11 @@ type CustomFieldsDraft struct {
 
 // FieldDefinition is a standalone struct
 type FieldDefinition struct {
-	Type      FieldType        `json:"type"`
-	Required  bool             `json:"required"`
-	Name      string           `json:"name"`
-	Label     *LocalizedString `json:"label"`
-	InputHint string           `json:"inputHint,omitempty"`
+	Type      FieldType         `json:"type"`
+	Required  bool              `json:"required"`
+	Name      string            `json:"name"`
+	Label     *LocalizedString  `json:"label"`
+	InputHint TypeTextInputHint `json:"inputHint,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

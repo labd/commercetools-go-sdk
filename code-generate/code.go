@@ -367,6 +367,8 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 			}
 		case "datetime":
 			code = code.Qual("time", "Time")
+		case "date-only":
+			code = code.Id("Date")
 		default:
 			code = code.Interface()
 		}
