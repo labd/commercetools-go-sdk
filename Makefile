@@ -2,7 +2,7 @@ test:
 	go test ./...
 
 coverage:
-	go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
+	go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./commercetools ./commercetools
 	go tool cover -html=coverage.txt
 
 generate:
