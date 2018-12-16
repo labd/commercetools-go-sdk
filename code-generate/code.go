@@ -189,35 +189,75 @@ func generateStructDiscriminatorMapping(object *RamlType) *jen.Statement {
 
 	interfaceName := object.InterfaceName
 	c := jen.Line()
-	c = c.Func().Id(object.discriminatorFunctionName()).Params(jen.Id("input").Interface()).Parens(jen.Id(interfaceName)).Block(
-		jen.Id("discriminator").Op(":=").Id("input").Assert(jen.Map(jen.String()).Interface()).Index(jen.Lit(object.Discriminator)),
+	c = c.Func().Id(object.discriminatorFunctionName()).Params(jen.Id("input").Interface()).Parens(jen.List(jen.Id(interfaceName), jen.Error())).Block(
+
+		jen.Var().Id("discriminator").String(),
+
+		jen.If(
+			jen.List(jen.Id("data"), jen.Id("ok")).
+				Op(":=").
+				Id("input").Assert(jen.Map(jen.String()).Interface()),
+			jen.Id("ok"),
+		).Block(
+			jen.List(jen.Id("discriminator"), jen.Id("ok")).
+				Op("=").
+				Id("data").Index(jen.Lit(object.Discriminator)).Assert(jen.String()),
+			jen.If(jen.Op("!").Id("ok")).Block(
+				jen.Return(jen.Nil(), jen.Qual("errors", "New").Call(
+					jen.Lit(fmt.Sprintf("Error processing discriminator field '%s'", object.Discriminator)),
+				)),
+			),
+		).Else().Block(
+			jen.Return(jen.Nil(), jen.Qual("errors", "New").Call(
+				jen.Lit("Invalid data"),
+			)),
+		),
+
 		jen.Switch(jen.Id("discriminator")).BlockFunc(func(g *jen.Group) {
 			for _, child := range object.Children {
 				g.Case(jen.Lit(child.DiscriminatorValue)).Block(
 					jen.Id("new").Op(":=").Id(child.CodeName).Values(),
-					jen.Qual("github.com/mitchellh/mapstructure", "Decode").Call(jen.Id("input"), jen.Op("&").Id("new")),
+					jen.Err().Op(":=").Qual("github.com/mitchellh/mapstructure", "Decode").Call(jen.Id("input"), jen.Op("&").Id("new")),
+					jen.If(jen.Err().Op("!=").Nil().Block(jen.Return(jen.List(jen.Nil(), jen.Err())))),
 					jen.CustomFunc(jen.Options{}, func(g *jen.Group) {
-						// HIER
 						discriminatedAttributes := child.getDiscriminatedAttributes()
-						for _, attr := range discriminatedAttributes {
-							if attr.Many {
-								stmt := jen.For(jen.Id("i").Op(":=").Range().Id("new").Dot(attr.CodeName)).Block(
-									jen.Id("new").Dot(attr.CodeName).Index(jen.Id("i")).Op("=").Id(attr.TypeObject.discriminatorFunctionName()).Call(jen.Id("new").Dot(attr.CodeName).Index(jen.Id("i"))),
-								)
-								g.Add(stmt.Line())
-							} else {
-								stmt := jen.If(jen.Id("new").Dot(attr.CodeName).Op("!=").Nil()).Block(
-									jen.Id("new").Dot(attr.CodeName).Op("=").Id(attr.TypeObject.discriminatorFunctionName()).Call(jen.Id("new").Dot(attr.CodeName)),
-								)
-								g.Add(stmt.Line())
+						if len(discriminatedAttributes) == 0 {
+
+						} else {
+							for _, attr := range discriminatedAttributes {
+								if attr.Many {
+									stmt := jen.For(jen.Id("i").Op(":=").Range().Id("new").Dot(attr.CodeName)).Block(
+										jen.List(jen.Id("new").Dot(attr.CodeName).Index(jen.Id("i")), jen.Err()).
+											Op("=").
+											Id(attr.TypeObject.discriminatorFunctionName()).
+											Call(
+												jen.Id("new").Dot(attr.CodeName).Index(jen.Id("i")),
+											),
+									)
+									g.Add(stmt.Line())
+								} else {
+									stmt := jen.If(jen.Id("new").Dot(attr.CodeName).Op("!=").Nil()).Block(
+										jen.List(jen.Id("new").Dot(attr.CodeName), jen.Err()).
+											Op("=").
+											Id(attr.TypeObject.discriminatorFunctionName()).
+											Call(
+												jen.Id("new").Dot(attr.CodeName),
+											),
+										jen.If(jen.Err().Op("!=").Nil().Block(
+											jen.Return().List(jen.Nil(), jen.Err()),
+										)),
+									)
+									g.Add(stmt.Line())
+								}
 							}
 						}
+						g.Return(jen.List(jen.Id("new"), jen.Nil()))
 					}),
-					jen.Return(jen.Id("new")),
 				)
 			}
 		}),
-		jen.Return(jen.Nil()),
+
+		jen.Return(jen.List(jen.Nil(), jen.Nil())),
 	)
 
 	return c
@@ -286,20 +326,51 @@ func generateStructUnmarshalJSON(object *RamlType, discriminatedAttributes []*Ra
 			for _, attr := range discriminatedAttributes {
 				if strings.Contains(attr.CodeName, "/") {
 					// Apply on each value in struct
-
 				} else if attr.Many {
+					// Process regular many
 					stmt := jen.For(jen.Id("i").Op(":=").Range().Id("obj").Dot(attr.CodeName)).Block(
-						jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i")).Op("=").Id(attr.TypeObject.discriminatorFunctionName()).Call(jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i"))),
+						jen.Var().Err().Error(),
+						jen.List(jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i")), jen.Err()).
+							Op("=").
+							Id(attr.TypeObject.discriminatorFunctionName()).
+							Call(
+								jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i")),
+							),
+						jen.If(jen.Err().Op("!=").Nil().Block(
+							jen.Return(jen.Err()),
+						)),
 					)
 					g.Add(stmt.Line())
+
 				} else if attr.TypeObject != nil {
+					// Process regular
 					stmt := jen.If(jen.Id("obj").Dot(attr.CodeName).Op("!=").Nil()).Block(
-						jen.Id("obj").Dot(attr.CodeName).Op("=").Id(attr.TypeObject.discriminatorFunctionName()).Call(jen.Id("obj").Dot(attr.CodeName)),
+						jen.Var().Err().Error(),
+						jen.List(jen.Id("obj").Dot(attr.CodeName), jen.Err()).
+							Op("=").
+							Id(attr.TypeObject.discriminatorFunctionName()).
+							Call(
+								jen.Id("obj").Dot(attr.CodeName),
+							),
+						jen.If(jen.Err().Op("!=").Nil().Block(
+							jen.Return(jen.Err()),
+						)),
 					)
 					g.Add(stmt.Line())
+
 				} else if attr.ItemsObject != nil {
+					// Process Array type
 					stmt := jen.For(jen.Id("i").Op(":=").Range().Id("obj").Dot(attr.CodeName)).Block(
-						jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i")).Op("=").Id(attr.ItemsObject.discriminatorFunctionName()).Call(jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i"))),
+						jen.Var().Err().Error(),
+						jen.List(jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i")), jen.Err()).
+							Op("=").
+							Id(attr.ItemsObject.discriminatorFunctionName()).
+							Call(
+								jen.Id("obj").Dot(attr.CodeName).Index(jen.Id("i")),
+							),
+						jen.If(jen.Err().Op("!=").Nil().Block(
+							jen.Return(jen.Err()),
+						)),
 					)
 					g.Add(stmt.Line())
 				}

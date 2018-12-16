@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -32,47 +33,82 @@ const (
 // StateUpdateAction uses action as discriminator attribute
 type StateUpdateAction interface{}
 
-func mapDiscriminatorStateUpdateAction(input interface{}) StateUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorStateUpdateAction(input interface{}) (StateUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addRoles":
 		new := StateAddRolesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeInitial":
 		new := StateChangeInitialAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeKey":
 		new := StateChangeKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeType":
 		new := StateChangeTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeRoles":
 		new := StateRemoveRolesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDescription":
 		new := StateSetDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setName":
 		new := StateSetNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setRoles":
 		new := StateSetRolesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setTransitions":
 		new := StateSetTransitionsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // State is of type Resource
@@ -266,7 +302,11 @@ func (obj *StateUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorStateUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorStateUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

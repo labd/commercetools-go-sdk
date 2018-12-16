@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,43 +13,75 @@ import (
 // InventoryUpdateAction uses action as discriminator attribute
 type InventoryUpdateAction interface{}
 
-func mapDiscriminatorInventoryUpdateAction(input interface{}) InventoryUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorInventoryUpdateAction(input interface{}) (InventoryUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addQuantity":
 		new := InventoryAddQuantityAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeQuantity":
 		new := InventoryChangeQuantityAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeQuantity":
 		new := InventoryRemoveQuantityAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := InventorySetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := InventorySetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setExpectedDelivery":
 		new := InventorySetExpectedDeliveryAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setRestockableInDays":
 		new := InventorySetRestockableInDaysAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setSupplyChannel":
 		new := InventorySetSupplyChannelAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // InventoryAddQuantityAction implements the interface InventoryUpdateAction
@@ -228,7 +261,11 @@ func (obj *InventoryUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorInventoryUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorInventoryUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -24,51 +25,89 @@ const (
 // ChannelUpdateAction uses action as discriminator attribute
 type ChannelUpdateAction interface{}
 
-func mapDiscriminatorChannelUpdateAction(input interface{}) ChannelUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addRoles":
 		new := ChannelAddRolesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeDescription":
 		new := ChannelChangeDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeKey":
 		new := ChannelChangeKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := ChannelChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeRoles":
 		new := ChannelRemoveRolesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setAddress":
 		new := ChannelSetAddressAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := ChannelSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := ChannelSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setGeoLocation":
 		new := ChannelSetGeoLocationAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setRoles":
 		new := ChannelSetRolesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Channel is of type Resource
@@ -278,7 +317,11 @@ func (obj *ChannelUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorChannelUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorChannelUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

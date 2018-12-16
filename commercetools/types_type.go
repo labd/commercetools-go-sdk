@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -49,121 +50,211 @@ type FieldContainer map[string]string
 // FieldType uses name as discriminator attribute
 type FieldType interface{}
 
-func mapDiscriminatorFieldType(input interface{}) FieldType {
-	discriminator := input.(map[string]interface{})["name"]
+func mapDiscriminatorFieldType(input interface{}) (FieldType, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["name"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'name'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "Boolean":
 		new := CustomFieldBooleanType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "DateTime":
 		new := CustomFieldDateTimeType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Date":
 		new := CustomFieldDateType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Enum":
 		new := CustomFieldEnumType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "LocalizedEnum":
 		new := CustomFieldLocalizedEnumType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "LocalizedString":
 		new := CustomFieldLocalizedStringType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Money":
 		new := CustomFieldMoneyType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Number":
 		new := CustomFieldNumberType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Reference":
 		new := CustomFieldReferenceType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Set":
 		new := CustomFieldSetType{}
-		mapstructure.Decode(input, &new)
-		if new.ElementType != nil {
-			new.ElementType = mapDiscriminatorFieldType(new.ElementType)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.ElementType != nil {
+			new.ElementType, err = mapDiscriminatorFieldType(new.ElementType)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "String":
 		new := CustomFieldStringType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Time":
 		new := CustomFieldTimeType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // TypeUpdateAction uses action as discriminator attribute
 type TypeUpdateAction interface{}
 
-func mapDiscriminatorTypeUpdateAction(input interface{}) TypeUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addEnumValue":
 		new := TypeAddEnumValueAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addFieldDefinition":
 		new := TypeAddFieldDefinitionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addLocalizedEnumValue":
 		new := TypeAddLocalizedEnumValueAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeEnumValueOrder":
 		new := TypeChangeEnumValueOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeFieldDefinitionLabel":
 		new := TypeChangeFieldDefinitionLabelAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeFieldDefinitionOrder":
 		new := TypeChangeFieldDefinitionOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeKey":
 		new := TypeChangeKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLabel":
 		new := TypeChangeLabelAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLocalizedEnumValueOrder":
 		new := TypeChangeLocalizedEnumValueOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := TypeChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeFieldDefinition":
 		new := TypeRemoveFieldDefinitionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDescription":
 		new := TypeSetDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // CustomFieldBooleanType implements the interface FieldType
@@ -314,7 +405,11 @@ func (obj *CustomFieldSetType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.ElementType != nil {
-		obj.ElementType = mapDiscriminatorFieldType(obj.ElementType)
+		var err error
+		obj.ElementType, err = mapDiscriminatorFieldType(obj.ElementType)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -373,7 +468,11 @@ func (obj *FieldDefinition) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Type != nil {
-		obj.Type = mapDiscriminatorFieldType(obj.Type)
+		var err error
+		obj.Type, err = mapDiscriminatorFieldType(obj.Type)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -613,7 +712,11 @@ func (obj *TypeUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorTypeUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorTypeUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -119,251 +120,439 @@ const (
 // CartUpdateAction uses action as discriminator attribute
 type CartUpdateAction interface{}
 
-func mapDiscriminatorCartUpdateAction(input interface{}) CartUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addCustomLineItem":
 		new := CartAddCustomLineItemAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addDiscountCode":
 		new := CartAddDiscountCodeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addItemShippingAddress":
 		new := CartAddItemShippingAddressAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addLineItem":
 		new := CartAddLineItemAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addPayment":
 		new := CartAddPaymentAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addShoppingList":
 		new := CartAddShoppingListAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "applyDeltaToCustomLineItemShippingDetailsTargets":
 		new := CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "applyDeltaToLineItemShippingDetailsTargets":
 		new := CartApplyDeltaToLineItemShippingDetailsTargetsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeCustomLineItemMoney":
 		new := CartChangeCustomLineItemMoneyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeCustomLineItemQuantity":
 		new := CartChangeCustomLineItemQuantityAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLineItemQuantity":
 		new := CartChangeLineItemQuantityAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTaxCalculationMode":
 		new := CartChangeTaxCalculationModeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTaxMode":
 		new := CartChangeTaxModeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTaxRoundingMode":
 		new := CartChangeTaxRoundingModeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "recalculate":
 		new := CartRecalculateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeCustomLineItem":
 		new := CartRemoveCustomLineItemAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeDiscountCode":
 		new := CartRemoveDiscountCodeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeItemShippingAddress":
 		new := CartRemoveItemShippingAddressAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeLineItem":
 		new := CartRemoveLineItemAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removePayment":
 		new := CartRemovePaymentAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setAnonymousId":
 		new := CartSetAnonymousIDAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setBillingAddress":
 		new := CartSetBillingAddressAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCartTotalTax":
 		new := CartSetCartTotalTaxAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCountry":
 		new := CartSetCountryAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := CartSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomLineItemCustomField":
 		new := CartSetCustomLineItemCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomLineItemCustomType":
 		new := CartSetCustomLineItemCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomLineItemShippingDetails":
 		new := CartSetCustomLineItemShippingDetailsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomLineItemTaxAmount":
 		new := CartSetCustomLineItemTaxAmountAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomLineItemTaxRate":
 		new := CartSetCustomLineItemTaxRateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomShippingMethod":
 		new := CartSetCustomShippingMethodAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := CartSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomerEmail":
 		new := CartSetCustomerEmailAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomerGroup":
 		new := CartSetCustomerGroupAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomerId":
 		new := CartSetCustomerIDAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDeleteDaysAfterLastModification":
 		new := CartSetDeleteDaysAfterLastModificationAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemCustomField":
 		new := CartSetLineItemCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemCustomType":
 		new := CartSetLineItemCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemPrice":
 		new := CartSetLineItemPriceAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemShippingDetails":
 		new := CartSetLineItemShippingDetailsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemTaxAmount":
 		new := CartSetLineItemTaxAmountAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemTaxRate":
 		new := CartSetLineItemTaxRateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemTotalPrice":
 		new := CartSetLineItemTotalPriceAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLocale":
 		new := CartSetLocaleAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingAddress":
 		new := CartSetShippingAddressAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingMethod":
 		new := CartSetShippingMethodAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingMethodTaxAmount":
 		new := CartSetShippingMethodTaxAmountAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingMethodTaxRate":
 		new := CartSetShippingMethodTaxRateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingRateInput":
 		new := CartSetShippingRateInputAction{}
-		mapstructure.Decode(input, &new)
-		if new.ShippingRateInput != nil {
-			new.ShippingRateInput = mapDiscriminatorShippingRateInputDraft(new.ShippingRateInput)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.ShippingRateInput != nil {
+			new.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(new.ShippingRateInput)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "updateItemShippingAddress":
 		new := CartUpdateItemShippingAddressAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ShippingRateInput uses type as discriminator attribute
 type ShippingRateInput interface{}
 
-func mapDiscriminatorShippingRateInput(input interface{}) ShippingRateInput {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorShippingRateInput(input interface{}) (ShippingRateInput, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "Classification":
 		new := ClassificationShippingRateInput{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Score":
 		new := ScoreShippingRateInput{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ShippingRateInputDraft uses type as discriminator attribute
 type ShippingRateInputDraft interface{}
 
-func mapDiscriminatorShippingRateInputDraft(input interface{}) ShippingRateInputDraft {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorShippingRateInputDraft(input interface{}) (ShippingRateInputDraft, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "Classification":
 		new := ClassificationShippingRateInputDraft{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Score":
 		new := ScoreShippingRateInputDraft{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Cart is of type Resource
@@ -408,10 +597,18 @@ func (obj *Cart) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.ShippingRateInput != nil {
-		obj.ShippingRateInput = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.TotalPrice != nil {
-		obj.TotalPrice = mapDiscriminatorTypedMoney(obj.TotalPrice)
+		var err error
+		obj.TotalPrice, err = mapDiscriminatorTypedMoney(obj.TotalPrice)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -672,7 +869,11 @@ func (obj *CartDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.ShippingRateInput != nil {
-		obj.ShippingRateInput = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1227,7 +1428,11 @@ func (obj *CartSetShippingRateInputAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.ShippingRateInput != nil {
-		obj.ShippingRateInput = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1247,7 +1452,11 @@ func (obj *CartUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorCartUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorCartUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1321,10 +1530,18 @@ func (obj *CustomLineItem) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Money != nil {
-		obj.Money = mapDiscriminatorTypedMoney(obj.Money)
+		var err error
+		obj.Money, err = mapDiscriminatorTypedMoney(obj.Money)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.TotalPrice != nil {
-		obj.TotalPrice = mapDiscriminatorTypedMoney(obj.TotalPrice)
+		var err error
+		obj.TotalPrice, err = mapDiscriminatorTypedMoney(obj.TotalPrice)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1368,7 +1585,11 @@ func (obj *DiscountedLineItemPrice) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorTypedMoney(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1469,7 +1690,11 @@ func (obj *ReplicaCartDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Reference != nil {
-		obj.Reference = mapDiscriminatorReference(obj.Reference)
+		var err error
+		obj.Reference, err = mapDiscriminatorReference(obj.Reference)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1525,7 +1750,11 @@ func (obj *ShippingInfo) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Price != nil {
-		obj.Price = mapDiscriminatorTypedMoney(obj.Price)
+		var err error
+		obj.Price, err = mapDiscriminatorTypedMoney(obj.Price)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1552,10 +1781,18 @@ func (obj *TaxedItemPrice) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.TotalGross != nil {
-		obj.TotalGross = mapDiscriminatorTypedMoney(obj.TotalGross)
+		var err error
+		obj.TotalGross, err = mapDiscriminatorTypedMoney(obj.TotalGross)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.TotalNet != nil {
-		obj.TotalNet = mapDiscriminatorTypedMoney(obj.TotalNet)
+		var err error
+		obj.TotalNet, err = mapDiscriminatorTypedMoney(obj.TotalNet)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

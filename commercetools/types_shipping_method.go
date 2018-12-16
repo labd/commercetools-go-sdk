@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -22,73 +23,128 @@ const (
 // ShippingMethodUpdateAction uses action as discriminator attribute
 type ShippingMethodUpdateAction interface{}
 
-func mapDiscriminatorShippingMethodUpdateAction(input interface{}) ShippingMethodUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMethodUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addShippingRate":
 		new := ShippingMethodAddShippingRateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addZone":
 		new := ShippingMethodAddZoneAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeIsDefault":
 		new := ShippingMethodChangeIsDefaultAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := ShippingMethodChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTaxCategory":
 		new := ShippingMethodChangeTaxCategoryAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeShippingRate":
 		new := ShippingMethodRemoveShippingRateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeZone":
 		new := ShippingMethodRemoveZoneAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDescription":
 		new := ShippingMethodSetDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := ShippingMethodSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setPredicate":
 		new := ShippingMethodSetPredicateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ShippingRatePriceTier uses type as discriminator attribute
 type ShippingRatePriceTier interface{}
 
-func mapDiscriminatorShippingRatePriceTier(input interface{}) ShippingRatePriceTier {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePriceTier, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "CartClassification":
 		new := CartClassificationTier{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "CartScore":
 		new := CartScoreTier{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "CartValue":
 		new := CartValueTier{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // CartClassificationTier implements the interface ShippingRatePriceTier
@@ -352,7 +408,11 @@ func (obj *ShippingMethodUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorShippingMethodUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorShippingMethodUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -374,13 +434,25 @@ func (obj *ShippingRate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.FreeAbove != nil {
-		obj.FreeAbove = mapDiscriminatorTypedMoney(obj.FreeAbove)
+		var err error
+		obj.FreeAbove, err = mapDiscriminatorTypedMoney(obj.FreeAbove)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Price != nil {
-		obj.Price = mapDiscriminatorTypedMoney(obj.Price)
+		var err error
+		obj.Price, err = mapDiscriminatorTypedMoney(obj.Price)
+		if err != nil {
+			return err
+		}
 	}
 	for i := range obj.Tiers {
-		obj.Tiers[i] = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+		var err error
+		obj.Tiers[i], err = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -401,7 +473,11 @@ func (obj *ShippingRateDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Tiers {
-		obj.Tiers[i] = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+		var err error
+		obj.Tiers[i], err = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

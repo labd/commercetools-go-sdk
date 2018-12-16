@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -40,157 +41,274 @@ const (
 // AttributeType uses name as discriminator attribute
 type AttributeType interface{}
 
-func mapDiscriminatorAttributeType(input interface{}) AttributeType {
-	discriminator := input.(map[string]interface{})["name"]
+func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["name"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'name'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "boolean":
 		new := AttributeBooleanType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "datetime":
 		new := AttributeDateTimeType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "date":
 		new := AttributeDateType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "enum":
 		new := AttributeEnumType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ltext":
 		new := AttributeLocalizableTextType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "lenum":
 		new := AttributeLocalizedEnumType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "money":
 		new := AttributeMoneyType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "nested":
 		new := AttributeNestedType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "number":
 		new := AttributeNumberType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "reference":
 		new := AttributeReferenceType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "set":
 		new := AttributeSetType{}
-		mapstructure.Decode(input, &new)
-		if new.ElementType != nil {
-			new.ElementType = mapDiscriminatorAttributeType(new.ElementType)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.ElementType != nil {
+			new.ElementType, err = mapDiscriminatorAttributeType(new.ElementType)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "text":
 		new := AttributeTextType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "time":
 		new := AttributeTimeType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ProductTypeUpdateAction uses action as discriminator attribute
 type ProductTypeUpdateAction interface{}
 
-func mapDiscriminatorProductTypeUpdateAction(input interface{}) ProductTypeUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorProductTypeUpdateAction(input interface{}) (ProductTypeUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addAttributeDefinition":
 		new := ProductTypeAddAttributeDefinitionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addLocalizedEnumValue":
 		new := ProductTypeAddLocalizedEnumValueAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addPlainEnumValue":
 		new := ProductTypeAddPlainEnumValueAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeAttributeConstraint":
 		new := ProductTypeChangeAttributeConstraintAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeAttributeName":
 		new := ProductTypeChangeAttributeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeAttributeOrder":
 		new := ProductTypeChangeAttributeOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeDescription":
 		new := ProductTypeChangeDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeEnumKey":
 		new := ProductTypeChangeEnumKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeInputHint":
 		new := ProductTypeChangeInputHintAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeIsSearchable":
 		new := ProductTypeChangeIsSearchableAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLabel":
 		new := ProductTypeChangeLabelAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLocalizedEnumValueLabel":
 		new := ProductTypeChangeLocalizedEnumValueLabelAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLocalizedEnumValueOrder":
 		new := ProductTypeChangeLocalizedEnumValueOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := ProductTypeChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changePlainEnumValueLabel":
 		new := ProductTypeChangePlainEnumValueLabelAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changePlainEnumValueOrder":
 		new := ProductTypeChangePlainEnumValueOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeAttributeDefinition":
 		new := ProductTypeRemoveAttributeDefinitionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeEnumValues":
 		new := ProductTypeRemoveEnumValuesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setInputTip":
 		new := ProductTypeSetInputTipAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := ProductTypeSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // AttributeBooleanType implements the interface AttributeType
@@ -249,7 +367,11 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Type != nil {
-		obj.Type = mapDiscriminatorAttributeType(obj.Type)
+		var err error
+		obj.Type, err = mapDiscriminatorAttributeType(obj.Type)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -275,7 +397,11 @@ func (obj *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Type != nil {
-		obj.Type = mapDiscriminatorAttributeType(obj.Type)
+		var err error
+		obj.Type, err = mapDiscriminatorAttributeType(obj.Type)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -407,7 +533,11 @@ func (obj *AttributeSetType) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.ElementType != nil {
-		obj.ElementType = mapDiscriminatorAttributeType(obj.ElementType)
+		var err error
+		obj.ElementType, err = mapDiscriminatorAttributeType(obj.ElementType)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -790,7 +920,11 @@ func (obj *ProductTypeUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorProductTypeUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorProductTypeUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

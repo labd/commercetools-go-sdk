@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,77 +13,122 @@ import (
 // OrderEditResult uses type as discriminator attribute
 type OrderEditResult interface{}
 
-func mapDiscriminatorOrderEditResult(input interface{}) OrderEditResult {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "Applied":
 		new := OrderEditApplied{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "NotProcessed":
 		new := OrderEditNotProcessed{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "PreviewFailure":
 		new := OrderEditPreviewFailure{}
-		mapstructure.Decode(input, &new)
-		for i := range new.Errors {
-			new.Errors[i] = mapDiscriminatorErrorObject(new.Errors[i])
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		for i := range new.Errors {
+			new.Errors[i], err = mapDiscriminatorErrorObject(new.Errors[i])
+		}
+		return new, nil
 	case "PreviewSuccess":
 		new := OrderEditPreviewSuccess{}
-		mapstructure.Decode(input, &new)
-		for i := range new.MessagePayloads {
-			new.MessagePayloads[i] = mapDiscriminatorMessagePayload(new.MessagePayloads[i])
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		for i := range new.MessagePayloads {
+			new.MessagePayloads[i], err = mapDiscriminatorMessagePayload(new.MessagePayloads[i])
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // OrderEditUpdateAction uses action as discriminator attribute
 type OrderEditUpdateAction interface{}
 
-func mapDiscriminatorOrderEditUpdateAction(input interface{}) OrderEditUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addStagedAction":
 		new := OrderEditAddStagedActionAction{}
-		mapstructure.Decode(input, &new)
-		if new.StagedAction != nil {
-			new.StagedAction = mapDiscriminatorStagedOrderUpdateAction(new.StagedAction)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.StagedAction != nil {
+			new.StagedAction, err = mapDiscriminatorStagedOrderUpdateAction(new.StagedAction)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "setComment":
 		new := OrderEditSetCommentAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := OrderEditSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := OrderEditSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := OrderEditSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setStagedActions":
 		new := OrderEditSetStagedActionsAction{}
-		mapstructure.Decode(input, &new)
-		for i := range new.StagedActions {
-			new.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(new.StagedActions[i])
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		for i := range new.StagedActions {
+			new.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(new.StagedActions[i])
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // OrderEdit is of type Resource
@@ -107,10 +153,18 @@ func (obj *OrderEdit) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Result != nil {
-		obj.Result = mapDiscriminatorOrderEditResult(obj.Result)
+		var err error
+		obj.Result, err = mapDiscriminatorOrderEditResult(obj.Result)
+		if err != nil {
+			return err
+		}
 	}
 	for i := range obj.StagedActions {
-		obj.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		var err error
+		obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -138,7 +192,11 @@ func (obj *OrderEditAddStagedActionAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.StagedAction != nil {
-		obj.StagedAction = mapDiscriminatorStagedOrderUpdateAction(obj.StagedAction)
+		var err error
+		obj.StagedAction, err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedAction)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -184,7 +242,11 @@ func (obj *OrderEditDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.StagedActions {
-		obj.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		var err error
+		obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -232,7 +294,11 @@ func (obj *OrderEditPreviewFailure) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Errors {
-		obj.Errors[i] = mapDiscriminatorErrorObject(obj.Errors[i])
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -261,7 +327,11 @@ func (obj *OrderEditPreviewSuccess) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.MessagePayloads {
-		obj.MessagePayloads[i] = mapDiscriminatorMessagePayload(obj.MessagePayloads[i])
+		var err error
+		obj.MessagePayloads[i], err = mapDiscriminatorMessagePayload(obj.MessagePayloads[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -363,7 +433,11 @@ func (obj *OrderEditSetStagedActionsAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.StagedActions {
-		obj.StagedActions[i] = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		var err error
+		obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -384,7 +458,11 @@ func (obj *OrderEditUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorOrderEditUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorOrderEditUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -1414,7 +1492,11 @@ func (obj *StagedOrderSetShippingRateInputAction) UnmarshalJSON(data []byte) err
 		return err
 	}
 	if obj.ShippingRateInput != nil {
-		obj.ShippingRateInput = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -32,67 +33,116 @@ const (
 // ExtensionDestination uses type as discriminator attribute
 type ExtensionDestination interface{}
 
-func mapDiscriminatorExtensionDestination(input interface{}) ExtensionDestination {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestination, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "AWSLambda":
 		new := ExtensionAWSLambdaDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "HTTP":
 		new := ExtensionHTTPDestination{}
-		mapstructure.Decode(input, &new)
-		if new.Authentication != nil {
-			new.Authentication = mapDiscriminatorExtensionHTTPDestinationAuthentication(new.Authentication)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Authentication != nil {
+			new.Authentication, err = mapDiscriminatorExtensionHTTPDestinationAuthentication(new.Authentication)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ExtensionHTTPDestinationAuthentication uses type as discriminator attribute
 type ExtensionHTTPDestinationAuthentication interface{}
 
-func mapDiscriminatorExtensionHTTPDestinationAuthentication(input interface{}) ExtensionHTTPDestinationAuthentication {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorExtensionHTTPDestinationAuthentication(input interface{}) (ExtensionHTTPDestinationAuthentication, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "AuthorizationHeader":
 		new := ExtensionAuthorizationHeaderAuthentication{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "AzureFunctions":
 		new := ExtensionAzureFunctionsAuthentication{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ExtensionUpdateAction uses action as discriminator attribute
 type ExtensionUpdateAction interface{}
 
-func mapDiscriminatorExtensionUpdateAction(input interface{}) ExtensionUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "changeDestination":
 		new := ExtensionChangeDestinationAction{}
-		mapstructure.Decode(input, &new)
-		if new.Destination != nil {
-			new.Destination = mapDiscriminatorExtensionDestination(new.Destination)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Destination != nil {
+			new.Destination, err = mapDiscriminatorExtensionDestination(new.Destination)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "changeTriggers":
 		new := ExtensionChangeTriggersAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := ExtensionSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Extension is of type Resource
@@ -114,7 +164,11 @@ func (obj *Extension) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Destination != nil {
-		obj.Destination = mapDiscriminatorExtensionDestination(obj.Destination)
+		var err error
+		obj.Destination, err = mapDiscriminatorExtensionDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -186,7 +240,11 @@ func (obj *ExtensionChangeDestinationAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Destination != nil {
-		obj.Destination = mapDiscriminatorExtensionDestination(obj.Destination)
+		var err error
+		obj.Destination, err = mapDiscriminatorExtensionDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -221,7 +279,11 @@ func (obj *ExtensionDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Destination != nil {
-		obj.Destination = mapDiscriminatorExtensionDestination(obj.Destination)
+		var err error
+		obj.Destination, err = mapDiscriminatorExtensionDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -250,7 +312,11 @@ func (obj *ExtensionHTTPDestination) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Authentication != nil {
-		obj.Authentication = mapDiscriminatorExtensionHTTPDestinationAuthentication(obj.Authentication)
+		var err error
+		obj.Authentication, err = mapDiscriminatorExtensionHTTPDestinationAuthentication(obj.Authentication)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -270,7 +336,11 @@ func (obj *ExtensionInput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Resource != nil {
-		obj.Resource = mapDiscriminatorReference(obj.Resource)
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -318,7 +388,11 @@ func (obj *ExtensionUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorExtensionUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorExtensionUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -30,127 +31,221 @@ const (
 // CartDiscountTarget uses type as discriminator attribute
 type CartDiscountTarget interface{}
 
-func mapDiscriminatorCartDiscountTarget(input interface{}) CartDiscountTarget {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "customLineItems":
 		new := CartDiscountCustomLineItemsTarget{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "lineItems":
 		new := CartDiscountLineItemsTarget{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "shipping":
 		new := CartDiscountShippingCostTarget{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "multiBuyCustomLineItems":
 		new := MultiBuyCustomLineItemsTarget{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "multiBuyLineItems":
 		new := MultiBuyLineItemsTarget{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // CartDiscountUpdateAction uses action as discriminator attribute
 type CartDiscountUpdateAction interface{}
 
-func mapDiscriminatorCartDiscountUpdateAction(input interface{}) CartDiscountUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "changeCartPredicate":
 		new := CartDiscountChangeCartPredicateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeIsActive":
 		new := CartDiscountChangeIsActiveAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := CartDiscountChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeRequiresDiscountCode":
 		new := CartDiscountChangeRequiresDiscountCodeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeSortOrder":
 		new := CartDiscountChangeSortOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeStackingMode":
 		new := CartDiscountChangeStackingModeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTarget":
 		new := CartDiscountChangeTargetAction{}
-		mapstructure.Decode(input, &new)
-		if new.Target != nil {
-			new.Target = mapDiscriminatorCartDiscountTarget(new.Target)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Target != nil {
+			new.Target, err = mapDiscriminatorCartDiscountTarget(new.Target)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "changeValue":
 		new := CartDiscountChangeValueAction{}
-		mapstructure.Decode(input, &new)
-		if new.Value != nil {
-			new.Value = mapDiscriminatorCartDiscountValue(new.Value)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Value != nil {
+			new.Value, err = mapDiscriminatorCartDiscountValue(new.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "setCustomField":
 		new := CartDiscountSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := CartDiscountSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDescription":
 		new := CartDiscountSetDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFrom":
 		new := CartDiscountSetValidFromAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFromAndUntil":
 		new := CartDiscountSetValidFromAndUntilAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidUntil":
 		new := CartDiscountSetValidUntilAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // CartDiscountValue uses type as discriminator attribute
 type CartDiscountValue interface{}
 
-func mapDiscriminatorCartDiscountValue(input interface{}) CartDiscountValue {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "absolute":
 		new := CartDiscountValueAbsolute{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "giftLineItem":
 		new := CartDiscountValueGiftLineItem{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "relative":
 		new := CartDiscountValueRelative{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // CartDiscount is of type Resource
@@ -182,13 +277,25 @@ func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.References {
-		obj.References[i] = mapDiscriminatorReference(obj.References[i])
+		var err error
+		obj.References[i], err = mapDiscriminatorReference(obj.References[i])
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Target != nil {
-		obj.Target = mapDiscriminatorCartDiscountTarget(obj.Target)
+		var err error
+		obj.Target, err = mapDiscriminatorCartDiscountTarget(obj.Target)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorCartDiscountValue(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorCartDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -300,7 +407,11 @@ func (obj *CartDiscountChangeTargetAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Target != nil {
-		obj.Target = mapDiscriminatorCartDiscountTarget(obj.Target)
+		var err error
+		obj.Target, err = mapDiscriminatorCartDiscountTarget(obj.Target)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -328,7 +439,11 @@ func (obj *CartDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorCartDiscountValue(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorCartDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -372,10 +487,18 @@ func (obj *CartDiscountDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Target != nil {
-		obj.Target = mapDiscriminatorCartDiscountTarget(obj.Target)
+		var err error
+		obj.Target, err = mapDiscriminatorCartDiscountTarget(obj.Target)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorCartDiscountValue(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorCartDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -532,7 +655,11 @@ func (obj *CartDiscountUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorCartDiscountUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorCartDiscountUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

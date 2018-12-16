@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,65 +13,113 @@ import (
 // ProjectUpdateAction uses action as discriminator attribute
 type ProjectUpdateAction interface{}
 
-func mapDiscriminatorProjectUpdateAction(input interface{}) ProjectUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "changeCountries":
 		new := ProjectChangeCountriesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeCurrencies":
 		new := ProjectChangeCurrenciesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeLanguages":
 		new := ProjectChangeLanguagesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeMessagesConfiguration":
 		new := ProjectChangeMessagesConfigurationAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeMessagesEnabled":
 		new := ProjectChangeMessagesEnabledAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := ProjectChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingRateInputType":
 		new := ProjectSetShippingRateInputTypeAction{}
-		mapstructure.Decode(input, &new)
-		if new.ShippingRateInputType != nil {
-			new.ShippingRateInputType = mapDiscriminatorShippingRateInputType(new.ShippingRateInputType)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.ShippingRateInputType != nil {
+			new.ShippingRateInputType, err = mapDiscriminatorShippingRateInputType(new.ShippingRateInputType)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ShippingRateInputType uses type as discriminator attribute
 type ShippingRateInputType interface{}
 
-func mapDiscriminatorShippingRateInputType(input interface{}) ShippingRateInputType {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInputType, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "CartClassification":
 		new := CartClassificationType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "CartScore":
 		new := CartScoreType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "CartValue":
 		new := CartValueType{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // CartClassificationType implements the interface ShippingRateInputType
@@ -133,7 +182,11 @@ func (obj *Project) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.ShippingRateInputType != nil {
-		obj.ShippingRateInputType = mapDiscriminatorShippingRateInputType(obj.ShippingRateInputType)
+		var err error
+		obj.ShippingRateInputType, err = mapDiscriminatorShippingRateInputType(obj.ShippingRateInputType)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -245,7 +298,11 @@ func (obj *ProjectSetShippingRateInputTypeAction) UnmarshalJSON(data []byte) err
 		return err
 	}
 	if obj.ShippingRateInputType != nil {
-		obj.ShippingRateInputType = mapDiscriminatorShippingRateInputType(obj.ShippingRateInputType)
+		var err error
+		obj.ShippingRateInputType, err = mapDiscriminatorShippingRateInputType(obj.ShippingRateInputType)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -265,7 +322,11 @@ func (obj *ProjectUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorProjectUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorProjectUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

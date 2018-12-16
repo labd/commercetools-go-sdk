@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -62,131 +63,230 @@ type LocalizedString map[string]string
 // GeoJSON uses type as discriminator attribute
 type GeoJSON interface{}
 
-func mapDiscriminatorGeoJSON(input interface{}) GeoJSON {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorGeoJSON(input interface{}) (GeoJSON, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "Point":
 		new := GeoJSONPoint{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Reference uses typeId as discriminator attribute
 type Reference interface{}
 
-func mapDiscriminatorReference(input interface{}) Reference {
-	discriminator := input.(map[string]interface{})["typeId"]
+func mapDiscriminatorReference(input interface{}) (Reference, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["typeId"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'typeId'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "cart-discount":
 		new := CartDiscountReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "cart":
 		new := CartReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "category":
 		new := CategoryReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "channel":
 		new := ChannelReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "key-value-document":
 		new := CustomObjectReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "customer-group":
 		new := CustomerGroupReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "customer":
 		new := CustomerReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "discount-code":
 		new := DiscountCodeReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "inventory-entry":
 		new := InventoryEntryReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "order-edit":
 		new := OrderEditReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "order":
 		new := OrderReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "payment":
 		new := PaymentReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "product-discount":
 		new := ProductDiscountReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "product":
 		new := ProductReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "product-type":
 		new := ProductTypeReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "review":
 		new := ReviewReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "shipping-method":
 		new := ShippingMethodReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "shopping-list":
 		new := ShoppingListReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "state":
 		new := StateReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "tax-category":
 		new := TaxCategoryReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "type":
 		new := TypeReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "zone":
 		new := ZoneReference{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // TypedMoney uses type as discriminator attribute
 type TypedMoney interface{}
 
-func mapDiscriminatorTypedMoney(input interface{}) TypedMoney {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "centPrecision":
 		new := CentPrecisionMoney{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "highPrecision":
 		new := HighPrecisionMoney{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Address is a standalone struct
@@ -394,10 +494,18 @@ func (obj *ScopedPrice) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.CurrentValue != nil {
-		obj.CurrentValue = mapDiscriminatorTypedMoney(obj.CurrentValue)
+		var err error
+		obj.CurrentValue, err = mapDiscriminatorTypedMoney(obj.CurrentValue)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorTypedMoney(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

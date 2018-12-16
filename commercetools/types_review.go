@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,59 +13,102 @@ import (
 // ReviewUpdateAction uses action as discriminator attribute
 type ReviewUpdateAction interface{}
 
-func mapDiscriminatorReviewUpdateAction(input interface{}) ReviewUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorReviewUpdateAction(input interface{}) (ReviewUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "setAuthorName":
 		new := ReviewSetAuthorNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := ReviewSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := ReviewSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomer":
 		new := ReviewSetCustomerAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := ReviewSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLocale":
 		new := ReviewSetLocaleAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setRating":
 		new := ReviewSetRatingAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setTarget":
 		new := ReviewSetTargetAction{}
-		mapstructure.Decode(input, &new)
-		if new.Target != nil {
-			new.Target = mapDiscriminatorReference(new.Target)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Target != nil {
+			new.Target, err = mapDiscriminatorReference(new.Target)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "setText":
 		new := ReviewSetTextAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setTitle":
 		new := ReviewSetTitleAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "transitionState":
 		new := ReviewTransitionStateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Review is of type Resource
@@ -95,7 +139,11 @@ func (obj *Review) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Target != nil {
-		obj.Target = mapDiscriminatorReference(obj.Target)
+		var err error
+		obj.Target, err = mapDiscriminatorReference(obj.Target)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -124,7 +172,11 @@ func (obj *ReviewDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Target != nil {
-		obj.Target = mapDiscriminatorReference(obj.Target)
+		var err error
+		obj.Target, err = mapDiscriminatorReference(obj.Target)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -285,7 +337,11 @@ func (obj *ReviewSetTargetAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Target != nil {
-		obj.Target = mapDiscriminatorReference(obj.Target)
+		var err error
+		obj.Target, err = mapDiscriminatorReference(obj.Target)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -348,7 +404,11 @@ func (obj *ReviewUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorReviewUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorReviewUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

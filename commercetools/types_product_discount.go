@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,73 +13,127 @@ import (
 // ProductDiscountUpdateAction uses action as discriminator attribute
 type ProductDiscountUpdateAction interface{}
 
-func mapDiscriminatorProductDiscountUpdateAction(input interface{}) ProductDiscountUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorProductDiscountUpdateAction(input interface{}) (ProductDiscountUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "changeIsActive":
 		new := ProductDiscountChangeIsActiveAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeName":
 		new := ProductDiscountChangeNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changePredicate":
 		new := ProductDiscountChangePredicateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeSortOrder":
 		new := ProductDiscountChangeSortOrderAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeValue":
 		new := ProductDiscountChangeValueAction{}
-		mapstructure.Decode(input, &new)
-		if new.Value != nil {
-			new.Value = mapDiscriminatorProductDiscountValue(new.Value)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Value != nil {
+			new.Value, err = mapDiscriminatorProductDiscountValue(new.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "setDescription":
 		new := ProductDiscountSetDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFrom":
 		new := ProductDiscountSetValidFromAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFromAndUntil":
 		new := ProductDiscountSetValidFromAndUntilAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidUntil":
 		new := ProductDiscountSetValidUntilAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ProductDiscountValue uses type as discriminator attribute
 type ProductDiscountValue interface{}
 
-func mapDiscriminatorProductDiscountValue(input interface{}) ProductDiscountValue {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountValue, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "absolute":
 		new := ProductDiscountValueAbsolute{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "external":
 		new := ProductDiscountValueExternal{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "relative":
 		new := ProductDiscountValueRelative{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // ProductDiscount is of type Resource
@@ -106,10 +161,18 @@ func (obj *ProductDiscount) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.References {
-		obj.References[i] = mapDiscriminatorReference(obj.References[i])
+		var err error
+		obj.References[i], err = mapDiscriminatorReference(obj.References[i])
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorProductDiscountValue(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorProductDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -193,7 +256,11 @@ func (obj *ProductDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorProductDiscountValue(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorProductDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -219,7 +286,11 @@ func (obj *ProductDiscountDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Value != nil {
-		obj.Value = mapDiscriminatorProductDiscountValue(obj.Value)
+		var err error
+		obj.Value, err = mapDiscriminatorProductDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -328,7 +399,11 @@ func (obj *ProductDiscountUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorProductDiscountUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorProductDiscountUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

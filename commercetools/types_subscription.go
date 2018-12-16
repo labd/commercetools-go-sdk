@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,109 +13,191 @@ import (
 // DeliveryFormat uses type as discriminator attribute
 type DeliveryFormat interface{}
 
-func mapDiscriminatorDeliveryFormat(input interface{}) DeliveryFormat {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "CloudEvents":
 		new := DeliveryCloudEventsFormat{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "Platform":
 		new := DeliveryPlatformFormat{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Destination uses type as discriminator attribute
 type Destination interface{}
 
-func mapDiscriminatorDestination(input interface{}) Destination {
-	discriminator := input.(map[string]interface{})["type"]
+func mapDiscriminatorDestination(input interface{}) (Destination, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "EventGrid":
 		new := AzureEventGridDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "AzureServiceBus":
 		new := AzureServiceBusDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "GoogleCloudPubSub":
 		new := GoogleCloudPubSubDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "IronMQ":
 		new := IronMqDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "SNS":
 		new := SnsDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "SQS":
 		new := SqsDestination{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // SubscriptionDelivery uses notificationType as discriminator attribute
 type SubscriptionDelivery interface{}
 
-func mapDiscriminatorSubscriptionDelivery(input interface{}) SubscriptionDelivery {
-	discriminator := input.(map[string]interface{})["notificationType"]
+func mapDiscriminatorSubscriptionDelivery(input interface{}) (SubscriptionDelivery, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["notificationType"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'notificationType'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "Message":
 		new := MessageDelivery{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ResourceCreated":
 		new := ResourceCreatedDelivery{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ResourceDeleted":
 		new := ResourceDeletedDelivery{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ResourceUpdated":
 		new := ResourceUpdatedDelivery{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // SubscriptionUpdateAction uses action as discriminator attribute
 type SubscriptionUpdateAction interface{}
 
-func mapDiscriminatorSubscriptionUpdateAction(input interface{}) SubscriptionUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "changeDestination":
 		new := SubscriptionChangeDestinationAction{}
-		mapstructure.Decode(input, &new)
-		if new.Destination != nil {
-			new.Destination = mapDiscriminatorDestination(new.Destination)
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
 		}
-
-		return new
+		if new.Destination != nil {
+			new.Destination, err = mapDiscriminatorDestination(new.Destination)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "setChanges":
 		new := SubscriptionSetChangesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := SubscriptionSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setMessages":
 		new := SubscriptionSetMessagesAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // AzureEventGridDestination implements the interface Destination
@@ -346,10 +429,18 @@ func (obj *Subscription) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Destination != nil {
-		obj.Destination = mapDiscriminatorDestination(obj.Destination)
+		var err error
+		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Format != nil {
-		obj.Format = mapDiscriminatorDeliveryFormat(obj.Format)
+		var err error
+		obj.Format, err = mapDiscriminatorDeliveryFormat(obj.Format)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -377,7 +468,11 @@ func (obj *SubscriptionChangeDestinationAction) UnmarshalJSON(data []byte) error
 		return err
 	}
 	if obj.Destination != nil {
-		obj.Destination = mapDiscriminatorDestination(obj.Destination)
+		var err error
+		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -400,10 +495,18 @@ func (obj *SubscriptionDraft) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Destination != nil {
-		obj.Destination = mapDiscriminatorDestination(obj.Destination)
+		var err error
+		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.Format != nil {
-		obj.Format = mapDiscriminatorDeliveryFormat(obj.Format)
+		var err error
+		obj.Format, err = mapDiscriminatorDeliveryFormat(obj.Format)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -473,7 +576,11 @@ func (obj *SubscriptionUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorSubscriptionUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorSubscriptionUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

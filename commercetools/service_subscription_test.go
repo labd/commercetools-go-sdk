@@ -314,6 +314,24 @@ func TestSubscriptionDeleteByKey(t *testing.T) {
 	assert.Equal(t, params, output.URL.Query())
 	assert.Equal(t, "/unittest/subscriptions/key=1234", output.URL.Path)
 }
+func TestSubscriptionGetDestinationInvalid(t *testing.T) {
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.invalid.json"), nil, nil)
+	defer server.Close()
+
+	subscription, err := client.SubscriptionGetByID("100")
+	assert.NotNil(t, err)
+	assert.Nil(t, subscription)
+}
+
+func TestSubscriptionGetDestinationUnknown(t *testing.T) {
+	client, server := testutil.MockClient(t, testutil.Fixture("subscription.unknown.json"), nil, nil)
+	defer server.Close()
+
+	subscription, err := client.SubscriptionGetByID("100")
+	assert.Nil(t, err)
+	assert.NotNil(t, subscription)
+	assert.Nil(t, subscription.Destination)
+}
 
 func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.ironmq.json"), nil, nil)

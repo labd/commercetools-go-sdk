@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -35,99 +36,173 @@ const (
 // PaymentUpdateAction uses action as discriminator attribute
 type PaymentUpdateAction interface{}
 
-func mapDiscriminatorPaymentUpdateAction(input interface{}) PaymentUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "addInterfaceInteraction":
 		new := PaymentAddInterfaceInteractionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "addTransaction":
 		new := PaymentAddTransactionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeAmountPlanned":
 		new := PaymentChangeAmountPlannedAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTransactionInteractionId":
 		new := PaymentChangeTransactionInteractionIDAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTransactionState":
 		new := PaymentChangeTransactionStateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeTransactionTimestamp":
 		new := PaymentChangeTransactionTimestampAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setAmountPaid":
 		new := PaymentSetAmountPaidAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setAmountRefunded":
 		new := PaymentSetAmountRefundedAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setAnonymousId":
 		new := PaymentSetAnonymousIDAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setAuthorization":
 		new := PaymentSetAuthorizationAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := PaymentSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := PaymentSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomer":
 		new := PaymentSetCustomerAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setExternalId":
 		new := PaymentSetExternalIDAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setInterfaceId":
 		new := PaymentSetInterfaceIDAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := PaymentSetKeyAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setMethodInfoInterface":
 		new := PaymentSetMethodInfoInterfaceAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setMethodInfoMethod":
 		new := PaymentSetMethodInfoMethodAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setMethodInfoName":
 		new := PaymentSetMethodInfoNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setStatusInterfaceCode":
 		new := PaymentSetStatusInterfaceCodeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setStatusInterfaceText":
 		new := PaymentSetStatusInterfaceTextAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "transitionState":
 		new := PaymentTransitionStateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // Payment is of type Resource
@@ -161,16 +236,32 @@ func (obj *Payment) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.AmountAuthorized != nil {
-		obj.AmountAuthorized = mapDiscriminatorTypedMoney(obj.AmountAuthorized)
+		var err error
+		obj.AmountAuthorized, err = mapDiscriminatorTypedMoney(obj.AmountAuthorized)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.AmountPaid != nil {
-		obj.AmountPaid = mapDiscriminatorTypedMoney(obj.AmountPaid)
+		var err error
+		obj.AmountPaid, err = mapDiscriminatorTypedMoney(obj.AmountPaid)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.AmountPlanned != nil {
-		obj.AmountPlanned = mapDiscriminatorTypedMoney(obj.AmountPlanned)
+		var err error
+		obj.AmountPlanned, err = mapDiscriminatorTypedMoney(obj.AmountPlanned)
+		if err != nil {
+			return err
+		}
 	}
 	if obj.AmountRefunded != nil {
-		obj.AmountRefunded = mapDiscriminatorTypedMoney(obj.AmountRefunded)
+		var err error
+		obj.AmountRefunded, err = mapDiscriminatorTypedMoney(obj.AmountRefunded)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -563,7 +654,11 @@ func (obj *PaymentUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorPaymentUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorPaymentUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -587,7 +682,11 @@ func (obj *Transaction) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if obj.Amount != nil {
-		obj.Amount = mapDiscriminatorTypedMoney(obj.Amount)
+		var err error
+		obj.Amount, err = mapDiscriminatorTypedMoney(obj.Amount)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil

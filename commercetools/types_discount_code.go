@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"encoding/json"
+	"errors"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -12,63 +13,110 @@ import (
 // DiscountCodeUpdateAction uses action as discriminator attribute
 type DiscountCodeUpdateAction interface{}
 
-func mapDiscriminatorDiscountCodeUpdateAction(input interface{}) DiscountCodeUpdateAction {
-	discriminator := input.(map[string]interface{})["action"]
+func mapDiscriminatorDiscountCodeUpdateAction(input interface{}) (DiscountCodeUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("Invalid discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
 	switch discriminator {
 	case "changeCartDiscounts":
 		new := DiscountCodeChangeCartDiscountsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeGroups":
 		new := DiscountCodeChangeGroupsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeIsActive":
 		new := DiscountCodeChangeIsActiveAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCartPredicate":
 		new := DiscountCodeSetCartPredicateAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := DiscountCodeSetCustomFieldAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomType":
 		new := DiscountCodeSetCustomTypeAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDescription":
 		new := DiscountCodeSetDescriptionAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setMaxApplications":
 		new := DiscountCodeSetMaxApplicationsAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setMaxApplicationsPerCustomer":
 		new := DiscountCodeSetMaxApplicationsPerCustomerAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setName":
 		new := DiscountCodeSetNameAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFrom":
 		new := DiscountCodeSetValidFromAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFromAndUntil":
 		new := DiscountCodeSetValidFromAndUntilAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidUntil":
 		new := DiscountCodeSetValidUntilAction{}
-		mapstructure.Decode(input, &new)
-		return new
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
-	return nil
+	return nil, nil
 }
 
 // DiscountCode is of type Resource
@@ -100,7 +148,11 @@ func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.References {
-		obj.References[i] = mapDiscriminatorReference(obj.References[i])
+		var err error
+		obj.References[i], err = mapDiscriminatorReference(obj.References[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -345,7 +397,11 @@ func (obj *DiscountCodeUpdate) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	for i := range obj.Actions {
-		obj.Actions[i] = mapDiscriminatorDiscountCodeUpdateAction(obj.Actions[i])
+		var err error
+		obj.Actions[i], err = mapDiscriminatorDiscountCodeUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
