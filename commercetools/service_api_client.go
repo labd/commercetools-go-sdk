@@ -2,8 +2,6 @@ package commercetools
 
 import (
 	"fmt"
-	"net/url"
-	"strconv"
 )
 
 // APIClientDeleteInput provides the data required to delete a channel.
@@ -35,11 +33,9 @@ func (client *Client) APIClientCreate(draft *APIClientDraft) (result *APIClient,
 // APIClientDelete will delete a type matching the provided ID. These requests
 // delete a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
-func (client *Client) APIClientDelete(id string, version int) (result *APIClient, err error) {
+func (client *Client) APIClientDelete(id string) (result *APIClient, err error) {
 	endpoint := fmt.Sprintf("api-clients/%s", id)
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	err = client.Delete(endpoint, params, &result)
+	err = client.Delete(endpoint, nil, &result)
 
 	if err != nil {
 		return nil, err
