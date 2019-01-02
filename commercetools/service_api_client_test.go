@@ -2,7 +2,6 @@ package commercetools_test
 
 import (
 	"fmt"
-	"net/url"
 	"testing"
 	"time"
 
@@ -41,12 +40,9 @@ func TestAPIClientDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.APIClientDelete("1234", 2)
+	_, err := client.APIClientDelete("1234")
 	assert.Nil(t, err)
 
-	params := url.Values{}
-	params.Add("version", "2")
-	assert.Equal(t, params, output.URL.Query())
 	assert.Equal(t, "/unittest/api-clients/1234", output.URL.Path)
 }
 
