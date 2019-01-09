@@ -68,7 +68,7 @@ func mapDiscriminatorGeoJSON(input interface{}) (GeoJSON, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -93,7 +93,7 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["typeId"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'typeId'")
+			return nil, errors.New("Error processing discriminator field 'typeId'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -265,7 +265,7 @@ func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")

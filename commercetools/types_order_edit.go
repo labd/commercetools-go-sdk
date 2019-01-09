@@ -18,7 +18,7 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -70,7 +70,7 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -229,7 +229,7 @@ type OrderEditDraft struct {
 	StagedActions []StagedOrderUpdateAction `json:"stagedActions,omitempty"`
 	Resource      *OrderReference           `json:"resource"`
 	Key           string                    `json:"key,omitempty"`
-	DryRun        bool                      `json:"dryRun,omitempty"`
+	DryRun        bool                      `json:"dryRun"`
 	Custom        *CustomFieldsDraft        `json:"custom,omitempty"`
 	Comment       string                    `json:"comment,omitempty"`
 }
@@ -1541,7 +1541,7 @@ func (obj StagedOrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error
 // StagedOrderTransitionStateAction implements the interface StagedOrderUpdateAction
 type StagedOrderTransitionStateAction struct {
 	State *StateReference `json:"state"`
-	Force bool            `json:"force,omitempty"`
+	Force bool            `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value

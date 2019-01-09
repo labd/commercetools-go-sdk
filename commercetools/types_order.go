@@ -76,7 +76,7 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -374,7 +374,7 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -1612,7 +1612,7 @@ func (obj OrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error) {
 // OrderTransitionStateAction implements the interface OrderUpdateAction
 type OrderTransitionStateAction struct {
 	State *StateReference `json:"state"`
-	Force bool            `json:"force,omitempty"`
+	Force bool            `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1776,6 +1776,6 @@ type TrackingData struct {
 	TrackingID          string `json:"trackingId,omitempty"`
 	ProviderTransaction string `json:"providerTransaction,omitempty"`
 	Provider            string `json:"provider,omitempty"`
-	IsReturn            bool   `json:"isReturn,omitempty"`
+	IsReturn            bool   `json:"isReturn"`
 	Carrier             string `json:"carrier,omitempty"`
 }

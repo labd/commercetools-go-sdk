@@ -36,7 +36,7 @@ func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, 
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -89,7 +89,7 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -217,7 +217,7 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -473,7 +473,7 @@ type CartDiscountDraft struct {
 	SortOrder            string             `json:"sortOrder"`
 	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
 	Name                 *LocalizedString   `json:"name"`
-	IsActive             bool               `json:"isActive,omitempty"`
+	IsActive             bool               `json:"isActive"`
 	Description          *LocalizedString   `json:"description,omitempty"`
 	Custom               *CustomFields      `json:"custom,omitempty"`
 	CartPredicate        string             `json:"cartPredicate"`

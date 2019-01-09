@@ -447,7 +447,9 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 
 	jsonTags := []string{object.Name}
 	if object.Optional {
-		jsonTags = append(jsonTags, "omitempty")
+		if object.TypeName != "boolean" {
+			jsonTags = append(jsonTags, "omitempty")
+		}
 	}
 
 	code = code.Tag(map[string]string{"json": strings.Join(jsonTags, ",")})

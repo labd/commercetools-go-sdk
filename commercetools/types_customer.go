@@ -27,7 +27,7 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -344,7 +344,7 @@ type CustomerDraft struct {
 	Locale                 string                  `json:"locale,omitempty"`
 	LastName               string                  `json:"lastName,omitempty"`
 	Key                    string                  `json:"key,omitempty"`
-	IsEmailVerified        bool                    `json:"isEmailVerified,omitempty"`
+	IsEmailVerified        bool                    `json:"isEmailVerified"`
 	FirstName              string                  `json:"firstName,omitempty"`
 	ExternalID             string                  `json:"externalId,omitempty"`
 	Email                  string                  `json:"email"`

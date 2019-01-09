@@ -5,6 +5,7 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
@@ -55,11 +56,12 @@ func mapDiscriminatorFieldType(input interface{}) (FieldType, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["name"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'name'")
+			return nil, errors.New("Error processing discriminator field 'name'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
 	}
+	log.Printf("[DEBUG] Converting discriminator %s for input %#v", discriminator, input)
 	switch discriminator {
 	case "Boolean":
 		new := CustomFieldBooleanType{}
@@ -163,7 +165,7 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -453,28 +455,24 @@ type CustomFieldsDraft struct {
 
 // FieldDefinition is a standalone struct
 type FieldDefinition struct {
-	Type      FieldType         `json:"type"`
+	Type      interface{}       `json:"type"`
 	Required  bool              `json:"required"`
 	Name      string            `json:"name"`
 	Label     *LocalizedString  `json:"label"`
 	InputHint TypeTextInputHint `json:"inputHint,omitempty"`
 }
 
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *FieldDefinition) UnmarshalJSON(data []byte) error {
+// UnmarshalJSON override to map the field type to the corresponding struct.
+func (f *FieldDefinition) UnmarshalJSON(data []byte) error {
 	type Alias FieldDefinition
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+	if err := json.Unmarshal(data, (*Alias)(f)); err != nil {
 		return err
 	}
-	if obj.Type != nil {
-		var err error
-		obj.Type, err = mapDiscriminatorFieldType(obj.Type)
-		if err != nil {
-			return err
-		}
+	discriminatorType, err := mapDiscriminatorFieldType(f.Type)
+	f.Type = discriminatorType
+	if err != nil {
+		return err
 	}
-
 	return nil
 }
 

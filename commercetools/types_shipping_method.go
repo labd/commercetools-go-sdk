@@ -28,7 +28,7 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -116,7 +116,7 @@ func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePrice
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -151,7 +151,7 @@ func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePrice
 type CartClassificationTier struct {
 	Value      string `json:"value"`
 	Price      *Money `json:"price"`
-	IsMatching bool   `json:"isMatching,omitempty"`
+	IsMatching bool   `json:"isMatching"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -168,7 +168,7 @@ type CartScoreTier struct {
 	Score         float64        `json:"score"`
 	PriceFunction *PriceFunction `json:"priceFunction,omitempty"`
 	Price         *Money         `json:"price,omitempty"`
-	IsMatching    bool           `json:"isMatching,omitempty"`
+	IsMatching    bool           `json:"isMatching"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -184,7 +184,7 @@ func (obj CartScoreTier) MarshalJSON() ([]byte, error) {
 type CartValueTier struct {
 	Price             *Money `json:"price"`
 	MinimumCentAmount int    `json:"minimumCentAmount"`
-	IsMatching        bool   `json:"isMatching,omitempty"`
+	IsMatching        bool   `json:"isMatching"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -422,7 +422,7 @@ func (obj *ShippingMethodUpdate) UnmarshalJSON(data []byte) error {
 type ShippingRate struct {
 	Tiers      []ShippingRatePriceTier `json:"tiers"`
 	Price      TypedMoney              `json:"price"`
-	IsMatching bool                    `json:"isMatching,omitempty"`
+	IsMatching bool                    `json:"isMatching"`
 	FreeAbove  TypedMoney              `json:"freeAbove,omitempty"`
 }
 

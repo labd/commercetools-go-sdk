@@ -46,7 +46,7 @@ func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["name"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'name'")
+			return nil, errors.New("Error processing discriminator field 'name'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -161,7 +161,7 @@ func mapDiscriminatorProductTypeUpdateAction(input interface{}) (ProductTypeUpda
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -382,7 +382,7 @@ type AttributeDefinitionDraft struct {
 	Type                AttributeType           `json:"type"`
 	Name                string                  `json:"name"`
 	Label               *LocalizedString        `json:"label"`
-	IsSearchable        bool                    `json:"isSearchable,omitempty"`
+	IsSearchable        bool                    `json:"isSearchable"`
 	IsRequired          bool                    `json:"isRequired"`
 	InputTip            *LocalizedString        `json:"inputTip,omitempty"`
 	InputHint           TextInputHint           `json:"inputHint,omitempty"`

@@ -38,7 +38,7 @@ func mapDiscriminatorStateUpdateAction(input interface{}) (StateUpdateAction, er
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -190,7 +190,7 @@ type StateDraft struct {
 	Roles       []StateRoleEnum  `json:"roles,omitempty"`
 	Name        *LocalizedString `json:"name,omitempty"`
 	Key         string           `json:"key"`
-	Initial     bool             `json:"initial,omitempty"`
+	Initial     bool             `json:"initial"`
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

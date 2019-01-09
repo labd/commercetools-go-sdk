@@ -18,7 +18,7 @@ func mapDiscriminatorDiscountCodeUpdateAction(input interface{}) (DiscountCodeUp
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -207,7 +207,7 @@ type DiscountCodeDraft struct {
 	Name                       *LocalizedString        `json:"name,omitempty"`
 	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
 	MaxApplications            int                     `json:"maxApplications,omitempty"`
-	IsActive                   bool                    `json:"isActive,omitempty"`
+	IsActive                   bool                    `json:"isActive"`
 	Groups                     []string                `json:"groups,omitempty"`
 	Description                *LocalizedString        `json:"description,omitempty"`
 	Custom                     *CustomFieldsDraft      `json:"custom,omitempty"`

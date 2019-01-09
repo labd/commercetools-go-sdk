@@ -44,7 +44,7 @@ func mapDiscriminatorFacetResult(input interface{}) (FacetResult, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -83,7 +83,7 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -423,7 +423,7 @@ func mapDiscriminatorSuggestTokenizer(input interface{}) (SuggestTokenizer, erro
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -537,7 +537,7 @@ type Product struct {
 // ProductAddAssetAction implements the interface ProductUpdateAction
 type ProductAddAssetAction struct {
 	VariantID int         `json:"variantId,omitempty"`
-	Staged    bool        `json:"staged,omitempty"`
+	Staged    bool        `json:"staged"`
 	SKU       string      `json:"sku,omitempty"`
 	Position  float64     `json:"position,omitempty"`
 	Asset     *AssetDraft `json:"asset"`
@@ -555,7 +555,7 @@ func (obj ProductAddAssetAction) MarshalJSON() ([]byte, error) {
 // ProductAddExternalImageAction implements the interface ProductUpdateAction
 type ProductAddExternalImageAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	Image     *Image `json:"image"`
 }
@@ -572,7 +572,7 @@ func (obj ProductAddExternalImageAction) MarshalJSON() ([]byte, error) {
 // ProductAddPriceAction implements the interface ProductUpdateAction
 type ProductAddPriceAction struct {
 	VariantID int         `json:"variantId,omitempty"`
-	Staged    bool        `json:"staged,omitempty"`
+	Staged    bool        `json:"staged"`
 	SKU       string      `json:"sku,omitempty"`
 	Price     *PriceDraft `json:"price"`
 }
@@ -588,7 +588,7 @@ func (obj ProductAddPriceAction) MarshalJSON() ([]byte, error) {
 
 // ProductAddToCategoryAction implements the interface ProductUpdateAction
 type ProductAddToCategoryAction struct {
-	Staged    bool               `json:"staged,omitempty"`
+	Staged    bool               `json:"staged"`
 	OrderHint string             `json:"orderHint,omitempty"`
 	Category  *CategoryReference `json:"category"`
 }
@@ -604,7 +604,7 @@ func (obj ProductAddToCategoryAction) MarshalJSON() ([]byte, error) {
 
 // ProductAddVariantAction implements the interface ProductUpdateAction
 type ProductAddVariantAction struct {
-	Staged     bool         `json:"staged,omitempty"`
+	Staged     bool         `json:"staged"`
 	SKU        string       `json:"sku,omitempty"`
 	Prices     []PriceDraft `json:"prices,omitempty"`
 	Key        string       `json:"key,omitempty"`
@@ -632,7 +632,7 @@ type ProductCatalogData struct {
 // ProductChangeAssetNameAction implements the interface ProductUpdateAction
 type ProductChangeAssetNameAction struct {
 	VariantID int              `json:"variantId,omitempty"`
-	Staged    bool             `json:"staged,omitempty"`
+	Staged    bool             `json:"staged"`
 	SKU       string           `json:"sku,omitempty"`
 	Name      *LocalizedString `json:"name"`
 	AssetKey  string           `json:"assetKey,omitempty"`
@@ -651,7 +651,7 @@ func (obj ProductChangeAssetNameAction) MarshalJSON() ([]byte, error) {
 // ProductChangeAssetOrderAction implements the interface ProductUpdateAction
 type ProductChangeAssetOrderAction struct {
 	VariantID  int      `json:"variantId,omitempty"`
-	Staged     bool     `json:"staged,omitempty"`
+	Staged     bool     `json:"staged"`
 	SKU        string   `json:"sku,omitempty"`
 	AssetOrder []string `json:"assetOrder"`
 }
@@ -668,7 +668,7 @@ func (obj ProductChangeAssetOrderAction) MarshalJSON() ([]byte, error) {
 // ProductChangeMasterVariantAction implements the interface ProductUpdateAction
 type ProductChangeMasterVariantAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 }
 
@@ -683,7 +683,7 @@ func (obj ProductChangeMasterVariantAction) MarshalJSON() ([]byte, error) {
 
 // ProductChangeNameAction implements the interface ProductUpdateAction
 type ProductChangeNameAction struct {
-	Staged bool             `json:"staged,omitempty"`
+	Staged bool             `json:"staged"`
 	Name   *LocalizedString `json:"name"`
 }
 
@@ -698,7 +698,7 @@ func (obj ProductChangeNameAction) MarshalJSON() ([]byte, error) {
 
 // ProductChangePriceAction implements the interface ProductUpdateAction
 type ProductChangePriceAction struct {
-	Staged  bool        `json:"staged,omitempty"`
+	Staged  bool        `json:"staged"`
 	PriceID string      `json:"priceId"`
 	Price   *PriceDraft `json:"price"`
 }
@@ -714,7 +714,7 @@ func (obj ProductChangePriceAction) MarshalJSON() ([]byte, error) {
 
 // ProductChangeSlugAction implements the interface ProductUpdateAction
 type ProductChangeSlugAction struct {
-	Staged bool             `json:"staged,omitempty"`
+	Staged bool             `json:"staged"`
 	Slug   *LocalizedString `json:"slug"`
 }
 
@@ -749,7 +749,7 @@ type ProductDraft struct {
 	State              *StateReference       `json:"state,omitempty"`
 	Slug               *LocalizedString      `json:"slug"`
 	SearchKeywords     *SearchKeywords       `json:"searchKeywords,omitempty"`
-	Publish            bool                  `json:"publish,omitempty"`
+	Publish            bool                  `json:"publish"`
 	ProductType        *ProductTypeReference `json:"productType,omitempty"`
 	Name               *LocalizedString      `json:"name"`
 	MetaTitle          *LocalizedString      `json:"metaTitle,omitempty"`
@@ -780,7 +780,7 @@ func (obj ProductLegacySetSkuAction) MarshalJSON() ([]byte, error) {
 // ProductMoveImageToPositionAction implements the interface ProductUpdateAction
 type ProductMoveImageToPositionAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	Position  int    `json:"position"`
 	ImageURL  string `json:"imageUrl"`
@@ -815,7 +815,7 @@ type ProductProjection struct {
 	Slug                   *LocalizedString        `json:"slug"`
 	SearchKeywords         *SearchKeywords         `json:"searchKeywords,omitempty"`
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
-	Published              bool                    `json:"published,omitempty"`
+	Published              bool                    `json:"published"`
 	ProductType            *ProductTypeReference   `json:"productType"`
 	Name                   *LocalizedString        `json:"name"`
 	MetaTitle              *LocalizedString        `json:"metaTitle,omitempty"`
@@ -823,7 +823,7 @@ type ProductProjection struct {
 	MetaDescription        *LocalizedString        `json:"metaDescription,omitempty"`
 	MasterVariant          *ProductVariant         `json:"masterVariant"`
 	Key                    string                  `json:"key,omitempty"`
-	HasStagedChanges       bool                    `json:"hasStagedChanges,omitempty"`
+	HasStagedChanges       bool                    `json:"hasStagedChanges"`
 	Description            *LocalizedString        `json:"description,omitempty"`
 	CategoryOrderHints     *CategoryOrderHints     `json:"categoryOrderHints,omitempty"`
 	Categories             []CategoryReference     `json:"categories"`
@@ -879,7 +879,7 @@ func (obj ProductReference) MarshalJSON() ([]byte, error) {
 // ProductRemoveAssetAction implements the interface ProductUpdateAction
 type ProductRemoveAssetAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	AssetKey  string `json:"assetKey,omitempty"`
 	AssetID   string `json:"assetId,omitempty"`
@@ -896,7 +896,7 @@ func (obj ProductRemoveAssetAction) MarshalJSON() ([]byte, error) {
 
 // ProductRemoveFromCategoryAction implements the interface ProductUpdateAction
 type ProductRemoveFromCategoryAction struct {
-	Staged   bool               `json:"staged,omitempty"`
+	Staged   bool               `json:"staged"`
 	Category *CategoryReference `json:"category"`
 }
 
@@ -912,7 +912,7 @@ func (obj ProductRemoveFromCategoryAction) MarshalJSON() ([]byte, error) {
 // ProductRemoveImageAction implements the interface ProductUpdateAction
 type ProductRemoveImageAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	ImageURL  string `json:"imageUrl"`
 }
@@ -928,7 +928,7 @@ func (obj ProductRemoveImageAction) MarshalJSON() ([]byte, error) {
 
 // ProductRemovePriceAction implements the interface ProductUpdateAction
 type ProductRemovePriceAction struct {
-	Staged  bool   `json:"staged,omitempty"`
+	Staged  bool   `json:"staged"`
 	PriceID string `json:"priceId"`
 }
 
@@ -943,7 +943,7 @@ func (obj ProductRemovePriceAction) MarshalJSON() ([]byte, error) {
 
 // ProductRemoveVariantAction implements the interface ProductUpdateAction
 type ProductRemoveVariantAction struct {
-	Staged bool   `json:"staged,omitempty"`
+	Staged bool   `json:"staged"`
 	SKU    string `json:"sku,omitempty"`
 	ID     int    `json:"id,omitempty"`
 }
@@ -987,7 +987,7 @@ func (obj ProductRevertStagedVariantChangesAction) MarshalJSON() ([]byte, error)
 type ProductSetAssetCustomFieldAction struct {
 	VariantID int         `json:"variantId,omitempty"`
 	Value     interface{} `json:"value,omitempty"`
-	Staged    bool        `json:"staged,omitempty"`
+	Staged    bool        `json:"staged"`
 	SKU       string      `json:"sku,omitempty"`
 	Name      string      `json:"name"`
 	AssetKey  string      `json:"assetKey,omitempty"`
@@ -1007,7 +1007,7 @@ func (obj ProductSetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
 type ProductSetAssetCustomTypeAction struct {
 	VariantID int            `json:"variantId,omitempty"`
 	Type      *TypeReference `json:"type,omitempty"`
-	Staged    bool           `json:"staged,omitempty"`
+	Staged    bool           `json:"staged"`
 	SKU       string         `json:"sku,omitempty"`
 	Fields    interface{}    `json:"fields,omitempty"`
 	AssetKey  string         `json:"assetKey,omitempty"`
@@ -1026,7 +1026,7 @@ func (obj ProductSetAssetCustomTypeAction) MarshalJSON() ([]byte, error) {
 // ProductSetAssetDescriptionAction implements the interface ProductUpdateAction
 type ProductSetAssetDescriptionAction struct {
 	VariantID   int              `json:"variantId,omitempty"`
-	Staged      bool             `json:"staged,omitempty"`
+	Staged      bool             `json:"staged"`
 	SKU         string           `json:"sku,omitempty"`
 	Description *LocalizedString `json:"description,omitempty"`
 	AssetKey    string           `json:"assetKey,omitempty"`
@@ -1045,7 +1045,7 @@ func (obj ProductSetAssetDescriptionAction) MarshalJSON() ([]byte, error) {
 // ProductSetAssetKeyAction implements the interface ProductUpdateAction
 type ProductSetAssetKeyAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	AssetKey  string `json:"assetKey,omitempty"`
 	AssetID   string `json:"assetId"`
@@ -1063,7 +1063,7 @@ func (obj ProductSetAssetKeyAction) MarshalJSON() ([]byte, error) {
 // ProductSetAssetSourcesAction implements the interface ProductUpdateAction
 type ProductSetAssetSourcesAction struct {
 	VariantID int           `json:"variantId,omitempty"`
-	Staged    bool          `json:"staged,omitempty"`
+	Staged    bool          `json:"staged"`
 	Sources   []AssetSource `json:"sources"`
 	SKU       string        `json:"sku,omitempty"`
 	AssetKey  string        `json:"assetKey,omitempty"`
@@ -1083,7 +1083,7 @@ func (obj ProductSetAssetSourcesAction) MarshalJSON() ([]byte, error) {
 type ProductSetAssetTagsAction struct {
 	VariantID int      `json:"variantId,omitempty"`
 	Tags      []string `json:"tags,omitempty"`
-	Staged    bool     `json:"staged,omitempty"`
+	Staged    bool     `json:"staged"`
 	SKU       string   `json:"sku,omitempty"`
 	AssetKey  string   `json:"assetKey,omitempty"`
 	AssetID   string   `json:"assetId,omitempty"`
@@ -1102,7 +1102,7 @@ func (obj ProductSetAssetTagsAction) MarshalJSON() ([]byte, error) {
 type ProductSetAttributeAction struct {
 	VariantID int         `json:"variantId,omitempty"`
 	Value     interface{} `json:"value,omitempty"`
-	Staged    bool        `json:"staged,omitempty"`
+	Staged    bool        `json:"staged"`
 	SKU       string      `json:"sku,omitempty"`
 	Name      string      `json:"name"`
 }
@@ -1119,7 +1119,7 @@ func (obj ProductSetAttributeAction) MarshalJSON() ([]byte, error) {
 // ProductSetAttributeInAllVariantsAction implements the interface ProductUpdateAction
 type ProductSetAttributeInAllVariantsAction struct {
 	Value  interface{} `json:"value,omitempty"`
-	Staged bool        `json:"staged,omitempty"`
+	Staged bool        `json:"staged"`
 	Name   string      `json:"name"`
 }
 
@@ -1134,7 +1134,7 @@ func (obj ProductSetAttributeInAllVariantsAction) MarshalJSON() ([]byte, error) 
 
 // ProductSetCategoryOrderHintAction implements the interface ProductUpdateAction
 type ProductSetCategoryOrderHintAction struct {
-	Staged     bool   `json:"staged,omitempty"`
+	Staged     bool   `json:"staged"`
 	OrderHint  string `json:"orderHint,omitempty"`
 	CategoryID string `json:"categoryId"`
 }
@@ -1150,7 +1150,7 @@ func (obj ProductSetCategoryOrderHintAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetDescriptionAction implements the interface ProductUpdateAction
 type ProductSetDescriptionAction struct {
-	Staged      bool             `json:"staged,omitempty"`
+	Staged      bool             `json:"staged"`
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -1165,7 +1165,7 @@ func (obj ProductSetDescriptionAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetDiscountedPriceAction implements the interface ProductUpdateAction
 type ProductSetDiscountedPriceAction struct {
-	Staged     bool             `json:"staged,omitempty"`
+	Staged     bool             `json:"staged"`
 	PriceID    string           `json:"priceId"`
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 }
@@ -1182,7 +1182,7 @@ func (obj ProductSetDiscountedPriceAction) MarshalJSON() ([]byte, error) {
 // ProductSetImageLabelAction implements the interface ProductUpdateAction
 type ProductSetImageLabelAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	Label     string `json:"label,omitempty"`
 	ImageURL  string `json:"imageUrl"`
@@ -1213,7 +1213,7 @@ func (obj ProductSetKeyAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetMetaDescriptionAction implements the interface ProductUpdateAction
 type ProductSetMetaDescriptionAction struct {
-	Staged          bool             `json:"staged,omitempty"`
+	Staged          bool             `json:"staged"`
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 }
 
@@ -1228,7 +1228,7 @@ func (obj ProductSetMetaDescriptionAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetMetaKeywordsAction implements the interface ProductUpdateAction
 type ProductSetMetaKeywordsAction struct {
-	Staged       bool             `json:"staged,omitempty"`
+	Staged       bool             `json:"staged"`
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 }
 
@@ -1243,7 +1243,7 @@ func (obj ProductSetMetaKeywordsAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetMetaTitleAction implements the interface ProductUpdateAction
 type ProductSetMetaTitleAction struct {
-	Staged    bool             `json:"staged,omitempty"`
+	Staged    bool             `json:"staged"`
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
 }
 
@@ -1259,7 +1259,7 @@ func (obj ProductSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 // ProductSetPricesAction implements the interface ProductUpdateAction
 type ProductSetPricesAction struct {
 	VariantID int          `json:"variantId,omitempty"`
-	Staged    bool         `json:"staged,omitempty"`
+	Staged    bool         `json:"staged"`
 	SKU       string       `json:"sku,omitempty"`
 	Prices    []PriceDraft `json:"prices"`
 }
@@ -1276,7 +1276,7 @@ func (obj ProductSetPricesAction) MarshalJSON() ([]byte, error) {
 // ProductSetProductPriceCustomFieldAction implements the interface ProductUpdateAction
 type ProductSetProductPriceCustomFieldAction struct {
 	Value   interface{} `json:"value,omitempty"`
-	Staged  bool        `json:"staged,omitempty"`
+	Staged  bool        `json:"staged"`
 	PriceID string      `json:"priceId"`
 	Name    string      `json:"name"`
 }
@@ -1293,7 +1293,7 @@ func (obj ProductSetProductPriceCustomFieldAction) MarshalJSON() ([]byte, error)
 // ProductSetProductPriceCustomTypeAction implements the interface ProductUpdateAction
 type ProductSetProductPriceCustomTypeAction struct {
 	Type    *TypeReference  `json:"type,omitempty"`
-	Staged  bool            `json:"staged,omitempty"`
+	Staged  bool            `json:"staged"`
 	PriceID string          `json:"priceId"`
 	Fields  *FieldContainer `json:"fields,omitempty"`
 }
@@ -1310,7 +1310,7 @@ func (obj ProductSetProductPriceCustomTypeAction) MarshalJSON() ([]byte, error) 
 // ProductSetProductVariantKeyAction implements the interface ProductUpdateAction
 type ProductSetProductVariantKeyAction struct {
 	VariantID int    `json:"variantId,omitempty"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 	Key       string `json:"key,omitempty"`
 }
@@ -1326,7 +1326,7 @@ func (obj ProductSetProductVariantKeyAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetSearchKeywordsAction implements the interface ProductUpdateAction
 type ProductSetSearchKeywordsAction struct {
-	Staged         bool            `json:"staged,omitempty"`
+	Staged         bool            `json:"staged"`
 	SearchKeywords *SearchKeywords `json:"searchKeywords"`
 }
 
@@ -1342,7 +1342,7 @@ func (obj ProductSetSearchKeywordsAction) MarshalJSON() ([]byte, error) {
 // ProductSetSkuAction implements the interface ProductUpdateAction
 type ProductSetSkuAction struct {
 	VariantID int    `json:"variantId"`
-	Staged    bool   `json:"staged,omitempty"`
+	Staged    bool   `json:"staged"`
 	SKU       string `json:"sku,omitempty"`
 }
 
@@ -1372,7 +1372,7 @@ func (obj ProductSetTaxCategoryAction) MarshalJSON() ([]byte, error) {
 // ProductTransitionStateAction implements the interface ProductUpdateAction
 type ProductTransitionStateAction struct {
 	State *StateReference `json:"state,omitempty"`
-	Force bool            `json:"force,omitempty"`
+	Force bool            `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1423,12 +1423,12 @@ func (obj *ProductUpdate) UnmarshalJSON(data []byte) error {
 // ProductVariant is a standalone struct
 type ProductVariant struct {
 	SKU                   string                      `json:"sku,omitempty"`
-	ScopedPriceDiscounted bool                        `json:"scopedPriceDiscounted,omitempty"`
+	ScopedPriceDiscounted bool                        `json:"scopedPriceDiscounted"`
 	ScopedPrice           *ScopedPrice                `json:"scopedPrice,omitempty"`
 	Prices                []Price                     `json:"prices,omitempty"`
 	Price                 *Price                      `json:"price,omitempty"`
 	Key                   string                      `json:"key,omitempty"`
-	IsMatchingVariant     bool                        `json:"isMatchingVariant,omitempty"`
+	IsMatchingVariant     bool                        `json:"isMatchingVariant"`
 	Images                []Image                     `json:"images,omitempty"`
 	ID                    int                         `json:"id"`
 	Availability          *ProductVariantAvailability `json:"availability,omitempty"`
@@ -1439,7 +1439,7 @@ type ProductVariant struct {
 // ProductVariantAvailability is a standalone struct
 type ProductVariantAvailability struct {
 	RestockableInDays int                                   `json:"restockableInDays,omitempty"`
-	IsOnStock         bool                                  `json:"isOnStock,omitempty"`
+	IsOnStock         bool                                  `json:"isOnStock"`
 	Channels          *ProductVariantChannelAvailabilityMap `json:"channels,omitempty"`
 	AvailableQuantity int                                   `json:"availableQuantity,omitempty"`
 }
@@ -1447,7 +1447,7 @@ type ProductVariantAvailability struct {
 // ProductVariantChannelAvailability is a standalone struct
 type ProductVariantChannelAvailability struct {
 	RestockableInDays int  `json:"restockableInDays,omitempty"`
-	IsOnStock         bool `json:"isOnStock,omitempty"`
+	IsOnStock         bool `json:"isOnStock"`
 	AvailableQuantity int  `json:"availableQuantity,omitempty"`
 }
 
