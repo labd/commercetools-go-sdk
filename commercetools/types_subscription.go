@@ -18,7 +18,7 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -50,7 +50,7 @@ func mapDiscriminatorDestination(input interface{}) (Destination, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -110,7 +110,7 @@ func mapDiscriminatorSubscriptionDelivery(input interface{}) (SubscriptionDelive
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["notificationType"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'notificationType'")
+			return nil, errors.New("Error processing discriminator field 'notificationType'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -156,7 +156,7 @@ func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUp
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")

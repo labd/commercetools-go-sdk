@@ -41,7 +41,7 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -628,7 +628,7 @@ type PaymentStatus struct {
 // PaymentTransitionStateAction implements the interface PaymentUpdateAction
 type PaymentTransitionStateAction struct {
 	State *StateReference `json:"state"`
-	Force bool            `json:"force,omitempty"`
+	Force bool            `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value

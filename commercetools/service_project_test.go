@@ -59,6 +59,7 @@ func TestProjectUpdate(t *testing.T) {
 				"actions": [
 					{
 						"action": "changeName",
+						"staged": false,
 						"name": {
 							"en": "Changed name"
 						}

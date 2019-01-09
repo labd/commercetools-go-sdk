@@ -18,7 +18,7 @@ func mapDiscriminatorReviewUpdateAction(input interface{}) (ReviewUpdateAction, 
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -378,7 +378,7 @@ func (obj ReviewSetTitleAction) MarshalJSON() ([]byte, error) {
 // ReviewTransitionStateAction implements the interface ReviewUpdateAction
 type ReviewTransitionStateAction struct {
 	State *StateReference `json:"state"`
-	Force bool            `json:"force,omitempty"`
+	Force bool            `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value

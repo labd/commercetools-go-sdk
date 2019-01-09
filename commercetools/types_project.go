@@ -18,7 +18,7 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -91,7 +91,7 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")

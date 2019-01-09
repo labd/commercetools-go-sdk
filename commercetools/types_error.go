@@ -17,7 +17,7 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["code"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'code'")
+			return nil, errors.New("Error processing discriminator field 'code'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")

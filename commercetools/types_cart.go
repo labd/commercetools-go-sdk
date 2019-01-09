@@ -125,7 +125,7 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'action'")
+			return nil, errors.New("Error processing discriminator field 'action'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -499,7 +499,7 @@ func mapDiscriminatorShippingRateInput(input interface{}) (ShippingRateInput, er
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -531,7 +531,7 @@ func mapDiscriminatorShippingRateInputDraft(input interface{}) (ShippingRateInpu
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Invalid discriminator field 'type'")
+			return nil, errors.New("Error processing discriminator field 'type'")
 		}
 	} else {
 		return nil, errors.New("Invalid data")
@@ -889,7 +889,7 @@ type CartPagedQueryResponse struct {
 
 // CartRecalculateAction implements the interface CartUpdateAction
 type CartRecalculateAction struct {
-	UpdateProductData bool `json:"updateProductData,omitempty"`
+	UpdateProductData bool `json:"updateProductData"`
 }
 
 // MarshalJSON override to set the discriminator value

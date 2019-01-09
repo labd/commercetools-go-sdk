@@ -55,6 +55,7 @@ func TestProductTypeCreate(t *testing.T) {
 			  		"en": "The right size is important."
 				},
 				"isRequired": false,
+				"isSearchable": false,
 				"attributeConstraint": "CombinationUnique"
 		  	}
 		]

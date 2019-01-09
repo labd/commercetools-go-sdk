@@ -188,6 +188,7 @@ func getPropertyValue(input yaml.MapSlice, key string) interface{} {
 			return mapItem.Value
 		}
 	}
+
 	return nil
 }
 
@@ -247,6 +248,7 @@ func main() {
 	t := yaml.MapSlice{}
 
 	err = yaml.Unmarshal(f, &t)
+
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
