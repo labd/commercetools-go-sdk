@@ -69,6 +69,12 @@ func main() {
 }
 ```
 
+## Generating code
+
+To generate code do the following steps:
+- pip install pyyaml
+- make generate
+
 ## Service implementation
 
 At the moment the SDK has service coverage for primarily Terraform configuration use-cases, for example declaring API Extensions, Subscriptions and Project Settings. Broader coverage will be implemented if our use-cases require it or via contributions of course!

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"strings"
 
 	yaml "gopkg.in/mikefarah/yaml.v2"
@@ -241,9 +242,13 @@ func postProcess(objects []RamlType) {
 }
 
 func main() {
-	fmt.Println("Generating code")
+	apiFile := os.Args[1]
+	fmt.Printf("Generating code for file %s", apiFile)
 
-	f, err := ioutil.ReadFile("api.raml")
+	f, err := ioutil.ReadFile(apiFile)
+	if err != nil {
+		panic(err)
+	}
 
 	t := yaml.MapSlice{}
 
