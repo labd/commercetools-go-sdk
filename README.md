@@ -73,6 +73,8 @@ func main() {
 
 To generate code do the following steps:
 - pip install pyyaml
+- install yq (f.e. brew install yq)
+- git clone https://github.com/commercetools/commercetools-api-reference.git in the folder on the same level as the commercetools-go-sdk folder
 - make generate
 
 ## Service implementation

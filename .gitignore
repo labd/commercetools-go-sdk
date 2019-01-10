@@ -11,6 +11,7 @@ debug.test
 
 # Temporary files
 commercetools-go-sdk
+code-generate/prepared.raml
 NOTES.txt
 /main.go
 /api.go

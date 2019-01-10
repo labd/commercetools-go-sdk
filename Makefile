@@ -5,11 +5,10 @@ coverage:
 	go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./commercetools ./commercetools
 	go tool cover -html=coverage.txt
 
-commercetools-api-reference:
-	@git clone https://github.com/commercetools/commercetools-api-reference.git ../commercetools-api-reference
-
-code-generate/prepared.raml: commmercetools-api-reference
-	python code-generate/prepare_raml ../commercetools-api-reference/api.raml ./code-generate/prepared.raml
+code-generate/prepared.raml:
+	python ./code-generate/prepare_yaml.py ../commercetools-api-reference/api.raml > ./code-generate/prepared.raml
+	# Incorrect type string, need to properly set FieldType type
+	yq w -i code-generate/prepared.raml types.FieldDefinition.properties.type.type FieldType
 
 generate: code-generate/prepared.raml
 	go run code-generate/*.go ./code-generate/prepared.raml
