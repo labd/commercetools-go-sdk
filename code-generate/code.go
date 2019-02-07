@@ -412,6 +412,9 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 			if object.Format == "int64" {
 				code = code.Int()
 			} else {
+				if object.Minimum != nil && *object.Minimum == 0 {
+					code = code.Op("*")
+				}
 				code = code.Float64()
 			}
 		case "integer":

@@ -72,8 +72,8 @@ func mapDiscriminatorTaxCategoryUpdateAction(input interface{}) (TaxCategoryUpda
 
 // SubRate is a standalone struct
 type SubRate struct {
-	Name   string  `json:"name"`
-	Amount float64 `json:"amount"`
+	Name   string   `json:"name"`
+	Amount *float64 `json:"amount"`
 }
 
 // TaxCategory is of type Resource
@@ -237,7 +237,7 @@ type TaxRate struct {
 	IncludedInPrice bool        `json:"includedInPrice"`
 	ID              string      `json:"id,omitempty"`
 	Country         CountryCode `json:"country"`
-	Amount          float64     `json:"amount"`
+	Amount          *float64    `json:"amount"`
 }
 
 // TaxRateDraft is a standalone struct
@@ -247,5 +247,5 @@ type TaxRateDraft struct {
 	Name            string      `json:"name"`
 	IncludedInPrice bool        `json:"includedInPrice"`
 	Country         CountryCode `json:"country"`
-	Amount          float64     `json:"amount,omitempty"`
+	Amount          *float64    `json:"amount,omitempty"`
 }

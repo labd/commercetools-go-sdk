@@ -17,6 +17,9 @@ func TestTaxCategoryCreate(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("tax-category.create.json"), &output, nil)
 	defer server.Close()
 
+	low_tax_rate := 6.00
+	high_tax_rate := 21.00
+
 	input := &commercetools.TaxCategoryDraft{
 		Name:        "Tax category",
 		Key:         "tax-category",
@@ -24,13 +27,13 @@ func TestTaxCategoryCreate(t *testing.T) {
 		Rates: []commercetools.TaxRateDraft{
 			{
 				Name:            "Tax rate low",
-				Amount:          6.00,
+				Amount:          &low_tax_rate,
 				IncludedInPrice: false,
 				Country:         "NL",
 			},
 			{
 				Name:            "Tax rate high",
-				Amount:          21.00,
+				Amount:          &high_tax_rate,
 				IncludedInPrice: false,
 				Country:         "NL",
 			},
@@ -66,6 +69,7 @@ func TestTaxCategoryCreate(t *testing.T) {
 }
 
 func TestTaxCategoryUpdate(t *testing.T) {
+	high_tax_rate := 21.14
 	testCases := []struct {
 		desc        string
 		input       *commercetools.TaxCategoryUpdateInput
@@ -143,7 +147,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 					&commercetools.TaxCategoryAddTaxRateAction{
 						TaxRate: &commercetools.TaxRateDraft{
 							Name:            "High tax rate",
-							Amount:          21.14,
+							Amount:          &high_tax_rate,
 							IncludedInPrice: true,
 							Country:         commercetools.CountryCode("US"),
 						},
@@ -175,7 +179,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 						TaxRateID: "2",
 						TaxRate: &commercetools.TaxRateDraft{
 							Name:            "High tax rate",
-							Amount:          21.14,
+							Amount:          &high_tax_rate,
 							IncludedInPrice: true,
 							Country:         "US",
 						},
@@ -270,6 +274,7 @@ func TestTaxCategoryGetByID(t *testing.T) {
 
 	client, server := testutil.MockClient(t, testutil.Fixture("tax-category.json"), nil, nil)
 	defer server.Close()
+	tax_rate := 0.2
 
 	input := &commercetools.TaxCategory{
 		ID:      "c60f7377-2643-4e99-adb5-b2909657444d",
@@ -278,7 +283,7 @@ func TestTaxCategoryGetByID(t *testing.T) {
 		Rates: []commercetools.TaxRate{
 			{
 				Name:            "test-tax-category",
-				Amount:          0.2,
+				Amount:          &tax_rate,
 				IncludedInPrice: true,
 				Country:         "DE",
 				ID:              "vWTk7VjT",

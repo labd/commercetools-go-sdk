@@ -1762,9 +1762,9 @@ func (obj *ShippingInfo) UnmarshalJSON(data []byte) error {
 
 // TaxPortion is a standalone struct
 type TaxPortion struct {
-	Rate   float64 `json:"rate"`
-	Name   string  `json:"name,omitempty"`
-	Amount *Money  `json:"amount"`
+	Rate   *float64 `json:"rate"`
+	Name   string   `json:"name,omitempty"`
+	Amount *Money   `json:"amount"`
 }
 
 // TaxedItemPrice is a standalone struct
