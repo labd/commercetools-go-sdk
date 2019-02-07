@@ -112,6 +112,8 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 	if props, isOk := properties.(yaml.MapSlice); isOk {
 		object.Items = getPropertyString(props, "items")
 		object.Format = getPropertyString(props, "format")
+		object.Minimum = getPropertyInt(props, "minimum")
+		object.Maximum = getPropertyInt(props, "maximum")
 	}
 	return object
 }

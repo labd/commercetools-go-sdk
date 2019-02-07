@@ -34,6 +34,8 @@ type RamlTypeAttribute struct {
 	Format      string
 	CodeName    string
 	Optional    bool
+	Minimum     *int
+	Maximum     *int
 	Many        bool
 	Items       string
 	ItemsObject *RamlType
@@ -190,6 +192,14 @@ func getPropertyValue(input yaml.MapSlice, key string) interface{} {
 		}
 	}
 
+	return nil
+}
+
+func getPropertyInt(input yaml.MapSlice, key string) *int {
+	value := getPropertyValue(input, key)
+	if new, isOk := value.(int); isOk {
+		return &new
+	}
 	return nil
 }
 
