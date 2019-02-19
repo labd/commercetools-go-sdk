@@ -10,6 +10,17 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
+// SubscriptionHealthStatus is an enum type
+type SubscriptionHealthStatus string
+
+// Enum values for SubscriptionHealthStatus
+const (
+	SubscriptionHealthStatusHealthy                           SubscriptionHealthStatus = "Healthy"
+	SubscriptionHealthStatusConfigurationError                SubscriptionHealthStatus = "ConfigurationError"
+	SubscriptionHealthStatusConfigurationErrorDeliveryStopped SubscriptionHealthStatus = "ConfigurationErrorDeliveryStopped"
+	SubscriptionHealthStatusTemporaryError                    SubscriptionHealthStatus = "TemporaryError"
+)
+
 // DeliveryFormat uses type as discriminator attribute
 type DeliveryFormat interface{}
 
@@ -410,15 +421,16 @@ func (obj SqsDestination) MarshalJSON() ([]byte, error) {
 
 // Subscription is of type Resource
 type Subscription struct {
-	Version        int                   `json:"version"`
-	LastModifiedAt time.Time             `json:"lastModifiedAt"`
-	ID             string                `json:"id"`
-	CreatedAt      time.Time             `json:"createdAt"`
-	Messages       []MessageSubscription `json:"messages"`
-	Key            string                `json:"key,omitempty"`
-	Format         DeliveryFormat        `json:"format"`
-	Destination    Destination           `json:"destination"`
-	Changes        []ChangeSubscription  `json:"changes"`
+	Version        int                      `json:"version"`
+	LastModifiedAt time.Time                `json:"lastModifiedAt"`
+	ID             string                   `json:"id"`
+	CreatedAt      time.Time                `json:"createdAt"`
+	Status         SubscriptionHealthStatus `json:"status"`
+	Messages       []MessageSubscription    `json:"messages"`
+	Key            string                   `json:"key,omitempty"`
+	Format         DeliveryFormat           `json:"format"`
+	Destination    Destination              `json:"destination"`
+	Changes        []ChangeSubscription     `json:"changes"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

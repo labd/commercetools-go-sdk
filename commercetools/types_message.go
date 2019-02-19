@@ -235,7 +235,7 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		}
 		return new, nil
 	case "OrderPaymentStateChanged":
-		new := OrderPaymentChangedMessagePayload{}
+		new := OrderPaymentStateChangedMessagePayload{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -852,12 +852,14 @@ type DeliveryAddressSetMessage struct {
 	SequenceNumber  int       `json:"sequenceNumber"`
 	ResourceVersion int       `json:"resourceVersion"`
 	Resource        Reference `json:"resource"`
+	OldAddress      *Address  `json:"oldAddress,omitempty"`
 	DeliveryID      string    `json:"deliveryId"`
 	Address         *Address  `json:"address,omitempty"`
 }
 
 // DeliveryAddressSetMessagePayload implements the interface MessagePayload
 type DeliveryAddressSetMessagePayload struct {
+	OldAddress *Address `json:"oldAddress,omitempty"`
 	DeliveryID string   `json:"deliveryId"`
 	Address    *Address `json:"address,omitempty"`
 }
@@ -881,12 +883,14 @@ type DeliveryItemsUpdatedMessage struct {
 	SequenceNumber  int            `json:"sequenceNumber"`
 	ResourceVersion int            `json:"resourceVersion"`
 	Resource        Reference      `json:"resource"`
+	OldItems        []DeliveryItem `json:"oldItems"`
 	Items           []DeliveryItem `json:"items"`
 	DeliveryID      string         `json:"deliveryId"`
 }
 
 // DeliveryItemsUpdatedMessagePayload implements the interface MessagePayload
 type DeliveryItemsUpdatedMessagePayload struct {
+	OldItems   []DeliveryItem `json:"oldItems"`
 	Items      []DeliveryItem `json:"items"`
 	DeliveryID string         `json:"deliveryId"`
 }
@@ -1051,12 +1055,14 @@ type OrderBillingAddressSetMessage struct {
 	SequenceNumber  int       `json:"sequenceNumber"`
 	ResourceVersion int       `json:"resourceVersion"`
 	Resource        Reference `json:"resource"`
-	Address         *Address  `json:"address"`
+	OldAddress      *Address  `json:"oldAddress,omitempty"`
+	Address         *Address  `json:"address,omitempty"`
 }
 
 // OrderBillingAddressSetMessagePayload implements the interface MessagePayload
 type OrderBillingAddressSetMessagePayload struct {
-	Address *Address `json:"address"`
+	OldAddress *Address `json:"oldAddress,omitempty"`
+	Address    *Address `json:"address,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1136,12 +1142,14 @@ type OrderCustomerEmailSetMessage struct {
 	SequenceNumber  int       `json:"sequenceNumber"`
 	ResourceVersion int       `json:"resourceVersion"`
 	Resource        Reference `json:"resource"`
-	Email           string    `json:"email"`
+	OldEmail        string    `json:"oldEmail,omitempty"`
+	Email           string    `json:"email,omitempty"`
 }
 
 // OrderCustomerEmailSetMessagePayload implements the interface MessagePayload
 type OrderCustomerEmailSetMessagePayload struct {
-	Email string `json:"email"`
+	OldEmail string `json:"oldEmail,omitempty"`
+	Email    string `json:"email,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1387,27 +1395,29 @@ func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Type: "OrderLineItemDiscountSet", Alias: (*Alias)(&obj)})
 }
 
-// OrderPaymentChangedMessage is of type Message
-type OrderPaymentChangedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	PaymentState    string    `json:"paymentState"`
+// OrderPaymentStateChangedMessage is of type Message
+type OrderPaymentStateChangedMessage struct {
+	Version         int          `json:"version"`
+	LastModifiedAt  time.Time    `json:"lastModifiedAt"`
+	ID              string       `json:"id"`
+	CreatedAt       time.Time    `json:"createdAt"`
+	Type            string       `json:"type"`
+	SequenceNumber  int          `json:"sequenceNumber"`
+	ResourceVersion int          `json:"resourceVersion"`
+	Resource        Reference    `json:"resource"`
+	PaymentState    PaymentState `json:"paymentState"`
+	OldPaymentState PaymentState `json:"oldPaymentState"`
 }
 
-// OrderPaymentChangedMessagePayload implements the interface MessagePayload
-type OrderPaymentChangedMessagePayload struct {
-	PaymentState string `json:"paymentState"`
+// OrderPaymentStateChangedMessagePayload implements the interface MessagePayload
+type OrderPaymentStateChangedMessagePayload struct {
+	PaymentState    PaymentState `json:"paymentState"`
+	OldPaymentState PaymentState `json:"oldPaymentState"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj OrderPaymentChangedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias OrderPaymentChangedMessagePayload
+func (obj OrderPaymentStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderPaymentStateChangedMessagePayload
 	return json.Marshal(struct {
 		Type string `json:"type"`
 		*Alias
@@ -1472,20 +1482,22 @@ func (obj OrderReturnShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, 
 
 // OrderShipmentStateChangedMessage is of type Message
 type OrderShipmentStateChangedMessage struct {
-	Version         int           `json:"version"`
-	LastModifiedAt  time.Time     `json:"lastModifiedAt"`
-	ID              string        `json:"id"`
-	CreatedAt       time.Time     `json:"createdAt"`
-	Type            string        `json:"type"`
-	SequenceNumber  int           `json:"sequenceNumber"`
-	ResourceVersion int           `json:"resourceVersion"`
-	Resource        Reference     `json:"resource"`
-	ShipmentState   ShipmentState `json:"shipmentState"`
+	Version          int           `json:"version"`
+	LastModifiedAt   time.Time     `json:"lastModifiedAt"`
+	ID               string        `json:"id"`
+	CreatedAt        time.Time     `json:"createdAt"`
+	Type             string        `json:"type"`
+	SequenceNumber   int           `json:"sequenceNumber"`
+	ResourceVersion  int           `json:"resourceVersion"`
+	Resource         Reference     `json:"resource"`
+	ShipmentState    ShipmentState `json:"shipmentState"`
+	OldShipmentState ShipmentState `json:"oldShipmentState"`
 }
 
 // OrderShipmentStateChangedMessagePayload implements the interface MessagePayload
 type OrderShipmentStateChangedMessagePayload struct {
-	ShipmentState ShipmentState `json:"shipmentState"`
+	ShipmentState    ShipmentState `json:"shipmentState"`
+	OldShipmentState ShipmentState `json:"oldShipmentState"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1507,12 +1519,14 @@ type OrderShippingAddressSetMessage struct {
 	SequenceNumber  int       `json:"sequenceNumber"`
 	ResourceVersion int       `json:"resourceVersion"`
 	Resource        Reference `json:"resource"`
-	Address         *Address  `json:"address"`
+	OldAddress      *Address  `json:"oldAddress,omitempty"`
+	Address         *Address  `json:"address,omitempty"`
 }
 
 // OrderShippingAddressSetMessagePayload implements the interface MessagePayload
 type OrderShippingAddressSetMessagePayload struct {
-	Address *Address `json:"address"`
+	OldAddress *Address `json:"oldAddress,omitempty"`
+	Address    *Address `json:"address,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1634,20 +1648,22 @@ func (obj *OrderShippingRateInputSetMessagePayload) UnmarshalJSON(data []byte) e
 
 // OrderStateChangedMessage is of type Message
 type OrderStateChangedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	OrderState      string    `json:"orderState"`
+	Version         int        `json:"version"`
+	LastModifiedAt  time.Time  `json:"lastModifiedAt"`
+	ID              string     `json:"id"`
+	CreatedAt       time.Time  `json:"createdAt"`
+	Type            string     `json:"type"`
+	SequenceNumber  int        `json:"sequenceNumber"`
+	ResourceVersion int        `json:"resourceVersion"`
+	Resource        Reference  `json:"resource"`
+	OrderState      OrderState `json:"orderState"`
+	OldOrderState   OrderState `json:"oldOrderState"`
 }
 
 // OrderStateChangedMessagePayload implements the interface MessagePayload
 type OrderStateChangedMessagePayload struct {
-	OrderState string `json:"orderState"`
+	OrderState    OrderState `json:"orderState"`
+	OldOrderState OrderState `json:"oldOrderState"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1728,6 +1744,7 @@ type ParcelItemsUpdatedMessage struct {
 	ResourceVersion int            `json:"resourceVersion"`
 	Resource        Reference      `json:"resource"`
 	ParcelID        string         `json:"parcelId"`
+	OldItems        []DeliveryItem `json:"oldItems"`
 	Items           []DeliveryItem `json:"items"`
 	DeliveryID      string         `json:"deliveryId,omitempty"`
 }
@@ -1735,6 +1752,7 @@ type ParcelItemsUpdatedMessage struct {
 // ParcelItemsUpdatedMessagePayload implements the interface MessagePayload
 type ParcelItemsUpdatedMessagePayload struct {
 	ParcelID   string         `json:"parcelId"`
+	OldItems   []DeliveryItem `json:"oldItems"`
 	Items      []DeliveryItem `json:"items"`
 	DeliveryID string         `json:"deliveryId,omitempty"`
 }
@@ -2298,9 +2316,9 @@ type ReviewRatingSetMessage struct {
 	SequenceNumber       int       `json:"sequenceNumber"`
 	ResourceVersion      int       `json:"resourceVersion"`
 	Resource             Reference `json:"resource"`
-	Target               Reference `json:"target"`
-	OldRating            float64   `json:"oldRating"`
-	NewRating            float64   `json:"newRating"`
+	Target               Reference `json:"target,omitempty"`
+	OldRating            float64   `json:"oldRating,omitempty"`
+	NewRating            float64   `json:"newRating,omitempty"`
 	IncludedInStatistics bool      `json:"includedInStatistics"`
 }
 
@@ -2324,9 +2342,9 @@ func (obj *ReviewRatingSetMessage) UnmarshalJSON(data []byte) error {
 
 // ReviewRatingSetMessagePayload implements the interface MessagePayload
 type ReviewRatingSetMessagePayload struct {
-	Target               Reference `json:"target"`
-	OldRating            float64   `json:"oldRating"`
-	NewRating            float64   `json:"newRating"`
+	Target               Reference `json:"target,omitempty"`
+	OldRating            float64   `json:"oldRating,omitempty"`
+	NewRating            float64   `json:"newRating,omitempty"`
 	IncludedInStatistics bool      `json:"includedInStatistics"`
 }
 
