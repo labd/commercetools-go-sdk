@@ -26,10 +26,6 @@ steps:
     workingDirectory: "$(modulePath)"
     displayName: "Run tests"
 
-  - script: go build -v .
-    workingDirectory: "$(modulePath)"
-    displayName: "Build"
-
   - script: bash <(curl -s https://codecov.io/bash)
     condition: succeeded()
     displayName: "Upload coverage information to codecov.io"
