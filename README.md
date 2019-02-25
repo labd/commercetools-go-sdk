@@ -1,6 +1,6 @@
 # commercetools-go-sdk
 
-[![Travis Build Status](https://travis-ci.org/labd/commercetools-go-sdk.svg?branch=master)](https://travis-ci.org/labd/commercetools-go-sdk)
+[![Build Status](https://dev.azure.com/lab-digital/commercetools-go-sdk/_apis/build/status/labd.commercetools-go-sdk?branchName=master)](https://dev.azure.com/lab-digital/commercetools-go-sdk/_build/latest?definitionId=4&branchName=master)
 [![codecov](https://codecov.io/gh/LabD/commercetools-go-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/LabD/commercetools-go-sdk)
 [![Go Report Card](https://goreportcard.com/badge/github.com/labd/commercetools-go-sdk)](https://goreportcard.com/report/github.com/labd/commercetools-go-sdk)
 [![GoDoc](https://godoc.org/github.com/labd/commercetools-go-sdk?status.svg)](https://godoc.org/github.com/labd/commercetools-go-sdk)

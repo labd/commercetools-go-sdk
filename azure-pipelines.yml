@@ -1,0 +1,31 @@
+pool:
+  vmImage: "ubuntu-16.04"
+
+variables:
+  GOBIN: "$(GOPATH)/bin"
+  GOROOT: "/usr/local/go1.11"
+  GOPATH: "$(system.defaultWorkingDirectory)/gopath"
+  modulePath: "$(GOPATH)/src/github.com/$(build.repository.name)"
+
+steps:
+  - script: |
+      mkdir -p '$(GOBIN)'
+      mkdir -p '$(GOPATH)/pkg'
+      mkdir -p '$(modulePath)'
+      shopt -s extglob
+      mv !(gopath) '$(modulePath)'
+      echo '##vso[task.prependpath]$(GOBIN)'
+      echo '##vso[task.prependpath]$(GOROOT)/bin'
+    displayName: "Set up the Go workspace"
+
+  - script: go get -v -t -d ./...
+    workingDirectory: "$(modulePath)"
+    displayName: "go get dependencies"
+
+  - script: go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
+    workingDirectory: "$(modulePath)"
+    displayName: "Run tests"
+
+  - script: bash <(curl -s https://codecov.io/bash)
+    condition: succeeded()
+    displayName: "Upload coverage information to codecov.io"
