@@ -25,10 +25,13 @@ type ChannelUpdateInput struct {
 	Actions []ChannelUpdateAction
 }
 
+// ChannelURLPath is the commercetools API channel path.
+const ChannelURLPath = "channels"
+
 // ChannelGetByID will return a channel matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
 func (client *Client) ChannelGetByID(id string) (result *Channel, err error) {
-	err = client.Get(fmt.Sprintf("channels/%s", id), nil, &result)
+	err = client.Get(fmt.Sprintf("%s/%s", ChannelURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +41,7 @@ func (client *Client) ChannelGetByID(id string) (result *Channel, err error) {
 // ChannelCreate will create a new channel from a draft, and return the newly created
 // channel. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ChannelCreate(draft *ChannelDraft) (result *Channel, err error) {
-	err = client.Create("channels", nil, draft, &result)
+	err = client.Create(ChannelURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +55,7 @@ func (client *Client) ChannelUpdate(input *ChannelUpdateInput) (result *Channel,
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
-	endpoint := fmt.Sprintf("channels/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", ChannelURLPath, input.ID)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -64,11 +67,21 @@ func (client *Client) ChannelUpdate(input *ChannelUpdateInput) (result *Channel,
 // delete a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
 func (client *Client) ChannelDelete(id string, version int) (result *Channel, err error) {
-	endpoint := fmt.Sprintf("channels/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", ChannelURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
 
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ChannelQuery will query channels.
+// OAuth2 Scopes: view_products:{projectKey}
+func (client *Client) ChannelQuery(input *QueryInput) (result *ChannelPagedQueryResponse, err error) {
+	err = client.Query(ChannelURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}

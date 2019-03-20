@@ -25,10 +25,13 @@ type ZoneUpdateInput struct {
 	Actions []ZoneUpdateAction
 }
 
+// ZoneURLPath is the commercetools API zone path.
+const ZoneURLPath = "zones"
+
 // ZoneGetByID will return a shipping zone matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
 func (client *Client) ZoneGetByID(id string) (result *Zone, err error) {
-	err = client.Get(fmt.Sprintf("zones/%s", id), nil, &result)
+	err = client.Get(fmt.Sprintf("%s/%s", ZoneURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +41,7 @@ func (client *Client) ZoneGetByID(id string) (result *Zone, err error) {
 // ZoneCreate will create a new shipping zone from a draft, and return the newly
 // created shipping zone. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
-	err = client.Create("zones", nil, draft, &result)
+	err = client.Create(ZoneURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +55,7 @@ func (client *Client) ZoneUpdate(input *ZoneUpdateInput) (result *Zone, err erro
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
-	endpoint := fmt.Sprintf("zones/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", ZoneURLPath, input.ID)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -63,11 +66,21 @@ func (client *Client) ZoneUpdate(input *ZoneUpdateInput) (result *Zone, err erro
 // ZoneDeleteByID will delete a shipping zone matching the provided ID. OAuth2
 // Scopes: manage_products:{projectKey}
 func (client *Client) ZoneDeleteByID(id string, version int) (result *Zone, err error) {
-	endpoint := fmt.Sprintf("zones/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", ZoneURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
 
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ZoneQuery will query zones.
+// OAuth2 Scopes: view_orders:{projectKey}
+func (client *Client) ZoneQuery(input *QueryInput) (result *ZonePagedQueryResponse, err error) {
+	err = client.Query(ZoneURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}

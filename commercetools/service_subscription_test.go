@@ -378,3 +378,17 @@ func TestSubscriptionGetDestinationSQS(t *testing.T) {
 	}
 	assert.Equal(t, destination, expected)
 }
+
+func TestSubscriptionTypeQuery(t *testing.T) {
+	output := testutil.RequestData{}
+	client, server := testutil.MockClient(t, "{}", &output, nil)
+	defer server.Close()
+
+	queryInput := commercetools.QueryInput{
+		Limit: 500,
+	}
+	_, err := client.SubscriptionQuery(&queryInput)
+	assert.Nil(t, err)
+
+	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())
+}

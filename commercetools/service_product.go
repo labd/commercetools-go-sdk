@@ -31,6 +31,9 @@ type ProductDeleteInput struct {
 	PriceSelection ProductPriceSelection
 }
 
+// ProductURLPath is the commercetools API product path.
+const ProductURLPath = "products"
+
 func (ps *ProductPriceSelection) getQueryParameters() url.Values {
 	result := url.Values{}
 
@@ -61,7 +64,7 @@ func (i *ProductDeleteInput) getQueryParameters() url.Values {
 // created product. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductCreate(draft *ProductDraft) (*Product, error) {
 	var result Product
-	err := client.Create("products", nil, draft, &result)
+	err := client.Create(ProductURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +75,7 @@ func (client *Client) ProductCreate(draft *ProductDraft) (*Product, error) {
 // view_products:{projectKey}
 func (client *Client) ProductGetByID(id string) (*Product, error) {
 	var result Product
-	err := client.Get(fmt.Sprintf("products/%s", id), nil, &result)
+	err := client.Get(fmt.Sprintf("%s/%s", ProductURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +93,7 @@ func (client *Client) ProductGetByKey(key string) (*Product, error) {
 func (client *Client) ProductUpdate(input *ProductUpdateInput) (*Product, error) {
 	var result Product
 
-	endpoint := fmt.Sprintf("products/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", ProductURLPath, input.ID)
 	params := input.PriceSelection.getQueryParameters()
 
 	err := client.Update(endpoint, params, input.Version, input.Actions, &result)
@@ -107,7 +110,7 @@ func (client *Client) ProductDeleteByID(input *ProductDeleteInput) (*Product, er
 		return nil, errors.New("Missing required field ID")
 	}
 	var result Product
-	endpoint := fmt.Sprintf("products/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", ProductURLPath, input.ID)
 	params := input.getQueryParameters()
 	err := client.Delete(endpoint, params, &result)
 
@@ -124,7 +127,7 @@ func (client *Client) ProductDeleteByKey(input *ProductDeleteInput) (*Product, e
 		return nil, errors.New("Missing required field Key")
 	}
 	var result Product
-	endpoint := fmt.Sprintf("products/key=%s", input.Key)
+	endpoint := fmt.Sprintf("%s/key=%s", ProductURLPath, input.Key)
 	params := input.getQueryParameters()
 	err := client.Delete(endpoint, params, &result)
 
@@ -132,4 +135,14 @@ func (client *Client) ProductDeleteByKey(input *ProductDeleteInput) (*Product, e
 		return nil, err
 	}
 	return &result, nil
+}
+
+// ProductQuery will query products.
+// OAuth2 Scopes: view_products:{projectKey}
+func (client *Client) ProductQuery(input *QueryInput) (result *ProductPagedQueryResponse, err error) {
+	err = client.Query(ProductURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }

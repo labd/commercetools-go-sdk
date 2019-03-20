@@ -19,10 +19,13 @@ type SubscriptionUpdateInput struct {
 	Actions []SubscriptionUpdateAction
 }
 
+// SubscriptionURLPath is the commercetools API subscription path.
+const SubscriptionURLPath = "subscriptions"
+
 // SubscriptionGetByID will return a subscription matching the provided ID.
 func (client *Client) SubscriptionGetByID(id string) (*Subscription, error) {
 	var result Subscription
-	err := client.Get(fmt.Sprintf("subscriptions/%s", id), nil, &result)
+	err := client.Get(fmt.Sprintf("%s/%s", SubscriptionURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +43,7 @@ func (client *Client) SubscriptionGetByID(id string) (*Subscription, error) {
 // Currently, a maximum of 25 subscriptions can be created per project.
 func (client *Client) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription, error) {
 	var result Subscription
-	err := client.Create("subscriptions", nil, draft, &result)
+	err := client.Create(SubscriptionURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +59,7 @@ func (client *Client) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subsc
 		return nil, fmt.Errorf("No valid subscription id passed")
 	}
 
-	endpoint := fmt.Sprintf("subscriptions/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", SubscriptionURLPath, input.ID)
 	err := client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -67,7 +70,7 @@ func (client *Client) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subsc
 // SubscriptionDeleteByID will delete a subscription matching the provided ID.
 func (client *Client) SubscriptionDeleteByID(id string, version int) (*Subscription, error) {
 	var result Subscription
-	endpoint := fmt.Sprintf("subscriptions/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", SubscriptionURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err := client.Delete(endpoint, params, &result)
@@ -81,7 +84,7 @@ func (client *Client) SubscriptionDeleteByID(id string, version int) (*Subscript
 // SubscriptionDeleteByKey will delete a subscription matching the provided key.
 func (client *Client) SubscriptionDeleteByKey(key string, version int) (*Subscription, error) {
 	var result Subscription
-	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
+	endpoint := fmt.Sprintf("%s/key=%s", SubscriptionURLPath, key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err := client.Delete(endpoint, params, &result)
@@ -90,4 +93,14 @@ func (client *Client) SubscriptionDeleteByKey(key string, version int) (*Subscri
 		return nil, err
 	}
 	return &result, nil
+}
+
+// SubscriptionQuery will query subscriptions.
+// OAuth2 Scopes: manage_subscriptions:{projectKey}
+func (client *Client) SubscriptionQuery(input *QueryInput) (result *SubscriptionPagedQueryResponse, err error) {
+	err = client.Query(SubscriptionURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }

@@ -25,10 +25,13 @@ type TypeUpdateInput struct {
 	Actions []TypeUpdateAction
 }
 
+// TypeURLPath is the commercetools API type path.
+const TypeURLPath = "types"
+
 // TypeGetByID will return a type matching the provided ID. OAuth2 Scopes:
 // view_types:{projectKey}
 func (client *Client) TypeGetByID(id string) (result *Type, err error) {
-	err = client.Get(fmt.Sprintf("types/%s", id), nil, &result)
+	err = client.Get(fmt.Sprintf("%s/%s", TypeURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +41,7 @@ func (client *Client) TypeGetByID(id string) (result *Type, err error) {
 // TypeCreate will create a new type from a draft, and return the newly created
 // type. OAuth2 Scopes: manage_types:{projectKey}
 func (client *Client) TypeCreate(draft *TypeDraft) (result *Type, err error) {
-	err = client.Create("types", nil, draft, &result)
+	err = client.Create(TypeURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +55,7 @@ func (client *Client) TypeUpdate(input *TypeUpdateInput) (result *Type, err erro
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
-	endpoint := fmt.Sprintf("types/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", TypeURLPath, input.ID)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -64,7 +67,7 @@ func (client *Client) TypeUpdate(input *TypeUpdateInput) (result *Type, err erro
 // a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
 func (client *Client) TypeDeleteByID(id string, version int) (result *Type, err error) {
-	endpoint := fmt.Sprintf("types/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", TypeURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
@@ -79,11 +82,21 @@ func (client *Client) TypeDeleteByID(id string, version int) (result *Type, err 
 // delete a type only if it’s not referenced by other entities. OAuth2 Scopes:
 // manage_types:{projectKey}
 func (client *Client) TypeDeleteByKey(key string, version int) (result *Type, err error) {
-	endpoint := fmt.Sprintf("types/key=%s", key)
+	endpoint := fmt.Sprintf("%s/key=%s", TypeURLPath, key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
 
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// TypeQuery will query types.
+// OAuth2 Scopes: view_types:{projectKey}
+func (client *Client) TypeQuery(input *QueryInput) (result *TypePagedQueryResponse, err error) {
+	err = client.Query(TypeURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}

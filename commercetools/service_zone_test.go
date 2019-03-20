@@ -202,3 +202,17 @@ func TestZoneGetByID(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
+
+func TestZoneQuery(t *testing.T) {
+	output := testutil.RequestData{}
+	client, server := testutil.MockClient(t, "{}", &output, nil)
+	defer server.Close()
+
+	queryInput := commercetools.QueryInput{
+		Limit: 500,
+	}
+	_, err := client.ZoneQuery(&queryInput)
+	assert.Nil(t, err)
+
+	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())
+}
