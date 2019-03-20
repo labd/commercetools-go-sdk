@@ -2,6 +2,7 @@ package commercetools_test
 
 import (
 	"fmt"
+	"net/url"
 	"testing"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
@@ -87,4 +88,18 @@ func TestExtensionDeleteByKey(t *testing.T) {
 
 	_, err := client.ExtensionDeleteByKey("1234", 2)
 	assert.Nil(t, err)
+}
+
+func TestExtensionQuery(t *testing.T) {
+	output := testutil.RequestData{}
+	client, server := testutil.MockClient(t, "{}", &output, nil)
+	defer server.Close()
+
+	queryInput := commercetools.QueryInput{
+		Limit: 500,
+	}
+	_, err := client.ExtensionQuery(&queryInput)
+	assert.Nil(t, err)
+
+	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())
 }

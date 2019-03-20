@@ -25,10 +25,13 @@ type ProductTypeUpdateInput struct {
 	Actions []ProductTypeUpdateAction
 }
 
+// ProductTypeURLPath is the commercetools API product type path.
+const ProductTypeURLPath = "product-types"
+
 // ProductTypeGetByID will return a product type matching the provided ID. OAuth2 Scopes:
 // view_products:{projectKey}
 func (client *Client) ProductTypeGetByID(id string) (result *ProductType, err error) {
-	err = client.Get(fmt.Sprintf("product-types/%s", id), nil, &result)
+	err = client.Get(fmt.Sprintf("%s/%s", ProductTypeURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +41,7 @@ func (client *Client) ProductTypeGetByID(id string) (result *ProductType, err er
 // ProductTypeCreate will create a new product type from a draft, and return the
 // newly created product type. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *ProductType, err error) {
-	err = client.Create("product-types", nil, draft, &result)
+	err = client.Create(ProductTypeURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +56,7 @@ func (client *Client) ProductTypeUpdate(input *ProductTypeUpdateInput) (result *
 		return nil, fmt.Errorf("No valid product type id passed")
 	}
 
-	endpoint := fmt.Sprintf("product-types/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", ProductTypeURLPath, input.ID)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -65,7 +68,7 @@ func (client *Client) ProductTypeUpdate(input *ProductTypeUpdateInput) (result *
 // This request deletes a product type only if it’s not referenced by a product.
 // OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductTypeDeleteByID(id string, version int) (result *ProductType, err error) {
-	endpoint := fmt.Sprintf("product-types/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", ProductTypeURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
@@ -80,11 +83,21 @@ func (client *Client) ProductTypeDeleteByID(id string, version int) (result *Pro
 // This request deletes a product type only if it’s not referenced by a product.
 // OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ProductTypeDeleteByKey(key string, version int) (result *ProductType, err error) {
-	endpoint := fmt.Sprintf("product-types/key=%s", key)
+	endpoint := fmt.Sprintf("%s/key=%s", ProductTypeURLPath, key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
 
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeQuery will query product types.
+// OAuth2 Scopes: view_products:{projectKey}
+func (client *Client) ProductTypeQuery(input *QueryInput) (result *ProductTypePagedQueryResponse, err error) {
+	err = client.Query(ProductTypeURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}

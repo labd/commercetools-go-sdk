@@ -25,10 +25,13 @@ type StateUpdateInput struct {
 	Actions []StateUpdateAction
 }
 
+// StateURLPath is the commercetools API state path.
+const StateURLPath = "states"
+
 // StateGetByID will return a state matching the provided ID. OAuth2 Scopes:
 // view_states:{projectKey} (or, deprecated: view_orders:{projectKey})
 func (client *Client) StateGetByID(id string) (result *State, err error) {
-	err = client.Get(fmt.Sprintf("states/%s", id), nil, &result)
+	err = client.Get(fmt.Sprintf("%s/%s", StateURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +42,7 @@ func (client *Client) StateGetByID(id string) (result *State, err error) {
 // created state. OAuth2 Scopes: manage_states:{projectKey} (or, deprecated:
 // manage_orders:{projectKey})
 func (client *Client) StateCreate(draft *StateDraft) (result *State, err error) {
-	err = client.Create("states", nil, draft, &result)
+	err = client.Create(StateURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +57,7 @@ func (client *Client) StateUpdate(input *StateUpdateInput) (result *State, err e
 		return nil, fmt.Errorf("no valid state id passed")
 	}
 
-	endpoint := fmt.Sprintf("states/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", StateURLPath, input.ID)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -66,11 +69,21 @@ func (client *Client) StateUpdate(input *StateUpdateInput) (result *State, err e
 // Scopes: manage_states:{projectKey} (or, deprecated:
 // manage_orders:{projectKey})
 func (client *Client) StateDeleteByID(id string, version int) (result *State, err error) {
-	endpoint := fmt.Sprintf("states/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", StateURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
 
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StateQuery will query state objects.
+// OAuth2 Scopes: view_states:{projectKey}
+func (client *Client) StateQuery(input *QueryInput) (result *StatePagedQueryResponse, err error) {
+	err = client.Query(StateURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}

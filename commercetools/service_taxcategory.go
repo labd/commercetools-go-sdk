@@ -25,10 +25,13 @@ type TaxCategoryUpdateInput struct {
 	Actions []TaxCategoryUpdateAction
 }
 
+// TaxCategoryURLPath is the commercetools API tax category path.
+const TaxCategoryURLPath = "tax-categories"
+
 // TaxCategoryGetByID will return a tax category matching the provided ID.
 // OAuth2 Scopes: view_products:{projectKey}
 func (client *Client) TaxCategoryGetByID(id string) (result *TaxCategory, err error) {
-	err = client.Get(fmt.Sprintf("tax-categories/%s", id), nil, &result)
+	err = client.Get(fmt.Sprintf("%s/%s", TaxCategoryURLPath, id), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +41,7 @@ func (client *Client) TaxCategoryGetByID(id string) (result *TaxCategory, err er
 // TaxCategoryCreate will create a new tax category from a draft, and return the
 // newly created tax category. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) TaxCategoryCreate(draft *TaxCategoryDraft) (result *TaxCategory, err error) {
-	err = client.Create("tax-categories", nil, draft, &result)
+	err = client.Create(TaxCategoryURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +56,7 @@ func (client *Client) TaxCategoryUpdate(input *TaxCategoryUpdateInput) (result *
 		return nil, fmt.Errorf("no valid type id passed")
 	}
 
-	endpoint := fmt.Sprintf("tax-categories/%s", input.ID)
+	endpoint := fmt.Sprintf("%s/%s", TaxCategoryURLPath, input.ID)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
@@ -64,7 +67,7 @@ func (client *Client) TaxCategoryUpdate(input *TaxCategoryUpdateInput) (result *
 // TaxCategoryDeleteByID will delete a tax category matching the provided ID.
 // OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) TaxCategoryDeleteByID(id string, version int) (result *TaxCategory, err error) {
-	endpoint := fmt.Sprintf("tax-categories/%s", id)
+	endpoint := fmt.Sprintf("%s/%s", TaxCategoryURLPath, id)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
@@ -78,11 +81,21 @@ func (client *Client) TaxCategoryDeleteByID(id string, version int) (result *Tax
 // TaxCategoryDeleteByKey will delete a tax category matching the provided key.
 // OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) TaxCategoryDeleteByKey(key string, version int) (result *TaxCategory, err error) {
-	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
+	endpoint := fmt.Sprintf("%s/key=%s", TaxCategoryURLPath, key)
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	err = client.Delete(endpoint, params, &result)
 
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// TaxCategoryQuery will query the tax categories.
+// OAuth2 Scopes: view_products:{projectKey}
+func (client *Client) TaxCategoryQuery(input *QueryInput) (result *TaxCategoryPagedQueryResponse, err error) {
+	err = client.Query(TaxCategoryURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}

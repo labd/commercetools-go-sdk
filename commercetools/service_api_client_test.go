@@ -2,6 +2,7 @@ package commercetools_test
 
 import (
 	"fmt"
+	"net/url"
 	"testing"
 	"time"
 
@@ -64,4 +65,18 @@ func TestAPIClientGetByID(t *testing.T) {
 	result, err := client.APIClientGetByID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
+}
+
+func TestAPIClientQuery(t *testing.T) {
+	output := testutil.RequestData{}
+	client, server := testutil.MockClient(t, "{}", &output, nil)
+	defer server.Close()
+
+	queryInput := commercetools.QueryInput{
+		Limit: 500,
+	}
+	_, err := client.APIClientQuery(&queryInput)
+	assert.Nil(t, err)
+
+	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())
 }

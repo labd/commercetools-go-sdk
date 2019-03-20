@@ -356,3 +356,17 @@ func TestChannelGetByID(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
+
+func TestChannelQuery(t *testing.T) {
+	output := testutil.RequestData{}
+	client, server := testutil.MockClient(t, "{}", &output, nil)
+	defer server.Close()
+
+	queryInput := commercetools.QueryInput{
+		Limit: 500,
+	}
+	_, err := client.ChannelQuery(&queryInput)
+	assert.Nil(t, err)
+
+	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())
+}
