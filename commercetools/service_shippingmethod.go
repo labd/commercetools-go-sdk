@@ -38,6 +38,26 @@ func (client *Client) ShippingMethodGetByID(id string) (result *ShippingMethod, 
 	return result, nil
 }
 
+// ShippingMethodGetByKey will return a shipping method matching the provided Key.
+// OAuth2 Scopes: view_orders:{projectKey} or manage_my_orders:{projectKey}
+func (client *Client) ShippingMethodGetByKey(key string) (result *ShippingMethod, err error) {
+	err = client.Get(fmt.Sprintf("%s/key=%s", ShippingMethodURLPath, key), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ShippingMethodQuery will query the shipping methods.
+// OAuth2 Scopes: view_orders:{projectKey} or manage_my_orders:{projectKey}
+func (client *Client) ShippingMethodQuery(input *QueryInput) (result *ShippingMethodPagedQueryResponse, err error) {
+	err = client.Query(ShippingMethodURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // ShippingMethodCreate will create a new shipping method from a draft, and return
 // the newly created shipping method.
 // OAuth2 Scopes: manage_orders:{projectKey}
