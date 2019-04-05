@@ -1,10 +1,7 @@
 package commercetools_test
 
 import (
-	"fmt"
-	//"net/url"
 	"testing"
-	//"time"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/labd/commercetools-go-sdk/testutil"
@@ -22,7 +19,6 @@ func TestShippingMethodCreate(t *testing.T) {
 		Key:         "shipping-method",
 		Description: "Shipping method description.",
 	}
-	fmt.Println(output)
 
 	_, err := client.ShippingMethodCreate(input)
 	assert.Nil(t, err)
