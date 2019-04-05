@@ -1,0 +1,12 @@
+{
+  "id": "93153b7e-577e-11e9-a0db-4ff9c32a63cc",
+  "version": 1,
+  "key": "test-shipping-method",
+  "name": "test shipping method",
+  "description": "",
+  "isDefault": false,
+  "zoneRates": null,
+  "taxCategory": null,
+  "createdAt": "2016-02-24T15:33:40.811Z",
+  "lastModifiedAt": "2016-02-24T15:33:40.811Z"
+}
