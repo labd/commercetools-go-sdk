@@ -16,6 +16,8 @@ type ShippingMethodDeleteInput struct {
 type ShippingMethodUpdateInput struct {
 	ID string
 
+	Key string
+
 	// The expected version of the type on which the changes should be applied.
 	// If the expected version does not match the actual version, a 409 Conflict
 	// will be returned.
@@ -27,6 +29,17 @@ type ShippingMethodUpdateInput struct {
 
 // ShippingMethodURLPath is the commercetools API shipping method path
 const ShippingMethodURLPath = "shipping-methods"
+
+// ShippingMethodCreate will create a new shipping method from a draft, and return
+// the newly created shipping method.
+// OAuth2 Scopes: manage_orders:{projectKey}
+func (client *Client) ShippingMethodCreate(draft *ShippingMethodDraft) (result *ShippingMethod, err error) {
+	err = client.Create(ShippingMethodURLPath, nil, draft, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
 
 // ShippingMethodGetByID will return a shipping method matching the provided ID.
 // OAuth2 Scopes: view_orders:{projectKey} or manage_my_orders:{projectKey}
@@ -58,26 +71,31 @@ func (client *Client) ShippingMethodQuery(input *QueryInput) (result *ShippingMe
 	return result, nil
 }
 
-// ShippingMethodCreate will create a new shipping method from a draft, and return
-// the newly created shipping method.
+// ShippingMethodUpdateByID will update a shipping method matching the provided ID with
+// the defined ShippingMethodUpdateActions.
 // OAuth2 Scopes: manage_orders:{projectKey}
-func (client *Client) ShippingMethodCreate(draft *ShippingMethodDraft) (result *ShippingMethod, err error) {
-	err = client.Create(ShippingMethodURLPath, nil, draft, &result)
+func (client *Client) ShippingMethodUpdateByID(input *ShippingMethodUpdateInput) (result *ShippingMethod, err error) {
+	if input.ID == "" {
+		return nil, fmt.Errorf("no valid type id passed")
+	}
+
+	endpoint := fmt.Sprintf("%s/%s", ShippingMethodURLPath, input.ID)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
-// ShippingMethodUpdate will update a shipping method matching the provided ID with
+// ShippingMethodUpdateByKey will update a shipping method matching the provided Key with
 // the defined ShippingMethodUpdateActions.
 // OAuth2 Scopes: manage_orders:{projectKey}
-func (client *Client) ShippingMethodUpdate(input *ShippingMethodUpdateInput) (result *ShippingMethod, err error) {
-	if input.ID == "" {
-		return nil, fmt.Errorf("no valid type id passed")
+func (client *Client) ShippingMethodUpdateByKey(input *ShippingMethodUpdateInput) (result *ShippingMethod, err error) {
+	if input.Key == "" {
+		return nil, fmt.Errorf("no valid type key passed")
 	}
 
-	endpoint := fmt.Sprintf("%s/%s", ShippingMethodURLPath, input.ID)
+	endpoint := fmt.Sprintf("%s/key=%s", ShippingMethodURLPath, input.Key)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
