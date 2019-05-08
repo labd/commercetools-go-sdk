@@ -80,6 +80,54 @@ func TestStoreUpdate(t *testing.T) {
 	}
 }
 
+func TestStoreUpdateByKey(t *testing.T) {
+	testCases := []struct {
+		desc        string
+		input       *commercetools.StoreUpdateKeyInput
+		requestBody string
+	}{
+		{
+			desc: "Set locale",
+			input: &commercetools.StoreUpdateKeyInput{
+				Key:     "test123",
+				Version: 2,
+				Actions: []commercetools.StoreUpdateAction{
+					&commercetools.StoreSetNameAction{
+						Name: &commercetools.LocalizedString{
+							"en": "foo",
+						},
+					},
+				},
+			},
+			requestBody: `{
+				"version": 2,
+				"actions": [
+					{
+						"action": "setName",
+						"name": {
+							"en": "foo"
+						}
+					}
+				]
+			}`,
+		},
+	}
+
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			output := testutil.RequestData{}
+
+			client, server := testutil.MockClient(t, "{}", &output, nil)
+			defer server.Close()
+
+			_, err := client.StoreUpdateByKey(tC.input)
+			assert.Nil(t, err)
+			assert.Equal(t, "/unittest/stores/key=test123", output.URL.Path)
+			assert.JSONEq(t, tC.requestBody, output.JSON)
+		})
+	}
+}
+
 func TestStoreDelete(t *testing.T) {
 	output := testutil.RequestData{}
 	client, server := testutil.MockClient(t, "{}", &output, nil)

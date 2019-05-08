@@ -19,6 +19,19 @@ type StoreUpdateInput struct {
 	Actions []StoreUpdateAction
 }
 
+// StoreUpdateKeyInput provides the data required to update a store.
+type StoreUpdateKeyInput struct {
+	Key string
+
+	// The expected version of the store on which the changes should be
+	// applied. If the expected version does not match the actual version, a 409
+	// Conflict will be returned.
+	Version int
+
+	// The list of update actions to be performed on the store.
+	Actions []StoreUpdateAction
+}
+
 // StoreURLPath is the commercetools API store path.
 const StoreURLPath = "stores"
 
@@ -60,6 +73,21 @@ func (client *Client) StoreUpdate(input *StoreUpdateInput) (result *Store, err e
 	}
 
 	endpoint := fmt.Sprintf("%s/%s", StoreURLPath, input.ID)
+	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreUpdateByKey will update a store matching the provided ID with the defined
+// StoreUpdateActions. OAuth2 Scopes: manage_stores:{projectKey}
+func (client *Client) StoreUpdateByKey(input *StoreUpdateKeyInput) (result *Store, err error) {
+	if input.Key == "" {
+		return nil, fmt.Errorf("no valid type key passed")
+	}
+
+	endpoint := fmt.Sprintf("%s/key=%s", StoreURLPath, input.Key)
 	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
