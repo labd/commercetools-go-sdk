@@ -566,6 +566,7 @@ type Cart struct {
 	TaxRoundingMode                 RoundingMode            `json:"taxRoundingMode"`
 	TaxMode                         TaxMode                 `json:"taxMode"`
 	TaxCalculationMode              TaxCalculationMode      `json:"taxCalculationMode"`
+	Store                           *StoreKeyReference      `json:"store,omitempty"`
 	ShippingRateInput               ShippingRateInput       `json:"shippingRateInput,omitempty"`
 	ShippingInfo                    *ShippingInfo           `json:"shippingInfo,omitempty"`
 	ShippingAddress                 *Address                `json:"shippingAddress,omitempty"`
@@ -840,6 +841,7 @@ type CartDraft struct {
 	TaxRoundingMode                  RoundingMode             `json:"taxRoundingMode,omitempty"`
 	TaxMode                          TaxMode                  `json:"taxMode,omitempty"`
 	TaxCalculationMode               TaxCalculationMode       `json:"taxCalculationMode,omitempty"`
+	Store                            *StoreReference          `json:"store,omitempty"`
 	ShippingRateInput                ShippingRateInputDraft   `json:"shippingRateInput,omitempty"`
 	ShippingMethod                   *ShippingMethodReference `json:"shippingMethod,omitempty"`
 	ShippingAddress                  *Address                 `json:"shippingAddress,omitempty"`
@@ -1615,11 +1617,12 @@ type ExternalTaxAmountDraft struct {
 
 // ExternalTaxRateDraft is a standalone struct
 type ExternalTaxRateDraft struct {
-	SubRates []SubRate `json:"subRates,omitempty"`
-	State    string    `json:"state,omitempty"`
-	Name     string    `json:"name"`
-	Country  string    `json:"country"`
-	Amount   float64   `json:"amount,omitempty"`
+	SubRates        []SubRate `json:"subRates,omitempty"`
+	State           string    `json:"state,omitempty"`
+	Name            string    `json:"name"`
+	IncludedInPrice bool      `json:"includedInPrice"`
+	Country         string    `json:"country"`
+	Amount          float64   `json:"amount,omitempty"`
 }
 
 // ItemShippingDetails is a standalone struct

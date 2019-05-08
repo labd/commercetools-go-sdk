@@ -302,15 +302,16 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 
 // MessageDelivery implements the interface SubscriptionDelivery
 type MessageDelivery struct {
-	Resource           Reference           `json:"resource"`
-	ProjectKey         string              `json:"projectKey"`
-	Version            int                 `json:"version"`
-	SequenceNumber     int                 `json:"sequenceNumber"`
-	ResourceVersion    int                 `json:"resourceVersion"`
-	PayloadNotIncluded *PayloadNotIncluded `json:"payloadNotIncluded"`
-	LastModifiedAt     time.Time           `json:"lastModifiedAt"`
-	ID                 string              `json:"id"`
-	CreatedAt          time.Time           `json:"createdAt"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ProjectKey                      string                   `json:"projectKey"`
+	Version                         int                      `json:"version"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	PayloadNotIncluded              *PayloadNotIncluded      `json:"payloadNotIncluded"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -336,10 +337,11 @@ type PayloadNotIncluded struct {
 
 // ResourceCreatedDelivery implements the interface SubscriptionDelivery
 type ResourceCreatedDelivery struct {
-	Resource   Reference `json:"resource"`
-	ProjectKey string    `json:"projectKey"`
-	Version    int       `json:"version"`
-	ModifiedAt time.Time `json:"modifiedAt"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ProjectKey                      string                   `json:"projectKey"`
+	Version                         int                      `json:"version"`
+	ModifiedAt                      time.Time                `json:"modifiedAt"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -353,10 +355,11 @@ func (obj ResourceCreatedDelivery) MarshalJSON() ([]byte, error) {
 
 // ResourceDeletedDelivery implements the interface SubscriptionDelivery
 type ResourceDeletedDelivery struct {
-	Resource   Reference `json:"resource"`
-	ProjectKey string    `json:"projectKey"`
-	Version    int       `json:"version"`
-	ModifiedAt time.Time `json:"modifiedAt"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ProjectKey                      string                   `json:"projectKey"`
+	Version                         int                      `json:"version"`
+	ModifiedAt                      time.Time                `json:"modifiedAt"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -370,11 +373,12 @@ func (obj ResourceDeletedDelivery) MarshalJSON() ([]byte, error) {
 
 // ResourceUpdatedDelivery implements the interface SubscriptionDelivery
 type ResourceUpdatedDelivery struct {
-	Resource   Reference `json:"resource"`
-	ProjectKey string    `json:"projectKey"`
-	Version    int       `json:"version"`
-	OldVersion int       `json:"oldVersion"`
-	ModifiedAt time.Time `json:"modifiedAt"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ProjectKey                      string                   `json:"projectKey"`
+	Version                         int                      `json:"version"`
+	OldVersion                      int                      `json:"oldVersion"`
+	ModifiedAt                      time.Time                `json:"modifiedAt"`
 }
 
 // MarshalJSON override to set the discriminator value

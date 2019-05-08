@@ -45,7 +45,7 @@ const (
 )
 
 // FieldContainer is a map
-type FieldContainer map[string]string
+type FieldContainer map[string]interface{}
 
 // FieldType uses name as discriminator attribute
 type FieldType interface{}

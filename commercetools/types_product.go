@@ -610,6 +610,7 @@ type ProductAddVariantAction struct {
 	Key        string       `json:"key,omitempty"`
 	Images     []Image      `json:"images,omitempty"`
 	Attributes []Attribute  `json:"attributes,omitempty"`
+	Assets     []Asset      `json:"assets,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

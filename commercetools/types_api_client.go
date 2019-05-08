@@ -11,13 +11,15 @@ type APIClient struct {
 	Name       string    `json:"name"`
 	LastUsedAt Date      `json:"lastUsedAt,omitempty"`
 	ID         string    `json:"id"`
-	CreatedAt  time.Time `json:"createdAt"`
+	DeleteAt   time.Time `json:"deleteAt,omitempty"`
+	CreatedAt  time.Time `json:"createdAt,omitempty"`
 }
 
 // APIClientDraft is a standalone struct
 type APIClientDraft struct {
-	Scope string `json:"scope"`
-	Name  string `json:"name"`
+	Scope                   string `json:"scope"`
+	Name                    string `json:"name"`
+	DeleteDaysAfterCreation int    `json:"deleteDaysAfterCreation,omitempty"`
 }
 
 // APIClientPagedQueryResponse is a standalone struct

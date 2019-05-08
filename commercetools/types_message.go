@@ -407,6 +407,20 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return new, nil
+	case "ProductPriceDiscountsSet":
+		new := ProductPriceDiscountsSetMessagePayload{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "ProductPriceExternalDiscountSet":
+		new := ProductPriceExternalDiscountSetMessagePayload{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ProductPublished":
 		new := ProductPublishedMessagePayload{}
 		err := mapstructure.Decode(input, &new)
@@ -488,15 +502,16 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 
 // CategoryCreatedMessage is of type Message
 type CategoryCreatedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Category        *Category `json:"category"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Category                        *Category                `json:"category"`
 }
 
 // CategoryCreatedMessagePayload implements the interface MessagePayload
@@ -515,15 +530,16 @@ func (obj CategoryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CategorySlugChangedMessage is of type Message
 type CategorySlugChangedMessage struct {
-	Version         int              `json:"version"`
-	LastModifiedAt  time.Time        `json:"lastModifiedAt"`
-	ID              string           `json:"id"`
-	CreatedAt       time.Time        `json:"createdAt"`
-	Type            string           `json:"type"`
-	SequenceNumber  int              `json:"sequenceNumber"`
-	ResourceVersion int              `json:"resourceVersion"`
-	Resource        Reference        `json:"resource"`
-	Slug            *LocalizedString `json:"slug"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Slug                            *LocalizedString         `json:"slug"`
 }
 
 // CategorySlugChangedMessagePayload implements the interface MessagePayload
@@ -542,19 +558,20 @@ func (obj CategorySlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomLineItemStateTransitionMessage is of type Message
 type CustomLineItemStateTransitionMessage struct {
-	Version          int             `json:"version"`
-	LastModifiedAt   time.Time       `json:"lastModifiedAt"`
-	ID               string          `json:"id"`
-	CreatedAt        time.Time       `json:"createdAt"`
-	Type             string          `json:"type"`
-	SequenceNumber   int             `json:"sequenceNumber"`
-	ResourceVersion  int             `json:"resourceVersion"`
-	Resource         Reference       `json:"resource"`
-	TransitionDate   time.Time       `json:"transitionDate"`
-	ToState          *StateReference `json:"toState"`
-	Quantity         int             `json:"quantity"`
-	FromState        *StateReference `json:"fromState"`
-	CustomLineItemID string          `json:"customLineItemId"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	TransitionDate                  time.Time                `json:"transitionDate"`
+	ToState                         *StateReference          `json:"toState"`
+	Quantity                        int                      `json:"quantity"`
+	FromState                       *StateReference          `json:"fromState"`
+	CustomLineItemID                string                   `json:"customLineItemId"`
 }
 
 // CustomLineItemStateTransitionMessagePayload implements the interface MessagePayload
@@ -577,15 +594,16 @@ func (obj CustomLineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, er
 
 // CustomerAddressAddedMessage is of type Message
 type CustomerAddressAddedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Address         *Address  `json:"address"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Address                         *Address                 `json:"address"`
 }
 
 // CustomerAddressAddedMessagePayload implements the interface MessagePayload
@@ -604,15 +622,16 @@ func (obj CustomerAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerAddressChangedMessage is of type Message
 type CustomerAddressChangedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Address         *Address  `json:"address"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Address                         *Address                 `json:"address"`
 }
 
 // CustomerAddressChangedMessagePayload implements the interface MessagePayload
@@ -631,15 +650,16 @@ func (obj CustomerAddressChangedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerAddressRemovedMessage is of type Message
 type CustomerAddressRemovedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Address         *Address  `json:"address"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Address                         *Address                 `json:"address"`
 }
 
 // CustomerAddressRemovedMessagePayload implements the interface MessagePayload
@@ -658,15 +678,16 @@ func (obj CustomerAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerCompanyNameSetMessage is of type Message
 type CustomerCompanyNameSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	CompanyName     string    `json:"companyName"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	CompanyName                     string                   `json:"companyName"`
 }
 
 // CustomerCompanyNameSetMessagePayload implements the interface MessagePayload
@@ -685,15 +706,16 @@ func (obj CustomerCompanyNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerCreatedMessage is of type Message
 type CustomerCreatedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Customer        *Customer `json:"customer"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Customer                        *Customer                `json:"customer"`
 }
 
 // CustomerCreatedMessagePayload implements the interface MessagePayload
@@ -712,15 +734,16 @@ func (obj CustomerCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerDateOfBirthSetMessage is of type Message
 type CustomerDateOfBirthSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	DateOfBirth     Date      `json:"dateOfBirth"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	DateOfBirth                     Date                     `json:"dateOfBirth"`
 }
 
 // CustomerDateOfBirthSetMessagePayload implements the interface MessagePayload
@@ -739,15 +762,16 @@ func (obj CustomerDateOfBirthSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerEmailChangedMessage is of type Message
 type CustomerEmailChangedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Email           string    `json:"email"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Email                           string                   `json:"email"`
 }
 
 // CustomerEmailChangedMessagePayload implements the interface MessagePayload
@@ -766,14 +790,15 @@ func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerEmailVerifiedMessage is of type Message
 type CustomerEmailVerifiedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
 }
 
 // CustomerEmailVerifiedMessagePayload implements the interface MessagePayload
@@ -790,15 +815,16 @@ func (obj CustomerEmailVerifiedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // CustomerGroupSetMessage is of type Message
 type CustomerGroupSetMessage struct {
-	Version         int                     `json:"version"`
-	LastModifiedAt  time.Time               `json:"lastModifiedAt"`
-	ID              string                  `json:"id"`
-	CreatedAt       time.Time               `json:"createdAt"`
-	Type            string                  `json:"type"`
-	SequenceNumber  int                     `json:"sequenceNumber"`
-	ResourceVersion int                     `json:"resourceVersion"`
-	Resource        Reference               `json:"resource"`
-	CustomerGroup   *CustomerGroupReference `json:"customerGroup"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	CustomerGroup                   *CustomerGroupReference  `json:"customerGroup"`
 }
 
 // CustomerGroupSetMessagePayload implements the interface MessagePayload
@@ -817,15 +843,16 @@ func (obj CustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // DeliveryAddedMessage is of type Message
 type DeliveryAddedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Delivery        *Delivery `json:"delivery"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Delivery                        *Delivery                `json:"delivery"`
 }
 
 // DeliveryAddedMessagePayload implements the interface MessagePayload
@@ -844,17 +871,18 @@ func (obj DeliveryAddedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // DeliveryAddressSetMessage is of type Message
 type DeliveryAddressSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	OldAddress      *Address  `json:"oldAddress,omitempty"`
-	DeliveryID      string    `json:"deliveryId"`
-	Address         *Address  `json:"address,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OldAddress                      *Address                 `json:"oldAddress,omitempty"`
+	DeliveryID                      string                   `json:"deliveryId"`
+	Address                         *Address                 `json:"address,omitempty"`
 }
 
 // DeliveryAddressSetMessagePayload implements the interface MessagePayload
@@ -875,17 +903,18 @@ func (obj DeliveryAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // DeliveryItemsUpdatedMessage is of type Message
 type DeliveryItemsUpdatedMessage struct {
-	Version         int            `json:"version"`
-	LastModifiedAt  time.Time      `json:"lastModifiedAt"`
-	ID              string         `json:"id"`
-	CreatedAt       time.Time      `json:"createdAt"`
-	Type            string         `json:"type"`
-	SequenceNumber  int            `json:"sequenceNumber"`
-	ResourceVersion int            `json:"resourceVersion"`
-	Resource        Reference      `json:"resource"`
-	OldItems        []DeliveryItem `json:"oldItems"`
-	Items           []DeliveryItem `json:"items"`
-	DeliveryID      string         `json:"deliveryId"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OldItems                        []DeliveryItem           `json:"oldItems"`
+	Items                           []DeliveryItem           `json:"items"`
+	DeliveryID                      string                   `json:"deliveryId"`
 }
 
 // DeliveryItemsUpdatedMessagePayload implements the interface MessagePayload
@@ -906,15 +935,16 @@ func (obj DeliveryItemsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // DeliveryRemovedMessage is of type Message
 type DeliveryRemovedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Delivery        *Delivery `json:"delivery"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Delivery                        *Delivery                `json:"delivery"`
 }
 
 // DeliveryRemovedMessagePayload implements the interface MessagePayload
@@ -933,16 +963,17 @@ func (obj DeliveryRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // InventoryEntryDeletedMessage is of type Message
 type InventoryEntryDeletedMessage struct {
-	Version         int               `json:"version"`
-	LastModifiedAt  time.Time         `json:"lastModifiedAt"`
-	ID              string            `json:"id"`
-	CreatedAt       time.Time         `json:"createdAt"`
-	Type            string            `json:"type"`
-	SequenceNumber  int               `json:"sequenceNumber"`
-	ResourceVersion int               `json:"resourceVersion"`
-	Resource        Reference         `json:"resource"`
-	SupplyChannel   *ChannelReference `json:"supplyChannel"`
-	SKU             string            `json:"sku"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	SupplyChannel                   *ChannelReference        `json:"supplyChannel"`
+	SKU                             string                   `json:"sku"`
 }
 
 // InventoryEntryDeletedMessagePayload implements the interface MessagePayload
@@ -962,19 +993,20 @@ func (obj InventoryEntryDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // LineItemStateTransitionMessage is of type Message
 type LineItemStateTransitionMessage struct {
-	Version         int             `json:"version"`
-	LastModifiedAt  time.Time       `json:"lastModifiedAt"`
-	ID              string          `json:"id"`
-	CreatedAt       time.Time       `json:"createdAt"`
-	Type            string          `json:"type"`
-	SequenceNumber  int             `json:"sequenceNumber"`
-	ResourceVersion int             `json:"resourceVersion"`
-	Resource        Reference       `json:"resource"`
-	TransitionDate  time.Time       `json:"transitionDate"`
-	ToState         *StateReference `json:"toState"`
-	Quantity        int             `json:"quantity"`
-	LineItemID      string          `json:"lineItemId"`
-	FromState       *StateReference `json:"fromState"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	TransitionDate                  time.Time                `json:"transitionDate"`
+	ToState                         *StateReference          `json:"toState"`
+	Quantity                        int                      `json:"quantity"`
+	LineItemID                      string                   `json:"lineItemId"`
+	FromState                       *StateReference          `json:"fromState"`
 }
 
 // LineItemStateTransitionMessagePayload implements the interface MessagePayload
@@ -997,14 +1029,15 @@ func (obj LineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 
 // Message is of type Resource
 type Message struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1047,16 +1080,17 @@ type MessagePagedQueryResponse struct {
 
 // OrderBillingAddressSetMessage is of type Message
 type OrderBillingAddressSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	OldAddress      *Address  `json:"oldAddress,omitempty"`
-	Address         *Address  `json:"address,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OldAddress                      *Address                 `json:"oldAddress,omitempty"`
+	Address                         *Address                 `json:"address,omitempty"`
 }
 
 // OrderBillingAddressSetMessagePayload implements the interface MessagePayload
@@ -1076,15 +1110,16 @@ func (obj OrderBillingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderCreatedMessage is of type Message
 type OrderCreatedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Order           *Order    `json:"order"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Order                           *Order                   `json:"order"`
 }
 
 // OrderCreatedMessagePayload implements the interface MessagePayload
@@ -1103,17 +1138,18 @@ func (obj OrderCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderCustomLineItemDiscountSetMessage is of type Message
 type OrderCustomLineItemDiscountSetMessage struct {
-	Version                    int                                  `json:"version"`
-	LastModifiedAt             time.Time                            `json:"lastModifiedAt"`
-	ID                         string                               `json:"id"`
-	CreatedAt                  time.Time                            `json:"createdAt"`
-	Type                       string                               `json:"type"`
-	SequenceNumber             int                                  `json:"sequenceNumber"`
-	ResourceVersion            int                                  `json:"resourceVersion"`
-	Resource                   Reference                            `json:"resource"`
-	TaxedPrice                 *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
-	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	CustomLineItemID           string                               `json:"customLineItemId"`
+	Version                         int                                  `json:"version"`
+	LastModifiedAt                  time.Time                            `json:"lastModifiedAt"`
+	ID                              string                               `json:"id"`
+	CreatedAt                       time.Time                            `json:"createdAt"`
+	Type                            string                               `json:"type"`
+	SequenceNumber                  int                                  `json:"sequenceNumber"`
+	ResourceVersion                 int                                  `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                            `json:"resource"`
+	TaxedPrice                      *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
+	DiscountedPricePerQuantity      []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
+	CustomLineItemID                string                               `json:"customLineItemId"`
 }
 
 // OrderCustomLineItemDiscountSetMessagePayload implements the interface MessagePayload
@@ -1134,16 +1170,17 @@ func (obj OrderCustomLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, e
 
 // OrderCustomerEmailSetMessage is of type Message
 type OrderCustomerEmailSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	OldEmail        string    `json:"oldEmail,omitempty"`
-	Email           string    `json:"email,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OldEmail                        string                   `json:"oldEmail,omitempty"`
+	Email                           string                   `json:"email,omitempty"`
 }
 
 // OrderCustomerEmailSetMessagePayload implements the interface MessagePayload
@@ -1163,18 +1200,19 @@ func (obj OrderCustomerEmailSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderCustomerSetMessage is of type Message
 type OrderCustomerSetMessage struct {
-	Version          int                     `json:"version"`
-	LastModifiedAt   time.Time               `json:"lastModifiedAt"`
-	ID               string                  `json:"id"`
-	CreatedAt        time.Time               `json:"createdAt"`
-	Type             string                  `json:"type"`
-	SequenceNumber   int                     `json:"sequenceNumber"`
-	ResourceVersion  int                     `json:"resourceVersion"`
-	Resource         Reference               `json:"resource"`
-	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
-	OldCustomer      *CustomerReference      `json:"oldCustomer,omitempty"`
-	CustomerGroup    *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Customer         *CustomerReference      `json:"customer,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OldCustomerGroup                *CustomerGroupReference  `json:"oldCustomerGroup,omitempty"`
+	OldCustomer                     *CustomerReference       `json:"oldCustomer,omitempty"`
+	CustomerGroup                   *CustomerGroupReference  `json:"customerGroup,omitempty"`
+	Customer                        *CustomerReference       `json:"customer,omitempty"`
 }
 
 // OrderCustomerSetMessagePayload implements the interface MessagePayload
@@ -1196,15 +1234,16 @@ func (obj OrderCustomerSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderDeletedMessage is of type Message
 type OrderDeletedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Order           *Order    `json:"order"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Order                           *Order                   `json:"order"`
 }
 
 // OrderDeletedMessagePayload implements the interface MessagePayload
@@ -1223,15 +1262,16 @@ func (obj OrderDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderDiscountCodeAddedMessage is of type Message
 type OrderDiscountCodeAddedMessage struct {
-	Version         int                    `json:"version"`
-	LastModifiedAt  time.Time              `json:"lastModifiedAt"`
-	ID              string                 `json:"id"`
-	CreatedAt       time.Time              `json:"createdAt"`
-	Type            string                 `json:"type"`
-	SequenceNumber  int                    `json:"sequenceNumber"`
-	ResourceVersion int                    `json:"resourceVersion"`
-	Resource        Reference              `json:"resource"`
-	DiscountCode    *DiscountCodeReference `json:"discountCode"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	DiscountCode                    *DiscountCodeReference   `json:"discountCode"`
 }
 
 // OrderDiscountCodeAddedMessagePayload implements the interface MessagePayload
@@ -1250,15 +1290,16 @@ func (obj OrderDiscountCodeAddedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderDiscountCodeRemovedMessage is of type Message
 type OrderDiscountCodeRemovedMessage struct {
-	Version         int                    `json:"version"`
-	LastModifiedAt  time.Time              `json:"lastModifiedAt"`
-	ID              string                 `json:"id"`
-	CreatedAt       time.Time              `json:"createdAt"`
-	Type            string                 `json:"type"`
-	SequenceNumber  int                    `json:"sequenceNumber"`
-	ResourceVersion int                    `json:"resourceVersion"`
-	Resource        Reference              `json:"resource"`
-	DiscountCode    *DiscountCodeReference `json:"discountCode"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	DiscountCode                    *DiscountCodeReference   `json:"discountCode"`
 }
 
 // OrderDiscountCodeRemovedMessagePayload implements the interface MessagePayload
@@ -1277,17 +1318,18 @@ func (obj OrderDiscountCodeRemovedMessagePayload) MarshalJSON() ([]byte, error) 
 
 // OrderDiscountCodeStateSetMessage is of type Message
 type OrderDiscountCodeStateSetMessage struct {
-	Version         int                    `json:"version"`
-	LastModifiedAt  time.Time              `json:"lastModifiedAt"`
-	ID              string                 `json:"id"`
-	CreatedAt       time.Time              `json:"createdAt"`
-	Type            string                 `json:"type"`
-	SequenceNumber  int                    `json:"sequenceNumber"`
-	ResourceVersion int                    `json:"resourceVersion"`
-	Resource        Reference              `json:"resource"`
-	State           DiscountCodeState      `json:"state"`
-	OldState        DiscountCodeState      `json:"oldState,omitempty"`
-	DiscountCode    *DiscountCodeReference `json:"discountCode"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	State                           DiscountCodeState        `json:"state"`
+	OldState                        DiscountCodeState        `json:"oldState,omitempty"`
+	DiscountCode                    *DiscountCodeReference   `json:"discountCode"`
 }
 
 // OrderDiscountCodeStateSetMessagePayload implements the interface MessagePayload
@@ -1308,16 +1350,17 @@ func (obj OrderDiscountCodeStateSetMessagePayload) MarshalJSON() ([]byte, error)
 
 // OrderEditAppliedMessage is of type Message
 type OrderEditAppliedMessage struct {
-	Version         int                 `json:"version"`
-	LastModifiedAt  time.Time           `json:"lastModifiedAt"`
-	ID              string              `json:"id"`
-	CreatedAt       time.Time           `json:"createdAt"`
-	Type            string              `json:"type"`
-	SequenceNumber  int                 `json:"sequenceNumber"`
-	ResourceVersion int                 `json:"resourceVersion"`
-	Resource        Reference           `json:"resource"`
-	Result          *OrderEditApplied   `json:"result"`
-	Edit            *OrderEditReference `json:"edit"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Result                          *OrderEditApplied        `json:"result"`
+	Edit                            *OrderEditReference      `json:"edit"`
 }
 
 // OrderEditAppliedMessagePayload implements the interface MessagePayload
@@ -1337,15 +1380,16 @@ func (obj OrderEditAppliedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderImportedMessage is of type Message
 type OrderImportedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Order           *Order    `json:"order"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Order                           *Order                   `json:"order"`
 }
 
 // OrderImportedMessagePayload implements the interface MessagePayload
@@ -1364,18 +1408,19 @@ func (obj OrderImportedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderLineItemDiscountSetMessage is of type Message
 type OrderLineItemDiscountSetMessage struct {
-	Version                    int                                  `json:"version"`
-	LastModifiedAt             time.Time                            `json:"lastModifiedAt"`
-	ID                         string                               `json:"id"`
-	CreatedAt                  time.Time                            `json:"createdAt"`
-	Type                       string                               `json:"type"`
-	SequenceNumber             int                                  `json:"sequenceNumber"`
-	ResourceVersion            int                                  `json:"resourceVersion"`
-	Resource                   Reference                            `json:"resource"`
-	TotalPrice                 *Money                               `json:"totalPrice"`
-	TaxedPrice                 *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
-	LineItemID                 string                               `json:"lineItemId"`
-	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
+	Version                         int                                  `json:"version"`
+	LastModifiedAt                  time.Time                            `json:"lastModifiedAt"`
+	ID                              string                               `json:"id"`
+	CreatedAt                       time.Time                            `json:"createdAt"`
+	Type                            string                               `json:"type"`
+	SequenceNumber                  int                                  `json:"sequenceNumber"`
+	ResourceVersion                 int                                  `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                            `json:"resource"`
+	TotalPrice                      *Money                               `json:"totalPrice"`
+	TaxedPrice                      *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
+	LineItemID                      string                               `json:"lineItemId"`
+	DiscountedPricePerQuantity      []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 }
 
 // OrderLineItemDiscountSetMessagePayload implements the interface MessagePayload
@@ -1397,16 +1442,17 @@ func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) 
 
 // OrderPaymentStateChangedMessage is of type Message
 type OrderPaymentStateChangedMessage struct {
-	Version         int          `json:"version"`
-	LastModifiedAt  time.Time    `json:"lastModifiedAt"`
-	ID              string       `json:"id"`
-	CreatedAt       time.Time    `json:"createdAt"`
-	Type            string       `json:"type"`
-	SequenceNumber  int          `json:"sequenceNumber"`
-	ResourceVersion int          `json:"resourceVersion"`
-	Resource        Reference    `json:"resource"`
-	PaymentState    PaymentState `json:"paymentState"`
-	OldPaymentState PaymentState `json:"oldPaymentState"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	PaymentState                    PaymentState             `json:"paymentState"`
+	OldPaymentState                 PaymentState             `json:"oldPaymentState"`
 }
 
 // OrderPaymentStateChangedMessagePayload implements the interface MessagePayload
@@ -1426,15 +1472,16 @@ func (obj OrderPaymentStateChangedMessagePayload) MarshalJSON() ([]byte, error) 
 
 // OrderReturnInfoAddedMessage is of type Message
 type OrderReturnInfoAddedMessage struct {
-	Version         int         `json:"version"`
-	LastModifiedAt  time.Time   `json:"lastModifiedAt"`
-	ID              string      `json:"id"`
-	CreatedAt       time.Time   `json:"createdAt"`
-	Type            string      `json:"type"`
-	SequenceNumber  int         `json:"sequenceNumber"`
-	ResourceVersion int         `json:"resourceVersion"`
-	Resource        Reference   `json:"resource"`
-	ReturnInfo      *ReturnInfo `json:"returnInfo"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ReturnInfo                      *ReturnInfo              `json:"returnInfo"`
 }
 
 // OrderReturnInfoAddedMessagePayload implements the interface MessagePayload
@@ -1453,16 +1500,17 @@ func (obj OrderReturnInfoAddedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderReturnShipmentStateChangedMessage is of type Message
 type OrderReturnShipmentStateChangedMessage struct {
-	Version             int                 `json:"version"`
-	LastModifiedAt      time.Time           `json:"lastModifiedAt"`
-	ID                  string              `json:"id"`
-	CreatedAt           time.Time           `json:"createdAt"`
-	Type                string              `json:"type"`
-	SequenceNumber      int                 `json:"sequenceNumber"`
-	ResourceVersion     int                 `json:"resourceVersion"`
-	Resource            Reference           `json:"resource"`
-	ReturnShipmentState ReturnShipmentState `json:"returnShipmentState"`
-	ReturnItemID        string              `json:"returnItemId"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ReturnShipmentState             ReturnShipmentState      `json:"returnShipmentState"`
+	ReturnItemID                    string                   `json:"returnItemId"`
 }
 
 // OrderReturnShipmentStateChangedMessagePayload implements the interface MessagePayload
@@ -1482,16 +1530,17 @@ func (obj OrderReturnShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, 
 
 // OrderShipmentStateChangedMessage is of type Message
 type OrderShipmentStateChangedMessage struct {
-	Version          int           `json:"version"`
-	LastModifiedAt   time.Time     `json:"lastModifiedAt"`
-	ID               string        `json:"id"`
-	CreatedAt        time.Time     `json:"createdAt"`
-	Type             string        `json:"type"`
-	SequenceNumber   int           `json:"sequenceNumber"`
-	ResourceVersion  int           `json:"resourceVersion"`
-	Resource         Reference     `json:"resource"`
-	ShipmentState    ShipmentState `json:"shipmentState"`
-	OldShipmentState ShipmentState `json:"oldShipmentState"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ShipmentState                   ShipmentState            `json:"shipmentState"`
+	OldShipmentState                ShipmentState            `json:"oldShipmentState"`
 }
 
 // OrderShipmentStateChangedMessagePayload implements the interface MessagePayload
@@ -1511,16 +1560,17 @@ func (obj OrderShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, error)
 
 // OrderShippingAddressSetMessage is of type Message
 type OrderShippingAddressSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	OldAddress      *Address  `json:"oldAddress,omitempty"`
-	Address         *Address  `json:"address,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OldAddress                      *Address                 `json:"oldAddress,omitempty"`
+	Address                         *Address                 `json:"address,omitempty"`
 }
 
 // OrderShippingAddressSetMessagePayload implements the interface MessagePayload
@@ -1540,16 +1590,17 @@ func (obj OrderShippingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderShippingInfoSetMessage is of type Message
 type OrderShippingInfoSetMessage struct {
-	Version         int           `json:"version"`
-	LastModifiedAt  time.Time     `json:"lastModifiedAt"`
-	ID              string        `json:"id"`
-	CreatedAt       time.Time     `json:"createdAt"`
-	Type            string        `json:"type"`
-	SequenceNumber  int           `json:"sequenceNumber"`
-	ResourceVersion int           `json:"resourceVersion"`
-	Resource        Reference     `json:"resource"`
-	ShippingInfo    *ShippingInfo `json:"shippingInfo,omitempty"`
-	OldShippingInfo *ShippingInfo `json:"oldShippingInfo,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ShippingInfo                    *ShippingInfo            `json:"shippingInfo,omitempty"`
+	OldShippingInfo                 *ShippingInfo            `json:"oldShippingInfo,omitempty"`
 }
 
 // OrderShippingInfoSetMessagePayload implements the interface MessagePayload
@@ -1569,16 +1620,17 @@ func (obj OrderShippingInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderShippingRateInputSetMessage is of type Message
 type OrderShippingRateInputSetMessage struct {
-	Version              int               `json:"version"`
-	LastModifiedAt       time.Time         `json:"lastModifiedAt"`
-	ID                   string            `json:"id"`
-	CreatedAt            time.Time         `json:"createdAt"`
-	Type                 string            `json:"type"`
-	SequenceNumber       int               `json:"sequenceNumber"`
-	ResourceVersion      int               `json:"resourceVersion"`
-	Resource             Reference         `json:"resource"`
-	ShippingRateInput    ShippingRateInput `json:"shippingRateInput,omitempty"`
-	OldShippingRateInput ShippingRateInput `json:"oldShippingRateInput,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ShippingRateInput               ShippingRateInput        `json:"shippingRateInput,omitempty"`
+	OldShippingRateInput            ShippingRateInput        `json:"oldShippingRateInput,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1648,16 +1700,17 @@ func (obj *OrderShippingRateInputSetMessagePayload) UnmarshalJSON(data []byte) e
 
 // OrderStateChangedMessage is of type Message
 type OrderStateChangedMessage struct {
-	Version         int        `json:"version"`
-	LastModifiedAt  time.Time  `json:"lastModifiedAt"`
-	ID              string     `json:"id"`
-	CreatedAt       time.Time  `json:"createdAt"`
-	Type            string     `json:"type"`
-	SequenceNumber  int        `json:"sequenceNumber"`
-	ResourceVersion int        `json:"resourceVersion"`
-	Resource        Reference  `json:"resource"`
-	OrderState      OrderState `json:"orderState"`
-	OldOrderState   OrderState `json:"oldOrderState"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	OrderState                      OrderState               `json:"orderState"`
+	OldOrderState                   OrderState               `json:"oldOrderState"`
 }
 
 // OrderStateChangedMessagePayload implements the interface MessagePayload
@@ -1677,16 +1730,17 @@ func (obj OrderStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // OrderStateTransitionMessage is of type Message
 type OrderStateTransitionMessage struct {
-	Version         int             `json:"version"`
-	LastModifiedAt  time.Time       `json:"lastModifiedAt"`
-	ID              string          `json:"id"`
-	CreatedAt       time.Time       `json:"createdAt"`
-	Type            string          `json:"type"`
-	SequenceNumber  int             `json:"sequenceNumber"`
-	ResourceVersion int             `json:"resourceVersion"`
-	Resource        Reference       `json:"resource"`
-	State           *StateReference `json:"state"`
-	Force           bool            `json:"force"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	State                           *StateReference          `json:"state"`
+	Force                           bool                     `json:"force"`
 }
 
 // OrderStateTransitionMessagePayload implements the interface MessagePayload
@@ -1706,16 +1760,17 @@ func (obj OrderStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ParcelAddedToDeliveryMessage is of type Message
 type ParcelAddedToDeliveryMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Parcel          *Parcel   `json:"parcel"`
-	Delivery        *Delivery `json:"delivery"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Parcel                          *Parcel                  `json:"parcel"`
+	Delivery                        *Delivery                `json:"delivery"`
 }
 
 // ParcelAddedToDeliveryMessagePayload implements the interface MessagePayload
@@ -1735,18 +1790,19 @@ func (obj ParcelAddedToDeliveryMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ParcelItemsUpdatedMessage is of type Message
 type ParcelItemsUpdatedMessage struct {
-	Version         int            `json:"version"`
-	LastModifiedAt  time.Time      `json:"lastModifiedAt"`
-	ID              string         `json:"id"`
-	CreatedAt       time.Time      `json:"createdAt"`
-	Type            string         `json:"type"`
-	SequenceNumber  int            `json:"sequenceNumber"`
-	ResourceVersion int            `json:"resourceVersion"`
-	Resource        Reference      `json:"resource"`
-	ParcelID        string         `json:"parcelId"`
-	OldItems        []DeliveryItem `json:"oldItems"`
-	Items           []DeliveryItem `json:"items"`
-	DeliveryID      string         `json:"deliveryId,omitempty"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ParcelID                        string                   `json:"parcelId"`
+	OldItems                        []DeliveryItem           `json:"oldItems"`
+	Items                           []DeliveryItem           `json:"items"`
+	DeliveryID                      string                   `json:"deliveryId,omitempty"`
 }
 
 // ParcelItemsUpdatedMessagePayload implements the interface MessagePayload
@@ -1768,17 +1824,18 @@ func (obj ParcelItemsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ParcelMeasurementsUpdatedMessage is of type Message
 type ParcelMeasurementsUpdatedMessage struct {
-	Version         int                 `json:"version"`
-	LastModifiedAt  time.Time           `json:"lastModifiedAt"`
-	ID              string              `json:"id"`
-	CreatedAt       time.Time           `json:"createdAt"`
-	Type            string              `json:"type"`
-	SequenceNumber  int                 `json:"sequenceNumber"`
-	ResourceVersion int                 `json:"resourceVersion"`
-	Resource        Reference           `json:"resource"`
-	ParcelID        string              `json:"parcelId"`
-	Measurements    *ParcelMeasurements `json:"measurements,omitempty"`
-	DeliveryID      string              `json:"deliveryId"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ParcelID                        string                   `json:"parcelId"`
+	Measurements                    *ParcelMeasurements      `json:"measurements,omitempty"`
+	DeliveryID                      string                   `json:"deliveryId"`
 }
 
 // ParcelMeasurementsUpdatedMessagePayload implements the interface MessagePayload
@@ -1799,16 +1856,17 @@ func (obj ParcelMeasurementsUpdatedMessagePayload) MarshalJSON() ([]byte, error)
 
 // ParcelRemovedFromDeliveryMessage is of type Message
 type ParcelRemovedFromDeliveryMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Parcel          *Parcel   `json:"parcel"`
-	DeliveryID      string    `json:"deliveryId"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Parcel                          *Parcel                  `json:"parcel"`
+	DeliveryID                      string                   `json:"deliveryId"`
 }
 
 // ParcelRemovedFromDeliveryMessagePayload implements the interface MessagePayload
@@ -1828,17 +1886,18 @@ func (obj ParcelRemovedFromDeliveryMessagePayload) MarshalJSON() ([]byte, error)
 
 // ParcelTrackingDataUpdatedMessage is of type Message
 type ParcelTrackingDataUpdatedMessage struct {
-	Version         int           `json:"version"`
-	LastModifiedAt  time.Time     `json:"lastModifiedAt"`
-	ID              string        `json:"id"`
-	CreatedAt       time.Time     `json:"createdAt"`
-	Type            string        `json:"type"`
-	SequenceNumber  int           `json:"sequenceNumber"`
-	ResourceVersion int           `json:"resourceVersion"`
-	Resource        Reference     `json:"resource"`
-	TrackingData    *TrackingData `json:"trackingData,omitempty"`
-	ParcelID        string        `json:"parcelId"`
-	DeliveryID      string        `json:"deliveryId"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	TrackingData                    *TrackingData            `json:"trackingData,omitempty"`
+	ParcelID                        string                   `json:"parcelId"`
+	DeliveryID                      string                   `json:"deliveryId"`
 }
 
 // ParcelTrackingDataUpdatedMessagePayload implements the interface MessagePayload
@@ -1859,15 +1918,16 @@ func (obj ParcelTrackingDataUpdatedMessagePayload) MarshalJSON() ([]byte, error)
 
 // PaymentCreatedMessage is of type Message
 type PaymentCreatedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Payment         *Payment  `json:"payment"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Payment                         *Payment                 `json:"payment"`
 }
 
 // PaymentCreatedMessagePayload implements the interface MessagePayload
@@ -1886,15 +1946,16 @@ func (obj PaymentCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // PaymentInteractionAddedMessage is of type Message
 type PaymentInteractionAddedMessage struct {
-	Version         int           `json:"version"`
-	LastModifiedAt  time.Time     `json:"lastModifiedAt"`
-	ID              string        `json:"id"`
-	CreatedAt       time.Time     `json:"createdAt"`
-	Type            string        `json:"type"`
-	SequenceNumber  int           `json:"sequenceNumber"`
-	ResourceVersion int           `json:"resourceVersion"`
-	Resource        Reference     `json:"resource"`
-	Interaction     *CustomFields `json:"interaction"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Interaction                     *CustomFields            `json:"interaction"`
 }
 
 // PaymentInteractionAddedMessagePayload implements the interface MessagePayload
@@ -1913,16 +1974,17 @@ func (obj PaymentInteractionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // PaymentStatusInterfaceCodeSetMessage is of type Message
 type PaymentStatusInterfaceCodeSetMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	PaymentID       string    `json:"paymentId"`
-	InterfaceCode   string    `json:"interfaceCode"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	PaymentID                       string                   `json:"paymentId"`
+	InterfaceCode                   string                   `json:"interfaceCode"`
 }
 
 // PaymentStatusInterfaceCodeSetMessagePayload implements the interface MessagePayload
@@ -1942,16 +2004,17 @@ func (obj PaymentStatusInterfaceCodeSetMessagePayload) MarshalJSON() ([]byte, er
 
 // PaymentStatusStateTransitionMessage is of type Message
 type PaymentStatusStateTransitionMessage struct {
-	Version         int             `json:"version"`
-	LastModifiedAt  time.Time       `json:"lastModifiedAt"`
-	ID              string          `json:"id"`
-	CreatedAt       time.Time       `json:"createdAt"`
-	Type            string          `json:"type"`
-	SequenceNumber  int             `json:"sequenceNumber"`
-	ResourceVersion int             `json:"resourceVersion"`
-	Resource        Reference       `json:"resource"`
-	State           *StateReference `json:"state"`
-	Force           bool            `json:"force"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	State                           *StateReference          `json:"state"`
+	Force                           bool                     `json:"force"`
 }
 
 // PaymentStatusStateTransitionMessagePayload implements the interface MessagePayload
@@ -1971,15 +2034,16 @@ func (obj PaymentStatusStateTransitionMessagePayload) MarshalJSON() ([]byte, err
 
 // PaymentTransactionAddedMessage is of type Message
 type PaymentTransactionAddedMessage struct {
-	Version         int          `json:"version"`
-	LastModifiedAt  time.Time    `json:"lastModifiedAt"`
-	ID              string       `json:"id"`
-	CreatedAt       time.Time    `json:"createdAt"`
-	Type            string       `json:"type"`
-	SequenceNumber  int          `json:"sequenceNumber"`
-	ResourceVersion int          `json:"resourceVersion"`
-	Resource        Reference    `json:"resource"`
-	Transaction     *Transaction `json:"transaction"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Transaction                     *Transaction             `json:"transaction"`
 }
 
 // PaymentTransactionAddedMessagePayload implements the interface MessagePayload
@@ -1998,16 +2062,17 @@ func (obj PaymentTransactionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // PaymentTransactionStateChangedMessage is of type Message
 type PaymentTransactionStateChangedMessage struct {
-	Version         int              `json:"version"`
-	LastModifiedAt  time.Time        `json:"lastModifiedAt"`
-	ID              string           `json:"id"`
-	CreatedAt       time.Time        `json:"createdAt"`
-	Type            string           `json:"type"`
-	SequenceNumber  int              `json:"sequenceNumber"`
-	ResourceVersion int              `json:"resourceVersion"`
-	Resource        Reference        `json:"resource"`
-	TransactionID   string           `json:"transactionId"`
-	State           TransactionState `json:"state"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	TransactionID                   string                   `json:"transactionId"`
+	State                           TransactionState         `json:"state"`
 }
 
 // PaymentTransactionStateChangedMessagePayload implements the interface MessagePayload
@@ -2027,15 +2092,16 @@ func (obj PaymentTransactionStateChangedMessagePayload) MarshalJSON() ([]byte, e
 
 // ProductCreatedMessage is of type Message
 type ProductCreatedMessage struct {
-	Version           int                `json:"version"`
-	LastModifiedAt    time.Time          `json:"lastModifiedAt"`
-	ID                string             `json:"id"`
-	CreatedAt         time.Time          `json:"createdAt"`
-	Type              string             `json:"type"`
-	SequenceNumber    int                `json:"sequenceNumber"`
-	ResourceVersion   int                `json:"resourceVersion"`
-	Resource          Reference          `json:"resource"`
-	ProductProjection *ProductProjection `json:"productProjection"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	ProductProjection               *ProductProjection       `json:"productProjection"`
 }
 
 // ProductCreatedMessagePayload implements the interface MessagePayload
@@ -2054,16 +2120,17 @@ func (obj ProductCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ProductDeletedMessage is of type Message
 type ProductDeletedMessage struct {
-	Version           int                `json:"version"`
-	LastModifiedAt    time.Time          `json:"lastModifiedAt"`
-	ID                string             `json:"id"`
-	CreatedAt         time.Time          `json:"createdAt"`
-	Type              string             `json:"type"`
-	SequenceNumber    int                `json:"sequenceNumber"`
-	ResourceVersion   int                `json:"resourceVersion"`
-	Resource          Reference          `json:"resource"`
-	RemovedImageUrls  []interface{}      `json:"removedImageUrls"`
-	CurrentProjection *ProductProjection `json:"currentProjection"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	RemovedImageUrls                []interface{}            `json:"removedImageUrls"`
+	CurrentProjection               *ProductProjection       `json:"currentProjection"`
 }
 
 // ProductDeletedMessagePayload implements the interface MessagePayload
@@ -2083,17 +2150,18 @@ func (obj ProductDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ProductImageAddedMessage is of type Message
 type ProductImageAddedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	VariantID       int       `json:"variantId"`
-	Staged          bool      `json:"staged"`
-	Image           *Image    `json:"image"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	VariantID                       int                      `json:"variantId"`
+	Staged                          bool                     `json:"staged"`
+	Image                           *Image                   `json:"image"`
 }
 
 // ProductImageAddedMessagePayload implements the interface MessagePayload
@@ -2112,19 +2180,96 @@ func (obj ProductImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Type: "ProductImageAdded", Alias: (*Alias)(&obj)})
 }
 
+// ProductPriceDiscountsSetMessage is of type Message
+type ProductPriceDiscountsSetMessage struct {
+	Version                         int                                    `json:"version"`
+	LastModifiedAt                  time.Time                              `json:"lastModifiedAt"`
+	ID                              string                                 `json:"id"`
+	CreatedAt                       time.Time                              `json:"createdAt"`
+	Type                            string                                 `json:"type"`
+	SequenceNumber                  int                                    `json:"sequenceNumber"`
+	ResourceVersion                 int                                    `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers               `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                              `json:"resource"`
+	UpdatedPrices                   []ProductPriceDiscountsSetUpdatedPrice `json:"updatedPrices"`
+}
+
+// ProductPriceDiscountsSetMessagePayload implements the interface MessagePayload
+type ProductPriceDiscountsSetMessagePayload struct {
+	UpdatedPrices []ProductPriceDiscountsSetUpdatedPrice `json:"updatedPrices"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductPriceDiscountsSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceDiscountsSetMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "ProductPriceDiscountsSet", Alias: (*Alias)(&obj)})
+}
+
+// ProductPriceDiscountsSetUpdatedPrice is a standalone struct
+type ProductPriceDiscountsSetUpdatedPrice struct {
+	VariantKey string           `json:"variantKey,omitempty"`
+	VariantID  int              `json:"variantId"`
+	Staged     bool             `json:"staged"`
+	SKU        string           `json:"sku,omitempty"`
+	PriceID    string           `json:"priceId"`
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+}
+
+// ProductPriceExternalDiscountSetMessage is of type Message
+type ProductPriceExternalDiscountSetMessage struct {
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	VariantKey                      string                   `json:"variantKey,omitempty"`
+	VariantID                       int                      `json:"variantId"`
+	Staged                          bool                     `json:"staged"`
+	SKU                             string                   `json:"sku,omitempty"`
+	PriceID                         string                   `json:"priceId"`
+	Discounted                      *DiscountedPrice         `json:"discounted,omitempty"`
+}
+
+// ProductPriceExternalDiscountSetMessagePayload implements the interface MessagePayload
+type ProductPriceExternalDiscountSetMessagePayload struct {
+	VariantKey string           `json:"variantKey,omitempty"`
+	VariantID  int              `json:"variantId"`
+	Staged     bool             `json:"staged"`
+	SKU        string           `json:"sku,omitempty"`
+	PriceID    string           `json:"priceId"`
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductPriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceExternalDiscountSetMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "ProductPriceExternalDiscountSet", Alias: (*Alias)(&obj)})
+}
+
 // ProductPublishedMessage is of type Message
 type ProductPublishedMessage struct {
-	Version           int                 `json:"version"`
-	LastModifiedAt    time.Time           `json:"lastModifiedAt"`
-	ID                string              `json:"id"`
-	CreatedAt         time.Time           `json:"createdAt"`
-	Type              string              `json:"type"`
-	SequenceNumber    int                 `json:"sequenceNumber"`
-	ResourceVersion   int                 `json:"resourceVersion"`
-	Resource          Reference           `json:"resource"`
-	Scope             ProductPublishScope `json:"scope"`
-	RemovedImageUrls  []interface{}       `json:"removedImageUrls"`
-	ProductProjection *ProductProjection  `json:"productProjection"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Scope                           ProductPublishScope      `json:"scope"`
+	RemovedImageUrls                []interface{}            `json:"removedImageUrls"`
+	ProductProjection               *ProductProjection       `json:"productProjection"`
 }
 
 // ProductPublishedMessagePayload implements the interface MessagePayload
@@ -2145,15 +2290,16 @@ func (obj ProductPublishedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ProductRevertedStagedChangesMessage is of type Message
 type ProductRevertedStagedChangesMessage struct {
-	Version          int           `json:"version"`
-	LastModifiedAt   time.Time     `json:"lastModifiedAt"`
-	ID               string        `json:"id"`
-	CreatedAt        time.Time     `json:"createdAt"`
-	Type             string        `json:"type"`
-	SequenceNumber   int           `json:"sequenceNumber"`
-	ResourceVersion  int           `json:"resourceVersion"`
-	Resource         Reference     `json:"resource"`
-	RemovedImageUrls []interface{} `json:"removedImageUrls"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	RemovedImageUrls                []interface{}            `json:"removedImageUrls"`
 }
 
 // ProductRevertedStagedChangesMessagePayload implements the interface MessagePayload
@@ -2172,15 +2318,16 @@ func (obj ProductRevertedStagedChangesMessagePayload) MarshalJSON() ([]byte, err
 
 // ProductSlugChangedMessage is of type Message
 type ProductSlugChangedMessage struct {
-	Version         int              `json:"version"`
-	LastModifiedAt  time.Time        `json:"lastModifiedAt"`
-	ID              string           `json:"id"`
-	CreatedAt       time.Time        `json:"createdAt"`
-	Type            string           `json:"type"`
-	SequenceNumber  int              `json:"sequenceNumber"`
-	ResourceVersion int              `json:"resourceVersion"`
-	Resource        Reference        `json:"resource"`
-	Slug            *LocalizedString `json:"slug"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Slug                            *LocalizedString         `json:"slug"`
 }
 
 // ProductSlugChangedMessagePayload implements the interface MessagePayload
@@ -2199,16 +2346,17 @@ func (obj ProductSlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ProductStateTransitionMessage is of type Message
 type ProductStateTransitionMessage struct {
-	Version         int             `json:"version"`
-	LastModifiedAt  time.Time       `json:"lastModifiedAt"`
-	ID              string          `json:"id"`
-	CreatedAt       time.Time       `json:"createdAt"`
-	Type            string          `json:"type"`
-	SequenceNumber  int             `json:"sequenceNumber"`
-	ResourceVersion int             `json:"resourceVersion"`
-	Resource        Reference       `json:"resource"`
-	State           *StateReference `json:"state"`
-	Force           bool            `json:"force"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	State                           *StateReference          `json:"state"`
+	Force                           bool                     `json:"force"`
 }
 
 // ProductStateTransitionMessagePayload implements the interface MessagePayload
@@ -2228,14 +2376,15 @@ func (obj ProductStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ProductUnpublishedMessage is of type Message
 type ProductUnpublishedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
 }
 
 // ProductUnpublishedMessagePayload implements the interface MessagePayload
@@ -2252,16 +2401,17 @@ func (obj ProductUnpublishedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ProductVariantDeletedMessage is of type Message
 type ProductVariantDeletedMessage struct {
-	Version          int             `json:"version"`
-	LastModifiedAt   time.Time       `json:"lastModifiedAt"`
-	ID               string          `json:"id"`
-	CreatedAt        time.Time       `json:"createdAt"`
-	Type             string          `json:"type"`
-	SequenceNumber   int             `json:"sequenceNumber"`
-	ResourceVersion  int             `json:"resourceVersion"`
-	Resource         Reference       `json:"resource"`
-	Variant          *ProductVariant `json:"variant"`
-	RemovedImageUrls []interface{}   `json:"removedImageUrls"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Variant                         *ProductVariant          `json:"variant"`
+	RemovedImageUrls                []interface{}            `json:"removedImageUrls"`
 }
 
 // ProductVariantDeletedMessagePayload implements the interface MessagePayload
@@ -2281,15 +2431,16 @@ func (obj ProductVariantDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ReviewCreatedMessage is of type Message
 type ReviewCreatedMessage struct {
-	Version         int       `json:"version"`
-	LastModifiedAt  time.Time `json:"lastModifiedAt"`
-	ID              string    `json:"id"`
-	CreatedAt       time.Time `json:"createdAt"`
-	Type            string    `json:"type"`
-	SequenceNumber  int       `json:"sequenceNumber"`
-	ResourceVersion int       `json:"resourceVersion"`
-	Resource        Reference `json:"resource"`
-	Review          *Review   `json:"review"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Review                          *Review                  `json:"review"`
 }
 
 // ReviewCreatedMessagePayload implements the interface MessagePayload
@@ -2308,18 +2459,19 @@ func (obj ReviewCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 // ReviewRatingSetMessage is of type Message
 type ReviewRatingSetMessage struct {
-	Version              int       `json:"version"`
-	LastModifiedAt       time.Time `json:"lastModifiedAt"`
-	ID                   string    `json:"id"`
-	CreatedAt            time.Time `json:"createdAt"`
-	Type                 string    `json:"type"`
-	SequenceNumber       int       `json:"sequenceNumber"`
-	ResourceVersion      int       `json:"resourceVersion"`
-	Resource             Reference `json:"resource"`
-	Target               Reference `json:"target,omitempty"`
-	OldRating            float64   `json:"oldRating,omitempty"`
-	NewRating            float64   `json:"newRating,omitempty"`
-	IncludedInStatistics bool      `json:"includedInStatistics"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Target                          Reference                `json:"target,omitempty"`
+	OldRating                       float64                  `json:"oldRating,omitempty"`
+	NewRating                       float64                  `json:"newRating,omitempty"`
+	IncludedInStatistics            bool                     `json:"includedInStatistics"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2377,20 +2529,21 @@ func (obj *ReviewRatingSetMessagePayload) UnmarshalJSON(data []byte) error {
 
 // ReviewStateTransitionMessage is of type Message
 type ReviewStateTransitionMessage struct {
-	Version                 int             `json:"version"`
-	LastModifiedAt          time.Time       `json:"lastModifiedAt"`
-	ID                      string          `json:"id"`
-	CreatedAt               time.Time       `json:"createdAt"`
-	Type                    string          `json:"type"`
-	SequenceNumber          int             `json:"sequenceNumber"`
-	ResourceVersion         int             `json:"resourceVersion"`
-	Resource                Reference       `json:"resource"`
-	Target                  Reference       `json:"target"`
-	OldState                *StateReference `json:"oldState"`
-	OldIncludedInStatistics bool            `json:"oldIncludedInStatistics"`
-	NewState                *StateReference `json:"newState"`
-	NewIncludedInStatistics bool            `json:"newIncludedInStatistics"`
-	Force                   bool            `json:"force"`
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	Target                          Reference                `json:"target"`
+	OldState                        *StateReference          `json:"oldState"`
+	OldIncludedInStatistics         bool                     `json:"oldIncludedInStatistics"`
+	NewState                        *StateReference          `json:"newState"`
+	NewIncludedInStatistics         bool                     `json:"newIncludedInStatistics"`
+	Force                           bool                     `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2446,4 +2599,14 @@ func (obj *ReviewStateTransitionMessagePayload) UnmarshalJSON(data []byte) error
 	}
 
 	return nil
+}
+
+// UserProvidedIdentifiers is a standalone struct
+type UserProvidedIdentifiers struct {
+	Slug           *LocalizedString `json:"slug,omitempty"`
+	SKU            string           `json:"sku,omitempty"`
+	OrderNumber    string           `json:"orderNumber,omitempty"`
+	Key            string           `json:"key,omitempty"`
+	ExternalID     string           `json:"externalId,omitempty"`
+	CustomerNumber string           `json:"customerNumber,omitempty"`
 }

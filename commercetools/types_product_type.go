@@ -209,6 +209,13 @@ func mapDiscriminatorProductTypeUpdateAction(input interface{}) (ProductTypeUpda
 			return nil, err
 		}
 		return new, nil
+	case "changeAttributeOrderByName":
+		new := ProductTypeChangeAttributeOrderByNameAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeDescription":
 		new := ProductTypeChangeDescriptionAction{}
 		err := mapstructure.Decode(input, &new)
@@ -665,6 +672,20 @@ func (obj ProductTypeChangeAttributeOrderAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeAttributeOrder", Alias: (*Alias)(&obj)})
+}
+
+// ProductTypeChangeAttributeOrderByNameAction implements the interface ProductTypeUpdateAction
+type ProductTypeChangeAttributeOrderByNameAction struct {
+	AttributeNames []string `json:"attributeNames"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductTypeChangeAttributeOrderByNameAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTypeChangeAttributeOrderByNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeAttributeOrderByName", Alias: (*Alias)(&obj)})
 }
 
 // ProductTypeChangeDescriptionAction implements the interface ProductTypeUpdateAction
