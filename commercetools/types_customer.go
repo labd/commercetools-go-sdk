@@ -330,7 +330,8 @@ type CustomerCreateEmailToken struct {
 
 // CustomerCreatePasswordResetToken is a standalone struct
 type CustomerCreatePasswordResetToken struct {
-	Email string `json:"email"`
+	TTLMinutes int    `json:"ttlMinutes,omitempty"`
+	Email      string `json:"email"`
 }
 
 // CustomerDraft is a standalone struct

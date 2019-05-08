@@ -5,6 +5,7 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
+	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
 )
@@ -65,6 +66,19 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "DuplicateFieldWithConflictingResource":
+		new := DuplicateFieldWithConflictingResourceError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		if new.ConflictingResource != nil {
+			new.ConflictingResource, err = mapDiscriminatorReference(new.ConflictingResource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return new, nil
 	case "DuplicatePriceScope":
 		new := DuplicatePriceScopeError{}
 		err := mapstructure.Decode(input, &new)
@@ -74,6 +88,34 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "DuplicateVariantValues":
 		new := DuplicateVariantValuesError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "EnumValueIsUsed":
+		new := EnumValueIsUsedError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "ExtensionBadResponse":
+		new := ExtensionBadResponseError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "ExtensionNoResponse":
+		new := ExtensionNoResponseError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "ExtensionUpdateActionsFailed":
+		new := ExtensionUpdateActionsFailedError{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -144,6 +186,13 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "invalid_token":
 		new := InvalidTokenError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "MatchingPriceNotFound":
+		new := MatchingPriceNotFoundError{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -248,7 +297,13 @@ func (obj ConcurrentModificationError) Error() string {
 
 // DiscountCodeNonApplicableError implements the interface ErrorObject
 type DiscountCodeNonApplicableError struct {
-	Message string `json:"message"`
+	Message           string    `json:"message"`
+	ValidityCheckTime time.Time `json:"validityCheckTime,omitempty"`
+	ValidUntil        time.Time `json:"validUntil,omitempty"`
+	ValidFrom         time.Time `json:"validFrom,omitempty"`
+	Reason            string    `json:"reason,omitempty"`
+	DiscountCode      string    `json:"discountCode,omitempty"`
+	DicountCodeID     string    `json:"dicountCodeId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -322,6 +377,45 @@ func (obj DuplicateFieldError) Error() string {
 	return obj.Message
 }
 
+// DuplicateFieldWithConflictingResourceError implements the interface ErrorObject
+type DuplicateFieldWithConflictingResourceError struct {
+	Message             string      `json:"message"`
+	Field               string      `json:"field"`
+	DuplicateValue      interface{} `json:"duplicateValue"`
+	ConflictingResource Reference   `json:"conflictingResource"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicateFieldWithConflictingResourceError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateFieldWithConflictingResourceError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicateFieldWithConflictingResource", Alias: (*Alias)(&obj)})
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicateFieldWithConflictingResourceError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicateFieldWithConflictingResourceError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ConflictingResource != nil {
+		var err error
+		obj.ConflictingResource, err = mapDiscriminatorReference(obj.ConflictingResource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (obj DuplicateFieldWithConflictingResourceError) Error() string {
+	return obj.Message
+}
+
 // DuplicatePriceScopeError implements the interface ErrorObject
 type DuplicatePriceScopeError struct {
 	Message           string  `json:"message"`
@@ -360,6 +454,30 @@ func (obj DuplicateVariantValuesError) Error() string {
 	return obj.Message
 }
 
+// EnumValueIsUsedError implements the interface ErrorObject
+type EnumValueIsUsedError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj EnumValueIsUsedError) MarshalJSON() ([]byte, error) {
+	type Alias EnumValueIsUsedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "EnumValueIsUsed", Alias: (*Alias)(&obj)})
+}
+
+func (obj EnumValueIsUsedError) Error() string {
+	return obj.Message
+}
+
+// ErrorByExtension is a standalone struct
+type ErrorByExtension struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id"`
+}
+
 // ErrorResponse is a standalone struct
 type ErrorResponse struct {
 	StatusCode       int           `json:"statusCode"`
@@ -388,6 +506,69 @@ func (obj *ErrorResponse) UnmarshalJSON(data []byte) error {
 }
 
 func (obj ErrorResponse) Error() string {
+	return obj.Message
+}
+
+// ExtensionBadResponseError implements the interface ErrorObject
+type ExtensionBadResponseError struct {
+	Message            string            `json:"message"`
+	LocalizedMessage   *LocalizedString  `json:"localizedMessage,omitempty"`
+	ExtensionExtraInfo interface{}       `json:"extensionExtraInfo,omitempty"`
+	ErrorByExtension   *ErrorByExtension `json:"errorByExtension"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ExtensionBadResponseError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionBadResponseError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ExtensionBadResponse", Alias: (*Alias)(&obj)})
+}
+
+func (obj ExtensionBadResponseError) Error() string {
+	return obj.Message
+}
+
+// ExtensionNoResponseError implements the interface ErrorObject
+type ExtensionNoResponseError struct {
+	Message            string            `json:"message"`
+	LocalizedMessage   *LocalizedString  `json:"localizedMessage,omitempty"`
+	ExtensionExtraInfo interface{}       `json:"extensionExtraInfo,omitempty"`
+	ErrorByExtension   *ErrorByExtension `json:"errorByExtension"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ExtensionNoResponseError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionNoResponseError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ExtensionNoResponse", Alias: (*Alias)(&obj)})
+}
+
+func (obj ExtensionNoResponseError) Error() string {
+	return obj.Message
+}
+
+// ExtensionUpdateActionsFailedError implements the interface ErrorObject
+type ExtensionUpdateActionsFailedError struct {
+	Message            string            `json:"message"`
+	LocalizedMessage   *LocalizedString  `json:"localizedMessage,omitempty"`
+	ExtensionExtraInfo interface{}       `json:"extensionExtraInfo,omitempty"`
+	ErrorByExtension   *ErrorByExtension `json:"errorByExtension"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ExtensionUpdateActionsFailedError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionUpdateActionsFailedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ExtensionUpdateActionsFailed", Alias: (*Alias)(&obj)})
+}
+
+func (obj ExtensionUpdateActionsFailedError) Error() string {
 	return obj.Message
 }
 
@@ -576,9 +757,36 @@ func (obj InvalidTokenError) Error() string {
 	return obj.Message
 }
 
+// MatchingPriceNotFoundError implements the interface ErrorObject
+type MatchingPriceNotFoundError struct {
+	Message       string                  `json:"message"`
+	VariantID     int                     `json:"variantId"`
+	ProductID     string                  `json:"productId"`
+	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+	Currency      string                  `json:"currency,omitempty"`
+	Country       string                  `json:"country,omitempty"`
+	Channel       *ChannelReference       `json:"channel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj MatchingPriceNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias MatchingPriceNotFoundError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "MatchingPriceNotFound", Alias: (*Alias)(&obj)})
+}
+
+func (obj MatchingPriceNotFoundError) Error() string {
+	return obj.Message
+}
+
 // MissingTaxRateForCountryError implements the interface ErrorObject
 type MissingTaxRateForCountryError struct {
-	Message string `json:"message"`
+	Message       string `json:"message"`
+	TaxCategoryID string `json:"taxCategoryId"`
+	State         string `json:"state,omitempty"`
+	Country       string `json:"country,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

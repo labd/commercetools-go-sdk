@@ -366,6 +366,38 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 	return nil, nil
 }
 
+// ReturnItem uses type as discriminator attribute
+type ReturnItem interface{}
+
+func mapDiscriminatorReturnItem(input interface{}) (ReturnItem, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+	switch discriminator {
+	case "CustomLineItemReturnItem":
+		new := CustomLineItemReturnItem{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "LineItemReturnItem":
+		new := LineItemReturnItem{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	}
+	return nil, nil
+}
+
 // StagedOrderUpdateAction uses action as discriminator attribute
 type StagedOrderUpdateAction interface{}
 
@@ -873,9 +905,8 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 	return nil, nil
 }
 
-// CustomLineItemReturnItem is of type ReturnItem
+// CustomLineItemReturnItem implements the interface ReturnItem
 type CustomLineItemReturnItem struct {
-	Type             string              `json:"type"`
 	ShipmentState    ReturnShipmentState `json:"shipmentState"`
 	Quantity         int                 `json:"quantity"`
 	PaymentState     ReturnPaymentState  `json:"paymentState"`
@@ -883,7 +914,16 @@ type CustomLineItemReturnItem struct {
 	ID               string              `json:"id"`
 	CreatedAt        time.Time           `json:"createdAt"`
 	Comment          string              `json:"comment,omitempty"`
-	CustomlineItemID string              `json:"customlineItemId"`
+	CustomLineItemID string              `json:"customLineItemId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomLineItemReturnItem) MarshalJSON() ([]byte, error) {
+	type Alias CustomLineItemReturnItem
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "CustomLineItemReturnItem", Alias: (*Alias)(&obj)})
 }
 
 // Delivery is a standalone struct
@@ -915,21 +955,21 @@ type ItemState struct {
 
 // LineItemImportDraft is a standalone struct
 type LineItemImportDraft struct {
-	Variant         *ProductVariantImportDraft `json:"variant"`
-	TaxRate         *TaxRate                   `json:"taxRate,omitempty"`
-	SupplyChannel   *ChannelReference          `json:"supplyChannel,omitempty"`
-	State           []ItemState                `json:"state,omitempty"`
-	ShippingDetails *ItemShippingDetailsDraft  `json:"shippingDetails,omitempty"`
-	Quantity        float64                    `json:"quantity"`
-	ProductID       string                     `json:"productId,omitempty"`
-	Price           *PriceDraft                `json:"price"`
-	Name            *LocalizedString           `json:"name"`
-	Custom          *CustomFieldsDraft         `json:"custom,omitempty"`
+	Variant             *ProductVariantImportDraft `json:"variant"`
+	TaxRate             *TaxRate                   `json:"taxRate,omitempty"`
+	SupplyChannel       *ChannelReference          `json:"supplyChannel,omitempty"`
+	State               []ItemState                `json:"state,omitempty"`
+	ShippingDetails     *ItemShippingDetailsDraft  `json:"shippingDetails,omitempty"`
+	Quantity            float64                    `json:"quantity"`
+	ProductID           string                     `json:"productId,omitempty"`
+	Price               *PriceDraft                `json:"price"`
+	Name                *LocalizedString           `json:"name"`
+	DistributionChannel *ChannelReference          `json:"distributionChannel,omitempty"`
+	Custom              *CustomFieldsDraft         `json:"custom,omitempty"`
 }
 
-// LineItemReturnItem is of type ReturnItem
+// LineItemReturnItem implements the interface ReturnItem
 type LineItemReturnItem struct {
-	Type           string              `json:"type"`
 	ShipmentState  ReturnShipmentState `json:"shipmentState"`
 	Quantity       int                 `json:"quantity"`
 	PaymentState   ReturnPaymentState  `json:"paymentState"`
@@ -938,6 +978,15 @@ type LineItemReturnItem struct {
 	CreatedAt      time.Time           `json:"createdAt"`
 	Comment        string              `json:"comment,omitempty"`
 	LineItemID     string              `json:"lineItemId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj LineItemReturnItem) MarshalJSON() ([]byte, error) {
+	type Alias LineItemReturnItem
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "LineItemReturnItem", Alias: (*Alias)(&obj)})
 }
 
 // Order is of type Resource
@@ -1143,26 +1192,26 @@ func (obj OrderImportCustomLineItemStateAction) MarshalJSON() ([]byte, error) {
 
 // OrderImportDraft is a standalone struct
 type OrderImportDraft struct {
-	TotalPrice            *Money                  `json:"totalPrice"`
-	TaxedPrice            *TaxedPrice             `json:"taxedPrice,omitempty"`
-	TaxRoundingMode       RoundingMode            `json:"taxRoundingMode,omitempty"`
-	ShippingInfo          *ShippingInfoDraft      `json:"shippingInfo,omitempty"`
-	ShippingAddress       *Address                `json:"shippingAddress,omitempty"`
-	ShipmentState         ShipmentState           `json:"shipmentState,omitempty"`
-	PaymentState          PaymentState            `json:"paymentState,omitempty"`
-	OrderState            OrderState              `json:"orderState,omitempty"`
-	OrderNumber           string                  `json:"orderNumber,omitempty"`
-	LineItems             []LineItemImportDraft   `json:"lineItems,omitempty"`
-	ItemShippingAddresses []Address               `json:"itemShippingAddresses,omitempty"`
-	InventoryMode         InventoryMode           `json:"inventoryMode,omitempty"`
-	CustomerID            string                  `json:"customerId,omitempty"`
-	CustomerGroup         *CustomerGroupReference `json:"customerGroup,omitempty"`
-	CustomerEmail         string                  `json:"customerEmail,omitempty"`
-	CustomLineItems       []CustomLineItemDraft   `json:"customLineItems,omitempty"`
-	Custom                *CustomFieldsDraft      `json:"custom,omitempty"`
-	Country               string                  `json:"country,omitempty"`
-	CompletedAt           time.Time               `json:"completedAt,omitempty"`
-	BillingAddress        *Address                `json:"billingAddress,omitempty"`
+	TotalPrice            *Money                   `json:"totalPrice"`
+	TaxedPrice            *TaxedPrice              `json:"taxedPrice,omitempty"`
+	TaxRoundingMode       RoundingMode             `json:"taxRoundingMode,omitempty"`
+	ShippingInfo          *ShippingInfoImportDraft `json:"shippingInfo,omitempty"`
+	ShippingAddress       *Address                 `json:"shippingAddress,omitempty"`
+	ShipmentState         ShipmentState            `json:"shipmentState,omitempty"`
+	PaymentState          PaymentState             `json:"paymentState,omitempty"`
+	OrderState            OrderState               `json:"orderState,omitempty"`
+	OrderNumber           string                   `json:"orderNumber,omitempty"`
+	LineItems             []LineItemImportDraft    `json:"lineItems,omitempty"`
+	ItemShippingAddresses []Address                `json:"itemShippingAddresses,omitempty"`
+	InventoryMode         InventoryMode            `json:"inventoryMode,omitempty"`
+	CustomerID            string                   `json:"customerId,omitempty"`
+	CustomerGroup         *CustomerGroupReference  `json:"customerGroup,omitempty"`
+	CustomerEmail         string                   `json:"customerEmail,omitempty"`
+	CustomLineItems       []CustomLineItemDraft    `json:"customLineItems,omitempty"`
+	Custom                *CustomFieldsDraft       `json:"custom,omitempty"`
+	Country               string                   `json:"country,omitempty"`
+	CompletedAt           time.Time                `json:"completedAt,omitempty"`
+	BillingAddress        *Address                 `json:"billingAddress,omitempty"`
 }
 
 // OrderImportLineItemStateAction implements the interface OrderUpdateAction
@@ -1723,16 +1772,22 @@ type ReturnInfo struct {
 	Items            []ReturnItem `json:"items"`
 }
 
-// ReturnItem is a standalone struct
-type ReturnItem struct {
-	Type           string              `json:"type"`
-	ShipmentState  ReturnShipmentState `json:"shipmentState"`
-	Quantity       int                 `json:"quantity"`
-	PaymentState   ReturnPaymentState  `json:"paymentState"`
-	LastModifiedAt time.Time           `json:"lastModifiedAt"`
-	ID             string              `json:"id"`
-	CreatedAt      time.Time           `json:"createdAt"`
-	Comment        string              `json:"comment,omitempty"`
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ReturnInfo) UnmarshalJSON(data []byte) error {
+	type Alias ReturnInfo
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Items {
+		var err error
+		obj.Items[i], err = mapDiscriminatorReturnItem(obj.Items[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // ReturnItemDraft is a standalone struct
@@ -1744,9 +1799,8 @@ type ReturnItemDraft struct {
 	Comment          string              `json:"comment,omitempty"`
 }
 
-// ShippingInfoDraft is a standalone struct
-type ShippingInfoDraft struct {
-	TaxedPrice          *TaxedItemPriceDraft          `json:"taxedPrice,omitempty"`
+// ShippingInfoImportDraft is a standalone struct
+type ShippingInfoImportDraft struct {
 	TaxRate             *TaxRate                      `json:"taxRate,omitempty"`
 	TaxCategory         *TaxCategoryReference         `json:"taxCategory,omitempty"`
 	ShippingRate        *ShippingRateDraft            `json:"shippingRate"`

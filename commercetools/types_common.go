@@ -41,6 +41,7 @@ const (
 	ReferenceTypeIDShoppingList     ReferenceTypeID = "shopping-list"
 	ReferenceTypeIDShippingMethod   ReferenceTypeID = "shipping-method"
 	ReferenceTypeIDState            ReferenceTypeID = "state"
+	ReferenceTypeIDStore            ReferenceTypeID = "store"
 	ReferenceTypeIDTaxCategory      ReferenceTypeID = "tax-category"
 	ReferenceTypeIDType             ReferenceTypeID = "type"
 	ReferenceTypeIDZone             ReferenceTypeID = "zone"
@@ -76,6 +77,31 @@ func mapDiscriminatorGeoJSON(input interface{}) (GeoJSON, error) {
 	switch discriminator {
 	case "Point":
 		new := GeoJSONPoint{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	}
+	return nil, nil
+}
+
+// KeyReference uses typeId as discriminator attribute
+type KeyReference interface{}
+
+func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["typeId"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'typeId'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+	switch discriminator {
+	case "store":
+		new := StoreKeyReference{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -227,6 +253,13 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return new, nil
 	case "state":
 		new := StateReference{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "store":
+		new := StoreReference{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err

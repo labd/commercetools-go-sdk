@@ -83,7 +83,19 @@ func generateString(object RamlType) *jen.Statement {
 
 func generateMap(object RamlType) *jen.Statement {
 	c := jen.Comment(fmt.Sprintf("%s is a map", object.CodeName)).Line()
-	return c.Type().Id(object.CodeName).Map(jen.String()).String().Line()
+	mapType := c.Type().Id(object.CodeName).Map(jen.String())
+	if len(object.Attributes) != 1 {
+		mapType = mapType.String()
+	} else {
+		attribute := object.Attributes[0]
+		if attribute.TypeName == "string" {
+			mapType = mapType.String()
+		} else {
+			mapType = mapType.Interface()
+		}
+	}
+
+	return mapType.Line()
 }
 
 func generateEnum(object RamlType) *jen.Statement {
