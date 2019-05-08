@@ -1,0 +1,18 @@
+{
+    "id": "ba8d47e5-6591-4ca2-af4c-d547f062bf35",
+    "version": 1,
+    "createdAt": "2019-05-08T11:29:42.781Z",
+    "lastModifiedAt": "2019-05-08T11:29:42.781Z",
+    "lastModifiedBy": {
+        "clientId": "WU-qHF_IkFYHB2W9KwKaqVpl",
+        "isPlatformClient": false
+    },
+    "createdBy": {
+        "clientId": "WU-qHF_IkFYHB2W9KwKaqVpl",
+        "isPlatformClient": false
+    },
+    "key": "test123",
+    "name": {
+        "en": "test123"
+    }
+}
