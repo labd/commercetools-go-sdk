@@ -1,8 +1,10 @@
 package commercetools_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
+	"runtime"
 	"testing"
 
 	"github.com/labd/commercetools-go-sdk/commercetools"
@@ -181,6 +183,53 @@ func TestQueryInput(t *testing.T) {
 			assert.Nil(t, err)
 			assert.Equal(t, tC.query, output.URL.Query())
 			assert.Equal(t, tC.rawQuery, output.URL.RawQuery)
+		})
+	}
+}
+
+func TestUserAgents(t *testing.T) {
+	testCases := []struct {
+		cfg               *commercetools.Config
+		expectedUserAgent string
+	}{
+		{
+			cfg: &commercetools.Config{
+				LibraryName:    "terraform-commercetools-provider",
+				LibraryVersion: "0.1",
+				ContactURL:     "https://example.com",
+				ContactEmail:   "test@example.org",
+			},
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-commercetools-provider/0.1 (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+		},
+		{
+			cfg: &commercetools.Config{
+				ContactURL:   "https://example.com",
+				ContactEmail: "test@example.org",
+			},
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+		},
+		{
+			cfg: &commercetools.Config{
+				LibraryName:    "terraform-commercetools-provider",
+				LibraryVersion: "0.1",
+				ContactEmail:   "test@example.org",
+			},
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-commercetools-provider/0.1 (+test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+		},
+		{
+			cfg: &commercetools.Config{
+				LibraryName:  "terraform-commercetools-provider",
+				ContactURL:   "https://example.com",
+				ContactEmail: "test@example.org",
+			},
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-commercetools-provider (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+		},
+	}
+
+	for _, tC := range testCases {
+		t.Run("Test user agent", func(t *testing.T) {
+			userAgent := commercetools.GetUserAgent(tC.cfg)
+			assert.Equal(t, tC.expectedUserAgent, userAgent)
 		})
 	}
 }

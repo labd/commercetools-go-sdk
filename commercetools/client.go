@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"runtime"
 	"strconv"
 	"strings"
 
@@ -19,9 +21,13 @@ import (
 
 // Config is used to pass settings for creating a new Client object
 type Config struct {
-	ProjectKey string
-	URL        string
-	HTTPClient *http.Client
+	ProjectKey     string
+	URL            string
+	HTTPClient     *http.Client
+	LibraryName    string
+	LibraryVersion string
+	ContactURL     string
+	ContactEmail   string
 }
 
 // Client bundles the logic for sending requests to the CommerceTools platform.
@@ -30,6 +36,7 @@ type Client struct {
 	url        string
 	projectKey string
 	logLevel   int
+	userAgent  string
 }
 
 // QueryInput provides the data required to query types.
@@ -100,6 +107,7 @@ func New(cfg *Config) *Client {
 		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
 		url:        getConfigValue(cfg.URL, "CTP_API_URL"),
 		httpClient: cfg.HTTPClient,
+		userAgent:  GetUserAgent(cfg),
 	}
 
 	if client.httpClient == nil {
@@ -116,6 +124,40 @@ func New(cfg *Config) *Client {
 		client.logLevel = 1
 	}
 	return client
+}
+
+// GetUserAgent determines the user agent for all HTTP requests.
+func GetUserAgent(cfg *Config) string {
+	baseInfo := "commercetools-go-sdk/1.0.0"
+	systemInfo := fmt.Sprintf("Go/%s (%s; %s)", runtime.Version(), runtime.GOOS, runtime.GOARCH)
+
+	libraryInfo := ""
+	if cfg.LibraryName != "" && cfg.LibraryVersion == "" {
+		libraryInfo = cfg.LibraryName
+	} else if cfg.LibraryName != "" && cfg.LibraryVersion != "" {
+		libraryInfo = fmt.Sprintf("%s/%s", cfg.LibraryName, cfg.LibraryVersion)
+	}
+	contactInfo := ""
+	if cfg.ContactURL != "" && cfg.ContactEmail == "" {
+		contactInfo = fmt.Sprintf("(+%s)", cfg.ContactURL)
+	} else if cfg.ContactURL == "" && cfg.ContactEmail != "" {
+		contactInfo = fmt.Sprintf("(+%s)", cfg.ContactEmail)
+	} else if cfg.ContactURL != "" && cfg.ContactEmail != "" {
+		contactInfo = fmt.Sprintf("(+%s; +%s)", cfg.ContactURL, cfg.ContactEmail)
+	}
+
+	s := []string{
+		baseInfo,
+		systemInfo,
+	}
+	if libraryInfo != "" {
+		s = append(s, libraryInfo)
+	}
+	if contactInfo != "" {
+		s = append(s, contactInfo)
+	}
+
+	return strings.Join(s, " ")
 }
 
 func getConfigValue(value string, envName string) string {
@@ -182,6 +224,7 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 	if c.logLevel > 0 {
 		logRequest(req)
 	}
+	req.Header.Set("User-Agent", c.userAgent)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {

@@ -45,6 +45,10 @@ func main() {
         ProjectKey: "<project-key>",
         URL:        "https://api.sphere.io",
         HTTPClient: httpClient,
+        LibraryName: "some-library",
+        LibraryVersion: "v1.0.0",
+        ContactURL: "https://example.org",
+        ContactEmail: "opensource@example.org",
     })
 
     product, err := client.Products.Create(&commercetools.ProductDraft{
