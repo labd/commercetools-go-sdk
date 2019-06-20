@@ -194,12 +194,12 @@ func TestUserAgents(t *testing.T) {
 	}{
 		{
 			cfg: &commercetools.Config{
-				LibraryName:    "terraform-commercetools-provider",
+				LibraryName:    "terraform-provider-commercetools",
 				LibraryVersion: "0.1",
 				ContactURL:     "https://example.com",
 				ContactEmail:   "test@example.org",
 			},
-			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-commercetools-provider/0.1 (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-provider-commercetools/0.1 (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
 		},
 		{
 			cfg: &commercetools.Config{
@@ -210,19 +210,19 @@ func TestUserAgents(t *testing.T) {
 		},
 		{
 			cfg: &commercetools.Config{
-				LibraryName:    "terraform-commercetools-provider",
+				LibraryName:    "terraform-provider-commercetools",
 				LibraryVersion: "0.1",
 				ContactEmail:   "test@example.org",
 			},
-			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-commercetools-provider/0.1 (+test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-provider-commercetools/0.1 (+test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
 		},
 		{
 			cfg: &commercetools.Config{
-				LibraryName:  "terraform-commercetools-provider",
+				LibraryName:  "terraform-provider-commercetools",
 				ContactURL:   "https://example.com",
 				ContactEmail: "test@example.org",
 			},
-			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-commercetools-provider (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
+			expectedUserAgent: fmt.Sprintf("commercetools-go-sdk/1.0.0 Go/%s (%s; %s) terraform-provider-commercetools (+https://example.com; +test@example.org)", runtime.Version(), runtime.GOOS, runtime.GOARCH),
 		},
 	}
 
