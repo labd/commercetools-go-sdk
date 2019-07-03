@@ -112,41 +112,57 @@ func (obj InventoryChangeQuantityAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeQuantity", Alias: (*Alias)(&obj)})
 }
 
-// InventoryEntry is of type Resource
+// InventoryEntry is of type LoggedResource
 type InventoryEntry struct {
-	Version           int               `json:"version"`
-	LastModifiedAt    time.Time         `json:"lastModifiedAt"`
-	ID                string            `json:"id"`
-	CreatedAt         time.Time         `json:"createdAt"`
-	SupplyChannel     *ChannelReference `json:"supplyChannel,omitempty"`
-	SKU               string            `json:"sku"`
-	RestockableInDays int               `json:"restockableInDays,omitempty"`
-	QuantityOnStock   int               `json:"quantityOnStock"`
-	ExpectedDelivery  time.Time         `json:"expectedDelivery,omitempty"`
-	Custom            *CustomFields     `json:"custom,omitempty"`
-	AvailableQuantity int               `json:"availableQuantity"`
+	Version           int                        `json:"version"`
+	LastModifiedAt    time.Time                  `json:"lastModifiedAt"`
+	ID                string                     `json:"id"`
+	CreatedAt         time.Time                  `json:"createdAt"`
+	LastModifiedBy    *LastModifiedBy            `json:"lastModifiedBy,omitempty"`
+	CreatedBy         *CreatedBy                 `json:"createdBy,omitempty"`
+	SupplyChannel     *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	SKU               string                     `json:"sku"`
+	RestockableInDays int                        `json:"restockableInDays,omitempty"`
+	QuantityOnStock   int                        `json:"quantityOnStock"`
+	ExpectedDelivery  time.Time                  `json:"expectedDelivery,omitempty"`
+	Custom            *CustomFields              `json:"custom,omitempty"`
+	AvailableQuantity int                        `json:"availableQuantity"`
 }
 
 // InventoryEntryDraft is a standalone struct
 type InventoryEntryDraft struct {
-	SupplyChannel     *ChannelReference  `json:"supplyChannel,omitempty"`
-	SKU               string             `json:"sku"`
-	RestockableInDays int                `json:"restockableInDays,omitempty"`
-	QuantityOnStock   int                `json:"quantityOnStock"`
-	ExpectedDelivery  time.Time          `json:"expectedDelivery,omitempty"`
-	Custom            *CustomFieldsDraft `json:"custom,omitempty"`
+	SupplyChannel     *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	SKU               string                     `json:"sku"`
+	RestockableInDays int                        `json:"restockableInDays,omitempty"`
+	QuantityOnStock   int                        `json:"quantityOnStock"`
+	ExpectedDelivery  time.Time                  `json:"expectedDelivery,omitempty"`
+	Custom            *CustomFieldsDraft         `json:"custom,omitempty"`
 }
 
 // InventoryEntryReference implements the interface Reference
 type InventoryEntryReference struct {
-	Key string          `json:"key,omitempty"`
-	ID  string          `json:"id,omitempty"`
+	ID  string          `json:"id"`
 	Obj *InventoryEntry `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "inventory-entry", Alias: (*Alias)(&obj)})
+}
+
+// InventoryEntryResourceIdentifier implements the interface ResourceIdentifier
+type InventoryEntryResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InventoryEntryResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -192,8 +208,8 @@ func (obj InventorySetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // InventorySetCustomTypeAction implements the interface InventoryUpdateAction
 type InventorySetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -235,7 +251,7 @@ func (obj InventorySetRestockableInDaysAction) MarshalJSON() ([]byte, error) {
 
 // InventorySetSupplyChannelAction implements the interface InventoryUpdateAction
 type InventorySetSupplyChannelAction struct {
-	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -247,7 +263,7 @@ func (obj InventorySetSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setSupplyChannel", Alias: (*Alias)(&obj)})
 }
 
-// InventoryUpdate is of type Update
+// InventoryUpdate is a standalone struct
 type InventoryUpdate struct {
 	Version int                     `json:"version"`
 	Actions []InventoryUpdateAction `json:"actions"`

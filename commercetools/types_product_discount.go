@@ -72,6 +72,13 @@ func mapDiscriminatorProductDiscountUpdateAction(input interface{}) (ProductDisc
 			return nil, err
 		}
 		return new, nil
+	case "setKey":
+		new := ProductDiscountSetKeyAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFrom":
 		new := ProductDiscountSetValidFromAction{}
 		err := mapstructure.Decode(input, &new)
@@ -136,12 +143,14 @@ func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountVal
 	return nil, nil
 }
 
-// ProductDiscount is of type Resource
+// ProductDiscount is of type LoggedResource
 type ProductDiscount struct {
 	Version        int                  `json:"version"`
 	LastModifiedAt time.Time            `json:"lastModifiedAt"`
 	ID             string               `json:"id"`
 	CreatedAt      time.Time            `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy      `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy           `json:"createdBy,omitempty"`
 	Value          ProductDiscountValue `json:"value"`
 	ValidUntil     time.Time            `json:"validUntil,omitempty"`
 	ValidFrom      time.Time            `json:"validFrom,omitempty"`
@@ -149,6 +158,7 @@ type ProductDiscount struct {
 	References     []Reference          `json:"references"`
 	Predicate      string               `json:"predicate"`
 	Name           *LocalizedString     `json:"name"`
+	Key            string               `json:"key,omitempty"`
 	IsActive       bool                 `json:"isActive"`
 	Description    *LocalizedString     `json:"description,omitempty"`
 }
@@ -274,6 +284,7 @@ type ProductDiscountDraft struct {
 	SortOrder   string               `json:"sortOrder"`
 	Predicate   string               `json:"predicate"`
 	Name        *LocalizedString     `json:"name"`
+	Key         string               `json:"key,omitempty"`
 	IsActive    bool                 `json:"isActive"`
 	Description *LocalizedString     `json:"description,omitempty"`
 }
@@ -314,14 +325,28 @@ type ProductDiscountPagedQueryResponse struct {
 
 // ProductDiscountReference implements the interface Reference
 type ProductDiscountReference struct {
-	Key string           `json:"key,omitempty"`
-	ID  string           `json:"id,omitempty"`
+	ID  string           `json:"id"`
 	Obj *ProductDiscount `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj ProductDiscountReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductDiscountReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "product-discount", Alias: (*Alias)(&obj)})
+}
+
+// ProductDiscountResourceIdentifier implements the interface ResourceIdentifier
+type ProductDiscountResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductDiscountResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ProductDiscountResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -340,6 +365,20 @@ func (obj ProductDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+// ProductDiscountSetKeyAction implements the interface ProductDiscountUpdateAction
+type ProductDiscountSetKeyAction struct {
+	Key string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductDiscountSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
 // ProductDiscountSetValidFromAction implements the interface ProductDiscountUpdateAction
@@ -385,7 +424,7 @@ func (obj ProductDiscountSetValidUntilAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
 }
 
-// ProductDiscountUpdate is of type Update
+// ProductDiscountUpdate is a standalone struct
 type ProductDiscountUpdate struct {
 	Version int                           `json:"version"`
 	Actions []ProductDiscountUpdateAction `json:"actions"`

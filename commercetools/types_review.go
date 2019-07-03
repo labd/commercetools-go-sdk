@@ -80,7 +80,7 @@ func mapDiscriminatorReviewUpdateAction(input interface{}) (ReviewUpdateAction, 
 			return nil, err
 		}
 		if new.Target != nil {
-			new.Target, err = mapDiscriminatorReference(new.Target)
+			new.Target, err = mapDiscriminatorResourceIdentifier(new.Target)
 			if err != nil {
 				return nil, err
 			}
@@ -111,12 +111,14 @@ func mapDiscriminatorReviewUpdateAction(input interface{}) (ReviewUpdateAction, 
 	return nil, nil
 }
 
-// Review is of type Resource
+// Review is of type LoggedResource
 type Review struct {
 	Version              int                `json:"version"`
 	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
 	ID                   string             `json:"id"`
 	CreatedAt            time.Time          `json:"createdAt"`
+	LastModifiedBy       *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
+	CreatedBy            *CreatedBy         `json:"createdBy,omitempty"`
 	UniquenessValue      string             `json:"uniquenessValue,omitempty"`
 	Title                string             `json:"title,omitempty"`
 	Text                 string             `json:"text,omitempty"`
@@ -151,17 +153,17 @@ func (obj *Review) UnmarshalJSON(data []byte) error {
 
 // ReviewDraft is a standalone struct
 type ReviewDraft struct {
-	UniquenessValue string              `json:"uniquenessValue,omitempty"`
-	Title           string              `json:"title,omitempty"`
-	Text            string              `json:"text,omitempty"`
-	Target          Reference           `json:"target,omitempty"`
-	State           *ResourceIdentifier `json:"state,omitempty"`
-	Rating          float64             `json:"rating,omitempty"`
-	Locale          string              `json:"locale,omitempty"`
-	Key             string              `json:"key,omitempty"`
-	Customer        *CustomerReference  `json:"customer,omitempty"`
-	Custom          *CustomFieldsDraft  `json:"custom,omitempty"`
-	AuthorName      string              `json:"authorName,omitempty"`
+	UniquenessValue string                      `json:"uniquenessValue,omitempty"`
+	Title           string                      `json:"title,omitempty"`
+	Text            string                      `json:"text,omitempty"`
+	Target          ResourceIdentifier          `json:"target,omitempty"`
+	State           *StateResourceIdentifier    `json:"state,omitempty"`
+	Rating          float64                     `json:"rating,omitempty"`
+	Locale          string                      `json:"locale,omitempty"`
+	Key             string                      `json:"key,omitempty"`
+	Customer        *CustomerResourceIdentifier `json:"customer,omitempty"`
+	Custom          *CustomFieldsDraft          `json:"custom,omitempty"`
+	AuthorName      string                      `json:"authorName,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -173,7 +175,7 @@ func (obj *ReviewDraft) UnmarshalJSON(data []byte) error {
 	}
 	if obj.Target != nil {
 		var err error
-		obj.Target, err = mapDiscriminatorReference(obj.Target)
+		obj.Target, err = mapDiscriminatorResourceIdentifier(obj.Target)
 		if err != nil {
 			return err
 		}
@@ -201,14 +203,28 @@ type ReviewRatingStatistics struct {
 
 // ReviewReference implements the interface Reference
 type ReviewReference struct {
-	Key string  `json:"key,omitempty"`
-	ID  string  `json:"id,omitempty"`
+	ID  string  `json:"id"`
 	Obj *Review `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj ReviewReference) MarshalJSON() ([]byte, error) {
 	type Alias ReviewReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "review", Alias: (*Alias)(&obj)})
+}
+
+// ReviewResourceIdentifier implements the interface ResourceIdentifier
+type ReviewResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ReviewResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ReviewResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -246,8 +262,8 @@ func (obj ReviewSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // ReviewSetCustomTypeAction implements the interface ReviewUpdateAction
 type ReviewSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -261,7 +277,7 @@ func (obj ReviewSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 // ReviewSetCustomerAction implements the interface ReviewUpdateAction
 type ReviewSetCustomerAction struct {
-	Customer *CustomerReference `json:"customer,omitempty"`
+	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -317,7 +333,7 @@ func (obj ReviewSetRatingAction) MarshalJSON() ([]byte, error) {
 
 // ReviewSetTargetAction implements the interface ReviewUpdateAction
 type ReviewSetTargetAction struct {
-	Target Reference `json:"target,omitempty"`
+	Target ResourceIdentifier `json:"target"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -338,7 +354,7 @@ func (obj *ReviewSetTargetAction) UnmarshalJSON(data []byte) error {
 	}
 	if obj.Target != nil {
 		var err error
-		obj.Target, err = mapDiscriminatorReference(obj.Target)
+		obj.Target, err = mapDiscriminatorResourceIdentifier(obj.Target)
 		if err != nil {
 			return err
 		}
@@ -377,8 +393,8 @@ func (obj ReviewSetTitleAction) MarshalJSON() ([]byte, error) {
 
 // ReviewTransitionStateAction implements the interface ReviewUpdateAction
 type ReviewTransitionStateAction struct {
-	State *StateReference `json:"state"`
-	Force bool            `json:"force"`
+	State *StateResourceIdentifier `json:"state"`
+	Force bool                     `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -390,7 +406,7 @@ func (obj ReviewTransitionStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }
 
-// ReviewUpdate is of type Update
+// ReviewUpdate is a standalone struct
 type ReviewUpdate struct {
 	Version int                  `json:"version"`
 	Actions []ReviewUpdateAction `json:"actions"`

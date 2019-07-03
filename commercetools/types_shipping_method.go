@@ -202,7 +202,7 @@ type PriceFunction struct {
 	CurrencyCode CurrencyCode `json:"currencyCode"`
 }
 
-// ShippingMethod is of type Resource
+// ShippingMethod is of type BaseResource
 type ShippingMethod struct {
 	Version        int                   `json:"version"`
 	LastModifiedAt time.Time             `json:"lastModifiedAt"`
@@ -219,8 +219,8 @@ type ShippingMethod struct {
 
 // ShippingMethodAddShippingRateAction implements the interface ShippingMethodUpdateAction
 type ShippingMethodAddShippingRateAction struct {
-	Zone         *ZoneReference     `json:"zone"`
-	ShippingRate *ShippingRateDraft `json:"shippingRate"`
+	Zone         *ZoneResourceIdentifier `json:"zone"`
+	ShippingRate *ShippingRateDraft      `json:"shippingRate"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -234,7 +234,7 @@ func (obj ShippingMethodAddShippingRateAction) MarshalJSON() ([]byte, error) {
 
 // ShippingMethodAddZoneAction implements the interface ShippingMethodUpdateAction
 type ShippingMethodAddZoneAction struct {
-	Zone *ZoneReference `json:"zone"`
+	Zone *ZoneResourceIdentifier `json:"zone"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -276,7 +276,7 @@ func (obj ShippingMethodChangeNameAction) MarshalJSON() ([]byte, error) {
 
 // ShippingMethodChangeTaxCategoryAction implements the interface ShippingMethodUpdateAction
 type ShippingMethodChangeTaxCategoryAction struct {
-	TaxCategory *TaxCategoryReference `json:"taxCategory"`
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -290,13 +290,13 @@ func (obj ShippingMethodChangeTaxCategoryAction) MarshalJSON() ([]byte, error) {
 
 // ShippingMethodDraft is a standalone struct
 type ShippingMethodDraft struct {
-	ZoneRates   []ZoneRateDraft       `json:"zoneRates"`
-	TaxCategory *TaxCategoryReference `json:"taxCategory"`
-	Predicate   string                `json:"predicate,omitempty"`
-	Name        string                `json:"name"`
-	Key         string                `json:"key,omitempty"`
-	IsDefault   bool                  `json:"isDefault"`
-	Description string                `json:"description,omitempty"`
+	ZoneRates   []ZoneRateDraft                `json:"zoneRates"`
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory"`
+	Predicate   string                         `json:"predicate,omitempty"`
+	Name        string                         `json:"name"`
+	Key         string                         `json:"key,omitempty"`
+	IsDefault   bool                           `json:"isDefault"`
+	Description string                         `json:"description,omitempty"`
 }
 
 // ShippingMethodPagedQueryResponse is of type PagedQueryResponse
@@ -309,8 +309,7 @@ type ShippingMethodPagedQueryResponse struct {
 
 // ShippingMethodReference implements the interface Reference
 type ShippingMethodReference struct {
-	Key string          `json:"key,omitempty"`
-	ID  string          `json:"id,omitempty"`
+	ID  string          `json:"id"`
 	Obj *ShippingMethod `json:"obj,omitempty"`
 }
 
@@ -325,8 +324,8 @@ func (obj ShippingMethodReference) MarshalJSON() ([]byte, error) {
 
 // ShippingMethodRemoveShippingRateAction implements the interface ShippingMethodUpdateAction
 type ShippingMethodRemoveShippingRateAction struct {
-	Zone         *ZoneReference     `json:"zone"`
-	ShippingRate *ShippingRateDraft `json:"shippingRate"`
+	Zone         *ZoneResourceIdentifier `json:"zone"`
+	ShippingRate *ShippingRateDraft      `json:"shippingRate"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -340,7 +339,7 @@ func (obj ShippingMethodRemoveShippingRateAction) MarshalJSON() ([]byte, error) 
 
 // ShippingMethodRemoveZoneAction implements the interface ShippingMethodUpdateAction
 type ShippingMethodRemoveZoneAction struct {
-	Zone *ZoneReference `json:"zone"`
+	Zone *ZoneResourceIdentifier `json:"zone"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -350,6 +349,21 @@ func (obj ShippingMethodRemoveZoneAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeZone", Alias: (*Alias)(&obj)})
+}
+
+// ShippingMethodResourceIdentifier implements the interface ResourceIdentifier
+type ShippingMethodResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShippingMethodResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ShippingMethodResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "shipping-method", Alias: (*Alias)(&obj)})
 }
 
 // ShippingMethodSetDescriptionAction implements the interface ShippingMethodUpdateAction
@@ -394,7 +408,7 @@ func (obj ShippingMethodSetPredicateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setPredicate", Alias: (*Alias)(&obj)})
 }
 
-// ShippingMethodUpdate is of type Update
+// ShippingMethodUpdate is a standalone struct
 type ShippingMethodUpdate struct {
 	Version int                          `json:"version"`
 	Actions []ShippingMethodUpdateAction `json:"actions"`
@@ -491,6 +505,6 @@ type ZoneRate struct {
 
 // ZoneRateDraft is a standalone struct
 type ZoneRateDraft struct {
-	Zone          *ZoneReference      `json:"zone"`
-	ShippingRates []ShippingRateDraft `json:"shippingRates"`
+	Zone          *ZoneResourceIdentifier `json:"zone"`
+	ShippingRates []ShippingRateDraft     `json:"shippingRates"`
 }

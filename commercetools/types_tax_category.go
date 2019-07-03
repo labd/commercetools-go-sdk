@@ -76,16 +76,18 @@ type SubRate struct {
 	Amount *float64 `json:"amount"`
 }
 
-// TaxCategory is of type Resource
+// TaxCategory is of type LoggedResource
 type TaxCategory struct {
-	Version        int       `json:"version"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	ID             string    `json:"id"`
-	CreatedAt      time.Time `json:"createdAt"`
-	Rates          []TaxRate `json:"rates"`
-	Name           string    `json:"name"`
-	Key            string    `json:"key,omitempty"`
-	Description    string    `json:"description,omitempty"`
+	Version        int             `json:"version"`
+	LastModifiedAt time.Time       `json:"lastModifiedAt"`
+	ID             string          `json:"id"`
+	CreatedAt      time.Time       `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy      `json:"createdBy,omitempty"`
+	Rates          []TaxRate       `json:"rates"`
+	Name           string          `json:"name"`
+	Key            string          `json:"key,omitempty"`
+	Description    string          `json:"description,omitempty"`
 }
 
 // TaxCategoryAddTaxRateAction implements the interface TaxCategoryUpdateAction
@@ -134,8 +136,7 @@ type TaxCategoryPagedQueryResponse struct {
 
 // TaxCategoryReference implements the interface Reference
 type TaxCategoryReference struct {
-	Key string       `json:"key,omitempty"`
-	ID  string       `json:"id,omitempty"`
+	ID  string       `json:"id"`
 	Obj *TaxCategory `json:"obj,omitempty"`
 }
 
@@ -177,6 +178,21 @@ func (obj TaxCategoryReplaceTaxRateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "replaceTaxRate", Alias: (*Alias)(&obj)})
 }
 
+// TaxCategoryResourceIdentifier implements the interface ResourceIdentifier
+type TaxCategoryResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TaxCategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "tax-category", Alias: (*Alias)(&obj)})
+}
+
 // TaxCategorySetDescriptionAction implements the interface TaxCategoryUpdateAction
 type TaxCategorySetDescriptionAction struct {
 	Description string `json:"description,omitempty"`
@@ -205,7 +221,7 @@ func (obj TaxCategorySetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
-// TaxCategoryUpdate is of type Update
+// TaxCategoryUpdate is a standalone struct
 type TaxCategoryUpdate struct {
 	Version int                       `json:"version"`
 	Actions []TaxCategoryUpdateAction `json:"actions"`

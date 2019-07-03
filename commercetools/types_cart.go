@@ -555,12 +555,14 @@ func mapDiscriminatorShippingRateInputDraft(input interface{}) (ShippingRateInpu
 	return nil, nil
 }
 
-// Cart is of type Resource
+// Cart is of type LoggedResource
 type Cart struct {
 	Version                         int                     `json:"version"`
 	LastModifiedAt                  time.Time               `json:"lastModifiedAt"`
 	ID                              string                  `json:"id"`
 	CreatedAt                       time.Time               `json:"createdAt"`
+	LastModifiedBy                  *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
+	CreatedBy                       *CreatedBy              `json:"createdBy,omitempty"`
 	TotalPrice                      TypedMoney              `json:"totalPrice"`
 	TaxedPrice                      *TaxedPrice             `json:"taxedPrice,omitempty"`
 	TaxRoundingMode                 RoundingMode            `json:"taxRoundingMode"`
@@ -617,13 +619,13 @@ func (obj *Cart) UnmarshalJSON(data []byte) error {
 
 // CartAddCustomLineItemAction implements the interface CartUpdateAction
 type CartAddCustomLineItemAction struct {
-	TaxCategory     *TaxCategoryReference `json:"taxCategory,omitempty"`
-	Slug            string                `json:"slug"`
-	Quantity        float64               `json:"quantity"`
-	Name            *LocalizedString      `json:"name"`
-	Money           *Money                `json:"money"`
-	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
-	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
+	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	Slug            string                         `json:"slug"`
+	Quantity        float64                        `json:"quantity"`
+	Name            *LocalizedString               `json:"name"`
+	Money           *Money                         `json:"money"`
+	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
+	Custom          *CustomFieldsDraft             `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -666,7 +668,7 @@ func (obj CartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 // CartAddLineItemAction implements the interface CartUpdateAction
 type CartAddLineItemAction struct {
 	VariantID           int                         `json:"variantId,omitempty"`
-	SupplyChannel       *ChannelReference           `json:"supplyChannel,omitempty"`
+	SupplyChannel       *ChannelResourceIdentifier  `json:"supplyChannel,omitempty"`
 	SKU                 string                      `json:"sku,omitempty"`
 	ShippingDetails     *ItemShippingDetailsDraft   `json:"shippingDetails,omitempty"`
 	Quantity            float64                     `json:"quantity,omitempty"`
@@ -674,7 +676,7 @@ type CartAddLineItemAction struct {
 	ExternalTotalPrice  *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	ExternalTaxRate     *ExternalTaxRateDraft       `json:"externalTaxRate,omitempty"`
 	ExternalPrice       *Money                      `json:"externalPrice,omitempty"`
-	DistributionChannel *ChannelReference           `json:"distributionChannel,omitempty"`
+	DistributionChannel *ChannelResourceIdentifier  `json:"distributionChannel,omitempty"`
 	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
 }
 
@@ -689,7 +691,7 @@ func (obj CartAddLineItemAction) MarshalJSON() ([]byte, error) {
 
 // CartAddPaymentAction implements the interface CartUpdateAction
 type CartAddPaymentAction struct {
-	Payment *PaymentReference `json:"payment"`
+	Payment *PaymentResourceIdentifier `json:"payment"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -703,9 +705,9 @@ func (obj CartAddPaymentAction) MarshalJSON() ([]byte, error) {
 
 // CartAddShoppingListAction implements the interface CartUpdateAction
 type CartAddShoppingListAction struct {
-	SupplyChannel       *ChannelReference      `json:"supplyChannel,omitempty"`
-	ShoppingList        *ShoppingListReference `json:"shoppingList"`
-	DistributionChannel *ChannelReference      `json:"distributionChannel,omitempty"`
+	SupplyChannel       *ChannelResourceIdentifier      `json:"supplyChannel,omitempty"`
+	ShoppingList        *ShoppingListResourceIdentifier `json:"shoppingList"`
+	DistributionChannel *ChannelResourceIdentifier      `json:"distributionChannel,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -838,29 +840,29 @@ func (obj CartChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) {
 
 // CartDraft is a standalone struct
 type CartDraft struct {
-	TaxRoundingMode                  RoundingMode             `json:"taxRoundingMode,omitempty"`
-	TaxMode                          TaxMode                  `json:"taxMode,omitempty"`
-	TaxCalculationMode               TaxCalculationMode       `json:"taxCalculationMode,omitempty"`
-	Store                            *StoreReference          `json:"store,omitempty"`
-	ShippingRateInput                ShippingRateInputDraft   `json:"shippingRateInput,omitempty"`
-	ShippingMethod                   *ShippingMethodReference `json:"shippingMethod,omitempty"`
-	ShippingAddress                  *Address                 `json:"shippingAddress,omitempty"`
-	Origin                           CartOrigin               `json:"origin,omitempty"`
-	Locale                           string                   `json:"locale,omitempty"`
-	LineItems                        []LineItemDraft          `json:"lineItems,omitempty"`
-	ItemShippingAddresses            []Address                `json:"itemShippingAddresses,omitempty"`
-	InventoryMode                    InventoryMode            `json:"inventoryMode,omitempty"`
-	ExternalTaxRateForShippingMethod *ExternalTaxRateDraft    `json:"externalTaxRateForShippingMethod,omitempty"`
-	DeleteDaysAfterLastModification  int                      `json:"deleteDaysAfterLastModification,omitempty"`
-	CustomerID                       string                   `json:"customerId,omitempty"`
-	CustomerGroup                    *CustomerGroupReference  `json:"customerGroup,omitempty"`
-	CustomerEmail                    string                   `json:"customerEmail,omitempty"`
-	CustomLineItems                  []CustomLineItemDraft    `json:"customLineItems,omitempty"`
-	Custom                           *CustomFieldsDraft       `json:"custom,omitempty"`
-	Currency                         CurrencyCode             `json:"currency"`
-	Country                          string                   `json:"country,omitempty"`
-	BillingAddress                   *Address                 `json:"billingAddress,omitempty"`
-	AnonymousID                      string                   `json:"anonymousId,omitempty"`
+	TaxRoundingMode                  RoundingMode                      `json:"taxRoundingMode,omitempty"`
+	TaxMode                          TaxMode                           `json:"taxMode,omitempty"`
+	TaxCalculationMode               TaxCalculationMode                `json:"taxCalculationMode,omitempty"`
+	Store                            *StoreResourceIdentifier          `json:"store,omitempty"`
+	ShippingRateInput                ShippingRateInputDraft            `json:"shippingRateInput,omitempty"`
+	ShippingMethod                   *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
+	ShippingAddress                  *Address                          `json:"shippingAddress,omitempty"`
+	Origin                           CartOrigin                        `json:"origin,omitempty"`
+	Locale                           string                            `json:"locale,omitempty"`
+	LineItems                        []LineItemDraft                   `json:"lineItems,omitempty"`
+	ItemShippingAddresses            []Address                         `json:"itemShippingAddresses,omitempty"`
+	InventoryMode                    InventoryMode                     `json:"inventoryMode,omitempty"`
+	ExternalTaxRateForShippingMethod *ExternalTaxRateDraft             `json:"externalTaxRateForShippingMethod,omitempty"`
+	DeleteDaysAfterLastModification  int                               `json:"deleteDaysAfterLastModification,omitempty"`
+	CustomerID                       string                            `json:"customerId,omitempty"`
+	CustomerGroup                    *CustomerGroupResourceIdentifier  `json:"customerGroup,omitempty"`
+	CustomerEmail                    string                            `json:"customerEmail,omitempty"`
+	CustomLineItems                  []CustomLineItemDraft             `json:"customLineItems,omitempty"`
+	Custom                           *CustomFieldsDraft                `json:"custom,omitempty"`
+	Currency                         CurrencyCode                      `json:"currency"`
+	Country                          string                            `json:"country,omitempty"`
+	BillingAddress                   *Address                          `json:"billingAddress,omitempty"`
+	AnonymousID                      string                            `json:"anonymousId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -905,8 +907,7 @@ func (obj CartRecalculateAction) MarshalJSON() ([]byte, error) {
 
 // CartReference implements the interface Reference
 type CartReference struct {
-	Key string `json:"key,omitempty"`
-	ID  string `json:"id,omitempty"`
+	ID  string `json:"id"`
 	Obj *Cart  `json:"obj,omitempty"`
 }
 
@@ -981,7 +982,7 @@ func (obj CartRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 
 // CartRemovePaymentAction implements the interface CartUpdateAction
 type CartRemovePaymentAction struct {
-	Payment *PaymentReference `json:"payment"`
+	Payment *PaymentResourceIdentifier `json:"payment"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -991,6 +992,21 @@ func (obj CartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removePayment", Alias: (*Alias)(&obj)})
+}
+
+// CartResourceIdentifier implements the interface ResourceIdentifier
+type CartResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias CartResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "cart", Alias: (*Alias)(&obj)})
 }
 
 // CartSetAnonymousIDAction implements the interface CartUpdateAction
@@ -1083,9 +1099,9 @@ func (obj CartSetCustomLineItemCustomFieldAction) MarshalJSON() ([]byte, error) 
 
 // CartSetCustomLineItemCustomTypeAction implements the interface CartUpdateAction
 type CartSetCustomLineItemCustomTypeAction struct {
-	Type             *TypeReference  `json:"type,omitempty"`
-	Fields           *FieldContainer `json:"fields,omitempty"`
-	CustomLineItemID string          `json:"customLineItemId"`
+	Type             *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields           *FieldContainer         `json:"fields,omitempty"`
+	CustomLineItemID string                  `json:"customLineItemId"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1144,10 +1160,10 @@ func (obj CartSetCustomLineItemTaxRateAction) MarshalJSON() ([]byte, error) {
 
 // CartSetCustomShippingMethodAction implements the interface CartUpdateAction
 type CartSetCustomShippingMethodAction struct {
-	TaxCategory        *TaxCategoryReference `json:"taxCategory,omitempty"`
-	ShippingRate       *ShippingRateDraft    `json:"shippingRate"`
-	ShippingMethodName string                `json:"shippingMethodName"`
-	ExternalTaxRate    *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	TaxCategory        *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	ShippingRate       *ShippingRateDraft             `json:"shippingRate"`
+	ShippingMethodName string                         `json:"shippingMethodName"`
+	ExternalTaxRate    *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1161,8 +1177,8 @@ func (obj CartSetCustomShippingMethodAction) MarshalJSON() ([]byte, error) {
 
 // CartSetCustomTypeAction implements the interface CartUpdateAction
 type CartSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1190,7 +1206,7 @@ func (obj CartSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 
 // CartSetCustomerGroupAction implements the interface CartUpdateAction
 type CartSetCustomerGroupAction struct {
-	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1248,9 +1264,9 @@ func (obj CartSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // CartSetLineItemCustomTypeAction implements the interface CartUpdateAction
 type CartSetLineItemCustomTypeAction struct {
-	Type       *TypeReference  `json:"type,omitempty"`
-	LineItemID string          `json:"lineItemId"`
-	Fields     *FieldContainer `json:"fields,omitempty"`
+	Type       *TypeResourceIdentifier `json:"type,omitempty"`
+	LineItemID string                  `json:"lineItemId"`
+	Fields     *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1367,8 +1383,8 @@ func (obj CartSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 
 // CartSetShippingMethodAction implements the interface CartUpdateAction
 type CartSetShippingMethodAction struct {
-	ShippingMethod  *TypeReference        `json:"shippingMethod,omitempty"`
-	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	ShippingMethod  *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
+	ExternalTaxRate *ExternalTaxRateDraft             `json:"externalTaxRate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1440,7 +1456,7 @@ func (obj *CartSetShippingRateInputAction) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// CartUpdate is of type Update
+// CartUpdate is a standalone struct
 type CartUpdate struct {
 	Version int                `json:"version"`
 	Actions []CartUpdateAction `json:"actions"`
@@ -1551,14 +1567,14 @@ func (obj *CustomLineItem) UnmarshalJSON(data []byte) error {
 
 // CustomLineItemDraft is a standalone struct
 type CustomLineItemDraft struct {
-	TaxCategory     *TaxCategoryReference     `json:"taxCategory,omitempty"`
-	Slug            string                    `json:"slug"`
-	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
-	Quantity        float64                   `json:"quantity"`
-	Name            *LocalizedString          `json:"name"`
-	Money           *Money                    `json:"money"`
-	ExternalTaxRate *ExternalTaxRateDraft     `json:"externalTaxRate,omitempty"`
-	Custom          *CustomFields             `json:"custom,omitempty"`
+	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	Slug            string                         `json:"slug"`
+	ShippingDetails *ItemShippingDetailsDraft      `json:"shippingDetails,omitempty"`
+	Quantity        float64                        `json:"quantity"`
+	Name            *LocalizedString               `json:"name"`
+	Money           *Money                         `json:"money"`
+	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
+	Custom          *CustomFields                  `json:"custom,omitempty"`
 }
 
 // DiscountCodeInfo is a standalone struct
@@ -1668,7 +1684,7 @@ type LineItem struct {
 // LineItemDraft is a standalone struct
 type LineItemDraft struct {
 	VariantID           int                         `json:"variantId,omitempty"`
-	SupplyChannel       *ChannelReference           `json:"supplyChannel,omitempty"`
+	SupplyChannel       *ChannelResourceIdentifier  `json:"supplyChannel,omitempty"`
 	SKU                 string                      `json:"sku,omitempty"`
 	ShippingDetails     *ItemShippingDetailsDraft   `json:"shippingDetails,omitempty"`
 	Quantity            int                         `json:"quantity,omitempty"`
@@ -1676,7 +1692,7 @@ type LineItemDraft struct {
 	ExternalTotalPrice  *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	ExternalTaxRate     *ExternalTaxRateDraft       `json:"externalTaxRate,omitempty"`
 	ExternalPrice       *Money                      `json:"externalPrice,omitempty"`
-	DistributionChannel *ChannelReference           `json:"distributionChannel,omitempty"`
+	DistributionChannel *ChannelResourceIdentifier  `json:"distributionChannel,omitempty"`
 	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
 }
 

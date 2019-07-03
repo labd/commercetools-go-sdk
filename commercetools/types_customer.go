@@ -212,12 +212,14 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 	return nil, nil
 }
 
-// Customer is of type Resource
+// Customer is of type LoggedResource
 type Customer struct {
 	Version                  int                     `json:"version"`
 	LastModifiedAt           time.Time               `json:"lastModifiedAt"`
 	ID                       string                  `json:"id"`
 	CreatedAt                time.Time               `json:"createdAt"`
+	LastModifiedBy           *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
+	CreatedBy                *CreatedBy              `json:"createdBy,omitempty"`
 	VatID                    string                  `json:"vatId,omitempty"`
 	Title                    string                  `json:"title,omitempty"`
 	ShippingAddressIds       []string                `json:"shippingAddressIds,omitempty"`
@@ -336,30 +338,30 @@ type CustomerCreatePasswordResetToken struct {
 
 // CustomerDraft is a standalone struct
 type CustomerDraft struct {
-	VatID                  string                  `json:"vatId,omitempty"`
-	Title                  string                  `json:"title,omitempty"`
-	ShippingAddresses      []int                   `json:"shippingAddresses,omitempty"`
-	Salutation             string                  `json:"salutation,omitempty"`
-	Password               string                  `json:"password"`
-	MiddleName             string                  `json:"middleName,omitempty"`
-	Locale                 string                  `json:"locale,omitempty"`
-	LastName               string                  `json:"lastName,omitempty"`
-	Key                    string                  `json:"key,omitempty"`
-	IsEmailVerified        bool                    `json:"isEmailVerified"`
-	FirstName              string                  `json:"firstName,omitempty"`
-	ExternalID             string                  `json:"externalId,omitempty"`
-	Email                  string                  `json:"email"`
-	DefaultShippingAddress int                     `json:"defaultShippingAddress,omitempty"`
-	DefaultBillingAddress  int                     `json:"defaultBillingAddress,omitempty"`
-	DateOfBirth            Date                    `json:"dateOfBirth,omitempty"`
-	CustomerNumber         string                  `json:"customerNumber,omitempty"`
-	CustomerGroup          *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Custom                 *CustomFieldsDraft      `json:"custom,omitempty"`
-	CompanyName            string                  `json:"companyName,omitempty"`
-	BillingAddresses       []int                   `json:"billingAddresses,omitempty"`
-	AnonymousID            string                  `json:"anonymousId,omitempty"`
-	AnonymousCartID        string                  `json:"anonymousCartId,omitempty"`
-	Addresses              []Address               `json:"addresses,omitempty"`
+	VatID                  string                           `json:"vatId,omitempty"`
+	Title                  string                           `json:"title,omitempty"`
+	ShippingAddresses      []int                            `json:"shippingAddresses,omitempty"`
+	Salutation             string                           `json:"salutation,omitempty"`
+	Password               string                           `json:"password"`
+	MiddleName             string                           `json:"middleName,omitempty"`
+	Locale                 string                           `json:"locale,omitempty"`
+	LastName               string                           `json:"lastName,omitempty"`
+	Key                    string                           `json:"key,omitempty"`
+	IsEmailVerified        bool                             `json:"isEmailVerified"`
+	FirstName              string                           `json:"firstName,omitempty"`
+	ExternalID             string                           `json:"externalId,omitempty"`
+	Email                  string                           `json:"email"`
+	DefaultShippingAddress int                              `json:"defaultShippingAddress,omitempty"`
+	DefaultBillingAddress  int                              `json:"defaultBillingAddress,omitempty"`
+	DateOfBirth            Date                             `json:"dateOfBirth,omitempty"`
+	CustomerNumber         string                           `json:"customerNumber,omitempty"`
+	CustomerGroup          *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	Custom                 *CustomFieldsDraft               `json:"custom,omitempty"`
+	CompanyName            string                           `json:"companyName,omitempty"`
+	BillingAddresses       []int                            `json:"billingAddresses,omitempty"`
+	AnonymousID            string                           `json:"anonymousId,omitempty"`
+	AnonymousCartID        string                           `json:"anonymousCartId,omitempty"`
+	Addresses              []Address                        `json:"addresses,omitempty"`
 }
 
 // CustomerEmailVerify is a standalone struct
@@ -378,8 +380,7 @@ type CustomerPagedQueryResponse struct {
 
 // CustomerReference implements the interface Reference
 type CustomerReference struct {
-	Key string    `json:"key,omitempty"`
-	ID  string    `json:"id,omitempty"`
+	ID  string    `json:"id"`
 	Obj *Customer `json:"obj,omitempty"`
 }
 
@@ -441,6 +442,21 @@ type CustomerResetPassword struct {
 	NewPassword string `json:"newPassword"`
 }
 
+// CustomerResourceIdentifier implements the interface ResourceIdentifier
+type CustomerResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomerResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias CustomerResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "customer", Alias: (*Alias)(&obj)})
+}
+
 // CustomerSetCompanyNameAction implements the interface CustomerUpdateAction
 type CustomerSetCompanyNameAction struct {
 	CompanyName string `json:"companyName,omitempty"`
@@ -472,8 +488,8 @@ func (obj CustomerSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // CustomerSetCustomTypeAction implements the interface CustomerUpdateAction
 type CustomerSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -487,7 +503,7 @@ func (obj CustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 // CustomerSetCustomerGroupAction implements the interface CustomerUpdateAction
 type CustomerSetCustomerGroupAction struct {
-	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -706,7 +722,7 @@ type CustomerToken struct {
 	CreatedAt      time.Time `json:"createdAt"`
 }
 
-// CustomerUpdate is of type Update
+// CustomerUpdate is a standalone struct
 type CustomerUpdate struct {
 	Version int                    `json:"version"`
 	Actions []CustomerUpdateAction `json:"actions"`

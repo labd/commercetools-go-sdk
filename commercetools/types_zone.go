@@ -69,7 +69,7 @@ type Location struct {
 	Country CountryCode `json:"country"`
 }
 
-// Zone is of type Resource
+// Zone is of type BaseResource
 type Zone struct {
 	Version        int        `json:"version"`
 	LastModifiedAt time.Time  `json:"lastModifiedAt"`
@@ -127,8 +127,7 @@ type ZonePagedQueryResponse struct {
 
 // ZoneReference implements the interface Reference
 type ZoneReference struct {
-	Key string `json:"key,omitempty"`
-	ID  string `json:"id,omitempty"`
+	ID  string `json:"id"`
 	Obj *Zone  `json:"obj,omitempty"`
 }
 
@@ -153,6 +152,21 @@ func (obj ZoneRemoveLocationAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeLocation", Alias: (*Alias)(&obj)})
+}
+
+// ZoneResourceIdentifier implements the interface ResourceIdentifier
+type ZoneResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ZoneResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ZoneResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "zone", Alias: (*Alias)(&obj)})
 }
 
 // ZoneSetDescriptionAction implements the interface ZoneUpdateAction
@@ -183,7 +197,7 @@ func (obj ZoneSetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
-// ZoneUpdate is of type Update
+// ZoneUpdate is a standalone struct
 type ZoneUpdate struct {
 	Version int                `json:"version"`
 	Actions []ZoneUpdateAction `json:"actions"`

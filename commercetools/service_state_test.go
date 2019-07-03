@@ -26,7 +26,7 @@ func TestStateCreate(t *testing.T) {
 			"en": "This is a state machine. Beep beep boop.",
 		},
 		Initial: true,
-		Transitions: []commercetools.StateReference{
+		Transitions: []commercetools.StateResourceIdentifier{
 			{
 				ID: "1",
 			},
@@ -183,7 +183,7 @@ func TestStateUpdate(t *testing.T) {
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
 					&commercetools.StateSetTransitionsAction{
-						Transitions: []commercetools.StateReference{
+						Transitions: []commercetools.StateResourceIdentifier{
 							{
 								ID: "1",
 							},

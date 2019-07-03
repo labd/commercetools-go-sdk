@@ -520,12 +520,14 @@ func (obj FilteredFacetResult) MarshalJSON() ([]byte, error) {
 	}{Type: "filter", Alias: (*Alias)(&obj)})
 }
 
-// Product is of type Resource
+// Product is of type LoggedResource
 type Product struct {
 	Version                int                     `json:"version"`
 	LastModifiedAt         time.Time               `json:"lastModifiedAt"`
 	ID                     string                  `json:"id"`
 	CreatedAt              time.Time               `json:"createdAt"`
+	LastModifiedBy         *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
+	CreatedBy              *CreatedBy              `json:"createdBy,omitempty"`
 	TaxCategory            *TaxCategoryReference   `json:"taxCategory,omitempty"`
 	State                  *StateReference         `json:"state,omitempty"`
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
@@ -588,9 +590,9 @@ func (obj ProductAddPriceAction) MarshalJSON() ([]byte, error) {
 
 // ProductAddToCategoryAction implements the interface ProductUpdateAction
 type ProductAddToCategoryAction struct {
-	Staged    bool               `json:"staged"`
-	OrderHint string             `json:"orderHint,omitempty"`
-	Category  *CategoryReference `json:"category"`
+	Staged    bool                        `json:"staged"`
+	OrderHint string                      `json:"orderHint,omitempty"`
+	Category  *CategoryResourceIdentifier `json:"category"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -745,22 +747,22 @@ type ProductData struct {
 
 // ProductDraft is a standalone struct
 type ProductDraft struct {
-	Variants           []ProductVariantDraft `json:"variants,omitempty"`
-	TaxCategory        *TaxCategoryReference `json:"taxCategory,omitempty"`
-	State              *StateReference       `json:"state,omitempty"`
-	Slug               *LocalizedString      `json:"slug"`
-	SearchKeywords     *SearchKeywords       `json:"searchKeywords,omitempty"`
-	Publish            bool                  `json:"publish"`
-	ProductType        *ProductTypeReference `json:"productType,omitempty"`
-	Name               *LocalizedString      `json:"name"`
-	MetaTitle          *LocalizedString      `json:"metaTitle,omitempty"`
-	MetaKeywords       *LocalizedString      `json:"metaKeywords,omitempty"`
-	MetaDescription    *LocalizedString      `json:"metaDescription,omitempty"`
-	MasterVariant      *ProductVariantDraft  `json:"masterVariant,omitempty"`
-	Key                string                `json:"key,omitempty"`
-	Description        *LocalizedString      `json:"description,omitempty"`
-	CategoryOrderHints *CategoryOrderHints   `json:"categoryOrderHints,omitempty"`
-	Categories         []CategoryReference   `json:"categories,omitempty"`
+	Variants           []ProductVariantDraft          `json:"variants,omitempty"`
+	TaxCategory        *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	State              *StateResourceIdentifier       `json:"state,omitempty"`
+	Slug               *LocalizedString               `json:"slug"`
+	SearchKeywords     *SearchKeywords                `json:"searchKeywords,omitempty"`
+	Publish            bool                           `json:"publish"`
+	ProductType        *ProductTypeResourceIdentifier `json:"productType"`
+	Name               *LocalizedString               `json:"name"`
+	MetaTitle          *LocalizedString               `json:"metaTitle,omitempty"`
+	MetaKeywords       *LocalizedString               `json:"metaKeywords,omitempty"`
+	MetaDescription    *LocalizedString               `json:"metaDescription,omitempty"`
+	MasterVariant      *ProductVariantDraft           `json:"masterVariant,omitempty"`
+	Key                string                         `json:"key,omitempty"`
+	Description        *LocalizedString               `json:"description,omitempty"`
+	CategoryOrderHints *CategoryOrderHints            `json:"categoryOrderHints,omitempty"`
+	Categories         []CategoryResourceIdentifier   `json:"categories,omitempty"`
 }
 
 // ProductLegacySetSkuAction implements the interface ProductUpdateAction
@@ -804,7 +806,7 @@ type ProductPagedQueryResponse struct {
 	Results []Product `json:"results"`
 }
 
-// ProductProjection is of type Resource
+// ProductProjection is of type BaseResource
 type ProductProjection struct {
 	Version                int                     `json:"version"`
 	LastModifiedAt         time.Time               `json:"lastModifiedAt"`
@@ -863,8 +865,7 @@ func (obj ProductPublishAction) MarshalJSON() ([]byte, error) {
 
 // ProductReference implements the interface Reference
 type ProductReference struct {
-	Key string   `json:"key,omitempty"`
-	ID  string   `json:"id,omitempty"`
+	ID  string   `json:"id"`
 	Obj *Product `json:"obj,omitempty"`
 }
 
@@ -897,8 +898,8 @@ func (obj ProductRemoveAssetAction) MarshalJSON() ([]byte, error) {
 
 // ProductRemoveFromCategoryAction implements the interface ProductUpdateAction
 type ProductRemoveFromCategoryAction struct {
-	Staged   bool               `json:"staged"`
-	Category *CategoryReference `json:"category"`
+	Staged   bool                        `json:"staged"`
+	Category *CategoryResourceIdentifier `json:"category"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -958,6 +959,21 @@ func (obj ProductRemoveVariantAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeVariant", Alias: (*Alias)(&obj)})
 }
 
+// ProductResourceIdentifier implements the interface ResourceIdentifier
+type ProductResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ProductResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "product", Alias: (*Alias)(&obj)})
+}
+
 // ProductRevertStagedChangesAction implements the interface ProductUpdateAction
 type ProductRevertStagedChangesAction struct{}
 
@@ -1006,13 +1022,13 @@ func (obj ProductSetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetAssetCustomTypeAction implements the interface ProductUpdateAction
 type ProductSetAssetCustomTypeAction struct {
-	VariantID int            `json:"variantId,omitempty"`
-	Type      *TypeReference `json:"type,omitempty"`
-	Staged    bool           `json:"staged"`
-	SKU       string         `json:"sku,omitempty"`
-	Fields    interface{}    `json:"fields,omitempty"`
-	AssetKey  string         `json:"assetKey,omitempty"`
-	AssetID   string         `json:"assetId,omitempty"`
+	VariantID int                     `json:"variantId,omitempty"`
+	Type      *TypeResourceIdentifier `json:"type,omitempty"`
+	Staged    bool                    `json:"staged"`
+	SKU       string                  `json:"sku,omitempty"`
+	Fields    interface{}             `json:"fields,omitempty"`
+	AssetKey  string                  `json:"assetKey,omitempty"`
+	AssetID   string                  `json:"assetId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1293,10 +1309,10 @@ func (obj ProductSetProductPriceCustomFieldAction) MarshalJSON() ([]byte, error)
 
 // ProductSetProductPriceCustomTypeAction implements the interface ProductUpdateAction
 type ProductSetProductPriceCustomTypeAction struct {
-	Type    *TypeReference  `json:"type,omitempty"`
-	Staged  bool            `json:"staged"`
-	PriceID string          `json:"priceId"`
-	Fields  *FieldContainer `json:"fields,omitempty"`
+	Type    *TypeResourceIdentifier `json:"type,omitempty"`
+	Staged  bool                    `json:"staged"`
+	PriceID string                  `json:"priceId"`
+	Fields  *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1358,7 +1374,7 @@ func (obj ProductSetSkuAction) MarshalJSON() ([]byte, error) {
 
 // ProductSetTaxCategoryAction implements the interface ProductUpdateAction
 type ProductSetTaxCategoryAction struct {
-	TaxCategory *TaxCategoryReference `json:"taxCategory,omitempty"`
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1372,8 +1388,8 @@ func (obj ProductSetTaxCategoryAction) MarshalJSON() ([]byte, error) {
 
 // ProductTransitionStateAction implements the interface ProductUpdateAction
 type ProductTransitionStateAction struct {
-	State *StateReference `json:"state,omitempty"`
-	Force bool            `json:"force"`
+	State *StateResourceIdentifier `json:"state,omitempty"`
+	Force bool                     `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1397,7 +1413,7 @@ func (obj ProductUnpublishAction) MarshalJSON() ([]byte, error) {
 	}{Action: "unpublish", Alias: (*Alias)(&obj)})
 }
 
-// ProductUpdate is of type Update
+// ProductUpdate is a standalone struct
 type ProductUpdate struct {
 	Version int                   `json:"version"`
 	Actions []ProductUpdateAction `json:"actions"`

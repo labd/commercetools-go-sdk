@@ -56,15 +56,17 @@ func mapDiscriminatorCustomerGroupUpdateAction(input interface{}) (CustomerGroup
 	return nil, nil
 }
 
-// CustomerGroup is of type Resource
+// CustomerGroup is of type LoggedResource
 type CustomerGroup struct {
-	Version        int           `json:"version"`
-	LastModifiedAt time.Time     `json:"lastModifiedAt"`
-	ID             string        `json:"id"`
-	CreatedAt      time.Time     `json:"createdAt"`
-	Name           string        `json:"name"`
-	Key            string        `json:"key,omitempty"`
-	Custom         *CustomFields `json:"custom,omitempty"`
+	Version        int             `json:"version"`
+	LastModifiedAt time.Time       `json:"lastModifiedAt"`
+	ID             string          `json:"id"`
+	CreatedAt      time.Time       `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy      `json:"createdBy,omitempty"`
+	Name           string          `json:"name"`
+	Key            string          `json:"key,omitempty"`
+	Custom         *CustomFields   `json:"custom,omitempty"`
 }
 
 // CustomerGroupChangeNameAction implements the interface CustomerGroupUpdateAction
@@ -98,14 +100,28 @@ type CustomerGroupPagedQueryResponse struct {
 
 // CustomerGroupReference implements the interface Reference
 type CustomerGroupReference struct {
-	Key string         `json:"key,omitempty"`
-	ID  string         `json:"id,omitempty"`
+	ID  string         `json:"id"`
 	Obj *CustomerGroup `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj CustomerGroupReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "customer-group", Alias: (*Alias)(&obj)})
+}
+
+// CustomerGroupResourceIdentifier implements the interface ResourceIdentifier
+type CustomerGroupResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomerGroupResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -129,8 +145,8 @@ func (obj CustomerGroupSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // CustomerGroupSetCustomTypeAction implements the interface CustomerGroupUpdateAction
 type CustomerGroupSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -156,7 +172,7 @@ func (obj CustomerGroupSetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
-// CustomerGroupUpdate is of type Update
+// CustomerGroupUpdate is a standalone struct
 type CustomerGroupUpdate struct {
 	Version int                         `json:"version"`
 	Actions []CustomerGroupUpdateAction `json:"actions"`

@@ -190,6 +190,13 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 			return nil, err
 		}
 		return new, nil
+	case "changeEnumValueLabel":
+		new := TypeChangeEnumValueLabelAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeEnumValueOrder":
 		new := TypeChangeEnumValueOrderAction{}
 		err := mapstructure.Decode(input, &new)
@@ -211,6 +218,13 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 			return nil, err
 		}
 		return new, nil
+	case "changeInputHint":
+		new := TypeChangeInputHintAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeKey":
 		new := TypeChangeKeyAction{}
 		err := mapstructure.Decode(input, &new)
@@ -220,6 +234,13 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 		return new, nil
 	case "changeLabel":
 		new := TypeChangeLabelAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "changeLocalizedEnumValueLabel":
+		new := TypeChangeLocalizedEnumValueLabelAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -447,8 +468,8 @@ type CustomFields struct {
 
 // CustomFieldsDraft is a standalone struct
 type CustomFieldsDraft struct {
-	Type   *ResourceIdentifier `json:"type"`
-	Fields *FieldContainer     `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // FieldDefinition is a standalone struct
@@ -478,12 +499,14 @@ func (obj *FieldDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// Type is of type Resource
+// Type is of type LoggedResource
 type Type struct {
 	Version          int               `json:"version"`
 	LastModifiedAt   time.Time         `json:"lastModifiedAt"`
 	ID               string            `json:"id"`
 	CreatedAt        time.Time         `json:"createdAt"`
+	LastModifiedBy   *LastModifiedBy   `json:"lastModifiedBy,omitempty"`
+	CreatedBy        *CreatedBy        `json:"createdBy,omitempty"`
 	ResourceTypeIds  []ResourceTypeID  `json:"resourceTypeIds"`
 	Name             *LocalizedString  `json:"name"`
 	Key              string            `json:"key"`
@@ -535,6 +558,21 @@ func (obj TypeAddLocalizedEnumValueAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addLocalizedEnumValue", Alias: (*Alias)(&obj)})
 }
 
+// TypeChangeEnumValueLabelAction implements the interface TypeUpdateAction
+type TypeChangeEnumValueLabelAction struct {
+	Value     *CustomFieldEnumValue `json:"value"`
+	FieldName string                `json:"fieldName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TypeChangeEnumValueLabelAction) MarshalJSON() ([]byte, error) {
+	type Alias TypeChangeEnumValueLabelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeEnumValueLabel", Alias: (*Alias)(&obj)})
+}
+
 // TypeChangeEnumValueOrderAction implements the interface TypeUpdateAction
 type TypeChangeEnumValueOrderAction struct {
 	Keys      []string `json:"keys"`
@@ -579,6 +617,21 @@ func (obj TypeChangeFieldDefinitionOrderAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeFieldDefinitionOrder", Alias: (*Alias)(&obj)})
 }
 
+// TypeChangeInputHintAction implements the interface TypeUpdateAction
+type TypeChangeInputHintAction struct {
+	InputHint TypeTextInputHint `json:"inputHint"`
+	FieldName string            `json:"fieldName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TypeChangeInputHintAction) MarshalJSON() ([]byte, error) {
+	type Alias TypeChangeInputHintAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeInputHint", Alias: (*Alias)(&obj)})
+}
+
 // TypeChangeKeyAction implements the interface TypeUpdateAction
 type TypeChangeKeyAction struct {
 	Key string `json:"key"`
@@ -606,6 +659,21 @@ func (obj TypeChangeLabelAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeLabel", Alias: (*Alias)(&obj)})
+}
+
+// TypeChangeLocalizedEnumValueLabelAction implements the interface TypeUpdateAction
+type TypeChangeLocalizedEnumValueLabelAction struct {
+	Value     *CustomFieldLocalizedEnumValue `json:"value"`
+	FieldName string                         `json:"fieldName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TypeChangeLocalizedEnumValueLabelAction) MarshalJSON() ([]byte, error) {
+	type Alias TypeChangeLocalizedEnumValueLabelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeLocalizedEnumValueLabel", Alias: (*Alias)(&obj)})
 }
 
 // TypeChangeLocalizedEnumValueOrderAction implements the interface TypeUpdateAction
@@ -656,8 +724,7 @@ type TypePagedQueryResponse struct {
 
 // TypeReference implements the interface Reference
 type TypeReference struct {
-	Key string `json:"key,omitempty"`
-	ID  string `json:"id,omitempty"`
+	ID  string `json:"id"`
 	Obj *Type  `json:"obj,omitempty"`
 }
 
@@ -684,6 +751,21 @@ func (obj TypeRemoveFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeFieldDefinition", Alias: (*Alias)(&obj)})
 }
 
+// TypeResourceIdentifier implements the interface ResourceIdentifier
+type TypeResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj TypeResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias TypeResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "type", Alias: (*Alias)(&obj)})
+}
+
 // TypeSetDescriptionAction implements the interface TypeUpdateAction
 type TypeSetDescriptionAction struct {
 	Description *LocalizedString `json:"description,omitempty"`
@@ -698,7 +780,7 @@ func (obj TypeSetDescriptionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
 }
 
-// TypeUpdate is of type Update
+// TypeUpdate is a standalone struct
 type TypeUpdate struct {
 	Version int                `json:"version"`
 	Actions []TypeUpdateAction `json:"actions"`

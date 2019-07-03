@@ -184,6 +184,13 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 			return nil, err
 		}
 		return new, nil
+	case "setKey":
+		new := CartDiscountSetKeyAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setValidFrom":
 		new := CartDiscountSetValidFromAction{}
 		err := mapstructure.Decode(input, &new)
@@ -248,12 +255,14 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 	return nil, nil
 }
 
-// CartDiscount is of type Resource
+// CartDiscount is of type LoggedResource
 type CartDiscount struct {
 	Version              int                `json:"version"`
 	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
 	ID                   string             `json:"id"`
 	CreatedAt            time.Time          `json:"createdAt"`
+	LastModifiedBy       *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
+	CreatedBy            *CreatedBy         `json:"createdBy,omitempty"`
 	Value                CartDiscountValue  `json:"value"`
 	ValidUntil           time.Time          `json:"validUntil,omitempty"`
 	ValidFrom            time.Time          `json:"validFrom,omitempty"`
@@ -263,6 +272,7 @@ type CartDiscount struct {
 	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
 	References           []Reference        `json:"references"`
 	Name                 *LocalizedString   `json:"name"`
+	Key                  string             `json:"key,omitempty"`
 	IsActive             bool               `json:"isActive"`
 	Description          *LocalizedString   `json:"description,omitempty"`
 	Custom               *CustomFields      `json:"custom,omitempty"`
@@ -473,6 +483,7 @@ type CartDiscountDraft struct {
 	SortOrder            string             `json:"sortOrder"`
 	RequiresDiscountCode bool               `json:"requiresDiscountCode"`
 	Name                 *LocalizedString   `json:"name"`
+	Key                  string             `json:"key,omitempty"`
 	IsActive             bool               `json:"isActive"`
 	Description          *LocalizedString   `json:"description,omitempty"`
 	Custom               *CustomFields      `json:"custom,omitempty"`
@@ -528,14 +539,28 @@ type CartDiscountPagedQueryResponse struct {
 
 // CartDiscountReference implements the interface Reference
 type CartDiscountReference struct {
-	Key string        `json:"key,omitempty"`
-	ID  string        `json:"id,omitempty"`
+	ID  string        `json:"id"`
 	Obj *CartDiscount `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj CartDiscountReference) MarshalJSON() ([]byte, error) {
 	type Alias CartDiscountReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "cart-discount", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountResourceIdentifier implements the interface ResourceIdentifier
+type CartDiscountResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -559,8 +584,8 @@ func (obj CartDiscountSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // CartDiscountSetCustomTypeAction implements the interface CartDiscountUpdateAction
 type CartDiscountSetCustomTypeAction struct {
-	Type   *TypeReference `json:"type,omitempty"`
-	Fields interface{}    `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields interface{}             `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -584,6 +609,20 @@ func (obj CartDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+// CartDiscountSetKeyAction implements the interface CartDiscountUpdateAction
+type CartDiscountSetKeyAction struct {
+	Key string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
 // CartDiscountSetValidFromAction implements the interface CartDiscountUpdateAction
@@ -641,7 +680,7 @@ func (obj CartDiscountShippingCostTarget) MarshalJSON() ([]byte, error) {
 	}{Type: "shipping", Alias: (*Alias)(&obj)})
 }
 
-// CartDiscountUpdate is of type Update
+// CartDiscountUpdate is a standalone struct
 type CartDiscountUpdate struct {
 	Version int                        `json:"version"`
 	Actions []CartDiscountUpdateAction `json:"actions"`

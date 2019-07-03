@@ -182,12 +182,14 @@ func mapDiscriminatorCategoryUpdateAction(input interface{}) (CategoryUpdateActi
 	return nil, nil
 }
 
-// Category is of type Resource
+// Category is of type LoggedResource
 type Category struct {
 	Version         int                 `json:"version"`
 	LastModifiedAt  time.Time           `json:"lastModifiedAt"`
 	ID              string              `json:"id"`
 	CreatedAt       time.Time           `json:"createdAt"`
+	LastModifiedBy  *LastModifiedBy     `json:"lastModifiedBy,omitempty"`
+	CreatedBy       *CreatedBy          `json:"createdBy,omitempty"`
 	Slug            *LocalizedString    `json:"slug"`
 	Parent          *CategoryReference  `json:"parent,omitempty"`
 	OrderHint       string              `json:"orderHint"`
@@ -278,7 +280,7 @@ func (obj CategoryChangeOrderHintAction) MarshalJSON() ([]byte, error) {
 
 // CategoryChangeParentAction implements the interface CategoryUpdateAction
 type CategoryChangeParentAction struct {
-	Parent *CategoryReference `json:"parent"`
+	Parent *CategoryResourceIdentifier `json:"parent"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -306,18 +308,18 @@ func (obj CategoryChangeSlugAction) MarshalJSON() ([]byte, error) {
 
 // CategoryDraft is a standalone struct
 type CategoryDraft struct {
-	Slug            *LocalizedString   `json:"slug"`
-	Parent          *CategoryReference `json:"parent,omitempty"`
-	OrderHint       string             `json:"orderHint,omitempty"`
-	Name            *LocalizedString   `json:"name"`
-	MetaTitle       *LocalizedString   `json:"metaTitle,omitempty"`
-	MetaKeywords    *LocalizedString   `json:"metaKeywords,omitempty"`
-	MetaDescription *LocalizedString   `json:"metaDescription,omitempty"`
-	Key             string             `json:"key,omitempty"`
-	ExternalID      string             `json:"externalId,omitempty"`
-	Description     *LocalizedString   `json:"description,omitempty"`
-	Custom          *CustomFieldsDraft `json:"custom,omitempty"`
-	Assets          []AssetDraft       `json:"assets,omitempty"`
+	Slug            *LocalizedString            `json:"slug"`
+	Parent          *CategoryResourceIdentifier `json:"parent,omitempty"`
+	OrderHint       string                      `json:"orderHint,omitempty"`
+	Name            *LocalizedString            `json:"name"`
+	MetaTitle       *LocalizedString            `json:"metaTitle,omitempty"`
+	MetaKeywords    *LocalizedString            `json:"metaKeywords,omitempty"`
+	MetaDescription *LocalizedString            `json:"metaDescription,omitempty"`
+	Key             string                      `json:"key,omitempty"`
+	ExternalID      string                      `json:"externalId,omitempty"`
+	Description     *LocalizedString            `json:"description,omitempty"`
+	Custom          *CustomFieldsDraft          `json:"custom,omitempty"`
+	Assets          []AssetDraft                `json:"assets,omitempty"`
 }
 
 // CategoryPagedQueryResponse is of type PagedQueryResponse
@@ -330,8 +332,7 @@ type CategoryPagedQueryResponse struct {
 
 // CategoryReference implements the interface Reference
 type CategoryReference struct {
-	Key string    `json:"key,omitempty"`
-	ID  string    `json:"id,omitempty"`
+	ID  string    `json:"id"`
 	Obj *Category `json:"obj,omitempty"`
 }
 
@@ -359,6 +360,21 @@ func (obj CategoryRemoveAssetAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeAsset", Alias: (*Alias)(&obj)})
 }
 
+// CategoryResourceIdentifier implements the interface ResourceIdentifier
+type CategoryResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias CategoryResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "category", Alias: (*Alias)(&obj)})
+}
+
 // CategorySetAssetCustomFieldAction implements the interface CategoryUpdateAction
 type CategorySetAssetCustomFieldAction struct {
 	Value    interface{} `json:"value,omitempty"`
@@ -378,10 +394,10 @@ func (obj CategorySetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // CategorySetAssetCustomTypeAction implements the interface CategoryUpdateAction
 type CategorySetAssetCustomTypeAction struct {
-	Type     *TypeReference `json:"type,omitempty"`
-	Fields   interface{}    `json:"fields,omitempty"`
-	AssetKey string         `json:"assetKey,omitempty"`
-	AssetID  string         `json:"assetId,omitempty"`
+	Type     *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields   interface{}             `json:"fields,omitempty"`
+	AssetKey string                  `json:"assetKey,omitempty"`
+	AssetID  string                  `json:"assetId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -473,8 +489,8 @@ func (obj CategorySetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // CategorySetCustomTypeAction implements the interface CategoryUpdateAction
 type CategorySetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -570,7 +586,7 @@ func (obj CategorySetMetaTitleAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setMetaTitle", Alias: (*Alias)(&obj)})
 }
 
-// CategoryUpdate is of type Update
+// CategoryUpdate is a standalone struct
 type CategoryUpdate struct {
 	Version int                    `json:"version"`
 	Actions []CategoryUpdateAction `json:"actions"`

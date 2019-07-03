@@ -205,12 +205,14 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 	return nil, nil
 }
 
-// Payment is of type Resource
+// Payment is of type LoggedResource
 type Payment struct {
 	Version               int                `json:"version"`
 	LastModifiedAt        time.Time          `json:"lastModifiedAt"`
 	ID                    string             `json:"id"`
 	CreatedAt             time.Time          `json:"createdAt"`
+	LastModifiedBy        *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
+	CreatedBy             *CreatedBy         `json:"createdBy,omitempty"`
 	Transactions          []Transaction      `json:"transactions"`
 	PaymentStatus         *PaymentStatus     `json:"paymentStatus"`
 	PaymentMethodInfo     *PaymentMethodInfo `json:"paymentMethodInfo"`
@@ -269,8 +271,8 @@ func (obj *Payment) UnmarshalJSON(data []byte) error {
 
 // PaymentAddInterfaceInteractionAction implements the interface PaymentUpdateAction
 type PaymentAddInterfaceInteractionAction struct {
-	Type   *TypeReference  `json:"type"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -357,21 +359,21 @@ func (obj PaymentChangeTransactionTimestampAction) MarshalJSON() ([]byte, error)
 
 // PaymentDraft is a standalone struct
 type PaymentDraft struct {
-	Transactions          []TransactionDraft  `json:"transactions,omitempty"`
-	PaymentStatus         *PaymentStatus      `json:"paymentStatus,omitempty"`
-	PaymentMethodInfo     *PaymentMethodInfo  `json:"paymentMethodInfo,omitempty"`
-	Key                   string              `json:"key,omitempty"`
-	InterfaceInteractions []CustomFieldsDraft `json:"interfaceInteractions,omitempty"`
-	InterfaceID           string              `json:"interfaceId,omitempty"`
-	ExternalID            string              `json:"externalId,omitempty"`
-	Customer              *CustomerReference  `json:"customer,omitempty"`
-	Custom                *CustomFieldsDraft  `json:"custom,omitempty"`
-	AuthorizedUntil       string              `json:"authorizedUntil,omitempty"`
-	AnonymousID           string              `json:"anonymousId,omitempty"`
-	AmountRefunded        *Money              `json:"amountRefunded,omitempty"`
-	AmountPlanned         *Money              `json:"amountPlanned"`
-	AmountPaid            *Money              `json:"amountPaid,omitempty"`
-	AmountAuthorized      *Money              `json:"amountAuthorized,omitempty"`
+	Transactions          []TransactionDraft          `json:"transactions,omitempty"`
+	PaymentStatus         *PaymentStatusDraft         `json:"paymentStatus,omitempty"`
+	PaymentMethodInfo     *PaymentMethodInfo          `json:"paymentMethodInfo,omitempty"`
+	Key                   string                      `json:"key,omitempty"`
+	InterfaceInteractions []CustomFieldsDraft         `json:"interfaceInteractions,omitempty"`
+	InterfaceID           string                      `json:"interfaceId,omitempty"`
+	ExternalID            string                      `json:"externalId,omitempty"`
+	Customer              *CustomerResourceIdentifier `json:"customer,omitempty"`
+	Custom                *CustomFieldsDraft          `json:"custom,omitempty"`
+	AuthorizedUntil       string                      `json:"authorizedUntil,omitempty"`
+	AnonymousID           string                      `json:"anonymousId,omitempty"`
+	AmountRefunded        *Money                      `json:"amountRefunded,omitempty"`
+	AmountPlanned         *Money                      `json:"amountPlanned"`
+	AmountPaid            *Money                      `json:"amountPaid,omitempty"`
+	AmountAuthorized      *Money                      `json:"amountAuthorized,omitempty"`
 }
 
 // PaymentMethodInfo is a standalone struct
@@ -391,14 +393,28 @@ type PaymentPagedQueryResponse struct {
 
 // PaymentReference implements the interface Reference
 type PaymentReference struct {
-	Key string   `json:"key,omitempty"`
-	ID  string   `json:"id,omitempty"`
+	ID  string   `json:"id"`
 	Obj *Payment `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 	type Alias PaymentReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "payment", Alias: (*Alias)(&obj)})
+}
+
+// PaymentResourceIdentifier implements the interface ResourceIdentifier
+type PaymentResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj PaymentResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias PaymentResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -479,8 +495,8 @@ func (obj PaymentSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // PaymentSetCustomTypeAction implements the interface PaymentUpdateAction
 type PaymentSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -494,7 +510,7 @@ func (obj PaymentSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 // PaymentSetCustomerAction implements the interface PaymentUpdateAction
 type PaymentSetCustomerAction struct {
-	Customer *CustomerReference `json:"customer,omitempty"`
+	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -625,10 +641,17 @@ type PaymentStatus struct {
 	InterfaceCode string          `json:"interfaceCode,omitempty"`
 }
 
+// PaymentStatusDraft is a standalone struct
+type PaymentStatusDraft struct {
+	State         *StateResourceIdentifier `json:"state,omitempty"`
+	InterfaceText string                   `json:"interfaceText,omitempty"`
+	InterfaceCode string                   `json:"interfaceCode,omitempty"`
+}
+
 // PaymentTransitionStateAction implements the interface PaymentUpdateAction
 type PaymentTransitionStateAction struct {
-	State *StateReference `json:"state"`
-	Force bool            `json:"force"`
+	State *StateResourceIdentifier `json:"state"`
+	Force bool                     `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -640,7 +663,7 @@ func (obj PaymentTransitionStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }
 
-// PaymentUpdate is of type Update
+// PaymentUpdate is a standalone struct
 type PaymentUpdate struct {
 	Version int                   `json:"version"`
 	Actions []PaymentUpdateAction `json:"actions"`

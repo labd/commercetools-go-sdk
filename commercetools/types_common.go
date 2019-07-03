@@ -290,6 +290,178 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 	return nil, nil
 }
 
+// ResourceIdentifier uses typeId as discriminator attribute
+type ResourceIdentifier interface{}
+
+func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["typeId"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'typeId'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+	switch discriminator {
+	case "cart-discount":
+		new := CartDiscountResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "cart":
+		new := CartResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "category":
+		new := CategoryResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "channel":
+		new := ChannelResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "customer-group":
+		new := CustomerGroupResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "customer":
+		new := CustomerResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "discount-code":
+		new := DiscountCodeResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "inventory-entry":
+		new := InventoryEntryResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "order-edit":
+		new := OrderEditResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "order":
+		new := OrderResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "payment":
+		new := PaymentResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "product-discount":
+		new := ProductDiscountResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "product":
+		new := ProductResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "product-type":
+		new := ProductTypeResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "review":
+		new := ReviewResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "shipping-method":
+		new := ShippingMethodResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "shopping-list":
+		new := ShoppingListResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "state":
+		new := StateResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "store":
+		new := StoreResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "tax-category":
+		new := TaxCategoryResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "type":
+		new := TypeResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "zone":
+		new := ZoneResourceIdentifier{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	}
+	return nil, nil
+}
+
 // TypedMoney uses type as discriminator attribute
 type TypedMoney interface{}
 
@@ -386,6 +558,14 @@ type AssetSource struct {
 	ContentType string           `json:"contentType,omitempty"`
 }
 
+// BaseResource is a standalone struct
+type BaseResource struct {
+	Version        int       `json:"version"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	ID             string    `json:"id"`
+	CreatedAt      time.Time `json:"createdAt"`
+}
+
 // CentPrecisionMoney implements the interface TypedMoney
 type CentPrecisionMoney struct {
 	CurrencyCode   CurrencyCode `json:"currencyCode"`
@@ -400,6 +580,22 @@ func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{Type: "centPrecision", Alias: (*Alias)(&obj)})
+}
+
+// ClientLogging is a standalone struct
+type ClientLogging struct {
+	ExternalUserID string             `json:"externalUserId,omitempty"`
+	Customer       *CustomerReference `json:"customer,omitempty"`
+	ClientID       string             `json:"clientId,omitempty"`
+	AnonymousID    string             `json:"anonymousId,omitempty"`
+}
+
+// CreatedBy is of type ClientLogging
+type CreatedBy struct {
+	ExternalUserID string             `json:"externalUserId,omitempty"`
+	Customer       *CustomerReference `json:"customer,omitempty"`
+	ClientID       string             `json:"clientId,omitempty"`
+	AnonymousID    string             `json:"anonymousId,omitempty"`
 }
 
 // DiscountedPrice is a standalone struct
@@ -452,10 +648,36 @@ type ImageDimensions struct {
 	H float64 `json:"h"`
 }
 
+// LastModifiedBy is of type ClientLogging
+type LastModifiedBy struct {
+	ExternalUserID string             `json:"externalUserId,omitempty"`
+	Customer       *CustomerReference `json:"customer,omitempty"`
+	ClientID       string             `json:"clientId,omitempty"`
+	AnonymousID    string             `json:"anonymousId,omitempty"`
+}
+
+// LoggedResource is of type BaseResource
+type LoggedResource struct {
+	Version        int             `json:"version"`
+	LastModifiedAt time.Time       `json:"lastModifiedAt"`
+	ID             string          `json:"id"`
+	CreatedAt      time.Time       `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy      `json:"createdBy,omitempty"`
+}
+
 // Money is a standalone struct
 type Money struct {
 	CurrencyCode CurrencyCode `json:"currencyCode"`
 	CentAmount   int          `json:"centAmount"`
+}
+
+// PagedQueryResponse is a standalone struct
+type PagedQueryResponse struct {
+	Total   int            `json:"total,omitempty"`
+	Results []BaseResource `json:"results"`
+	Offset  int            `json:"offset"`
+	Count   int            `json:"count"`
 }
 
 // Price is a standalone struct
@@ -474,35 +696,20 @@ type Price struct {
 
 // PriceDraft is a standalone struct
 type PriceDraft struct {
-	Value         *Money                  `json:"value"`
-	ValidUntil    time.Time               `json:"validUntil,omitempty"`
-	ValidFrom     time.Time               `json:"validFrom,omitempty"`
-	Tiers         []PriceTier             `json:"tiers,omitempty"`
-	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Custom        *CustomFieldsDraft      `json:"custom,omitempty"`
-	Country       CountryCode             `json:"country,omitempty"`
-	Channel       *ChannelReference       `json:"channel,omitempty"`
+	Value         *Money                           `json:"value"`
+	ValidUntil    time.Time                        `json:"validUntil,omitempty"`
+	ValidFrom     time.Time                        `json:"validFrom,omitempty"`
+	Tiers         []PriceTier                      `json:"tiers,omitempty"`
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	Custom        *CustomFieldsDraft               `json:"custom,omitempty"`
+	Country       CountryCode                      `json:"country,omitempty"`
+	Channel       *ChannelResourceIdentifier       `json:"channel,omitempty"`
 }
 
 // PriceTier is a standalone struct
 type PriceTier struct {
 	Value           *Money `json:"value"`
 	MinimumQuantity int    `json:"minimumQuantity"`
-}
-
-// Resource is a standalone struct
-type Resource struct {
-	Version        int       `json:"version"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	ID             string    `json:"id"`
-	CreatedAt      time.Time `json:"createdAt"`
-}
-
-// ResourceIdentifier is a standalone struct
-type ResourceIdentifier struct {
-	TypeID ReferenceTypeID `json:"typeId,omitempty"`
-	Key    string          `json:"key,omitempty"`
-	ID     string          `json:"id,omitempty"`
 }
 
 // ScopedPrice is a standalone struct
@@ -542,4 +749,15 @@ func (obj *ScopedPrice) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// Update is a standalone struct
+type Update struct {
+	Version int            `json:"version"`
+	Actions []UpdateAction `json:"actions"`
+}
+
+// UpdateAction is a standalone struct
+type UpdateAction struct {
+	Action string `json:"action"`
 }

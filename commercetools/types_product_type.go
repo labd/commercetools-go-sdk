@@ -574,12 +574,14 @@ func (obj AttributeTimeType) MarshalJSON() ([]byte, error) {
 	}{Name: "time", Alias: (*Alias)(&obj)})
 }
 
-// ProductType is of type Resource
+// ProductType is of type LoggedResource
 type ProductType struct {
 	Version        int                   `json:"version"`
 	LastModifiedAt time.Time             `json:"lastModifiedAt"`
 	ID             string                `json:"id"`
 	CreatedAt      time.Time             `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy       `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy            `json:"createdBy,omitempty"`
 	Name           string                `json:"name"`
 	Key            string                `json:"key,omitempty"`
 	Description    string                `json:"description"`
@@ -855,8 +857,7 @@ type ProductTypePagedQueryResponse struct {
 
 // ProductTypeReference implements the interface Reference
 type ProductTypeReference struct {
-	Key string       `json:"key,omitempty"`
-	ID  string       `json:"id,omitempty"`
+	ID  string       `json:"id"`
 	Obj *ProductType `json:"obj,omitempty"`
 }
 
@@ -898,6 +899,21 @@ func (obj ProductTypeRemoveEnumValuesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeEnumValues", Alias: (*Alias)(&obj)})
 }
 
+// ProductTypeResourceIdentifier implements the interface ResourceIdentifier
+type ProductTypeResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductTypeResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ProductTypeResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "product-type", Alias: (*Alias)(&obj)})
+}
+
 // ProductTypeSetInputTipAction implements the interface ProductTypeUpdateAction
 type ProductTypeSetInputTipAction struct {
 	InputTip      *LocalizedString `json:"inputTip,omitempty"`
@@ -927,7 +943,7 @@ func (obj ProductTypeSetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
-// ProductTypeUpdate is of type Update
+// ProductTypeUpdate is a standalone struct
 type ProductTypeUpdate struct {
 	Version int                       `json:"version"`
 	Actions []ProductTypeUpdateAction `json:"actions"`

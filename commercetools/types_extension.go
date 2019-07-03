@@ -141,17 +141,27 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 			return nil, err
 		}
 		return new, nil
+	case "setTimeoutInMs":
+		new := ExtensionSetTimeoutInMsAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
 	return nil, nil
 }
 
-// Extension is of type Resource
+// Extension is of type LoggedResource
 type Extension struct {
 	Version        int                  `json:"version"`
 	LastModifiedAt time.Time            `json:"lastModifiedAt"`
 	ID             string               `json:"id"`
 	CreatedAt      time.Time            `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy      `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy           `json:"createdBy,omitempty"`
 	Triggers       []ExtensionTrigger   `json:"triggers"`
+	TimeoutInMs    int                  `json:"timeoutInMs,omitempty"`
 	Key            string               `json:"key,omitempty"`
 	Destination    ExtensionDestination `json:"destination"`
 }
@@ -267,6 +277,7 @@ func (obj ExtensionChangeTriggersAction) MarshalJSON() ([]byte, error) {
 // ExtensionDraft is a standalone struct
 type ExtensionDraft struct {
 	Triggers    []ExtensionTrigger   `json:"triggers"`
+	TimeoutInMs int                  `json:"timeoutInMs,omitempty"`
 	Key         string               `json:"key,omitempty"`
 	Destination ExtensionDestination `json:"destination"`
 }
@@ -368,13 +379,27 @@ func (obj ExtensionSetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
+// ExtensionSetTimeoutInMsAction implements the interface ExtensionUpdateAction
+type ExtensionSetTimeoutInMsAction struct {
+	TimeoutInMs int `json:"timeoutInMs,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ExtensionSetTimeoutInMsAction) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionSetTimeoutInMsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setTimeoutInMs", Alias: (*Alias)(&obj)})
+}
+
 // ExtensionTrigger is a standalone struct
 type ExtensionTrigger struct {
 	ResourceTypeID ExtensionResourceTypeID `json:"resourceTypeId"`
 	Actions        []ExtensionAction       `json:"actions"`
 }
 
-// ExtensionUpdate is of type Update
+// ExtensionUpdate is a standalone struct
 type ExtensionUpdate struct {
 	Version int                     `json:"version"`
 	Actions []ExtensionUpdateAction `json:"actions"`

@@ -226,7 +226,7 @@ func TestChannelUpdate(t *testing.T) {
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
 					&commercetools.ChannelSetCustomTypeAction{
-						Type: &commercetools.TypeReference{
+						Type: &commercetools.TypeResourceIdentifier{
 							Key: "resource-key",
 							ID:  "2",
 						},

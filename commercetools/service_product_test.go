@@ -20,7 +20,7 @@ func TestCreateProductNew(t *testing.T) {
 			"nl": "Een product",
 			"en": "Some product",
 		},
-		ProductType: &commercetools.ProductTypeReference{
+		ProductType: &commercetools.ProductTypeResourceIdentifier{
 			ID: "8750e1fd-f431-481f-9296-967b1e56bf49",
 		},
 		Slug: &commercetools.LocalizedString{

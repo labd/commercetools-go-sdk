@@ -423,12 +423,14 @@ func (obj SqsDestination) MarshalJSON() ([]byte, error) {
 	}{Type: "SQS", Alias: (*Alias)(&obj)})
 }
 
-// Subscription is of type Resource
+// Subscription is of type LoggedResource
 type Subscription struct {
 	Version        int                      `json:"version"`
 	LastModifiedAt time.Time                `json:"lastModifiedAt"`
 	ID             string                   `json:"id"`
 	CreatedAt      time.Time                `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy          `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy               `json:"createdBy,omitempty"`
 	Status         SubscriptionHealthStatus `json:"status"`
 	Messages       []MessageSubscription    `json:"messages"`
 	Key            string                   `json:"key,omitempty"`
@@ -578,7 +580,7 @@ func (obj SubscriptionSetMessagesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setMessages", Alias: (*Alias)(&obj)})
 }
 
-// SubscriptionUpdate is of type Update
+// SubscriptionUpdate is a standalone struct
 type SubscriptionUpdate struct {
 	Version int                        `json:"version"`
 	Actions []SubscriptionUpdateAction `json:"actions"`

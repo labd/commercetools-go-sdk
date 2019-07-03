@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// CustomObject is of type Resource
+// CustomObject is of type BaseResource
 type CustomObject struct {
 	Version        int         `json:"version"`
 	LastModifiedAt time.Time   `json:"lastModifiedAt"`
@@ -36,8 +36,7 @@ type CustomObjectPagedQueryResponse struct {
 
 // CustomObjectReference implements the interface Reference
 type CustomObjectReference struct {
-	Key string        `json:"key,omitempty"`
-	ID  string        `json:"id,omitempty"`
+	ID  string        `json:"id"`
 	Obj *CustomObject `json:"obj,omitempty"`
 }
 

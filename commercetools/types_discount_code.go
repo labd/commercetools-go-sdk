@@ -119,12 +119,14 @@ func mapDiscriminatorDiscountCodeUpdateAction(input interface{}) (DiscountCodeUp
 	return nil, nil
 }
 
-// DiscountCode is of type Resource
+// DiscountCode is of type LoggedResource
 type DiscountCode struct {
 	Version                    int                     `json:"version"`
 	LastModifiedAt             time.Time               `json:"lastModifiedAt"`
 	ID                         string                  `json:"id"`
 	CreatedAt                  time.Time               `json:"createdAt"`
+	LastModifiedBy             *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
+	CreatedBy                  *CreatedBy              `json:"createdBy,omitempty"`
 	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
 	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
 	References                 []Reference             `json:"references"`
@@ -160,7 +162,7 @@ func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
 
 // DiscountCodeChangeCartDiscountsAction implements the interface DiscountCodeUpdateAction
 type DiscountCodeChangeCartDiscountsAction struct {
-	CartDiscounts []CartDiscountReference `json:"cartDiscounts"`
+	CartDiscounts []CartDiscountResourceIdentifier `json:"cartDiscounts"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -202,18 +204,18 @@ func (obj DiscountCodeChangeIsActiveAction) MarshalJSON() ([]byte, error) {
 
 // DiscountCodeDraft is a standalone struct
 type DiscountCodeDraft struct {
-	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
-	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
-	Name                       *LocalizedString        `json:"name,omitempty"`
-	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
-	MaxApplications            int                     `json:"maxApplications,omitempty"`
-	IsActive                   bool                    `json:"isActive"`
-	Groups                     []string                `json:"groups,omitempty"`
-	Description                *LocalizedString        `json:"description,omitempty"`
-	Custom                     *CustomFieldsDraft      `json:"custom,omitempty"`
-	Code                       string                  `json:"code"`
-	CartPredicate              string                  `json:"cartPredicate,omitempty"`
-	CartDiscounts              []CartDiscountReference `json:"cartDiscounts"`
+	ValidUntil                 time.Time                        `json:"validUntil,omitempty"`
+	ValidFrom                  time.Time                        `json:"validFrom,omitempty"`
+	Name                       *LocalizedString                 `json:"name,omitempty"`
+	MaxApplicationsPerCustomer int                              `json:"maxApplicationsPerCustomer,omitempty"`
+	MaxApplications            int                              `json:"maxApplications,omitempty"`
+	IsActive                   bool                             `json:"isActive"`
+	Groups                     []string                         `json:"groups,omitempty"`
+	Description                *LocalizedString                 `json:"description,omitempty"`
+	Custom                     *CustomFieldsDraft               `json:"custom,omitempty"`
+	Code                       string                           `json:"code"`
+	CartPredicate              string                           `json:"cartPredicate,omitempty"`
+	CartDiscounts              []CartDiscountResourceIdentifier `json:"cartDiscounts"`
 }
 
 // DiscountCodePagedQueryResponse is of type PagedQueryResponse
@@ -226,14 +228,28 @@ type DiscountCodePagedQueryResponse struct {
 
 // DiscountCodeReference implements the interface Reference
 type DiscountCodeReference struct {
-	Key string        `json:"key,omitempty"`
-	ID  string        `json:"id,omitempty"`
+	ID  string        `json:"id"`
 	Obj *DiscountCode `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj DiscountCodeReference) MarshalJSON() ([]byte, error) {
 	type Alias DiscountCodeReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "discount-code", Alias: (*Alias)(&obj)})
+}
+
+// DiscountCodeResourceIdentifier implements the interface ResourceIdentifier
+type DiscountCodeResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DiscountCodeResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -271,8 +287,8 @@ func (obj DiscountCodeSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // DiscountCodeSetCustomTypeAction implements the interface DiscountCodeUpdateAction
 type DiscountCodeSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -383,7 +399,7 @@ func (obj DiscountCodeSetValidUntilAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
 }
 
-// DiscountCodeUpdate is of type Update
+// DiscountCodeUpdate is a standalone struct
 type DiscountCodeUpdate struct {
 	Version int                        `json:"version"`
 	Actions []DiscountCodeUpdateAction `json:"actions"`

@@ -35,14 +35,14 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 	return nil, nil
 }
 
-// Store is a standalone struct
+// Store is of type BaseResource
 type Store struct {
 	Version        int              `json:"version"`
-	Name           *LocalizedString `json:"name,omitempty"`
 	LastModifiedAt time.Time        `json:"lastModifiedAt"`
-	Key            string           `json:"key"`
 	ID             string           `json:"id"`
 	CreatedAt      time.Time        `json:"createdAt"`
+	Name           *LocalizedString `json:"name,omitempty"`
+	Key            string           `json:"key"`
 }
 
 // StoreDraft is a standalone struct
@@ -75,14 +75,28 @@ type StorePagedQueryResponse struct {
 
 // StoreReference implements the interface Reference
 type StoreReference struct {
-	Key string `json:"key,omitempty"`
-	ID  string `json:"id,omitempty"`
+	ID  string `json:"id"`
 	Obj *Store `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
 func (obj StoreReference) MarshalJSON() ([]byte, error) {
 	type Alias StoreReference
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "store", Alias: (*Alias)(&obj)})
+}
+
+// StoreResourceIdentifier implements the interface ResourceIdentifier
+type StoreResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoreResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias StoreResourceIdentifier
 	return json.Marshal(struct {
 		TypeID string `json:"typeId"`
 		*Alias
@@ -103,7 +117,7 @@ func (obj StoreSetNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setName", Alias: (*Alias)(&obj)})
 }
 
-// StoreUpdate is of type Update
+// StoreUpdate is a standalone struct
 type StoreUpdate struct {
 	Version int                 `json:"version"`
 	Actions []StoreUpdateAction `json:"actions"`

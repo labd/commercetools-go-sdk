@@ -66,6 +66,13 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return new, nil
+	case "setExternalOAuth":
+		new := ProjectSetExternalOAuthAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setShippingRateInputType":
 		new := ProjectSetShippingRateInputTypeAction{}
 		err := mapstructure.Decode(input, &new)
@@ -160,6 +167,12 @@ func (obj CartValueType) MarshalJSON() ([]byte, error) {
 	}{Type: "CartValue", Alias: (*Alias)(&obj)})
 }
 
+// ExternalOAuth is a standalone struct
+type ExternalOAuth struct {
+	URL                 string `json:"url"`
+	AuthorizationHeader string `json:"authorizationHeader"`
+}
+
 // Project is a standalone struct
 type Project struct {
 	Version               int                   `json:"version"`
@@ -169,6 +182,7 @@ type Project struct {
 	Messages              *MessageConfiguration `json:"messages"`
 	Languages             []Locale              `json:"languages"`
 	Key                   string                `json:"key"`
+	ExternalOAuth         *ExternalOAuth        `json:"externalOAuth,omitempty"`
 	Currencies            []CurrencyCode        `json:"currencies"`
 	CreatedAt             time.Time             `json:"createdAt"`
 	Countries             []CountryCode         `json:"countries"`
@@ -276,6 +290,20 @@ func (obj ProjectChangeNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
 }
 
+// ProjectSetExternalOAuthAction implements the interface ProjectUpdateAction
+type ProjectSetExternalOAuthAction struct {
+	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProjectSetExternalOAuthAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetExternalOAuthAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setExternalOAuth", Alias: (*Alias)(&obj)})
+}
+
 // ProjectSetShippingRateInputTypeAction implements the interface ProjectUpdateAction
 type ProjectSetShippingRateInputTypeAction struct {
 	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
@@ -308,7 +336,7 @@ func (obj *ProjectSetShippingRateInputTypeAction) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-// ProjectUpdate is of type Update
+// ProjectUpdate is a standalone struct
 type ProjectUpdate struct {
 	Version int                   `json:"version"`
 	Actions []ProjectUpdateAction `json:"actions"`

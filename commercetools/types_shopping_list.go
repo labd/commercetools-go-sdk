@@ -189,12 +189,14 @@ func mapDiscriminatorShoppingListUpdateAction(input interface{}) (ShoppingListUp
 	return nil, nil
 }
 
-// ShoppingList is of type Resource
+// ShoppingList is of type LoggedResource
 type ShoppingList struct {
 	Version                         int                    `json:"version"`
 	LastModifiedAt                  time.Time              `json:"lastModifiedAt"`
 	ID                              string                 `json:"id"`
 	CreatedAt                       time.Time              `json:"createdAt"`
+	LastModifiedBy                  *LastModifiedBy        `json:"lastModifiedBy,omitempty"`
+	CreatedBy                       *CreatedBy             `json:"createdBy,omitempty"`
 	TextLineItems                   []TextLineItem         `json:"textLineItems,omitempty"`
 	Slug                            *LocalizedString       `json:"slug,omitempty"`
 	Name                            *LocalizedString       `json:"name"`
@@ -340,7 +342,7 @@ type ShoppingListDraft struct {
 	Key                             string                      `json:"key,omitempty"`
 	Description                     *LocalizedString            `json:"description,omitempty"`
 	DeleteDaysAfterLastModification int                         `json:"deleteDaysAfterLastModification,omitempty"`
-	Customer                        *CustomerReference          `json:"customer,omitempty"`
+	Customer                        *CustomerResourceIdentifier `json:"customer,omitempty"`
 	Custom                          *CustomFieldsDraft          `json:"custom,omitempty"`
 	AnonymousID                     string                      `json:"anonymousId,omitempty"`
 }
@@ -380,8 +382,7 @@ type ShoppingListPagedQueryResponse struct {
 
 // ShoppingListReference implements the interface Reference
 type ShoppingListReference struct {
-	Key string        `json:"key,omitempty"`
-	ID  string        `json:"id,omitempty"`
+	ID  string        `json:"id"`
 	Obj *ShoppingList `json:"obj,omitempty"`
 }
 
@@ -424,6 +425,21 @@ func (obj ShoppingListRemoveTextLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeTextLineItem", Alias: (*Alias)(&obj)})
 }
 
+// ShoppingListResourceIdentifier implements the interface ResourceIdentifier
+type ShoppingListResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShoppingListResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "shopping-list", Alias: (*Alias)(&obj)})
+}
+
 // ShoppingListSetAnonymousIDAction implements the interface ShoppingListUpdateAction
 type ShoppingListSetAnonymousIDAction struct {
 	AnonymousID string `json:"anonymousId,omitempty"`
@@ -455,8 +471,8 @@ func (obj ShoppingListSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // ShoppingListSetCustomTypeAction implements the interface ShoppingListUpdateAction
 type ShoppingListSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -470,7 +486,7 @@ func (obj ShoppingListSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 // ShoppingListSetCustomerAction implements the interface ShoppingListUpdateAction
 type ShoppingListSetCustomerAction struct {
-	Customer *CustomerReference `json:"customer,omitempty"`
+	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -542,9 +558,9 @@ func (obj ShoppingListSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error
 
 // ShoppingListSetLineItemCustomTypeAction implements the interface ShoppingListUpdateAction
 type ShoppingListSetLineItemCustomTypeAction struct {
-	Type       *TypeReference  `json:"type,omitempty"`
-	LineItemID string          `json:"lineItemId"`
-	Fields     *FieldContainer `json:"fields,omitempty"`
+	Type       *TypeResourceIdentifier `json:"type,omitempty"`
+	LineItemID string                  `json:"lineItemId"`
+	Fields     *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -588,9 +604,9 @@ func (obj ShoppingListSetTextLineItemCustomFieldAction) MarshalJSON() ([]byte, e
 
 // ShoppingListSetTextLineItemCustomTypeAction implements the interface ShoppingListUpdateAction
 type ShoppingListSetTextLineItemCustomTypeAction struct {
-	Type           *TypeReference  `json:"type,omitempty"`
-	TextLineItemID string          `json:"textLineItemId"`
-	Fields         *FieldContainer `json:"fields,omitempty"`
+	Type           *TypeResourceIdentifier `json:"type,omitempty"`
+	TextLineItemID string                  `json:"textLineItemId"`
+	Fields         *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -617,7 +633,7 @@ func (obj ShoppingListSetTextLineItemDescriptionAction) MarshalJSON() ([]byte, e
 	}{Action: "setTextLineItemDescription", Alias: (*Alias)(&obj)})
 }
 
-// ShoppingListUpdate is of type Update
+// ShoppingListUpdate is a standalone struct
 type ShoppingListUpdate struct {
 	Version int                        `json:"version"`
 	Actions []ShoppingListUpdateAction `json:"actions"`

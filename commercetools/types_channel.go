@@ -110,12 +110,14 @@ func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction
 	return nil, nil
 }
 
-// Channel is of type Resource
+// Channel is of type LoggedResource
 type Channel struct {
 	Version                int                     `json:"version"`
 	LastModifiedAt         time.Time               `json:"lastModifiedAt"`
 	ID                     string                  `json:"id"`
 	CreatedAt              time.Time               `json:"createdAt"`
+	LastModifiedBy         *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
+	CreatedBy              *CreatedBy              `json:"createdBy,omitempty"`
 	Roles                  []ChannelRoleEnum       `json:"roles"`
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
 	Name                   *LocalizedString        `json:"name,omitempty"`
@@ -203,8 +205,7 @@ type ChannelPagedQueryResponse struct {
 
 // ChannelReference implements the interface Reference
 type ChannelReference struct {
-	Key string   `json:"key,omitempty"`
-	ID  string   `json:"id,omitempty"`
+	ID  string   `json:"id"`
 	Obj *Channel `json:"obj,omitempty"`
 }
 
@@ -229,6 +230,21 @@ func (obj ChannelRemoveRolesAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeRoles", Alias: (*Alias)(&obj)})
+}
+
+// ChannelResourceIdentifier implements the interface ResourceIdentifier
+type ChannelResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ChannelResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ChannelResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "channel", Alias: (*Alias)(&obj)})
 }
 
 // ChannelSetAddressAction implements the interface ChannelUpdateAction
@@ -262,8 +278,8 @@ func (obj ChannelSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 // ChannelSetCustomTypeAction implements the interface ChannelUpdateAction
 type ChannelSetCustomTypeAction struct {
-	Type   *TypeReference  `json:"type,omitempty"`
-	Fields *FieldContainer `json:"fields,omitempty"`
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -303,7 +319,7 @@ func (obj ChannelSetRolesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setRoles", Alias: (*Alias)(&obj)})
 }
 
-// ChannelUpdate is of type Update
+// ChannelUpdate is a standalone struct
 type ChannelUpdate struct {
 	Version int                   `json:"version"`
 	Actions []ChannelUpdateAction `json:"actions"`

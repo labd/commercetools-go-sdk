@@ -1027,7 +1027,7 @@ func (obj LineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Type: "LineItemStateTransition", Alias: (*Alias)(&obj)})
 }
 
-// Message is of type Resource
+// Message is of type BaseResource
 type Message struct {
 	Version                         int                      `json:"version"`
 	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
@@ -2129,13 +2129,13 @@ type ProductDeletedMessage struct {
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	Resource                        Reference                `json:"resource"`
-	RemovedImageUrls                []interface{}            `json:"removedImageUrls"`
+	RemovedImageUrls                []string                 `json:"removedImageUrls"`
 	CurrentProjection               *ProductProjection       `json:"currentProjection"`
 }
 
 // ProductDeletedMessagePayload implements the interface MessagePayload
 type ProductDeletedMessagePayload struct {
-	RemovedImageUrls  []interface{}      `json:"removedImageUrls"`
+	RemovedImageUrls  []string           `json:"removedImageUrls"`
 	CurrentProjection *ProductProjection `json:"currentProjection"`
 }
 

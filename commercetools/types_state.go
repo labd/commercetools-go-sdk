@@ -111,12 +111,14 @@ func mapDiscriminatorStateUpdateAction(input interface{}) (StateUpdateAction, er
 	return nil, nil
 }
 
-// State is of type Resource
+// State is of type LoggedResource
 type State struct {
 	Version        int              `json:"version"`
 	LastModifiedAt time.Time        `json:"lastModifiedAt"`
 	ID             string           `json:"id"`
 	CreatedAt      time.Time        `json:"createdAt"`
+	LastModifiedBy *LastModifiedBy  `json:"lastModifiedBy,omitempty"`
+	CreatedBy      *CreatedBy       `json:"createdBy,omitempty"`
 	Type           StateTypeEnum    `json:"type"`
 	Transitions    []StateReference `json:"transitions,omitempty"`
 	Roles          []StateRoleEnum  `json:"roles,omitempty"`
@@ -185,13 +187,13 @@ func (obj StateChangeTypeAction) MarshalJSON() ([]byte, error) {
 
 // StateDraft is a standalone struct
 type StateDraft struct {
-	Type        StateTypeEnum    `json:"type"`
-	Transitions []StateReference `json:"transitions,omitempty"`
-	Roles       []StateRoleEnum  `json:"roles,omitempty"`
-	Name        *LocalizedString `json:"name,omitempty"`
-	Key         string           `json:"key"`
-	Initial     bool             `json:"initial"`
-	Description *LocalizedString `json:"description,omitempty"`
+	Type        StateTypeEnum             `json:"type"`
+	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
+	Roles       []StateRoleEnum           `json:"roles,omitempty"`
+	Name        *LocalizedString          `json:"name,omitempty"`
+	Key         string                    `json:"key"`
+	Initial     bool                      `json:"initial"`
+	Description *LocalizedString          `json:"description,omitempty"`
 }
 
 // StatePagedQueryResponse is of type PagedQueryResponse
@@ -204,8 +206,7 @@ type StatePagedQueryResponse struct {
 
 // StateReference implements the interface Reference
 type StateReference struct {
-	Key string `json:"key,omitempty"`
-	ID  string `json:"id,omitempty"`
+	ID  string `json:"id"`
 	Obj *State `json:"obj,omitempty"`
 }
 
@@ -230,6 +231,21 @@ func (obj StateRemoveRolesAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeRoles", Alias: (*Alias)(&obj)})
+}
+
+// StateResourceIdentifier implements the interface ResourceIdentifier
+type StateResourceIdentifier struct {
+	Key string `json:"key,omitempty"`
+	ID  string `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StateResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias StateResourceIdentifier
+	return json.Marshal(struct {
+		TypeID string `json:"typeId"`
+		*Alias
+	}{TypeID: "state", Alias: (*Alias)(&obj)})
 }
 
 // StateSetDescriptionAction implements the interface StateUpdateAction
@@ -276,7 +292,7 @@ func (obj StateSetRolesAction) MarshalJSON() ([]byte, error) {
 
 // StateSetTransitionsAction implements the interface StateUpdateAction
 type StateSetTransitionsAction struct {
-	Transitions []StateReference `json:"transitions,omitempty"`
+	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -288,7 +304,7 @@ func (obj StateSetTransitionsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setTransitions", Alias: (*Alias)(&obj)})
 }
 
-// StateUpdate is of type Update
+// StateUpdate is a standalone struct
 type StateUpdate struct {
 	Version int                 `json:"version"`
 	Actions []StateUpdateAction `json:"actions"`
