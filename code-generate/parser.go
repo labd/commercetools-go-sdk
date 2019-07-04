@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"regexp"
 	"strings"
 
@@ -118,11 +119,81 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 	return object
 }
 
+type ResourceMethod struct {
+	Path                 string
+	PathParameterName    string
+	MethodName           string
+	HTTPMethods          []string
+	DeleteHasDataErasure bool
+}
+
+type ResourceService struct {
+	BasePath        string
+	HasCreate       bool
+	HasList         bool
+	ResourceMethods []ResourceMethod
+	ResourceType    string
+}
+
 func parseYaml(data yaml.MapSlice) (objects []RamlType) {
 	types := getPropertyValue(data, "types")
 	for _, mapItem := range types.(yaml.MapSlice) {
 		obj := createRamlType(mapItem.Key.(string), mapItem.Value.(yaml.MapSlice))
 		objects = append(objects, obj)
 	}
+
+	resources := make([]ResourceService, 0)
+	apiResources := getPropertyValue(data, "/{projectKey}")
+	for _, apiResource := range apiResources.(yaml.MapSlice) {
+		if !strings.HasPrefix(apiResource.Key.(string), "/") {
+			continue
+		}
+		resourceService := ResourceService{
+			BasePath: apiResource.Key.(string)[1:],
+		}
+		for _, item := range apiResource.Value.(yaml.MapSlice) {
+			key := item.Key.(string)
+			if key == "get" {
+				resourceService.HasList = true
+			}
+			if key == "post" {
+				resourceService.HasCreate = true
+			}
+			if key == "type" {
+				typeInfo := getPropertyValue(apiResource.Value.(yaml.MapSlice), "type")
+				if _, ok := typeInfo.(yaml.MapSlice); !ok {
+					continue
+				}
+				baseDomain := getPropertyValue(typeInfo.(yaml.MapSlice), "baseDomain").(yaml.MapSlice)
+				resourceService.ResourceType = getPropertyString(baseDomain, "resourceType")
+			}
+			if strings.HasPrefix(key, "/") {
+				/*
+					Path                 string
+					PathParameterName    string
+					MethodName           string
+					DeleteHasDataErasure bool
+				*/
+				resourceMethod := ResourceMethod{
+					Path: key,
+				}
+				for _, methodEntry := range item.Value.(yaml.MapSlice) {
+					methodKey := methodEntry.Key.(string)
+					if methodKey == "(methodName)" {
+						resourceMethod.MethodName = methodEntry.Value.(string)
+					}
+					if methodKey == "get" || methodKey == "post" || methodKey == "delete" {
+						resourceMethod.HTTPMethods = append(resourceMethod.HTTPMethods, methodKey)
+					}
+					// TODO: DeleteHasDateErasure check
+				}
+				resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
+			}
+
+		}
+
+		log.Printf("Resource type: %#v", resourceService)
+	}
+	log.Printf("Found %d resources", len(resources))
 	return
 }

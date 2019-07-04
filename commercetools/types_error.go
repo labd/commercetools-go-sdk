@@ -5,9 +5,8 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	"time"
-
 	mapstructure "github.com/mitchellh/mapstructure"
+	"time"
 )
 
 // ErrorObject uses code as discriminator attribute
