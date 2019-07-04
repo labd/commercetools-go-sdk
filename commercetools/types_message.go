@@ -1070,12 +1070,12 @@ type MessageConfigurationDraft struct {
 	DeleteDaysAfterCreation float64 `json:"deleteDaysAfterCreation"`
 }
 
-// MessagePagedQueryResponse is of type PagedQueryResponse
+// MessagePagedQueryResponse is a standalone struct
 type MessagePagedQueryResponse struct {
 	Total   int       `json:"total,omitempty"`
+	Results []Message `json:"results"`
 	Offset  int       `json:"offset"`
 	Count   int       `json:"count"`
-	Results []Message `json:"results"`
 }
 
 // OrderBillingAddressSetMessage is of type Message

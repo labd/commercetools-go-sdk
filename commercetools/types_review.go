@@ -184,12 +184,12 @@ func (obj *ReviewDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// ReviewPagedQueryResponse is of type PagedQueryResponse
+// ReviewPagedQueryResponse is a standalone struct
 type ReviewPagedQueryResponse struct {
 	Total   int      `json:"total,omitempty"`
+	Results []Review `json:"results"`
 	Offset  int      `json:"offset"`
 	Count   int      `json:"count"`
-	Results []Review `json:"results"`
 }
 
 // ReviewRatingStatistics is a standalone struct

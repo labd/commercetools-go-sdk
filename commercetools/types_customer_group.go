@@ -90,12 +90,12 @@ type CustomerGroupDraft struct {
 	Custom    *CustomFields `json:"custom,omitempty"`
 }
 
-// CustomerGroupPagedQueryResponse is of type PagedQueryResponse
+// CustomerGroupPagedQueryResponse is a standalone struct
 type CustomerGroupPagedQueryResponse struct {
 	Total   int             `json:"total,omitempty"`
+	Results []CustomerGroup `json:"results"`
 	Offset  int             `json:"offset"`
 	Count   int             `json:"count"`
-	Results []CustomerGroup `json:"results"`
 }
 
 // CustomerGroupReference implements the interface Reference

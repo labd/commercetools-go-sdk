@@ -254,6 +254,14 @@ func postProcess(objects []RamlType) {
 func main() {
 	apiFile := os.Args[1]
 	fmt.Printf("Generating code for file %s", apiFile)
+	fi, err := os.Stat(apiFile)
+	if err != nil {
+		panic(err)
+	}
+	size := fi.Size()
+	if size == 0 {
+		panic(fmt.Errorf("File %s is empty", apiFile))
+	}
 
 	f, err := ioutil.ReadFile(apiFile)
 	if err != nil {

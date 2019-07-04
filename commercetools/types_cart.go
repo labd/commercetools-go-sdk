@@ -883,12 +883,12 @@ func (obj *CartDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// CartPagedQueryResponse is of type PagedQueryResponse
+// CartPagedQueryResponse is a standalone struct
 type CartPagedQueryResponse struct {
 	Total   int    `json:"total,omitempty"`
+	Results []Cart `json:"results"`
 	Offset  int    `json:"offset"`
 	Count   int    `json:"count"`
-	Results []Cart `json:"results"`
 }
 
 // CartRecalculateAction implements the interface CartUpdateAction

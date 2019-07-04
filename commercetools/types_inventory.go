@@ -169,12 +169,12 @@ func (obj InventoryEntryResourceIdentifier) MarshalJSON() ([]byte, error) {
 	}{TypeID: "inventory-entry", Alias: (*Alias)(&obj)})
 }
 
-// InventoryPagedQueryResponse is of type PagedQueryResponse
+// InventoryPagedQueryResponse is a standalone struct
 type InventoryPagedQueryResponse struct {
 	Total   int              `json:"total,omitempty"`
+	Results []InventoryEntry `json:"results"`
 	Offset  int              `json:"offset"`
 	Count   int              `json:"count"`
-	Results []InventoryEntry `json:"results"`
 }
 
 // InventoryRemoveQuantityAction implements the interface InventoryUpdateAction

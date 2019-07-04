@@ -117,12 +117,12 @@ type ZoneDraft struct {
 	Description string     `json:"description,omitempty"`
 }
 
-// ZonePagedQueryResponse is of type PagedQueryResponse
+// ZonePagedQueryResponse is a standalone struct
 type ZonePagedQueryResponse struct {
 	Total   int    `json:"total,omitempty"`
+	Results []Zone `json:"results"`
 	Offset  int    `json:"offset"`
 	Count   int    `json:"count"`
-	Results []Zone `json:"results"`
 }
 
 // ZoneReference implements the interface Reference

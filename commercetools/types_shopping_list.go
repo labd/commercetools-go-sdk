@@ -372,12 +372,12 @@ type ShoppingListLineItemDraft struct {
 	AddedAt   time.Time          `json:"addedAt,omitempty"`
 }
 
-// ShoppingListPagedQueryResponse is of type PagedQueryResponse
+// ShoppingListPagedQueryResponse is a standalone struct
 type ShoppingListPagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
+	Results []ShoppingList `json:"results"`
 	Offset  int            `json:"offset"`
 	Count   int            `json:"count"`
-	Results []ShoppingList `json:"results"`
 }
 
 // ShoppingListReference implements the interface Reference

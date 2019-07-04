@@ -195,12 +195,12 @@ type ChannelDraft struct {
 	Address     *Address           `json:"address,omitempty"`
 }
 
-// ChannelPagedQueryResponse is of type PagedQueryResponse
+// ChannelPagedQueryResponse is a standalone struct
 type ChannelPagedQueryResponse struct {
 	Total   int       `json:"total,omitempty"`
+	Results []Channel `json:"results"`
 	Offset  int       `json:"offset"`
 	Count   int       `json:"count"`
-	Results []Channel `json:"results"`
 }
 
 // ChannelReference implements the interface Reference

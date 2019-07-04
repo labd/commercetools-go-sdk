@@ -357,12 +357,12 @@ func (obj *ExtensionInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// ExtensionPagedQueryResponse is of type PagedQueryResponse
+// ExtensionPagedQueryResponse is a standalone struct
 type ExtensionPagedQueryResponse struct {
 	Total   int         `json:"total,omitempty"`
+	Results []Extension `json:"results"`
 	Offset  int         `json:"offset"`
 	Count   int         `json:"count"`
-	Results []Extension `json:"results"`
 }
 
 // ExtensionSetKeyAction implements the interface ExtensionUpdateAction

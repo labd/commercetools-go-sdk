@@ -798,12 +798,12 @@ func (obj ProductMoveImageToPositionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "moveImageToPosition", Alias: (*Alias)(&obj)})
 }
 
-// ProductPagedQueryResponse is of type PagedQueryResponse
+// ProductPagedQueryResponse is a standalone struct
 type ProductPagedQueryResponse struct {
 	Total   int       `json:"total,omitempty"`
+	Results []Product `json:"results"`
 	Offset  int       `json:"offset"`
 	Count   int       `json:"count"`
-	Results []Product `json:"results"`
 }
 
 // ProductProjection is of type BaseResource
@@ -832,21 +832,21 @@ type ProductProjection struct {
 	Categories             []CategoryReference     `json:"categories"`
 }
 
-// ProductProjectionPagedQueryResponse is of type PagedQueryResponse
+// ProductProjectionPagedQueryResponse is a standalone struct
 type ProductProjectionPagedQueryResponse struct {
 	Total   int                 `json:"total,omitempty"`
+	Results []ProductProjection `json:"results"`
 	Offset  int                 `json:"offset"`
 	Count   int                 `json:"count"`
-	Results []ProductProjection `json:"results"`
 }
 
-// ProductProjectionPagedSearchResponse is of type PagedQueryResponse
+// ProductProjectionPagedSearchResponse is a standalone struct
 type ProductProjectionPagedSearchResponse struct {
 	Total   int                 `json:"total,omitempty"`
-	Offset  int                 `json:"offset"`
-	Count   int                 `json:"count"`
 	Results []ProductProjection `json:"results"`
+	Offset  int                 `json:"offset"`
 	Facets  *FacetResults       `json:"facets"`
+	Count   int                 `json:"count"`
 }
 
 // ProductPublishAction implements the interface ProductUpdateAction

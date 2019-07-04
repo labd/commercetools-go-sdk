@@ -196,12 +196,12 @@ type StateDraft struct {
 	Description *LocalizedString          `json:"description,omitempty"`
 }
 
-// StatePagedQueryResponse is of type PagedQueryResponse
+// StatePagedQueryResponse is a standalone struct
 type StatePagedQueryResponse struct {
 	Total   int     `json:"total,omitempty"`
+	Results []State `json:"results"`
 	Offset  int     `json:"offset"`
 	Count   int     `json:"count"`
-	Results []State `json:"results"`
 }
 
 // StateReference implements the interface Reference

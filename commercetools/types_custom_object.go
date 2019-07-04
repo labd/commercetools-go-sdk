@@ -26,12 +26,12 @@ type CustomObjectDraft struct {
 	Container string      `json:"container"`
 }
 
-// CustomObjectPagedQueryResponse is of type PagedQueryResponse
+// CustomObjectPagedQueryResponse is a standalone struct
 type CustomObjectPagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
+	Results []CustomObject `json:"results"`
 	Offset  int            `json:"offset"`
 	Count   int            `json:"count"`
-	Results []CustomObject `json:"results"`
 }
 
 // CustomObjectReference implements the interface Reference

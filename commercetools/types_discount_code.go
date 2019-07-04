@@ -218,12 +218,12 @@ type DiscountCodeDraft struct {
 	CartDiscounts              []CartDiscountResourceIdentifier `json:"cartDiscounts"`
 }
 
-// DiscountCodePagedQueryResponse is of type PagedQueryResponse
+// DiscountCodePagedQueryResponse is a standalone struct
 type DiscountCodePagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
+	Results []DiscountCode `json:"results"`
 	Offset  int            `json:"offset"`
 	Count   int            `json:"count"`
-	Results []DiscountCode `json:"results"`
 }
 
 // DiscountCodeReference implements the interface Reference

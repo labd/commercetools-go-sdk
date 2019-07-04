@@ -266,12 +266,12 @@ func (obj OrderEditNotProcessed) MarshalJSON() ([]byte, error) {
 	}{Type: "NotProcessed", Alias: (*Alias)(&obj)})
 }
 
-// OrderEditPagedQueryResponse is of type PagedQueryResponse
+// OrderEditPagedQueryResponse is a standalone struct
 type OrderEditPagedQueryResponse struct {
 	Total   int         `json:"total,omitempty"`
+	Results []OrderEdit `json:"results"`
 	Offset  int         `json:"offset"`
 	Count   int         `json:"count"`
-	Results []OrderEdit `json:"results"`
 }
 
 // OrderEditPreviewFailure implements the interface OrderEditResult

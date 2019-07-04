@@ -1232,12 +1232,12 @@ func (obj OrderImportLineItemStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "importLineItemState", Alias: (*Alias)(&obj)})
 }
 
-// OrderPagedQueryResponse is of type PagedQueryResponse
+// OrderPagedQueryResponse is a standalone struct
 type OrderPagedQueryResponse struct {
 	Total   int     `json:"total,omitempty"`
+	Results []Order `json:"results"`
 	Offset  int     `json:"offset"`
 	Count   int     `json:"count"`
-	Results []Order `json:"results"`
 }
 
 // OrderReference implements the interface Reference

@@ -370,12 +370,12 @@ type CustomerEmailVerify struct {
 	TokenValue string `json:"tokenValue"`
 }
 
-// CustomerPagedQueryResponse is of type PagedQueryResponse
+// CustomerPagedQueryResponse is a standalone struct
 type CustomerPagedQueryResponse struct {
 	Total   int        `json:"total,omitempty"`
+	Results []Customer `json:"results"`
 	Offset  int        `json:"offset"`
 	Count   int        `json:"count"`
-	Results []Customer `json:"results"`
 }
 
 // CustomerReference implements the interface Reference

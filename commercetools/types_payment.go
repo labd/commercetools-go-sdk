@@ -383,12 +383,12 @@ type PaymentMethodInfo struct {
 	Method           string           `json:"method,omitempty"`
 }
 
-// PaymentPagedQueryResponse is of type PagedQueryResponse
+// PaymentPagedQueryResponse is a standalone struct
 type PaymentPagedQueryResponse struct {
 	Total   int       `json:"total,omitempty"`
+	Results []Payment `json:"results"`
 	Offset  int       `json:"offset"`
 	Count   int       `json:"count"`
-	Results []Payment `json:"results"`
 }
 
 // PaymentReference implements the interface Reference

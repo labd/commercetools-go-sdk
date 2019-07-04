@@ -677,6 +677,8 @@ type PagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
 	Results []BaseResource `json:"results"`
 	Offset  int            `json:"offset"`
+	Meta    interface{}    `json:"meta,omitempty"`
+	Facets  *FacetResults  `json:"facets,omitempty"`
 	Count   int            `json:"count"`
 }
 

@@ -714,12 +714,12 @@ type TypeDraft struct {
 	Description      *LocalizedString  `json:"description,omitempty"`
 }
 
-// TypePagedQueryResponse is of type PagedQueryResponse
+// TypePagedQueryResponse is a standalone struct
 type TypePagedQueryResponse struct {
 	Total   int    `json:"total,omitempty"`
+	Results []Type `json:"results"`
 	Offset  int    `json:"offset"`
 	Count   int    `json:"count"`
-	Results []Type `json:"results"`
 }
 
 // TypeReference implements the interface Reference

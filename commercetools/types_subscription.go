@@ -530,12 +530,12 @@ func (obj *SubscriptionDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// SubscriptionPagedQueryResponse is of type PagedQueryResponse
+// SubscriptionPagedQueryResponse is a standalone struct
 type SubscriptionPagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
+	Results []Subscription `json:"results"`
 	Offset  int            `json:"offset"`
 	Count   int            `json:"count"`
-	Results []Subscription `json:"results"`
 }
 
 // SubscriptionSetChangesAction implements the interface SubscriptionUpdateAction

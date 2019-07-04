@@ -315,12 +315,12 @@ type ProductDiscountMatchQuery struct {
 	Price     *Price  `json:"price"`
 }
 
-// ProductDiscountPagedQueryResponse is of type PagedQueryResponse
+// ProductDiscountPagedQueryResponse is a standalone struct
 type ProductDiscountPagedQueryResponse struct {
 	Total   int               `json:"total,omitempty"`
+	Results []ProductDiscount `json:"results"`
 	Offset  int               `json:"offset"`
 	Count   int               `json:"count"`
-	Results []ProductDiscount `json:"results"`
 }
 
 // ProductDiscountReference implements the interface Reference

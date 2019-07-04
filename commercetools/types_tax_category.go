@@ -126,12 +126,12 @@ type TaxCategoryDraft struct {
 	Description string         `json:"description,omitempty"`
 }
 
-// TaxCategoryPagedQueryResponse is of type PagedQueryResponse
+// TaxCategoryPagedQueryResponse is a standalone struct
 type TaxCategoryPagedQueryResponse struct {
 	Total   int           `json:"total,omitempty"`
+	Results []TaxCategory `json:"results"`
 	Offset  int           `json:"offset"`
 	Count   int           `json:"count"`
-	Results []TaxCategory `json:"results"`
 }
 
 // TaxCategoryReference implements the interface Reference

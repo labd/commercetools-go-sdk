@@ -529,12 +529,12 @@ func (obj CartDiscountLineItemsTarget) MarshalJSON() ([]byte, error) {
 	}{Type: "lineItems", Alias: (*Alias)(&obj)})
 }
 
-// CartDiscountPagedQueryResponse is of type PagedQueryResponse
+// CartDiscountPagedQueryResponse is a standalone struct
 type CartDiscountPagedQueryResponse struct {
 	Total   int            `json:"total,omitempty"`
+	Results []CartDiscount `json:"results"`
 	Offset  int            `json:"offset"`
 	Count   int            `json:"count"`
-	Results []CartDiscount `json:"results"`
 }
 
 // CartDiscountReference implements the interface Reference

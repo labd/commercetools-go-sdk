@@ -847,12 +847,12 @@ type ProductTypeDraft struct {
 	Attributes  []AttributeDefinitionDraft `json:"attributes,omitempty"`
 }
 
-// ProductTypePagedQueryResponse is of type PagedQueryResponse
+// ProductTypePagedQueryResponse is a standalone struct
 type ProductTypePagedQueryResponse struct {
 	Total   int           `json:"total,omitempty"`
+	Results []ProductType `json:"results"`
 	Offset  int           `json:"offset"`
 	Count   int           `json:"count"`
-	Results []ProductType `json:"results"`
 }
 
 // ProductTypeReference implements the interface Reference

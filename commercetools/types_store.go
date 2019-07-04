@@ -65,12 +65,12 @@ func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 	}{TypeID: "store", Alias: (*Alias)(&obj)})
 }
 
-// StorePagedQueryResponse is of type PagedQueryResponse
+// StorePagedQueryResponse is a standalone struct
 type StorePagedQueryResponse struct {
 	Total   int     `json:"total,omitempty"`
+	Results []Store `json:"results"`
 	Offset  int     `json:"offset"`
 	Count   int     `json:"count"`
-	Results []Store `json:"results"`
 }
 
 // StoreReference implements the interface Reference

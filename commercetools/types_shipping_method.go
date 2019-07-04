@@ -299,12 +299,12 @@ type ShippingMethodDraft struct {
 	Description string                         `json:"description,omitempty"`
 }
 
-// ShippingMethodPagedQueryResponse is of type PagedQueryResponse
+// ShippingMethodPagedQueryResponse is a standalone struct
 type ShippingMethodPagedQueryResponse struct {
 	Total   int              `json:"total,omitempty"`
+	Results []ShippingMethod `json:"results"`
 	Offset  int              `json:"offset"`
 	Count   int              `json:"count"`
-	Results []ShippingMethod `json:"results"`
 }
 
 // ShippingMethodReference implements the interface Reference

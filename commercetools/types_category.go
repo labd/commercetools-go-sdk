@@ -322,12 +322,12 @@ type CategoryDraft struct {
 	Assets          []AssetDraft                `json:"assets,omitempty"`
 }
 
-// CategoryPagedQueryResponse is of type PagedQueryResponse
+// CategoryPagedQueryResponse is a standalone struct
 type CategoryPagedQueryResponse struct {
 	Total   int        `json:"total,omitempty"`
+	Results []Category `json:"results"`
 	Offset  int        `json:"offset"`
 	Count   int        `json:"count"`
-	Results []Category `json:"results"`
 }
 
 // CategoryReference implements the interface Reference
