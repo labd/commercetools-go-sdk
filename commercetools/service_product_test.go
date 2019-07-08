@@ -38,7 +38,7 @@ func TestGetProductByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductGetByID("foo-bar")
+	product, err := client.ProductGetWithId("foo-bar")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,12 +52,15 @@ func TestProductUpdate(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductUpdate(&commercetools.ProductUpdateInput{
+	product, err := client.ProductUpdateWithId(&commercetools.ProductUpdateWithIdInput{
 		ID:      "1",
 		Version: 2,
+		/*
+		TODO: trait priceSelecting should add this...
 		PriceSelection: commercetools.ProductPriceSelection{
 			Currency: "EUR",
 		},
+		*/
 		Actions: []commercetools.ProductUpdateAction{
 			commercetools.ProductAddPriceAction{
 				VariantID: 1,
@@ -78,10 +81,7 @@ func TestProductDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductDeleteByID(&commercetools.ProductDeleteInput{
-		ID:      "foobar",
-		Version: 2,
-	})
+	product, err := client.ProductDeleteWithId("foobar", 2)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,10 +94,7 @@ func TestProductDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductDeleteByKey(&commercetools.ProductDeleteInput{
-		Key:     "foobar",
-		Version: 2,
-	})
+	product, err := client.ProductDeleteWithKey("foobar", 2)
 	if err != nil {
 		t.Fatal(err)
 	}

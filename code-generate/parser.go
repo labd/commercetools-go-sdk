@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"regexp"
 	"strings"
 
@@ -10,9 +9,9 @@ import (
 	yaml "gopkg.in/mikefarah/yaml.v2"
 )
 
-// Generate a go identifier for the given value. We also do some extra
+// CreateCodeName generates a go identifier for the given value. We also do some extra
 // modifications to make golint happy.
-func createCodeName(value string) string {
+func CreateCodeName(value string) string {
 	if strings.HasPrefix(value, "/") {
 		return value
 	}
@@ -45,8 +44,8 @@ func createRamlType(name string, properties yaml.MapSlice) RamlType {
 	object := RamlType{
 		Name:               name,
 		TypeName:           typeName,
-		CodeName:           createCodeName(name),
-		InterfaceName:      createCodeName(name),
+		CodeName:           CreateCodeName(name),
+		InterfaceName:      CreateCodeName(name),
 		Discriminator:      getPropertyString(properties, "discriminator"),
 		DiscriminatorValue: getPropertyString(properties, "discriminatorValue"),
 		Package:            getPropertyString(properties, "(package)"),
@@ -97,7 +96,7 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 		many = true
 	}
 
-	codeName := createCodeName(name)
+	codeName := CreateCodeName(name)
 	if codeName == "Error" {
 		codeName = "_Error"
 	}
@@ -119,6 +118,7 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 	return object
 }
 
+// ResourceMethod contains HTTP CRUD actions for a specific method.
 type ResourceMethod struct {
 	Path                 string
 	PathParameterName    string
@@ -127,22 +127,25 @@ type ResourceMethod struct {
 	DeleteHasDataErasure bool
 }
 
+// ResourceService contains all the data to CRUD an API resource.
 type ResourceService struct {
-	BasePath        string
-	HasCreate       bool
-	HasList         bool
-	ResourceMethods []ResourceMethod
-	ResourceType    string
+	BasePath          string
+	HasCreate         bool
+	HasList           bool
+	ResourceMethods   []ResourceMethod
+	ResourceType      string
+	ResourceQueryType string
+	ResourceDraftType string
 }
 
-func parseYaml(data yaml.MapSlice) (objects []RamlType) {
+func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceService) {
 	types := getPropertyValue(data, "types")
 	for _, mapItem := range types.(yaml.MapSlice) {
 		obj := createRamlType(mapItem.Key.(string), mapItem.Value.(yaml.MapSlice))
 		objects = append(objects, obj)
 	}
 
-	resources := make([]ResourceService, 0)
+	resources = make([]ResourceService, 0)
 	apiResources := getPropertyValue(data, "/{projectKey}")
 	for _, apiResource := range apiResources.(yaml.MapSlice) {
 		if !strings.HasPrefix(apiResource.Key.(string), "/") {
@@ -166,34 +169,59 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType) {
 				}
 				baseDomain := getPropertyValue(typeInfo.(yaml.MapSlice), "baseDomain").(yaml.MapSlice)
 				resourceService.ResourceType = getPropertyString(baseDomain, "resourceType")
+				resourceService.ResourceQueryType = strings.Split(getPropertyString(baseDomain, "resourceQueryType"), " ")[0]
+				resourceService.ResourceDraftType = getPropertyString(baseDomain, "resourceDraft")
 			}
 			if strings.HasPrefix(key, "/") {
-				/*
-					Path                 string
-					PathParameterName    string
-					MethodName           string
-					DeleteHasDataErasure bool
-				*/
 				resourceMethod := ResourceMethod{
 					Path: key,
+				}
+				switch key {
+				case "/{ID}":
+					resourceMethod.PathParameterName = "ID"
+				case "/key={key}":
+					resourceMethod.PathParameterName = "key"
 				}
 				for _, methodEntry := range item.Value.(yaml.MapSlice) {
 					methodKey := methodEntry.Key.(string)
 					if methodKey == "(methodName)" {
 						resourceMethod.MethodName = methodEntry.Value.(string)
+
 					}
+
 					if methodKey == "get" || methodKey == "post" || methodKey == "delete" {
 						resourceMethod.HTTPMethods = append(resourceMethod.HTTPMethods, methodKey)
 					}
-					// TODO: DeleteHasDateErasure check
+					if methodKey == "delete" {
+						if methodEntry.Value == nil {
+							continue
+						}
+						deleteInfo := methodEntry.Value.(yaml.MapSlice)
+						if deleteInfo == nil {
+							continue
+						}
+						isSection := getPropertyValue(deleteInfo, "is")
+						if isSection != nil {
+							for _, traitInterface := range isSection.([]interface{}) {
+								if traitName, ok := traitInterface.(string); ok {
+									if traitName == "dataErasure" {
+										resourceMethod.DeleteHasDataErasure = true
+										break
+									}
+								}
+
+							}
+						}
+					}
 				}
-				resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
+				// Only support withId/withKey for now.
+				if resourceMethod.MethodName == "withId" || resourceMethod.MethodName == "withKey" {
+					resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
+				}
 			}
-
 		}
-
-		log.Printf("Resource type: %#v", resourceService)
+		resources = append(resources, resourceService)
 	}
-	log.Printf("Found %d resources", len(resources))
+
 	return
 }

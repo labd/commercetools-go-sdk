@@ -1,45 +1,16 @@
+// Automatically generated, do not edit
+
 package commercetools
 
 import (
-	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
-// ZoneDeleteInput provides the data required to delete a shipping zone.
-type ZoneDeleteInput struct {
-	ID      string
-	Version int
-}
-
-// ZoneUpdateInput provides the data required to update a shipping zone.
-type ZoneUpdateInput struct {
-	ID string
-
-	// The expected version of the type on which the changes should be applied.
-	// If the expected version does not match the actual version, a 409 Conflict
-	// will be returned.
-	Version int
-
-	// The list of update actions to be performed on the type.
-	Actions []ZoneUpdateAction
-}
-
-// ZoneURLPath is the commercetools API zone path.
+// ZoneURLPath is the commercetools API path.
 const ZoneURLPath = "zones"
 
-// ZoneGetByID will return a shipping zone matching the provided ID. OAuth2 Scopes:
-// view_products:{projectKey}
-func (client *Client) ZoneGetByID(id string) (result *Zone, err error) {
-	err = client.Get(fmt.Sprintf("%s/%s", ZoneURLPath, id), nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ZoneCreate will create a new shipping zone from a draft, and return the newly
-// created shipping zone. OAuth2 Scopes: manage_products:{projectKey}
 func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
 	err = client.Create(ZoneURLPath, nil, draft, &result)
 	if err != nil {
@@ -48,39 +19,74 @@ func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
 	return result, nil
 }
 
-// ZoneUpdate will update a shipping zone matching the provided ID with the defined
-// ZoneUpdateActions. OAuth2 Scopes: manage_products:{projectKey}
-func (client *Client) ZoneUpdate(input *ZoneUpdateInput) (result *Zone, err error) {
-	if input.ID == "" {
-		return nil, fmt.Errorf("no valid type id passed")
-	}
-
-	endpoint := fmt.Sprintf("%s/%s", ZoneURLPath, input.ID)
-	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ZoneDeleteByID will delete a shipping zone matching the provided ID. OAuth2
-// Scopes: manage_products:{projectKey}
-func (client *Client) ZoneDeleteByID(id string, version int) (result *Zone, err error) {
-	endpoint := fmt.Sprintf("%s/%s", ZoneURLPath, id)
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	err = client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ZoneQuery will query zones.
-// OAuth2 Scopes: view_orders:{projectKey}
 func (client *Client) ZoneQuery(input *QueryInput) (result *ZonePagedQueryResponse, err error) {
 	err = client.Query(ZoneURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) ZoneDeleteWithKey(key string, version int) (result *Zone, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) ZoneGetWithKey(key string) (result *Zone, err error) {
+	err = client.Get(strings.Replace("zones/key={key}", "{key}", key, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+type ZoneUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []ZoneUpdateAction
+}
+
+func (client *Client) ZoneUpdateWithKey(input *ZoneUpdateWithKeyInput) (result *Zone, err error) {
+	err = client.Update(strings.Replace("zones/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) ZoneDeleteWithId(ID string, version int) (result *Zone, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) ZoneGetWithId(ID string) (result *Zone, err error) {
+	err = client.Get(strings.Replace("zones/{ID}", "{ID}", ID, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+type ZoneUpdateWithIdInput struct {
+	ID      string
+	Version int
+	Actions []ZoneUpdateAction
+}
+
+func (client *Client) ZoneUpdateWithId(input *ZoneUpdateWithIdInput) (result *Zone, err error) {
+	err = client.Update(strings.Replace("zones/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

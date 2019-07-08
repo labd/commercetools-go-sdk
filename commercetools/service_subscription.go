@@ -1,104 +1,92 @@
+// Automatically generated, do not edit
+
 package commercetools
 
 import (
-	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
-// SubscriptionDeleteInput provides the data required to delete a subscription.
-type SubscriptionDeleteInput struct {
-	ID      string
-	Version int
+// SubscriptionURLPath is the commercetools API path.
+const SubscriptionURLPath = "subscriptions"
+
+func (client *Client) SubscriptionCreate(draft *SubscriptionDraft) (result *Subscription, err error) {
+	err = client.Create(SubscriptionURLPath, nil, draft, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-// SubscriptionUpdateInput provides the data required to update a subscription.
-type SubscriptionUpdateInput struct {
+func (client *Client) SubscriptionQuery(input *QueryInput) (result *SubscriptionPagedQueryResponse, err error) {
+	err = client.Query(SubscriptionURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) SubscriptionDeleteWithKey(key string, version int) (result *Subscription, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("subscriptions/key={key}", "{key}", key, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) SubscriptionGetWithKey(key string) (result *Subscription, err error) {
+	err = client.Get(strings.Replace("subscriptions/key={key}", "{key}", key, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+type SubscriptionUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []SubscriptionUpdateAction
+}
+
+func (client *Client) SubscriptionUpdateWithKey(input *SubscriptionUpdateWithKeyInput) (result *Subscription, err error) {
+	err = client.Update(strings.Replace("subscriptions/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) SubscriptionDeleteWithId(ID string, version int) (result *Subscription, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("subscriptions/{ID}", "{ID}", ID, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+func (client *Client) SubscriptionGetWithId(ID string) (result *Subscription, err error) {
+	err = client.Get(strings.Replace("subscriptions/{ID}", "{ID}", ID, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+type SubscriptionUpdateWithIdInput struct {
 	ID      string
 	Version int
 	Actions []SubscriptionUpdateAction
 }
 
-// SubscriptionURLPath is the commercetools API subscription path.
-const SubscriptionURLPath = "subscriptions"
-
-// SubscriptionGetByID will return a subscription matching the provided ID.
-func (client *Client) SubscriptionGetByID(id string) (*Subscription, error) {
-	var result Subscription
-	err := client.Get(fmt.Sprintf("%s/%s", SubscriptionURLPath, id), nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// SubscriptionCreate creates a new Subscription. It is eventually consistent,
-// it may take up to a minute before it becomes fully active.
-//
-// In order to test that the destination is correctly configured, a test message
-// will be put into the queue. If the message could not be delivered, the
-// subscription will not be created. The payload of the test message is a
-// notification of type ResourceCreated for the resourceTypeId subscription.
-//
-// Currently, a maximum of 25 subscriptions can be created per project.
-func (client *Client) SubscriptionCreate(draft *SubscriptionDraft) (*Subscription, error) {
-	var result Subscription
-	err := client.Create(SubscriptionURLPath, nil, draft, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// SubscriptionUpdate updates a Subscription. It is eventually consistent, it
-// may take up to a minute before changes becomes fully active.
-func (client *Client) SubscriptionUpdate(input *SubscriptionUpdateInput) (*Subscription, error) {
-	var result Subscription
-
-	if input.ID == "" {
-		return nil, fmt.Errorf("No valid subscription id passed")
-	}
-
-	endpoint := fmt.Sprintf("%s/%s", SubscriptionURLPath, input.ID)
-	err := client.Update(endpoint, nil, input.Version, input.Actions, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// SubscriptionDeleteByID will delete a subscription matching the provided ID.
-func (client *Client) SubscriptionDeleteByID(id string, version int) (*Subscription, error) {
-	var result Subscription
-	endpoint := fmt.Sprintf("%s/%s", SubscriptionURLPath, id)
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	err := client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// SubscriptionDeleteByKey will delete a subscription matching the provided key.
-func (client *Client) SubscriptionDeleteByKey(key string, version int) (*Subscription, error) {
-	var result Subscription
-	endpoint := fmt.Sprintf("%s/key=%s", SubscriptionURLPath, key)
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	err := client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// SubscriptionQuery will query subscriptions.
-// OAuth2 Scopes: manage_subscriptions:{projectKey}
-func (client *Client) SubscriptionQuery(input *QueryInput) (result *SubscriptionPagedQueryResponse, err error) {
-	err = client.Query(SubscriptionURLPath, input.toParams(), &result)
+func (client *Client) SubscriptionUpdateWithId(input *SubscriptionUpdateWithIdInput) (result *Subscription, err error) {
+	err = client.Update(strings.Replace("subscriptions/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

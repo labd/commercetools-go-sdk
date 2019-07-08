@@ -53,12 +53,12 @@ func TestZoneCreate(t *testing.T) {
 func TestZoneUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.ZoneUpdateInput
+		input       *commercetools.ZoneUpdateWithIdInput
 		requestBody string
 	}{
 		{
 			desc: "Change name",
-			input: &commercetools.ZoneUpdateInput{
+			input: &commercetools.ZoneUpdateWithIdInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -79,7 +79,7 @@ func TestZoneUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set description",
-			input: &commercetools.ZoneUpdateInput{
+			input: &commercetools.ZoneUpdateWithIdInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -100,7 +100,7 @@ func TestZoneUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add location ",
-			input: &commercetools.ZoneUpdateInput{
+			input: &commercetools.ZoneUpdateWithIdInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -125,7 +125,7 @@ func TestZoneUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove location",
-			input: &commercetools.ZoneUpdateInput{
+			input: &commercetools.ZoneUpdateWithIdInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ZoneUpdateAction{
@@ -157,7 +157,7 @@ func TestZoneUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("shipping-zone.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ZoneUpdate(tC.input)
+			_, err := client.ZoneUpdateWithId(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/zones/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -170,7 +170,7 @@ func TestZoneDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ZoneDeleteByID("1234", 2)
+	_, err := client.ZoneDeleteWithId("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -198,7 +198,7 @@ func TestZoneGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ZoneGetByID("1234")
+	result, err := client.ZoneGetWithId("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
