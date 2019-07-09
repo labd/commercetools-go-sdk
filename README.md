@@ -88,6 +88,7 @@ At the moment the SDK has service coverage for primarily Terraform configuration
 ### TODO for code generating the services:
 
 - Currently only /{ID} and /key={key} is supported, support other actions (f.e. Replicate cart)
+- Parse and use trait definitions (traits folder)
 - CustomObject service implementation
 - Implement other HTTPMethods/actions apart from get/post/delete (f.e. /images on product)
 - Implement all traits (f.e. priceSelecting)
