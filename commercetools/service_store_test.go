@@ -35,12 +35,12 @@ func TestStoreCreate(t *testing.T) {
 func TestStoreUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.StoreUpdateWithIdInput
+		input       *commercetools.StoreUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Set locale",
-			input: &commercetools.StoreUpdateWithIdInput{
+			input: &commercetools.StoreUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StoreUpdateAction{
@@ -72,7 +72,7 @@ func TestStoreUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.StoreUpdateWithId(tC.input)
+			_, err := client.StoreUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/stores/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -133,7 +133,7 @@ func TestStoreDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StoreDeleteWithId("ba8d47e5-6591-4ca2-af4c-d547f062bf35", 2)
+	_, err := client.StoreDeleteWithID("ba8d47e5-6591-4ca2-af4c-d547f062bf35", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -160,7 +160,7 @@ func TestStoreGetByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("store.json"), nil, nil)
 	defer server.Close()
 
-	store, err := client.StoreGetWithId("ba8d47e5-6591-4ca2-af4c-d547f062bf35")
+	store, err := client.StoreGetWithID("ba8d47e5-6591-4ca2-af4c-d547f062bf35")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "ba8d47e5-6591-4ca2-af4c-d547f062bf35", store.ID)

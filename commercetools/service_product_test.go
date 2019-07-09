@@ -38,7 +38,7 @@ func TestGetProductByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductGetWithId("foo-bar")
+	product, err := client.ProductGetWithID("foo-bar")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,14 +52,14 @@ func TestProductUpdate(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductUpdateWithId(&commercetools.ProductUpdateWithIdInput{
+	product, err := client.ProductUpdateWithID(&commercetools.ProductUpdateWithIDInput{
 		ID:      "1",
 		Version: 2,
 		/*
-		TODO: trait priceSelecting should add this...
-		PriceSelection: commercetools.ProductPriceSelection{
-			Currency: "EUR",
-		},
+			TODO: trait priceSelecting should add this...
+			PriceSelection: commercetools.ProductPriceSelection{
+				Currency: "EUR",
+			},
 		*/
 		Actions: []commercetools.ProductUpdateAction{
 			commercetools.ProductAddPriceAction{
@@ -81,7 +81,7 @@ func TestProductDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductDeleteWithId("foobar", 2)
+	product, err := client.ProductDeleteWithID("foobar", 2)
 	if err != nil {
 		t.Fatal(err)
 	}

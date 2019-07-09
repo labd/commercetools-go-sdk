@@ -77,12 +77,12 @@ func TestTypeCreate(t *testing.T) {
 func TestTypeUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.TypeUpdateWithIdInput
+		input       *commercetools.TypeUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Change key",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -103,7 +103,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change name",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -128,7 +128,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set description",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -153,7 +153,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add field definition",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -192,7 +192,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove field definition",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -213,7 +213,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change label",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -240,7 +240,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add enum value",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -269,7 +269,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add localized enum value",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -302,7 +302,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change field definition order",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -323,7 +323,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change enum value order",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -346,7 +346,7 @@ func TestTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change localized enum value order",
-			input: &commercetools.TypeUpdateWithIdInput{
+			input: &commercetools.TypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TypeUpdateAction{
@@ -376,7 +376,7 @@ func TestTypeUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("type.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.TypeUpdateWithId(tC.input)
+			_, err := client.TypeUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/types/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -389,7 +389,7 @@ func TestTypeDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.TypeDeleteWithId("1234", 2)
+	_, err := client.TypeDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -796,7 +796,7 @@ func TestTypeGetByID(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture(tC.fixture), nil, nil)
 			defer server.Close()
 
-			result, err := client.TypeGetWithId("1234")
+			result, err := client.TypeGetWithID("1234")
 			assert.Nil(t, err)
 			assert.Equal(t, tC.input, result)
 		})

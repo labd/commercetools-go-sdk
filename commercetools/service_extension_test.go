@@ -39,7 +39,7 @@ func TestExtensionUpdate(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), &output, nil)
 	defer server.Close()
 
-	input := &commercetools.ExtensionUpdateWithIdInput{
+	input := &commercetools.ExtensionUpdateWithIDInput{
 		Version: 2,
 		Actions: []commercetools.ExtensionUpdateAction{
 			commercetools.ExtensionChangeDestinationAction{
@@ -54,7 +54,7 @@ func TestExtensionUpdate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.ExtensionUpdateWithId(input)
+	_, err := client.ExtensionUpdateWithID(input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -78,7 +78,7 @@ func TestExtensionDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
 
-	_, err := client.ExtensionDeleteWithId("1234", 2)
+	_, err := client.ExtensionDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 }
 

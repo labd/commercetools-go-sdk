@@ -40,12 +40,12 @@ func TestShippingMethodCreate(t *testing.T) {
 func TestShippingMethodUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.ShippingMethodUpdateWithIdInput
+		input       *commercetools.ShippingMethodUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Change name",
-			input: &commercetools.ShippingMethodUpdateWithIdInput{
+			input: &commercetools.ShippingMethodUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ShippingMethodUpdateAction{
@@ -66,7 +66,7 @@ func TestShippingMethodUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set key",
-			input: &commercetools.ShippingMethodUpdateWithIdInput{
+			input: &commercetools.ShippingMethodUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ShippingMethodUpdateAction{
@@ -87,7 +87,7 @@ func TestShippingMethodUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set description",
-			input: &commercetools.ShippingMethodUpdateWithIdInput{
+			input: &commercetools.ShippingMethodUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ShippingMethodUpdateAction{
@@ -108,7 +108,7 @@ func TestShippingMethodUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set default",
-			input: &commercetools.ShippingMethodUpdateWithIdInput{
+			input: &commercetools.ShippingMethodUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ShippingMethodUpdateAction{
@@ -137,7 +137,7 @@ func TestShippingMethodUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("shipping-method.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ShippingMethodUpdateWithId(tC.input)
+			_, err := client.ShippingMethodUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/shipping-methods/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -150,7 +150,7 @@ func TestShippingMethodDeleteById(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ShippingMethodDeleteWithId("1234", 2)
+	_, err := client.ShippingMethodDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -174,7 +174,7 @@ func TestShippingMethodGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ShippingMethodGetWithId("1234")
+	result, err := client.ShippingMethodGetWithID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

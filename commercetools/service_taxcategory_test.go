@@ -72,12 +72,12 @@ func TestTaxCategoryUpdate(t *testing.T) {
 	high_tax_rate := 21.14
 	testCases := []struct {
 		desc        string
-		input       *commercetools.TaxCategoryUpdateWithIdInput
+		input       *commercetools.TaxCategoryUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Change name",
-			input: &commercetools.TaxCategoryUpdateWithIdInput{
+			input: &commercetools.TaxCategoryUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TaxCategoryUpdateAction{
@@ -98,7 +98,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set key",
-			input: &commercetools.TaxCategoryUpdateWithIdInput{
+			input: &commercetools.TaxCategoryUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TaxCategoryUpdateAction{
@@ -119,7 +119,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set description",
-			input: &commercetools.TaxCategoryUpdateWithIdInput{
+			input: &commercetools.TaxCategoryUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TaxCategoryUpdateAction{
@@ -140,7 +140,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add tax rate",
-			input: &commercetools.TaxCategoryUpdateWithIdInput{
+			input: &commercetools.TaxCategoryUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TaxCategoryUpdateAction{
@@ -171,7 +171,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 		},
 		{
 			desc: "Replace tax rate",
-			input: &commercetools.TaxCategoryUpdateWithIdInput{
+			input: &commercetools.TaxCategoryUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TaxCategoryUpdateAction{
@@ -204,7 +204,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove tax rate",
-			input: &commercetools.TaxCategoryUpdateWithIdInput{
+			input: &commercetools.TaxCategoryUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.TaxCategoryUpdateAction{
@@ -232,7 +232,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("tax-category.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.TaxCategoryUpdateWithId(tC.input)
+			_, err := client.TaxCategoryUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/tax-categories/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -245,7 +245,7 @@ func TestTaxCategoryDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.TaxCategoryDeleteWithId("1234", 2)
+	_, err := client.TaxCategoryDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -260,7 +260,7 @@ func TestTaxCategoryDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.TaxCategoryDeleteWithId("1234", 2)
+	_, err := client.TaxCategoryDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -294,7 +294,7 @@ func TestTaxCategoryGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.TaxCategoryGetWithId("1234")
+	result, err := client.TaxCategoryGetWithID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

@@ -34,12 +34,12 @@ func TestCartCreate(t *testing.T) {
 func TestCartUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.CartUpdateWithIdInput
+		input       *commercetools.CartUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Set locale",
-			input: &commercetools.CartUpdateWithIdInput{
+			input: &commercetools.CartUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.CartUpdateAction{
@@ -67,7 +67,7 @@ func TestCartUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.CartUpdateWithId(tC.input)
+			_, err := client.CartUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/carts/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -80,7 +80,7 @@ func TestCartDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.CartDeleteWithId("debd77c9-ef14-4595-8614-5d123429f9e1", 2, true)
+	_, err := client.CartDeleteWithID("debd77c9-ef14-4595-8614-5d123429f9e1", 2, true)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -94,7 +94,7 @@ func TestCartGetByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("cart.json"), nil, nil)
 	defer server.Close()
 
-	cart, err := client.CartGetWithId("debd77c9-ef14-4595-8614-5d123429f9e1")
+	cart, err := client.CartGetWithID("debd77c9-ef14-4595-8614-5d123429f9e1")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "debd77c9-ef14-4595-8614-5d123429f9e1", cart.ID)

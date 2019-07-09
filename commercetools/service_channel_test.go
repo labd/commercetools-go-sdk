@@ -51,12 +51,12 @@ func TestChannelCreate(t *testing.T) {
 func TestChannelUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.ChannelUpdateWithIdInput
+		input       *commercetools.ChannelUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Change key",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -77,7 +77,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change name",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -102,7 +102,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change description",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -127,7 +127,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set roles",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -150,7 +150,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add roles",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -173,7 +173,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove roles",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -196,7 +196,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set address",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -221,7 +221,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set custom type",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -255,7 +255,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set custom field",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -282,7 +282,7 @@ func TestChannelUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set geo location",
-			input: &commercetools.ChannelUpdateWithIdInput{
+			input: &commercetools.ChannelUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.ChannelUpdateAction{
@@ -315,7 +315,7 @@ func TestChannelUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.ChannelUpdateWithId(tC.input)
+			_, err := client.ChannelUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/channels/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -328,7 +328,7 @@ func TestChannelDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ChannelDeleteWithId("1234", 2)
+	_, err := client.ChannelDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -352,7 +352,7 @@ func TestChannelGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ChannelGetWithId("1234")
+	result, err := client.ChannelGetWithID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
