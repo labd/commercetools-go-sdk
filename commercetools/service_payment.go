@@ -60,7 +60,7 @@ func (client *Client) PaymentUpdateWithKey(input *PaymentUpdateWithKeyInput) (re
 	return result, nil
 }
 
-func (client *Client) PaymentDeleteWithId(ID string, version int, dataErasure bool) (result *Payment, err error) {
+func (client *Client) PaymentDeleteWithID(ID string, version int, dataErasure bool) (result *Payment, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
@@ -71,7 +71,7 @@ func (client *Client) PaymentDeleteWithId(ID string, version int, dataErasure bo
 	return result, nil
 }
 
-func (client *Client) PaymentGetWithId(ID string) (result *Payment, err error) {
+func (client *Client) PaymentGetWithID(ID string) (result *Payment, err error) {
 	err = client.Get(strings.Replace("payments/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) PaymentGetWithId(ID string) (result *Payment, err error) {
 	return result, nil
 }
 
-type PaymentUpdateWithIdInput struct {
+type PaymentUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []PaymentUpdateAction
 }
 
-func (client *Client) PaymentUpdateWithId(input *PaymentUpdateWithIdInput) (result *Payment, err error) {
+func (client *Client) PaymentUpdateWithID(input *PaymentUpdateWithIDInput) (result *Payment, err error) {
 	err = client.Update(strings.Replace("payments/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

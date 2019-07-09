@@ -27,7 +27,7 @@ func (client *Client) ChannelQuery(input *QueryInput) (result *ChannelPagedQuery
 	return result, nil
 }
 
-func (client *Client) ChannelDeleteWithId(ID string, version int) (result *Channel, err error) {
+func (client *Client) ChannelDeleteWithID(ID string, version int) (result *Channel, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -38,7 +38,7 @@ func (client *Client) ChannelDeleteWithId(ID string, version int) (result *Chann
 	return result, nil
 }
 
-func (client *Client) ChannelGetWithId(ID string) (result *Channel, err error) {
+func (client *Client) ChannelGetWithID(ID string) (result *Channel, err error) {
 	err = client.Get(strings.Replace("channels/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -46,13 +46,13 @@ func (client *Client) ChannelGetWithId(ID string) (result *Channel, err error) {
 	return result, nil
 }
 
-type ChannelUpdateWithIdInput struct {
+type ChannelUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ChannelUpdateAction
 }
 
-func (client *Client) ChannelUpdateWithId(input *ChannelUpdateWithIdInput) (result *Channel, err error) {
+func (client *Client) ChannelUpdateWithID(input *ChannelUpdateWithIDInput) (result *Channel, err error) {
 	err = client.Update(strings.Replace("channels/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

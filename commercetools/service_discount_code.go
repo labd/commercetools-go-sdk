@@ -27,7 +27,7 @@ func (client *Client) DiscountCodeQuery(input *QueryInput) (result *DiscountCode
 	return result, nil
 }
 
-func (client *Client) DiscountCodeDeleteWithId(ID string, version int, dataErasure bool) (result *DiscountCode, err error) {
+func (client *Client) DiscountCodeDeleteWithID(ID string, version int, dataErasure bool) (result *DiscountCode, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
@@ -38,7 +38,7 @@ func (client *Client) DiscountCodeDeleteWithId(ID string, version int, dataErasu
 	return result, nil
 }
 
-func (client *Client) DiscountCodeGetWithId(ID string) (result *DiscountCode, err error) {
+func (client *Client) DiscountCodeGetWithID(ID string) (result *DiscountCode, err error) {
 	err = client.Get(strings.Replace("discount-codes/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -46,13 +46,13 @@ func (client *Client) DiscountCodeGetWithId(ID string) (result *DiscountCode, er
 	return result, nil
 }
 
-type DiscountCodeUpdateWithIdInput struct {
+type DiscountCodeUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []DiscountCodeUpdateAction
 }
 
-func (client *Client) DiscountCodeUpdateWithId(input *DiscountCodeUpdateWithIdInput) (result *DiscountCode, err error) {
+func (client *Client) DiscountCodeUpdateWithID(input *DiscountCodeUpdateWithIDInput) (result *DiscountCode, err error) {
 	err = client.Update(strings.Replace("discount-codes/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

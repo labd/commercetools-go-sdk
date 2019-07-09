@@ -60,7 +60,7 @@ func (client *Client) ProductTypeUpdateWithKey(input *ProductTypeUpdateWithKeyIn
 	return result, nil
 }
 
-func (client *Client) ProductTypeDeleteWithId(ID string, version int) (result *ProductType, err error) {
+func (client *Client) ProductTypeDeleteWithID(ID string, version int) (result *ProductType, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) ProductTypeDeleteWithId(ID string, version int) (result *P
 	return result, nil
 }
 
-func (client *Client) ProductTypeGetWithId(ID string) (result *ProductType, err error) {
+func (client *Client) ProductTypeGetWithID(ID string) (result *ProductType, err error) {
 	err = client.Get(strings.Replace("product-types/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) ProductTypeGetWithId(ID string) (result *ProductType, err 
 	return result, nil
 }
 
-type ProductTypeUpdateWithIdInput struct {
+type ProductTypeUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ProductTypeUpdateAction
 }
 
-func (client *Client) ProductTypeUpdateWithId(input *ProductTypeUpdateWithIdInput) (result *ProductType, err error) {
+func (client *Client) ProductTypeUpdateWithID(input *ProductTypeUpdateWithIDInput) (result *ProductType, err error) {
 	err = client.Update(strings.Replace("product-types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

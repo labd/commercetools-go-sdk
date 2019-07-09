@@ -60,7 +60,7 @@ func (client *Client) SubscriptionUpdateWithKey(input *SubscriptionUpdateWithKey
 	return result, nil
 }
 
-func (client *Client) SubscriptionDeleteWithId(ID string, version int) (result *Subscription, err error) {
+func (client *Client) SubscriptionDeleteWithID(ID string, version int) (result *Subscription, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) SubscriptionDeleteWithId(ID string, version int) (result *
 	return result, nil
 }
 
-func (client *Client) SubscriptionGetWithId(ID string) (result *Subscription, err error) {
+func (client *Client) SubscriptionGetWithID(ID string) (result *Subscription, err error) {
 	err = client.Get(strings.Replace("subscriptions/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) SubscriptionGetWithId(ID string) (result *Subscription, er
 	return result, nil
 }
 
-type SubscriptionUpdateWithIdInput struct {
+type SubscriptionUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []SubscriptionUpdateAction
 }
 
-func (client *Client) SubscriptionUpdateWithId(input *SubscriptionUpdateWithIdInput) (result *Subscription, err error) {
+func (client *Client) SubscriptionUpdateWithID(input *SubscriptionUpdateWithIDInput) (result *Subscription, err error) {
 	err = client.Update(strings.Replace("subscriptions/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

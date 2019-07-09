@@ -27,7 +27,7 @@ func (client *Client) TaxCategoryQuery(input *QueryInput) (result *TaxCategoryPa
 	return result, nil
 }
 
-func (client *Client) TaxCategoryDeleteWithId(ID string, version int) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryDeleteWithID(ID string, version int) (result *TaxCategory, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -38,7 +38,7 @@ func (client *Client) TaxCategoryDeleteWithId(ID string, version int) (result *T
 	return result, nil
 }
 
-func (client *Client) TaxCategoryGetWithId(ID string) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryGetWithID(ID string) (result *TaxCategory, err error) {
 	err = client.Get(strings.Replace("tax-categories/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -46,13 +46,13 @@ func (client *Client) TaxCategoryGetWithId(ID string) (result *TaxCategory, err 
 	return result, nil
 }
 
-type TaxCategoryUpdateWithIdInput struct {
+type TaxCategoryUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []TaxCategoryUpdateAction
 }
 
-func (client *Client) TaxCategoryUpdateWithId(input *TaxCategoryUpdateWithIdInput) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryUpdateWithID(input *TaxCategoryUpdateWithIDInput) (result *TaxCategory, err error) {
 	err = client.Update(strings.Replace("tax-categories/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

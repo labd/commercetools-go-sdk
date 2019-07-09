@@ -27,7 +27,7 @@ func (client *Client) CustomerQuery(input *QueryInput) (result *CustomerPagedQue
 	return result, nil
 }
 
-func (client *Client) CustomerDeleteWithId(ID string, version int, dataErasure bool) (result *Customer, err error) {
+func (client *Client) CustomerDeleteWithID(ID string, version int, dataErasure bool) (result *Customer, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
@@ -38,7 +38,7 @@ func (client *Client) CustomerDeleteWithId(ID string, version int, dataErasure b
 	return result, nil
 }
 
-func (client *Client) CustomerGetWithId(ID string) (result *Customer, err error) {
+func (client *Client) CustomerGetWithID(ID string) (result *Customer, err error) {
 	err = client.Get(strings.Replace("customers/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -46,13 +46,13 @@ func (client *Client) CustomerGetWithId(ID string) (result *Customer, err error)
 	return result, nil
 }
 
-type CustomerUpdateWithIdInput struct {
+type CustomerUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []CustomerUpdateAction
 }
 
-func (client *Client) CustomerUpdateWithId(input *CustomerUpdateWithIdInput) (result *Customer, err error) {
+func (client *Client) CustomerUpdateWithID(input *CustomerUpdateWithIDInput) (result *Customer, err error) {
 	err = client.Update(strings.Replace("customers/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

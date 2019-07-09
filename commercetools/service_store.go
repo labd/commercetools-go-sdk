@@ -60,7 +60,7 @@ func (client *Client) StoreUpdateWithKey(input *StoreUpdateWithKeyInput) (result
 	return result, nil
 }
 
-func (client *Client) StoreDeleteWithId(ID string, version int) (result *Store, err error) {
+func (client *Client) StoreDeleteWithID(ID string, version int) (result *Store, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) StoreDeleteWithId(ID string, version int) (result *Store, 
 	return result, nil
 }
 
-func (client *Client) StoreGetWithId(ID string) (result *Store, err error) {
+func (client *Client) StoreGetWithID(ID string) (result *Store, err error) {
 	err = client.Get(strings.Replace("stores/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) StoreGetWithId(ID string) (result *Store, err error) {
 	return result, nil
 }
 
-type StoreUpdateWithIdInput struct {
+type StoreUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []StoreUpdateAction
 }
 
-func (client *Client) StoreUpdateWithId(input *StoreUpdateWithIdInput) (result *Store, err error) {
+func (client *Client) StoreUpdateWithID(input *StoreUpdateWithIDInput) (result *Store, err error) {
 	err = client.Update(strings.Replace("stores/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

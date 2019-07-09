@@ -60,7 +60,7 @@ func (client *Client) ShippingMethodUpdateWithKey(input *ShippingMethodUpdateWit
 	return result, nil
 }
 
-func (client *Client) ShippingMethodDeleteWithId(ID string, version int) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodDeleteWithID(ID string, version int) (result *ShippingMethod, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) ShippingMethodDeleteWithId(ID string, version int) (result
 	return result, nil
 }
 
-func (client *Client) ShippingMethodGetWithId(ID string) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodGetWithID(ID string) (result *ShippingMethod, err error) {
 	err = client.Get(strings.Replace("shipping-methods/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) ShippingMethodGetWithId(ID string) (result *ShippingMethod
 	return result, nil
 }
 
-type ShippingMethodUpdateWithIdInput struct {
+type ShippingMethodUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ShippingMethodUpdateAction
 }
 
-func (client *Client) ShippingMethodUpdateWithId(input *ShippingMethodUpdateWithIdInput) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodUpdateWithID(input *ShippingMethodUpdateWithIDInput) (result *ShippingMethod, err error) {
 	err = client.Update(strings.Replace("shipping-methods/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

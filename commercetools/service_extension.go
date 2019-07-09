@@ -60,7 +60,7 @@ func (client *Client) ExtensionUpdateWithKey(input *ExtensionUpdateWithKeyInput)
 	return result, nil
 }
 
-func (client *Client) ExtensionDeleteWithId(ID string, version int) (result *Extension, err error) {
+func (client *Client) ExtensionDeleteWithID(ID string, version int) (result *Extension, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) ExtensionDeleteWithId(ID string, version int) (result *Ext
 	return result, nil
 }
 
-func (client *Client) ExtensionGetWithId(ID string) (result *Extension, err error) {
+func (client *Client) ExtensionGetWithID(ID string) (result *Extension, err error) {
 	err = client.Get(strings.Replace("extensions/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) ExtensionGetWithId(ID string) (result *Extension, err erro
 	return result, nil
 }
 
-type ExtensionUpdateWithIdInput struct {
+type ExtensionUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ExtensionUpdateAction
 }
 
-func (client *Client) ExtensionUpdateWithId(input *ExtensionUpdateWithIdInput) (result *Extension, err error) {
+func (client *Client) ExtensionUpdateWithID(input *ExtensionUpdateWithIDInput) (result *Extension, err error) {
 	err = client.Update(strings.Replace("extensions/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

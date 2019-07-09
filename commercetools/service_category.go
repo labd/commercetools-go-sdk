@@ -60,7 +60,7 @@ func (client *Client) CategoryUpdateWithKey(input *CategoryUpdateWithKeyInput) (
 	return result, nil
 }
 
-func (client *Client) CategoryDeleteWithId(ID string, version int) (result *Category, err error) {
+func (client *Client) CategoryDeleteWithID(ID string, version int) (result *Category, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) CategoryDeleteWithId(ID string, version int) (result *Cate
 	return result, nil
 }
 
-func (client *Client) CategoryGetWithId(ID string) (result *Category, err error) {
+func (client *Client) CategoryGetWithID(ID string) (result *Category, err error) {
 	err = client.Get(strings.Replace("categories/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) CategoryGetWithId(ID string) (result *Category, err error)
 	return result, nil
 }
 
-type CategoryUpdateWithIdInput struct {
+type CategoryUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []CategoryUpdateAction
 }
 
-func (client *Client) CategoryUpdateWithId(input *CategoryUpdateWithIdInput) (result *Category, err error) {
+func (client *Client) CategoryUpdateWithID(input *CategoryUpdateWithIDInput) (result *Category, err error) {
 	err = client.Update(strings.Replace("categories/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

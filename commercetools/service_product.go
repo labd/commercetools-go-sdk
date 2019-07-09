@@ -60,7 +60,7 @@ func (client *Client) ProductUpdateWithKey(input *ProductUpdateWithKeyInput) (re
 	return result, nil
 }
 
-func (client *Client) ProductDeleteWithId(ID string, version int) (result *Product, err error) {
+func (client *Client) ProductDeleteWithID(ID string, version int) (result *Product, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) ProductDeleteWithId(ID string, version int) (result *Produ
 	return result, nil
 }
 
-func (client *Client) ProductGetWithId(ID string) (result *Product, err error) {
+func (client *Client) ProductGetWithID(ID string) (result *Product, err error) {
 	err = client.Get(strings.Replace("products/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) ProductGetWithId(ID string) (result *Product, err error) {
 	return result, nil
 }
 
-type ProductUpdateWithIdInput struct {
+type ProductUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ProductUpdateAction
 }
 
-func (client *Client) ProductUpdateWithId(input *ProductUpdateWithIdInput) (result *Product, err error) {
+func (client *Client) ProductUpdateWithID(input *ProductUpdateWithIDInput) (result *Product, err error) {
 	err = client.Update(strings.Replace("products/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

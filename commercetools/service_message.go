@@ -15,7 +15,7 @@ func (client *Client) MessageQuery(input *QueryInput) (result *MessagePagedQuery
 	return result, nil
 }
 
-func (client *Client) MessageGetWithId(ID string) (result *Message, err error) {
+func (client *Client) MessageGetWithID(ID string) (result *Message, err error) {
 	err = client.Get(strings.Replace("messages/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err

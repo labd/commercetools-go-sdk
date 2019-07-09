@@ -60,7 +60,7 @@ func (client *Client) CustomerGroupUpdateWithKey(input *CustomerGroupUpdateWithK
 	return result, nil
 }
 
-func (client *Client) CustomerGroupDeleteWithId(ID string, version int) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupDeleteWithID(ID string, version int) (result *CustomerGroup, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) CustomerGroupDeleteWithId(ID string, version int) (result 
 	return result, nil
 }
 
-func (client *Client) CustomerGroupGetWithId(ID string) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupGetWithID(ID string) (result *CustomerGroup, err error) {
 	err = client.Get(strings.Replace("customer-groups/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) CustomerGroupGetWithId(ID string) (result *CustomerGroup, 
 	return result, nil
 }
 
-type CustomerGroupUpdateWithIdInput struct {
+type CustomerGroupUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []CustomerGroupUpdateAction
 }
 
-func (client *Client) CustomerGroupUpdateWithId(input *CustomerGroupUpdateWithIdInput) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupUpdateWithID(input *CustomerGroupUpdateWithIDInput) (result *CustomerGroup, err error) {
 	err = client.Update(strings.Replace("customer-groups/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

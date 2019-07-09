@@ -22,13 +22,13 @@ type RequestData struct {
 	JSON   string
 }
 
-type HttpHandler func(w http.ResponseWriter, r *http.Request)
+type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
 func MockClient(
 	t *testing.T,
 	fixture string,
 	output *RequestData,
-	callback HttpHandler) (*commercetools.Client, *httptest.Server) {
+	callback HTTPHandler) (*commercetools.Client, *httptest.Server) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(r.Body)

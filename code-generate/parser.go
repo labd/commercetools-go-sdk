@@ -98,7 +98,7 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 
 	codeName := CreateCodeName(name)
 	if codeName == "Error" {
-		codeName = "_Error"
+		codeName = "ErrorMessage"
 	}
 
 	object := RamlTypeAttribute{
@@ -186,7 +186,9 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceServ
 					methodKey := methodEntry.Key.(string)
 					if methodKey == "(methodName)" {
 						resourceMethod.MethodName = methodEntry.Value.(string)
-
+						if resourceMethod.MethodName == "withId" {
+							resourceMethod.MethodName = "withID"
+						}
 					}
 
 					if methodKey == "get" || methodKey == "post" || methodKey == "delete" {
@@ -215,7 +217,7 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceServ
 					}
 				}
 				// Only support withId/withKey for now.
-				if resourceMethod.MethodName == "withId" || resourceMethod.MethodName == "withKey" {
+				if resourceMethod.MethodName == "withID" || resourceMethod.MethodName == "withKey" {
 					resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
 				}
 			}

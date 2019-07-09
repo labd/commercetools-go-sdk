@@ -60,7 +60,7 @@ func (client *Client) TypeUpdateWithKey(input *TypeUpdateWithKeyInput) (result *
 	return result, nil
 }
 
-func (client *Client) TypeDeleteWithId(ID string, version int) (result *Type, err error) {
+func (client *Client) TypeDeleteWithID(ID string, version int) (result *Type, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) TypeDeleteWithId(ID string, version int) (result *Type, er
 	return result, nil
 }
 
-func (client *Client) TypeGetWithId(ID string) (result *Type, err error) {
+func (client *Client) TypeGetWithID(ID string) (result *Type, err error) {
 	err = client.Get(strings.Replace("types/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) TypeGetWithId(ID string) (result *Type, err error) {
 	return result, nil
 }
 
-type TypeUpdateWithIdInput struct {
+type TypeUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []TypeUpdateAction
 }
 
-func (client *Client) TypeUpdateWithId(input *TypeUpdateWithIdInput) (result *Type, err error) {
+func (client *Client) TypeUpdateWithID(input *TypeUpdateWithIDInput) (result *Type, err error) {
 	err = client.Update(strings.Replace("types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

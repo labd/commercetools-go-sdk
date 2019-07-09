@@ -60,7 +60,7 @@ func (client *Client) ZoneUpdateWithKey(input *ZoneUpdateWithKeyInput) (result *
 	return result, nil
 }
 
-func (client *Client) ZoneDeleteWithId(ID string, version int) (result *Zone, err error) {
+func (client *Client) ZoneDeleteWithID(ID string, version int) (result *Zone, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -71,7 +71,7 @@ func (client *Client) ZoneDeleteWithId(ID string, version int) (result *Zone, er
 	return result, nil
 }
 
-func (client *Client) ZoneGetWithId(ID string) (result *Zone, err error) {
+func (client *Client) ZoneGetWithID(ID string) (result *Zone, err error) {
 	err = client.Get(strings.Replace("zones/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) ZoneGetWithId(ID string) (result *Zone, err error) {
 	return result, nil
 }
 
-type ZoneUpdateWithIdInput struct {
+type ZoneUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ZoneUpdateAction
 }
 
-func (client *Client) ZoneUpdateWithId(input *ZoneUpdateWithIdInput) (result *Zone, err error) {
+func (client *Client) ZoneUpdateWithID(input *ZoneUpdateWithIDInput) (result *Zone, err error) {
 	err = client.Update(strings.Replace("zones/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

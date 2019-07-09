@@ -5,9 +5,8 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	"time"
-
 	mapstructure "github.com/mitchellh/mapstructure"
+	"time"
 )
 
 // SubscriptionHealthStatus is an enum type

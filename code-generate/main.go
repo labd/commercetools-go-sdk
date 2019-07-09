@@ -273,7 +273,6 @@ func main() {
 	}
 
 	objects, resources := parseYaml(t)
-	log.Printf("Found %d resources", len(resources))
 	postProcess(objects)
 	generateCode(objects)
 	generateResources(objects, resources)

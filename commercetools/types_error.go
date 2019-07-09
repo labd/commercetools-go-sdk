@@ -5,9 +5,8 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	"time"
-
 	mapstructure "github.com/mitchellh/mapstructure"
+	"time"
 )
 
 // ErrorObject uses code as discriminator attribute
@@ -484,7 +483,7 @@ type ErrorResponse struct {
 	Message          string        `json:"message"`
 	Errors           []ErrorObject `json:"errors,omitempty"`
 	ErrorDescription string        `json:"error_description,omitempty"`
-	_Error           string        `json:"error,omitempty"`
+	ErrorMessage     string        `json:"error,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

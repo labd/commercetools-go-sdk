@@ -60,7 +60,7 @@ func (client *Client) ReviewUpdateWithKey(input *ReviewUpdateWithKeyInput) (resu
 	return result, nil
 }
 
-func (client *Client) ReviewDeleteWithId(ID string, version int, dataErasure bool) (result *Review, err error) {
+func (client *Client) ReviewDeleteWithID(ID string, version int, dataErasure bool) (result *Review, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
@@ -71,7 +71,7 @@ func (client *Client) ReviewDeleteWithId(ID string, version int, dataErasure boo
 	return result, nil
 }
 
-func (client *Client) ReviewGetWithId(ID string) (result *Review, err error) {
+func (client *Client) ReviewGetWithID(ID string) (result *Review, err error) {
 	err = client.Get(strings.Replace("reviews/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,13 @@ func (client *Client) ReviewGetWithId(ID string) (result *Review, err error) {
 	return result, nil
 }
 
-type ReviewUpdateWithIdInput struct {
+type ReviewUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ReviewUpdateAction
 }
 
-func (client *Client) ReviewUpdateWithId(input *ReviewUpdateWithIdInput) (result *Review, err error) {
+func (client *Client) ReviewUpdateWithID(input *ReviewUpdateWithIDInput) (result *Review, err error) {
 	err = client.Update(strings.Replace("reviews/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

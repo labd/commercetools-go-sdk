@@ -202,16 +202,6 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 				}
 
 			}
-			/*
-				type ResourceMethod struct {
-					Path                 string
-					PathParameterName    string
-					MethodName           string
-					HTTPMethods          []string
-					DeleteHasDataErasure bool
-				}
-			*/
-
 		}
 
 		filename := generateFilename(resource.Package)

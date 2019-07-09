@@ -27,7 +27,7 @@ func (client *Client) CartQuery(input *QueryInput) (result *CartPagedQueryRespon
 	return result, nil
 }
 
-func (client *Client) CartDeleteWithId(ID string, version int, dataErasure bool) (result *Cart, err error) {
+func (client *Client) CartDeleteWithID(ID string, version int, dataErasure bool) (result *Cart, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
@@ -38,7 +38,7 @@ func (client *Client) CartDeleteWithId(ID string, version int, dataErasure bool)
 	return result, nil
 }
 
-func (client *Client) CartGetWithId(ID string) (result *Cart, err error) {
+func (client *Client) CartGetWithID(ID string) (result *Cart, err error) {
 	err = client.Get(strings.Replace("carts/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -46,13 +46,13 @@ func (client *Client) CartGetWithId(ID string) (result *Cart, err error) {
 	return result, nil
 }
 
-type CartUpdateWithIdInput struct {
+type CartUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []CartUpdateAction
 }
 
-func (client *Client) CartUpdateWithId(input *CartUpdateWithIdInput) (result *Cart, err error) {
+func (client *Client) CartUpdateWithID(input *CartUpdateWithIDInput) (result *Cart, err error) {
 	err = client.Update(strings.Replace("carts/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

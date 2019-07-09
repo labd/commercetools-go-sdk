@@ -26,7 +26,7 @@ func (client *Client) APIClientQuery(input *QueryInput) (result *APIClientPagedQ
 	return result, nil
 }
 
-func (client *Client) APIClientDeleteWithId(ID string) (result *APIClient, err error) {
+func (client *Client) APIClientDeleteWithID(ID string) (result *APIClient, err error) {
 	params := url.Values{}
 
 	err = client.Delete(strings.Replace("api-clients/{ID}", "{ID}", ID, 1), params, &result)
@@ -36,7 +36,7 @@ func (client *Client) APIClientDeleteWithId(ID string) (result *APIClient, err e
 	return result, nil
 }
 
-func (client *Client) APIClientGetWithId(ID string) (result *APIClient, err error) {
+func (client *Client) APIClientGetWithID(ID string) (result *APIClient, err error) {
 	err = client.Get(strings.Replace("api-clients/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err

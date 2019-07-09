@@ -27,7 +27,7 @@ func (client *Client) InventoryEntryQuery(input *QueryInput) (result *InventoryP
 	return result, nil
 }
 
-func (client *Client) InventoryEntryDeleteWithId(ID string, version int) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryDeleteWithID(ID string, version int) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
@@ -38,7 +38,7 @@ func (client *Client) InventoryEntryDeleteWithId(ID string, version int) (result
 	return result, nil
 }
 
-func (client *Client) InventoryEntryGetWithId(ID string) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryGetWithID(ID string) (result *InventoryEntry, err error) {
 	err = client.Get(strings.Replace("inventory/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
@@ -46,13 +46,13 @@ func (client *Client) InventoryEntryGetWithId(ID string) (result *InventoryEntry
 	return result, nil
 }
 
-type InventoryEntryUpdateWithIdInput struct {
+type InventoryEntryUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []InventoryUpdateAction
 }
 
-func (client *Client) InventoryEntryUpdateWithId(input *InventoryEntryUpdateWithIdInput) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryUpdateWithID(input *InventoryEntryUpdateWithIDInput) (result *InventoryEntry, err error) {
 	err = client.Update(strings.Replace("inventory/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
