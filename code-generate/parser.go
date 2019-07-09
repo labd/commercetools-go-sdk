@@ -120,9 +120,19 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 
 // ResourceHTTPMethod contains data for a specific HTTP method
 type ResourceHTTPMethod struct {
-	HTTPMethod           string
-	Description          string
-	DeleteHasDataErasure bool
+	HTTPMethod  string
+	Description string
+	Traits      []string
+}
+
+// HasTrait checks if a ResourceHTTPMethod has a certain trait
+func (resourceHTTPMethod *ResourceHTTPMethod) HasTrait(searchTrait string) bool {
+	for _, trait := range resourceHTTPMethod.Traits {
+		if trait == searchTrait {
+			return true
+		}
+	}
+	return false
 }
 
 // ResourceMethod contains HTTP CRUD actions for a specific method.
@@ -179,51 +189,7 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceServ
 				resourceService.ResourceDraftType = getPropertyString(baseDomain, "resourceDraft")
 			}
 			if strings.HasPrefix(key, "/") {
-				resourceMethod := ResourceMethod{
-					Path: key,
-				}
-				switch key {
-				case "/{ID}":
-					resourceMethod.PathParameterName = "ID"
-				case "/key={key}":
-					resourceMethod.PathParameterName = "key"
-				}
-				for _, methodEntry := range item.Value.(yaml.MapSlice) {
-					methodKey := methodEntry.Key.(string)
-					if methodKey == "(methodName)" {
-						resourceMethod.MethodName = methodEntry.Value.(string)
-						if resourceMethod.MethodName == "withId" {
-							resourceMethod.MethodName = "withID"
-						}
-					}
-
-					if methodKey == "get" || methodKey == "post" || methodKey == "delete" {
-						resourceHTTPMethod := ResourceHTTPMethod{
-							HTTPMethod: methodKey,
-						}
-						if methodEntry.Value != nil {
-							methodInfo := methodEntry.Value.(yaml.MapSlice)
-							if methodInfo != nil {
-								resourceHTTPMethod.Description = getPropertyString(methodInfo, "description")
-								if methodKey == "delete" {
-									isSection := getPropertyValue(methodInfo, "is")
-									if isSection != nil {
-										for _, traitInterface := range isSection.([]interface{}) {
-											if traitName, ok := traitInterface.(string); ok {
-												if traitName == "dataErasure" {
-													resourceHTTPMethod.DeleteHasDataErasure = true
-													break
-												}
-											}
-
-										}
-									}
-								}
-							}
-						}
-						resourceMethod.HTTPMethods = append(resourceMethod.HTTPMethods, resourceHTTPMethod)
-					}
-				}
+				resourceMethod := createResourceMethod(item.Value.(yaml.MapSlice), key)
 				// Only support withId/withKey for now.
 				if resourceMethod.MethodName == "withID" || resourceMethod.MethodName == "withKey" {
 					resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
@@ -234,4 +200,52 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceServ
 	}
 
 	return
+}
+
+func createResourceMethod(resourceMethodData yaml.MapSlice, key string) (resourceMethod ResourceMethod) {
+	resourceMethod = ResourceMethod{
+		Path: key,
+	}
+	switch key {
+	case "/{ID}":
+		resourceMethod.PathParameterName = "ID"
+	case "/key={key}":
+		resourceMethod.PathParameterName = "key"
+	}
+	for _, methodEntry := range resourceMethodData {
+		methodKey := methodEntry.Key.(string)
+		if methodKey == "(methodName)" {
+			resourceMethod.MethodName = methodEntry.Value.(string)
+			if resourceMethod.MethodName == "withId" {
+				resourceMethod.MethodName = "withID"
+			}
+		}
+
+		if methodKey == "get" || methodKey == "post" || methodKey == "delete" {
+			resourceHTTPMethod := createHTTPMethod(methodEntry, methodKey)
+			resourceMethod.HTTPMethods = append(resourceMethod.HTTPMethods, resourceHTTPMethod)
+		}
+	}
+	return resourceMethod
+}
+
+func createHTTPMethod(methodEntry yaml.MapItem, methodKey string) ResourceHTTPMethod {
+	resourceHTTPMethod := ResourceHTTPMethod{
+		HTTPMethod: methodKey,
+	}
+	if methodEntry.Value != nil {
+		methodInfo := methodEntry.Value.(yaml.MapSlice)
+		if methodInfo != nil {
+			resourceHTTPMethod.Description = getPropertyString(methodInfo, "description")
+			isSection := getPropertyValue(methodInfo, "is")
+			if isSection != nil {
+				for _, traitInterface := range isSection.([]interface{}) {
+					if traitName, ok := traitInterface.(string); ok {
+						resourceHTTPMethod.Traits = append(resourceHTTPMethod.Traits, traitName)
+					}
+				}
+			}
+		}
+	}
+	return resourceHTTPMethod
 }

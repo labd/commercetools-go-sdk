@@ -94,7 +94,7 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 		setVersionParam = jen.Id("params").Op(".").Id("Set").Call(jen.Lit("version"), jen.Qual("strconv", "Itoa").Call(jen.Id("version")))
 	}
 	setDataErasure := jen.Empty()
-	if httpMethod.DeleteHasDataErasure {
+	if httpMethod.HasTrait("dataErasure") {
 		// TODO: nasty hack, assume version is also input
 		methodParams = jen.List(methodIdentifierParam, jen.Id("version").Int(), jen.Id("dataErasure").Bool())
 
