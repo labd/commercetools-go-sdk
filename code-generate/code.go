@@ -53,6 +53,7 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 			returnParams := jen.Id("client").Op("*").Id("Client")
 			createParams := jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType)
 
+			f.Commentf("%s creates a new instance of type %s", createName, resourceService.ResourceType)
 			f.Func().Params(returnParams).Id(createName).Params(createParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 				jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
 					jen.Id(urlPathName),
@@ -72,6 +73,7 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 			returnParams := jen.Id("client").Op("*").Id("Client")
 			queryParams := jen.Id("input").Op("*").Id("QueryInput")
 
+			f.Commentf("%s allows querying for type %s", queryName, resourceService.ResourceType)
 			f.Func().Params(returnParams).Id(queryName).Params(queryParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceQueryType), jen.Err().Error())).Block(
 				jen.Id("err").Op("=").Id("client").Op(".").Id("Query").Call(
 					jen.Id(urlPathName),
@@ -87,7 +89,7 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 
 		for _, resourceMethod := range resourceService.ResourceMethods {
 			for _, httpMethod := range resourceMethod.HTTPMethods {
-				switch httpMethod {
+				switch httpMethod.HTTPMethod {
 				case "get":
 					methodName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 					returnParams := jen.Id("client").Op("*").Id("Client")
@@ -95,8 +97,13 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 
 					urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
 
+					description := fmt.Sprintf("for type %s", resourceService.ResourceType)
+					if httpMethod.Description != "" {
+						description = httpMethod.Description
+					}
+					f.Commentf("%s %s", methodName, description)
 					f.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
-						jen.Id("err").Op("=").Id("client").Op(".").Id(strings.Title(httpMethod)).Call(
+						jen.Id("err").Op("=").Id("client").Op(".").Id(strings.Title(httpMethod.HTTPMethod)).Call(
 							jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(resourceMethod.PathParameterName), jen.Lit(1)),
 							jen.Nil(),
 							jen.Op("&").Id("result"),
@@ -119,6 +126,8 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 					if updateObjectType == "InventoryEntryUpdateAction" {
 						updateObjectType = "InventoryUpdateAction"
 					}
+
+					f.Commentf("%s is input for function %s", updateStructID, methodName)
 					f.Type().Id(updateStructID).Struct(
 						jen.Id(updateIdentifier).String(),
 						jen.Id("Version").Int(),
@@ -136,6 +145,11 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 							return nil, fmt.Errorf("no valid type id passed")
 						}
 					*/
+					description := fmt.Sprintf("for type %s", resourceService.ResourceType)
+					if httpMethod.Description != "" {
+						description = httpMethod.Description
+					}
+					f.Commentf("%s %s", methodName, description)
 					f.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 						jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
 							jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id("input").Op(".").Id(updateIdentifier), jen.Lit(1)),
@@ -172,7 +186,7 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 						setVersionParam = jen.Id("params").Op(".").Id("Set").Call(jen.Lit("version"), jen.Qual("strconv", "Itoa").Call(jen.Id("version")))
 					}
 					setDataErasure := jen.Empty()
-					if resourceMethod.DeleteHasDataErasure {
+					if httpMethod.DeleteHasDataErasure {
 						// TODO: nasty hack, assume version is also input
 						methodParams = jen.List(methodIdentifierParam, jen.Id("version").Int(), jen.Id("dataErasure").Bool())
 
@@ -181,6 +195,12 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 					clientMethod := "Delete"
 
 					returnParams := jen.Id("client").Op("*").Id("Client")
+
+					description := fmt.Sprintf("for type %s", resourceService.ResourceType)
+					if httpMethod.Description != "" {
+						description = httpMethod.Description
+					}
+					f.Commentf("%s %s", methodName, description)
 					f.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 						jen.Id("params").Op(":=").Qual("net/url", "Values").Block(),
 						setVersionParam,

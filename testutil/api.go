@@ -15,6 +15,7 @@ import (
 	"golang.org/x/oauth2"
 )
 
+// RequestData holds test HTTP request data
 type RequestData struct {
 	URL    url.URL
 	Body   []byte
@@ -22,8 +23,10 @@ type RequestData struct {
 	JSON   string
 }
 
+// HTTPHandler type defines callback from doing a mock HTTP request
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
+// MockClient returns a client to mock HTTP requests with a callback function
 func MockClient(
 	t *testing.T,
 	fixture string,

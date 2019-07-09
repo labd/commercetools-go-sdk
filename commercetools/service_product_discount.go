@@ -11,6 +11,7 @@ import (
 // ProductDiscountURLPath is the commercetools API path.
 const ProductDiscountURLPath = "product-discounts"
 
+// ProductDiscountCreate creates a new instance of type ProductDiscount
 func (client *Client) ProductDiscountCreate(draft *ProductDiscountDraft) (result *ProductDiscount, err error) {
 	err = client.Create(ProductDiscountURLPath, nil, draft, &result)
 	if err != nil {
@@ -19,6 +20,7 @@ func (client *Client) ProductDiscountCreate(draft *ProductDiscountDraft) (result
 	return result, nil
 }
 
+// ProductDiscountQuery allows querying for type ProductDiscount
 func (client *Client) ProductDiscountQuery(input *QueryInput) (result *ProductDiscountPagedQueryResponse, err error) {
 	err = client.Query(ProductDiscountURLPath, input.toParams(), &result)
 	if err != nil {
@@ -27,6 +29,7 @@ func (client *Client) ProductDiscountQuery(input *QueryInput) (result *ProductDi
 	return result, nil
 }
 
+// ProductDiscountDeleteWithKey for type ProductDiscount
 func (client *Client) ProductDiscountDeleteWithKey(key string, version int) (result *ProductDiscount, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
@@ -38,6 +41,7 @@ func (client *Client) ProductDiscountDeleteWithKey(key string, version int) (res
 	return result, nil
 }
 
+// ProductDiscountGetWithKey for type ProductDiscount
 func (client *Client) ProductDiscountGetWithKey(key string) (result *ProductDiscount, err error) {
 	err = client.Get(strings.Replace("product-discounts/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
@@ -46,12 +50,14 @@ func (client *Client) ProductDiscountGetWithKey(key string) (result *ProductDisc
 	return result, nil
 }
 
+// ProductDiscountUpdateWithKeyInput is input for function ProductDiscountUpdateWithKey
 type ProductDiscountUpdateWithKeyInput struct {
 	Key     string
 	Version int
 	Actions []ProductDiscountUpdateAction
 }
 
+// ProductDiscountUpdateWithKey for type ProductDiscount
 func (client *Client) ProductDiscountUpdateWithKey(input *ProductDiscountUpdateWithKeyInput) (result *ProductDiscount, err error) {
 	err = client.Update(strings.Replace("product-discounts/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
@@ -60,6 +66,7 @@ func (client *Client) ProductDiscountUpdateWithKey(input *ProductDiscountUpdateW
 	return result, nil
 }
 
+// ProductDiscountDeleteWithID for type ProductDiscount
 func (client *Client) ProductDiscountDeleteWithID(ID string, version int) (result *ProductDiscount, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
@@ -71,6 +78,7 @@ func (client *Client) ProductDiscountDeleteWithID(ID string, version int) (resul
 	return result, nil
 }
 
+// ProductDiscountGetWithID for type ProductDiscount
 func (client *Client) ProductDiscountGetWithID(ID string) (result *ProductDiscount, err error) {
 	err = client.Get(strings.Replace("product-discounts/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
@@ -79,12 +87,14 @@ func (client *Client) ProductDiscountGetWithID(ID string) (result *ProductDiscou
 	return result, nil
 }
 
+// ProductDiscountUpdateWithIDInput is input for function ProductDiscountUpdateWithID
 type ProductDiscountUpdateWithIDInput struct {
 	ID      string
 	Version int
 	Actions []ProductDiscountUpdateAction
 }
 
+// ProductDiscountUpdateWithID for type ProductDiscount
 func (client *Client) ProductDiscountUpdateWithID(input *ProductDiscountUpdateWithIDInput) (result *ProductDiscount, err error) {
 	err = client.Update(strings.Replace("product-discounts/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {

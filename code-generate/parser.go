@@ -118,13 +118,19 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 	return object
 }
 
+// ResourceHTTPMethod contains data for a specific HTTP method
+type ResourceHTTPMethod struct {
+	HTTPMethod           string
+	Description          string
+	DeleteHasDataErasure bool
+}
+
 // ResourceMethod contains HTTP CRUD actions for a specific method.
 type ResourceMethod struct {
-	Path                 string
-	PathParameterName    string
-	MethodName           string
-	HTTPMethods          []string
-	DeleteHasDataErasure bool
+	Path              string
+	PathParameterName string
+	MethodName        string
+	HTTPMethods       []ResourceHTTPMethod
 }
 
 // ResourceService contains all the data to CRUD an API resource.
@@ -192,28 +198,30 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceServ
 					}
 
 					if methodKey == "get" || methodKey == "post" || methodKey == "delete" {
-						resourceMethod.HTTPMethods = append(resourceMethod.HTTPMethods, methodKey)
-					}
-					if methodKey == "delete" {
-						if methodEntry.Value == nil {
-							continue
+						resourceHTTPMethod := ResourceHTTPMethod{
+							HTTPMethod: methodKey,
 						}
-						deleteInfo := methodEntry.Value.(yaml.MapSlice)
-						if deleteInfo == nil {
-							continue
-						}
-						isSection := getPropertyValue(deleteInfo, "is")
-						if isSection != nil {
-							for _, traitInterface := range isSection.([]interface{}) {
-								if traitName, ok := traitInterface.(string); ok {
-									if traitName == "dataErasure" {
-										resourceMethod.DeleteHasDataErasure = true
-										break
+						if methodEntry.Value != nil {
+							methodInfo := methodEntry.Value.(yaml.MapSlice)
+							if methodInfo != nil {
+								resourceHTTPMethod.Description = getPropertyString(methodInfo, "description")
+								if methodKey == "delete" {
+									isSection := getPropertyValue(methodInfo, "is")
+									if isSection != nil {
+										for _, traitInterface := range isSection.([]interface{}) {
+											if traitName, ok := traitInterface.(string); ok {
+												if traitName == "dataErasure" {
+													resourceHTTPMethod.DeleteHasDataErasure = true
+													break
+												}
+											}
+
+										}
 									}
 								}
-
 							}
 						}
+						resourceMethod.HTTPMethods = append(resourceMethod.HTTPMethods, resourceHTTPMethod)
 					}
 				}
 				// Only support withId/withKey for now.
