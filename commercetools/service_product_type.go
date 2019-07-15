@@ -1,45 +1,17 @@
+// Automatically generated, do not edit
+
 package commercetools
 
 import (
-	"fmt"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
-// ProductTypeDeleteInput provides the data required to delete a product type.
-type ProductTypeDeleteInput struct {
-	ID      string
-	Version int
-}
-
-// ProductTypeUpdateInput provides the data required to update a product type.
-type ProductTypeUpdateInput struct {
-	ID string
-
-	// The expected version of the product type on which the changes should be
-	// applied. If the expected version does not match the actual version, a 409
-	// Conflict will be returned.
-	Version int
-
-	// The list of update actions to be performed on the product type.
-	Actions []ProductTypeUpdateAction
-}
-
-// ProductTypeURLPath is the commercetools API product type path.
+// ProductTypeURLPath is the commercetools API path.
 const ProductTypeURLPath = "product-types"
 
-// ProductTypeGetByID will return a product type matching the provided ID. OAuth2 Scopes:
-// view_products:{projectKey}
-func (client *Client) ProductTypeGetByID(id string) (result *ProductType, err error) {
-	err = client.Get(fmt.Sprintf("%s/%s", ProductTypeURLPath, id), nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductTypeCreate will create a new product type from a draft, and return the
-// newly created product type. OAuth2 Scopes: manage_products:{projectKey}
+// ProductTypeCreate creates a new instance of type ProductType
 func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *ProductType, err error) {
 	err = client.Create(ProductTypeURLPath, nil, draft, &result)
 	if err != nil {
@@ -48,56 +20,83 @@ func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *Produc
 	return result, nil
 }
 
-// ProductTypeUpdate will update a product type matching the provided ID with
-// the defined ProductTypeUpdateActions. OAuth2 Scopes:
-// manage_products:{projectKey}
-func (client *Client) ProductTypeUpdate(input *ProductTypeUpdateInput) (result *ProductType, err error) {
-	if input.ID == "" {
-		return nil, fmt.Errorf("No valid product type id passed")
-	}
-
-	endpoint := fmt.Sprintf("%s/%s", ProductTypeURLPath, input.ID)
-	err = client.Update(endpoint, nil, input.Version, input.Actions, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductTypeDeleteByID will delete a product type matching the provided ID.
-// This request deletes a product type only if it’s not referenced by a product.
-// OAuth2 Scopes: manage_products:{projectKey}
-func (client *Client) ProductTypeDeleteByID(id string, version int) (result *ProductType, err error) {
-	endpoint := fmt.Sprintf("%s/%s", ProductTypeURLPath, id)
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	err = client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductTypeDeleteByKey will delete a product type matching the provided key.
-// This request deletes a product type only if it’s not referenced by a product.
-// OAuth2 Scopes: manage_products:{projectKey}
-func (client *Client) ProductTypeDeleteByKey(key string, version int) (result *ProductType, err error) {
-	endpoint := fmt.Sprintf("%s/key=%s", ProductTypeURLPath, key)
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	err = client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductTypeQuery will query product types.
-// OAuth2 Scopes: view_products:{projectKey}
+// ProductTypeQuery allows querying for type ProductType
 func (client *Client) ProductTypeQuery(input *QueryInput) (result *ProductTypePagedQueryResponse, err error) {
 	err = client.Query(ProductTypeURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeDeleteWithKey for type ProductType
+func (client *Client) ProductTypeDeleteWithKey(key string, version int) (result *ProductType, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("product-types/key={key}", "{key}", key, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeGetWithKey for type ProductType
+func (client *Client) ProductTypeGetWithKey(key string) (result *ProductType, err error) {
+	err = client.Get(strings.Replace("product-types/key={key}", "{key}", key, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeUpdateWithKeyInput is input for function ProductTypeUpdateWithKey
+type ProductTypeUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []ProductTypeUpdateAction
+}
+
+// ProductTypeUpdateWithKey for type ProductType
+func (client *Client) ProductTypeUpdateWithKey(input *ProductTypeUpdateWithKeyInput) (result *ProductType, err error) {
+	err = client.Update(strings.Replace("product-types/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeDeleteWithID for type ProductType
+func (client *Client) ProductTypeDeleteWithID(ID string, version int) (result *ProductType, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("product-types/{ID}", "{ID}", ID, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeGetWithID for type ProductType
+func (client *Client) ProductTypeGetWithID(ID string) (result *ProductType, err error) {
+	err = client.Get(strings.Replace("product-types/{ID}", "{ID}", ID, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductTypeUpdateWithIDInput is input for function ProductTypeUpdateWithID
+type ProductTypeUpdateWithIDInput struct {
+	ID      string
+	Version int
+	Actions []ProductTypeUpdateAction
+}
+
+// ProductTypeUpdateWithID for type ProductType
+func (client *Client) ProductTypeUpdateWithID(input *ProductTypeUpdateWithIDInput) (result *ProductType, err error) {
+	err = client.Update(strings.Replace("product-types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

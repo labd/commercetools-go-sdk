@@ -66,12 +66,12 @@ func TestProductTypeCreate(t *testing.T) {
 func TestProductTypeUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.ProductTypeUpdateInput
+		input       *commercetools.ProductTypeUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Set key",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -92,7 +92,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change name",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -113,7 +113,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change description",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -134,7 +134,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add attribute definition",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -183,7 +183,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove attribute definition",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -204,7 +204,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change attribute definition name",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -227,7 +227,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change attribute definition label",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -254,7 +254,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set attribute definition input tip",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -281,7 +281,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add plain enum value",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -310,7 +310,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add localized enum value",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -343,7 +343,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove enum values",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -366,7 +366,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change attribute definitions order",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -413,7 +413,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change plain enum value order",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -446,7 +446,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change localized enum value order",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -483,7 +483,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change enum value key",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -508,7 +508,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change plain enum value label",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -537,7 +537,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change localized enum value label",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -570,7 +570,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change is searchable",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -593,7 +593,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change input hint",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -616,7 +616,7 @@ func TestProductTypeUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change attribute constraint",
-			input: &commercetools.ProductTypeUpdateInput{
+			input: &commercetools.ProductTypeUpdateWithIDInput{
 				ID:      "1234",
 				Version: 3,
 				Actions: []commercetools.ProductTypeUpdateAction{
@@ -646,7 +646,7 @@ func TestProductTypeUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("producttype.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ProductTypeUpdate(tC.input)
+			_, err := client.ProductTypeUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/product-types/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -660,7 +660,7 @@ func TestProductTypeDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ProductTypeDeleteByID("1234", 3)
+	_, err := client.ProductTypeDeleteWithID("1234", 3)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -675,7 +675,7 @@ func TestProductTypeDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ProductTypeDeleteByKey("1234", 3)
+	_, err := client.ProductTypeDeleteWithKey("1234", 3)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -749,7 +749,7 @@ func TestProductTypeGetByID(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture(tC.fixture), nil, nil)
 			defer server.Close()
 
-			result, err := client.ProductTypeGetByID("1234")
+			result, err := client.ProductTypeGetWithID("1234")
 			assert.Nil(t, err)
 			assert.Equal(t, tC.input, result)
 		})

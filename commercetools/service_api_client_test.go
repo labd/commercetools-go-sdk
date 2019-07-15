@@ -41,7 +41,7 @@ func TestAPIClientDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.APIClientDelete("1234")
+	_, err := client.APIClientDeleteWithID("1234")
 	assert.Nil(t, err)
 
 	assert.Equal(t, "/unittest/api-clients/1234", output.URL.Path)
@@ -62,7 +62,7 @@ func TestAPIClientGetByID(t *testing.T) {
 		Secret:     "secret-passphrase",
 	}
 
-	result, err := client.APIClientGetByID("1234")
+	result, err := client.APIClientGetWithID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

@@ -16,6 +16,263 @@ func generateFilename(name string) string {
 	return strcase.ToSnake(name) + ".go"
 }
 
+// Entry point to generate services
+func generateResources(objects []RamlType, resources []ResourceService) {
+	typeMapping := map[string]*RamlType{}
+
+	for i := range objects {
+		item := objects[i]
+		typeMapping[item.Name] = &item
+	}
+
+	for _, resourceService := range resources {
+		f := jen.NewFile("commercetools")
+		f.HeaderComment("Automatically generated, do not edit")
+
+		resource := typeMapping[resourceService.ResourceType]
+
+		if resource == nil {
+			continue
+		}
+		// Skip this because it has a weird RAML definition
+		if resource.CodeName == "CustomObject" {
+			continue
+		}
+		// TODO: ugly hack
+		resourceService.ResourceType = CreateCodeName(resourceService.ResourceType)
+		resourceService.ResourceDraftType = CreateCodeName(resourceService.ResourceDraftType)
+		resourceService.ResourceQueryType = CreateCodeName(resourceService.ResourceQueryType)
+
+		urlPathName := fmt.Sprintf("%sURLPath", resource.CodeName)
+		c := jen.Comment(fmt.Sprintf("%s is the commercetools API path.", urlPathName)).Line()
+		c.Const().Id(urlPathName).Op("=").Lit(resourceService.BasePath).Line()
+		f.Add(c)
+
+		if resourceService.HasCreate {
+			createCode := createResourceCode(resource, resourceService, urlPathName)
+			f.Add(createCode)
+		}
+
+		if resourceService.HasList {
+			queryCode := queryResourceCode(resource, resourceService, urlPathName)
+			f.Add(queryCode)
+		}
+
+		httpMethodsCode := generateResourceHTTPMethodsCode(resource, resourceService, urlPathName)
+		for _, httpMethodCode := range httpMethodsCode {
+			f.Add(httpMethodCode)
+		}
+
+		filename := generateFilename(resource.Package)
+		err := f.Save("commercetools/service_" + filename)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+	deleteIdentifier := "ID"
+	if strings.Contains(resourceMethod.MethodName, "Key") {
+		deleteIdentifier = "key"
+	}
+
+	methodName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
+
+	deleteWithVersion := true
+	// TODO: nasty hack / incomplete API def
+	if resourceService.ResourceType == "APIClient" {
+		deleteWithVersion = false
+	}
+
+	methodIdentifierParam := jen.Id(resourceMethod.PathParameterName).String()
+	methodParams := methodIdentifierParam
+	setVersionParam := jen.Empty()
+	if deleteWithVersion {
+		methodParams = jen.List(methodIdentifierParam, jen.Id("version").Int())
+		setVersionParam = jen.Id("params").Op(".").Id("Set").Call(jen.Lit("version"), jen.Qual("strconv", "Itoa").Call(jen.Id("version")))
+	}
+	setDataErasure := jen.Empty()
+	if httpMethod.HasTrait("dataErasure") {
+		// TODO: nasty hack, assume version is also input
+		methodParams = jen.List(methodIdentifierParam, jen.Id("version").Int(), jen.Id("dataErasure").Bool())
+
+		setDataErasure = jen.Id("params").Op(".").Id("Set").Call(jen.Lit("dataErasure"), jen.Qual("strconv", "FormatBool").Call(jen.Id("dataErasure")))
+	}
+	clientMethod := "Delete"
+
+	returnParams := jen.Id("client").Op("*").Id("Client")
+
+	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
+	if httpMethod.Description != "" {
+		description = httpMethod.Description
+	}
+	c := jen.Commentf("%s %s", methodName, description).Line()
+	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+		jen.Id("params").Op(":=").Qual("net/url", "Values").Block(),
+		setVersionParam,
+		setDataErasure,
+		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
+			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(deleteIdentifier), jen.Lit(1)),
+			jen.Id("params"),
+			jen.Op("&").Id("result"),
+		),
+		jen.If(jen.Err().Op("!=").Nil()).Block(
+			jen.Return(jen.Nil(), jen.Err()),
+		),
+		jen.Return(jen.Id("result"), jen.Nil()),
+	).Line()
+
+	return c
+}
+
+func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+	updateIdentifier := "ID"
+	if strings.Contains(resourceMethod.MethodName, "Key") {
+		updateIdentifier = "Key"
+	}
+
+	methodName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	updateStructID := fmt.Sprintf("%sUpdate%sInput", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	updateObjectType := fmt.Sprintf("%sUpdateAction", resource.CodeName)
+	// TODO: Inconsistent api def... :(
+	if updateObjectType == "InventoryEntryUpdateAction" {
+		updateObjectType = "InventoryUpdateAction"
+	}
+
+	c := jen.Commentf("%s is input for function %s", updateStructID, methodName).Line()
+	c.Type().Id(updateStructID).Struct(
+		jen.Id(updateIdentifier).String(),
+		jen.Id("Version").Int(),
+		jen.Id("Actions").Index().Id(updateObjectType),
+	).Line()
+	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
+
+	methodParams := jen.Id("input").Op("*").Id(updateStructID)
+	clientMethod := "Update"
+
+	returnParams := jen.Id("client").Op("*").Id("Client")
+	/*
+		TODO: add this sanity check
+		if input.ID == "" {
+			return nil, fmt.Errorf("no valid type id passed")
+		}
+	*/
+	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
+	if httpMethod.Description != "" {
+		description = httpMethod.Description
+	}
+	c.Commentf("%s %s", methodName, description).Line()
+	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
+			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id("input").Op(".").Id(updateIdentifier), jen.Lit(1)),
+			jen.Nil(),
+			jen.Id("input").Op(".").Id("Version"),
+			jen.Id("input").Op(".").Id("Actions"),
+			jen.Op("&").Id("result"),
+		),
+		jen.If(jen.Err().Op("!=").Nil()).Block(
+			jen.Return(jen.Nil(), jen.Err()),
+		),
+		jen.Return(jen.Id("result"), jen.Nil()),
+	).Line()
+
+	return c
+}
+
+func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+	methodName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	returnParams := jen.Id("client").Op("*").Id("Client")
+	methodParams := jen.Id(resourceMethod.PathParameterName).String()
+
+	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
+
+	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
+	if httpMethod.Description != "" {
+		description = httpMethod.Description
+	}
+	c := jen.Commentf("%s %s", methodName, description).Line()
+	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+		jen.Id("err").Op("=").Id("client").Op(".").Id(strings.Title(httpMethod.HTTPMethod)).Call(
+			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(resourceMethod.PathParameterName), jen.Lit(1)),
+			jen.Nil(),
+			jen.Op("&").Id("result"),
+		),
+		jen.If(jen.Err().Op("!=").Nil()).Block(
+			jen.Return(jen.Nil(), jen.Err()),
+		),
+		jen.Return(jen.Id("result"), jen.Nil()),
+	).Line()
+	return c
+}
+
+func generateResourceHTTPMethodsCode(resource *RamlType, resourceService ResourceService, urlPathName string) (httpMethodsCode []*jen.Statement) {
+	httpMethodsCode = make([]*jen.Statement, 0)
+	for _, resourceMethod := range resourceService.ResourceMethods {
+		for _, httpMethod := range resourceMethod.HTTPMethods {
+			switch httpMethod.HTTPMethod {
+			case "get":
+				c := getResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				httpMethodsCode = append(httpMethodsCode, c)
+			case "post":
+				c := postResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				httpMethodsCode = append(httpMethodsCode, c)
+			case "delete":
+				c := deleteResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				httpMethodsCode = append(httpMethodsCode, c)
+			default:
+				continue
+
+			}
+
+		}
+	}
+
+	return httpMethodsCode
+}
+
+func queryResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
+	queryName := fmt.Sprintf("%sQuery", resource.CodeName)
+	returnParams := jen.Id("client").Op("*").Id("Client")
+	queryParams := jen.Id("input").Op("*").Id("QueryInput")
+
+	c := jen.Commentf("%s allows querying for type %s", queryName, resourceService.ResourceType).Line()
+	c.Func().Params(returnParams).Id(queryName).Params(queryParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceQueryType), jen.Err().Error())).Block(
+		jen.Id("err").Op("=").Id("client").Op(".").Id("Query").Call(
+			jen.Id(urlPathName),
+			jen.Id("input").Op(".").Id("toParams").Call(),
+			jen.Op("&").Id("result"),
+		),
+		jen.If(jen.Err().Op("!=").Nil()).Block(
+			jen.Return(jen.Nil(), jen.Err()),
+		),
+		jen.Return(jen.Id("result"), jen.Nil()),
+	).Line()
+	return c
+}
+
+func createResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
+	createName := fmt.Sprintf("%sCreate", resource.CodeName)
+	returnParams := jen.Id("client").Op("*").Id("Client")
+	createParams := jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType)
+
+	c := jen.Commentf("%s creates a new instance of type %s", createName, resourceService.ResourceType).Line()
+	c.Func().Params(returnParams).Id(createName).Params(createParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+		jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
+			jen.Id(urlPathName),
+			jen.Nil(),
+			jen.Id("draft"),
+			jen.Op("&").Id("result"),
+		),
+		jen.If(jen.Err().Op("!=").Nil()).Block(
+			jen.Return(jen.Nil(), jen.Err()),
+		),
+		jen.Return(jen.Id("result"), jen.Nil()),
+	).Line()
+	return c
+}
+
 // Entry point to generate code object for a specific RamlType
 func generateCode(objects []RamlType) {
 	items := map[string][]*RamlType{}

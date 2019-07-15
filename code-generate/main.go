@@ -10,6 +10,7 @@ import (
 	yaml "gopkg.in/mikefarah/yaml.v2"
 )
 
+// RamlType holds info for specific type
 type RamlType struct {
 	Name                string
 	TypeName            string
@@ -27,6 +28,7 @@ type RamlType struct {
 	EnumValues          []string
 }
 
+// RamlTypeAttribute holds attribute data for RamlType.
 type RamlTypeAttribute struct {
 	Name        string
 	TypeName    string
@@ -243,12 +245,6 @@ func postProcess(objects []RamlType) {
 			}
 		}
 	}
-
-	// for _, obj := range objects {
-	// 	fmt.Println(obj.Name)
-	// 	fmt.Println(obj.Children)
-	// }
-
 }
 
 func main() {
@@ -276,7 +272,8 @@ func main() {
 		log.Fatalf("error: %v", err)
 	}
 
-	objects := parseYaml(t)
+	objects, resources := parseYaml(t)
 	postProcess(objects)
 	generateCode(objects)
+	generateResources(objects, resources)
 }

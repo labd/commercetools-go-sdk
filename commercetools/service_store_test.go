@@ -35,12 +35,12 @@ func TestStoreCreate(t *testing.T) {
 func TestStoreUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.StoreUpdateInput
+		input       *commercetools.StoreUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Set locale",
-			input: &commercetools.StoreUpdateInput{
+			input: &commercetools.StoreUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StoreUpdateAction{
@@ -72,7 +72,7 @@ func TestStoreUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.StoreUpdate(tC.input)
+			_, err := client.StoreUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/stores/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -83,12 +83,12 @@ func TestStoreUpdate(t *testing.T) {
 func TestStoreUpdateByKey(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.StoreUpdateKeyInput
+		input       *commercetools.StoreUpdateWithKeyInput
 		requestBody string
 	}{
 		{
 			desc: "Set locale",
-			input: &commercetools.StoreUpdateKeyInput{
+			input: &commercetools.StoreUpdateWithKeyInput{
 				Key:     "test123",
 				Version: 2,
 				Actions: []commercetools.StoreUpdateAction{
@@ -120,7 +120,7 @@ func TestStoreUpdateByKey(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.StoreUpdateByKey(tC.input)
+			_, err := client.StoreUpdateWithKey(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/stores/key=test123", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -133,7 +133,7 @@ func TestStoreDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StoreDelete("ba8d47e5-6591-4ca2-af4c-d547f062bf35", 2)
+	_, err := client.StoreDeleteWithID("ba8d47e5-6591-4ca2-af4c-d547f062bf35", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -147,7 +147,7 @@ func TestStoreDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StoreDeleteByKey("test123", 2)
+	_, err := client.StoreDeleteWithKey("test123", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -160,7 +160,7 @@ func TestStoreGetByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("store.json"), nil, nil)
 	defer server.Close()
 
-	store, err := client.StoreGetByID("ba8d47e5-6591-4ca2-af4c-d547f062bf35")
+	store, err := client.StoreGetWithID("ba8d47e5-6591-4ca2-af4c-d547f062bf35")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "ba8d47e5-6591-4ca2-af4c-d547f062bf35", store.ID)
@@ -170,7 +170,7 @@ func TestStoreGetByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("store.json"), nil, nil)
 	defer server.Close()
 
-	store, err := client.StoreGetByKey("test123")
+	store, err := client.StoreGetWithKey("test123")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "ba8d47e5-6591-4ca2-af4c-d547f062bf35", store.ID)

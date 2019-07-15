@@ -60,12 +60,12 @@ func TestStateCreate(t *testing.T) {
 func TestStateUpdate(t *testing.T) {
 	testCases := []struct {
 		desc        string
-		input       *commercetools.StateUpdateInput
+		input       *commercetools.StateUpdateWithIDInput
 		requestBody string
 	}{
 		{
 			desc: "Change key",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -86,7 +86,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set name",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -111,7 +111,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set description",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -136,7 +136,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change type",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -157,7 +157,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Change initial",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -178,7 +178,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set transitions",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -208,7 +208,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Set roles",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -235,7 +235,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Add roles",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -260,7 +260,7 @@ func TestStateUpdate(t *testing.T) {
 		},
 		{
 			desc: "Remove roles",
-			input: &commercetools.StateUpdateInput{
+			input: &commercetools.StateUpdateWithIDInput{
 				ID:      "1234",
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
@@ -292,7 +292,7 @@ func TestStateUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("state.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.StateUpdate(tC.input)
+			_, err := client.StateUpdateWithID(tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/states/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -305,7 +305,7 @@ func TestStateDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StateDeleteByID("1234", 2)
+	_, err := client.StateDeleteWithID("1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -338,7 +338,7 @@ func TestStateGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.StateGetByID("1234")
+	result, err := client.StateGetWithID("1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }

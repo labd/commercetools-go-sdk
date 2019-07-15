@@ -85,58 +85,11 @@ To generate code do the following steps:
 
 At the moment the SDK has service coverage for primarily Terraform configuration use-cases, for example declaring API Extensions, Subscriptions and Project Settings. Broader coverage will be implemented if our use-cases require it or via contributions of course!
 
-### Product Catalog
+### TODO for code generating the services:
 
- - [x] Categories
- - [x] Products
- - [ ] Product Projections
- - [ ] Product Projections Search
- - [ ] Product Suggestions
- - [ ] Inventory
- - [ ] Reviews
-
-### Pricing & Discounts
-
- - [x] Tax Categories
- - [ ] Product Discounts
- - [ ] Cart Discounts
- - [ ] Discount Codes
-
-### Carts, Orders & Shopping Lists
-
- - [ ] Shopping Lists beta
- - [ ] My Shopping Lists beta
- - [ ] Carts
- - [ ] My Carts beta
- - [ ] Shipping Methods
- - [ ] Shipping Zones
- - [ ] Payments
- - [ ] My Payments beta
- - [ ] Orders
- - [ ] My Orders beta
- - [ ] Order Import
-
-### Customers
-
- - [ ] Customers
- - [ ] My Customer Profile beta
- - [ ] Customer Groups
-
-### Configuration
-
- - [x] Project Settings
- - [x] Channels
- - [x] State Machines
-
-### Customize Data
-
- - [x] Product Types
- - [x] Types
- - [x] Custom Fields
- - [ ] Custom Objects
-
-### Customize Behavior
-
- - [x] API Extensions beta
- - [x] Subscriptions beta
- - [ ] Messages Query
+- Currently only /{ID} and /key={key} is supported, support other actions (f.e. Replicate cart)
+- Parse and use trait definitions (traits folder)
+- CustomObject service implementation
+- Implement other HTTPMethods/actions apart from get/post/delete (f.e. /images on product)
+- Implement all traits (f.e. priceSelecting)
+- Implement reference expansion

@@ -1,146 +1,102 @@
+// Automatically generated, do not edit
+
 package commercetools
 
 import (
-	"errors"
-	"fmt"
 	"net/url"
+	"strconv"
+	"strings"
 )
 
-// ProductPriceSelection is used to select a price from the Product prices array
-// for displaying it to the user.
-type ProductPriceSelection struct {
-	Currency      string
-	Country       string
-	CustomerGroup string
-	Channel       string
-}
-
-// ProductUpdateInput provides the data required to update a product.
-type ProductUpdateInput struct {
-	ID             string
-	Version        int
-	PriceSelection ProductPriceSelection
-	Actions        []ProductUpdateAction
-}
-
-// ProductDeleteInput provides the data required to delete a product.
-type ProductDeleteInput struct {
-	ID             string
-	Key            string
-	Version        int
-	PriceSelection ProductPriceSelection
-}
-
-// ProductURLPath is the commercetools API product path.
+// ProductURLPath is the commercetools API path.
 const ProductURLPath = "products"
 
-func (ps *ProductPriceSelection) getQueryParameters() url.Values {
-	result := url.Values{}
-
-	if ps.Currency != "" {
-		result.Add("priceCurrency", ps.Currency)
-	}
-	if ps.Country != "" {
-		result.Add("priceCountry", ps.Country)
-	}
-	if ps.CustomerGroup != "" {
-		result.Add("priceCustomerGroup", ps.CustomerGroup)
-	}
-	if ps.Channel != "" {
-		result.Add("priceChannel", ps.Channel)
-	}
-	return result
-}
-
-func (i *ProductDeleteInput) getQueryParameters() url.Values {
-	result := i.PriceSelection.getQueryParameters()
-	if i.Version > 0 {
-		result.Add("version", string(i.Version))
-	}
-	return result
-}
-
-// ProductCreate will create a new product from a draft, and return the newly
-// created product. OAuth2 Scopes: manage_products:{projectKey}
-func (client *Client) ProductCreate(draft *ProductDraft) (*Product, error) {
-	var result Product
-	err := client.Create(ProductURLPath, nil, draft, &result)
+// ProductCreate creates a new instance of type Product
+func (client *Client) ProductCreate(draft *ProductDraft) (result *Product, err error) {
+	err = client.Create(ProductURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
-	return &result, nil
+	return result, nil
 }
 
-// ProductGetByID will return a product matching the provided ID. OAuth2 Scopes:
-// view_products:{projectKey}
-func (client *Client) ProductGetByID(id string) (*Product, error) {
-	var result Product
-	err := client.Get(fmt.Sprintf("%s/%s", ProductURLPath, id), nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// ProductGetByKey will return a product matching the provided Key. OAuth2 Scopes:
-// view_products:{projectKey}
-func (client *Client) ProductGetByKey(key string) (*Product, error) {
-	return &Product{}, nil
-}
-
-// ProductUpdate will update a product matching the provided ID with the
-// defined ProductUpdateActions. OAuth2 Scopes: manage_product:{projectKey}
-func (client *Client) ProductUpdate(input *ProductUpdateInput) (*Product, error) {
-	var result Product
-
-	endpoint := fmt.Sprintf("%s/%s", ProductURLPath, input.ID)
-	params := input.PriceSelection.getQueryParameters()
-
-	err := client.Update(endpoint, params, input.Version, input.Actions, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// ProductDeleteByID will delete a product matching the provided ID. OAuth2
-// Scopes: manage_products:{projectKey}
-func (client *Client) ProductDeleteByID(input *ProductDeleteInput) (*Product, error) {
-	if input.ID == "" {
-		return nil, errors.New("Missing required field ID")
-	}
-	var result Product
-	endpoint := fmt.Sprintf("%s/%s", ProductURLPath, input.ID)
-	params := input.getQueryParameters()
-	err := client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// ProductDeleteByKey will delete a product matching the provided Key. OAuth2
-// Scopes: manage_products:{projectKey}
-func (client *Client) ProductDeleteByKey(input *ProductDeleteInput) (*Product, error) {
-	if input.Key == "" {
-		return nil, errors.New("Missing required field Key")
-	}
-	var result Product
-	endpoint := fmt.Sprintf("%s/key=%s", ProductURLPath, input.Key)
-	params := input.getQueryParameters()
-	err := client.Delete(endpoint, params, &result)
-
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// ProductQuery will query products.
-// OAuth2 Scopes: view_products:{projectKey}
+// ProductQuery allows querying for type Product
 func (client *Client) ProductQuery(input *QueryInput) (result *ProductPagedQueryResponse, err error) {
 	err = client.Query(ProductURLPath, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductDeleteWithKey for type Product
+func (client *Client) ProductDeleteWithKey(key string, version int) (result *Product, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("products/key={key}", "{key}", key, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductGetWithKey for type Product
+func (client *Client) ProductGetWithKey(key string) (result *Product, err error) {
+	err = client.Get(strings.Replace("products/key={key}", "{key}", key, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductUpdateWithKeyInput is input for function ProductUpdateWithKey
+type ProductUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []ProductUpdateAction
+}
+
+// ProductUpdateWithKey for type Product
+func (client *Client) ProductUpdateWithKey(input *ProductUpdateWithKeyInput) (result *Product, err error) {
+	err = client.Update(strings.Replace("products/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductDeleteWithID for type Product
+func (client *Client) ProductDeleteWithID(ID string, version int) (result *Product, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	err = client.Delete(strings.Replace("products/{ID}", "{ID}", ID, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductGetWithID for type Product
+func (client *Client) ProductGetWithID(ID string) (result *Product, err error) {
+	err = client.Get(strings.Replace("products/{ID}", "{ID}", ID, 1), nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductUpdateWithIDInput is input for function ProductUpdateWithID
+type ProductUpdateWithIDInput struct {
+	ID      string
+	Version int
+	Actions []ProductUpdateAction
+}
+
+// ProductUpdateWithID for type Product
+func (client *Client) ProductUpdateWithID(input *ProductUpdateWithIDInput) (result *Product, err error) {
+	err = client.Update(strings.Replace("products/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

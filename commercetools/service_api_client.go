@@ -1,30 +1,16 @@
+// Automatically generated, do not edit
+
 package commercetools
 
 import (
-	"fmt"
+	"net/url"
+	"strings"
 )
 
-// APIClientDeleteInput provides the data required to delete a channel.
-type APIClientDeleteInput struct {
-	ID      string
-	Version int
-}
-
-// APIClientURLPath is the commercetools API client path.
+// APIClientURLPath is the commercetools API path.
 const APIClientURLPath = "api-clients"
 
-// APIClientGetByID will return a channel matching the provided ID. OAuth2 Scopes:
-// view_products:{projectKey}
-func (client *Client) APIClientGetByID(id string) (result *APIClient, err error) {
-	err = client.Get(fmt.Sprintf("%s/%s", APIClientURLPath, id), nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// APIClientCreate will create a new channel from a draft, and return the newly created
-// channel. OAuth2 Scopes: manage_products:{projectKey}
+// APIClientCreate creates a new instance of type APIClient
 func (client *Client) APIClientCreate(draft *APIClientDraft) (result *APIClient, err error) {
 	err = client.Create(APIClientURLPath, nil, draft, &result)
 	if err != nil {
@@ -33,23 +19,29 @@ func (client *Client) APIClientCreate(draft *APIClientDraft) (result *APIClient,
 	return result, nil
 }
 
-// APIClientDelete will delete a type matching the provided ID. These requests
-// delete a type only if it’s not referenced by other entities. OAuth2 Scopes:
-// manage_types:{projectKey}
-func (client *Client) APIClientDelete(id string) (result *APIClient, err error) {
-	endpoint := fmt.Sprintf("%s/%s", APIClientURLPath, id)
-	err = client.Delete(endpoint, nil, &result)
-
+// APIClientQuery allows querying for type APIClient
+func (client *Client) APIClientQuery(input *QueryInput) (result *APIClientPagedQueryResponse, err error) {
+	err = client.Query(APIClientURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
-// APIClientQuery will query API clients.
-// OAuth2 Scopes: view_api_clients:{projectKey}
-func (client *Client) APIClientQuery(input *QueryInput) (result *APIClientPagedQueryResponse, err error) {
-	err = client.Query(APIClientURLPath, input.toParams(), &result)
+// APIClientDeleteWithID Delete ApiClient by ID
+func (client *Client) APIClientDeleteWithID(ID string) (result *APIClient, err error) {
+	params := url.Values{}
+
+	err = client.Delete(strings.Replace("api-clients/{ID}", "{ID}", ID, 1), params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// APIClientGetWithID Get ApiClient by ID
+func (client *Client) APIClientGetWithID(ID string) (result *APIClient, err error) {
+	err = client.Get(strings.Replace("api-clients/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
