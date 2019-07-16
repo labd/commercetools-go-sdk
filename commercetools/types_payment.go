@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // TransactionState is an enum type
@@ -464,8 +465,8 @@ func (obj PaymentSetAnonymousIDAction) MarshalJSON() ([]byte, error) {
 
 // PaymentSetAuthorizationAction implements the interface PaymentUpdateAction
 type PaymentSetAuthorizationAction struct {
-	Until  time.Time `json:"until,omitempty"`
-	Amount *Money    `json:"amount,omitempty"`
+	Until  *time.Time `json:"until,omitempty"`
+	Amount *Money     `json:"amount,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -689,7 +690,7 @@ func (obj *PaymentUpdate) UnmarshalJSON(data []byte) error {
 // Transaction is a standalone struct
 type Transaction struct {
 	Type          TransactionType  `json:"type"`
-	Timestamp     time.Time        `json:"timestamp,omitempty"`
+	Timestamp     *time.Time       `json:"timestamp,omitempty"`
 	State         TransactionState `json:"state,omitempty"`
 	InteractionID string           `json:"interactionId,omitempty"`
 	ID            string           `json:"id"`
@@ -717,7 +718,7 @@ func (obj *Transaction) UnmarshalJSON(data []byte) error {
 // TransactionDraft is a standalone struct
 type TransactionDraft struct {
 	Type          TransactionType  `json:"type"`
-	Timestamp     time.Time        `json:"timestamp,omitempty"`
+	Timestamp     *time.Time       `json:"timestamp,omitempty"`
 	State         TransactionState `json:"state,omitempty"`
 	InteractionID string           `json:"interactionId,omitempty"`
 	Amount        *Money           `json:"amount"`

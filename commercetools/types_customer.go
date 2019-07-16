@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // AnonymousCartSignInMode is an enum type
@@ -713,12 +714,12 @@ type CustomerSignin struct {
 
 // CustomerToken is a standalone struct
 type CustomerToken struct {
-	Value          string    `json:"value"`
-	LastModifiedAt time.Time `json:"lastModifiedAt,omitempty"`
-	ID             string    `json:"id"`
-	ExpiresAt      time.Time `json:"expiresAt"`
-	CustomerID     string    `json:"customerId"`
-	CreatedAt      time.Time `json:"createdAt"`
+	Value          string     `json:"value"`
+	LastModifiedAt *time.Time `json:"lastModifiedAt,omitempty"`
+	ID             string     `json:"id"`
+	ExpiresAt      time.Time  `json:"expiresAt"`
+	CustomerID     string     `json:"customerId"`
+	CreatedAt      time.Time  `json:"createdAt"`
 }
 
 // CustomerUpdate is a standalone struct

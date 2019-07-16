@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ShoppingListUpdateAction uses action as discriminator attribute
@@ -215,7 +216,7 @@ type ShoppingListAddLineItemAction struct {
 	Quantity  int                `json:"quantity,omitempty"`
 	ProductID string             `json:"productId,omitempty"`
 	Custom    *CustomFieldsDraft `json:"custom,omitempty"`
-	AddedAt   time.Time          `json:"addedAt,omitempty"`
+	AddedAt   *time.Time         `json:"addedAt,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -233,7 +234,7 @@ type ShoppingListAddTextLineItemAction struct {
 	Name        *LocalizedString   `json:"name"`
 	Description *LocalizedString   `json:"description,omitempty"`
 	Custom      *CustomFieldsDraft `json:"custom,omitempty"`
-	AddedAt     time.Time          `json:"addedAt,omitempty"`
+	AddedAt     *time.Time         `json:"addedAt,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -356,7 +357,7 @@ type ShoppingListLineItem struct {
 	ProductID     string                `json:"productId"`
 	Name          *LocalizedString      `json:"name"`
 	ID            string                `json:"id"`
-	DeactivatedAt time.Time             `json:"deactivatedAt,omitempty"`
+	DeactivatedAt *time.Time            `json:"deactivatedAt,omitempty"`
 	Custom        *CustomFields         `json:"custom,omitempty"`
 	AddedAt       time.Time             `json:"addedAt"`
 }
@@ -368,7 +369,7 @@ type ShoppingListLineItemDraft struct {
 	Quantity  float64            `json:"quantity,omitempty"`
 	ProductID string             `json:"productId,omitempty"`
 	Custom    *CustomFieldsDraft `json:"custom,omitempty"`
-	AddedAt   time.Time          `json:"addedAt,omitempty"`
+	AddedAt   *time.Time         `json:"addedAt,omitempty"`
 }
 
 // ShoppingListPagedQueryResponse is a standalone struct
@@ -672,5 +673,5 @@ type TextLineItemDraft struct {
 	Name        *LocalizedString   `json:"name"`
 	Description *LocalizedString   `json:"description,omitempty"`
 	Custom      *CustomFieldsDraft `json:"custom,omitempty"`
-	AddedAt     time.Time          `json:"addedAt,omitempty"`
+	AddedAt     *time.Time         `json:"addedAt,omitempty"`
 }

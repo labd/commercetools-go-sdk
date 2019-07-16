@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // InventoryUpdateAction uses action as discriminator attribute
@@ -123,7 +124,7 @@ type InventoryEntry struct {
 	SKU               string                     `json:"sku"`
 	RestockableInDays int                        `json:"restockableInDays,omitempty"`
 	QuantityOnStock   int                        `json:"quantityOnStock"`
-	ExpectedDelivery  time.Time                  `json:"expectedDelivery,omitempty"`
+	ExpectedDelivery  *time.Time                 `json:"expectedDelivery,omitempty"`
 	Custom            *CustomFields              `json:"custom,omitempty"`
 	AvailableQuantity int                        `json:"availableQuantity"`
 }
@@ -134,7 +135,7 @@ type InventoryEntryDraft struct {
 	SKU               string                     `json:"sku"`
 	RestockableInDays int                        `json:"restockableInDays,omitempty"`
 	QuantityOnStock   int                        `json:"quantityOnStock"`
-	ExpectedDelivery  time.Time                  `json:"expectedDelivery,omitempty"`
+	ExpectedDelivery  *time.Time                 `json:"expectedDelivery,omitempty"`
 	Custom            *CustomFieldsDraft         `json:"custom,omitempty"`
 }
 
@@ -222,7 +223,7 @@ func (obj InventorySetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 // InventorySetExpectedDeliveryAction implements the interface InventoryUpdateAction
 type InventorySetExpectedDeliveryAction struct {
-	ExpectedDelivery time.Time `json:"expectedDelivery,omitempty"`
+	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

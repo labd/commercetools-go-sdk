@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // MoneyType is an enum type
@@ -684,8 +685,8 @@ type PagedQueryResponse struct {
 // Price is a standalone struct
 type Price struct {
 	Value         *Money                  `json:"value"`
-	ValidUntil    time.Time               `json:"validUntil,omitempty"`
-	ValidFrom     time.Time               `json:"validFrom,omitempty"`
+	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
+	ValidFrom     *time.Time              `json:"validFrom,omitempty"`
 	Tiers         []PriceTier             `json:"tiers,omitempty"`
 	ID            string                  `json:"id,omitempty"`
 	Discounted    *DiscountedPrice        `json:"discounted,omitempty"`
@@ -698,8 +699,8 @@ type Price struct {
 // PriceDraft is a standalone struct
 type PriceDraft struct {
 	Value         *Money                           `json:"value"`
-	ValidUntil    time.Time                        `json:"validUntil,omitempty"`
-	ValidFrom     time.Time                        `json:"validFrom,omitempty"`
+	ValidUntil    *time.Time                       `json:"validUntil,omitempty"`
+	ValidFrom     *time.Time                       `json:"validFrom,omitempty"`
 	Tiers         []PriceTier                      `json:"tiers,omitempty"`
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	Custom        *CustomFieldsDraft               `json:"custom,omitempty"`
@@ -716,8 +717,8 @@ type PriceTier struct {
 // ScopedPrice is a standalone struct
 type ScopedPrice struct {
 	Value         TypedMoney              `json:"value"`
-	ValidUntil    time.Time               `json:"validUntil,omitempty"`
-	ValidFrom     time.Time               `json:"validFrom,omitempty"`
+	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
+	ValidFrom     *time.Time              `json:"validFrom,omitempty"`
 	ID            string                  `json:"id"`
 	Discounted    *DiscountedPrice        `json:"discounted,omitempty"`
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`

@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ProductDiscountUpdateAction uses action as discriminator attribute
@@ -151,8 +152,8 @@ type ProductDiscount struct {
 	LastModifiedBy *LastModifiedBy      `json:"lastModifiedBy,omitempty"`
 	CreatedBy      *CreatedBy           `json:"createdBy,omitempty"`
 	Value          ProductDiscountValue `json:"value"`
-	ValidUntil     time.Time            `json:"validUntil,omitempty"`
-	ValidFrom      time.Time            `json:"validFrom,omitempty"`
+	ValidUntil     *time.Time           `json:"validUntil,omitempty"`
+	ValidFrom      *time.Time           `json:"validFrom,omitempty"`
 	SortOrder      string               `json:"sortOrder"`
 	References     []Reference          `json:"references"`
 	Predicate      string               `json:"predicate"`
@@ -278,8 +279,8 @@ func (obj *ProductDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
 // ProductDiscountDraft is a standalone struct
 type ProductDiscountDraft struct {
 	Value       ProductDiscountValue `json:"value"`
-	ValidUntil  time.Time            `json:"validUntil,omitempty"`
-	ValidFrom   time.Time            `json:"validFrom,omitempty"`
+	ValidUntil  *time.Time           `json:"validUntil,omitempty"`
+	ValidFrom   *time.Time           `json:"validFrom,omitempty"`
 	SortOrder   string               `json:"sortOrder"`
 	Predicate   string               `json:"predicate"`
 	Name        *LocalizedString     `json:"name"`
@@ -382,7 +383,7 @@ func (obj ProductDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
 
 // ProductDiscountSetValidFromAction implements the interface ProductDiscountUpdateAction
 type ProductDiscountSetValidFromAction struct {
-	ValidFrom time.Time `json:"validFrom,omitempty"`
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -396,8 +397,8 @@ func (obj ProductDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
 
 // ProductDiscountSetValidFromAndUntilAction implements the interface ProductDiscountUpdateAction
 type ProductDiscountSetValidFromAndUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-	ValidFrom  time.Time `json:"validFrom,omitempty"`
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	ValidFrom  *time.Time `json:"validFrom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -411,7 +412,7 @@ func (obj ProductDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, erro
 
 // ProductDiscountSetValidUntilAction implements the interface ProductDiscountUpdateAction
 type ProductDiscountSetValidUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

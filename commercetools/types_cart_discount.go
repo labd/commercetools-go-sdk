@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // SelectionMode is an enum type
@@ -263,8 +264,8 @@ type CartDiscount struct {
 	LastModifiedBy       *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
 	CreatedBy            *CreatedBy         `json:"createdBy,omitempty"`
 	Value                CartDiscountValue  `json:"value"`
-	ValidUntil           time.Time          `json:"validUntil,omitempty"`
-	ValidFrom            time.Time          `json:"validFrom,omitempty"`
+	ValidUntil           *time.Time         `json:"validUntil,omitempty"`
+	ValidFrom            *time.Time         `json:"validFrom,omitempty"`
 	Target               CartDiscountTarget `json:"target,omitempty"`
 	StackingMode         StackingMode       `json:"stackingMode"`
 	SortOrder            string             `json:"sortOrder"`
@@ -475,8 +476,8 @@ func (obj CartDiscountCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 // CartDiscountDraft is a standalone struct
 type CartDiscountDraft struct {
 	Value                CartDiscountValue  `json:"value"`
-	ValidUntil           time.Time          `json:"validUntil,omitempty"`
-	ValidFrom            time.Time          `json:"validFrom,omitempty"`
+	ValidUntil           *time.Time         `json:"validUntil,omitempty"`
+	ValidFrom            *time.Time         `json:"validFrom,omitempty"`
 	Target               CartDiscountTarget `json:"target,omitempty"`
 	StackingMode         StackingMode       `json:"stackingMode,omitempty"`
 	SortOrder            string             `json:"sortOrder"`
@@ -626,7 +627,7 @@ func (obj CartDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
 
 // CartDiscountSetValidFromAction implements the interface CartDiscountUpdateAction
 type CartDiscountSetValidFromAction struct {
-	ValidFrom time.Time `json:"validFrom,omitempty"`
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -640,8 +641,8 @@ func (obj CartDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
 
 // CartDiscountSetValidFromAndUntilAction implements the interface CartDiscountUpdateAction
 type CartDiscountSetValidFromAndUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-	ValidFrom  time.Time `json:"validFrom,omitempty"`
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	ValidFrom  *time.Time `json:"validFrom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -655,7 +656,7 @@ func (obj CartDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) 
 
 // CartDiscountSetValidUntilAction implements the interface CartDiscountUpdateAction
 type CartDiscountSetValidUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // OrderState is an enum type
@@ -1026,7 +1027,7 @@ type Order struct {
 	CustomLineItems           []CustomLineItem        `json:"customLineItems"`
 	Custom                    *CustomFields           `json:"custom,omitempty"`
 	Country                   string                  `json:"country,omitempty"`
-	CompletedAt               time.Time               `json:"completedAt,omitempty"`
+	CompletedAt               *time.Time              `json:"completedAt,omitempty"`
 	Cart                      *CartReference          `json:"cart,omitempty"`
 	BillingAddress            *Address                `json:"billingAddress,omitempty"`
 	AnonymousID               string                  `json:"anonymousId,omitempty"`
@@ -1114,7 +1115,7 @@ func (obj OrderAddPaymentAction) MarshalJSON() ([]byte, error) {
 // OrderAddReturnInfoAction implements the interface OrderUpdateAction
 type OrderAddReturnInfoAction struct {
 	ReturnTrackingID string            `json:"returnTrackingId,omitempty"`
-	ReturnDate       time.Time         `json:"returnDate,omitempty"`
+	ReturnDate       *time.Time        `json:"returnDate,omitempty"`
 	Items            []ReturnItemDraft `json:"items"`
 }
 
@@ -1212,7 +1213,7 @@ type OrderImportDraft struct {
 	CustomLineItems       []CustomLineItemDraft            `json:"customLineItems,omitempty"`
 	Custom                *CustomFieldsDraft               `json:"custom,omitempty"`
 	Country               string                           `json:"country,omitempty"`
-	CompletedAt           time.Time                        `json:"completedAt,omitempty"`
+	CompletedAt           *time.Time                       `json:"completedAt,omitempty"`
 	BillingAddress        *Address                         `json:"billingAddress,omitempty"`
 }
 
@@ -1644,7 +1645,7 @@ type OrderTransitionCustomLineItemStateAction struct {
 	Quantity             int                      `json:"quantity"`
 	FromState            *StateResourceIdentifier `json:"fromState"`
 	CustomLineItemID     string                   `json:"customLineItemId"`
-	ActualTransitionDate time.Time                `json:"actualTransitionDate,omitempty"`
+	ActualTransitionDate *time.Time               `json:"actualTransitionDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1662,7 +1663,7 @@ type OrderTransitionLineItemStateAction struct {
 	Quantity             int                      `json:"quantity"`
 	LineItemID           string                   `json:"lineItemId"`
 	FromState            *StateResourceIdentifier `json:"fromState"`
-	ActualTransitionDate time.Time                `json:"actualTransitionDate,omitempty"`
+	ActualTransitionDate *time.Time               `json:"actualTransitionDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1729,7 +1730,7 @@ func (obj OrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 
 // OrderUpdateSyncInfoAction implements the interface OrderUpdateAction
 type OrderUpdateSyncInfoAction struct {
-	SyncedAt   time.Time                  `json:"syncedAt,omitempty"`
+	SyncedAt   *time.Time                 `json:"syncedAt,omitempty"`
 	ExternalID string                     `json:"externalId,omitempty"`
 	Channel    *ChannelResourceIdentifier `json:"channel"`
 }
@@ -1784,7 +1785,7 @@ type ProductVariantImportDraft struct {
 // ReturnInfo is a standalone struct
 type ReturnInfo struct {
 	ReturnTrackingID string       `json:"returnTrackingId,omitempty"`
-	ReturnDate       time.Time    `json:"returnDate,omitempty"`
+	ReturnDate       *time.Time   `json:"returnDate,omitempty"`
 	Items            []ReturnItem `json:"items"`
 }
 

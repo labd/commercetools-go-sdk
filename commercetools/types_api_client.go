@@ -6,13 +6,13 @@ import "time"
 
 // APIClient is a standalone struct
 type APIClient struct {
-	Secret     string    `json:"secret,omitempty"`
-	Scope      string    `json:"scope"`
-	Name       string    `json:"name"`
-	LastUsedAt Date      `json:"lastUsedAt,omitempty"`
-	ID         string    `json:"id"`
-	DeleteAt   time.Time `json:"deleteAt,omitempty"`
-	CreatedAt  time.Time `json:"createdAt,omitempty"`
+	Secret     string     `json:"secret,omitempty"`
+	Scope      string     `json:"scope"`
+	Name       string     `json:"name"`
+	LastUsedAt Date       `json:"lastUsedAt,omitempty"`
+	ID         string     `json:"id"`
+	DeleteAt   *time.Time `json:"deleteAt,omitempty"`
+	CreatedAt  *time.Time `json:"createdAt,omitempty"`
 }
 
 // APIClientDraft is a standalone struct

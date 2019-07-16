@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // DiscountCodeUpdateAction uses action as discriminator attribute
@@ -126,8 +127,8 @@ type DiscountCode struct {
 	CreatedAt                  time.Time               `json:"createdAt"`
 	LastModifiedBy             *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
 	CreatedBy                  *CreatedBy              `json:"createdBy,omitempty"`
-	ValidUntil                 time.Time               `json:"validUntil,omitempty"`
-	ValidFrom                  time.Time               `json:"validFrom,omitempty"`
+	ValidUntil                 *time.Time              `json:"validUntil,omitempty"`
+	ValidFrom                  *time.Time              `json:"validFrom,omitempty"`
 	References                 []Reference             `json:"references"`
 	Name                       *LocalizedString        `json:"name,omitempty"`
 	MaxApplicationsPerCustomer int                     `json:"maxApplicationsPerCustomer,omitempty"`
@@ -203,8 +204,8 @@ func (obj DiscountCodeChangeIsActiveAction) MarshalJSON() ([]byte, error) {
 
 // DiscountCodeDraft is a standalone struct
 type DiscountCodeDraft struct {
-	ValidUntil                 time.Time                        `json:"validUntil,omitempty"`
-	ValidFrom                  time.Time                        `json:"validFrom,omitempty"`
+	ValidUntil                 *time.Time                       `json:"validUntil,omitempty"`
+	ValidFrom                  *time.Time                       `json:"validFrom,omitempty"`
 	Name                       *LocalizedString                 `json:"name,omitempty"`
 	MaxApplicationsPerCustomer int                              `json:"maxApplicationsPerCustomer,omitempty"`
 	MaxApplications            int                              `json:"maxApplications,omitempty"`
@@ -357,7 +358,7 @@ func (obj DiscountCodeSetNameAction) MarshalJSON() ([]byte, error) {
 
 // DiscountCodeSetValidFromAction implements the interface DiscountCodeUpdateAction
 type DiscountCodeSetValidFromAction struct {
-	ValidFrom time.Time `json:"validFrom,omitempty"`
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -371,8 +372,8 @@ func (obj DiscountCodeSetValidFromAction) MarshalJSON() ([]byte, error) {
 
 // DiscountCodeSetValidFromAndUntilAction implements the interface DiscountCodeUpdateAction
 type DiscountCodeSetValidFromAndUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
-	ValidFrom  time.Time `json:"validFrom,omitempty"`
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	ValidFrom  *time.Time `json:"validFrom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -386,7 +387,7 @@ func (obj DiscountCodeSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) 
 
 // DiscountCodeSetValidUntilAction implements the interface DiscountCodeUpdateAction
 type DiscountCodeSetValidUntilAction struct {
-	ValidUntil time.Time `json:"validUntil,omitempty"`
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

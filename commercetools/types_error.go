@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ErrorObject uses code as discriminator attribute
@@ -296,13 +297,13 @@ func (obj ConcurrentModificationError) Error() string {
 
 // DiscountCodeNonApplicableError implements the interface ErrorObject
 type DiscountCodeNonApplicableError struct {
-	Message           string    `json:"message"`
-	ValidityCheckTime time.Time `json:"validityCheckTime,omitempty"`
-	ValidUntil        time.Time `json:"validUntil,omitempty"`
-	ValidFrom         time.Time `json:"validFrom,omitempty"`
-	Reason            string    `json:"reason,omitempty"`
-	DiscountCode      string    `json:"discountCode,omitempty"`
-	DicountCodeID     string    `json:"dicountCodeId,omitempty"`
+	Message           string     `json:"message"`
+	ValidityCheckTime *time.Time `json:"validityCheckTime,omitempty"`
+	ValidUntil        *time.Time `json:"validUntil,omitempty"`
+	ValidFrom         *time.Time `json:"validFrom,omitempty"`
+	Reason            string     `json:"reason,omitempty"`
+	DiscountCode      string     `json:"discountCode,omitempty"`
+	DicountCodeID     string     `json:"dicountCodeId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

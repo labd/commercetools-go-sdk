@@ -5,8 +5,9 @@ package commercetools
 import (
 	"encoding/json"
 	"errors"
-	mapstructure "github.com/mitchellh/mapstructure"
 	"time"
+
+	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // OrderEditResult uses type as discriminator attribute
@@ -528,7 +529,7 @@ type StagedOrder struct {
 	CustomLineItems           []CustomLineItem        `json:"customLineItems"`
 	Custom                    *CustomFields           `json:"custom,omitempty"`
 	Country                   string                  `json:"country,omitempty"`
-	CompletedAt               time.Time               `json:"completedAt,omitempty"`
+	CompletedAt               *time.Time              `json:"completedAt,omitempty"`
 	Cart                      *CartReference          `json:"cart,omitempty"`
 	BillingAddress            *Address                `json:"billingAddress,omitempty"`
 	AnonymousID               string                  `json:"anonymousId,omitempty"`
@@ -656,7 +657,7 @@ func (obj StagedOrderAddPaymentAction) MarshalJSON() ([]byte, error) {
 // StagedOrderAddReturnInfoAction implements the interface StagedOrderUpdateAction
 type StagedOrderAddReturnInfoAction struct {
 	ReturnTrackingID string            `json:"returnTrackingId,omitempty"`
-	ReturnDate       time.Time         `json:"returnDate,omitempty"`
+	ReturnDate       *time.Time        `json:"returnDate,omitempty"`
 	Items            []ReturnItemDraft `json:"items"`
 }
 
@@ -1526,7 +1527,7 @@ type StagedOrderTransitionCustomLineItemStateAction struct {
 	Quantity             int                      `json:"quantity"`
 	FromState            *StateResourceIdentifier `json:"fromState"`
 	CustomLineItemID     string                   `json:"customLineItemId"`
-	ActualTransitionDate time.Time                `json:"actualTransitionDate,omitempty"`
+	ActualTransitionDate *time.Time               `json:"actualTransitionDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1544,7 +1545,7 @@ type StagedOrderTransitionLineItemStateAction struct {
 	Quantity             int                      `json:"quantity"`
 	LineItemID           string                   `json:"lineItemId"`
 	FromState            *StateResourceIdentifier `json:"fromState"`
-	ActualTransitionDate time.Time                `json:"actualTransitionDate,omitempty"`
+	ActualTransitionDate *time.Time               `json:"actualTransitionDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1587,7 +1588,7 @@ func (obj StagedOrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, err
 
 // StagedOrderUpdateSyncInfoAction implements the interface StagedOrderUpdateAction
 type StagedOrderUpdateSyncInfoAction struct {
-	SyncedAt   time.Time                  `json:"syncedAt,omitempty"`
+	SyncedAt   *time.Time                 `json:"syncedAt,omitempty"`
 	ExternalID string                     `json:"externalId,omitempty"`
 	Channel    *ChannelResourceIdentifier `json:"channel"`
 }
