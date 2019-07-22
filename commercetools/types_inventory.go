@@ -10,10 +10,10 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
-// InventoryUpdateAction uses action as discriminator attribute
-type InventoryUpdateAction interface{}
+// InventoryEntryUpdateAction uses action as discriminator attribute
+type InventoryEntryUpdateAction interface{}
 
-func mapDiscriminatorInventoryUpdateAction(input interface{}) (InventoryUpdateAction, error) {
+func mapDiscriminatorInventoryEntryUpdateAction(input interface{}) (InventoryEntryUpdateAction, error) {
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
@@ -25,56 +25,56 @@ func mapDiscriminatorInventoryUpdateAction(input interface{}) (InventoryUpdateAc
 	}
 	switch discriminator {
 	case "addQuantity":
-		new := InventoryAddQuantityAction{}
+		new := InventoryEntryAddQuantityAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeQuantity":
-		new := InventoryChangeQuantityAction{}
+		new := InventoryEntryChangeQuantityAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeQuantity":
-		new := InventoryRemoveQuantityAction{}
+		new := InventoryEntryRemoveQuantityAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
-		new := InventorySetCustomFieldAction{}
+		new := InventoryEntrySetCustomFieldAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
-		new := InventorySetCustomTypeAction{}
+		new := InventoryEntrySetCustomTypeAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExpectedDelivery":
-		new := InventorySetExpectedDeliveryAction{}
+		new := InventoryEntrySetExpectedDeliveryAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setRestockableInDays":
-		new := InventorySetRestockableInDaysAction{}
+		new := InventoryEntrySetRestockableInDaysAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSupplyChannel":
-		new := InventorySetSupplyChannelAction{}
+		new := InventoryEntrySetSupplyChannelAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -82,34 +82,6 @@ func mapDiscriminatorInventoryUpdateAction(input interface{}) (InventoryUpdateAc
 		return new, nil
 	}
 	return nil, nil
-}
-
-// InventoryAddQuantityAction implements the interface InventoryUpdateAction
-type InventoryAddQuantityAction struct {
-	Quantity int `json:"quantity"`
-}
-
-// MarshalJSON override to set the discriminator value
-func (obj InventoryAddQuantityAction) MarshalJSON() ([]byte, error) {
-	type Alias InventoryAddQuantityAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "addQuantity", Alias: (*Alias)(&obj)})
-}
-
-// InventoryChangeQuantityAction implements the interface InventoryUpdateAction
-type InventoryChangeQuantityAction struct {
-	Quantity int `json:"quantity"`
-}
-
-// MarshalJSON override to set the discriminator value
-func (obj InventoryChangeQuantityAction) MarshalJSON() ([]byte, error) {
-	type Alias InventoryChangeQuantityAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "changeQuantity", Alias: (*Alias)(&obj)})
 }
 
 // InventoryEntry is of type LoggedResource
@@ -127,6 +99,34 @@ type InventoryEntry struct {
 	ExpectedDelivery  *time.Time                 `json:"expectedDelivery,omitempty"`
 	Custom            *CustomFields              `json:"custom,omitempty"`
 	AvailableQuantity int                        `json:"availableQuantity"`
+}
+
+// InventoryEntryAddQuantityAction implements the interface InventoryEntryUpdateAction
+type InventoryEntryAddQuantityAction struct {
+	Quantity int `json:"quantity"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InventoryEntryAddQuantityAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryAddQuantityAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addQuantity", Alias: (*Alias)(&obj)})
+}
+
+// InventoryEntryChangeQuantityAction implements the interface InventoryEntryUpdateAction
+type InventoryEntryChangeQuantityAction struct {
+	Quantity int `json:"quantity"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InventoryEntryChangeQuantityAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryChangeQuantityAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeQuantity", Alias: (*Alias)(&obj)})
 }
 
 // InventoryEntryDraft is a standalone struct
@@ -154,6 +154,20 @@ func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 	}{TypeID: "inventory-entry", Alias: (*Alias)(&obj)})
 }
 
+// InventoryEntryRemoveQuantityAction implements the interface InventoryEntryUpdateAction
+type InventoryEntryRemoveQuantityAction struct {
+	Quantity int `json:"quantity"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InventoryEntryRemoveQuantityAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryRemoveQuantityAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeQuantity", Alias: (*Alias)(&obj)})
+}
+
 // InventoryEntryResourceIdentifier implements the interface ResourceIdentifier
 type InventoryEntryResourceIdentifier struct {
 	Key string `json:"key,omitempty"`
@@ -169,120 +183,106 @@ func (obj InventoryEntryResourceIdentifier) MarshalJSON() ([]byte, error) {
 	}{TypeID: "inventory-entry", Alias: (*Alias)(&obj)})
 }
 
-// InventoryPagedQueryResponse is a standalone struct
-type InventoryPagedQueryResponse struct {
-	Total   int              `json:"total,omitempty"`
-	Results []InventoryEntry `json:"results"`
-	Offset  int              `json:"offset"`
-	Count   int              `json:"count"`
-}
-
-// InventoryRemoveQuantityAction implements the interface InventoryUpdateAction
-type InventoryRemoveQuantityAction struct {
-	Quantity int `json:"quantity"`
-}
-
-// MarshalJSON override to set the discriminator value
-func (obj InventoryRemoveQuantityAction) MarshalJSON() ([]byte, error) {
-	type Alias InventoryRemoveQuantityAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "removeQuantity", Alias: (*Alias)(&obj)})
-}
-
-// InventorySetCustomFieldAction implements the interface InventoryUpdateAction
-type InventorySetCustomFieldAction struct {
+// InventoryEntrySetCustomFieldAction implements the interface InventoryEntryUpdateAction
+type InventoryEntrySetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 	Name  string      `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj InventorySetCustomFieldAction) MarshalJSON() ([]byte, error) {
-	type Alias InventorySetCustomFieldAction
+func (obj InventoryEntrySetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetCustomFieldAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
-// InventorySetCustomTypeAction implements the interface InventoryUpdateAction
-type InventorySetCustomTypeAction struct {
+// InventoryEntrySetCustomTypeAction implements the interface InventoryEntryUpdateAction
+type InventoryEntrySetCustomTypeAction struct {
 	Type   *TypeResourceIdentifier `json:"type,omitempty"`
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj InventorySetCustomTypeAction) MarshalJSON() ([]byte, error) {
-	type Alias InventorySetCustomTypeAction
+func (obj InventoryEntrySetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetCustomTypeAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
-// InventorySetExpectedDeliveryAction implements the interface InventoryUpdateAction
-type InventorySetExpectedDeliveryAction struct {
+// InventoryEntrySetExpectedDeliveryAction implements the interface InventoryEntryUpdateAction
+type InventoryEntrySetExpectedDeliveryAction struct {
 	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj InventorySetExpectedDeliveryAction) MarshalJSON() ([]byte, error) {
-	type Alias InventorySetExpectedDeliveryAction
+func (obj InventoryEntrySetExpectedDeliveryAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetExpectedDeliveryAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setExpectedDelivery", Alias: (*Alias)(&obj)})
 }
 
-// InventorySetRestockableInDaysAction implements the interface InventoryUpdateAction
-type InventorySetRestockableInDaysAction struct {
+// InventoryEntrySetRestockableInDaysAction implements the interface InventoryEntryUpdateAction
+type InventoryEntrySetRestockableInDaysAction struct {
 	RestockableInDays int `json:"restockableInDays,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj InventorySetRestockableInDaysAction) MarshalJSON() ([]byte, error) {
-	type Alias InventorySetRestockableInDaysAction
+func (obj InventoryEntrySetRestockableInDaysAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetRestockableInDaysAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setRestockableInDays", Alias: (*Alias)(&obj)})
 }
 
-// InventorySetSupplyChannelAction implements the interface InventoryUpdateAction
-type InventorySetSupplyChannelAction struct {
+// InventoryEntrySetSupplyChannelAction implements the interface InventoryEntryUpdateAction
+type InventoryEntrySetSupplyChannelAction struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj InventorySetSupplyChannelAction) MarshalJSON() ([]byte, error) {
-	type Alias InventorySetSupplyChannelAction
+func (obj InventoryEntrySetSupplyChannelAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetSupplyChannelAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setSupplyChannel", Alias: (*Alias)(&obj)})
 }
 
-// InventoryUpdate is a standalone struct
-type InventoryUpdate struct {
-	Version int                     `json:"version"`
-	Actions []InventoryUpdateAction `json:"actions"`
+// InventoryEntryUpdate is a standalone struct
+type InventoryEntryUpdate struct {
+	Version int                          `json:"version"`
+	Actions []InventoryEntryUpdateAction `json:"actions"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *InventoryUpdate) UnmarshalJSON(data []byte) error {
-	type Alias InventoryUpdate
+func (obj *InventoryEntryUpdate) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryUpdate
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
 	for i := range obj.Actions {
 		var err error
-		obj.Actions[i], err = mapDiscriminatorInventoryUpdateAction(obj.Actions[i])
+		obj.Actions[i], err = mapDiscriminatorInventoryEntryUpdateAction(obj.Actions[i])
 		if err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+// InventoryPagedQueryResponse is a standalone struct
+type InventoryPagedQueryResponse struct {
+	Total   int              `json:"total,omitempty"`
+	Results []InventoryEntry `json:"results"`
+	Offset  int              `json:"offset"`
+	Count   int              `json:"count"`
 }

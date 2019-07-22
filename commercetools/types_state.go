@@ -16,6 +16,7 @@ type StateRoleEnum string
 // Enum values for StateRoleEnum
 const (
 	StateRoleEnumReviewIncludedInStatistics StateRoleEnum = "ReviewIncludedInStatistics"
+	StateRoleEnumReturn                     StateRoleEnum = "Return"
 )
 
 // StateTypeEnum is an enum type

@@ -227,6 +227,13 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return new, nil
+	case "OrderLineItemAdded":
+		new := OrderLineItemAddedMessagePayload{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "OrderLineItemDiscountSet":
 		new := OrderLineItemDiscountSetMessagePayload{}
 		err := mapstructure.Decode(input, &new)
@@ -1404,6 +1411,36 @@ func (obj OrderImportedMessagePayload) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{Type: "OrderImported", Alias: (*Alias)(&obj)})
+}
+
+// OrderLineItemAddedMessage is of type Message
+type OrderLineItemAddedMessage struct {
+	Version                         int                      `json:"version"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Type                            string                   `json:"type"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	LineItem                        *LineItem                `json:"lineItem"`
+	AddedQuantity                   int                      `json:"addedQuantity"`
+}
+
+// OrderLineItemAddedMessagePayload implements the interface MessagePayload
+type OrderLineItemAddedMessagePayload struct {
+	LineItem      *LineItem `json:"lineItem"`
+	AddedQuantity int       `json:"addedQuantity"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderLineItemAddedMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "OrderLineItemAdded", Alias: (*Alias)(&obj)})
 }
 
 // OrderLineItemDiscountSetMessage is of type Message

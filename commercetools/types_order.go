@@ -1775,11 +1775,11 @@ type PaymentInfo struct {
 
 // ProductVariantImportDraft is a standalone struct
 type ProductVariantImportDraft struct {
-	SKU        string      `json:"sku,omitempty"`
-	Prices     []Price     `json:"prices,omitempty"`
-	Images     []Image     `json:"images,omitempty"`
-	ID         int         `json:"id,omitempty"`
-	Attributes []Attribute `json:"attributes,omitempty"`
+	SKU        string       `json:"sku,omitempty"`
+	Prices     []PriceDraft `json:"prices,omitempty"`
+	Images     []Image      `json:"images,omitempty"`
+	ID         int          `json:"id,omitempty"`
+	Attributes []Attribute  `json:"attributes,omitempty"`
 }
 
 // ReturnInfo is a standalone struct
