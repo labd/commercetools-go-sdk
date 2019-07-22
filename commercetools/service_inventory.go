@@ -54,7 +54,7 @@ func (client *Client) InventoryEntryGetWithID(ID string) (result *InventoryEntry
 type InventoryEntryUpdateWithIDInput struct {
 	ID      string
 	Version int
-	Actions []InventoryUpdateAction
+	Actions []InventoryEntryUpdateAction
 }
 
 // InventoryEntryUpdateWithID for type InventoryEntry

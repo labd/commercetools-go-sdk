@@ -136,10 +136,6 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 	methodName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	updateStructID := fmt.Sprintf("%sUpdate%sInput", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	updateObjectType := fmt.Sprintf("%sUpdateAction", resource.CodeName)
-	// TODO: Inconsistent api def... :(
-	if updateObjectType == "InventoryEntryUpdateAction" {
-		updateObjectType = "InventoryUpdateAction"
-	}
 
 	c := jen.Commentf("%s is input for function %s", updateStructID, methodName).Line()
 	c.Type().Id(updateStructID).Struct(
