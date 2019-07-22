@@ -57,7 +57,7 @@ func TestAPIClientGetByID(t *testing.T) {
 		ID:         "api-client-id",
 		Scope:      "view_products",
 		Name:       "api-client-name",
-		CreatedAt:  timestamp,
+		CreatedAt:  &timestamp,
 		LastUsedAt: commercetools.NewDate(2017, 9, 10),
 		Secret:     "secret-passphrase",
 	}
