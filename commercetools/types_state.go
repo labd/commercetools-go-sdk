@@ -121,7 +121,7 @@ type State struct {
 	LastModifiedBy *LastModifiedBy  `json:"lastModifiedBy,omitempty"`
 	CreatedBy      *CreatedBy       `json:"createdBy,omitempty"`
 	Type           StateTypeEnum    `json:"type"`
-	Transitions    []StateReference `json:"transitions,omitempty"`
+	Transitions    []StateReference `json:"transitions"`
 	Roles          []StateRoleEnum  `json:"roles,omitempty"`
 	Name           *LocalizedString `json:"name,omitempty"`
 	Key            string           `json:"key"`
@@ -189,7 +189,7 @@ func (obj StateChangeTypeAction) MarshalJSON() ([]byte, error) {
 // StateDraft is a standalone struct
 type StateDraft struct {
 	Type        StateTypeEnum             `json:"type"`
-	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
+	Transitions []StateResourceIdentifier `json:"transitions"`
 	Roles       []StateRoleEnum           `json:"roles,omitempty"`
 	Name        *LocalizedString          `json:"name,omitempty"`
 	Key         string                    `json:"key"`
@@ -293,7 +293,7 @@ func (obj StateSetRolesAction) MarshalJSON() ([]byte, error) {
 
 // StateSetTransitionsAction implements the interface StateUpdateAction
 type StateSetTransitionsAction struct {
-	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
+	Transitions []StateResourceIdentifier `json:"transitions"`
 }
 
 // MarshalJSON override to set the discriminator value
