@@ -44,9 +44,10 @@ func createExampleProduct() *commercetools.Product {
 					Prices: []commercetools.Price{
 						{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
-							Value: &commercetools.Money{
-								CentAmount:   10000,
-								CurrencyCode: "EUR",
+							Value: commercetools.CentPrecisionMoney{
+								FractionDigits: 2,
+								CentAmount:     10000,
+								CurrencyCode:   "EUR",
 							},
 						},
 					},
@@ -86,9 +87,10 @@ func createExampleProduct() *commercetools.Product {
 					Prices: []commercetools.Price{
 						{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
-							Value: &commercetools.Money{
-								CentAmount:   10000,
-								CurrencyCode: "EUR",
+							Value: commercetools.CentPrecisionMoney{
+								FractionDigits: 2,
+								CentAmount:     10000,
+								CurrencyCode:   "EUR",
 							},
 						},
 					},
