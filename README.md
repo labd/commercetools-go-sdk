@@ -1,7 +1,6 @@
 # commercetools-go-sdk
 
 [![Build Status](https://github.com/labd/commercetools-go-sdk/workflows/Go%20Tests/badge.svg)](https://github.com/labd/commercetools-go-sdk/workflows/)
-
 [![codecov](https://codecov.io/gh/LabD/commercetools-go-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/LabD/commercetools-go-sdk)
 [![Go Report Card](https://goreportcard.com/badge/github.com/labd/commercetools-go-sdk)](https://goreportcard.com/report/github.com/labd/commercetools-go-sdk)
 [![GoDoc](https://godoc.org/github.com/labd/commercetools-go-sdk?status.svg)](https://godoc.org/github.com/labd/commercetools-go-sdk)
