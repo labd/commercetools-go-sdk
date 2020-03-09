@@ -6,7 +6,7 @@ import (
 
 	"github.com/iancoleman/strcase"
 
-	yaml "gopkg.in/mikefarah/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // CreateCodeName generates a go identifier for the given value. We also do some extra

@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	yaml "gopkg.in/mikefarah/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 // RamlType holds info for specific type
