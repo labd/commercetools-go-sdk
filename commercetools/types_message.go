@@ -136,6 +136,13 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			return nil, err
 		}
 		return new, nil
+	case "InventoryEntryCreated":
+		new := InventoryEntryCreatedMessage{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "InventoryEntryDeleted":
 		new := InventoryEntryDeletedMessage{}
 		err := mapstructure.Decode(input, &new)
@@ -656,6 +663,13 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return new, nil
 	case "DeliveryRemoved":
 		new := DeliveryRemovedMessagePayload{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "InventoryEntryCreated":
+		new := InventoryEntryCreatedMessagePayload{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -1679,6 +1693,44 @@ func (obj DeliveryRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{Type: "DeliveryRemoved", Alias: (*Alias)(&obj)})
+}
+
+// InventoryEntryCreatedMessage implements the interface Message
+type InventoryEntryCreatedMessage struct {
+	Version                         int                      `json:"version"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	LastModifiedBy                  *LastModifiedBy          `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	InventoryEntry                  *InventoryEntry          `json:"inventoryEntry"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InventoryEntryCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryCreatedMessage
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
+}
+
+// InventoryEntryCreatedMessagePayload implements the interface MessagePayload
+type InventoryEntryCreatedMessagePayload struct {
+	InventoryEntry *InventoryEntry `json:"inventoryEntry"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InventoryEntryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryCreatedMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
 }
 
 // InventoryEntryDeletedMessage implements the interface Message

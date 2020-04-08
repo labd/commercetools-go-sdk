@@ -20,6 +20,8 @@ func generateFilename(name string) string {
 func generateResources(objects []RamlType, resources []ResourceService) {
 	typeMapping := map[string]*RamlType{}
 
+	generatedFiles := map[string]string{}
+
 	for i := range objects {
 		item := objects[i]
 		typeMapping[item.Name] = &item
@@ -30,54 +32,81 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 		f.HeaderComment("Automatically generated, do not edit")
 
 		resource := typeMapping[resourceService.ResourceType]
+		hasResource := resource != nil && resource.CodeName != "CustomObject"
 
-		if resource == nil {
-			continue
+		codeNameCamel := strcase.ToCamel(resourceService.Package)
+		if hasResource && !resourceService.NestedResource {
+			codeNameCamel = resource.CodeName
 		}
-		// Skip this because it has a weird RAML definition
-		if resource.CodeName == "CustomObject" {
-			continue
-		}
+
 		// TODO: ugly hack
 		resourceService.ResourceType = CreateCodeName(resourceService.ResourceType)
 		resourceService.ResourceDraftType = CreateCodeName(resourceService.ResourceDraftType)
 		resourceService.ResourceQueryType = CreateCodeName(resourceService.ResourceQueryType)
 
-		urlPathName := fmt.Sprintf("%sURLPath", resource.CodeName)
+		urlPathName := fmt.Sprintf("%sURLPath", codeNameCamel)
+
 		c := jen.Comment(fmt.Sprintf("%s is the commercetools API path.", urlPathName)).Line()
 		c.Const().Id(urlPathName).Op("=").Lit(resourceService.BasePath).Line()
 		f.Add(c)
 
+		hasMethods := false
+
 		if resourceService.HasCreate {
-			createCode := createResourceCode(resource, resourceService, urlPathName)
+			createCode := createResourceCode(codeNameCamel, resourceService, urlPathName)
 			f.Add(createCode)
+			hasMethods = true
 		}
 
-		if resourceService.HasList {
-			queryCode := queryResourceCode(resource, resourceService, urlPathName)
+		if resourceService.HasList && len(resourceService.ResourceQueryType) > 0 {
+			queryCode := queryResourceCode(codeNameCamel, resourceService, urlPathName)
 			f.Add(queryCode)
+			hasMethods = true
 		}
 
-		httpMethodsCode := generateResourceHTTPMethodsCode(resource, resourceService, urlPathName)
+		httpMethodsCode := generateResourceHTTPMethodsCode(codeNameCamel, resourceService, urlPathName)
 		for _, httpMethodCode := range httpMethodsCode {
 			f.Add(httpMethodCode)
+			hasMethods = true
 		}
 
-		filename := generateFilename(resource.Package)
-		err := f.Save("commercetools/service_" + filename)
-		if err != nil {
-			panic(err)
+		if hasMethods {
+			packageName := resourceService.Package
+			// for non-nested resources keep original naming for backward compatibility
+			if hasResource && !resourceService.NestedResource {
+				packageName = resource.Package
+			}
+
+			// in the latest generated client some files overwrite each other as more endponts were added
+			// this code prevents files from being overwritten by caching their names and adding prefixes
+			serviceName := packageName
+			i := 1
+			for len(generatedFiles[serviceName]) > 0 {
+				serviceName = fmt.Sprintf("%s%d", packageName, i)
+				i++
+			}
+
+			generatedFiles[serviceName] = serviceName
+
+			filename := generateFilename(serviceName)
+
+			fmt.Printf("fileName = %s\n", filename)
+
+			err := f.Save("commercetools/service_" + filename)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 }
 
-func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+func deleteResourceHTTPMethod(codeNameCamel string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	deleteIdentifier := "ID"
 	if strings.Contains(resourceMethod.MethodName, "Key") {
 		deleteIdentifier = "key"
 	}
 
-	methodName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	methodName := fmt.Sprintf("%sDelete%s", codeNameCamel, strings.Title(resourceMethod.MethodName))
 	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
 
 	deleteWithVersion := true
@@ -127,15 +156,15 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 	return c
 }
 
-func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+func postResourceHTTPMethod(codeNameCamel string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	updateIdentifier := "ID"
 	if strings.Contains(resourceMethod.MethodName, "Key") {
 		updateIdentifier = "Key"
 	}
 
-	methodName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-	updateStructID := fmt.Sprintf("%sUpdate%sInput", resource.CodeName, strings.Title(resourceMethod.MethodName))
-	updateObjectType := fmt.Sprintf("%sUpdateAction", resource.CodeName)
+	methodName := fmt.Sprintf("%sUpdate%s", codeNameCamel, strings.Title(resourceMethod.MethodName))
+	updateStructID := fmt.Sprintf("%sUpdate%sInput", resourceService.ResourceType, strings.Title(resourceMethod.MethodName))
+	updateObjectType := fmt.Sprintf("%sUpdateAction", resourceService.ResourceType)
 
 	c := jen.Commentf("%s is input for function %s", updateStructID, methodName).Line()
 	c.Type().Id(updateStructID).Struct(
@@ -160,25 +189,41 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 		description = httpMethod.Description
 	}
 	c.Commentf("%s %s", methodName, description).Line()
-	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
-		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
-			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id("input").Op(".").Id(updateIdentifier), jen.Lit(1)),
-			jen.Nil(),
-			jen.Id("input").Op(".").Id("Version"),
-			jen.Id("input").Op(".").Id("Actions"),
-			jen.Op("&").Id("result"),
-		),
-		jen.If(jen.Err().Op("!=").Nil()).Block(
-			jen.Return(jen.Nil(), jen.Err()),
-		),
-		jen.Return(jen.Id("result"), jen.Nil()),
-	).Line()
+	stmt := c.Func().Params(returnParams).Id(methodName).Params(methodParams)
+	fmt.Printf("ResouceType = [%s]\n", resourceService.ResourceType)
+	if len(resourceService.ResourceType) > 0 {
+		stmt = stmt.Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+			jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
+				jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id("input").Op(".").Id(updateIdentifier), jen.Lit(1)),
+				jen.Nil(),
+				jen.Id("input").Op(".").Id("Version"),
+				jen.Id("input").Op(".").Id("Actions"),
+				jen.Op("&").Id("result"),
+			),
+			jen.If(jen.Err().Op("!=").Nil()).Block(
+				jen.Return(jen.Nil(), jen.Err()),
+			),
+			jen.Return(jen.Id("result"), jen.Nil()),
+		)
+	} else {
+		stmt = jen.Err().Error().Block(
+			jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
+				jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id("input").Op(".").Id(updateIdentifier), jen.Lit(1)),
+				jen.Nil(),
+				jen.Id("input").Op(".").Id("Version"),
+				jen.Id("input").Op(".").Id("Actions"),
+				jen.Nil(),
+			),
+			jen.Return(jen.Err()),
+		)
+	}
+	stmt.Line()
 
 	return c
 }
 
-func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	methodName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+func getResourceHTTPMethod(codeNameCamel string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+	methodName := fmt.Sprintf("%sGet%s", codeNameCamel, strings.Title(resourceMethod.MethodName))
 	returnParams := jen.Id("client").Op("*").Id("Client")
 	methodParams := jen.Id(resourceMethod.PathParameterName).String()
 
@@ -203,19 +248,19 @@ func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, 
 	return c
 }
 
-func generateResourceHTTPMethodsCode(resource *RamlType, resourceService ResourceService, urlPathName string) (httpMethodsCode []*jen.Statement) {
+func generateResourceHTTPMethodsCode(codeNameCamel string, resourceService ResourceService, urlPathName string) (httpMethodsCode []*jen.Statement) {
 	httpMethodsCode = make([]*jen.Statement, 0)
 	for _, resourceMethod := range resourceService.ResourceMethods {
 		for _, httpMethod := range resourceMethod.HTTPMethods {
 			switch httpMethod.HTTPMethod {
 			case "get":
-				c := getResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				c := getResourceHTTPMethod(codeNameCamel, resourceService, resourceMethod, httpMethod)
 				httpMethodsCode = append(httpMethodsCode, c)
 			case "post":
-				c := postResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				c := postResourceHTTPMethod(codeNameCamel, resourceService, resourceMethod, httpMethod)
 				httpMethodsCode = append(httpMethodsCode, c)
 			case "delete":
-				c := deleteResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				c := deleteResourceHTTPMethod(codeNameCamel, resourceService, resourceMethod, httpMethod)
 				httpMethodsCode = append(httpMethodsCode, c)
 			default:
 				continue
@@ -228,8 +273,8 @@ func generateResourceHTTPMethodsCode(resource *RamlType, resourceService Resourc
 	return httpMethodsCode
 }
 
-func queryResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
-	queryName := fmt.Sprintf("%sQuery", resource.CodeName)
+func queryResourceCode(codeNameCamel string, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
+	queryName := fmt.Sprintf("%sQuery", codeNameCamel)
 	returnParams := jen.Id("client").Op("*").Id("Client")
 	queryParams := jen.Id("input").Op("*").Id("QueryInput")
 
@@ -248,24 +293,48 @@ func queryResourceCode(resource *RamlType, resourceService ResourceService, urlP
 	return c
 }
 
-func createResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
-	createName := fmt.Sprintf("%sCreate", resource.CodeName)
+func createResourceCode(codeNameCamel string, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
+	createName := fmt.Sprintf("%sCreate", codeNameCamel)
 	returnParams := jen.Id("client").Op("*").Id("Client")
-	createParams := jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType)
+	var createParams *jen.Statement = nil
+	var createParamName *jen.Statement = jen.Nil()
+	if len(resourceService.ResourceDraftType) > 0 {
+		createParams = jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType)
+		createParamName = jen.Id("draft")
+	}
 
 	c := jen.Commentf("%s creates a new instance of type %s", createName, resourceService.ResourceType).Line()
-	c.Func().Params(returnParams).Id(createName).Params(createParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
-		jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
-			jen.Id(urlPathName),
-			jen.Nil(),
-			jen.Id("draft"),
-			jen.Op("&").Id("result"),
-		),
-		jen.If(jen.Err().Op("!=").Nil()).Block(
-			jen.Return(jen.Nil(), jen.Err()),
-		),
-		jen.Return(jen.Id("result"), jen.Nil()),
-	).Line()
+	stmt := c.Func().Params(returnParams).Id(createName)
+	if createParams != nil {
+		stmt = stmt.Params(createParams)
+	} else {
+		stmt = stmt.Params()
+	}
+	if len(resourceService.ResourceType) > 0 {
+		stmt = stmt.Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+			jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
+				jen.Id(urlPathName),
+				jen.Nil(),
+				createParamName,
+				jen.Op("&").Id("result"),
+			),
+			jen.If(jen.Err().Op("!=").Nil()).Block(
+				jen.Return(jen.Nil(), jen.Err()),
+			),
+			jen.Return(jen.Id("result"), jen.Nil()),
+		)
+	} else {
+		stmt = stmt.Parens(jen.Err().Error()).Block(
+			jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
+				jen.Id(urlPathName),
+				jen.Nil(),
+				createParamName,
+				jen.Nil(),
+			),
+			jen.Return(jen.Err()),
+		)
+	}
+	stmt.Line()
 	return c
 }
 
@@ -710,6 +779,9 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 			}
 			code = code.Qual("time", "Time")
 		case "date-only":
+			if object.Optional {
+				code = code.Op("*")
+			}
 			code = code.Id("Date")
 		default:
 			code = code.Interface()

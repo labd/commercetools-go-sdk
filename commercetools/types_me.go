@@ -1059,7 +1059,7 @@ type MyCustomer struct {
 	Email                    string                  `json:"email"`
 	DefaultShippingAddressID string                  `json:"defaultShippingAddressId,omitempty"`
 	DefaultBillingAddressID  string                  `json:"defaultBillingAddressId,omitempty"`
-	DateOfBirth              Date                    `json:"dateOfBirth,omitempty"`
+	DateOfBirth              *Date                   `json:"dateOfBirth,omitempty"`
 	CustomerNumber           string                  `json:"customerNumber,omitempty"`
 	CustomerGroup            *CustomerGroupReference `json:"customerGroup,omitempty"`
 	Custom                   *CustomFields           `json:"custom,omitempty"`
@@ -1154,7 +1154,7 @@ type MyCustomerDraft struct {
 	Email                  string                    `json:"email"`
 	DefaultShippingAddress int                       `json:"defaultShippingAddress,omitempty"`
 	DefaultBillingAddress  int                       `json:"defaultBillingAddress,omitempty"`
-	DateOfBirth            Date                      `json:"dateOfBirth,omitempty"`
+	DateOfBirth            *Date                     `json:"dateOfBirth,omitempty"`
 	Custom                 *CustomFields             `json:"custom,omitempty"`
 	CompanyName            string                    `json:"companyName,omitempty"`
 	Addresses              []Address                 `json:"addresses,omitempty"`
@@ -1248,7 +1248,7 @@ func (obj MyCustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 // MyCustomerSetDateOfBirthAction implements the interface MyCustomerUpdateAction
 type MyCustomerSetDateOfBirthAction struct {
-	DateOfBirth Date `json:"dateOfBirth,omitempty"`
+	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

@@ -24,6 +24,13 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 		return nil, errors.New("Invalid data")
 	}
 	switch discriminator {
+	case "setLanguages":
+		new := StoreSetLanguagesAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setName":
 		new := StoreSetNameAction{}
 		err := mapstructure.Decode(input, &new)
@@ -41,6 +48,7 @@ type Store struct {
 	Name           *LocalizedString `json:"name,omitempty"`
 	LastModifiedBy *LastModifiedBy  `json:"lastModifiedBy,omitempty"`
 	LastModifiedAt time.Time        `json:"lastModifiedAt"`
+	Languages      []string         `json:"languages,omitempty"`
 	Key            string           `json:"key"`
 	ID             string           `json:"id"`
 	CreatedBy      *CreatedBy       `json:"createdBy,omitempty"`
@@ -49,8 +57,9 @@ type Store struct {
 
 // StoreDraft is a standalone struct
 type StoreDraft struct {
-	Name *LocalizedString `json:"name"`
-	Key  string           `json:"key"`
+	Name      *LocalizedString `json:"name"`
+	Languages []string         `json:"languages,omitempty"`
+	Key       string           `json:"key"`
 }
 
 // StoreKeyReference implements the interface KeyReference
@@ -104,6 +113,20 @@ func (obj StoreResourceIdentifier) MarshalJSON() ([]byte, error) {
 		TypeID string `json:"typeId"`
 		*Alias
 	}{TypeID: "store", Alias: (*Alias)(&obj)})
+}
+
+// StoreSetLanguagesAction implements the interface StoreUpdateAction
+type StoreSetLanguagesAction struct {
+	Languages []string `json:"languages,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoreSetLanguagesAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetLanguagesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setLanguages", Alias: (*Alias)(&obj)})
 }
 
 // StoreSetNameAction implements the interface StoreUpdateAction
