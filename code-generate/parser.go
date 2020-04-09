@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -145,13 +146,20 @@ type ResourceMethod struct {
 
 // ResourceService contains all the data to CRUD an API resource.
 type ResourceService struct {
+	Package           string
 	BasePath          string
+	NestedResource    bool
 	HasCreate         bool
 	HasList           bool
 	ResourceMethods   []ResourceMethod
 	ResourceType      string
 	ResourceQueryType string
 	ResourceDraftType string
+}
+
+var ignoreRoutes = []string{
+	"in-store",
+	"graphql",
 }
 
 func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceService) {
@@ -164,42 +172,169 @@ func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceServ
 	resources = make([]ResourceService, 0)
 	apiResources := getPropertyValue(data, "/{projectKey}")
 	for _, apiResource := range apiResources.(yaml.MapSlice) {
-		if !strings.HasPrefix(apiResource.Key.(string), "/") {
+		apiKeyString := apiResource.Key.(string)
+		if !strings.HasPrefix(apiKeyString, "/") {
 			continue
 		}
-		resourceService := ResourceService{
-			BasePath: apiResource.Key.(string)[1:],
+
+		// skip some routes which should be ignored (either not supported or not a part of REST API)
+		ignore := false
+		for _, ir := range ignoreRoutes {
+			if strings.Contains(apiKeyString, ir) {
+				ignore = true
+			}
 		}
-		for _, item := range apiResource.Value.(yaml.MapSlice) {
-			key := item.Key.(string)
-			if key == "get" {
-				resourceService.HasList = true
+		if ignore {
+			continue
+		}
+
+		fmt.Printf("== get resources for %s", apiKeyString)
+
+		resourceServices := getResourceServices(apiResource, "", "")
+
+		resources = append(resources, resourceServices...)
+	}
+
+	return
+}
+
+func getResourceServices(apiResource yaml.MapItem, basePath string, basePackage string) []ResourceService {
+	resourceServices := []ResourceService{}
+
+	packageDelimiter := "_"
+	pathDelimeter := "/"
+	if len(basePath) == 0 {
+		packageDelimiter = ""
+		pathDelimeter = ""
+	}
+
+	currPath := apiResource.Key.(string)[1:]
+	nestedResource := len(basePath) > 0
+
+	resourceService := ResourceService{
+		BasePath:       fmt.Sprintf("%s%s%s", basePath, pathDelimeter, currPath),
+		Package:        fmt.Sprintf("%s%s%s", basePackage, packageDelimiter, currPath),
+		NestedResource: nestedResource,
+	}
+
+	slice, ok := apiResource.Value.(yaml.MapSlice)
+	if !ok {
+		return []ResourceService{}
+	}
+
+	for _, item := range slice {
+		key := item.Key.(string)
+		if key == "get" {
+			resourceService.HasList = true
+			if responseType, ok := getResponseType(item, "200"); ok {
+				resourceService.ResourceQueryType = responseType
+				resourceService.ResourceType = responseType
 			}
-			if key == "post" {
-				resourceService.HasCreate = true
+		}
+		if key == "post" {
+			resourceService.HasCreate = true
+			if requestType, ok := getRequestType(item); ok {
+				resourceService.ResourceDraftType = requestType
 			}
-			if key == "type" {
-				typeInfo := getPropertyValue(apiResource.Value.(yaml.MapSlice), "type")
-				if _, ok := typeInfo.(yaml.MapSlice); !ok {
-					continue
-				}
+			if responseType, ok := getResponseType(item, "201"); ok {
+				resourceService.ResourceType = responseType
+			}
+		}
+		if key == "type" {
+			typeInfo := getPropertyValue(apiResource.Value.(yaml.MapSlice), "type")
+			if _, ok := typeInfo.(yaml.MapSlice); !ok {
+				continue
+			}
+			baseDomainPropertyVal := getPropertyValue(typeInfo.(yaml.MapSlice), "baseDomain")
+			if baseDomainPropertyVal != nil {
 				baseDomain := getPropertyValue(typeInfo.(yaml.MapSlice), "baseDomain").(yaml.MapSlice)
 				resourceService.ResourceType = getPropertyString(baseDomain, "resourceType")
 				resourceService.ResourceQueryType = strings.Split(getPropertyString(baseDomain, "resourceQueryType"), " ")[0]
 				resourceService.ResourceDraftType = getPropertyString(baseDomain, "resourceDraft")
 			}
-			if strings.HasPrefix(key, "/") {
-				resourceMethod := createResourceMethod(item.Value.(yaml.MapSlice), key)
-				// Only support withId/withKey for now.
-				if resourceMethod.MethodName == "withID" || resourceMethod.MethodName == "withKey" {
-					resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
-				}
+		}
+		if strings.HasPrefix(key, "/") {
+			resourceMethod := createResourceMethod(item.Value.(yaml.MapSlice), key)
+			// Only support withId/withKey for now.
+			if resourceMethod.MethodName == "withID" || resourceMethod.MethodName == "withKey" {
+				resourceService.ResourceMethods = append(resourceService.ResourceMethods, resourceMethod)
+			} else if !strings.ContainsAny(key, "{}=") { // currently not supporing injected pathes
+				fmt.Printf("get child services for key = %s\n", key)
+				childServices := getResourceServices(item, resourceService.BasePath, resourceService.Package)
+				fmt.Printf("Child services: %v\n", childServices)
+				resourceServices = append(resourceServices, childServices...)
 			}
 		}
-		resources = append(resources, resourceService)
 	}
 
-	return
+	resourceServices = append(resourceServices, resourceService)
+
+	return resourceServices
+}
+
+func getRequestType(item yaml.MapItem) (res string, ok bool) {
+	// body => application/json => type
+	body, ok := getValueByKey(item.Value, "body")
+	if !ok {
+		return "", false
+	}
+
+	aj, ok := getValueByKey(body, "application/json")
+	if !ok {
+		return "", false
+	}
+
+	resType, ok := getValueByKey(aj, "type")
+	if !ok {
+		return "", false
+	}
+
+	return resType.(string), true
+}
+
+func getResponseType(item yaml.MapItem, responseStatus string) (res string, ok bool) {
+	// responses => 201 => body => application/json => type
+	resp, ok := getValueByKey(item.Value, "responses")
+	if !ok {
+		return "", false
+	}
+
+	status, ok := getValueByKey(resp, responseStatus)
+	if !ok {
+		return "", false
+	}
+
+	body, ok := getValueByKey(status, "body")
+	if !ok {
+		return "", false
+	}
+
+	aj, ok := getValueByKey(body, "application/json")
+	if !ok {
+		return "", false
+	}
+
+	resType, ok := getValueByKey(aj, "type")
+	if !ok {
+		return "", false
+	}
+
+	return resType.(string), true
+}
+
+func getValueByKey(val interface{}, key string) (interface{}, bool) {
+	slice, ok := val.(yaml.MapSlice)
+	if !ok {
+		return nil, false
+	}
+
+	for _, b := range slice {
+		if fmt.Sprintf("%v", b.Key) == key {
+			return b.Value, true
+		}
+	}
+
+	return nil, false
 }
 
 func createResourceMethod(resourceMethodData yaml.MapSlice, key string) (resourceMethod ResourceMethod) {
