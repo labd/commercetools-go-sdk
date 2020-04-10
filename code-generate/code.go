@@ -303,15 +303,20 @@ func createResourceCode(codeNameCamel string, resourceService ResourceService, u
 		createParamName = jen.Id("draft")
 	}
 
-	c := jen.Commentf("%s creates a new instance of type %s", createName, resourceService.ResourceType).Line()
+	responseType := resourceService.ResourceDraftResponseType
+	if len(responseType) == 0 {
+		responseType = resourceService.ResourceType
+	}
+
+	c := jen.Commentf("%s creates a new instance of type %s", createName, responseType).Line()
 	stmt := c.Func().Params(returnParams).Id(createName)
 	if createParams != nil {
 		stmt = stmt.Params(createParams)
 	} else {
 		stmt = stmt.Params()
 	}
-	if len(resourceService.ResourceType) > 0 {
-		stmt = stmt.Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+	if len(responseType) > 0 {
+		stmt = stmt.Parens(jen.List(jen.Id("result").Op("*").Id(responseType), jen.Err().Error())).Block(
 			jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
 				jen.Id(urlPathName),
 				jen.Nil(),

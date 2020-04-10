@@ -146,20 +146,22 @@ type ResourceMethod struct {
 
 // ResourceService contains all the data to CRUD an API resource.
 type ResourceService struct {
-	Package           string
-	BasePath          string
-	NestedResource    bool
-	HasCreate         bool
-	HasList           bool
-	ResourceMethods   []ResourceMethod
-	ResourceType      string
-	ResourceQueryType string
-	ResourceDraftType string
+	Package                   string
+	BasePath                  string
+	NestedResource            bool
+	HasCreate                 bool
+	HasList                   bool
+	ResourceMethods           []ResourceMethod
+	ResourceType              string
+	ResourceQueryType         string
+	ResourceDraftType         string
+	ResourceDraftResponseType string
 }
 
 var ignoreRoutes = []string{
 	"in-store",
 	"graphql",
+	"me", // me endpoints are in beta and their description not quite accurate
 }
 
 func parseYaml(data yaml.MapSlice) (objects []RamlType, resources []ResourceService) {
@@ -237,7 +239,7 @@ func getResourceServices(apiResource yaml.MapItem, basePath string, basePackage 
 				resourceService.ResourceDraftType = requestType
 			}
 			if responseType, ok := getResponseType(item, "201"); ok {
-				resourceService.ResourceType = responseType
+				resourceService.ResourceDraftResponseType = responseType
 			}
 		}
 		if key == "type" {

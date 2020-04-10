@@ -11,8 +11,8 @@ import (
 // CustomerURLPath is the commercetools API path.
 const CustomerURLPath = "customers"
 
-// CustomerCreate creates a new instance of type Customer
-func (client *Client) CustomerCreate(draft *CustomerDraft) (result *Customer, err error) {
+// CustomerCreate creates a new instance of type CustomerSignInResult
+func (client *Client) CustomerCreate(draft *CustomerDraft) (result *CustomerSignInResult, err error) {
 	err = client.Create(CustomerURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
