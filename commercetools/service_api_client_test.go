@@ -52,13 +52,14 @@ func TestAPIClientGetByID(t *testing.T) {
 	defer server.Close()
 
 	timestamp, _ := time.Parse(time.RFC3339, "2018-01-01T00:00:00.001Z")
+	lastUsedAt := commercetools.NewDate(2017, 9, 10)
 
 	input := &commercetools.APIClient{
 		ID:         "api-client-id",
 		Scope:      "view_products",
 		Name:       "api-client-name",
 		CreatedAt:  &timestamp,
-		LastUsedAt: commercetools.NewDate(2017, 9, 10),
+		LastUsedAt: &lastUsedAt,
 		Secret:     "secret-passphrase",
 	}
 
