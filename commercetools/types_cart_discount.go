@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // SelectionMode is an enum type
@@ -44,35 +42,35 @@ func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, 
 	switch discriminator {
 	case "customLineItems":
 		new := CartDiscountCustomLineItemsTarget{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "lineItems":
 		new := CartDiscountLineItemsTarget{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "shipping":
 		new := CartDiscountShippingCostTarget{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "multiBuyCustomLineItems":
 		new := MultiBuyCustomLineItemsTarget{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "multiBuyLineItems":
 		new := MultiBuyLineItemsTarget{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -97,49 +95,49 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 	switch discriminator {
 	case "changeCartPredicate":
 		new := CartDiscountChangeCartPredicateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeIsActive":
 		new := CartDiscountChangeIsActiveAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := CartDiscountChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeRequiresDiscountCode":
 		new := CartDiscountChangeRequiresDiscountCodeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeSortOrder":
 		new := CartDiscountChangeSortOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeStackingMode":
 		new := CartDiscountChangeStackingModeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTarget":
 		new := CartDiscountChangeTargetAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -152,7 +150,7 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 		return new, nil
 	case "changeValue":
 		new := CartDiscountChangeValueAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -165,49 +163,49 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 		return new, nil
 	case "setCustomField":
 		new := CartDiscountSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := CartDiscountSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := CartDiscountSetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := CartDiscountSetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFrom":
 		new := CartDiscountSetValidFromAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFromAndUntil":
 		new := CartDiscountSetValidFromAndUntilAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidUntil":
 		new := CartDiscountSetValidUntilAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -232,7 +230,7 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 	switch discriminator {
 	case "absolute":
 		new := CartDiscountValueAbsolute{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -242,14 +240,14 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 		return new, nil
 	case "giftLineItem":
 		new := CartDiscountValueGiftLineItem{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "relative":
 		new := CartDiscountValueRelative{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -274,21 +272,21 @@ func mapDiscriminatorCartDiscountValueDraft(input interface{}) (CartDiscountValu
 	switch discriminator {
 	case "absolute":
 		new := CartDiscountValueAbsoluteDraft{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "giftLineItem":
 		new := CartDiscountValueGiftLineItemDraft{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "relative":
 		new := CartDiscountValueRelativeDraft{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}

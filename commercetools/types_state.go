@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // StateRoleEnum is an enum type
@@ -47,63 +45,63 @@ func mapDiscriminatorStateUpdateAction(input interface{}) (StateUpdateAction, er
 	switch discriminator {
 	case "addRoles":
 		new := StateAddRolesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeInitial":
 		new := StateChangeInitialAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeKey":
 		new := StateChangeKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeType":
 		new := StateChangeTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeRoles":
 		new := StateRemoveRolesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := StateSetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setName":
 		new := StateSetNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setRoles":
 		new := StateSetRolesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTransitions":
 		new := StateSetTransitionsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}

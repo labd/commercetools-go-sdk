@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // AnonymousCartSignInMode is an enum type
@@ -35,196 +33,196 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 	switch discriminator {
 	case "addAddress":
 		new := CustomerAddAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addBillingAddressId":
 		new := CustomerAddBillingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addShippingAddressId":
 		new := CustomerAddShippingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addStore":
 		new := CustomerAddStoreAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAddress":
 		new := CustomerChangeAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeEmail":
 		new := CustomerChangeEmailAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeAddress":
 		new := CustomerRemoveAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeBillingAddressId":
 		new := CustomerRemoveBillingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeShippingAddressId":
 		new := CustomerRemoveShippingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeStore":
 		new := CustomerRemoveStoreAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCompanyName":
 		new := CustomerSetCompanyNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := CustomerSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := CustomerSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerGroup":
 		new := CustomerSetCustomerGroupAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerNumber":
 		new := CustomerSetCustomerNumberAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDateOfBirth":
 		new := CustomerSetDateOfBirthAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDefaultBillingAddress":
 		new := CustomerSetDefaultBillingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDefaultShippingAddress":
 		new := CustomerSetDefaultShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExternalId":
 		new := CustomerSetExternalIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setFirstName":
 		new := CustomerSetFirstNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := CustomerSetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLastName":
 		new := CustomerSetLastNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := CustomerSetLocaleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMiddleName":
 		new := CustomerSetMiddleNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSalutation":
 		new := CustomerSetSalutationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setStores":
 		new := CustomerSetStoresAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTitle":
 		new := CustomerSetTitleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setVatId":
 		new := CustomerSetVatIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}

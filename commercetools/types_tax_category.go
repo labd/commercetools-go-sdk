@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // TaxCategoryUpdateAction uses action as discriminator attribute
@@ -26,42 +24,42 @@ func mapDiscriminatorTaxCategoryUpdateAction(input interface{}) (TaxCategoryUpda
 	switch discriminator {
 	case "addTaxRate":
 		new := TaxCategoryAddTaxRateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := TaxCategoryChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeTaxRate":
 		new := TaxCategoryRemoveTaxRateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "replaceTaxRate":
 		new := TaxCategoryReplaceTaxRateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := TaxCategorySetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := TaxCategorySetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
