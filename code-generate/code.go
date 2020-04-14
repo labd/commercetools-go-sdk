@@ -556,7 +556,8 @@ func generateStructDiscriminatorMapping(object *RamlType) *jen.Statement {
 			for _, child := range object.Children {
 				g.Case(jen.Lit(child.DiscriminatorValue)).Block(
 					jen.Id("new").Op(":=").Id(child.CodeName).Values(),
-					jen.Err().Op(":=").Qual("github.com/mitchellh/mapstructure", "Decode").Call(jen.Id("input"), jen.Op("&").Id("new")),
+					// use enhanced decoder  with additional hooks instead of mapstructure decode (see decoder.go for details)
+					jen.Err().Op(":=").Id("Decode").Call(jen.Id("input"), jen.Op("&").Id("new")),
 					jen.If(jen.Err().Op("!=").Nil().Block(jen.Return(jen.List(jen.Nil(), jen.Err())))),
 					jen.CustomFunc(jen.Options{}, func(g *jen.Group) {
 						discriminatedAttributes := child.getDiscriminatedAttributes()

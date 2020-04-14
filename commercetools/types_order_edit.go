@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // OrderEditResult uses type as discriminator attribute
@@ -26,21 +24,21 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 	switch discriminator {
 	case "Applied":
 		new := OrderEditApplied{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "NotProcessed":
 		new := OrderEditNotProcessed{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PreviewFailure":
 		new := OrderEditPreviewFailure{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -50,7 +48,7 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 		return new, nil
 	case "PreviewSuccess":
 		new := OrderEditPreviewSuccess{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -78,7 +76,7 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 	switch discriminator {
 	case "addStagedAction":
 		new := OrderEditAddStagedActionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -91,35 +89,35 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 		return new, nil
 	case "setComment":
 		new := OrderEditSetCommentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := OrderEditSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := OrderEditSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := OrderEditSetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setStagedActions":
 		new := OrderEditSetStagedActionsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := Decode(input, &new)
 		if err != nil {
 			return nil, err
 		}
