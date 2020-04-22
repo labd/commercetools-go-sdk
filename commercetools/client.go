@@ -73,6 +73,8 @@ type QueryInput struct {
 
 	Limit  int
 	Offset int
+
+	WithTotal string
 }
 
 func (qi QueryInput) toParams() (values url.Values) {
@@ -96,6 +98,15 @@ func (qi QueryInput) toParams() (values url.Values) {
 
 	if qi.Offset != 0 {
 		values.Set("offset", strconv.Itoa(qi.Offset))
+	}
+
+	// This is a string and not a bool because it would be hard to differentiate if user explicitly set value to "false"
+	// or it is just the default value. If it is the default value we do not want to pass this query param to all
+	// of the requests that use query input.
+	// withTotal can only be "true" or "false" otherwise malformed URL will be thrown.
+	// https://docs.commercetools.com/http-api#pagedqueryresult
+	if qi.WithTotal == "true" || qi.WithTotal == "false" {
+		values.Set("withTotal", qi.WithTotal)
 	}
 
 	return

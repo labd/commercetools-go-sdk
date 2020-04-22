@@ -169,6 +169,34 @@ func TestQueryInput(t *testing.T) {
 			},
 			rawQuery: "offset=20",
 		},
+		{
+			desc: "WithTotal False",
+			input: &commercetools.QueryInput{
+				WithTotal: "false",
+			},
+			query: url.Values{
+				"withTotal": []string{"false"},
+			},
+			rawQuery: "withTotal=false",
+		},
+		{
+			desc: "WithTotal True",
+			input: &commercetools.QueryInput{
+				WithTotal: "true",
+			},
+			query: url.Values{
+				"withTotal": []string{"true"},
+			},
+			rawQuery: "withTotal=true",
+		},
+		{
+			desc: "WithTotal malformed doesn't add withTotal to URL",
+			input: &commercetools.QueryInput{
+				WithTotal: "abc",
+			},
+			query:    url.Values{},
+			rawQuery: "",
+		},
 	}
 
 	for _, tC := range testCases {
