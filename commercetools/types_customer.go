@@ -282,7 +282,8 @@ func (obj CustomerAddAddressAction) MarshalJSON() ([]byte, error) {
 
 // CustomerAddBillingAddressIDAction implements the interface CustomerUpdateAction
 type CustomerAddBillingAddressIDAction struct {
-	AddressID string `json:"addressId"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -296,7 +297,8 @@ func (obj CustomerAddBillingAddressIDAction) MarshalJSON() ([]byte, error) {
 
 // CustomerAddShippingAddressIDAction implements the interface CustomerUpdateAction
 type CustomerAddShippingAddressIDAction struct {
-	AddressID string `json:"addressId"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -324,8 +326,9 @@ func (obj CustomerAddStoreAction) MarshalJSON() ([]byte, error) {
 
 // CustomerChangeAddressAction implements the interface CustomerUpdateAction
 type CustomerChangeAddressAction struct {
-	AddressID string   `json:"addressId"`
-	Address   *Address `json:"address"`
+	AddressKey string   `json:"addressKey,omitempty"`
+	AddressID  string   `json:"addressId,omitempty"`
+	Address    *Address `json:"address"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -433,7 +436,8 @@ func (obj CustomerReference) MarshalJSON() ([]byte, error) {
 
 // CustomerRemoveAddressAction implements the interface CustomerUpdateAction
 type CustomerRemoveAddressAction struct {
-	AddressID string `json:"addressId"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -447,7 +451,8 @@ func (obj CustomerRemoveAddressAction) MarshalJSON() ([]byte, error) {
 
 // CustomerRemoveBillingAddressIDAction implements the interface CustomerUpdateAction
 type CustomerRemoveBillingAddressIDAction struct {
-	AddressID string `json:"addressId"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -461,7 +466,8 @@ func (obj CustomerRemoveBillingAddressIDAction) MarshalJSON() ([]byte, error) {
 
 // CustomerRemoveShippingAddressIDAction implements the interface CustomerUpdateAction
 type CustomerRemoveShippingAddressIDAction struct {
-	AddressID string `json:"addressId"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -597,7 +603,8 @@ func (obj CustomerSetDateOfBirthAction) MarshalJSON() ([]byte, error) {
 
 // CustomerSetDefaultBillingAddressAction implements the interface CustomerUpdateAction
 type CustomerSetDefaultBillingAddressAction struct {
-	AddressID string `json:"addressId,omitempty"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -611,7 +618,8 @@ func (obj CustomerSetDefaultBillingAddressAction) MarshalJSON() ([]byte, error) 
 
 // CustomerSetDefaultShippingAddressAction implements the interface CustomerUpdateAction
 type CustomerSetDefaultShippingAddressAction struct {
-	AddressID string `json:"addressId,omitempty"`
+	AddressKey string `json:"addressKey,omitempty"`
+	AddressID  string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
