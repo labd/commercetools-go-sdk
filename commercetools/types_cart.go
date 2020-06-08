@@ -34,10 +34,12 @@ type DiscountCodeState string
 
 // Enum values for DiscountCodeState
 const (
-	DiscountCodeStateNotActive             DiscountCodeState = "NotActive"
-	DiscountCodeStateDoesNotMatchCart      DiscountCodeState = "DoesNotMatchCart"
-	DiscountCodeStateMatchesCart           DiscountCodeState = "MatchesCart"
-	DiscountCodeStateMaxApplicationReached DiscountCodeState = "MaxApplicationReached"
+	DiscountCodeStateNotActive                            DiscountCodeState = "NotActive"
+	DiscountCodeStateDoesNotMatchCart                     DiscountCodeState = "DoesNotMatchCart"
+	DiscountCodeStateMatchesCart                          DiscountCodeState = "MatchesCart"
+	DiscountCodeStateMaxApplicationReached                DiscountCodeState = "MaxApplicationReached"
+	DiscountCodeStateApplicationStoppedByPreviousDiscount DiscountCodeState = "ApplicationStoppedByPreviousDiscount"
+	DiscountCodeStateNotValid                             DiscountCodeState = "NotValid"
 )
 
 // InventoryMode is an enum type
