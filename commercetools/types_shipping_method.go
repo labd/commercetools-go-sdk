@@ -314,8 +314,8 @@ type ShippingMethodDraft struct {
 type ShippingMethodPagedQueryResponse struct {
 	Total   int              `json:"total,omitempty"`
 	Results []ShippingMethod `json:"results"`
-	Offset  int              `json:"offset"`
-	Limit   int              `json:"limit"`
+	Offset  int              `json:"offset,omitempty"`
+	Limit   int              `json:"limit,omitempty"`
 	Count   int              `json:"count"`
 }
 

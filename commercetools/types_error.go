@@ -197,6 +197,13 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "LanguageUsedInStores":
+		new := LanguageUsedInStoresError{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "MatchingPriceNotFound":
 		new := MatchingPriceNotFoundError{}
 		err := mapstructure.Decode(input, &new)
@@ -779,6 +786,24 @@ func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj InvalidTokenError) Error() string {
+	return obj.Message
+}
+
+// LanguageUsedInStoresError implements the interface ErrorObject
+type LanguageUsedInStoresError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj LanguageUsedInStoresError) MarshalJSON() ([]byte, error) {
+	type Alias LanguageUsedInStoresError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "LanguageUsedInStores", Alias: (*Alias)(&obj)})
+}
+
+func (obj LanguageUsedInStoresError) Error() string {
 	return obj.Message
 }
 

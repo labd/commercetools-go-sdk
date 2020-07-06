@@ -38,28 +38,37 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return new, nil
+	case "setDistributionChannels":
+		new := StoresStDistributionChannelsAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
 	return nil, nil
 }
 
 // Store is of type BaseResource
 type Store struct {
-	Version        int              `json:"version"`
-	Name           *LocalizedString `json:"name,omitempty"`
-	LastModifiedBy *LastModifiedBy  `json:"lastModifiedBy,omitempty"`
-	LastModifiedAt time.Time        `json:"lastModifiedAt"`
-	Languages      []string         `json:"languages,omitempty"`
-	Key            string           `json:"key"`
-	ID             string           `json:"id"`
-	CreatedBy      *CreatedBy       `json:"createdBy,omitempty"`
-	CreatedAt      time.Time        `json:"createdAt"`
+	Version              int                `json:"version"`
+	Name                 *LocalizedString   `json:"name,omitempty"`
+	LastModifiedBy       *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
+	Languages            []string           `json:"languages,omitempty"`
+	Key                  string             `json:"key"`
+	ID                   string             `json:"id"`
+	DistributionChannels []ChannelReference `json:"distributionChannels"`
+	CreatedBy            *CreatedBy         `json:"createdBy,omitempty"`
+	CreatedAt            time.Time          `json:"createdAt"`
 }
 
 // StoreDraft is a standalone struct
 type StoreDraft struct {
-	Name      *LocalizedString `json:"name"`
-	Languages []string         `json:"languages,omitempty"`
-	Key       string           `json:"key"`
+	Name                 *LocalizedString            `json:"name"`
+	Languages            []string                    `json:"languages,omitempty"`
+	Key                  string                      `json:"key"`
+	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels,omitempty"`
 }
 
 // StoreKeyReference implements the interface KeyReference
@@ -165,4 +174,18 @@ func (obj *StoreUpdate) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// StoresStDistributionChannelsAction implements the interface StoreUpdateAction
+type StoresStDistributionChannelsAction struct {
+	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoresStDistributionChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresStDistributionChannelsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDistributionChannels", Alias: (*Alias)(&obj)})
 }

@@ -31,6 +31,13 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return new, nil
+	case "changeCountryTaxRateFallbackEnabled":
+		new := ProjectChangeCountryTaxRateFallbackEnabledAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeCurrencies":
 		new := ProjectChangeCurrenciesAction{}
 		err := mapstructure.Decode(input, &new)
@@ -167,6 +174,11 @@ func (obj CartValueType) MarshalJSON() ([]byte, error) {
 	}{Type: "CartValue", Alias: (*Alias)(&obj)})
 }
 
+// CartsConfiguration is a standalone struct
+type CartsConfiguration struct {
+	CountryTaxRateFallbackEnabled bool `json:"countryTaxRateFallbackEnabled"`
+}
+
 // ExternalOAuth is a standalone struct
 type ExternalOAuth struct {
 	URL                 string `json:"url"`
@@ -186,6 +198,7 @@ type Project struct {
 	Currencies            []CurrencyCode        `json:"currencies"`
 	CreatedAt             time.Time             `json:"createdAt"`
 	Countries             []CountryCode         `json:"countries"`
+	Carts                 *CartsConfiguration   `json:"carts"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -218,6 +231,20 @@ func (obj ProjectChangeCountriesAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeCountries", Alias: (*Alias)(&obj)})
+}
+
+// ProjectChangeCountryTaxRateFallbackEnabledAction implements the interface ProjectUpdateAction
+type ProjectChangeCountryTaxRateFallbackEnabledAction struct {
+	CountryTaxRateFallbackEnabled bool `json:"countryTaxRateFallbackEnabled"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProjectChangeCountryTaxRateFallbackEnabledAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeCountryTaxRateFallbackEnabledAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCountryTaxRateFallbackEnabled", Alias: (*Alias)(&obj)})
 }
 
 // ProjectChangeCurrenciesAction implements the interface ProjectUpdateAction
