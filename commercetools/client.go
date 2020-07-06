@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -16,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/clientcredentials"
 )
 
@@ -228,7 +228,7 @@ func (c *Client) doRequest(method string, endpoint string, params url.Values, da
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return handleAuthError(err)
 	}
 	defer resp.Body.Close()
 
@@ -264,4 +264,19 @@ func serializeInput(input interface{}) (io.Reader, error) {
 	}
 	data := bytes.NewReader(m)
 	return data, nil
+}
+
+// Unnwrap the error object and return an ErrorResponse
+func handleAuthError(err error) error {
+	if uErr, ok := err.(*url.Error); ok {
+		if rErr, ok := uErr.Err.(*oauth2.RetrieveError); ok {
+			customErr := ErrorResponse{}
+			jsonErr := json.Unmarshal(rErr.Body, &customErr)
+			if jsonErr != nil {
+				return jsonErr
+			}
+			return customErr
+		}
+	}
+	return err
 }

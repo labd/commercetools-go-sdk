@@ -1,8 +1,10 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"runtime"
 	"testing"
@@ -10,6 +12,7 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/labd/commercetools-go-sdk/testutil"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2/clientcredentials"
 )
 
 type OutputData struct{}
@@ -47,6 +50,59 @@ func TestClientNotFound(t *testing.T) {
 	ctErr, ok := err.(commercetools.ErrorResponse)
 	assert.Equal(t, true, ok)
 	assert.Equal(t, 404, ctErr.StatusCode)
+}
+
+func TestOAuth2TokenError(t *testing.T) {
+	body := `{
+		"statusCode": 401,
+		"message": "Please provide valid client credentials using HTTP Basic Authentication.",
+		"errors": [
+			{
+				"code": "invalid_client",
+				"message": "Please provide valid client credentials using HTTP Basic Authentication."
+			}
+		],
+		"error": "invalid_client",
+		"error_description": "Please provide valid client credentials using HTTP Basic Authentication."
+	}`
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		fmt.Fprint(w, body)
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	oauth2Config := &clientcredentials.Config{
+		ClientID:     "foo",
+		ClientSecret: "bar",
+		Scopes:       []string{"manage_project:dummy"},
+		TokenURL:     fmt.Sprintf("%s/oauth/token", server.URL),
+	}
+	httpClient := oauth2Config.Client(context.TODO())
+	client := commercetools.New(&commercetools.Config{
+		ProjectKey: "dummy",
+		URL:        server.URL,
+		HTTPClient: httpClient,
+	})
+
+	// Call a random endpoint since the oauth2 exchange happens on the first
+	// request.
+	draft := &commercetools.APIClientDraft{
+		Name:  "test",
+		Scope: "manage_orders:my-ct-project-key manage_payments:my-ct-project-key",
+	}
+	_, err := client.APIClientCreate(draft)
+
+	// Validate that we have received a valid error response
+	assert.Equal(t, "Please provide valid client credentials using HTTP Basic Authentication.", err.Error())
+
+	ctErr, ok := err.(commercetools.ErrorResponse)
+	assert.Equal(t, true, ok)
+	assert.Equal(t, ctErr.StatusCode, 401)
+	assert.Equal(t, ctErr.ErrorDescription, "Please provide valid client credentials using HTTP Basic Authentication.", err.Error())
 }
 
 func TestAuthError(t *testing.T) {
