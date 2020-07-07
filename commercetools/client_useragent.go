@@ -8,7 +8,7 @@ import (
 
 // GetUserAgent determines the user agent for all HTTP requests.
 func GetUserAgent(cfg *Config) string {
-	baseInfo := "commercetools-go-sdk/0.1.0"
+	baseInfo := fmt.Sprintf("commercetools-go-sdk/%s", Version)
 	systemInfo := fmt.Sprintf("Go/%s (%s; %s)", runtime.Version(), runtime.GOOS, runtime.GOARCH)
 
 	libraryInfo := ""

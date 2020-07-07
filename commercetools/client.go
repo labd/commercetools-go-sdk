@@ -17,6 +17,9 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
+// Version identifies the current library version. Should match the git tag
+const Version = "0.1.0"
+
 // Config is used to pass settings for creating a new Client object
 type Config struct {
 	ProjectKey     string
