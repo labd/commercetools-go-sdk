@@ -193,9 +193,14 @@ func New(cfg *Config) *Client {
 		ContactEmail:   cfg.ContactEmail,
 	})
 
+	apiURL, err := cleanURL(getConfigValue(cfg.URL, "CTP_API_URL"))
+	if err != nil {
+		return nil
+	}
+
 	client := &Client{
 		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
-		url:        getConfigValue(cfg.URL, "CTP_API_URL"),
+		url:        apiURL,
 		httpClient: cfg.HTTPClient,
 		userAgent:  userAgent,
 	}
@@ -272,31 +277,45 @@ func (c *Client) Delete(ctx context.Context, endpoint string, queryParams url.Va
 
 func (c *Client) doRequest(ctx context.Context, method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
 	url := c.endpoints.API + "/" + c.projectKey + "/" + endpoint
+	resp, err := c.getResponse(ctx, method, url, params, data)
+
+	if err != nil {
+		return err
+	}
+	return processResponse(resp, output)
+}
+
+func (c *Client) getResponse(ctx context.Context, method string, url string, params url.Values, data io.Reader) (*http.Response, error) {
 	req, err := http.NewRequestWithContext(ctx, method, url, data)
 	if err != nil {
-		return errors.Wrap(err, "Creating new request")
+		return nil, errors.Wrap(err, "Creating new request")
 	}
 
 	if params != nil {
 		req.URL.RawQuery = params.Encode()
 	}
 
+	req.Header.Set("User-Agent", c.userAgent)
+
 	if c.logLevel > 0 {
 		logRequest(req)
 	}
-	req.Header.Set("User-Agent", c.userAgent)
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return handleAuthError(err)
+		return nil, handleAuthError(err)
 	}
-	defer resp.Body.Close()
 
 	if c.logLevel > 0 {
 		logResponse(resp)
 	}
 
+	return resp, nil
+}
+
+func processResponse(resp *http.Response, output interface{}) error {
 	body, err := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
 
 	switch resp.StatusCode {
 	case 200, 201:
@@ -315,6 +334,15 @@ func (c *Client) doRequest(ctx context.Context, method string, endpoint string, 
 		}
 		return customErr
 	}
+}
+
+func cleanURL(baseURL string) (string, error) {
+	u, err := url.Parse(baseURL)
+	if err != nil {
+		return baseURL, err
+	}
+	u.Path = ""
+	return u.String(), nil
 }
 
 func serializeInput(input interface{}) (io.Reader, error) {
