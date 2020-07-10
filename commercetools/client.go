@@ -295,6 +295,8 @@ func (c *Client) getResponse(ctx context.Context, method string, url string, par
 		req.URL.RawQuery = params.Encode()
 	}
 
+	req.Header.Set("Accept", "application/json; charset=utf-8")
+	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("User-Agent", c.userAgent)
 
 	if c.logLevel > 0 {
