@@ -2,6 +2,9 @@
 
 package commercetools
 
+// GraphQLVariablesMap is a map
+type GraphQLVariablesMap map[string]interface{}
+
 // GraphQLError is a standalone struct
 type GraphQLError struct {
 	Path      []interface{}          `json:"path"`
@@ -30,8 +33,4 @@ type GraphQLRequest struct {
 type GraphQLResponse struct {
 	Errors []GraphQLError `json:"errors,omitempty"`
 	Data   interface{}    `json:"data,omitempty"`
-}
-
-// GraphQLVariablesMap is a standalone struct
-type GraphQLVariablesMap struct {
 }

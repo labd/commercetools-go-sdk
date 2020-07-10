@@ -70,6 +70,13 @@ func createRamlType(name string, properties yaml.MapSlice) RamlType {
 		for _, mapItem := range typeProperties.(yaml.MapSlice) {
 			attribute := createRamlTypeAttribute(mapItem.Key.(string), mapItem.Value)
 			object.Attributes = append(object.Attributes, attribute)
+
+		}
+
+		// If the raml type has one attribute with a wildcard name (//) then
+		// turn it into a map keeping the type
+		if len(object.Attributes) == 1 && object.Attributes[0].Name == "//" {
+			object.asMap = true
 		}
 	}
 	return object

@@ -36,6 +36,9 @@ const (
 // CategoryOrderHints is a map
 type CategoryOrderHints map[string]string
 
+// ProductVariantChannelAvailabilityMap is a map
+type ProductVariantChannelAvailabilityMap map[string]interface{}
+
 // FacetResult uses type as discriminator attribute
 type FacetResult interface{}
 
@@ -1468,10 +1471,6 @@ type ProductVariantChannelAvailability struct {
 	RestockableInDays int  `json:"restockableInDays,omitempty"`
 	IsOnStock         bool `json:"isOnStock"`
 	AvailableQuantity int  `json:"availableQuantity,omitempty"`
-}
-
-// ProductVariantChannelAvailabilityMap is a standalone struct
-type ProductVariantChannelAvailabilityMap struct {
 }
 
 // ProductVariantDraft is a standalone struct
