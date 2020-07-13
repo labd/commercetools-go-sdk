@@ -37,6 +37,7 @@ type ClientConfig struct {
 	ProjectKey     string
 	Endpoints      *ClientEndpoints
 	Credentials    *ClientCredentials
+	HTTPClient     *http.Client
 	LibraryName    string
 	LibraryVersion string
 	ContactURL     string
@@ -152,12 +153,22 @@ func NewClient(cfg *ClientConfig) (*Client, error) {
 		TokenURL:     cfg.Endpoints.Auth,
 	}
 
+	// If a custom httpClient is passed use that
+	var httpClient *http.Client
+	if cfg.HTTPClient != nil {
+		httpClient = auth.Client(
+			context.WithValue(oauth2.NoContext, oauth2.HTTPClient, cfg.HTTPClient))
+	} else {
+		httpClient = auth.Client(context.TODO())
+	}
+
 	client := &Client{
 		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
 		endpoints:  *cfg.Endpoints,
-		httpClient: auth.Client(context.TODO()),
+		httpClient: httpClient,
 		userAgent:  GetUserAgent(cfg),
 	}
+
 	if os.Getenv("CTP_DEBUG") != "" {
 		client.logLevel = 1
 	}

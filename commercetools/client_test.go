@@ -151,7 +151,59 @@ func TestClientRequest(t *testing.T) {
 	query, err := client.ProductQuery(&commercetools.QueryInput{})
 	assert.NoError(t, err)
 	assert.Equal(t, query.Total, 0)
+}
 
+func TestClientRequestCustomHTTPClient(t *testing.T) {
+	oAuthBody := `{
+		"access_token": "dummy-token",
+		"scope": "user",
+		"token_type": "bearer",
+		"expires_in": 86400
+	}`
+
+	productsBody := `{
+		"limit": 20,
+		"offset": 0,
+		"count": 0,
+		"total": 0,
+		"results": []
+	}`
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		if r.URL.Path == "/oauth/token" {
+			fmt.Fprint(w, oAuthBody)
+		} else {
+			assert.Equal(t, r.Header["Authorization"], []string{"Bearer dummy-token"})
+			fmt.Fprint(w, productsBody)
+		}
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	httpClient := &http.Client{}
+
+	client, err := commercetools.NewClient(&commercetools.ClientConfig{
+		ProjectKey: "dummy",
+		Credentials: &commercetools.ClientCredentials{
+			ClientID:     "foo",
+			ClientSecret: "bar",
+			Scopes:       []string{"manage_project:dummy"},
+		},
+		Endpoints: &commercetools.ClientEndpoints{
+			API:  server.URL,
+			Auth: fmt.Sprintf("%s/oauth/token", server.URL),
+		},
+		HTTPClient: httpClient,
+	})
+	assert.NoError(t, err)
+
+	query, err := client.ProductQuery(&commercetools.QueryInput{})
+	assert.NoError(t, err)
+	assert.Equal(t, query.Total, 0)
 }
 
 func TestAuthError(t *testing.T) {
