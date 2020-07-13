@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -20,6 +21,28 @@ import (
 // Version identifies the current library version. Should match the git tag
 const Version = "0.1.0"
 
+type ClientEndpoints struct {
+	Auth              string
+	API               string
+	MerchantCenterAPI string
+}
+
+type ClientCredentials struct {
+	ClientID     string
+	ClientSecret string
+	Scopes       []string
+}
+
+type ClientConfig struct {
+	ProjectKey     string
+	Endpoints      *ClientEndpoints
+	Credentials    *ClientCredentials
+	LibraryName    string
+	LibraryVersion string
+	ContactURL     string
+	ContactEmail   string
+}
+
 // Config is used to pass settings for creating a new Client object
 type Config struct {
 	ProjectKey     string
@@ -35,6 +58,7 @@ type Config struct {
 type Client struct {
 	httpClient *http.Client
 	url        string
+	endpoints  ClientEndpoints
 	projectKey string
 	logLevel   int
 	userAgent  string
@@ -102,13 +126,67 @@ func (qi QueryInput) toParams() (values url.Values) {
 	return
 }
 
-// New creates a new client based on the provided Config.
+// NewClient creates a new client based on the provided ClientConfig
+func NewClient(cfg *ClientConfig) (*Client, error) {
+
+	if cfg.Endpoints == nil {
+		cfg.Endpoints = &ClientEndpoints{
+			Auth:              os.Getenv("CTP_AUTH_URL"),
+			API:               os.Getenv("CTP_API_URL"),
+			MerchantCenterAPI: os.Getenv("CTP_MC_API_URL"),
+		}
+	}
+
+	if cfg.Credentials == nil {
+		cfg.Credentials = &ClientCredentials{
+			ClientID:     os.Getenv("CTP_CLIENT_ID"),
+			ClientSecret: os.Getenv("CTP_CLIENT_SECRET"),
+			Scopes:       strings.Split(os.Getenv("CTP_SCOPES"), ","),
+		}
+	}
+
+	auth := &clientcredentials.Config{
+		ClientID:     cfg.Credentials.ClientID,
+		ClientSecret: cfg.Credentials.ClientSecret,
+		Scopes:       cfg.Credentials.Scopes,
+		TokenURL:     cfg.Endpoints.Auth,
+	}
+
+	client := &Client{
+		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
+		endpoints:  *cfg.Endpoints,
+		httpClient: auth.Client(context.TODO()),
+		userAgent:  GetUserAgent(cfg),
+	}
+	if os.Getenv("CTP_DEBUG") != "" {
+		client.logLevel = 1
+	}
+	return client, nil
+}
+
+func NewClientEndpoints(region string, provider string) *ClientEndpoints {
+	return &ClientEndpoints{
+		Auth:              fmt.Sprintf("https://auth.%s.%s.commercetools.com/oauth/token", region, provider),
+		API:               fmt.Sprintf("https://api.%s.%s.commercetools.com", region, provider),
+		MerchantCenterAPI: fmt.Sprintf("https://mc-api.%s.%s.commercetools.com", region, provider),
+	}
+}
+
+// New creates a new client based on the provided Config (Deprecated)
 func New(cfg *Config) *Client {
+
+	userAgent := GetUserAgent(&ClientConfig{
+		LibraryName:    cfg.LibraryName,
+		LibraryVersion: cfg.LibraryVersion,
+		ContactURL:     cfg.ContactURL,
+		ContactEmail:   cfg.ContactEmail,
+	})
+
 	client := &Client{
 		projectKey: getConfigValue(cfg.ProjectKey, "CTP_PROJECT_KEY"),
 		url:        getConfigValue(cfg.URL, "CTP_API_URL"),
 		httpClient: cfg.HTTPClient,
-		userAgent:  GetUserAgent(cfg),
+		userAgent:  userAgent,
 	}
 
 	if client.httpClient == nil {
@@ -119,6 +197,10 @@ func New(cfg *Config) *Client {
 			TokenURL:     os.Getenv("CTP_AUTH_URL"),
 		}
 		client.httpClient = auth.Client(context.TODO())
+	}
+
+	client.endpoints = ClientEndpoints{
+		API: getConfigValue(cfg.URL, "CTP_API_URL"),
 	}
 
 	if os.Getenv("CTP_DEBUG") != "" {
@@ -178,7 +260,7 @@ func (c *Client) Delete(endpoint string, queryParams url.Values, output interfac
 }
 
 func (c *Client) doRequest(method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
-	url := c.url + "/" + c.projectKey + "/" + endpoint
+	url := c.endpoints.API + "/" + c.projectKey + "/" + endpoint
 	req, err := http.NewRequest(method, url, data)
 	if err != nil {
 		return errors.Wrap(err, "Creating new request")
@@ -238,10 +320,15 @@ func handleAuthError(err error) error {
 	if uErr, ok := err.(*url.Error); ok {
 		if rErr, ok := uErr.Err.(*oauth2.RetrieveError); ok {
 			customErr := ErrorResponse{}
-			jsonErr := json.Unmarshal(rErr.Body, &customErr)
-			if jsonErr != nil {
-				return jsonErr
+			if len(rErr.Body) > 0 {
+				jsonErr := json.Unmarshal(rErr.Body, &customErr)
+				if jsonErr != nil {
+					return jsonErr
+				}
+			} else {
+				customErr.Message = rErr.Error()
 			}
+
 			return customErr
 		}
 	}
