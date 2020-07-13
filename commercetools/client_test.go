@@ -1,7 +1,6 @@
 package commercetools_test
 
 import (
-	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -11,7 +10,6 @@ import (
 	"github.com/labd/commercetools-go-sdk/commercetools"
 	"github.com/labd/commercetools-go-sdk/testutil"
 	"github.com/stretchr/testify/assert"
-	"golang.org/x/oauth2/clientcredentials"
 )
 
 type OutputData struct{}
@@ -74,18 +72,19 @@ func TestOAuth2TokenError(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(handler))
 	defer server.Close()
 
-	oauth2Config := &clientcredentials.Config{
-		ClientID:     "foo",
-		ClientSecret: "bar",
-		Scopes:       []string{"manage_project:dummy"},
-		TokenURL:     fmt.Sprintf("%s/oauth/token", server.URL),
-	}
-	httpClient := oauth2Config.Client(context.TODO())
-	client := commercetools.New(&commercetools.Config{
+	client, err := commercetools.NewClient(&commercetools.ClientConfig{
 		ProjectKey: "dummy",
-		URL:        server.URL,
-		HTTPClient: httpClient,
+		Credentials: &commercetools.ClientCredentials{
+			ClientID:     "foo",
+			ClientSecret: "bar",
+			Scopes:       []string{"manage_project:dummy"},
+		},
+		Endpoints: &commercetools.ClientEndpoints{
+			API:  server.URL,
+			Auth: fmt.Sprintf("%s/oauth/token", server.URL),
+		},
 	})
+	assert.NoError(t, err)
 
 	// Call a random endpoint since the oauth2 exchange happens on the first
 	// request.
@@ -93,7 +92,7 @@ func TestOAuth2TokenError(t *testing.T) {
 		Name:  "test",
 		Scope: "manage_orders:my-ct-project-key manage_payments:my-ct-project-key",
 	}
-	_, err := client.APIClientCreate(draft)
+	_, err = client.APIClientCreate(draft)
 
 	// Validate that we have received a valid error response
 	assert.Equal(t, "Please provide valid client credentials using HTTP Basic Authentication.", err.Error())
@@ -102,6 +101,57 @@ func TestOAuth2TokenError(t *testing.T) {
 	assert.Equal(t, true, ok)
 	assert.Equal(t, ctErr.StatusCode, 401)
 	assert.Equal(t, ctErr.ErrorDescription, "Please provide valid client credentials using HTTP Basic Authentication.", err.Error())
+}
+
+func TestClientRequest(t *testing.T) {
+	oAuthBody := `{
+		"access_token": "dummy-token",
+		"scope": "user",
+		"token_type": "bearer",
+		"expires_in": 86400
+	}`
+
+	productsBody := `{
+		"limit": 20,
+		"offset": 0,
+		"count": 0,
+		"total": 0,
+		"results": []
+	}`
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+
+		if r.URL.Path == "/oauth/token" {
+			fmt.Fprint(w, oAuthBody)
+		} else {
+			assert.Equal(t, r.Header["Authorization"], []string{"Bearer dummy-token"})
+			fmt.Fprint(w, productsBody)
+		}
+	}
+
+	server := httptest.NewServer(http.HandlerFunc(handler))
+	defer server.Close()
+
+	client, err := commercetools.NewClient(&commercetools.ClientConfig{
+		ProjectKey: "dummy",
+		Credentials: &commercetools.ClientCredentials{
+			ClientID:     "foo",
+			ClientSecret: "bar",
+			Scopes:       []string{"manage_project:dummy"},
+		},
+		Endpoints: &commercetools.ClientEndpoints{
+			API:  server.URL,
+			Auth: fmt.Sprintf("%s/oauth/token", server.URL),
+		},
+	})
+	assert.NoError(t, err)
+
+	query, err := client.ProductQuery(&commercetools.QueryInput{})
+	assert.NoError(t, err)
+	assert.Equal(t, query.Total, 0)
+
 }
 
 func TestAuthError(t *testing.T) {

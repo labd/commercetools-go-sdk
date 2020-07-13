@@ -11,11 +11,11 @@ import (
 
 func TestUserAgents(t *testing.T) {
 	testCases := []struct {
-		cfg               *commercetools.Config
+		cfg               *commercetools.ClientConfig
 		expectedUserAgent string
 	}{
 		{
-			cfg: &commercetools.Config{
+			cfg: &commercetools.ClientConfig{
 				LibraryName:    "terraform-provider-commercetools",
 				LibraryVersion: "0.1",
 				ContactURL:     "https://example.com",
@@ -26,7 +26,7 @@ func TestUserAgents(t *testing.T) {
 				commercetools.Version, runtime.Version(), runtime.GOOS, runtime.GOARCH),
 		},
 		{
-			cfg: &commercetools.Config{
+			cfg: &commercetools.ClientConfig{
 				ContactURL:   "https://example.com",
 				ContactEmail: "test@example.org",
 			},
@@ -35,7 +35,7 @@ func TestUserAgents(t *testing.T) {
 				commercetools.Version, runtime.Version(), runtime.GOOS, runtime.GOARCH),
 		},
 		{
-			cfg: &commercetools.Config{
+			cfg: &commercetools.ClientConfig{
 				LibraryName:    "terraform-provider-commercetools",
 				LibraryVersion: "0.1",
 				ContactEmail:   "test@example.org",
@@ -45,7 +45,7 @@ func TestUserAgents(t *testing.T) {
 				commercetools.Version, runtime.Version(), runtime.GOOS, runtime.GOARCH),
 		},
 		{
-			cfg: &commercetools.Config{
+			cfg: &commercetools.ClientConfig{
 				LibraryName:  "terraform-provider-commercetools",
 				ContactURL:   "https://example.com",
 				ContactEmail: "test@example.org",
