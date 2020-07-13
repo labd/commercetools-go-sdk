@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -25,7 +26,7 @@ func TestAPIClientCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.APIClientCreate(input)
+	_, err := client.APIClientCreate(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -41,7 +42,7 @@ func TestAPIClientDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.APIClientDeleteWithID("1234")
+	_, err := client.APIClientDeleteWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 
 	assert.Equal(t, "/unittest/api-clients/1234", output.URL.Path)
@@ -62,7 +63,7 @@ func TestAPIClientGetByID(t *testing.T) {
 		Secret:     "secret-passphrase",
 	}
 
-	result, err := client.APIClientGetWithID("1234")
+	result, err := client.APIClientGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -75,7 +76,7 @@ func TestAPIClientQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.APIClientQuery(&queryInput)
+	_, err := client.APIClientQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

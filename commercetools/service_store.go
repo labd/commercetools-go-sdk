@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const StoreURLPath = "stores"
 
 // StoreCreate creates a new instance of type Store
-func (client *Client) StoreCreate(draft *StoreDraft) (result *Store, err error) {
-	err = client.Create(StoreURLPath, nil, draft, &result)
+func (client *Client) StoreCreate(ctx context.Context, draft *StoreDraft) (result *Store, err error) {
+	err = client.Create(ctx, StoreURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) StoreCreate(draft *StoreDraft) (result *Store, err error) 
 }
 
 // StoreQuery allows querying for type Store
-func (client *Client) StoreQuery(input *QueryInput) (result *StorePagedQueryResponse, err error) {
-	err = client.Query(StoreURLPath, input.toParams(), &result)
+func (client *Client) StoreQuery(ctx context.Context, input *QueryInput) (result *StorePagedQueryResponse, err error) {
+	err = client.Query(ctx, StoreURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) StoreQuery(input *QueryInput) (result *StorePagedQueryResp
 }
 
 // StoreDeleteWithKey for type Store
-func (client *Client) StoreDeleteWithKey(key string, version int) (result *Store, err error) {
+func (client *Client) StoreDeleteWithKey(ctx context.Context, key string, version int) (result *Store, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("stores/key={key}", "{key}", key, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("stores/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) StoreDeleteWithKey(key string, version int) (result *Store
 }
 
 // StoreGetWithKey for type Store
-func (client *Client) StoreGetWithKey(key string) (result *Store, err error) {
-	err = client.Get(strings.Replace("stores/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) StoreGetWithKey(ctx context.Context, key string) (result *Store, err error) {
+	err = client.Get(ctx, strings.Replace("stores/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type StoreUpdateWithKeyInput struct {
 }
 
 // StoreUpdateWithKey for type Store
-func (client *Client) StoreUpdateWithKey(input *StoreUpdateWithKeyInput) (result *Store, err error) {
-	err = client.Update(strings.Replace("stores/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) StoreUpdateWithKey(ctx context.Context, input *StoreUpdateWithKeyInput) (result *Store, err error) {
+	err = client.Update(ctx, strings.Replace("stores/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +68,11 @@ func (client *Client) StoreUpdateWithKey(input *StoreUpdateWithKeyInput) (result
 }
 
 // StoreDeleteWithID for type Store
-func (client *Client) StoreDeleteWithID(ID string, version int) (result *Store, err error) {
+func (client *Client) StoreDeleteWithID(ctx context.Context, ID string, version int) (result *Store, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("stores/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("stores/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,8 @@ func (client *Client) StoreDeleteWithID(ID string, version int) (result *Store, 
 }
 
 // StoreGetWithID for type Store
-func (client *Client) StoreGetWithID(ID string) (result *Store, err error) {
-	err = client.Get(strings.Replace("stores/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) StoreGetWithID(ctx context.Context, ID string) (result *Store, err error) {
+	err = client.Get(ctx, strings.Replace("stores/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +96,8 @@ type StoreUpdateWithIDInput struct {
 }
 
 // StoreUpdateWithID for type Store
-func (client *Client) StoreUpdateWithID(input *StoreUpdateWithIDInput) (result *Store, err error) {
-	err = client.Update(strings.Replace("stores/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) StoreUpdateWithID(ctx context.Context, input *StoreUpdateWithIDInput) (result *Store, err error) {
+	err = client.Update(ctx, strings.Replace("stores/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

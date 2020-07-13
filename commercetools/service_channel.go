@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const ChannelURLPath = "channels"
 
 // ChannelCreate creates a new instance of type Channel
-func (client *Client) ChannelCreate(draft *ChannelDraft) (result *Channel, err error) {
-	err = client.Create(ChannelURLPath, nil, draft, &result)
+func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft) (result *Channel, err error) {
+	err = client.Create(ctx, ChannelURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) ChannelCreate(draft *ChannelDraft) (result *Channel, err e
 }
 
 // ChannelQuery allows querying for type Channel
-func (client *Client) ChannelQuery(input *QueryInput) (result *ChannelPagedQueryResponse, err error) {
-	err = client.Query(ChannelURLPath, input.toParams(), &result)
+func (client *Client) ChannelQuery(ctx context.Context, input *QueryInput) (result *ChannelPagedQueryResponse, err error) {
+	err = client.Query(ctx, ChannelURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) ChannelQuery(input *QueryInput) (result *ChannelPagedQuery
 }
 
 // ChannelDeleteWithID for type Channel
-func (client *Client) ChannelDeleteWithID(ID string, version int) (result *Channel, err error) {
+func (client *Client) ChannelDeleteWithID(ctx context.Context, ID string, version int) (result *Channel, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("channels/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("channels/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) ChannelDeleteWithID(ID string, version int) (result *Chann
 }
 
 // ChannelGetWithID for type Channel
-func (client *Client) ChannelGetWithID(ID string) (result *Channel, err error) {
-	err = client.Get(strings.Replace("channels/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ChannelGetWithID(ctx context.Context, ID string) (result *Channel, err error) {
+	err = client.Get(ctx, strings.Replace("channels/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type ChannelUpdateWithIDInput struct {
 }
 
 // ChannelUpdateWithID for type Channel
-func (client *Client) ChannelUpdateWithID(input *ChannelUpdateWithIDInput) (result *Channel, err error) {
-	err = client.Update(strings.Replace("channels/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ChannelUpdateWithID(ctx context.Context, input *ChannelUpdateWithIDInput) (result *Channel, err error) {
+	err = client.Update(ctx, strings.Replace("channels/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

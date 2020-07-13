@@ -1,3 +1,8 @@
+0.2.0 (unreleased)
+==================
+ - *Backwards incompatible:* Add context parameter to all method calls
+
+
 0.1.0 (2020-07-07)
 ==================
 First versioned release. Although this library has been in development for

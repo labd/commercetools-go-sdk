@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const ZoneURLPath = "zones"
 
 // ZoneCreate creates a new instance of type Zone
-func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
-	err = client.Create(ZoneURLPath, nil, draft, &result)
+func (client *Client) ZoneCreate(ctx context.Context, draft *ZoneDraft) (result *Zone, err error) {
+	err = client.Create(ctx, ZoneURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) ZoneCreate(draft *ZoneDraft) (result *Zone, err error) {
 }
 
 // ZoneQuery allows querying for type Zone
-func (client *Client) ZoneQuery(input *QueryInput) (result *ZonePagedQueryResponse, err error) {
-	err = client.Query(ZoneURLPath, input.toParams(), &result)
+func (client *Client) ZoneQuery(ctx context.Context, input *QueryInput) (result *ZonePagedQueryResponse, err error) {
+	err = client.Query(ctx, ZoneURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) ZoneQuery(input *QueryInput) (result *ZonePagedQueryRespon
 }
 
 // ZoneDeleteWithKey for type Zone
-func (client *Client) ZoneDeleteWithKey(key string, version int) (result *Zone, err error) {
+func (client *Client) ZoneDeleteWithKey(ctx context.Context, key string, version int) (result *Zone, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) ZoneDeleteWithKey(key string, version int) (result *Zone, 
 }
 
 // ZoneGetWithKey for type Zone
-func (client *Client) ZoneGetWithKey(key string) (result *Zone, err error) {
-	err = client.Get(strings.Replace("zones/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) ZoneGetWithKey(ctx context.Context, key string) (result *Zone, err error) {
+	err = client.Get(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type ZoneUpdateWithKeyInput struct {
 }
 
 // ZoneUpdateWithKey for type Zone
-func (client *Client) ZoneUpdateWithKey(input *ZoneUpdateWithKeyInput) (result *Zone, err error) {
-	err = client.Update(strings.Replace("zones/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWithKeyInput) (result *Zone, err error) {
+	err = client.Update(ctx, strings.Replace("zones/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +68,11 @@ func (client *Client) ZoneUpdateWithKey(input *ZoneUpdateWithKeyInput) (result *
 }
 
 // ZoneDeleteWithID for type Zone
-func (client *Client) ZoneDeleteWithID(ID string, version int) (result *Zone, err error) {
+func (client *Client) ZoneDeleteWithID(ctx context.Context, ID string, version int) (result *Zone, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,8 @@ func (client *Client) ZoneDeleteWithID(ID string, version int) (result *Zone, er
 }
 
 // ZoneGetWithID for type Zone
-func (client *Client) ZoneGetWithID(ID string) (result *Zone, err error) {
-	err = client.Get(strings.Replace("zones/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ZoneGetWithID(ctx context.Context, ID string) (result *Zone, err error) {
+	err = client.Get(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +96,8 @@ type ZoneUpdateWithIDInput struct {
 }
 
 // ZoneUpdateWithID for type Zone
-func (client *Client) ZoneUpdateWithID(input *ZoneUpdateWithIDInput) (result *Zone, err error) {
-	err = client.Update(strings.Replace("zones/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ZoneUpdateWithID(ctx context.Context, input *ZoneUpdateWithIDInput) (result *Zone, err error) {
+	err = client.Update(ctx, strings.Replace("zones/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

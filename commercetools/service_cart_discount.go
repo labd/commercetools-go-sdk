@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const CartDiscountURLPath = "cart-discounts"
 
 // CartDiscountCreate creates a new instance of type CartDiscount
-func (client *Client) CartDiscountCreate(draft *CartDiscountDraft) (result *CartDiscount, err error) {
-	err = client.Create(CartDiscountURLPath, nil, draft, &result)
+func (client *Client) CartDiscountCreate(ctx context.Context, draft *CartDiscountDraft) (result *CartDiscount, err error) {
+	err = client.Create(ctx, CartDiscountURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) CartDiscountCreate(draft *CartDiscountDraft) (result *Cart
 }
 
 // CartDiscountQuery allows querying for type CartDiscount
-func (client *Client) CartDiscountQuery(input *QueryInput) (result *CartDiscountPagedQueryResponse, err error) {
-	err = client.Query(CartDiscountURLPath, input.toParams(), &result)
+func (client *Client) CartDiscountQuery(ctx context.Context, input *QueryInput) (result *CartDiscountPagedQueryResponse, err error) {
+	err = client.Query(ctx, CartDiscountURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) CartDiscountQuery(input *QueryInput) (result *CartDiscount
 }
 
 // CartDiscountDeleteWithKey for type CartDiscount
-func (client *Client) CartDiscountDeleteWithKey(key string, version int) (result *CartDiscount, err error) {
+func (client *Client) CartDiscountDeleteWithKey(ctx context.Context, key string, version int) (result *CartDiscount, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("cart-discounts/key={key}", "{key}", key, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("cart-discounts/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) CartDiscountDeleteWithKey(key string, version int) (result
 }
 
 // CartDiscountGetWithKey for type CartDiscount
-func (client *Client) CartDiscountGetWithKey(key string) (result *CartDiscount, err error) {
-	err = client.Get(strings.Replace("cart-discounts/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) CartDiscountGetWithKey(ctx context.Context, key string) (result *CartDiscount, err error) {
+	err = client.Get(ctx, strings.Replace("cart-discounts/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type CartDiscountUpdateWithKeyInput struct {
 }
 
 // CartDiscountUpdateWithKey for type CartDiscount
-func (client *Client) CartDiscountUpdateWithKey(input *CartDiscountUpdateWithKeyInput) (result *CartDiscount, err error) {
-	err = client.Update(strings.Replace("cart-discounts/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CartDiscountUpdateWithKey(ctx context.Context, input *CartDiscountUpdateWithKeyInput) (result *CartDiscount, err error) {
+	err = client.Update(ctx, strings.Replace("cart-discounts/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +68,11 @@ func (client *Client) CartDiscountUpdateWithKey(input *CartDiscountUpdateWithKey
 }
 
 // CartDiscountDeleteWithID for type CartDiscount
-func (client *Client) CartDiscountDeleteWithID(ID string, version int) (result *CartDiscount, err error) {
+func (client *Client) CartDiscountDeleteWithID(ctx context.Context, ID string, version int) (result *CartDiscount, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("cart-discounts/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("cart-discounts/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,8 @@ func (client *Client) CartDiscountDeleteWithID(ID string, version int) (result *
 }
 
 // CartDiscountGetWithID for type CartDiscount
-func (client *Client) CartDiscountGetWithID(ID string) (result *CartDiscount, err error) {
-	err = client.Get(strings.Replace("cart-discounts/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) CartDiscountGetWithID(ctx context.Context, ID string) (result *CartDiscount, err error) {
+	err = client.Get(ctx, strings.Replace("cart-discounts/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +96,8 @@ type CartDiscountUpdateWithIDInput struct {
 }
 
 // CartDiscountUpdateWithID for type CartDiscount
-func (client *Client) CartDiscountUpdateWithID(input *CartDiscountUpdateWithIDInput) (result *CartDiscount, err error) {
-	err = client.Update(strings.Replace("cart-discounts/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CartDiscountUpdateWithID(ctx context.Context, input *CartDiscountUpdateWithIDInput) (result *CartDiscount, err error) {
+	err = client.Update(ctx, strings.Replace("cart-discounts/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -31,7 +32,7 @@ func TestZoneCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.ZoneCreate(input)
+	_, err := client.ZoneCreate(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -157,7 +158,7 @@ func TestZoneUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("shipping-zone.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ZoneUpdateWithID(tC.input)
+			_, err := client.ZoneUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/zones/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -170,7 +171,7 @@ func TestZoneDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ZoneDeleteWithID("1234", 2)
+	_, err := client.ZoneDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -198,7 +199,7 @@ func TestZoneGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ZoneGetWithID("1234")
+	result, err := client.ZoneGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -211,7 +212,7 @@ func TestZoneQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.ZoneQuery(&queryInput)
+	_, err := client.ZoneQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

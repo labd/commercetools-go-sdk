@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -29,7 +30,7 @@ func TestExtensionCreate(t *testing.T) {
 		},
 	}
 
-	_, err := client.ExtensionCreate(draft)
+	_, err := client.ExtensionCreate(context.TODO(), draft)
 	assert.Nil(t, err)
 }
 
@@ -54,7 +55,7 @@ func TestExtensionUpdate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.ExtensionUpdateWithID(input)
+	_, err := client.ExtensionUpdateWithID(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -78,7 +79,7 @@ func TestExtensionDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
 
-	_, err := client.ExtensionDeleteWithID("1234", 2)
+	_, err := client.ExtensionDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 }
 
@@ -86,7 +87,7 @@ func TestExtensionDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("extension.azure.json"), nil, nil)
 	defer server.Close()
 
-	_, err := client.ExtensionDeleteWithKey("1234", 2)
+	_, err := client.ExtensionDeleteWithKey(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 }
 
@@ -98,7 +99,7 @@ func TestExtensionQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.ExtensionQuery(&queryInput)
+	_, err := client.ExtensionQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

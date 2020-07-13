@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -24,7 +25,7 @@ func TestStoreCreate(t *testing.T) {
 		},
 	}
 
-	store, err := client.StoreCreate(input)
+	store, err := client.StoreCreate(context.TODO(), input)
 	fmt.Printf("%#v", store)
 	assert.Nil(t, err)
 
@@ -72,7 +73,7 @@ func TestStoreUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.StoreUpdateWithID(tC.input)
+			_, err := client.StoreUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/stores/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -120,7 +121,7 @@ func TestStoreUpdateByKey(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.StoreUpdateWithKey(tC.input)
+			_, err := client.StoreUpdateWithKey(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/stores/key=test123", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -133,7 +134,7 @@ func TestStoreDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StoreDeleteWithID("ba8d47e5-6591-4ca2-af4c-d547f062bf35", 2)
+	_, err := client.StoreDeleteWithID(context.TODO(), "ba8d47e5-6591-4ca2-af4c-d547f062bf35", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -147,7 +148,7 @@ func TestStoreDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StoreDeleteWithKey("test123", 2)
+	_, err := client.StoreDeleteWithKey(context.TODO(), "test123", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -160,7 +161,7 @@ func TestStoreGetByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("store.json"), nil, nil)
 	defer server.Close()
 
-	store, err := client.StoreGetWithID("ba8d47e5-6591-4ca2-af4c-d547f062bf35")
+	store, err := client.StoreGetWithID(context.TODO(), "ba8d47e5-6591-4ca2-af4c-d547f062bf35")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "ba8d47e5-6591-4ca2-af4c-d547f062bf35", store.ID)
@@ -170,7 +171,7 @@ func TestStoreGetByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("store.json"), nil, nil)
 	defer server.Close()
 
-	store, err := client.StoreGetWithKey("test123")
+	store, err := client.StoreGetWithKey(context.TODO(), "test123")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "ba8d47e5-6591-4ca2-af4c-d547f062bf35", store.ID)
@@ -184,7 +185,7 @@ func TestStoreQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.StoreQuery(&queryInput)
+	_, err := client.StoreQuery(context.TODO(), &queryInput)
 
 	assert.Nil(t, err)
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

@@ -228,31 +228,31 @@ func getConfigValue(value string, envName string) string {
 }
 
 // Get accomodates get requests tot the CommerceTools platform.
-func (c *Client) Get(endpoint string, queryParams url.Values, output interface{}) error {
-	err := c.doRequest("GET", endpoint, queryParams, nil, output)
+func (c *Client) Get(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
+	err := c.doRequest(ctx, "GET", endpoint, queryParams, nil, output)
 	return err
 }
 
 // Query accomodates query requests tot the CommerceTools platform.
-func (c *Client) Query(endpoint string, queryParams url.Values, output interface{}) error {
-	err := c.doRequest("GET", endpoint, queryParams, nil, output)
+func (c *Client) Query(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
+	err := c.doRequest(ctx, "GET", endpoint, queryParams, nil, output)
 	return err
 }
 
 // Create accomodates post intended for creation requests tot the CommerceTools
 // platform.
-func (c *Client) Create(endpoint string, queryParams url.Values, input interface{}, output interface{}) error {
+func (c *Client) Create(ctx context.Context, endpoint string, queryParams url.Values, input interface{}, output interface{}) error {
 	data, err := serializeInput(input)
 	if err != nil {
 		return err
 	}
-	err = c.doRequest("POST", endpoint, queryParams, data, output)
+	err = c.doRequest(ctx, "POST", endpoint, queryParams, data, output)
 	return err
 }
 
 // Update accomodates post requests intended for updates tot the CommerceTools
 // platform.
-func (c *Client) Update(endpoint string, queryParams url.Values, version int, actions interface{}, output interface{}) error {
+func (c *Client) Update(ctx context.Context, endpoint string, queryParams url.Values, version int, actions interface{}, output interface{}) error {
 	data, err := serializeInput(&map[string]interface{}{
 		"version": version,
 		"actions": actions,
@@ -260,19 +260,19 @@ func (c *Client) Update(endpoint string, queryParams url.Values, version int, ac
 	if err != nil {
 		return err
 	}
-	err = c.doRequest("POST", endpoint, queryParams, data, output)
+	err = c.doRequest(ctx, "POST", endpoint, queryParams, data, output)
 	return err
 }
 
 // Delete accomodates delete requests tot the CommerceTools platform.
-func (c *Client) Delete(endpoint string, queryParams url.Values, output interface{}) error {
-	err := c.doRequest("DELETE", endpoint, queryParams, nil, output)
+func (c *Client) Delete(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
+	err := c.doRequest(ctx, "DELETE", endpoint, queryParams, nil, output)
 	return err
 }
 
-func (c *Client) doRequest(method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
+func (c *Client) doRequest(ctx context.Context, method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
 	url := c.endpoints.API + "/" + c.projectKey + "/" + endpoint
-	req, err := http.NewRequest(method, url, data)
+	req, err := http.NewRequestWithContext(ctx, method, url, data)
 	if err != nil {
 		return errors.Wrap(err, "Creating new request")
 	}

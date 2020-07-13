@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -31,7 +32,7 @@ func TestChannelCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.ChannelCreate(input)
+	_, err := client.ChannelCreate(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -315,7 +316,7 @@ func TestChannelUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.ChannelUpdateWithID(tC.input)
+			_, err := client.ChannelUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/channels/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -328,7 +329,7 @@ func TestChannelDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ChannelDeleteWithID("1234", 2)
+	_, err := client.ChannelDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -352,7 +353,7 @@ func TestChannelGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ChannelGetWithID("1234")
+	result, err := client.ChannelGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -365,7 +366,7 @@ func TestChannelQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.ChannelQuery(&queryInput)
+	_, err := client.ChannelQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

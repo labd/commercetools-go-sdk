@@ -2,14 +2,17 @@
 
 package commercetools
 
-import "strings"
+import (
+	"context"
+	"strings"
+)
 
 // AbstractMessageURLPath is the commercetools API path.
 const AbstractMessageURLPath = "messages"
 
 // AbstractMessageQuery allows querying for type Message
-func (client *Client) AbstractMessageQuery(input *QueryInput) (result *MessagePagedQueryResponse, err error) {
-	err = client.Query(AbstractMessageURLPath, input.toParams(), &result)
+func (client *Client) AbstractMessageQuery(ctx context.Context, input *QueryInput) (result *MessagePagedQueryResponse, err error) {
+	err = client.Query(ctx, AbstractMessageURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -17,8 +20,8 @@ func (client *Client) AbstractMessageQuery(input *QueryInput) (result *MessagePa
 }
 
 // AbstractMessageGetWithID for type Message
-func (client *Client) AbstractMessageGetWithID(ID string) (result *Message, err error) {
-	err = client.Get(strings.Replace("messages/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) AbstractMessageGetWithID(ctx context.Context, ID string) (result *Message, err error) {
+	err = client.Get(ctx, strings.Replace("messages/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}

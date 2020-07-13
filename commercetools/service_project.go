@@ -1,5 +1,7 @@
 package commercetools
 
+import "context"
+
 // ProjectUpdateInput provides the data required to update a project.
 type ProjectUpdateInput struct {
 	// The expected version of the project on which the changes should be
@@ -14,7 +16,8 @@ type ProjectUpdateInput struct {
 // ProjectGet will return the current project. OAuth2 Scopes:
 // view_project_settings:{projectKey}
 func (client *Client) ProjectGet() (result *Project, err error) {
-	err = client.Get("", nil, &result)
+	ctx := context.TODO()
+	err = client.Get(ctx, "", nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +27,8 @@ func (client *Client) ProjectGet() (result *Project, err error) {
 // ProjectUpdate will update the current project with the defined UpdateActions. OAuth2
 // Scopes: manage_project:{projectKey}
 func (client *Client) ProjectUpdate(input *ProjectUpdateInput) (result *Project, err error) {
-	err = client.Update("", nil, input.Version, input.Actions, &result)
+	ctx := context.TODO()
+	err = client.Update(ctx, "", nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

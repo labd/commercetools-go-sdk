@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -24,7 +25,7 @@ func TestCartCreate(t *testing.T) {
 		},
 	}
 
-	cart, err := client.CartCreate(input)
+	cart, err := client.CartCreate(context.TODO(), input)
 	fmt.Printf("%#v", cart)
 	assert.Nil(t, err)
 
@@ -67,7 +68,7 @@ func TestCartUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.CartUpdateWithID(tC.input)
+			_, err := client.CartUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/carts/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -80,7 +81,7 @@ func TestCartDelete(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.CartDeleteWithID("debd77c9-ef14-4595-8614-5d123429f9e1", 2, true)
+	_, err := client.CartDeleteWithID(context.TODO(), "debd77c9-ef14-4595-8614-5d123429f9e1", 2, true)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -94,7 +95,7 @@ func TestCartGetByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("cart.json"), nil, nil)
 	defer server.Close()
 
-	cart, err := client.CartGetWithID("debd77c9-ef14-4595-8614-5d123429f9e1")
+	cart, err := client.CartGetWithID(context.TODO(), "debd77c9-ef14-4595-8614-5d123429f9e1")
 
 	assert.Nil(t, err)
 	assert.Equal(t, "debd77c9-ef14-4595-8614-5d123429f9e1", cart.ID)
@@ -108,7 +109,7 @@ func TestCartQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.CartQuery(&queryInput)
+	_, err := client.CartQuery(context.TODO(), &queryInput)
 
 	assert.Nil(t, err)
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())
