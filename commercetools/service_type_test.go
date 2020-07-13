@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -42,7 +43,7 @@ func TestTypeCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.TypeCreate(input)
+	_, err := client.TypeCreate(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -376,7 +377,7 @@ func TestTypeUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("type.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.TypeUpdateWithID(tC.input)
+			_, err := client.TypeUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/types/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -389,7 +390,7 @@ func TestTypeDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.TypeDeleteWithID("1234", 2)
+	_, err := client.TypeDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -404,7 +405,7 @@ func TestTypeDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("type.boolean.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.TypeDeleteWithKey("1234", 2)
+	_, err := client.TypeDeleteWithKey(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -796,7 +797,7 @@ func TestTypeGetByID(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture(tC.fixture), nil, nil)
 			defer server.Close()
 
-			result, err := client.TypeGetWithID("1234")
+			result, err := client.TypeGetWithID(context.TODO(), "1234")
 			assert.Nil(t, err)
 			assert.Equal(t, tC.input, result)
 		})
@@ -973,7 +974,7 @@ func TestTypeQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.TypeQuery(&queryInput)
+	_, err := client.TypeQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

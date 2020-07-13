@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"net/url"
 	"testing"
 	"time"
@@ -33,7 +34,7 @@ func TestStateCreate(t *testing.T) {
 		},
 	}
 
-	_, err := client.StateCreate(input)
+	_, err := client.StateCreate(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -292,7 +293,7 @@ func TestStateUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("state.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.StateUpdateWithID(tC.input)
+			_, err := client.StateUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/states/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -305,7 +306,7 @@ func TestStateDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.StateDeleteWithID("1234", 2)
+	_, err := client.StateDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -338,7 +339,7 @@ func TestStateGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.StateGetWithID("1234")
+	result, err := client.StateGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -351,7 +352,7 @@ func TestStateQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.StateQuery(&queryInput)
+	_, err := client.StateQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

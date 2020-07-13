@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"net/url"
 	"testing"
 
@@ -28,7 +29,7 @@ func TestCreateProductNew(t *testing.T) {
 			"en": "some-product",
 		},
 	}
-	product, err := client.ProductCreate(draft)
+	product, err := client.ProductCreate(context.TODO(), draft)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, product.Version)
 	assert.Equal(t, "Sample description", (*product.MasterData.Current.Description)["en"])
@@ -38,7 +39,7 @@ func TestGetProductByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductGetWithID("foo-bar")
+	product, err := client.ProductGetWithID(context.TODO(), "foo-bar")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -52,7 +53,7 @@ func TestProductUpdate(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductUpdateWithID(&commercetools.ProductUpdateWithIDInput{
+	product, err := client.ProductUpdateWithID(context.TODO(), &commercetools.ProductUpdateWithIDInput{
 		ID:      "1",
 		Version: 2,
 		/*
@@ -81,7 +82,7 @@ func TestProductDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductDeleteWithID("foobar", 2)
+	product, err := client.ProductDeleteWithID(context.TODO(), "foobar", 2)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -94,7 +95,7 @@ func TestProductDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("product.example.json"), nil, nil)
 	defer server.Close()
 
-	product, err := client.ProductDeleteWithKey("foobar", 2)
+	product, err := client.ProductDeleteWithKey(context.TODO(), "foobar", 2)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -111,7 +112,7 @@ func TestProductQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.ProductQuery(&queryInput)
+	_, err := client.ProductQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

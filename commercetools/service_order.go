@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const OrderURLPath = "orders"
 
 // OrderCreate creates a new instance of type Order
-func (client *Client) OrderCreate(draft *OrderFromCartDraft) (result *Order, err error) {
-	err = client.Create(OrderURLPath, nil, draft, &result)
+func (client *Client) OrderCreate(ctx context.Context, draft *OrderFromCartDraft) (result *Order, err error) {
+	err = client.Create(ctx, OrderURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) OrderCreate(draft *OrderFromCartDraft) (result *Order, err
 }
 
 // OrderQuery allows querying for type Order
-func (client *Client) OrderQuery(input *QueryInput) (result *OrderPagedQueryResponse, err error) {
-	err = client.Query(OrderURLPath, input.toParams(), &result)
+func (client *Client) OrderQuery(ctx context.Context, input *QueryInput) (result *OrderPagedQueryResponse, err error) {
+	err = client.Query(ctx, OrderURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) OrderQuery(input *QueryInput) (result *OrderPagedQueryResp
 }
 
 // OrderDeleteWithID for type Order
-func (client *Client) OrderDeleteWithID(ID string, version int, dataErasure bool) (result *Order, err error) {
+func (client *Client) OrderDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool) (result *Order, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
-	err = client.Delete(strings.Replace("orders/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("orders/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) OrderDeleteWithID(ID string, version int, dataErasure bool
 }
 
 // OrderGetWithID for type Order
-func (client *Client) OrderGetWithID(ID string) (result *Order, err error) {
-	err = client.Get(strings.Replace("orders/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) OrderGetWithID(ctx context.Context, ID string) (result *Order, err error) {
+	err = client.Get(ctx, strings.Replace("orders/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type OrderUpdateWithIDInput struct {
 }
 
 // OrderUpdateWithID for type Order
-func (client *Client) OrderUpdateWithID(input *OrderUpdateWithIDInput) (result *Order, err error) {
-	err = client.Update(strings.Replace("orders/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) OrderUpdateWithID(ctx context.Context, input *OrderUpdateWithIDInput) (result *Order, err error) {
+	err = client.Update(ctx, strings.Replace("orders/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

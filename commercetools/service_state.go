@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const StateURLPath = "states"
 
 // StateCreate creates a new instance of type State
-func (client *Client) StateCreate(draft *StateDraft) (result *State, err error) {
-	err = client.Create(StateURLPath, nil, draft, &result)
+func (client *Client) StateCreate(ctx context.Context, draft *StateDraft) (result *State, err error) {
+	err = client.Create(ctx, StateURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) StateCreate(draft *StateDraft) (result *State, err error) 
 }
 
 // StateQuery allows querying for type State
-func (client *Client) StateQuery(input *QueryInput) (result *StatePagedQueryResponse, err error) {
-	err = client.Query(StateURLPath, input.toParams(), &result)
+func (client *Client) StateQuery(ctx context.Context, input *QueryInput) (result *StatePagedQueryResponse, err error) {
+	err = client.Query(ctx, StateURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) StateQuery(input *QueryInput) (result *StatePagedQueryResp
 }
 
 // StateDeleteWithID for type State
-func (client *Client) StateDeleteWithID(ID string, version int) (result *State, err error) {
+func (client *Client) StateDeleteWithID(ctx context.Context, ID string, version int) (result *State, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("states/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("states/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) StateDeleteWithID(ID string, version int) (result *State, 
 }
 
 // StateGetWithID for type State
-func (client *Client) StateGetWithID(ID string) (result *State, err error) {
-	err = client.Get(strings.Replace("states/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) StateGetWithID(ctx context.Context, ID string) (result *State, err error) {
+	err = client.Get(ctx, strings.Replace("states/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type StateUpdateWithIDInput struct {
 }
 
 // StateUpdateWithID for type State
-func (client *Client) StateUpdateWithID(input *StateUpdateWithIDInput) (result *State, err error) {
-	err = client.Update(strings.Replace("states/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) StateUpdateWithID(ctx context.Context, input *StateUpdateWithIDInput) (result *State, err error) {
+	err = client.Update(ctx, strings.Replace("states/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

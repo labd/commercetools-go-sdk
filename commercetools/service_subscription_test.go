@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"net/url"
 	"testing"
 
@@ -215,7 +216,7 @@ func TestSubscriptionCreate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.SubscriptionCreate(tC.input)
+			_, err := client.SubscriptionCreate(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
 		})
@@ -253,7 +254,7 @@ func TestSubscriptionUpdate(t *testing.T) {
 		},
 	}
 
-	_, err := client.SubscriptionUpdateWithID(input)
+	_, err := client.SubscriptionUpdateWithID(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -291,7 +292,7 @@ func TestSubscriptionDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.SubscriptionDeleteWithID("1234", 2)
+	_, err := client.SubscriptionDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -306,7 +307,7 @@ func TestSubscriptionDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), &output, nil)
 	defer server.Close()
 
-	_, err := client.SubscriptionDeleteWithKey("1234", 2)
+	_, err := client.SubscriptionDeleteWithKey(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -318,7 +319,7 @@ func TestSubscriptionGetDestinationInvalid(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.invalid.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.SubscriptionGetWithID("100")
+	subscription, err := client.SubscriptionGetWithID(context.TODO(), "100")
 	assert.NotNil(t, err)
 	assert.Nil(t, subscription)
 }
@@ -327,7 +328,7 @@ func TestSubscriptionGetDestinationUnknown(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.unknown.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.SubscriptionGetWithID("100")
+	subscription, err := client.SubscriptionGetWithID(context.TODO(), "100")
 	assert.Nil(t, err)
 	assert.NotNil(t, subscription)
 	assert.Nil(t, subscription.Destination)
@@ -337,7 +338,7 @@ func TestSubscriptionGetDestinationIronMQ(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.ironmq.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.SubscriptionGetWithID("100")
+	subscription, err := client.SubscriptionGetWithID(context.TODO(), "100")
 	assert.Nil(t, err)
 
 	destination := subscription.Destination.(commercetools.IronMqDestination)
@@ -351,7 +352,7 @@ func TestSubscriptionGetDestinationSNS(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sns.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.SubscriptionGetWithID("100")
+	subscription, err := client.SubscriptionGetWithID(context.TODO(), "100")
 	assert.Nil(t, err)
 
 	destination := subscription.Destination.(commercetools.SnsDestination)
@@ -367,7 +368,7 @@ func TestSubscriptionGetDestinationSQS(t *testing.T) {
 	client, server := testutil.MockClient(t, testutil.Fixture("subscription.sqs.json"), nil, nil)
 	defer server.Close()
 
-	subscription, err := client.SubscriptionGetWithID("100")
+	subscription, err := client.SubscriptionGetWithID(context.TODO(), "100")
 	assert.Nil(t, err)
 
 	destination := subscription.Destination.(commercetools.SqsDestination)
@@ -387,7 +388,7 @@ func TestSubscriptionTypeQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.SubscriptionQuery(&queryInput)
+	_, err := client.SubscriptionQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

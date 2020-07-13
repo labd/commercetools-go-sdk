@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -29,7 +30,7 @@ func TestClientGetBadRequestJson(t *testing.T) {
 
 	output := OutputData{}
 
-	err := client.Get("/", nil, &output)
+	err := client.Get(context.TODO(), "/", nil, &output)
 	assert.Equal(t, "invalid character ',' looking for beginning of value", err.Error())
 }
 
@@ -41,7 +42,7 @@ func TestClientNotFound(t *testing.T) {
 
 	output := OutputData{}
 
-	err := client.Get("/", nil, &output)
+	err := client.Get(context.TODO(), "/", nil, &output)
 	assert.Equal(t, "Not Found (404): ResourceNotFound", err.Error())
 
 	ctErr, ok := err.(commercetools.ErrorResponse)
@@ -92,7 +93,7 @@ func TestOAuth2TokenError(t *testing.T) {
 		Name:  "test",
 		Scope: "manage_orders:my-ct-project-key manage_payments:my-ct-project-key",
 	}
-	_, err = client.APIClientCreate(draft)
+	_, err = client.APIClientCreate(context.TODO(), draft)
 
 	// Validate that we have received a valid error response
 	assert.Equal(t, "Please provide valid client credentials using HTTP Basic Authentication.", err.Error())
@@ -148,7 +149,7 @@ func TestClientRequest(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	query, err := client.ProductQuery(&commercetools.QueryInput{})
+	query, err := client.ProductQuery(context.TODO(), &commercetools.QueryInput{})
 	assert.NoError(t, err)
 	assert.Equal(t, query.Total, 0)
 }
@@ -201,7 +202,7 @@ func TestClientRequestCustomHTTPClient(t *testing.T) {
 	})
 	assert.NoError(t, err)
 
-	query, err := client.ProductQuery(&commercetools.QueryInput{})
+	query, err := client.ProductQuery(context.TODO(), &commercetools.QueryInput{})
 	assert.NoError(t, err)
 	assert.Equal(t, query.Total, 0)
 }
@@ -226,7 +227,7 @@ func TestAuthError(t *testing.T) {
 
 	output := OutputData{}
 
-	err := client.Get("/", nil, &output)
+	err := client.Get(context.TODO(), "/", nil, &output)
 
 	assert.Equal(t, "Insufficient scope", err.Error())
 
@@ -257,7 +258,7 @@ func TestInvalidJsonError(t *testing.T) {
 
 	output := OutputData{}
 
-	err := client.Get("/", nil, &output)
+	err := client.Get(context.TODO(), "/", nil, &output)
 
 	assert.Equal(t, "Request body does not contain valid JSON.", err.Error())
 
@@ -335,7 +336,7 @@ func TestQueryInput(t *testing.T) {
 			client, server := testutil.MockClient(t, "{}", &output, nil)
 			defer server.Close()
 
-			_, err := client.TaxCategoryQuery(tC.input)
+			_, err := client.TaxCategoryQuery(context.TODO(), tC.input)
 
 			assert.Nil(t, err)
 			assert.Equal(t, tC.query, output.URL.Query())

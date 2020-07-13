@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"net/url"
 	"testing"
 	"time"
@@ -23,7 +24,7 @@ func TestShippingMethodCreate(t *testing.T) {
 		IsDefault:   false,
 	}
 
-	_, err := client.ShippingMethodCreate(input)
+	_, err := client.ShippingMethodCreate(context.TODO(), input)
 	assert.Nil(t, err)
 	expectBody := `{
 		"name": "Shipping method",
@@ -137,7 +138,7 @@ func TestShippingMethodUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("shipping-method.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.ShippingMethodUpdateWithID(tC.input)
+			_, err := client.ShippingMethodUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/shipping-methods/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -150,7 +151,7 @@ func TestShippingMethodDeleteById(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.ShippingMethodDeleteWithID("1234", 2)
+	_, err := client.ShippingMethodDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -174,7 +175,7 @@ func TestShippingMethodGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ShippingMethodGetWithID("1234")
+	result, err := client.ShippingMethodGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -193,7 +194,7 @@ func TestShippingMethodGetByKey(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.ShippingMethodGetWithKey("test-shipping-method")
+	result, err := client.ShippingMethodGetWithKey(context.TODO(), "test-shipping-method")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -206,7 +207,7 @@ func TestShippingMethodQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.ShippingMethodQuery(&queryInput)
+	_, err := client.ShippingMethodQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

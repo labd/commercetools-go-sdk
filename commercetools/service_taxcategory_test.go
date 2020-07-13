@@ -1,6 +1,7 @@
 package commercetools_test
 
 import (
+	"context"
 	"fmt"
 	"net/url"
 	"testing"
@@ -42,7 +43,7 @@ func TestTaxCategoryCreate(t *testing.T) {
 
 	fmt.Println(output)
 
-	_, err := client.TaxCategoryCreate(input)
+	_, err := client.TaxCategoryCreate(context.TODO(), input)
 	assert.Nil(t, err)
 
 	expectedBody := `{
@@ -232,7 +233,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 			client, server := testutil.MockClient(t, testutil.Fixture("tax-category.update.json"), &output, nil)
 			defer server.Close()
 
-			_, err := client.TaxCategoryUpdateWithID(tC.input)
+			_, err := client.TaxCategoryUpdateWithID(context.TODO(), tC.input)
 			assert.Nil(t, err)
 			assert.Equal(t, "/unittest/tax-categories/1234", output.URL.Path)
 			assert.JSONEq(t, tC.requestBody, output.JSON)
@@ -245,7 +246,7 @@ func TestTaxCategoryDeleteByID(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.TaxCategoryDeleteWithID("1234", 2)
+	_, err := client.TaxCategoryDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -260,7 +261,7 @@ func TestTaxCategoryDeleteByKey(t *testing.T) {
 	client, server := testutil.MockClient(t, "{}", &output, nil)
 	defer server.Close()
 
-	_, err := client.TaxCategoryDeleteWithID("1234", 2)
+	_, err := client.TaxCategoryDeleteWithID(context.TODO(), "1234", 2)
 	assert.Nil(t, err)
 
 	params := url.Values{}
@@ -294,7 +295,7 @@ func TestTaxCategoryGetByID(t *testing.T) {
 		LastModifiedAt: timestamp,
 	}
 
-	result, err := client.TaxCategoryGetWithID("1234")
+	result, err := client.TaxCategoryGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 	assert.Equal(t, input, result)
 }
@@ -307,7 +308,7 @@ func TestTaxCategoryQuery(t *testing.T) {
 	queryInput := commercetools.QueryInput{
 		Limit: 500,
 	}
-	_, err := client.TaxCategoryQuery(&queryInput)
+	_, err := client.TaxCategoryQuery(context.TODO(), &queryInput)
 	assert.Nil(t, err)
 
 	assert.Equal(t, url.Values{"limit": []string{"500"}}, output.URL.Query())

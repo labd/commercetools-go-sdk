@@ -71,6 +71,7 @@ func generateResources(objects []RamlType, resources []ResourceService) {
 	}
 }
 
+// Create the `<method>DeleteWithID` and `<method>DeleteWithKey` functions
 func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	deleteIdentifier := "ID"
 	if strings.Contains(resourceMethod.MethodName, "Key") {
@@ -86,7 +87,11 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 		deleteWithVersion = false
 	}
 
-	methodIdentifierParam := jen.Id(resourceMethod.PathParameterName).String()
+	methodIdentifierParam := jen.List(
+		jen.Id("ctx").Qual("context", "Context"),
+		jen.Id(resourceMethod.PathParameterName).String(),
+	)
+
 	methodParams := methodIdentifierParam
 	setVersionParam := jen.Empty()
 	if deleteWithVersion {
@@ -114,6 +119,7 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 		setVersionParam,
 		setDataErasure,
 		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
+			jen.Id("ctx"),
 			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(deleteIdentifier), jen.Lit(1)),
 			jen.Id("params"),
 			jen.Op("&").Id("result"),
@@ -127,6 +133,7 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 	return c
 }
 
+// Create the `<method>Update` function
 func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	updateIdentifier := "ID"
 	if strings.Contains(resourceMethod.MethodName, "Key") {
@@ -145,7 +152,10 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 	).Line()
 	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
 
-	methodParams := jen.Id("input").Op("*").Id(updateStructID)
+	methodParams := jen.List(
+		jen.Id("ctx").Qual("context", "Context"),
+		jen.Id("input").Op("*").Id(updateStructID),
+	)
 	clientMethod := "Update"
 
 	returnParams := jen.Id("client").Op("*").Id("Client")
@@ -162,6 +172,7 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 	c.Commentf("%s %s", methodName, description).Line()
 	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
+			jen.Id("ctx"),
 			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id("input").Op(".").Id(updateIdentifier), jen.Lit(1)),
 			jen.Nil(),
 			jen.Id("input").Op(".").Id("Version"),
@@ -177,10 +188,14 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 	return c
 }
 
+// Create the `<method>Get` function
 func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	methodName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	returnParams := jen.Id("client").Op("*").Id("Client")
-	methodParams := jen.Id(resourceMethod.PathParameterName).String()
+	methodParams := jen.List(
+		jen.Id("ctx").Qual("context", "Context"),
+		jen.Id(resourceMethod.PathParameterName).String(),
+	)
 
 	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
 
@@ -191,6 +206,7 @@ func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, 
 	c := jen.Commentf("%s %s", methodName, description).Line()
 	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 		jen.Id("err").Op("=").Id("client").Op(".").Id(strings.Title(httpMethod.HTTPMethod)).Call(
+			jen.Id("ctx"),
 			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(resourceMethod.PathParameterName), jen.Lit(1)),
 			jen.Nil(),
 			jen.Op("&").Id("result"),
@@ -228,14 +244,19 @@ func generateResourceHTTPMethodsCode(resource *RamlType, resourceService Resourc
 	return httpMethodsCode
 }
 
+// Create the `<method>Query` function
 func queryResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
 	queryName := fmt.Sprintf("%sQuery", resource.CodeName)
 	returnParams := jen.Id("client").Op("*").Id("Client")
-	queryParams := jen.Id("input").Op("*").Id("QueryInput")
+	queryParams := jen.List(
+		jen.Id("ctx").Qual("context", "Context"),
+		jen.Id("input").Op("*").Id("QueryInput"),
+	)
 
 	c := jen.Commentf("%s allows querying for type %s", queryName, resourceService.ResourceType).Line()
 	c.Func().Params(returnParams).Id(queryName).Params(queryParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceQueryType), jen.Err().Error())).Block(
 		jen.Id("err").Op("=").Id("client").Op(".").Id("Query").Call(
+			jen.Id("ctx"),
 			jen.Id(urlPathName),
 			jen.Id("input").Op(".").Id("toParams").Call(),
 			jen.Op("&").Id("result"),
@@ -248,14 +269,19 @@ func queryResourceCode(resource *RamlType, resourceService ResourceService, urlP
 	return c
 }
 
+// Create the `<method>Create` function
 func createResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
 	createName := fmt.Sprintf("%sCreate", resource.CodeName)
 	returnParams := jen.Id("client").Op("*").Id("Client")
-	createParams := jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType)
+	createParams := jen.List(
+		jen.Id("ctx").Qual("context", "Context"),
+		jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType),
+	)
 
 	c := jen.Commentf("%s creates a new instance of type %s", createName, resourceService.ResourceType).Line()
 	c.Func().Params(returnParams).Id(createName).Params(createParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 		jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
+			jen.Id("ctx"),
 			jen.Id(urlPathName),
 			jen.Nil(),
 			jen.Id("draft"),

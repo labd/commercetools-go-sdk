@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const TypeURLPath = "types"
 
 // TypeCreate creates a new instance of type Type
-func (client *Client) TypeCreate(draft *TypeDraft) (result *Type, err error) {
-	err = client.Create(TypeURLPath, nil, draft, &result)
+func (client *Client) TypeCreate(ctx context.Context, draft *TypeDraft) (result *Type, err error) {
+	err = client.Create(ctx, TypeURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) TypeCreate(draft *TypeDraft) (result *Type, err error) {
 }
 
 // TypeQuery allows querying for type Type
-func (client *Client) TypeQuery(input *QueryInput) (result *TypePagedQueryResponse, err error) {
-	err = client.Query(TypeURLPath, input.toParams(), &result)
+func (client *Client) TypeQuery(ctx context.Context, input *QueryInput) (result *TypePagedQueryResponse, err error) {
+	err = client.Query(ctx, TypeURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) TypeQuery(input *QueryInput) (result *TypePagedQueryRespon
 }
 
 // TypeDeleteWithKey for type Type
-func (client *Client) TypeDeleteWithKey(key string, version int) (result *Type, err error) {
+func (client *Client) TypeDeleteWithKey(ctx context.Context, key string, version int) (result *Type, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("types/key={key}", "{key}", key, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("types/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) TypeDeleteWithKey(key string, version int) (result *Type, 
 }
 
 // TypeGetWithKey for type Type
-func (client *Client) TypeGetWithKey(key string) (result *Type, err error) {
-	err = client.Get(strings.Replace("types/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) TypeGetWithKey(ctx context.Context, key string) (result *Type, err error) {
+	err = client.Get(ctx, strings.Replace("types/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type TypeUpdateWithKeyInput struct {
 }
 
 // TypeUpdateWithKey for type Type
-func (client *Client) TypeUpdateWithKey(input *TypeUpdateWithKeyInput) (result *Type, err error) {
-	err = client.Update(strings.Replace("types/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) TypeUpdateWithKey(ctx context.Context, input *TypeUpdateWithKeyInput) (result *Type, err error) {
+	err = client.Update(ctx, strings.Replace("types/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +68,11 @@ func (client *Client) TypeUpdateWithKey(input *TypeUpdateWithKeyInput) (result *
 }
 
 // TypeDeleteWithID for type Type
-func (client *Client) TypeDeleteWithID(ID string, version int) (result *Type, err error) {
+func (client *Client) TypeDeleteWithID(ctx context.Context, ID string, version int) (result *Type, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("types/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("types/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,8 @@ func (client *Client) TypeDeleteWithID(ID string, version int) (result *Type, er
 }
 
 // TypeGetWithID for type Type
-func (client *Client) TypeGetWithID(ID string) (result *Type, err error) {
-	err = client.Get(strings.Replace("types/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) TypeGetWithID(ctx context.Context, ID string) (result *Type, err error) {
+	err = client.Get(ctx, strings.Replace("types/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +96,8 @@ type TypeUpdateWithIDInput struct {
 }
 
 // TypeUpdateWithID for type Type
-func (client *Client) TypeUpdateWithID(input *TypeUpdateWithIDInput) (result *Type, err error) {
-	err = client.Update(strings.Replace("types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) TypeUpdateWithID(ctx context.Context, input *TypeUpdateWithIDInput) (result *Type, err error) {
+	err = client.Update(ctx, strings.Replace("types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

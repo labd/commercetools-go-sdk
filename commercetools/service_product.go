@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const ProductURLPath = "products"
 
 // ProductCreate creates a new instance of type Product
-func (client *Client) ProductCreate(draft *ProductDraft) (result *Product, err error) {
-	err = client.Create(ProductURLPath, nil, draft, &result)
+func (client *Client) ProductCreate(ctx context.Context, draft *ProductDraft) (result *Product, err error) {
+	err = client.Create(ctx, ProductURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) ProductCreate(draft *ProductDraft) (result *Product, err e
 }
 
 // ProductQuery allows querying for type Product
-func (client *Client) ProductQuery(input *QueryInput) (result *ProductPagedQueryResponse, err error) {
-	err = client.Query(ProductURLPath, input.toParams(), &result)
+func (client *Client) ProductQuery(ctx context.Context, input *QueryInput) (result *ProductPagedQueryResponse, err error) {
+	err = client.Query(ctx, ProductURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) ProductQuery(input *QueryInput) (result *ProductPagedQuery
 }
 
 // ProductDeleteWithKey for type Product
-func (client *Client) ProductDeleteWithKey(key string, version int) (result *Product, err error) {
+func (client *Client) ProductDeleteWithKey(ctx context.Context, key string, version int) (result *Product, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("products/key={key}", "{key}", key, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("products/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) ProductDeleteWithKey(key string, version int) (result *Pro
 }
 
 // ProductGetWithKey Gets the full representation of a product by Key.
-func (client *Client) ProductGetWithKey(key string) (result *Product, err error) {
-	err = client.Get(strings.Replace("products/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) ProductGetWithKey(ctx context.Context, key string) (result *Product, err error) {
+	err = client.Get(ctx, strings.Replace("products/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type ProductUpdateWithKeyInput struct {
 }
 
 // ProductUpdateWithKey for type Product
-func (client *Client) ProductUpdateWithKey(input *ProductUpdateWithKeyInput) (result *Product, err error) {
-	err = client.Update(strings.Replace("products/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ProductUpdateWithKey(ctx context.Context, input *ProductUpdateWithKeyInput) (result *Product, err error) {
+	err = client.Update(ctx, strings.Replace("products/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +68,11 @@ func (client *Client) ProductUpdateWithKey(input *ProductUpdateWithKeyInput) (re
 }
 
 // ProductDeleteWithID for type Product
-func (client *Client) ProductDeleteWithID(ID string, version int) (result *Product, err error) {
+func (client *Client) ProductDeleteWithID(ctx context.Context, ID string, version int) (result *Product, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("products/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("products/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,8 @@ func (client *Client) ProductDeleteWithID(ID string, version int) (result *Produ
 }
 
 // ProductGetWithID Gets the full representation of a product by ID.
-func (client *Client) ProductGetWithID(ID string) (result *Product, err error) {
-	err = client.Get(strings.Replace("products/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ProductGetWithID(ctx context.Context, ID string) (result *Product, err error) {
+	err = client.Get(ctx, strings.Replace("products/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +96,8 @@ type ProductUpdateWithIDInput struct {
 }
 
 // ProductUpdateWithID for type Product
-func (client *Client) ProductUpdateWithID(input *ProductUpdateWithIDInput) (result *Product, err error) {
-	err = client.Update(strings.Replace("products/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ProductUpdateWithID(ctx context.Context, input *ProductUpdateWithIDInput) (result *Product, err error) {
+	err = client.Update(ctx, strings.Replace("products/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

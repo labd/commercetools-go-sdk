@@ -3,6 +3,7 @@
 package commercetools
 
 import (
+	"context"
 	"net/url"
 	"strconv"
 	"strings"
@@ -12,8 +13,8 @@ import (
 const ProductTypeURLPath = "product-types"
 
 // ProductTypeCreate creates a new instance of type ProductType
-func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *ProductType, err error) {
-	err = client.Create(ProductTypeURLPath, nil, draft, &result)
+func (client *Client) ProductTypeCreate(ctx context.Context, draft *ProductTypeDraft) (result *ProductType, err error) {
+	err = client.Create(ctx, ProductTypeURLPath, nil, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -21,8 +22,8 @@ func (client *Client) ProductTypeCreate(draft *ProductTypeDraft) (result *Produc
 }
 
 // ProductTypeQuery allows querying for type ProductType
-func (client *Client) ProductTypeQuery(input *QueryInput) (result *ProductTypePagedQueryResponse, err error) {
-	err = client.Query(ProductTypeURLPath, input.toParams(), &result)
+func (client *Client) ProductTypeQuery(ctx context.Context, input *QueryInput) (result *ProductTypePagedQueryResponse, err error) {
+	err = client.Query(ctx, ProductTypeURLPath, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,11 +31,11 @@ func (client *Client) ProductTypeQuery(input *QueryInput) (result *ProductTypePa
 }
 
 // ProductTypeDeleteWithKey for type ProductType
-func (client *Client) ProductTypeDeleteWithKey(key string, version int) (result *ProductType, err error) {
+func (client *Client) ProductTypeDeleteWithKey(ctx context.Context, key string, version int) (result *ProductType, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("product-types/key={key}", "{key}", key, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("product-types/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,8 +43,8 @@ func (client *Client) ProductTypeDeleteWithKey(key string, version int) (result 
 }
 
 // ProductTypeGetWithKey for type ProductType
-func (client *Client) ProductTypeGetWithKey(key string) (result *ProductType, err error) {
-	err = client.Get(strings.Replace("product-types/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) ProductTypeGetWithKey(ctx context.Context, key string) (result *ProductType, err error) {
+	err = client.Get(ctx, strings.Replace("product-types/key={key}", "{key}", key, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +59,8 @@ type ProductTypeUpdateWithKeyInput struct {
 }
 
 // ProductTypeUpdateWithKey for type ProductType
-func (client *Client) ProductTypeUpdateWithKey(input *ProductTypeUpdateWithKeyInput) (result *ProductType, err error) {
-	err = client.Update(strings.Replace("product-types/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ProductTypeUpdateWithKey(ctx context.Context, input *ProductTypeUpdateWithKeyInput) (result *ProductType, err error) {
+	err = client.Update(ctx, strings.Replace("product-types/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -67,11 +68,11 @@ func (client *Client) ProductTypeUpdateWithKey(input *ProductTypeUpdateWithKeyIn
 }
 
 // ProductTypeDeleteWithID for type ProductType
-func (client *Client) ProductTypeDeleteWithID(ID string, version int) (result *ProductType, err error) {
+func (client *Client) ProductTypeDeleteWithID(ctx context.Context, ID string, version int) (result *ProductType, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
-	err = client.Delete(strings.Replace("product-types/{ID}", "{ID}", ID, 1), params, &result)
+	err = client.Delete(ctx, strings.Replace("product-types/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,8 +80,8 @@ func (client *Client) ProductTypeDeleteWithID(ID string, version int) (result *P
 }
 
 // ProductTypeGetWithID for type ProductType
-func (client *Client) ProductTypeGetWithID(ID string) (result *ProductType, err error) {
-	err = client.Get(strings.Replace("product-types/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ProductTypeGetWithID(ctx context.Context, ID string) (result *ProductType, err error) {
+	err = client.Get(ctx, strings.Replace("product-types/{ID}", "{ID}", ID, 1), nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +96,8 @@ type ProductTypeUpdateWithIDInput struct {
 }
 
 // ProductTypeUpdateWithID for type ProductType
-func (client *Client) ProductTypeUpdateWithID(input *ProductTypeUpdateWithIDInput) (result *ProductType, err error) {
-	err = client.Update(strings.Replace("product-types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ProductTypeUpdateWithID(ctx context.Context, input *ProductTypeUpdateWithIDInput) (result *ProductType, err error) {
+	err = client.Update(ctx, strings.Replace("product-types/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
