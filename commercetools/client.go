@@ -232,6 +232,14 @@ func getConfigValue(value string, envName string) string {
 	return os.Getenv(envName)
 }
 
+func (c *Client) Endpoints() ClientEndpoints {
+	return c.endpoints
+}
+
+func (c *Client) ProjectKey() string {
+	return c.projectKey
+}
+
 // Get accomodates get requests tot the CommerceTools platform.
 func (c *Client) Get(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
 	err := c.doRequest(ctx, "GET", endpoint, queryParams, nil, output)
@@ -277,7 +285,7 @@ func (c *Client) Delete(ctx context.Context, endpoint string, queryParams url.Va
 
 func (c *Client) doRequest(ctx context.Context, method string, endpoint string, params url.Values, data io.Reader, output interface{}) error {
 	url := c.endpoints.API + "/" + c.projectKey + "/" + endpoint
-	resp, err := c.getResponse(ctx, method, url, params, data)
+	resp, err := c.getResponse(ctx, method, url, params, data, nil)
 
 	if err != nil {
 		return err
@@ -285,7 +293,8 @@ func (c *Client) doRequest(ctx context.Context, method string, endpoint string, 
 	return processResponse(resp, output)
 }
 
-func (c *Client) getResponse(ctx context.Context, method string, url string, params url.Values, data io.Reader) (*http.Response, error) {
+func (c *Client) getResponse(ctx context.Context, method string, url string, params url.Values, data io.Reader, headers map[string]string) (*http.Response, error) {
+	fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, method, url, data)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new request")
@@ -298,6 +307,9 @@ func (c *Client) getResponse(ctx context.Context, method string, url string, par
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("User-Agent", c.userAgent)
+	for headerName, headerValue := range headers {
+		req.Header.Set(headerName, headerValue)
+	}
 
 	if c.logLevel > 0 {
 		logRequest(req)
