@@ -17,6 +17,7 @@ type GraphQLQuery struct {
 	endpoint string
 	query    string
 	vars     GraphQLVariablesMap
+	headers  map[string]string
 }
 
 // NewGraphQLQuery creates a new GraphQLQuery object which can be used to
@@ -25,7 +26,7 @@ func (client *Client) NewGraphQLQuery(query string) *GraphQLQuery {
 
 	queryObject := GraphQLQuery{
 		client:   client,
-		endpoint: fmt.Sprintf("%s/%s/graphql", client.url, client.projectKey),
+		endpoint: fmt.Sprintf("%s/%s/graphql", client.Endpoints().API, client.projectKey),
 		query:    query,
 	}
 
@@ -40,8 +41,20 @@ func (gql *GraphQLQuery) Bind(key string, value interface{}) {
 	gql.vars[key] = value
 }
 
+type GraphQLOption func(o *GraphQLQuery)
+
+func (gql *GraphQLQuery) ForMerchantCenter() GraphQLOption {
+	return func(o *GraphQLQuery) {
+
+		o.endpoint = fmt.Sprintf("%s/graphql", o.client.Endpoints().MerchantCenterAPI)
+		o.headers = make(map[string]string)
+		o.headers["X-Project-Key"] = gql.client.ProjectKey()
+		o.headers["X-GraphQL-Target"] = "settings"
+	}
+}
+
 // Execute the GraphQL query
-func (gql *GraphQLQuery) Execute(respData interface{}) error {
+func (gql *GraphQLQuery) Execute(respData interface{}, opts ...GraphQLOption) error {
 	var body bytes.Buffer
 
 	requestObj := GraphQLRequest{
@@ -49,15 +62,19 @@ func (gql *GraphQLQuery) Execute(respData interface{}) error {
 		Variables: &gql.vars,
 	}
 
+	for _, opt := range opts {
+		opt(gql)
+	}
+
 	if err := json.NewEncoder(&body).Encode(requestObj); err != nil {
 		return errors.Wrap(err, "encode body")
 	}
 	ctx := context.TODO()
-	resp, err := gql.client.getResponse(ctx, "POST", gql.endpoint, nil, &body)
-	defer resp.Body.Close()
+	resp, err := gql.client.getResponse(ctx, "POST", gql.endpoint, nil, &body, gql.headers)
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	return gql.processResponse(resp, respData)
 }
