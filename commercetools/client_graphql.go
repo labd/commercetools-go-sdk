@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"reflect"
+	"time"
 
 	mapstructure "github.com/mitchellh/mapstructure"
 	"github.com/pkg/errors"
@@ -92,8 +94,42 @@ func (gql *GraphQLQuery) processResponse(resp *http.Response, dest interface{}) 
 		return output.Errors[0]
 	}
 
-	if output.Data != nil {
-		mapstructure.Decode(output.Data, &dest)
+	if output.Data == nil {
+		return nil
+	}
+
+	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
+		Metadata: nil,
+		DecodeHook: mapstructure.ComposeDecodeHookFunc(
+			ToTimeHookFunc()),
+		Result: &dest,
+	})
+
+	err = decoder.Decode(output.Data)
+	if err != nil {
+		return err
 	}
 	return nil
+}
+
+func ToTimeHookFunc() mapstructure.DecodeHookFunc {
+	return func(
+		f reflect.Type,
+		t reflect.Type,
+		data interface{}) (interface{}, error) {
+		if t != reflect.TypeOf(time.Time{}) {
+			return data, nil
+		}
+
+		switch f.Kind() {
+		case reflect.String:
+			return time.Parse(time.RFC3339, data.(string))
+		case reflect.Float64:
+			return time.Unix(0, int64(data.(float64))*int64(time.Millisecond)), nil
+		case reflect.Int64:
+			return time.Unix(0, data.(int64)*int64(time.Millisecond)), nil
+		default:
+			return data, nil
+		}
+	}
 }

@@ -2,6 +2,8 @@ package commercetools
 
 import (
 	"context"
+	"sort"
+	"time"
 )
 
 // LabelLocale describes the structure of a localized label.
@@ -28,7 +30,7 @@ type CustomApplicationNavbarSubmenu struct {
 
 type CustomApplicationDraft struct {
 	Name        string                      `json:"name"`
-	Description *string                     `json:"description,omitempty"`
+	Description string                      `json:"description"`
 	URL         string                      `json:"url"`
 	NavbarMenu  CustomApplicationNavbarMenu `json:"navbarMenu"`
 	OAuthScopes []string                    `json:"oAuthScopes,omitempty"`
@@ -37,8 +39,8 @@ type CustomApplicationDraft struct {
 // CustomApplication describes the structure of a Custom Application stored object.
 type CustomApplication struct {
 	ID          string                      `json:"id"`
-	CreatedAt   string                      `json:"createdAt"`
-	UpdatedAt   string                      `json:"updatedAt"`
+	CreatedAt   time.Time                   `json:"createdAt,string"`
+	UpdatedAt   time.Time                   `json:"updatedAt"`
 	IsActive    bool                        `json:"isActive"`
 	Name        string                      `json:"name"`
 	Description *string                     `json:"description,omitempty"`
@@ -78,11 +80,14 @@ func (client *Client) CustomApplicationCreate(ctx context.Context, draft *Custom
 	var result graphQLResponseProjectExtensionCreation
 
 	query := client.NewGraphQLQuery(`
-		mutation CreateCustomApplication($draft: ApplicationExtensionDataInput!) {
+		mutation CreateCustomApplicationMutation($draft: ApplicationExtensionDataInput!) {
 			createProjectExtensionApplication(data: $draft) {
 				id
 				applications {
 					id
+					name
+					url
+					createdAt
 				}
 			}
 		}`)
@@ -92,8 +97,22 @@ func (client *Client) CustomApplicationCreate(ctx context.Context, draft *Custom
 	if err != nil {
 		return nil, err
 	}
-	return nil, nil
 
+	apps := result.CreateProjectExtensionApplication.Applications
+
+	// Sort the apps descending on the created timestamp so we can easily find
+	// the last created item
+	sort.Slice(apps, func(i, j int) bool {
+		return apps[i].CreatedAt.After(apps[j].CreatedAt)
+	})
+
+	for _, app := range apps {
+		if app.Name == draft.Name && app.URL == draft.URL {
+			return client.CustomApplicationGetWithID(ctx, app.ID)
+		}
+	}
+
+	return nil, nil
 }
 
 func (client *Client) CustomApplicationGetWithID(ctx context.Context, ID string) (*CustomApplication, error) {
