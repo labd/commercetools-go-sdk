@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// LabelLocale describes the structure of a localized label.
+// CustomApplicationLabelLocale describes the structure of a localized label.
 type CustomApplicationLabelLocale struct {
 	Locale string `json:"locale"`
 	Value  string `json:"value"`
@@ -46,6 +46,14 @@ type CustomApplication struct {
 	Description *string                     `json:"description,omitempty"`
 	URL         string                      `json:"url"`
 	NavbarMenu  CustomApplicationNavbarMenu `json:"navbarMenu"`
+}
+
+type CustomApplicationPagedQueryResponse struct {
+	Total   int                 `json:"total,omitempty"`
+	Results []CustomApplication `json:"results"`
+	Offset  int                 `json:"offset"`
+	Limit   int                 `json:"limit"`
+	Count   int                 `json:"count"`
 }
 
 // ProjectExtension describes the structure of a project extension stored object.
@@ -150,7 +158,7 @@ func (client *Client) CustomApplicationGetWithID(ctx context.Context, ID string)
 				}
 			}
 		}
-		`)
+	`)
 
 	query.Bind("applicationId", ID)
 	err := query.Execute(&result, query.ForMerchantCenter())
@@ -161,4 +169,85 @@ func (client *Client) CustomApplicationGetWithID(ctx context.Context, ID string)
 		return &result.ProjectExtension.Applications[0], nil
 	}
 	return nil, nil
+}
+
+func (client *Client) CustomApplicationQuery(ctx context.Context, input *QueryInput) (*CustomApplicationPagedQueryResponse, error) {
+	var result graphQLResponseProjectExtension
+
+	query := client.NewGraphQLQuery(`
+		query FetchCustomApplicationById {
+			projectExtension {
+				id
+				applications {
+					id
+					createdAt
+					updatedAt
+					isActive
+					name
+					description
+					url
+					navbarMenu {
+						uriPath
+						icon
+						labelAllLocales {
+							locale
+							value
+						}
+						permissions
+						submenu {
+							uriPath
+							labelAllLocales {
+								locale
+								value
+							}
+							permissions
+						}
+					}
+				}
+			}
+		}
+	`)
+
+	err := query.Execute(&result, query.ForMerchantCenter())
+	if err != nil {
+		return nil, err
+	}
+
+	response := CustomApplicationPagedQueryResponse{
+		Results: result.ProjectExtension.Applications,
+		Total:   len(result.ProjectExtension.Applications),
+		Count:   len(result.ProjectExtension.Applications),
+		Offset:  0,
+		Limit:   0,
+	}
+	return &response, nil
+}
+
+func (client *Client) CustomApplicationUpdateWithID(ctx context.Context, ID string, draft *CustomApplicationDraft) (*CustomApplication, error) {
+	var result graphQLResponseProjectExtensionUpdate
+
+	query := client.NewGraphQLQuery(`
+		mutation UpdateCustomApplication(
+			$applicationId: ID!
+			$draft: ApplicationExtensionDataInput!
+		) {
+			updateProjectExtensionApplication(
+				applicationId: $applicationId
+				data: $draft
+			) {
+				id
+				applications(where: { id: $applicationId }) {
+					id
+				}
+			}
+		}
+	`)
+	query.Bind("applicationId", ID)
+	query.Bind("draft", draft)
+
+	err := query.Execute(&result, query.ForMerchantCenter())
+	if err != nil {
+		return nil, err
+	}
+	return client.CustomApplicationGetWithID(ctx, ID)
 }
