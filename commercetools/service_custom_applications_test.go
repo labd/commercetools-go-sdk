@@ -47,5 +47,5 @@ func TestCustomApplicationGetWithID(t *testing.T) {
 	_, err := client.CustomApplicationGetWithID(context.TODO(), "1234")
 	assert.Nil(t, err)
 
-	assert.Equal(t, "/graphq", output.URL.Path)
+	assert.Equal(t, "/graphql", output.URL.Path)
 }

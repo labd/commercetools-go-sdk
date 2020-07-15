@@ -223,6 +223,23 @@ func (client *Client) CustomApplicationQuery(ctx context.Context, input *QueryIn
 	return &response, nil
 }
 
+func (client *Client) CustomApplicationDeleteWithID(ctx context.Context, ID string) error {
+	var result graphQLResponseProjectExtensionDeletion
+
+	query := client.NewGraphQLQuery(`
+		mutation DeleteCustomApplication($applicationId: ID!) {
+			deleteProjectExtensionApplication(applicationId: $applicationId) {
+				id
+			}
+		}
+	`)
+
+	query.Bind("applicationId", ID)
+
+	err := query.Execute(&result, query.ForMerchantCenter())
+	return err
+}
+
 func (client *Client) CustomApplicationUpdateWithID(ctx context.Context, ID string, draft *CustomApplicationDraft) (*CustomApplication, error) {
 	var result graphQLResponseProjectExtensionUpdate
 
