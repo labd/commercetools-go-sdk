@@ -13,8 +13,12 @@ import (
 const InventoryEntryURLPath = "inventory"
 
 // InventoryEntryCreate creates a new instance of type InventoryEntry
-func (client *Client) InventoryEntryCreate(ctx context.Context, draft *InventoryEntryDraft) (result *InventoryEntry, err error) {
-	err = client.Create(ctx, InventoryEntryURLPath, nil, draft, &result)
+func (client *Client) InventoryEntryCreate(ctx context.Context, draft *InventoryEntryDraft, opts ...RequestOption) (result *InventoryEntry, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, InventoryEntryURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput
 }
 
 // InventoryEntryDeleteWithID for type InventoryEntry
-func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string, version int) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("inventory/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string,
 }
 
 // InventoryEntryGetWithID for type InventoryEntry
-func (client *Client) InventoryEntryGetWithID(ctx context.Context, ID string) (result *InventoryEntry, err error) {
-	err = client.Get(ctx, strings.Replace("inventory/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) InventoryEntryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *InventoryEntry, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("inventory/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type InventoryEntryUpdateWithIDInput struct {
 }
 
 // InventoryEntryUpdateWithID for type InventoryEntry
-func (client *Client) InventoryEntryUpdateWithID(ctx context.Context, input *InventoryEntryUpdateWithIDInput) (result *InventoryEntry, err error) {
-	err = client.Update(ctx, strings.Replace("inventory/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) InventoryEntryUpdateWithID(ctx context.Context, input *InventoryEntryUpdateWithIDInput, opts ...RequestOption) (result *InventoryEntry, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("inventory/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

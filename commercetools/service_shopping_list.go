@@ -13,8 +13,12 @@ import (
 const ShoppingListURLPath = "shopping-lists"
 
 // ShoppingListCreate creates a new instance of type ShoppingList
-func (client *Client) ShoppingListCreate(ctx context.Context, draft *ShoppingListDraft) (result *ShoppingList, err error) {
-	err = client.Create(ctx, ShoppingListURLPath, nil, draft, &result)
+func (client *Client) ShoppingListCreate(ctx context.Context, draft *ShoppingListDraft, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, ShoppingListURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) ShoppingListQuery(ctx context.Context, input *QueryInput) 
 }
 
 // ShoppingListDeleteWithKey for type ShoppingList
-func (client *Client) ShoppingListDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool) (result *ShoppingList, err error) {
+func (client *Client) ShoppingListDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool, opts ...RequestOption) (result *ShoppingList, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("shopping-lists/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) ShoppingListDeleteWithKey(ctx context.Context, key string,
 }
 
 // ShoppingListGetWithKey Gets a shopping list by Key.
-func (client *Client) ShoppingListGetWithKey(ctx context.Context, key string) (result *ShoppingList, err error) {
-	err = client.Get(ctx, strings.Replace("shopping-lists/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) ShoppingListGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("shopping-lists/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type ShoppingListUpdateWithKeyInput struct {
 }
 
 // ShoppingListUpdateWithKey Update a shopping list found by its Key.
-func (client *Client) ShoppingListUpdateWithKey(ctx context.Context, input *ShoppingListUpdateWithKeyInput) (result *ShoppingList, err error) {
-	err = client.Update(ctx, strings.Replace("shopping-lists/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ShoppingListUpdateWithKey(ctx context.Context, input *ShoppingListUpdateWithKeyInput, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("shopping-lists/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +83,13 @@ func (client *Client) ShoppingListUpdateWithKey(ctx context.Context, input *Shop
 }
 
 // ShoppingListDeleteWithID for type ShoppingList
-func (client *Client) ShoppingListDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool) (result *ShoppingList, err error) {
+func (client *Client) ShoppingListDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *ShoppingList, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("shopping-lists/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -80,8 +98,12 @@ func (client *Client) ShoppingListDeleteWithID(ctx context.Context, ID string, v
 }
 
 // ShoppingListGetWithID Gets a shopping list by ID.
-func (client *Client) ShoppingListGetWithID(ctx context.Context, ID string) (result *ShoppingList, err error) {
-	err = client.Get(ctx, strings.Replace("shopping-lists/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ShoppingListGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("shopping-lists/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +118,12 @@ type ShoppingListUpdateWithIDInput struct {
 }
 
 // ShoppingListUpdateWithID for type ShoppingList
-func (client *Client) ShoppingListUpdateWithID(ctx context.Context, input *ShoppingListUpdateWithIDInput) (result *ShoppingList, err error) {
-	err = client.Update(ctx, strings.Replace("shopping-lists/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ShoppingListUpdateWithID(ctx context.Context, input *ShoppingListUpdateWithIDInput, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("shopping-lists/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

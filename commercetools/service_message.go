@@ -4,6 +4,7 @@ package commercetools
 
 import (
 	"context"
+	"net/url"
 	"strings"
 )
 
@@ -20,8 +21,12 @@ func (client *Client) AbstractMessageQuery(ctx context.Context, input *QueryInpu
 }
 
 // AbstractMessageGetWithID for type Message
-func (client *Client) AbstractMessageGetWithID(ctx context.Context, ID string) (result *Message, err error) {
-	err = client.Get(ctx, strings.Replace("messages/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) AbstractMessageGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Message, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("messages/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}

@@ -13,8 +13,12 @@ import (
 const CustomerGroupURLPath = "customer-groups"
 
 // CustomerGroupCreate creates a new instance of type CustomerGroup
-func (client *Client) CustomerGroupCreate(ctx context.Context, draft *CustomerGroupDraft) (result *CustomerGroup, err error) {
-	err = client.Create(ctx, CustomerGroupURLPath, nil, draft, &result)
+func (client *Client) CustomerGroupCreate(ctx context.Context, draft *CustomerGroupDraft, opts ...RequestOption) (result *CustomerGroup, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, CustomerGroupURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) CustomerGroupQuery(ctx context.Context, input *QueryInput)
 }
 
 // CustomerGroupDeleteWithKey for type CustomerGroup
-func (client *Client) CustomerGroupDeleteWithKey(ctx context.Context, key string, version int) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *CustomerGroup, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("customer-groups/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) CustomerGroupDeleteWithKey(ctx context.Context, key string
 }
 
 // CustomerGroupGetWithKey Gets a customer group by Key.
-func (client *Client) CustomerGroupGetWithKey(ctx context.Context, key string) (result *CustomerGroup, err error) {
-	err = client.Get(ctx, strings.Replace("customer-groups/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) CustomerGroupGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *CustomerGroup, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("customer-groups/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type CustomerGroupUpdateWithKeyInput struct {
 }
 
 // CustomerGroupUpdateWithKey Updates a customer group by Key.
-func (client *Client) CustomerGroupUpdateWithKey(ctx context.Context, input *CustomerGroupUpdateWithKeyInput) (result *CustomerGroup, err error) {
-	err = client.Update(ctx, strings.Replace("customer-groups/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CustomerGroupUpdateWithKey(ctx context.Context, input *CustomerGroupUpdateWithKeyInput, opts ...RequestOption) (result *CustomerGroup, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("customer-groups/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +83,13 @@ func (client *Client) CustomerGroupUpdateWithKey(ctx context.Context, input *Cus
 }
 
 // CustomerGroupDeleteWithID for type CustomerGroup
-func (client *Client) CustomerGroupDeleteWithID(ctx context.Context, ID string, version int) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *CustomerGroup, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("customer-groups/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -80,8 +98,12 @@ func (client *Client) CustomerGroupDeleteWithID(ctx context.Context, ID string, 
 }
 
 // CustomerGroupGetWithID for type CustomerGroup
-func (client *Client) CustomerGroupGetWithID(ctx context.Context, ID string) (result *CustomerGroup, err error) {
-	err = client.Get(ctx, strings.Replace("customer-groups/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) CustomerGroupGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *CustomerGroup, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("customer-groups/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +118,12 @@ type CustomerGroupUpdateWithIDInput struct {
 }
 
 // CustomerGroupUpdateWithID for type CustomerGroup
-func (client *Client) CustomerGroupUpdateWithID(ctx context.Context, input *CustomerGroupUpdateWithIDInput) (result *CustomerGroup, err error) {
-	err = client.Update(ctx, strings.Replace("customer-groups/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CustomerGroupUpdateWithID(ctx context.Context, input *CustomerGroupUpdateWithIDInput, opts ...RequestOption) (result *CustomerGroup, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("customer-groups/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

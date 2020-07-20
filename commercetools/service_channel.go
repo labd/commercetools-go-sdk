@@ -13,8 +13,12 @@ import (
 const ChannelURLPath = "channels"
 
 // ChannelCreate creates a new instance of type Channel
-func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft) (result *Channel, err error) {
-	err = client.Create(ctx, ChannelURLPath, nil, draft, &result)
+func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft, opts ...RequestOption) (result *Channel, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, ChannelURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) ChannelQuery(ctx context.Context, input *QueryInput) (resu
 }
 
 // ChannelDeleteWithID for type Channel
-func (client *Client) ChannelDeleteWithID(ctx context.Context, ID string, version int) (result *Channel, err error) {
+func (client *Client) ChannelDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Channel, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("channels/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) ChannelDeleteWithID(ctx context.Context, ID string, versio
 }
 
 // ChannelGetWithID for type Channel
-func (client *Client) ChannelGetWithID(ctx context.Context, ID string) (result *Channel, err error) {
-	err = client.Get(ctx, strings.Replace("channels/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ChannelGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Channel, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("channels/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type ChannelUpdateWithIDInput struct {
 }
 
 // ChannelUpdateWithID for type Channel
-func (client *Client) ChannelUpdateWithID(ctx context.Context, input *ChannelUpdateWithIDInput) (result *Channel, err error) {
-	err = client.Update(ctx, strings.Replace("channels/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ChannelUpdateWithID(ctx context.Context, input *ChannelUpdateWithIDInput, opts ...RequestOption) (result *Channel, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("channels/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
