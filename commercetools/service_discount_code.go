@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // DiscountCodeURLPath is the commercetools API path.
@@ -36,14 +36,15 @@ func (client *Client) DiscountCodeQuery(ctx context.Context, input *QueryInput) 
 }
 
 // DiscountCodeDeleteWithID for type DiscountCode
-func (client *Client) DiscountCodeDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *DiscountCode, err error) {
+func (client *Client) DiscountCodeDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *DiscountCode, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("discount-codes/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("discount-codes/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -51,12 +52,13 @@ func (client *Client) DiscountCodeDeleteWithID(ctx context.Context, ID string, v
 }
 
 // DiscountCodeGetWithID for type DiscountCode
-func (client *Client) DiscountCodeGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *DiscountCode, err error) {
+func (client *Client) DiscountCodeGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *DiscountCode, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("discount-codes/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("discount-codes/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) DiscountCodeUpdateWithID(ctx context.Context, input *Disco
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("discount-codes/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("discount-codes/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

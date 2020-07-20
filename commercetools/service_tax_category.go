@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // TaxCategoryURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) TaxCategoryDeleteWithKey(ctx context.Context, key string, 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("tax-categories/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) TaxCategoryGetWithKey(ctx context.Context, key string, opt
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("tax-categories/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) TaxCategoryUpdateWithKey(ctx context.Context, input *TaxCa
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("tax-categories/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("tax-categories/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) TaxCategoryUpdateWithKey(ctx context.Context, input *TaxCa
 }
 
 // TaxCategoryDeleteWithID for type TaxCategory
-func (client *Client) TaxCategoryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *TaxCategory, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("tax-categories/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("tax-categories/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) TaxCategoryDeleteWithID(ctx context.Context, ID string, ve
 }
 
 // TaxCategoryGetWithID for type TaxCategory
-func (client *Client) TaxCategoryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *TaxCategory, err error) {
+func (client *Client) TaxCategoryGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *TaxCategory, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("tax-categories/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("tax-categories/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) TaxCategoryUpdateWithID(ctx context.Context, input *TaxCat
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("tax-categories/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("tax-categories/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

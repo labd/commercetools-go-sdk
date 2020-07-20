@@ -7,15 +7,10 @@ import (
 	"github.com/dave/jennifer/jen"
 )
 
-// Create the `<method>DeleteWithID` and `<method>DeleteWithKey` functions
+// Generate the `<service>DeleteWithID` and `<service>DeleteWithKey` functions
 func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	deleteIdentifier := "ID"
-	if strings.Contains(resourceMethod.MethodName, "Key") {
-		deleteIdentifier = "key"
-	}
-
 	methodName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
+	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
 
 	deleteWithVersion := true
 	// TODO: nasty hack / incomplete API def
@@ -25,7 +20,7 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 
 	methodParamList := []jen.Code{
 		jen.Id("ctx").Qual("context", "Context"),
-		jen.Id(resourceMethod.PathParameterName).String(),
+		jen.Id(resourceIdentifier.ArgName).String(),
 	}
 
 	setVersionParam := jen.Empty()
@@ -63,9 +58,10 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 			jen.Id("opt").Call(jen.Op("&").Id("params")),
 		),
 
+		resourceIdentifier.createEndpointCode(false),
 		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
 			jen.Id("ctx"),
-			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(deleteIdentifier), jen.Lit(1)),
+			jen.Id("endpoint"),
 			jen.Id("params"),
 			jen.Op("&").Id("result"),
 		),

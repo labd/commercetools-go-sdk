@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // CustomerURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) CustomerDeleteWithKey(ctx context.Context, key string, ver
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("customers/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("customers/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) CustomerGetWithKey(ctx context.Context, key string, opts .
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("customers/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("customers/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) CustomerUpdateWithKey(ctx context.Context, input *Customer
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("customers/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("customers/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) CustomerUpdateWithKey(ctx context.Context, input *Customer
 }
 
 // CustomerDeleteWithID for type Customer
-func (client *Client) CustomerDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Customer, err error) {
+func (client *Client) CustomerDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *Customer, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("customers/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("customers/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) CustomerDeleteWithID(ctx context.Context, ID string, versi
 }
 
 // CustomerGetWithID for type Customer
-func (client *Client) CustomerGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Customer, err error) {
+func (client *Client) CustomerGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Customer, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("customers/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("customers/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) CustomerUpdateWithID(ctx context.Context, input *CustomerU
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("customers/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("customers/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

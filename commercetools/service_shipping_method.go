@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // ShippingMethodURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) ShippingMethodDeleteWithKey(ctx context.Context, key strin
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("shipping-methods/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("shipping-methods/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) ShippingMethodGetWithKey(ctx context.Context, key string, 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("shipping-methods/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("shipping-methods/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) ShippingMethodUpdateWithKey(ctx context.Context, input *Sh
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("shipping-methods/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("shipping-methods/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) ShippingMethodUpdateWithKey(ctx context.Context, input *Sh
 }
 
 // ShippingMethodDeleteWithID for type ShippingMethod
-func (client *Client) ShippingMethodDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *ShippingMethod, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("shipping-methods/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) ShippingMethodDeleteWithID(ctx context.Context, ID string,
 }
 
 // ShippingMethodGetWithID for type ShippingMethod
-func (client *Client) ShippingMethodGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *ShippingMethod, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("shipping-methods/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) ShippingMethodUpdateWithID(ctx context.Context, input *Shi
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("shipping-methods/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

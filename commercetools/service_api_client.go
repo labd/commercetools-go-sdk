@@ -4,8 +4,8 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
-	"strings"
 )
 
 // APIClientURLPath is the commercetools API path.
@@ -35,13 +35,14 @@ func (client *Client) APIClientQuery(ctx context.Context, input *QueryInput) (re
 }
 
 // APIClientDeleteWithID Delete ApiClient by ID
-func (client *Client) APIClientDeleteWithID(ctx context.Context, ID string, opts ...RequestOption) (result *APIClient, err error) {
+func (client *Client) APIClientDeleteWithID(ctx context.Context, id string, opts ...RequestOption) (result *APIClient, err error) {
 	params := url.Values{}
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("api-clients/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("api-clients/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -49,12 +50,13 @@ func (client *Client) APIClientDeleteWithID(ctx context.Context, ID string, opts
 }
 
 // APIClientGetWithID Get ApiClient by ID
-func (client *Client) APIClientGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *APIClient, err error) {
+func (client *Client) APIClientGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *APIClient, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("api-clients/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("api-clients/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}

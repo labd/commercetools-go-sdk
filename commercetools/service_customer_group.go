@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // CustomerGroupURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) CustomerGroupDeleteWithKey(ctx context.Context, key string
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("customer-groups/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("customer-groups/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) CustomerGroupGetWithKey(ctx context.Context, key string, o
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("customer-groups/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("customer-groups/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) CustomerGroupUpdateWithKey(ctx context.Context, input *Cus
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("customer-groups/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("customer-groups/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) CustomerGroupUpdateWithKey(ctx context.Context, input *Cus
 }
 
 // CustomerGroupDeleteWithID for type CustomerGroup
-func (client *Client) CustomerGroupDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *CustomerGroup, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("customer-groups/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("customer-groups/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) CustomerGroupDeleteWithID(ctx context.Context, ID string, 
 }
 
 // CustomerGroupGetWithID for type CustomerGroup
-func (client *Client) CustomerGroupGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *CustomerGroup, err error) {
+func (client *Client) CustomerGroupGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *CustomerGroup, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("customer-groups/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("customer-groups/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) CustomerGroupUpdateWithID(ctx context.Context, input *Cust
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("customer-groups/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("customer-groups/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

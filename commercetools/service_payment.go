@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // PaymentURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) PaymentDeleteWithKey(ctx context.Context, key string, vers
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("payments/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("payments/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) PaymentGetWithKey(ctx context.Context, key string, opts ..
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("payments/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("payments/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) PaymentUpdateWithKey(ctx context.Context, input *PaymentUp
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("payments/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("payments/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) PaymentUpdateWithKey(ctx context.Context, input *PaymentUp
 }
 
 // PaymentDeleteWithID for type Payment
-func (client *Client) PaymentDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Payment, err error) {
+func (client *Client) PaymentDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *Payment, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("payments/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("payments/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) PaymentDeleteWithID(ctx context.Context, ID string, versio
 }
 
 // PaymentGetWithID for type Payment
-func (client *Client) PaymentGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Payment, err error) {
+func (client *Client) PaymentGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Payment, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("payments/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("payments/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) PaymentUpdateWithID(ctx context.Context, input *PaymentUpd
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("payments/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("payments/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

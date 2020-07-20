@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // ZoneURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) ZoneDeleteWithKey(ctx context.Context, key string, version
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("zones/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) ZoneGetWithKey(ctx context.Context, key string, opts ...Re
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("zones/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWi
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("zones/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("zones/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWi
 }
 
 // ZoneDeleteWithID for type Zone
-func (client *Client) ZoneDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Zone, err error) {
+func (client *Client) ZoneDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *Zone, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("zones/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) ZoneDeleteWithID(ctx context.Context, ID string, version i
 }
 
 // ZoneGetWithID for type Zone
-func (client *Client) ZoneGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Zone, err error) {
+func (client *Client) ZoneGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Zone, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("zones/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) ZoneUpdateWithID(ctx context.Context, input *ZoneUpdateWit
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("zones/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("zones/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

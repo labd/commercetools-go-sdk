@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // ExtensionURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) ExtensionDeleteWithKey(ctx context.Context, key string, ve
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("extensions/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("extensions/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) ExtensionGetWithKey(ctx context.Context, key string, opts 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("extensions/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("extensions/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) ExtensionUpdateWithKey(ctx context.Context, input *Extensi
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("extensions/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("extensions/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) ExtensionUpdateWithKey(ctx context.Context, input *Extensi
 }
 
 // ExtensionDeleteWithID for type Extension
-func (client *Client) ExtensionDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Extension, err error) {
+func (client *Client) ExtensionDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *Extension, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("extensions/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("extensions/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) ExtensionDeleteWithID(ctx context.Context, ID string, vers
 }
 
 // ExtensionGetWithID Retrieves the representation of an extension by its id.
-func (client *Client) ExtensionGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Extension, err error) {
+func (client *Client) ExtensionGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Extension, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("extensions/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("extensions/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) ExtensionUpdateWithID(ctx context.Context, input *Extensio
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("extensions/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("extensions/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

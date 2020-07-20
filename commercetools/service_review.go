@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // ReviewURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) ReviewDeleteWithKey(ctx context.Context, key string, versi
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("reviews/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("reviews/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) ReviewGetWithKey(ctx context.Context, key string, opts ...
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("reviews/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("reviews/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) ReviewUpdateWithKey(ctx context.Context, input *ReviewUpda
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("reviews/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("reviews/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) ReviewUpdateWithKey(ctx context.Context, input *ReviewUpda
 }
 
 // ReviewDeleteWithID for type Review
-func (client *Client) ReviewDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Review, err error) {
+func (client *Client) ReviewDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *Review, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("reviews/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("reviews/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) ReviewDeleteWithID(ctx context.Context, ID string, version
 }
 
 // ReviewGetWithID for type Review
-func (client *Client) ReviewGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Review, err error) {
+func (client *Client) ReviewGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Review, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("reviews/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("reviews/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) ReviewUpdateWithID(ctx context.Context, input *ReviewUpdat
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("reviews/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("reviews/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

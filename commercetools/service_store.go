@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // StoreURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) StoreDeleteWithKey(ctx context.Context, key string, versio
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("stores/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("stores/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) StoreGetWithKey(ctx context.Context, key string, opts ...R
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("stores/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("stores/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) StoreUpdateWithKey(ctx context.Context, input *StoreUpdate
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("stores/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("stores/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) StoreUpdateWithKey(ctx context.Context, input *StoreUpdate
 }
 
 // StoreDeleteWithID for type Store
-func (client *Client) StoreDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Store, err error) {
+func (client *Client) StoreDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *Store, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("stores/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("stores/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) StoreDeleteWithID(ctx context.Context, ID string, version 
 }
 
 // StoreGetWithID for type Store
-func (client *Client) StoreGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Store, err error) {
+func (client *Client) StoreGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Store, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("stores/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("stores/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) StoreUpdateWithID(ctx context.Context, input *StoreUpdateW
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("stores/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("stores/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

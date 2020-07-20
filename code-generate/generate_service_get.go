@@ -7,17 +7,16 @@ import (
 	"github.com/dave/jennifer/jen"
 )
 
-// Create the `<method>Get` function
+// Generate the `<service>Get` function
 func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	methodName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	returnParams := jen.Id("client").Op("*").Id("Client")
+	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
 	methodParams := jen.List(
 		jen.Id("ctx").Qual("context", "Context"),
-		jen.Id(resourceMethod.PathParameterName).String(),
+		jen.Id(resourceIdentifier.ArgName).String(),
 		jen.Id("opts").Op("...").Id("RequestOption"),
 	)
-
-	urlPath := fmt.Sprintf("%s%s", resourceService.BasePath, resourceMethod.Path)
 
 	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
 	if httpMethod.Description != "" {
@@ -34,9 +33,10 @@ func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, 
 			jen.Id("opt").Call(jen.Op("&").Id("params")),
 		),
 
+		resourceIdentifier.createEndpointCode(false),
 		jen.Id("err").Op("=").Id("client").Op(".").Id(strings.Title(httpMethod.HTTPMethod)).Call(
 			jen.Id("ctx"),
-			jen.Qual("strings", "Replace").Call(jen.Lit(urlPath), jen.Lit(fmt.Sprintf("{%s}", resourceMethod.PathParameterName)), jen.Id(resourceMethod.PathParameterName), jen.Lit(1)),
+			jen.Id("endpoint"),
 			jen.Id("params"),
 			jen.Op("&").Id("result"),
 		),

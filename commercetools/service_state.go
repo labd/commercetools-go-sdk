@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // StateURLPath is the commercetools API path.
@@ -36,14 +36,15 @@ func (client *Client) StateQuery(ctx context.Context, input *QueryInput) (result
 }
 
 // StateDeleteWithID for type State
-func (client *Client) StateDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *State, err error) {
+func (client *Client) StateDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *State, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("states/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("states/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -51,12 +52,13 @@ func (client *Client) StateDeleteWithID(ctx context.Context, ID string, version 
 }
 
 // StateGetWithID for type State
-func (client *Client) StateGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *State, err error) {
+func (client *Client) StateGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *State, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("states/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("states/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) StateUpdateWithID(ctx context.Context, input *StateUpdateW
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("states/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("states/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

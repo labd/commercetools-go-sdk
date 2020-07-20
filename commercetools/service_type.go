@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // TypeURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) TypeDeleteWithKey(ctx context.Context, key string, version
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("types/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("types/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) TypeGetWithKey(ctx context.Context, key string, opts ...Re
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("types/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("types/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) TypeUpdateWithKey(ctx context.Context, input *TypeUpdateWi
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("types/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("types/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) TypeUpdateWithKey(ctx context.Context, input *TypeUpdateWi
 }
 
 // TypeDeleteWithID for type Type
-func (client *Client) TypeDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Type, err error) {
+func (client *Client) TypeDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *Type, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("types/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("types/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) TypeDeleteWithID(ctx context.Context, ID string, version i
 }
 
 // TypeGetWithID for type Type
-func (client *Client) TypeGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Type, err error) {
+func (client *Client) TypeGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Type, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("types/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("types/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) TypeUpdateWithID(ctx context.Context, input *TypeUpdateWit
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("types/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("types/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

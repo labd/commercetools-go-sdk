@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // OrderURLPath is the commercetools API path.
@@ -36,14 +36,15 @@ func (client *Client) OrderQuery(ctx context.Context, input *QueryInput) (result
 }
 
 // OrderDeleteWithID for type Order
-func (client *Client) OrderDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Order, err error) {
+func (client *Client) OrderDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *Order, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("orders/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("orders/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -51,12 +52,13 @@ func (client *Client) OrderDeleteWithID(ctx context.Context, ID string, version 
 }
 
 // OrderGetWithID for type Order
-func (client *Client) OrderGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Order, err error) {
+func (client *Client) OrderGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Order, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("orders/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("orders/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) OrderUpdateWithID(ctx context.Context, input *OrderUpdateW
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("orders/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("orders/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

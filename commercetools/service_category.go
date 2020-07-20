@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // CategoryURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) CategoryDeleteWithKey(ctx context.Context, key string, ver
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("categories/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("categories/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) CategoryGetWithKey(ctx context.Context, key string, opts .
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("categories/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("categories/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *Category
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("categories/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("categories/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *Category
 }
 
 // CategoryDeleteWithID for type Category
-func (client *Client) CategoryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Category, err error) {
+func (client *Client) CategoryDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *Category, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("categories/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("categories/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) CategoryDeleteWithID(ctx context.Context, ID string, versi
 }
 
 // CategoryGetWithID for type Category
-func (client *Client) CategoryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Category, err error) {
+func (client *Client) CategoryGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Category, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("categories/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("categories/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) CategoryUpdateWithID(ctx context.Context, input *CategoryU
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("categories/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("categories/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

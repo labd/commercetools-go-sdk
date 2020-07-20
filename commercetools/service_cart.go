@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // CartURLPath is the commercetools API path.
@@ -36,14 +36,15 @@ func (client *Client) CartQuery(ctx context.Context, input *QueryInput) (result 
 }
 
 // CartDeleteWithID for type Cart
-func (client *Client) CartDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Cart, err error) {
+func (client *Client) CartDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *Cart, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("carts/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("carts/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -54,12 +55,13 @@ func (client *Client) CartDeleteWithID(ctx context.Context, ID string, version i
 CartGetWithID The cart may not contain up-to-date prices, discounts etc.
 If you want to ensure they’re up-to-date, send an Update request with the Recalculate update action instead.
 */
-func (client *Client) CartGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Cart, err error) {
+func (client *Client) CartGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Cart, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("carts/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("carts/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +81,8 @@ func (client *Client) CartUpdateWithID(ctx context.Context, input *CartUpdateWit
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("carts/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("carts/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

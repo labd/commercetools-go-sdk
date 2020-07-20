@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // InventoryEntryURLPath is the commercetools API path.
@@ -36,14 +36,15 @@ func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput
 }
 
 // InventoryEntryDeleteWithID for type InventoryEntry
-func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("inventory/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("inventory/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -51,12 +52,13 @@ func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string,
 }
 
 // InventoryEntryGetWithID for type InventoryEntry
-func (client *Client) InventoryEntryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("inventory/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("inventory/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) InventoryEntryUpdateWithID(ctx context.Context, input *Inv
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("inventory/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("inventory/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

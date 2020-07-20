@@ -4,9 +4,9 @@ package commercetools
 
 import (
 	"context"
+	"fmt"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // ProductDiscountURLPath is the commercetools API path.
@@ -43,7 +43,8 @@ func (client *Client) ProductDiscountDeleteWithKey(ctx context.Context, key stri
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("product-discounts/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("product-discounts/key=%s", key)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +57,8 @@ func (client *Client) ProductDiscountGetWithKey(ctx context.Context, key string,
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("product-discounts/key={key}", "{key}", key, 1), params, &result)
+	endpoint := fmt.Sprintf("product-discounts/key=%s", key)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +78,8 @@ func (client *Client) ProductDiscountUpdateWithKey(ctx context.Context, input *P
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("product-discounts/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("product-discounts/key=%s", input.Key)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -84,14 +87,15 @@ func (client *Client) ProductDiscountUpdateWithKey(ctx context.Context, input *P
 }
 
 // ProductDiscountDeleteWithID for type ProductDiscount
-func (client *Client) ProductDiscountDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *ProductDiscount, err error) {
+func (client *Client) ProductDiscountDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *ProductDiscount, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Delete(ctx, strings.Replace("product-discounts/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("product-discounts/%s", id)
+	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -99,12 +103,13 @@ func (client *Client) ProductDiscountDeleteWithID(ctx context.Context, ID string
 }
 
 // ProductDiscountGetWithID for type ProductDiscount
-func (client *Client) ProductDiscountGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *ProductDiscount, err error) {
+func (client *Client) ProductDiscountGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *ProductDiscount, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Get(ctx, strings.Replace("product-discounts/{ID}", "{ID}", ID, 1), params, &result)
+	endpoint := fmt.Sprintf("product-discounts/%s", id)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +129,8 @@ func (client *Client) ProductDiscountUpdateWithID(ctx context.Context, input *Pr
 	for _, opt := range opts {
 		opt(&params)
 	}
-	err = client.Update(ctx, strings.Replace("product-discounts/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
+	endpoint := fmt.Sprintf("product-discounts/%s", input.ID)
+	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
