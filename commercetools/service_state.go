@@ -18,6 +18,7 @@ func (client *Client) StateCreate(ctx context.Context, draft *StateDraft, opts .
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, StateURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

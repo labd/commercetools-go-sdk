@@ -18,6 +18,7 @@ func (client *Client) ExtensionCreate(ctx context.Context, draft *ExtensionDraft
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, ExtensionURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

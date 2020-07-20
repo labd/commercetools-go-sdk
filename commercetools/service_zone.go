@@ -18,6 +18,7 @@ func (client *Client) ZoneCreate(ctx context.Context, draft *ZoneDraft, opts ...
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, ZoneURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

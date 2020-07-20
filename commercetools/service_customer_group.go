@@ -18,6 +18,7 @@ func (client *Client) CustomerGroupCreate(ctx context.Context, draft *CustomerGr
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, CustomerGroupURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

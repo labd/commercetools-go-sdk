@@ -17,6 +17,7 @@ func (client *Client) APIClientCreate(ctx context.Context, draft *APIClientDraft
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, APIClientURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

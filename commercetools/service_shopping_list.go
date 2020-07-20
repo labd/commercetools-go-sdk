@@ -18,6 +18,7 @@ func (client *Client) ShoppingListCreate(ctx context.Context, draft *ShoppingLis
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, ShoppingListURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

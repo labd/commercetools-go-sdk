@@ -18,6 +18,7 @@ func (client *Client) TaxCategoryCreate(ctx context.Context, draft *TaxCategoryD
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, TaxCategoryURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

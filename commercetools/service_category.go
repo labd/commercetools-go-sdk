@@ -18,6 +18,7 @@ func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft, 
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, CategoryURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

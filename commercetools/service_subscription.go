@@ -18,6 +18,7 @@ func (client *Client) SubscriptionCreate(ctx context.Context, draft *Subscriptio
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, SubscriptionURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

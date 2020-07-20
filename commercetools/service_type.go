@@ -18,6 +18,7 @@ func (client *Client) TypeCreate(ctx context.Context, draft *TypeDraft, opts ...
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, TypeURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

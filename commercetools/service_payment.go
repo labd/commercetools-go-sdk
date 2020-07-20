@@ -18,6 +18,7 @@ func (client *Client) PaymentCreate(ctx context.Context, draft *PaymentDraft, op
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, PaymentURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

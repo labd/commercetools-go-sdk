@@ -18,6 +18,7 @@ func (client *Client) DiscountCodeCreate(ctx context.Context, draft *DiscountCod
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, DiscountCodeURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

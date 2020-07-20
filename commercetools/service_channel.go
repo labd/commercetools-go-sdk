@@ -18,6 +18,7 @@ func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft, op
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, ChannelURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

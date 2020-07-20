@@ -18,6 +18,7 @@ func (client *Client) CartDiscountCreate(ctx context.Context, draft *CartDiscoun
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, CartDiscountURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

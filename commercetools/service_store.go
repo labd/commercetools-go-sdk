@@ -18,6 +18,7 @@ func (client *Client) StoreCreate(ctx context.Context, draft *StoreDraft, opts .
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, StoreURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

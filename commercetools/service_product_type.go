@@ -18,6 +18,7 @@ func (client *Client) ProductTypeCreate(ctx context.Context, draft *ProductTypeD
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, ProductTypeURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

@@ -18,6 +18,7 @@ func (client *Client) ShippingMethodCreate(ctx context.Context, draft *ShippingM
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, ShippingMethodURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err

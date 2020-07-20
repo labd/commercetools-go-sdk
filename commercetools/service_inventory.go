@@ -18,6 +18,7 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	err = client.Create(ctx, InventoryEntryURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
