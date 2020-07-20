@@ -72,12 +72,27 @@ type ExtensionUpdateWithKeyInput struct {
 	Actions []ExtensionUpdateAction
 }
 
+func (input *ExtensionUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ExtensionUpdateWithKey for type Extension
 func (client *Client) ExtensionUpdateWithKey(ctx context.Context, input *ExtensionUpdateWithKeyInput, opts ...RequestOption) (result *Extension, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("extensions/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type ExtensionUpdateWithIDInput struct {
 	Actions []ExtensionUpdateAction
 }
 
+func (input *ExtensionUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ExtensionUpdateWithID for type Extension
 func (client *Client) ExtensionUpdateWithID(ctx context.Context, input *ExtensionUpdateWithIDInput, opts ...RequestOption) (result *Extension, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("extensions/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

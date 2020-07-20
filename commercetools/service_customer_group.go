@@ -72,12 +72,27 @@ type CustomerGroupUpdateWithKeyInput struct {
 	Actions []CustomerGroupUpdateAction
 }
 
+func (input *CustomerGroupUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // CustomerGroupUpdateWithKey Updates a customer group by Key.
 func (client *Client) CustomerGroupUpdateWithKey(ctx context.Context, input *CustomerGroupUpdateWithKeyInput, opts ...RequestOption) (result *CustomerGroup, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("customer-groups/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type CustomerGroupUpdateWithIDInput struct {
 	Actions []CustomerGroupUpdateAction
 }
 
+func (input *CustomerGroupUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // CustomerGroupUpdateWithID for type CustomerGroup
 func (client *Client) CustomerGroupUpdateWithID(ctx context.Context, input *CustomerGroupUpdateWithIDInput, opts ...RequestOption) (result *CustomerGroup, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("customer-groups/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

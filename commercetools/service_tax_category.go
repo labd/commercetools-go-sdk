@@ -72,12 +72,27 @@ type TaxCategoryUpdateWithKeyInput struct {
 	Actions []TaxCategoryUpdateAction
 }
 
+func (input *TaxCategoryUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // TaxCategoryUpdateWithKey for type TaxCategory
 func (client *Client) TaxCategoryUpdateWithKey(ctx context.Context, input *TaxCategoryUpdateWithKeyInput, opts ...RequestOption) (result *TaxCategory, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("tax-categories/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type TaxCategoryUpdateWithIDInput struct {
 	Actions []TaxCategoryUpdateAction
 }
 
+func (input *TaxCategoryUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // TaxCategoryUpdateWithID for type TaxCategory
 func (client *Client) TaxCategoryUpdateWithID(ctx context.Context, input *TaxCategoryUpdateWithIDInput, opts ...RequestOption) (result *TaxCategory, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("tax-categories/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

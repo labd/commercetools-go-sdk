@@ -72,12 +72,27 @@ type ReviewUpdateWithKeyInput struct {
 	Actions []ReviewUpdateAction
 }
 
+func (input *ReviewUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ReviewUpdateWithKey for type Review
 func (client *Client) ReviewUpdateWithKey(ctx context.Context, input *ReviewUpdateWithKeyInput, opts ...RequestOption) (result *Review, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("reviews/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type ReviewUpdateWithIDInput struct {
 	Actions []ReviewUpdateAction
 }
 
+func (input *ReviewUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ReviewUpdateWithID for type Review
 func (client *Client) ReviewUpdateWithID(ctx context.Context, input *ReviewUpdateWithIDInput, opts ...RequestOption) (result *Review, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("reviews/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

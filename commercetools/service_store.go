@@ -72,12 +72,27 @@ type StoreUpdateWithKeyInput struct {
 	Actions []StoreUpdateAction
 }
 
+func (input *StoreUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // StoreUpdateWithKey for type Store
 func (client *Client) StoreUpdateWithKey(ctx context.Context, input *StoreUpdateWithKeyInput, opts ...RequestOption) (result *Store, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("stores/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type StoreUpdateWithIDInput struct {
 	Actions []StoreUpdateAction
 }
 
+func (input *StoreUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // StoreUpdateWithID for type Store
 func (client *Client) StoreUpdateWithID(ctx context.Context, input *StoreUpdateWithIDInput, opts ...RequestOption) (result *Store, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("stores/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

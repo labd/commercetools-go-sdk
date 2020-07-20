@@ -41,6 +41,7 @@ func TestExtensionUpdate(t *testing.T) {
 	defer server.Close()
 
 	input := &commercetools.ExtensionUpdateWithIDInput{
+		ID:      "foobar",
 		Version: 2,
 		Actions: []commercetools.ExtensionUpdateAction{
 			commercetools.ExtensionChangeDestinationAction{

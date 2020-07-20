@@ -72,12 +72,27 @@ type ChannelUpdateWithIDInput struct {
 	Actions []ChannelUpdateAction
 }
 
+func (input *ChannelUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ChannelUpdateWithID for type Channel
 func (client *Client) ChannelUpdateWithID(ctx context.Context, input *ChannelUpdateWithIDInput, opts ...RequestOption) (result *Channel, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("channels/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

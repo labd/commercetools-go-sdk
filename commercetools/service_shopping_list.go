@@ -72,12 +72,27 @@ type ShoppingListUpdateWithKeyInput struct {
 	Actions []ShoppingListUpdateAction
 }
 
+func (input *ShoppingListUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ShoppingListUpdateWithKey Update a shopping list found by its Key.
 func (client *Client) ShoppingListUpdateWithKey(ctx context.Context, input *ShoppingListUpdateWithKeyInput, opts ...RequestOption) (result *ShoppingList, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("shopping-lists/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type ShoppingListUpdateWithIDInput struct {
 	Actions []ShoppingListUpdateAction
 }
 
+func (input *ShoppingListUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ShoppingListUpdateWithID for type ShoppingList
 func (client *Client) ShoppingListUpdateWithID(ctx context.Context, input *ShoppingListUpdateWithIDInput, opts ...RequestOption) (result *ShoppingList, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("shopping-lists/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

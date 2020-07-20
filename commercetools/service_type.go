@@ -72,12 +72,27 @@ type TypeUpdateWithKeyInput struct {
 	Actions []TypeUpdateAction
 }
 
+func (input *TypeUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // TypeUpdateWithKey for type Type
 func (client *Client) TypeUpdateWithKey(ctx context.Context, input *TypeUpdateWithKeyInput, opts ...RequestOption) (result *Type, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("types/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type TypeUpdateWithIDInput struct {
 	Actions []TypeUpdateAction
 }
 
+func (input *TypeUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // TypeUpdateWithID for type Type
 func (client *Client) TypeUpdateWithID(ctx context.Context, input *TypeUpdateWithIDInput, opts ...RequestOption) (result *Type, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("types/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

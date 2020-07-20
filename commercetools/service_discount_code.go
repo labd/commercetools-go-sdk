@@ -72,12 +72,27 @@ type DiscountCodeUpdateWithIDInput struct {
 	Actions []DiscountCodeUpdateAction
 }
 
+func (input *DiscountCodeUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // DiscountCodeUpdateWithID for type DiscountCode
 func (client *Client) DiscountCodeUpdateWithID(ctx context.Context, input *DiscountCodeUpdateWithIDInput, opts ...RequestOption) (result *DiscountCode, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("discount-codes/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

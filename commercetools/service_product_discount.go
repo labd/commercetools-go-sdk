@@ -72,12 +72,27 @@ type ProductDiscountUpdateWithKeyInput struct {
 	Actions []ProductDiscountUpdateAction
 }
 
+func (input *ProductDiscountUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ProductDiscountUpdateWithKey for type ProductDiscount
 func (client *Client) ProductDiscountUpdateWithKey(ctx context.Context, input *ProductDiscountUpdateWithKeyInput, opts ...RequestOption) (result *ProductDiscount, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("product-discounts/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type ProductDiscountUpdateWithIDInput struct {
 	Actions []ProductDiscountUpdateAction
 }
 
+func (input *ProductDiscountUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ProductDiscountUpdateWithID for type ProductDiscount
 func (client *Client) ProductDiscountUpdateWithID(ctx context.Context, input *ProductDiscountUpdateWithIDInput, opts ...RequestOption) (result *ProductDiscount, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("product-discounts/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

@@ -39,7 +39,6 @@ func TestClientCreateWithReferenceExpansion(t *testing.T) {
 	assert.Equal(t, url.Values(url.Values{"expand": []string{"productType"}}), output.URL.Query())
 }
 
-
 func TestClientGetWithReferenceExpansion(t *testing.T) {
 	responseData := "{}"
 	output := testutil.RequestData{}
@@ -54,7 +53,6 @@ func TestClientGetWithReferenceExpansion(t *testing.T) {
 	assert.Equal(t, url.Values(url.Values{"expand": []string{"productType"}}), output.URL.Query())
 }
 
-
 func TestClientUpdateWithReferenceExpansion(t *testing.T) {
 	responseData := "{}"
 	output := testutil.RequestData{}
@@ -63,15 +61,22 @@ func TestClientUpdateWithReferenceExpansion(t *testing.T) {
 
 	product, err := client.ProductUpdateWithID(
 		context.TODO(), &commercetools.ProductUpdateWithIDInput{
-			ID: "foobar",
+			ID:      "foobar",
 			Version: 10,
+			Actions: []commercetools.ProductUpdateAction{
+				commercetools.ProductChangeNameAction{
+					Staged: true,
+					Name: &commercetools.LocalizedString{
+						"nl": "foobar",
+					},
+				},
+			},
 		},
 		commercetools.WithReferenceExpansion("productType", "taxCategory"))
 	assert.NotNil(t, product)
 	assert.NoError(t, err)
 	assert.Equal(t, url.Values(url.Values{"expand": []string{"productType", "taxCategory"}}), output.URL.Query())
 }
-
 
 func TestClientDeleteWithReferenceExpansion(t *testing.T) {
 	responseData := "{}"
@@ -84,5 +89,5 @@ func TestClientDeleteWithReferenceExpansion(t *testing.T) {
 		commercetools.WithReferenceExpansion("productType"))
 	assert.NotNil(t, product)
 	assert.NoError(t, err)
-	assert.Equal(t, url.Values(url.Values{"expand": []string{"productType"}, "version":[]string{"10"}}), output.URL.Query())
+	assert.Equal(t, url.Values(url.Values{"expand": []string{"productType"}, "version": []string{"10"}}), output.URL.Query())
 }

@@ -72,12 +72,27 @@ type SubscriptionUpdateWithKeyInput struct {
 	Actions []SubscriptionUpdateAction
 }
 
+func (input *SubscriptionUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // SubscriptionUpdateWithKey for type Subscription
 func (client *Client) SubscriptionUpdateWithKey(ctx context.Context, input *SubscriptionUpdateWithKeyInput, opts ...RequestOption) (result *Subscription, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("subscriptions/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type SubscriptionUpdateWithIDInput struct {
 	Actions []SubscriptionUpdateAction
 }
 
+func (input *SubscriptionUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // SubscriptionUpdateWithID for type Subscription
 func (client *Client) SubscriptionUpdateWithID(ctx context.Context, input *SubscriptionUpdateWithIDInput, opts ...RequestOption) (result *Subscription, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("subscriptions/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

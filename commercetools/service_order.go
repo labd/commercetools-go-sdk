@@ -72,12 +72,27 @@ type OrderUpdateWithIDInput struct {
 	Actions []OrderUpdateAction
 }
 
+func (input *OrderUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // OrderUpdateWithID for type Order
 func (client *Client) OrderUpdateWithID(ctx context.Context, input *OrderUpdateWithIDInput, opts ...RequestOption) (result *Order, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("orders/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {

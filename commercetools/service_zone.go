@@ -72,12 +72,27 @@ type ZoneUpdateWithKeyInput struct {
 	Actions []ZoneUpdateAction
 }
 
+func (input *ZoneUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ZoneUpdateWithKey for type Zone
 func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWithKeyInput, opts ...RequestOption) (result *Zone, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("zones/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
@@ -123,12 +138,27 @@ type ZoneUpdateWithIDInput struct {
 	Actions []ZoneUpdateAction
 }
 
+func (input *ZoneUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
 // ZoneUpdateWithID for type Zone
 func (client *Client) ZoneUpdateWithID(ctx context.Context, input *ZoneUpdateWithIDInput, opts ...RequestOption) (result *Zone, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
+
 	endpoint := fmt.Sprintf("zones/%s", input.ID)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
