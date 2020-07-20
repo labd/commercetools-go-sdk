@@ -13,8 +13,12 @@ import (
 const ZoneURLPath = "zones"
 
 // ZoneCreate creates a new instance of type Zone
-func (client *Client) ZoneCreate(ctx context.Context, draft *ZoneDraft) (result *Zone, err error) {
-	err = client.Create(ctx, ZoneURLPath, nil, draft, &result)
+func (client *Client) ZoneCreate(ctx context.Context, draft *ZoneDraft, opts ...RequestOption) (result *Zone, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, ZoneURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) ZoneQuery(ctx context.Context, input *QueryInput) (result 
 }
 
 // ZoneDeleteWithKey for type Zone
-func (client *Client) ZoneDeleteWithKey(ctx context.Context, key string, version int) (result *Zone, err error) {
+func (client *Client) ZoneDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Zone, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) ZoneDeleteWithKey(ctx context.Context, key string, version
 }
 
 // ZoneGetWithKey for type Zone
-func (client *Client) ZoneGetWithKey(ctx context.Context, key string) (result *Zone, err error) {
-	err = client.Get(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) ZoneGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Zone, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("zones/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type ZoneUpdateWithKeyInput struct {
 }
 
 // ZoneUpdateWithKey for type Zone
-func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWithKeyInput) (result *Zone, err error) {
-	err = client.Update(ctx, strings.Replace("zones/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWithKeyInput, opts ...RequestOption) (result *Zone, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("zones/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +83,13 @@ func (client *Client) ZoneUpdateWithKey(ctx context.Context, input *ZoneUpdateWi
 }
 
 // ZoneDeleteWithID for type Zone
-func (client *Client) ZoneDeleteWithID(ctx context.Context, ID string, version int) (result *Zone, err error) {
+func (client *Client) ZoneDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Zone, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -80,8 +98,12 @@ func (client *Client) ZoneDeleteWithID(ctx context.Context, ID string, version i
 }
 
 // ZoneGetWithID for type Zone
-func (client *Client) ZoneGetWithID(ctx context.Context, ID string) (result *Zone, err error) {
-	err = client.Get(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ZoneGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Zone, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("zones/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +118,12 @@ type ZoneUpdateWithIDInput struct {
 }
 
 // ZoneUpdateWithID for type Zone
-func (client *Client) ZoneUpdateWithID(ctx context.Context, input *ZoneUpdateWithIDInput) (result *Zone, err error) {
-	err = client.Update(ctx, strings.Replace("zones/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ZoneUpdateWithID(ctx context.Context, input *ZoneUpdateWithIDInput, opts ...RequestOption) (result *Zone, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("zones/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

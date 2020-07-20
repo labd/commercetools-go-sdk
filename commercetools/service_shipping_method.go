@@ -13,8 +13,12 @@ import (
 const ShippingMethodURLPath = "shipping-methods"
 
 // ShippingMethodCreate creates a new instance of type ShippingMethod
-func (client *Client) ShippingMethodCreate(ctx context.Context, draft *ShippingMethodDraft) (result *ShippingMethod, err error) {
-	err = client.Create(ctx, ShippingMethodURLPath, nil, draft, &result)
+func (client *Client) ShippingMethodCreate(ctx context.Context, draft *ShippingMethodDraft, opts ...RequestOption) (result *ShippingMethod, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, ShippingMethodURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) ShippingMethodQuery(ctx context.Context, input *QueryInput
 }
 
 // ShippingMethodDeleteWithKey for type ShippingMethod
-func (client *Client) ShippingMethodDeleteWithKey(ctx context.Context, key string, version int) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *ShippingMethod, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("shipping-methods/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) ShippingMethodDeleteWithKey(ctx context.Context, key strin
 }
 
 // ShippingMethodGetWithKey for type ShippingMethod
-func (client *Client) ShippingMethodGetWithKey(ctx context.Context, key string) (result *ShippingMethod, err error) {
-	err = client.Get(ctx, strings.Replace("shipping-methods/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) ShippingMethodGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *ShippingMethod, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("shipping-methods/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type ShippingMethodUpdateWithKeyInput struct {
 }
 
 // ShippingMethodUpdateWithKey for type ShippingMethod
-func (client *Client) ShippingMethodUpdateWithKey(ctx context.Context, input *ShippingMethodUpdateWithKeyInput) (result *ShippingMethod, err error) {
-	err = client.Update(ctx, strings.Replace("shipping-methods/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ShippingMethodUpdateWithKey(ctx context.Context, input *ShippingMethodUpdateWithKeyInput, opts ...RequestOption) (result *ShippingMethod, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("shipping-methods/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +83,13 @@ func (client *Client) ShippingMethodUpdateWithKey(ctx context.Context, input *Sh
 }
 
 // ShippingMethodDeleteWithID for type ShippingMethod
-func (client *Client) ShippingMethodDeleteWithID(ctx context.Context, ID string, version int) (result *ShippingMethod, err error) {
+func (client *Client) ShippingMethodDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *ShippingMethod, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -80,8 +98,12 @@ func (client *Client) ShippingMethodDeleteWithID(ctx context.Context, ID string,
 }
 
 // ShippingMethodGetWithID for type ShippingMethod
-func (client *Client) ShippingMethodGetWithID(ctx context.Context, ID string) (result *ShippingMethod, err error) {
-	err = client.Get(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) ShippingMethodGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *ShippingMethod, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +118,12 @@ type ShippingMethodUpdateWithIDInput struct {
 }
 
 // ShippingMethodUpdateWithID for type ShippingMethod
-func (client *Client) ShippingMethodUpdateWithID(ctx context.Context, input *ShippingMethodUpdateWithIDInput) (result *ShippingMethod, err error) {
-	err = client.Update(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) ShippingMethodUpdateWithID(ctx context.Context, input *ShippingMethodUpdateWithIDInput, opts ...RequestOption) (result *ShippingMethod, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("shipping-methods/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

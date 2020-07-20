@@ -12,8 +12,12 @@ import (
 const APIClientURLPath = "api-clients"
 
 // APIClientCreate creates a new instance of type APIClient
-func (client *Client) APIClientCreate(ctx context.Context, draft *APIClientDraft) (result *APIClient, err error) {
-	err = client.Create(ctx, APIClientURLPath, nil, draft, &result)
+func (client *Client) APIClientCreate(ctx context.Context, draft *APIClientDraft, opts ...RequestOption) (result *APIClient, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, APIClientURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -30,9 +34,12 @@ func (client *Client) APIClientQuery(ctx context.Context, input *QueryInput) (re
 }
 
 // APIClientDeleteWithID Delete ApiClient by ID
-func (client *Client) APIClientDeleteWithID(ctx context.Context, ID string) (result *APIClient, err error) {
+func (client *Client) APIClientDeleteWithID(ctx context.Context, ID string, opts ...RequestOption) (result *APIClient, err error) {
 	params := url.Values{}
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("api-clients/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -41,8 +48,12 @@ func (client *Client) APIClientDeleteWithID(ctx context.Context, ID string) (res
 }
 
 // APIClientGetWithID Get ApiClient by ID
-func (client *Client) APIClientGetWithID(ctx context.Context, ID string) (result *APIClient, err error) {
-	err = client.Get(ctx, strings.Replace("api-clients/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) APIClientGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *APIClient, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("api-clients/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}

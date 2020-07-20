@@ -13,8 +13,12 @@ import (
 const CustomerURLPath = "customers"
 
 // CustomerCreate creates a new instance of type Customer
-func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft) (result *Customer, err error) {
-	err = client.Create(ctx, CustomerURLPath, nil, draft, &result)
+func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, CustomerURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) CustomerQuery(ctx context.Context, input *QueryInput) (res
 }
 
 // CustomerDeleteWithKey for type Customer
-func (client *Client) CustomerDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool) (result *Customer, err error) {
+func (client *Client) CustomerDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool, opts ...RequestOption) (result *Customer, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("customers/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) CustomerDeleteWithKey(ctx context.Context, key string, ver
 }
 
 // CustomerGetWithKey for type Customer
-func (client *Client) CustomerGetWithKey(ctx context.Context, key string) (result *Customer, err error) {
-	err = client.Get(ctx, strings.Replace("customers/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) CustomerGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("customers/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type CustomerUpdateWithKeyInput struct {
 }
 
 // CustomerUpdateWithKey for type Customer
-func (client *Client) CustomerUpdateWithKey(ctx context.Context, input *CustomerUpdateWithKeyInput) (result *Customer, err error) {
-	err = client.Update(ctx, strings.Replace("customers/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CustomerUpdateWithKey(ctx context.Context, input *CustomerUpdateWithKeyInput, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("customers/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +83,13 @@ func (client *Client) CustomerUpdateWithKey(ctx context.Context, input *Customer
 }
 
 // CustomerDeleteWithID for type Customer
-func (client *Client) CustomerDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool) (result *Customer, err error) {
+func (client *Client) CustomerDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Customer, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("customers/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -80,8 +98,12 @@ func (client *Client) CustomerDeleteWithID(ctx context.Context, ID string, versi
 }
 
 // CustomerGetWithID for type Customer
-func (client *Client) CustomerGetWithID(ctx context.Context, ID string) (result *Customer, err error) {
-	err = client.Get(ctx, strings.Replace("customers/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) CustomerGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("customers/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +118,12 @@ type CustomerUpdateWithIDInput struct {
 }
 
 // CustomerUpdateWithID for type Customer
-func (client *Client) CustomerUpdateWithID(ctx context.Context, input *CustomerUpdateWithIDInput) (result *Customer, err error) {
-	err = client.Update(ctx, strings.Replace("customers/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CustomerUpdateWithID(ctx context.Context, input *CustomerUpdateWithIDInput, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("customers/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

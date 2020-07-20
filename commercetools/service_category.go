@@ -13,8 +13,12 @@ import (
 const CategoryURLPath = "categories"
 
 // CategoryCreate creates a new instance of type Category
-func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft) (result *Category, err error) {
-	err = client.Create(ctx, CategoryURLPath, nil, draft, &result)
+func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, CategoryURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) CategoryQuery(ctx context.Context, input *QueryInput) (res
 }
 
 // CategoryDeleteWithKey for type Category
-func (client *Client) CategoryDeleteWithKey(ctx context.Context, key string, version int) (result *Category, err error) {
+func (client *Client) CategoryDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Category, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("categories/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -43,8 +50,12 @@ func (client *Client) CategoryDeleteWithKey(ctx context.Context, key string, ver
 }
 
 // CategoryGetWithKey for type Category
-func (client *Client) CategoryGetWithKey(ctx context.Context, key string) (result *Category, err error) {
-	err = client.Get(ctx, strings.Replace("categories/key={key}", "{key}", key, 1), nil, &result)
+func (client *Client) CategoryGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("categories/key={key}", "{key}", key, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -59,8 +70,12 @@ type CategoryUpdateWithKeyInput struct {
 }
 
 // CategoryUpdateWithKey for type Category
-func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *CategoryUpdateWithKeyInput) (result *Category, err error) {
-	err = client.Update(ctx, strings.Replace("categories/key={key}", "{key}", input.Key, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *CategoryUpdateWithKeyInput, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("categories/key={key}", "{key}", input.Key, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -68,10 +83,13 @@ func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *Category
 }
 
 // CategoryDeleteWithID for type Category
-func (client *Client) CategoryDeleteWithID(ctx context.Context, ID string, version int) (result *Category, err error) {
+func (client *Client) CategoryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *Category, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("categories/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -80,8 +98,12 @@ func (client *Client) CategoryDeleteWithID(ctx context.Context, ID string, versi
 }
 
 // CategoryGetWithID for type Category
-func (client *Client) CategoryGetWithID(ctx context.Context, ID string) (result *Category, err error) {
-	err = client.Get(ctx, strings.Replace("categories/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) CategoryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("categories/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -96,8 +118,12 @@ type CategoryUpdateWithIDInput struct {
 }
 
 // CategoryUpdateWithID for type Category
-func (client *Client) CategoryUpdateWithID(ctx context.Context, input *CategoryUpdateWithIDInput) (result *Category, err error) {
-	err = client.Update(ctx, strings.Replace("categories/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CategoryUpdateWithID(ctx context.Context, input *CategoryUpdateWithIDInput, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("categories/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

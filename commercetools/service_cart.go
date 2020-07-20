@@ -13,8 +13,12 @@ import (
 const CartURLPath = "carts"
 
 // CartCreate creates a new instance of type Cart
-func (client *Client) CartCreate(ctx context.Context, draft *CartDraft) (result *Cart, err error) {
-	err = client.Create(ctx, CartURLPath, nil, draft, &result)
+func (client *Client) CartCreate(ctx context.Context, draft *CartDraft, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Create(ctx, CartURLPath, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -31,10 +35,13 @@ func (client *Client) CartQuery(ctx context.Context, input *QueryInput) (result 
 }
 
 // CartDeleteWithID for type Cart
-func (client *Client) CartDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool) (result *Cart, err error) {
+func (client *Client) CartDeleteWithID(ctx context.Context, ID string, version int, dataErasure bool, opts ...RequestOption) (result *Cart, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
 	err = client.Delete(ctx, strings.Replace("carts/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
@@ -46,8 +53,12 @@ func (client *Client) CartDeleteWithID(ctx context.Context, ID string, version i
 CartGetWithID The cart may not contain up-to-date prices, discounts etc.
 If you want to ensure they’re up-to-date, send an Update request with the Recalculate update action instead.
 */
-func (client *Client) CartGetWithID(ctx context.Context, ID string) (result *Cart, err error) {
-	err = client.Get(ctx, strings.Replace("carts/{ID}", "{ID}", ID, 1), nil, &result)
+func (client *Client) CartGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Get(ctx, strings.Replace("carts/{ID}", "{ID}", ID, 1), params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -62,8 +73,12 @@ type CartUpdateWithIDInput struct {
 }
 
 // CartUpdateWithID for type Cart
-func (client *Client) CartUpdateWithID(ctx context.Context, input *CartUpdateWithIDInput) (result *Cart, err error) {
-	err = client.Update(ctx, strings.Replace("carts/{ID}", "{ID}", input.ID, 1), nil, input.Version, input.Actions, &result)
+func (client *Client) CartUpdateWithID(ctx context.Context, input *CartUpdateWithIDInput, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	err = client.Update(ctx, strings.Replace("carts/{ID}", "{ID}", input.ID, 1), params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
