@@ -7,18 +7,18 @@ import (
 	"github.com/dave/jennifer/jen"
 )
 
-// Create the `<method>Update` function
+// Generate the `<service>Update` function
 func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	updateIdentifier := "ID"
 	if strings.Contains(resourceMethod.MethodName, "Key") {
 		updateIdentifier = "Key"
 	}
 
-	methodName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	funcName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	updateStructID := fmt.Sprintf("%sUpdate%sInput", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	updateObjectType := fmt.Sprintf("%sUpdateAction", resource.CodeName)
 
-	c := jen.Commentf("%s is input for function %s", updateStructID, methodName).Line()
+	c := jen.Commentf("%s is input for function %s", updateStructID, funcName).Line()
 	c.Type().Id(updateStructID).Struct(
 		jen.Id(updateIdentifier).String(),
 		jen.Id("Version").Int(),
@@ -33,7 +33,7 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 	)
 	clientMethod := "Update"
 
-	returnParams := jen.Id("client").Op("*").Id("Client")
+	structReceiver := jen.Id("client").Op("*").Id("Client")
 	/*
 		TODO: add this sanity check
 		if input.ID == "" {
@@ -44,8 +44,13 @@ func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService,
 	if httpMethod.Description != "" {
 		description = httpMethod.Description
 	}
-	c.Commentf("%s %s", methodName, description).Line()
-	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+	returnParams := jen.List(
+		jen.Id("result").Op("*").Id(resourceService.ResourceType),
+		jen.Err().Error(),
+	)
+
+	c.Commentf("%s %s", funcName, description).Line()
+	c.Func().Params(structReceiver).Id(funcName).Params(methodParams).Parens(returnParams).Block(
 		jen.Id("params").Op(":=").Qual("net/url", "Values").Block(),
 
 		// for _, opt := range opts {
