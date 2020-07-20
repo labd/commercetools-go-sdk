@@ -1,6 +1,11 @@
 0.2.0 (unreleased)
 ==================
- - *Backwards incompatible:* Add context parameter to all method calls
+ - *Backwards incompatible:* Add context parameter to all method calls.
+ - Add support for reference expansion by passing a function option as last
+   parameter. For example:
+
+      client.ProductCreate(
+         ctx, draft, commercetools.WithReferenceExpansion("productType))
 
 
 0.1.0 (2020-07-07)
