@@ -1,5 +1,6 @@
 vendor/
 run.sh
+code-generate/code-generate
 
 # IDE
 .vscode
