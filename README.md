@@ -22,53 +22,68 @@ use our [unofficial Python SDK for Commercetools](https://github.com/labd/commer
 package main
 
 import (
-    "log"
-
-    "golang.org/x/oauth2/clientcredentials"
+	"context"
+	"fmt"
+	"log"
+	"math/rand"
+	"time"
+    
     "github.com/labd/commercetools-go-sdk/commercetools"
 )
 
 func main() {
 
-    oauth2Config := &clientcredentials.Config{
-        ClientID:     "<client-id>",
-        ClientSecret: "<client-secret>",
-        Scopes:       []string{"manage_project:<scopes>"},
-        TokenURL:     "https://auth.sphere.io/oauth/token",
-    }
-    httpClient := oauth2Config.Client(context.TODO())
-
     // Create the new client. When an empty value is passed it will use the CTP_*
     // environment variables to get the value. The HTTPClient arg is optional,
     // and when empty will automatically be created using the env values.
-    client := commercetools.New(&commercetools.Config{
-        ProjectKey: "<project-key>",
-        URL:        "https://api.sphere.io",
-        HTTPClient: httpClient,
-        LibraryName: "some-library",
-        LibraryVersion: "v1.0.0",
-        ContactURL: "https://example.org",
-        ContactEmail: "opensource@example.org",
-    })
+	client, err := commercetools.NewClient(&commercetools.ClientConfig{
+		ProjectKey: "<project-key>",
+		Endpoints:  commercetools.NewClientEndpoints("europe-west1", "gcp"),
+		Credentials: &commercetools.ClientCredentials{
+			ClientID:     "<client-id>",
+			ClientSecret: "<client-secret>",
+			Scopes:       []string{"<scope>"},
+		},
+	})
+    
+	ctx := context.Background()
 
-    product, err := client.Products.Create(&commercetools.ProductDraft{
-        Key: "test-product",
-        Name: commercetools.LocalizedString{
-            "nl": "Een test product",
-            "en": "A test product",
-        },
-        ProductType: commercetools.ProductTypeReference{
-            ID:     "8750e1fd-f431-481f-9296-967b1e56bf49",
-        },
-        Slug: commercetools.LocalizedString{
-            "nl": "een-test-product",
-            "en": "a-test-product",
-        },
-    }
-    if err != nil {
-        log.Fatal(err)
-    }
+    // Get or Createa product type
+	productTypeDraft := commercetools.ProductTypeDraft{
+		Name: "a-product-type",
+		Key:  "a-product-type",
+	}
 
+	productType, err := client.ProductTypeGetWithKey(ctx, productTypeDraft.Key)
+	if productType == nil {
+		productType, err = client.ProductTypeCreate(ctx, &productTypeDraft)
+		if err != nil {
+			log.Println(err)
+		}
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	randomID := r.Int()
+	productDraft := &commercetools.ProductDraft{
+		Key: fmt.Sprintf("test-product-%d", randomID),
+		Name: &commercetools.LocalizedString{
+			"nl": "Een test product",
+			"en": "A test product",
+		},
+		ProductType: &commercetools.ProductTypeResourceIdentifier{
+			ID: productType.ID,
+		},
+		Slug: &commercetools.LocalizedString{
+			"nl": fmt.Sprintf("een-test-product-%d", randomID),
+			"en": fmt.Sprintf("a-test-product-%d", randomID),
+		},
+	}
+
+	product, err := client.ProductCreate(ctx, productDraft)
+	if err != nil {
+		log.Fatal(err)
+	}
+    
     log.Print(product)
 }
 ```
@@ -81,9 +96,6 @@ To generate code do the following steps:
 - `git clone https://github.com/commercetools/commercetools-api-reference.git` in the folder on the same level as the commercetools-go-sdk folder
 - `make generate`
 
-## Service implementation
-
-At the moment the SDK has service coverage for primarily Terraform configuration use-cases, for example declaring API Extensions, Subscriptions and Project Settings. Broader coverage will be implemented if our use-cases require it or via contributions of course!
 
 ### TODO for code generating the services:
 
