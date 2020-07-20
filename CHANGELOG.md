@@ -1,11 +1,14 @@
-0.2.0 (unreleased)
+0.2.0 (2020-07-20)
 ==================
- - *Backwards incompatible:* Add context parameter to all method calls.
+ - *Backwards incompatible:* Add context parameter to all method calls. (#51)
+ - Add a more simple Client factory as commercetools.NewClient() (#50)
  - Add support for reference expansion by passing a function option as last
    parameter. For example:
-
       client.ProductCreate(
          ctx, draft, commercetools.WithReferenceExpansion("productType))
+   See #53 for more information
+ - Add a GraphQL interface to the client (See #49)
+ - Improve handling of OAuth2 authentication errors (#48)
 
 
 0.1.0 (2020-07-07)
