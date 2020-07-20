@@ -22,11 +22,11 @@ use our [unofficial Python SDK for Commercetools](https://github.com/labd/commer
 package main
 
 import (
-	"context"
-	"fmt"
-	"log"
-	"math/rand"
-	"time"
+    "context"
+    "fmt"
+    "log"
+    "math/rand"
+    "time"
     
     "github.com/labd/commercetools-go-sdk/commercetools"
 )
@@ -36,53 +36,53 @@ func main() {
     // Create the new client. When an empty value is passed it will use the CTP_*
     // environment variables to get the value. The HTTPClient arg is optional,
     // and when empty will automatically be created using the env values.
-	client, err := commercetools.NewClient(&commercetools.ClientConfig{
-		ProjectKey: "<project-key>",
-		Endpoints:  commercetools.NewClientEndpoints("europe-west1", "gcp"),
-		Credentials: &commercetools.ClientCredentials{
-			ClientID:     "<client-id>",
-			ClientSecret: "<client-secret>",
-			Scopes:       []string{"<scope>"},
-		},
-	})
+    client, err := commercetools.NewClient(&commercetools.ClientConfig{
+        ProjectKey: "<project-key>",
+        Endpoints:  commercetools.NewClientEndpoints("europe-west1", "gcp"),
+        Credentials: &commercetools.ClientCredentials{
+            ClientID:     "<client-id>",
+            ClientSecret: "<client-secret>",
+            Scopes:       []string{"<scope>"},
+        },
+    })
     
-	ctx := context.Background()
+    ctx := context.Background()
 
     // Get or Createa product type
-	productTypeDraft := commercetools.ProductTypeDraft{
-		Name: "a-product-type",
-		Key:  "a-product-type",
-	}
+    productTypeDraft := commercetools.ProductTypeDraft{
+        Name: "a-product-type",
+        Key:  "a-product-type",
+    }
 
-	productType, err := client.ProductTypeGetWithKey(ctx, productTypeDraft.Key)
-	if productType == nil {
-		productType, err = client.ProductTypeCreate(ctx, &productTypeDraft)
-		if err != nil {
-			log.Println(err)
-		}
-	}
+    productType, err := client.ProductTypeGetWithKey(ctx, productTypeDraft.Key)
+    if productType == nil {
+        productType, err = client.ProductTypeCreate(ctx, &productTypeDraft)
+        if err != nil {
+            log.Println(err)
+        }
+    }
 
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	randomID := r.Int()
-	productDraft := &commercetools.ProductDraft{
-		Key: fmt.Sprintf("test-product-%d", randomID),
-		Name: &commercetools.LocalizedString{
-			"nl": "Een test product",
-			"en": "A test product",
-		},
-		ProductType: &commercetools.ProductTypeResourceIdentifier{
-			ID: productType.ID,
-		},
-		Slug: &commercetools.LocalizedString{
-			"nl": fmt.Sprintf("een-test-product-%d", randomID),
-			"en": fmt.Sprintf("a-test-product-%d", randomID),
-		},
-	}
+    r := rand.New(rand.NewSource(time.Now().UnixNano()))
+    randomID := r.Int()
+    productDraft := &commercetools.ProductDraft{
+        Key: fmt.Sprintf("test-product-%d", randomID),
+        Name: &commercetools.LocalizedString{
+            "nl": "Een test product",
+            "en": "A test product",
+        },
+        ProductType: &commercetools.ProductTypeResourceIdentifier{
+            ID: productType.ID,
+        },
+        Slug: &commercetools.LocalizedString{
+            "nl": fmt.Sprintf("een-test-product-%d", randomID),
+            "en": fmt.Sprintf("a-test-product-%d", randomID),
+        },
+    }
 
-	product, err := client.ProductCreate(ctx, productDraft)
-	if err != nil {
-		log.Fatal(err)
-	}
+    product, err := client.ProductCreate(ctx, productDraft)
+    if err != nil {
+        log.Fatal(err)
+    }
     
     log.Print(product)
 }
