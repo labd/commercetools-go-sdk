@@ -9,8 +9,8 @@ import (
 
 // Generate the `<service>DeleteWithID` and `<service>DeleteWithKey` functions
 func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	methodName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
+	funcName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 
 	deleteWithVersion := true
 	// TODO: nasty hack / incomplete API def
@@ -22,31 +22,38 @@ func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceServic
 		jen.Id("ctx").Qual("context", "Context"),
 		jen.Id(resourceIdentifier.ArgName).String(),
 	}
+	returnParams := jen.List(
+		jen.Id("result").Op("*").Id(resourceService.ResourceType),
+		jen.Err().Error())
 
 	setVersionParam := jen.Empty()
 	if deleteWithVersion {
 		methodParamList = append(methodParamList, jen.Id("version").Int())
-		setVersionParam = jen.Id("params").Op(".").Id("Set").Call(jen.Lit("version"), jen.Qual("strconv", "Itoa").Call(jen.Id("version")))
+		setVersionParam = jen.Id("params").Op(".").Id("Set").Call(
+			jen.Lit("version"),
+			jen.Qual("strconv", "Itoa").Call(jen.Id("version")))
 	}
+
 	setDataErasure := jen.Empty()
 	if httpMethod.HasTrait("dataErasure") {
 		methodParamList = append(methodParamList, jen.Id("dataErasure").Bool())
-
-		setDataErasure = jen.Id("params").Op(".").Id("Set").Call(jen.Lit("dataErasure"), jen.Qual("strconv", "FormatBool").Call(jen.Id("dataErasure")))
+		setDataErasure = jen.Id("params").Op(".").Id("Set").Call(
+			jen.Lit("dataErasure"),
+			jen.Qual("strconv", "FormatBool").Call(jen.Id("dataErasure")))
 	}
 	methodParamList = append(methodParamList, jen.Id("opts").Op("...").Id("RequestOption"))
 
 	methodParams := jen.List(methodParamList...)
 	clientMethod := "Delete"
 
-	returnParams := jen.Id("client").Op("*").Id("Client")
+	structReceiver := jen.Id("client").Op("*").Id("Client")
 
 	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
 	if httpMethod.Description != "" {
 		description = httpMethod.Description
 	}
-	c := jen.Commentf("%s %s", methodName, description).Line()
-	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+	c := jen.Commentf("%s %s", funcName, description).Line()
+	c.Func().Params(structReceiver).Id(funcName).Params(methodParams).Parens(returnParams).Block(
 		jen.Id("params").Op(":=").Qual("net/url", "Values").Block(),
 		setVersionParam,
 		setDataErasure,

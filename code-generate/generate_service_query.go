@@ -6,17 +6,20 @@ import (
 	"github.com/dave/jennifer/jen"
 )
 
-// Create the `<method>Query` function
+// Generate the `<service>Query` function
 func queryResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
-	queryName := fmt.Sprintf("%sQuery", resource.CodeName)
-	returnParams := jen.Id("client").Op("*").Id("Client")
+	funcName := fmt.Sprintf("%sQuery", resource.CodeName)
+	structReceiver := jen.Id("client").Op("*").Id("Client")
 	queryParams := jen.List(
 		jen.Id("ctx").Qual("context", "Context"),
 		jen.Id("input").Op("*").Id("QueryInput"),
 	)
+	returnParams := jen.List(
+		jen.Id("result").Op("*").Id(resourceService.ResourceQueryType),
+		jen.Err().Error())
 
-	c := jen.Commentf("%s allows querying for type %s", queryName, resourceService.ResourceType).Line()
-	c.Func().Params(returnParams).Id(queryName).Params(queryParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceQueryType), jen.Err().Error())).Block(
+	c := jen.Commentf("%s allows querying for type %s", funcName, resourceService.ResourceType).Line()
+	c.Func().Params(structReceiver).Id(funcName).Params(queryParams).Parens(returnParams).Block(
 		jen.Id("err").Op("=").Id("client").Op(".").Id("Query").Call(
 			jen.Id("ctx"),
 			jen.Id(urlPathName),

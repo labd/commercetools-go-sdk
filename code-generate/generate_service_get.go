@@ -9,8 +9,8 @@ import (
 
 // Generate the `<service>Get` function
 func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	methodName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-	returnParams := jen.Id("client").Op("*").Id("Client")
+	funcName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+	structReceiver := jen.Id("client").Op("*").Id("Client")
 	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
 	methodParams := jen.List(
 		jen.Id("ctx").Qual("context", "Context"),
@@ -22,8 +22,8 @@ func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, 
 	if httpMethod.Description != "" {
 		description = httpMethod.Description
 	}
-	c := jen.Commentf("%s %s", methodName, description).Line()
-	c.Func().Params(returnParams).Id(methodName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
+	c := jen.Commentf("%s %s", funcName, description).Line()
+	c.Func().Params(structReceiver).Id(funcName).Params(methodParams).Parens(jen.List(jen.Id("result").Op("*").Id(resourceService.ResourceType), jen.Err().Error())).Block(
 		jen.Id("params").Op(":=").Qual("net/url", "Values").Block(),
 
 		// for _, opt := range opts {
