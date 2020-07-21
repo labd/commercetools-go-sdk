@@ -1412,7 +1412,7 @@ type CustomerDateOfBirthSetMessage struct {
 	ID                              string                   `json:"id"`
 	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
 	CreatedAt                       time.Time                `json:"createdAt"`
-	DateOfBirth                     Date                     `json:"dateOfBirth"`
+	DateOfBirth                     *Date                    `json:"dateOfBirth"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1426,7 +1426,7 @@ func (obj CustomerDateOfBirthSetMessage) MarshalJSON() ([]byte, error) {
 
 // CustomerDateOfBirthSetMessagePayload implements the interface MessagePayload
 type CustomerDateOfBirthSetMessagePayload struct {
-	DateOfBirth Date `json:"dateOfBirth"`
+	DateOfBirth *Date `json:"dateOfBirth"`
 }
 
 // MarshalJSON override to set the discriminator value
