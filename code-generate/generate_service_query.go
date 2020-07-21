@@ -1,14 +1,11 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/dave/jennifer/jen"
 )
 
 // Generate the `<service>Query` function
-func queryResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
-	funcName := fmt.Sprintf("%sQuery", resource.CodeName)
+func generateServiceQuery(funcName string, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 	queryParams := jen.List(
 		jen.Id("ctx").Qual("context", "Context"),

@@ -1,14 +1,11 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/dave/jennifer/jen"
 )
 
 // Generate the `<service>Create` function
-func createResourceCode(resource *RamlType, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
-	funcName := fmt.Sprintf("%sCreate", resource.CodeName)
+func generateServiceCreate(funcName string, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 	createParams := jen.List(
 		jen.Id("ctx").Qual("context", "Context"),

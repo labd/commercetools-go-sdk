@@ -2,15 +2,13 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/dave/jennifer/jen"
 )
 
 // Generate the `<service>DeleteWithID` and `<service>DeleteWithKey` functions
-func deleteResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
+func generateServiceDelete(funcName string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
-	funcName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
 
 	deleteWithVersion := true
 	// TODO: nasty hack / incomplete API def

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dave/jennifer/jen"
 )
@@ -28,6 +29,7 @@ func generateServices(objects []RamlType, resources []ResourceService) {
 		if resource.CodeName == "CustomObject" {
 			continue
 		}
+
 		// TODO: ugly hack
 		resourceService.ResourceType = CreateCodeName(resourceService.ResourceType)
 		resourceService.ResourceDraftType = CreateCodeName(resourceService.ResourceDraftType)
@@ -39,12 +41,14 @@ func generateServices(objects []RamlType, resources []ResourceService) {
 		f.Add(c)
 
 		if resourceService.HasCreate {
-			createCode := createResourceCode(resource, resourceService, urlPathName)
+			funcName := fmt.Sprintf("%sCreate", resource.CodeName)
+			createCode := generateServiceCreate(funcName, resourceService, urlPathName)
 			f.Add(createCode)
 		}
 
 		if resourceService.HasList {
-			queryCode := queryResourceCode(resource, resourceService, urlPathName)
+			funcName := fmt.Sprintf("%sQuery", resource.CodeName)
+			queryCode := generateServiceQuery(funcName, resourceService, urlPathName)
 			f.Add(queryCode)
 		}
 
@@ -67,13 +71,16 @@ func generateResourceHTTPMethodsCode(resource *RamlType, resourceService Resourc
 		for _, httpMethod := range resourceMethod.HTTPMethods {
 			switch httpMethod.HTTPMethod {
 			case "get":
-				c := getResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				funcName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+				c := generateServiceGet(funcName, resourceService, resourceMethod, httpMethod)
 				httpMethodsCode = append(httpMethodsCode, c)
 			case "post":
-				c := postResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				funcName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+				c := generateServiceUpdate(funcName, resource.CodeName, resourceService, resourceMethod, httpMethod)
 				httpMethodsCode = append(httpMethodsCode, c)
 			case "delete":
-				c := deleteResourceHTTPMethod(resource, resourceService, resourceMethod, httpMethod)
+				funcName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+				c := generateServiceDelete(funcName, resourceService, resourceMethod, httpMethod)
 				httpMethodsCode = append(httpMethodsCode, c)
 			default:
 				continue

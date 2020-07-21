@@ -2,18 +2,15 @@ package main
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/dave/jennifer/jen"
 )
 
 // Generate the `<service>Update` function
-func postResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-
+func generateServiceUpdate(funcName string, resourceName string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
-	funcName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-	updateStructID := fmt.Sprintf("%sUpdate%sInput", resource.CodeName, strings.Title(resourceMethod.MethodName))
-	updateObjectType := fmt.Sprintf("%sUpdateAction", resource.CodeName)
+	updateStructID := fmt.Sprintf("%sInput", funcName)
+	updateObjectType := fmt.Sprintf("%sUpdateAction", resourceName)
 
 	// Generate the `type <resource>With<ID>Input struct {}`
 	c := jen.Commentf("%s is input for function %s", updateStructID, funcName).Line()

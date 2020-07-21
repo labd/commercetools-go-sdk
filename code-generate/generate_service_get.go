@@ -8,8 +8,7 @@ import (
 )
 
 // Generate the `<service>Get` function
-func getResourceHTTPMethod(resource *RamlType, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	funcName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
+func generateServiceGet(funcName string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
 	methodParams := jen.List(
