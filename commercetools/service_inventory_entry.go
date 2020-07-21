@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// InventoryEntryURLPath is the commercetools API path.
-const InventoryEntryURLPath = "inventory"
-
 // InventoryEntryCreate creates a new instance of type InventoryEntry
 func (client *Client) InventoryEntryCreate(ctx context.Context, draft *InventoryEntryDraft, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 		opt(&params)
 	}
 
-	err = client.Create(ctx, InventoryEntryURLPath, params, draft, &result)
+	endpoint := "inventory"
+	err = client.Create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +25,10 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 }
 
 // InventoryEntryQuery allows querying for type InventoryEntry
+// for type InventoryPagedQueryResponse
 func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput) (result *InventoryPagedQueryResponse, err error) {
-	err = client.Query(ctx, InventoryEntryURLPath, input.toParams(), &result)
+	endpoint := "inventory"
+	err = client.Query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -36,14 +36,14 @@ func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput
 }
 
 // InventoryEntryDeleteWithID for type InventoryEntry
-func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("inventory/%s", id)
+	endpoint := fmt.Sprintf("inventory/%s", ID)
 	err = client.Delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
@@ -52,12 +52,12 @@ func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, id string,
 }
 
 // InventoryEntryGetWithID for type InventoryEntry
-func (client *Client) InventoryEntryGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("inventory/%s", id)
+	endpoint := fmt.Sprintf("inventory/%s", ID)
 	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err

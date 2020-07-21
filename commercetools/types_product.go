@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // FacetTypes is an enum type
@@ -55,21 +53,21 @@ func mapDiscriminatorFacetResult(input interface{}) (FacetResult, error) {
 	switch discriminator {
 	case "filter":
 		new := FilteredFacetResult{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "range":
 		new := RangeFacetResult{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "terms":
 		new := TermFacetResult{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -94,322 +92,322 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 	switch discriminator {
 	case "addAsset":
 		new := ProductAddAssetAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addExternalImage":
 		new := ProductAddExternalImageAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addPrice":
 		new := ProductAddPriceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addToCategory":
 		new := ProductAddToCategoryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addVariant":
 		new := ProductAddVariantAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAssetName":
 		new := ProductChangeAssetNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAssetOrder":
 		new := ProductChangeAssetOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeMasterVariant":
 		new := ProductChangeMasterVariantAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := ProductChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changePrice":
 		new := ProductChangePriceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeSlug":
 		new := ProductChangeSlugAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "legacySetSku":
 		new := ProductLegacySetSkuAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "moveImageToPosition":
 		new := ProductMoveImageToPositionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "publish":
 		new := ProductPublishAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeAsset":
 		new := ProductRemoveAssetAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeFromCategory":
 		new := ProductRemoveFromCategoryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeImage":
 		new := ProductRemoveImageAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removePrice":
 		new := ProductRemovePriceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeVariant":
 		new := ProductRemoveVariantAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "revertStagedChanges":
 		new := ProductRevertStagedChangesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "revertStagedVariantChanges":
 		new := ProductRevertStagedVariantChangesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetCustomField":
 		new := ProductSetAssetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetCustomType":
 		new := ProductSetAssetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetDescription":
 		new := ProductSetAssetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetKey":
 		new := ProductSetAssetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetSources":
 		new := ProductSetAssetSourcesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetTags":
 		new := ProductSetAssetTagsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAttribute":
 		new := ProductSetAttributeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAttributeInAllVariants":
 		new := ProductSetAttributeInAllVariantsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCategoryOrderHint":
 		new := ProductSetCategoryOrderHintAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := ProductSetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDiscountedPrice":
 		new := ProductSetDiscountedPriceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setImageLabel":
 		new := ProductSetImageLabelAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := ProductSetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMetaDescription":
 		new := ProductSetMetaDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMetaKeywords":
 		new := ProductSetMetaKeywordsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMetaTitle":
 		new := ProductSetMetaTitleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setPrices":
 		new := ProductSetPricesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setProductPriceCustomField":
 		new := ProductSetProductPriceCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setProductPriceCustomType":
 		new := ProductSetProductPriceCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setProductVariantKey":
 		new := ProductSetProductVariantKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSearchKeywords":
 		new := ProductSetSearchKeywordsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSku":
 		new := ProductSetSkuAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTaxCategory":
 		new := ProductSetTaxCategoryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionState":
 		new := ProductTransitionStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "unpublish":
 		new := ProductUnpublishAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -434,14 +432,14 @@ func mapDiscriminatorSuggestTokenizer(input interface{}) (SuggestTokenizer, erro
 	switch discriminator {
 	case "custom":
 		new := CustomTokenizer{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "whitespace":
 		new := WhitespaceTokenizer{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

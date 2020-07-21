@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ProjectUpdateAction uses action as discriminator attribute
@@ -26,63 +24,63 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 	switch discriminator {
 	case "changeCountries":
 		new := ProjectChangeCountriesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeCountryTaxRateFallbackEnabled":
 		new := ProjectChangeCountryTaxRateFallbackEnabledAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeCurrencies":
 		new := ProjectChangeCurrenciesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLanguages":
 		new := ProjectChangeLanguagesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeMessagesConfiguration":
 		new := ProjectChangeMessagesConfigurationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeMessagesEnabled":
 		new := ProjectChangeMessagesEnabledAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := ProjectChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExternalOAuth":
 		new := ProjectSetExternalOAuthAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingRateInputType":
 		new := ProjectSetShippingRateInputTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -113,21 +111,21 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 	switch discriminator {
 	case "CartClassification":
 		new := CartClassificationType{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CartScore":
 		new := CartScoreType{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CartValue":
 		new := CartValueType{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

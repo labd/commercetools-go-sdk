@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // OrderState is an enum type
@@ -84,287 +82,287 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 	switch discriminator {
 	case "addDelivery":
 		new := OrderAddDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addItemShippingAddress":
 		new := OrderAddItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addParcelToDelivery":
 		new := OrderAddParcelToDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addPayment":
 		new := OrderAddPaymentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addReturnInfo":
 		new := OrderAddReturnInfoAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeOrderState":
 		new := OrderChangeOrderStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changePaymentState":
 		new := OrderChangePaymentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeShipmentState":
 		new := OrderChangeShipmentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "importCustomLineItemState":
 		new := OrderImportCustomLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "importLineItemState":
 		new := OrderImportLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDelivery":
 		new := OrderRemoveDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeItemShippingAddress":
 		new := OrderRemoveItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeParcelFromDelivery":
 		new := OrderRemoveParcelFromDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removePayment":
 		new := OrderRemovePaymentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setBillingAddress":
 		new := OrderSetBillingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := OrderSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemCustomField":
 		new := OrderSetCustomLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemCustomType":
 		new := OrderSetCustomLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemShippingDetails":
 		new := OrderSetCustomLineItemShippingDetailsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := OrderSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerEmail":
 		new := OrderSetCustomerEmailAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerId":
 		new := OrderSetCustomerIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeliveryAddress":
 		new := OrderSetDeliveryAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeliveryItems":
 		new := OrderSetDeliveryItemsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := OrderSetLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := OrderSetLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemShippingDetails":
 		new := OrderSetLineItemShippingDetailsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := OrderSetLocaleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setOrderNumber":
 		new := OrderSetOrderNumberAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setParcelItems":
 		new := OrderSetParcelItemsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setParcelMeasurements":
 		new := OrderSetParcelMeasurementsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setParcelTrackingData":
 		new := OrderSetParcelTrackingDataAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setReturnPaymentState":
 		new := OrderSetReturnPaymentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setReturnShipmentState":
 		new := OrderSetReturnShipmentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingAddress":
 		new := OrderSetShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setStore":
 		new := OrderSetStoreAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionCustomLineItemState":
 		new := OrderTransitionCustomLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionLineItemState":
 		new := OrderTransitionLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionState":
 		new := OrderTransitionStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "updateItemShippingAddress":
 		new := OrderUpdateItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "updateSyncInfo":
 		new := OrderUpdateSyncInfoAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -389,14 +387,14 @@ func mapDiscriminatorReturnItem(input interface{}) (ReturnItem, error) {
 	switch discriminator {
 	case "CustomLineItemReturnItem":
 		new := CustomLineItemReturnItem{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "LineItemReturnItem":
 		new := LineItemReturnItem{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -421,448 +419,448 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 	switch discriminator {
 	case "addCustomLineItem":
 		new := StagedOrderAddCustomLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addDelivery":
 		new := StagedOrderAddDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addDiscountCode":
 		new := StagedOrderAddDiscountCodeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addItemShippingAddress":
 		new := StagedOrderAddItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addLineItem":
 		new := StagedOrderAddLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addParcelToDelivery":
 		new := StagedOrderAddParcelToDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addPayment":
 		new := StagedOrderAddPaymentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addReturnInfo":
 		new := StagedOrderAddReturnInfoAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addShoppingList":
 		new := StagedOrderAddShoppingListAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeCustomLineItemMoney":
 		new := StagedOrderChangeCustomLineItemMoneyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeCustomLineItemQuantity":
 		new := StagedOrderChangeCustomLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemQuantity":
 		new := StagedOrderChangeLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeOrderState":
 		new := StagedOrderChangeOrderStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changePaymentState":
 		new := StagedOrderChangePaymentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeShipmentState":
 		new := StagedOrderChangeShipmentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTaxCalculationMode":
 		new := StagedOrderChangeTaxCalculationModeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTaxMode":
 		new := StagedOrderChangeTaxModeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTaxRoundingMode":
 		new := StagedOrderChangeTaxRoundingModeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "importCustomLineItemState":
 		new := StagedOrderImportCustomLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "importLineItemState":
 		new := StagedOrderImportLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeCustomLineItem":
 		new := StagedOrderRemoveCustomLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDelivery":
 		new := StagedOrderRemoveDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDiscountCode":
 		new := StagedOrderRemoveDiscountCodeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeItemShippingAddress":
 		new := StagedOrderRemoveItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeLineItem":
 		new := StagedOrderRemoveLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeParcelFromDelivery":
 		new := StagedOrderRemoveParcelFromDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removePayment":
 		new := StagedOrderRemovePaymentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setBillingAddress":
 		new := StagedOrderSetBillingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCountry":
 		new := StagedOrderSetCountryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := StagedOrderSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemCustomField":
 		new := StagedOrderSetCustomLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemCustomType":
 		new := StagedOrderSetCustomLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemShippingDetails":
 		new := StagedOrderSetCustomLineItemShippingDetailsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemTaxAmount":
 		new := StagedOrderSetCustomLineItemTaxAmountAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomLineItemTaxRate":
 		new := StagedOrderSetCustomLineItemTaxRateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomShippingMethod":
 		new := StagedOrderSetCustomShippingMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := StagedOrderSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerEmail":
 		new := StagedOrderSetCustomerEmailAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerGroup":
 		new := StagedOrderSetCustomerGroupAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomerId":
 		new := StagedOrderSetCustomerIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeliveryAddress":
 		new := StagedOrderSetDeliveryAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeliveryItems":
 		new := StagedOrderSetDeliveryItemsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := StagedOrderSetLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := StagedOrderSetLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemPrice":
 		new := StagedOrderSetLineItemPriceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemShippingDetails":
 		new := StagedOrderSetLineItemShippingDetailsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemTaxAmount":
 		new := StagedOrderSetLineItemTaxAmountAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemTaxRate":
 		new := StagedOrderSetLineItemTaxRateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemTotalPrice":
 		new := StagedOrderSetLineItemTotalPriceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := StagedOrderSetLocaleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setOrderNumber":
 		new := StagedOrderSetOrderNumberAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setOrderTotalTax":
 		new := StagedOrderSetOrderTotalTaxAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setParcelItems":
 		new := StagedOrderSetParcelItemsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setParcelMeasurements":
 		new := StagedOrderSetParcelMeasurementsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setParcelTrackingData":
 		new := StagedOrderSetParcelTrackingDataAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setReturnPaymentState":
 		new := StagedOrderSetReturnPaymentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setReturnShipmentState":
 		new := StagedOrderSetReturnShipmentStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingAddress":
 		new := StagedOrderSetShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingAddressAndCustomShippingMethod":
 		new := StagedOrderSetShippingAddressAndCustomShippingMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingAddressAndShippingMethod":
 		new := StagedOrderSetShippingAddressAndShippingMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingMethod":
 		new := StagedOrderSetShippingMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingMethodTaxAmount":
 		new := StagedOrderSetShippingMethodTaxAmountAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingMethodTaxRate":
 		new := StagedOrderSetShippingMethodTaxRateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingRateInput":
 		new := StagedOrderSetShippingRateInputAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -875,35 +873,35 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 		return new, nil
 	case "transitionCustomLineItemState":
 		new := StagedOrderTransitionCustomLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionLineItemState":
 		new := StagedOrderTransitionLineItemStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionState":
 		new := StagedOrderTransitionStateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "updateItemShippingAddress":
 		new := StagedOrderUpdateItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "updateSyncInfo":
 		new := StagedOrderUpdateSyncInfoAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

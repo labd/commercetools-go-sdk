@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ShoppingListUpdateAction uses action as discriminator attribute
@@ -26,161 +24,161 @@ func mapDiscriminatorShoppingListUpdateAction(input interface{}) (ShoppingListUp
 	switch discriminator {
 	case "addLineItem":
 		new := ShoppingListAddLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addTextLineItem":
 		new := ShoppingListAddTextLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemQuantity":
 		new := ShoppingListChangeLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemsOrder":
 		new := ShoppingListChangeLineItemsOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := ShoppingListChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemName":
 		new := ShoppingListChangeTextLineItemNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemQuantity":
 		new := ShoppingListChangeTextLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemsOrder":
 		new := ShoppingListChangeTextLineItemsOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeLineItem":
 		new := ShoppingListRemoveLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeTextLineItem":
 		new := ShoppingListRemoveTextLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAnonymousId":
 		new := ShoppingListSetAnonymousIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := ShoppingListSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := ShoppingListSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomer":
 		new := ShoppingListSetCustomerAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeleteDaysAfterLastModification":
 		new := ShoppingListSetDeleteDaysAfterLastModificationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := ShoppingListSetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := ShoppingListSetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := ShoppingListSetLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := ShoppingListSetLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSlug":
 		new := ShoppingListSetSlugAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemCustomField":
 		new := ShoppingListSetTextLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemCustomType":
 		new := ShoppingListSetTextLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemDescription":
 		new := ShoppingListSetTextLineItemDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

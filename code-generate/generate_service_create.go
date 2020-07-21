@@ -5,21 +5,26 @@ import (
 )
 
 // Generate the `<service>Create` function
-func generateServiceCreate(funcName string, resourceService ResourceService, urlPathName string) (code *jen.Statement) {
+func generateServiceCreate(method ServiceMethod, objects map[string]RamlType) (code *jen.Statement) {
 	structReceiver := jen.Id("client").Op("*").Id("Client")
-	createParams := jen.List(
+	methodParamList := []jen.Code{
 		jen.Id("ctx").Qual("context", "Context"),
-		jen.Id("draft").Op("*").Id(resourceService.ResourceDraftType),
+	}
+	extraParams := generateServiceArgumentCode(method)
+	methodParamList = append(methodParamList, extraParams...)
+	methodParamList = append(
+		methodParamList,
+		jen.Id("draft").Op("*").Id(method.InputType),
 		jen.Id("opts").Op("...").Id("RequestOption"),
 	)
-	returnParams := jen.List(
-		jen.Id("result").Op("*").Id(resourceService.ResourceType),
-		jen.Err().Error())
 
-	c := jen.Commentf("%s creates a new instance of type %s", funcName, resourceService.ResourceType).Line()
+	returnObject := objects[method.ReturnType]
+	returnParams := createServiceReturnList(method, returnObject)
+
+	c := jen.Commentf("%s creates a new instance of type %s", method.Name, method.ReturnType).Line()
 
 	// func (client *Client) ResourceCreate(ctx context.Context, draft *ResourceDraft, opts ...RequestOption) (result *APIClient, err error) {
-	c.Func().Params(structReceiver).Id(funcName).Params(createParams).Parens(returnParams).Block(
+	c.Func().Params(structReceiver).Id(method.Name).Params(jen.List(methodParamList...)).Parens(returnParams).Block(
 
 		// params := url.Values{}
 		// for _, opt := range opts {
@@ -32,9 +37,10 @@ func generateServiceCreate(funcName string, resourceService ResourceService, url
 		jen.Line(),
 
 		// err = client.Create(ctx, ProductURLPath, params, draft, &result)
+		jen.Id("endpoint").Op(":=").Add(generateServicePathCode(method)),
 		jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
 			jen.Id("ctx"),
-			jen.Id(urlPathName),
+			jen.Id("endpoint"),
 			jen.Id("params"),
 			jen.Id("draft"),
 			jen.Op("&").Id("result"),

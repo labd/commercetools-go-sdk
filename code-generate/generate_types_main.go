@@ -1,6 +1,10 @@
 package main
 
-import "github.com/dave/jennifer/jen"
+import (
+	"log"
+
+	"github.com/dave/jennifer/jen"
+)
 
 // Entry point to generate code object for a specific RamlType
 func generateTypes(objects []RamlType) {
@@ -12,6 +16,8 @@ func generateTypes(objects []RamlType) {
 	}
 
 	for pkg, packageObjects := range items {
+		filename := generateFilename(pkg)
+		log.Printf("Writing commercetools/%s\n", filename)
 		f := jen.NewFile("commercetools")
 		f.HeaderComment("Automatically generated, do not edit")
 
@@ -42,7 +48,6 @@ func generateTypes(objects []RamlType) {
 		addCodeObjects(f, mapObjects)
 		addCodeObjects(f, structObjects)
 
-		filename := generateFilename(pkg)
 		err := f.Save("commercetools/types_" + filename)
 		if err != nil {
 			panic(err)

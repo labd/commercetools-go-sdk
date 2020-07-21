@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // MyCartUpdateAction uses action as discriminator attribute
@@ -26,175 +24,175 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 	switch discriminator {
 	case "addDiscountCode":
 		new := MyCartAddDiscountCodeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addItemShippingAddress":
 		new := MyCartAddItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addLineItem":
 		new := MyCartAddLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addPayment":
 		new := MyCartAddPaymentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "applyDeltaToLineItemShippingDetailsTargets":
 		new := MyCartApplyDeltaToLineItemShippingDetailsTargetsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemQuantity":
 		new := MyCartChangeLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTaxMode":
 		new := MyCartChangeTaxModeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "recalculate":
 		new := MyCartRecalculateAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDiscountCode":
 		new := MyCartRemoveDiscountCodeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeItemShippingAddress":
 		new := MyCartRemoveItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeLineItem":
 		new := MyCartRemoveLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removePayment":
 		new := MyCartRemovePaymentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setBillingAddress":
 		new := MyCartSetBillingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCountry":
 		new := MyCartSetCountryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyCartSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomShippingMethod":
 		new := MyCartSetCustomShippingMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := MyCartSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeleteDaysAfterLastModification":
 		new := MyCartSetDeleteDaysAfterLastModificationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := MyCartSetLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := MyCartSetLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemShippingDetails":
 		new := MyCartSetLineItemShippingDetailsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := MyCartSetLocaleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingAddress":
 		new := MyCartSetShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingMethod":
 		new := MyCartSetShippingMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "updateItemShippingAddress":
 		new := MyCartUpdateItemShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -219,147 +217,147 @@ func mapDiscriminatorMyCustomerUpdateAction(input interface{}) (MyCustomerUpdate
 	switch discriminator {
 	case "addAddress":
 		new := MyCustomerAddAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addBillingAddressId":
 		new := MyCustomerAddBillingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addShippingAddressId":
 		new := MyCustomerAddShippingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAddress":
 		new := MyCustomerChangeAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeEmail":
 		new := MyCustomerChangeEmailAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeAddress":
 		new := MyCustomerRemoveAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeBillingAddressId":
 		new := MyCustomerRemoveBillingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeShippingAddressId":
 		new := MyCustomerRemoveShippingAddressIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCompanyName":
 		new := MyCustomerSetCompanyNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyCustomerSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := MyCustomerSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDateOfBirth":
 		new := MyCustomerSetDateOfBirthAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDefaultBillingAddress":
 		new := MyCustomerSetDefaultBillingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDefaultShippingAddress":
 		new := MyCustomerSetDefaultShippingAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setFirstName":
 		new := MyCustomerSetFirstNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLastName":
 		new := MyCustomerSetLastNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := MyCustomerSetLocaleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMiddleName":
 		new := MyCustomerSetMiddleNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSalutation":
 		new := MyCustomerSetSalutationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTitle":
 		new := MyCustomerSetTitleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setVatId":
 		new := MyCustomerSetVatIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -384,42 +382,42 @@ func mapDiscriminatorMyPaymentUpdateAction(input interface{}) (MyPaymentUpdateAc
 	switch discriminator {
 	case "addTransaction":
 		new := MyPaymentAddTransactionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAmountPlanned":
 		new := MyPaymentChangeAmountPlannedAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyPaymentSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoInterface":
 		new := MyPaymentSetMethodInfoInterfaceAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoMethod":
 		new := MyPaymentSetMethodInfoMethodAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoName":
 		new := MyPaymentSetMethodInfoNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -444,133 +442,133 @@ func mapDiscriminatorMyShoppingListUpdateAction(input interface{}) (MyShoppingLi
 	switch discriminator {
 	case "addLineItem":
 		new := MyShoppingListAddLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addTextLineItem":
 		new := MyShoppingListAddTextLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemQuantity":
 		new := MyShoppingListChangeLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemsOrder":
 		new := MyShoppingListChangeLineItemsOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := MyShoppingListChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemName":
 		new := MyShoppingListChangeTextLineItemNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemQuantity":
 		new := MyShoppingListChangeTextLineItemQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemsOrder":
 		new := MyShoppingListChangeTextLineItemsOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeLineItem":
 		new := MyShoppingListRemoveLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeTextLineItem":
 		new := MyShoppingListRemoveTextLineItemAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyShoppingListSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := MyShoppingListSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeleteDaysAfterLastModification":
 		new := MyShoppingListSetDeleteDaysAfterLastModificationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := MyShoppingListSetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := MyShoppingListSetLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := MyShoppingListSetLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemCustomField":
 		new := MyShoppingListSetTextLineItemCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemCustomType":
 		new := MyShoppingListSetTextLineItemCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemDescription":
 		new := MyShoppingListSetTextLineItemDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := DecodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

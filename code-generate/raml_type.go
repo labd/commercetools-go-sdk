@@ -184,30 +184,63 @@ func (r *RamlTypeAttribute) resolve(types map[string]*RamlType) {
 	}
 }
 
-func getPropertyValue(input yaml.MapSlice, key string) interface{} {
-	for _, mapItem := range input {
-		if mapItem.Key == key {
-			return mapItem.Value
+func getPropertyValue(input yaml.MapSlice, keys ...string) interface{} {
+	source := input
+	numKeys := len(keys)
+	for i, key := range keys {
+		found := false
+		for _, mapItem := range source {
+			lookup := fmt.Sprintf("%v", mapItem.Key)
+			if lookup == key {
+				if i == numKeys-1 {
+					// log.Printf("For key '%s' found %s\n", strings.Join(keys, "#"), mapItem.Value)
+					return mapItem.Value
+				} else {
+					if _, ok := mapItem.Value.(yaml.MapSlice); !ok {
+						// log.Printf("Unable to resolve keys: %s", keys)
+						return nil
+					}
+					source = mapItem.Value.(yaml.MapSlice)
+					found = true
+					break
+				}
+			}
+		}
+
+		if !found {
+			// log.Printf("No key found '%s' (item %s does not exist)", strings.Join(keys, "#"), key)
+			return nil
 		}
 	}
 
 	return nil
 }
 
-func getPropertyInt(input yaml.MapSlice, key string) *int {
-	value := getPropertyValue(input, key)
+func getPropertyInt(input yaml.MapSlice, keys ...string) *int {
+	value := getPropertyValue(input, keys...)
 	if new, isOk := value.(int); isOk {
 		return &new
 	}
 	return nil
 }
 
-func getPropertyString(input yaml.MapSlice, key string) string {
-	value := getPropertyValue(input, key)
+func getPropertyString(input yaml.MapSlice, keys ...string) string {
+	value := getPropertyValue(input, keys...)
 	if new, isOk := value.(string); isOk {
 		return new
 	}
 	return ""
+}
+
+func getPropertyStringArray(input yaml.MapSlice, keys ...string) []string {
+	value := getPropertyValue(input, keys...)
+	if new, isOk := value.(string); isOk {
+		return []string{new}
+	}
+	if new, isOk := value.([]string); isOk {
+		return new
+	}
+	return []string{}
 }
 
 func postProcess(objects []RamlType) {

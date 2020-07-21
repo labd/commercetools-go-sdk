@@ -7,22 +7,21 @@ import (
 )
 
 // Generate the `<service>DeleteWithID` and `<service>DeleteWithKey` functions
-func generateServiceDelete(funcName string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
-
+func generateServiceDelete(method ServiceMethod, objects map[string]RamlType) (code *jen.Statement) {
 	deleteWithVersion := true
 	// TODO: nasty hack / incomplete API def
-	if resourceService.ResourceType == "APIClient" {
+	if method.Context == "ApiClient" {
 		deleteWithVersion = false
 	}
 
+	extraParams := generateServiceArgumentCode(method)
 	methodParamList := []jen.Code{
 		jen.Id("ctx").Qual("context", "Context"),
-		jen.Id(resourceIdentifier.ArgName).String(),
 	}
-	returnParams := jen.List(
-		jen.Id("result").Op("*").Id(resourceService.ResourceType),
-		jen.Err().Error())
+	methodParamList = append(methodParamList, extraParams...)
+
+	returnObject := objects[method.ReturnType]
+	returnParams := createServiceReturnList(method, returnObject)
 
 	setVersionParam := jen.Empty()
 	if deleteWithVersion {
@@ -33,7 +32,7 @@ func generateServiceDelete(funcName string, resourceService ResourceService, res
 	}
 
 	setDataErasure := jen.Empty()
-	if httpMethod.HasTrait("dataErasure") {
+	if method.HasTrait("dataErasure") {
 		methodParamList = append(methodParamList, jen.Id("dataErasure").Bool())
 		setDataErasure = jen.Id("params").Op(".").Id("Set").Call(
 			jen.Lit("dataErasure"),
@@ -46,12 +45,12 @@ func generateServiceDelete(funcName string, resourceService ResourceService, res
 
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 
-	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
-	if httpMethod.Description != "" {
-		description = httpMethod.Description
+	description := fmt.Sprintf("for type %s", method.ReturnType)
+	if method.Description != "" {
+		description = method.Description
 	}
-	c := jen.Commentf("%s %s", funcName, description).Line()
-	c.Func().Params(structReceiver).Id(funcName).Params(methodParams).Parens(returnParams).Block(
+	c := jen.Commentf("%s %s", method.Name, description).Line()
+	c.Func().Params(structReceiver).Id(method.Name).Params(methodParams).Parens(returnParams).Block(
 		jen.Id("params").Op(":=").Qual("net/url", "Values").Block(),
 		setVersionParam,
 		setDataErasure,
@@ -63,7 +62,7 @@ func generateServiceDelete(funcName string, resourceService ResourceService, res
 			jen.Id("opt").Call(jen.Op("&").Id("params")),
 		),
 
-		resourceIdentifier.createEndpointCode(false),
+		jen.Id("endpoint").Op(":=").Add(generateServicePathCode(method)),
 		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
 			jen.Id("ctx"),
 			jen.Id("endpoint"),

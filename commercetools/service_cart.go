@@ -35,6 +35,26 @@ func (client *Client) CartQuery(ctx context.Context, input *QueryInput) (result 
 	return result, nil
 }
 
+/*
+CartGetWithCustomerId Retrieves the active cart of the customer that has been modified most recently.
+It does not consider carts with CartOrigin Merchant. If no active cart exists, a 404 Not Found error is returned.
+
+The cart may not contain up-to-date prices, discounts etc. If you want to ensure they’re up-to-date,
+send an Update request with the Recalculate update action instead.
+*/
+func (client *Client) CartGetWithCustomerId(ctx context.Context, customerid string, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("carts/customer-id=%s", customerid)
+	err = client.Get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // CartDeleteWithID for type Cart
 func (client *Client) CartDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *Cart, err error) {
 	params := url.Values{}

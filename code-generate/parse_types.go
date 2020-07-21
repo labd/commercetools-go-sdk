@@ -72,17 +72,30 @@ func createRamlTypeAttribute(name string, properties interface{}) RamlTypeAttrib
 		many = true
 	}
 
+	var itemsObject *RamlType
+	if strings.HasPrefix(name, "/") {
+		placeholder := getPropertyValue(properties.(yaml.MapSlice), "(placeholderParam)")
+		if placeholder != nil {
+			name = getPropertyString(properties.(yaml.MapSlice), "(placeholderParam)", "paramName")
+			itemsObject = &RamlType{
+				Name:     getPropertyString(properties.(yaml.MapSlice), "(placeholderParam)", "placeholder"),
+				TypeName: typeName,
+			}
+		}
+	}
+
 	codeName := CreateCodeName(name)
 	if codeName == "Error" {
 		codeName = "ErrorMessage"
 	}
 
 	object := RamlTypeAttribute{
-		Name:     name,
-		TypeName: typeName,
-		CodeName: codeName,
-		Optional: optional,
-		Many:     many,
+		Name:        name,
+		TypeName:    typeName,
+		CodeName:    codeName,
+		Optional:    optional,
+		Many:        many,
+		ItemsObject: itemsObject,
 	}
 
 	if props, isOk := properties.(yaml.MapSlice); isOk {

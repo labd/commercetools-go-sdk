@@ -11,7 +11,7 @@ import (
 
 func main() {
 	apiFile := os.Args[1]
-	fmt.Printf("Generating code for file %s", apiFile)
+	fmt.Printf("Generating code for file %s\n", apiFile)
 	fi, err := os.Stat(apiFile)
 	if err != nil {
 		panic(err)
@@ -34,8 +34,12 @@ func main() {
 		log.Fatalf("error: %v", err)
 	}
 
+	log.Println("=================[ Parsing RAML ]=================")
 	objects, resources := parseYaml(t)
 	postProcess(objects)
+
+	log.Println("===============[ Generating types ]===============")
 	generateTypes(objects)
+	log.Println("==============[ Generating services ]=============")
 	generateServices(objects, resources)
 }

@@ -16,6 +16,7 @@ func CreateCodeName(value string) string {
 
 	result := strcase.ToCamel(value)
 	translateMap := map[string]string{
+		"/":        "",
 		"Id$":      "ID",
 		"Sku$":     "SKU",
 		"Uri$":     "URI",
@@ -33,6 +34,11 @@ func CreateCodeName(value string) string {
 	}
 
 	return result
+}
+
+func ExtractCodeName(value string) string {
+	values := strings.Split(value, "|")
+	return strings.TrimSpace(values[0])
 }
 
 func generateFilename(name string) string {

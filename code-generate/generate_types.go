@@ -174,7 +174,7 @@ func generateStructDiscriminatorMapping(object *RamlType) *jen.Statement {
 			for _, child := range object.Children {
 				g.Case(jen.Lit(child.DiscriminatorValue)).Block(
 					jen.Id("new").Op(":=").Id(child.CodeName).Values(),
-					jen.Err().Op(":=").Qual("github.com/mitchellh/mapstructure", "Decode").Call(jen.Id("input"), jen.Op("&").Id("new")),
+					jen.Err().Op(":=").Id("decodeStruct").Call(jen.Id("input"), jen.Op("&").Id("new")),
 					jen.If(jen.Err().Op("!=").Nil().Block(jen.Return(jen.List(jen.Nil(), jen.Err())))),
 					jen.CustomFunc(jen.Options{}, func(g *jen.Group) {
 						discriminatedAttributes := child.getDiscriminatedAttributes()
@@ -360,52 +360,9 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 			code = code.Id(object.TypeObject.InterfaceName)
 		}
 	} else {
-		switch object.TypeName {
-		case "string":
-			code = code.String()
-		case "boolean":
-			code = code.Bool()
-		case "number":
-			if object.Format == "int64" {
-				code = code.Int()
-			} else {
-				if object.Minimum != nil && *object.Minimum == 0 {
-					code = code.Op("*")
-				}
-				code = code.Float64()
-			}
-		case "integer":
-			code = code.Int()
-		case "int64":
-			code = code.Int()
-		case "array":
-			if object.ItemsObject != nil {
-				if object.ItemsObject.InterfaceName != object.ItemsObject.CodeName {
-					code = code.Index().Id(object.ItemsObject.InterfaceName)
-				} else {
-					code = code.Index().Id(object.ItemsObject.CodeName)
-				}
-			} else {
-				code = code.Index()
-				switch object.Items {
-				case "string":
-					code = code.String()
-				case "number":
-					code = code.Float64()
-				default:
-					code = code.Interface()
-				}
-			}
-		case "datetime":
-			if object.Optional {
-				code = code.Op("*")
-			}
-			code = code.Qual("time", "Time")
-		case "date-only":
-			code = code.Op("*").Id("Date")
-		default:
-			code = code.Interface()
-		}
+		typeCode := getNativeTypeCode(object)
+		code.Add(typeCode)
+
 	}
 
 	jsonTags := []string{object.Name}
@@ -417,4 +374,55 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 
 	code = code.Tag(map[string]string{"json": strings.Join(jsonTags, ",")})
 	return code
+}
+
+func getNativeTypeCode(object RamlTypeAttribute) jen.Code {
+	switch object.TypeName {
+	case "string":
+		return jen.String()
+	case "boolean":
+		return jen.Bool()
+	case "number":
+		if object.Format == "int64" {
+			return jen.Int()
+		} else {
+			code := jen.Empty()
+			if object.Minimum != nil && *object.Minimum == 0 {
+				code = code.Op("*")
+			}
+			return code.Float64()
+		}
+	case "integer":
+		return jen.Int()
+	case "int64":
+		return jen.Int()
+	case "array":
+		if object.ItemsObject != nil {
+			if object.ItemsObject.InterfaceName != object.ItemsObject.CodeName {
+				return jen.Index().Id(object.ItemsObject.InterfaceName)
+			} else {
+				return jen.Index().Id(object.ItemsObject.CodeName)
+			}
+		} else {
+			code := jen.Index()
+			switch object.Items {
+			case "string":
+				return code.String()
+			case "number":
+				return code.Float64()
+			default:
+				return code.Interface()
+			}
+		}
+	case "datetime":
+		code := jen.Empty()
+		if object.Optional {
+			code = code.Op("*")
+		}
+		return code.Qual("time", "Time")
+	case "date-only":
+		return jen.Op("*").Id("Date")
+	default:
+		return jen.Interface()
+	}
 }

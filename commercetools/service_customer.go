@@ -35,6 +35,20 @@ func (client *Client) CustomerQuery(ctx context.Context, input *QueryInput) (res
 	return result, nil
 }
 
+// CustomerGetWithEmailToken for type Customer
+func (client *Client) CustomerGetWithEmailToken(ctx context.Context, emailtoken string, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("customers/email-token=%s", emailtoken)
+	err = client.Get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // CustomerDeleteWithKey for type Customer
 func (client *Client) CustomerDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool, opts ...RequestOption) (result *Customer, err error) {
 	params := url.Values{}
@@ -95,6 +109,20 @@ func (client *Client) CustomerUpdateWithKey(ctx context.Context, input *Customer
 
 	endpoint := fmt.Sprintf("customers/key=%s", input.Key)
 	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// CustomerGetWithPasswordToken for type Customer
+func (client *Client) CustomerGetWithPasswordToken(ctx context.Context, passwordtoken string, opts ...RequestOption) (result *Customer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("customers/password-token=%s", passwordtoken)
+	err = client.Get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}

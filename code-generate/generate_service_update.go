@@ -7,15 +7,15 @@ import (
 )
 
 // Generate the `<service>Update` function
-func generateServiceUpdate(funcName string, resourceName string, resourceService ResourceService, resourceMethod ResourceMethod, httpMethod ResourceHTTPMethod) (code *jen.Statement) {
-	resourceIdentifier := createResourceIdentifier(resourceService, resourceMethod)
-	updateStructID := fmt.Sprintf("%sInput", funcName)
-	updateObjectType := fmt.Sprintf("%sUpdateAction", resourceName)
+func generateServiceUpdate(method ServiceMethod, objects map[string]RamlType) (code *jen.Statement) {
+	updateStructID := fmt.Sprintf("%sInput", method.Name)
+	updateObjectType := fmt.Sprintf("%sUpdateAction", method.ReturnType)
 
 	// Generate the `type <resource>With<ID>Input struct {}`
-	c := jen.Commentf("%s is input for function %s", updateStructID, funcName).Line()
+	identifier := CreateCodeName(method.Parameters[len(method.Parameters)-1])
+	c := jen.Commentf("%s is input for function %s", updateStructID, method.Name).Line()
 	c.Type().Id(updateStructID).Struct(
-		jen.Id(resourceIdentifier.PublicName).String(),
+		jen.Id(identifier).String(),
 		jen.Id("Version").Int(),
 		jen.Id("Actions").Index().Id(updateObjectType),
 	).Line()
@@ -23,10 +23,10 @@ func generateServiceUpdate(funcName string, resourceName string, resourceService
 	c.Func().Params(jen.Id("input").Op("*").Id(updateStructID)).Id("Validate").Params().Parens(jen.Id("error")).Block(
 
 		// Validate if input identifier is empty
-		jen.If(jen.Id("input").Op(".").Id(resourceIdentifier.PublicName).Op("==").Lit("")).Block(
+		jen.If(jen.Id("input").Op(".").Id(identifier).Op("==").Lit("")).Block(
 			jen.Return(
 				jen.Qual("fmt", "Errorf").Call(
-					jen.Lit(fmt.Sprintf("no valid value for %s given", resourceIdentifier.PublicName)),
+					jen.Lit(fmt.Sprintf("no valid value for %s given", identifier)),
 				),
 			),
 		),
@@ -43,25 +43,27 @@ func generateServiceUpdate(funcName string, resourceName string, resourceService
 		jen.Return(jen.Nil()),
 	).Line()
 
-	methodParams := jen.List(
+	extraParams := generateServiceArgumentCode(method)
+	methodParamsList := []jen.Code{
 		jen.Id("ctx").Qual("context", "Context"),
+	}
+	methodParamsList = append(methodParamsList, extraParams[:len(extraParams)-1]...)
+	methodParamsList = append(methodParamsList,
 		jen.Id("input").Op("*").Id(updateStructID),
 		jen.Id("opts").Op("...").Id("RequestOption"),
 	)
 	clientMethod := "Update"
 
 	structReceiver := jen.Id("client").Op("*").Id("Client")
-	description := fmt.Sprintf("for type %s", resourceService.ResourceType)
-	if httpMethod.Description != "" {
-		description = httpMethod.Description
-	}
-	returnParams := jen.List(
-		jen.Id("result").Op("*").Id(resourceService.ResourceType),
-		jen.Err().Error(),
-	)
+	description := fmt.Sprintf("for type %s", method.ReturnType)
+	// if httpMethod.Description != "" {
+	// 	description = httpMethod.Description
+	// }
+	returnObject := objects[method.ReturnType]
+	returnParams := createServiceReturnList(method, returnObject)
 
-	c.Commentf("%s %s", funcName, description).Line()
-	c.Func().Params(structReceiver).Id(funcName).Params(methodParams).Parens(returnParams).Block(
+	c.Commentf("%s %s", method.Name, description).Line()
+	c.Func().Params(structReceiver).Id(method.Name).Params(jen.List(methodParamsList...)).Parens(returnParams).Block(
 		// if err := input.Validate(); err != nil {
 		// 	return nil, err
 		// }
@@ -81,7 +83,7 @@ func generateServiceUpdate(funcName string, resourceName string, resourceService
 			jen.Id("opt").Call(jen.Op("&").Id("params")),
 		).Line(),
 
-		resourceIdentifier.createEndpointCode(true),
+		jen.Id("endpoint").Op(":=").Add(generateServicePathCode(method)),
 		jen.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
 			jen.Id("ctx"),
 			jen.Id("endpoint"),
