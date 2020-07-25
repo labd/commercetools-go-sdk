@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// ProductURLPath is the commercetools API path.
-const ProductURLPath = "products"
-
 // ProductCreate creates a new instance of type Product
 func (client *Client) ProductCreate(ctx context.Context, draft *ProductDraft, opts ...RequestOption) (result *Product, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) ProductCreate(ctx context.Context, draft *ProductDraft, op
 		opt(&params)
 	}
 
-	err = client.Create(ctx, ProductURLPath, params, draft, &result)
+	endpoint := "products"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,74 +25,14 @@ func (client *Client) ProductCreate(ctx context.Context, draft *ProductDraft, op
 }
 
 // ProductQuery allows querying for type Product
+/*
+You can use the query endpoint to get the full representations of products.
+REMARK: We suggest to use the performance optimized search endpoint which has a bunch functionalities,
+the query API lacks like sorting on custom attributes, etc.
+*/
 func (client *Client) ProductQuery(ctx context.Context, input *QueryInput) (result *ProductPagedQueryResponse, err error) {
-	err = client.Query(ctx, ProductURLPath, input.toParams(), &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductDeleteWithKey for type Product
-func (client *Client) ProductDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Product, err error) {
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("products/key=%s", key)
-	err = client.Delete(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductGetWithKey Gets the full representation of a product by Key.
-func (client *Client) ProductGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Product, err error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("products/key=%s", key)
-	err = client.Get(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ProductUpdateWithKeyInput is input for function ProductUpdateWithKey
-type ProductUpdateWithKeyInput struct {
-	Key     string
-	Version int
-	Actions []ProductUpdateAction
-}
-
-func (input *ProductUpdateWithKeyInput) Validate() error {
-	if input.Key == "" {
-		return fmt.Errorf("no valid value for Key given")
-	}
-	if len(input.Actions) == 0 {
-		return fmt.Errorf("no update actions specified")
-	}
-	return nil
-}
-
-// ProductUpdateWithKey for type Product
-func (client *Client) ProductUpdateWithKey(ctx context.Context, input *ProductUpdateWithKeyInput, opts ...RequestOption) (result *Product, err error) {
-	if err := input.Validate(); err != nil {
-		return nil, err
-	}
-
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-
-	endpoint := fmt.Sprintf("products/key=%s", input.Key)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	endpoint := "products"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +48,23 @@ func (client *Client) ProductDeleteWithID(ctx context.Context, id string, versio
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("products/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductDeleteWithKey for type Product
+func (client *Client) ProductDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Product, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("products/key=%s", key)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +78,21 @@ func (client *Client) ProductGetWithID(ctx context.Context, id string, opts ...R
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("products/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductGetWithKey Gets the full representation of a product by Key.
+func (client *Client) ProductGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Product, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("products/key=%s", key)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +128,68 @@ func (client *Client) ProductUpdateWithID(ctx context.Context, input *ProductUpd
 	}
 
 	endpoint := fmt.Sprintf("products/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductUpdateWithKeyInput is input for function ProductUpdateWithKey
+type ProductUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []ProductUpdateAction
+}
+
+func (input *ProductUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// ProductUpdateWithKey for type Product
+func (client *Client) ProductUpdateWithKey(ctx context.Context, input *ProductUpdateWithKeyInput, opts ...RequestOption) (result *Product, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("products/key=%s", input.Key)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ProductImagesInput is input for function ProductImages
+type ProductImagesInput struct {
+	Filename string  `url:"filename,omitempty"`
+	SKU      string  `url:"sku,omitempty"`
+	Staged   bool    `url:"staged,omitempty"`
+	Variant  float64 `url:"variant,omitempty"`
+}
+
+/*
+ProductImages Uploads a binary image file to a given product variant. The supported image formats are JPEG, PNG and GIF.
+*/
+func (client *Client) ProductImages(ctx context.Context, value *ProductImagesInput, opts ...RequestOption) (result *Product, err error) {
+	params := serializeQueryParams(value)
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := "products/images"
+	err = client.create(ctx, endpoint, params, value, &result)
 	if err != nil {
 		return nil, err
 	}

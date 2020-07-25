@@ -17,7 +17,7 @@ type ProjectUpdateInput struct {
 // view_project_settings:{projectKey}
 func (client *Client) ProjectGet() (result *Project, err error) {
 	ctx := context.TODO()
-	err = client.Get(ctx, "", nil, &result)
+	err = client.get(ctx, "", nil, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (client *Client) ProjectGet() (result *Project, err error) {
 // Scopes: manage_project:{projectKey}
 func (client *Client) ProjectUpdate(input *ProjectUpdateInput) (result *Project, err error) {
 	ctx := context.TODO()
-	err = client.Update(ctx, "", nil, input.Version, input.Actions, &result)
+	err = client.update(ctx, "", nil, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

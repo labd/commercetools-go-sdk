@@ -47,154 +47,154 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 	switch discriminator {
 	case "addInterfaceInteraction":
 		new := PaymentAddInterfaceInteractionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addTransaction":
 		new := PaymentAddTransactionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAmountPlanned":
 		new := PaymentChangeAmountPlannedAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTransactionInteractionId":
 		new := PaymentChangeTransactionInteractionIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTransactionState":
 		new := PaymentChangeTransactionStateAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTransactionTimestamp":
 		new := PaymentChangeTransactionTimestampAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAmountPaid":
 		new := PaymentSetAmountPaidAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAmountRefunded":
 		new := PaymentSetAmountRefundedAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAnonymousId":
 		new := PaymentSetAnonymousIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAuthorization":
 		new := PaymentSetAuthorizationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := PaymentSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := PaymentSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomer":
 		new := PaymentSetCustomerAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExternalId":
 		new := PaymentSetExternalIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setInterfaceId":
 		new := PaymentSetInterfaceIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := PaymentSetKeyAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoInterface":
 		new := PaymentSetMethodInfoInterfaceAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoMethod":
 		new := PaymentSetMethodInfoMethodAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoName":
 		new := PaymentSetMethodInfoNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setStatusInterfaceCode":
 		new := PaymentSetStatusInterfaceCodeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setStatusInterfaceText":
 		new := PaymentSetStatusInterfaceTextAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "transitionState":
 		new := PaymentTransitionStateAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// DiscountCodeURLPath is the commercetools API path.
-const DiscountCodeURLPath = "discount-codes"
-
 // DiscountCodeCreate creates a new instance of type DiscountCode
 func (client *Client) DiscountCodeCreate(ctx context.Context, draft *DiscountCodeDraft, opts ...RequestOption) (result *DiscountCode, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) DiscountCodeCreate(ctx context.Context, draft *DiscountCod
 		opt(&params)
 	}
 
-	err = client.Create(ctx, DiscountCodeURLPath, params, draft, &result)
+	endpoint := "discount-codes"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +25,10 @@ func (client *Client) DiscountCodeCreate(ctx context.Context, draft *DiscountCod
 }
 
 // DiscountCodeQuery allows querying for type DiscountCode
+// for type DiscountCodePagedQueryResponse
 func (client *Client) DiscountCodeQuery(ctx context.Context, input *QueryInput) (result *DiscountCodePagedQueryResponse, err error) {
-	err = client.Query(ctx, DiscountCodeURLPath, input.toParams(), &result)
+	endpoint := "discount-codes"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (client *Client) DiscountCodeDeleteWithID(ctx context.Context, id string, v
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("discount-codes/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (client *Client) DiscountCodeGetWithID(ctx context.Context, id string, opts
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("discount-codes/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (client *Client) DiscountCodeUpdateWithID(ctx context.Context, input *Disco
 	}
 
 	endpoint := fmt.Sprintf("discount-codes/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

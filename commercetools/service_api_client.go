@@ -8,9 +8,6 @@ import (
 	"net/url"
 )
 
-// APIClientURLPath is the commercetools API path.
-const APIClientURLPath = "api-clients"
-
 // APIClientCreate creates a new instance of type APIClient
 func (client *Client) APIClientCreate(ctx context.Context, draft *APIClientDraft, opts ...RequestOption) (result *APIClient, err error) {
 	params := url.Values{}
@@ -18,16 +15,19 @@ func (client *Client) APIClientCreate(ctx context.Context, draft *APIClientDraft
 		opt(&params)
 	}
 
-	err = client.Create(ctx, APIClientURLPath, params, draft, &result)
+	endpoint := "api-clients"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
-// APIClientQuery allows querying for type APIClient
+// APIClientQuery allows querying for type ApiClient
+// for type APIClientPagedQueryResponse
 func (client *Client) APIClientQuery(ctx context.Context, input *QueryInput) (result *APIClientPagedQueryResponse, err error) {
-	err = client.Query(ctx, APIClientURLPath, input.toParams(), &result)
+	endpoint := "api-clients"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +42,7 @@ func (client *Client) APIClientDeleteWithID(ctx context.Context, id string, opts
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("api-clients/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func (client *Client) APIClientGetWithID(ctx context.Context, id string, opts ..
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("api-clients/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}

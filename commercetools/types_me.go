@@ -24,175 +24,175 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 	switch discriminator {
 	case "addDiscountCode":
 		new := MyCartAddDiscountCodeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addItemShippingAddress":
 		new := MyCartAddItemShippingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addLineItem":
 		new := MyCartAddLineItemAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addPayment":
 		new := MyCartAddPaymentAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "applyDeltaToLineItemShippingDetailsTargets":
 		new := MyCartApplyDeltaToLineItemShippingDetailsTargetsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemQuantity":
 		new := MyCartChangeLineItemQuantityAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTaxMode":
 		new := MyCartChangeTaxModeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "recalculate":
 		new := MyCartRecalculateAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDiscountCode":
 		new := MyCartRemoveDiscountCodeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeItemShippingAddress":
 		new := MyCartRemoveItemShippingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeLineItem":
 		new := MyCartRemoveLineItemAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removePayment":
 		new := MyCartRemovePaymentAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setBillingAddress":
 		new := MyCartSetBillingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCountry":
 		new := MyCartSetCountryAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyCartSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomShippingMethod":
 		new := MyCartSetCustomShippingMethodAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := MyCartSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeleteDaysAfterLastModification":
 		new := MyCartSetDeleteDaysAfterLastModificationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := MyCartSetLineItemCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := MyCartSetLineItemCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemShippingDetails":
 		new := MyCartSetLineItemShippingDetailsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := MyCartSetLocaleAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingAddress":
 		new := MyCartSetShippingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingMethod":
 		new := MyCartSetShippingMethodAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "updateItemShippingAddress":
 		new := MyCartUpdateItemShippingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -217,147 +217,147 @@ func mapDiscriminatorMyCustomerUpdateAction(input interface{}) (MyCustomerUpdate
 	switch discriminator {
 	case "addAddress":
 		new := MyCustomerAddAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addBillingAddressId":
 		new := MyCustomerAddBillingAddressIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addShippingAddressId":
 		new := MyCustomerAddShippingAddressIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAddress":
 		new := MyCustomerChangeAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeEmail":
 		new := MyCustomerChangeEmailAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeAddress":
 		new := MyCustomerRemoveAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeBillingAddressId":
 		new := MyCustomerRemoveBillingAddressIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeShippingAddressId":
 		new := MyCustomerRemoveShippingAddressIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCompanyName":
 		new := MyCustomerSetCompanyNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyCustomerSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := MyCustomerSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDateOfBirth":
 		new := MyCustomerSetDateOfBirthAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDefaultBillingAddress":
 		new := MyCustomerSetDefaultBillingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDefaultShippingAddress":
 		new := MyCustomerSetDefaultShippingAddressAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setFirstName":
 		new := MyCustomerSetFirstNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLastName":
 		new := MyCustomerSetLastNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLocale":
 		new := MyCustomerSetLocaleAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMiddleName":
 		new := MyCustomerSetMiddleNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSalutation":
 		new := MyCustomerSetSalutationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTitle":
 		new := MyCustomerSetTitleAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setVatId":
 		new := MyCustomerSetVatIDAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -382,42 +382,42 @@ func mapDiscriminatorMyPaymentUpdateAction(input interface{}) (MyPaymentUpdateAc
 	switch discriminator {
 	case "addTransaction":
 		new := MyPaymentAddTransactionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAmountPlanned":
 		new := MyPaymentChangeAmountPlannedAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyPaymentSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoInterface":
 		new := MyPaymentSetMethodInfoInterfaceAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoMethod":
 		new := MyPaymentSetMethodInfoMethodAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMethodInfoName":
 		new := MyPaymentSetMethodInfoNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -442,133 +442,133 @@ func mapDiscriminatorMyShoppingListUpdateAction(input interface{}) (MyShoppingLi
 	switch discriminator {
 	case "addLineItem":
 		new := MyShoppingListAddLineItemAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addTextLineItem":
 		new := MyShoppingListAddTextLineItemAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemQuantity":
 		new := MyShoppingListChangeLineItemQuantityAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLineItemsOrder":
 		new := MyShoppingListChangeLineItemsOrderAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := MyShoppingListChangeNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemName":
 		new := MyShoppingListChangeTextLineItemNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemQuantity":
 		new := MyShoppingListChangeTextLineItemQuantityAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTextLineItemsOrder":
 		new := MyShoppingListChangeTextLineItemsOrderAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeLineItem":
 		new := MyShoppingListRemoveLineItemAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeTextLineItem":
 		new := MyShoppingListRemoveTextLineItemAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := MyShoppingListSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := MyShoppingListSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDeleteDaysAfterLastModification":
 		new := MyShoppingListSetDeleteDaysAfterLastModificationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := MyShoppingListSetDescriptionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomField":
 		new := MyShoppingListSetLineItemCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setLineItemCustomType":
 		new := MyShoppingListSetLineItemCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemCustomField":
 		new := MyShoppingListSetTextLineItemCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemCustomType":
 		new := MyShoppingListSetTextLineItemCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTextLineItemDescription":
 		new := MyShoppingListSetTextLineItemDescriptionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

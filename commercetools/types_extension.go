@@ -44,14 +44,14 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 	switch discriminator {
 	case "AWSLambda":
 		new := ExtensionAWSLambdaDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "HTTP":
 		new := ExtensionHTTPDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -82,14 +82,14 @@ func mapDiscriminatorExtensionHTTPDestinationAuthentication(input interface{}) (
 	switch discriminator {
 	case "AuthorizationHeader":
 		new := ExtensionAuthorizationHeaderAuthentication{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "AzureFunctions":
 		new := ExtensionAzureFunctionsAuthentication{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -114,7 +114,7 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 	switch discriminator {
 	case "changeDestination":
 		new := ExtensionChangeDestinationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -127,21 +127,21 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 		return new, nil
 	case "changeTriggers":
 		new := ExtensionChangeTriggersAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := ExtensionSetKeyAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTimeoutInMs":
 		new := ExtensionSetTimeoutInMsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

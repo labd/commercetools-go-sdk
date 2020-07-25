@@ -24,91 +24,91 @@ func mapDiscriminatorDiscountCodeUpdateAction(input interface{}) (DiscountCodeUp
 	switch discriminator {
 	case "changeCartDiscounts":
 		new := DiscountCodeChangeCartDiscountsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeGroups":
 		new := DiscountCodeChangeGroupsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeIsActive":
 		new := DiscountCodeChangeIsActiveAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCartPredicate":
 		new := DiscountCodeSetCartPredicateAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := DiscountCodeSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := DiscountCodeSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := DiscountCodeSetDescriptionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMaxApplications":
 		new := DiscountCodeSetMaxApplicationsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMaxApplicationsPerCustomer":
 		new := DiscountCodeSetMaxApplicationsPerCustomerAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setName":
 		new := DiscountCodeSetNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFrom":
 		new := DiscountCodeSetValidFromAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFromAndUntil":
 		new := DiscountCodeSetValidFromAndUntilAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidUntil":
 		new := DiscountCodeSetValidUntilAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

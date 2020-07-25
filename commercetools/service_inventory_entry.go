@@ -17,7 +17,7 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 	}
 
 	endpoint := "inventory"
-	err = client.Create(ctx, endpoint, params, draft, &result)
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 // for type InventoryPagedQueryResponse
 func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput) (result *InventoryPagedQueryResponse, err error) {
 	endpoint := "inventory"
-	err = client.Query(ctx, endpoint, input.toParams(), &result)
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -36,15 +36,15 @@ func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput
 }
 
 // InventoryEntryDeleteWithID for type InventoryEntry
-func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, id string, version int, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("inventory/%s", ID)
-	err = client.Delete(ctx, endpoint, params, &result)
+	endpoint := fmt.Sprintf("inventory/%s", id)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -52,13 +52,13 @@ func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, ID string,
 }
 
 // InventoryEntryGetWithID for type InventoryEntry
-func (client *Client) InventoryEntryGetWithID(ctx context.Context, ID string, opts ...RequestOption) (result *InventoryEntry, err error) {
+func (client *Client) InventoryEntryGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("inventory/%s", ID)
-	err = client.Get(ctx, endpoint, params, &result)
+	endpoint := fmt.Sprintf("inventory/%s", id)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (client *Client) InventoryEntryUpdateWithID(ctx context.Context, input *Inv
 	}
 
 	endpoint := fmt.Sprintf("inventory/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

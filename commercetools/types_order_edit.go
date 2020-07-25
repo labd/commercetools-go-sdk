@@ -24,21 +24,21 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 	switch discriminator {
 	case "Applied":
 		new := OrderEditApplied{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "NotProcessed":
 		new := OrderEditNotProcessed{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PreviewFailure":
 		new := OrderEditPreviewFailure{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -48,7 +48,7 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 		return new, nil
 	case "PreviewSuccess":
 		new := OrderEditPreviewSuccess{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -76,7 +76,7 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 	switch discriminator {
 	case "addStagedAction":
 		new := OrderEditAddStagedActionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -89,35 +89,35 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 		return new, nil
 	case "setComment":
 		new := OrderEditSetCommentAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := OrderEditSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := OrderEditSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := OrderEditSetKeyAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setStagedActions":
 		new := OrderEditSetStagedActionsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

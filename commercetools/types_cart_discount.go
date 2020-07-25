@@ -42,35 +42,35 @@ func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, 
 	switch discriminator {
 	case "customLineItems":
 		new := CartDiscountCustomLineItemsTarget{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "lineItems":
 		new := CartDiscountLineItemsTarget{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "shipping":
 		new := CartDiscountShippingCostTarget{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "multiBuyCustomLineItems":
 		new := MultiBuyCustomLineItemsTarget{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "multiBuyLineItems":
 		new := MultiBuyLineItemsTarget{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -95,49 +95,49 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 	switch discriminator {
 	case "changeCartPredicate":
 		new := CartDiscountChangeCartPredicateAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeIsActive":
 		new := CartDiscountChangeIsActiveAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := CartDiscountChangeNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeRequiresDiscountCode":
 		new := CartDiscountChangeRequiresDiscountCodeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeSortOrder":
 		new := CartDiscountChangeSortOrderAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeStackingMode":
 		new := CartDiscountChangeStackingModeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeTarget":
 		new := CartDiscountChangeTargetAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -150,7 +150,7 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 		return new, nil
 	case "changeValue":
 		new := CartDiscountChangeValueAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -163,49 +163,49 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 		return new, nil
 	case "setCustomField":
 		new := CartDiscountSetCustomFieldAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := CartDiscountSetCustomTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := CartDiscountSetDescriptionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := CartDiscountSetKeyAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFrom":
 		new := CartDiscountSetValidFromAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFromAndUntil":
 		new := CartDiscountSetValidFromAndUntilAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidUntil":
 		new := CartDiscountSetValidUntilAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -230,7 +230,7 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 	switch discriminator {
 	case "absolute":
 		new := CartDiscountValueAbsolute{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -240,14 +240,14 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 		return new, nil
 	case "giftLineItem":
 		new := CartDiscountValueGiftLineItem{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "relative":
 		new := CartDiscountValueRelative{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -272,21 +272,21 @@ func mapDiscriminatorCartDiscountValueDraft(input interface{}) (CartDiscountValu
 	switch discriminator {
 	case "absolute":
 		new := CartDiscountValueAbsoluteDraft{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "giftLineItem":
 		new := CartDiscountValueGiftLineItemDraft{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "relative":
 		new := CartDiscountValueRelativeDraft{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

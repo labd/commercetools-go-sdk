@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// TaxCategoryURLPath is the commercetools API path.
-const TaxCategoryURLPath = "tax-categories"
-
 // TaxCategoryCreate creates a new instance of type TaxCategory
 func (client *Client) TaxCategoryCreate(ctx context.Context, draft *TaxCategoryDraft, opts ...RequestOption) (result *TaxCategory, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) TaxCategoryCreate(ctx context.Context, draft *TaxCategoryD
 		opt(&params)
 	}
 
-	err = client.Create(ctx, TaxCategoryURLPath, params, draft, &result)
+	endpoint := "tax-categories"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,74 +25,10 @@ func (client *Client) TaxCategoryCreate(ctx context.Context, draft *TaxCategoryD
 }
 
 // TaxCategoryQuery allows querying for type TaxCategory
+// for type TaxCategoryPagedQueryResponse
 func (client *Client) TaxCategoryQuery(ctx context.Context, input *QueryInput) (result *TaxCategoryPagedQueryResponse, err error) {
-	err = client.Query(ctx, TaxCategoryURLPath, input.toParams(), &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// TaxCategoryDeleteWithKey for type TaxCategory
-func (client *Client) TaxCategoryDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *TaxCategory, err error) {
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
-	err = client.Delete(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// TaxCategoryGetWithKey for type TaxCategory
-func (client *Client) TaxCategoryGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *TaxCategory, err error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
-	err = client.Get(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// TaxCategoryUpdateWithKeyInput is input for function TaxCategoryUpdateWithKey
-type TaxCategoryUpdateWithKeyInput struct {
-	Key     string
-	Version int
-	Actions []TaxCategoryUpdateAction
-}
-
-func (input *TaxCategoryUpdateWithKeyInput) Validate() error {
-	if input.Key == "" {
-		return fmt.Errorf("no valid value for Key given")
-	}
-	if len(input.Actions) == 0 {
-		return fmt.Errorf("no update actions specified")
-	}
-	return nil
-}
-
-// TaxCategoryUpdateWithKey for type TaxCategory
-func (client *Client) TaxCategoryUpdateWithKey(ctx context.Context, input *TaxCategoryUpdateWithKeyInput, opts ...RequestOption) (result *TaxCategory, err error) {
-	if err := input.Validate(); err != nil {
-		return nil, err
-	}
-
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-
-	endpoint := fmt.Sprintf("tax-categories/key=%s", input.Key)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	endpoint := "tax-categories"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +44,23 @@ func (client *Client) TaxCategoryDeleteWithID(ctx context.Context, id string, ve
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("tax-categories/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// TaxCategoryDeleteWithKey for type TaxCategory
+func (client *Client) TaxCategoryDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *TaxCategory, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +74,21 @@ func (client *Client) TaxCategoryGetWithID(ctx context.Context, id string, opts 
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("tax-categories/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// TaxCategoryGetWithKey for type TaxCategory
+func (client *Client) TaxCategoryGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *TaxCategory, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("tax-categories/key=%s", key)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +124,43 @@ func (client *Client) TaxCategoryUpdateWithID(ctx context.Context, input *TaxCat
 	}
 
 	endpoint := fmt.Sprintf("tax-categories/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// TaxCategoryUpdateWithKeyInput is input for function TaxCategoryUpdateWithKey
+type TaxCategoryUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []TaxCategoryUpdateAction
+}
+
+func (input *TaxCategoryUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// TaxCategoryUpdateWithKey for type TaxCategory
+func (client *Client) TaxCategoryUpdateWithKey(ctx context.Context, input *TaxCategoryUpdateWithKeyInput, opts ...RequestOption) (result *TaxCategory, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("tax-categories/key=%s", input.Key)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

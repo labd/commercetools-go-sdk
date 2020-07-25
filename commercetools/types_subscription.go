@@ -35,14 +35,14 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 	switch discriminator {
 	case "CloudEvents":
 		new := DeliveryCloudEventsFormat{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "Platform":
 		new := DeliveryPlatformFormat{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -67,42 +67,42 @@ func mapDiscriminatorDestination(input interface{}) (Destination, error) {
 	switch discriminator {
 	case "EventGrid":
 		new := AzureEventGridDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "AzureServiceBus":
 		new := AzureServiceBusDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "GoogleCloudPubSub":
 		new := GoogleCloudPubSubDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "IronMQ":
 		new := IronMqDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "SNS":
 		new := SnsDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "SQS":
 		new := SqsDestination{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -127,28 +127,28 @@ func mapDiscriminatorSubscriptionDelivery(input interface{}) (SubscriptionDelive
 	switch discriminator {
 	case "Message":
 		new := MessageDelivery{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ResourceCreated":
 		new := ResourceCreatedDelivery{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ResourceDeleted":
 		new := ResourceDeletedDelivery{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ResourceUpdated":
 		new := ResourceUpdatedDelivery{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -173,7 +173,7 @@ func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUp
 	switch discriminator {
 	case "changeDestination":
 		new := SubscriptionChangeDestinationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -186,21 +186,21 @@ func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUp
 		return new, nil
 	case "setChanges":
 		new := SubscriptionSetChangesAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := SubscriptionSetKeyAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMessages":
 		new := SubscriptionSetMessagesAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

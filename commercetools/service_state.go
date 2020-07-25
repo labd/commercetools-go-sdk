@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// StateURLPath is the commercetools API path.
-const StateURLPath = "states"
-
 // StateCreate creates a new instance of type State
 func (client *Client) StateCreate(ctx context.Context, draft *StateDraft, opts ...RequestOption) (result *State, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) StateCreate(ctx context.Context, draft *StateDraft, opts .
 		opt(&params)
 	}
 
-	err = client.Create(ctx, StateURLPath, params, draft, &result)
+	endpoint := "states"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +25,10 @@ func (client *Client) StateCreate(ctx context.Context, draft *StateDraft, opts .
 }
 
 // StateQuery allows querying for type State
+// for type StatePagedQueryResponse
 func (client *Client) StateQuery(ctx context.Context, input *QueryInput) (result *StatePagedQueryResponse, err error) {
-	err = client.Query(ctx, StateURLPath, input.toParams(), &result)
+	endpoint := "states"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (client *Client) StateDeleteWithID(ctx context.Context, id string, version 
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("states/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (client *Client) StateGetWithID(ctx context.Context, id string, opts ...Req
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("states/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (client *Client) StateUpdateWithID(ctx context.Context, input *StateUpdateW
 	}
 
 	endpoint := fmt.Sprintf("states/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

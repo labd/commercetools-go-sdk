@@ -24,35 +24,35 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 	switch discriminator {
 	case "setLanguages":
 		new := StoreSetLanguagesAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setName":
 		new := StoreSetNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addDistributionChannel":
 		new := StoresAddDistributionChannelsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDistributionChannel":
 		new := StoresRemoveDistributionChannelsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDistributionChannels":
 		new := StoresSetDistributionChannelsAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

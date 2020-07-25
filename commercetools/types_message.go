@@ -24,287 +24,287 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 	switch discriminator {
 	case "CategoryCreated":
 		new := CategoryCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CategorySlugChanged":
 		new := CategorySlugChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomLineItemStateTransition":
 		new := CustomLineItemStateTransitionMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerAddressAdded":
 		new := CustomerAddressAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerAddressChanged":
 		new := CustomerAddressChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerAddressRemoved":
 		new := CustomerAddressRemovedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerCompanyNameSet":
 		new := CustomerCompanyNameSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerCreated":
 		new := CustomerCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerDateOfBirthSet":
 		new := CustomerDateOfBirthSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerEmailChanged":
 		new := CustomerEmailChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerEmailVerified":
 		new := CustomerEmailVerifiedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerGroupSet":
 		new := CustomerGroupSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryAdded":
 		new := DeliveryAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryAddressSet":
 		new := DeliveryAddressSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryItemsUpdated":
 		new := DeliveryItemsUpdatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryRemoved":
 		new := DeliveryRemovedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InventoryEntryCreated":
 		new := InventoryEntryCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InventoryEntryDeleted":
 		new := InventoryEntryDeletedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InventoryEntryQuantitySet":
 		new := InventoryEntryQuantitySetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "LineItemStateTransition":
 		new := LineItemStateTransitionMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderBillingAddressSet":
 		new := OrderBillingAddressSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCreated":
 		new := OrderCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomLineItemDiscountSet":
 		new := OrderCustomLineItemDiscountSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomerEmailSet":
 		new := OrderCustomerEmailSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomerGroupSet":
 		new := OrderCustomerGroupSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomerSet":
 		new := OrderCustomerSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDeleted":
 		new := OrderDeletedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDiscountCodeAdded":
 		new := OrderDiscountCodeAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDiscountCodeRemoved":
 		new := OrderDiscountCodeRemovedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDiscountCodeStateSet":
 		new := OrderDiscountCodeStateSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderEditApplied":
 		new := OrderEditAppliedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderImported":
 		new := OrderImportedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderLineItemAdded":
 		new := OrderLineItemAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderLineItemDiscountSet":
 		new := OrderLineItemDiscountSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderPaymentStateChanged":
 		new := OrderPaymentStateChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReturnInfoAdded":
 		new := OrderReturnInfoAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderReturnShipmentStateChanged":
 		new := OrderReturnShipmentStateChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShipmentStateChanged":
 		new := OrderShipmentStateChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShippingAddressSet":
 		new := OrderShippingAddressSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShippingInfoSet":
 		new := OrderShippingInfoSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShippingRateInputSet":
 		new := OrderShippingRateInputSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -323,203 +323,203 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return new, nil
 	case "OrderStateChanged":
 		new := OrderStateChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderStateTransition":
 		new := OrderStateTransitionMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderStoreSet":
 		new := OrderStoreSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelAddedToDelivery":
 		new := ParcelAddedToDeliveryMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelItemsUpdated":
 		new := ParcelItemsUpdatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelMeasurementsUpdated":
 		new := ParcelMeasurementsUpdatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelRemovedFromDelivery":
 		new := ParcelRemovedFromDeliveryMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelTrackingDataUpdated":
 		new := ParcelTrackingDataUpdatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentCreated":
 		new := PaymentCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentInteractionAdded":
 		new := PaymentInteractionAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentStatusInterfaceCodeSet":
 		new := PaymentStatusInterfaceCodeSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentStatusStateTransition":
 		new := PaymentStatusStateTransitionMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentTransactionAdded":
 		new := PaymentTransactionAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentTransactionStateChanged":
 		new := PaymentTransactionStateChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductAddedToCategory":
 		new := ProductAddedToCategoryMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductCreated":
 		new := ProductCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductDeleted":
 		new := ProductDeletedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductImageAdded":
 		new := ProductImageAddedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductPriceDiscountsSet":
 		new := ProductPriceDiscountsSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductPriceExternalDiscountSet":
 		new := ProductPriceExternalDiscountSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductPublished":
 		new := ProductPublishedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductRemovedFromCategory":
 		new := ProductRemovedFromCategoryMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductRevertedStagedChanges":
 		new := ProductRevertedStagedChangesMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductSlugChanged":
 		new := ProductSlugChangedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductStateTransition":
 		new := ProductStateTransitionMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductUnpublished":
 		new := ProductUnpublishedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductVariantDeleted":
 		new := ProductVariantDeletedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReviewCreated":
 		new := ReviewCreatedMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReviewRatingSet":
 		new := ReviewRatingSetMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -532,7 +532,7 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return new, nil
 	case "ReviewStateTransition":
 		new := ReviewStateTransitionMessage{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -563,287 +563,287 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 	switch discriminator {
 	case "CategoryCreated":
 		new := CategoryCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CategorySlugChanged":
 		new := CategorySlugChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomLineItemStateTransition":
 		new := CustomLineItemStateTransitionMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerAddressAdded":
 		new := CustomerAddressAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerAddressChanged":
 		new := CustomerAddressChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerAddressRemoved":
 		new := CustomerAddressRemovedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerCompanyNameSet":
 		new := CustomerCompanyNameSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerCreated":
 		new := CustomerCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerDateOfBirthSet":
 		new := CustomerDateOfBirthSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerEmailChanged":
 		new := CustomerEmailChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerEmailVerified":
 		new := CustomerEmailVerifiedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CustomerGroupSet":
 		new := CustomerGroupSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryAdded":
 		new := DeliveryAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryAddressSet":
 		new := DeliveryAddressSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryItemsUpdated":
 		new := DeliveryItemsUpdatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DeliveryRemoved":
 		new := DeliveryRemovedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InventoryEntryCreated":
 		new := InventoryEntryCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InventoryEntryDeleted":
 		new := InventoryEntryDeletedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InventoryEntryQuantitySet":
 		new := InventoryEntryQuantitySetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "LineItemStateTransition":
 		new := LineItemStateTransitionMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderBillingAddressSet":
 		new := OrderBillingAddressSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCreated":
 		new := OrderCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomLineItemDiscountSet":
 		new := OrderCustomLineItemDiscountSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomerEmailSet":
 		new := OrderCustomerEmailSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomerGroupSet":
 		new := OrderCustomerGroupSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderCustomerSet":
 		new := OrderCustomerSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDeleted":
 		new := OrderDeletedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDiscountCodeAdded":
 		new := OrderDiscountCodeAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDiscountCodeRemoved":
 		new := OrderDiscountCodeRemovedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderDiscountCodeStateSet":
 		new := OrderDiscountCodeStateSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderEditApplied":
 		new := OrderEditAppliedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderImported":
 		new := OrderImportedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderLineItemAdded":
 		new := OrderLineItemAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderLineItemDiscountSet":
 		new := OrderLineItemDiscountSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderPaymentStateChanged":
 		new := OrderPaymentStateChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReturnInfoAdded":
 		new := OrderReturnInfoAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderReturnShipmentStateChanged":
 		new := OrderReturnShipmentStateChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShipmentStateChanged":
 		new := OrderShipmentStateChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShippingAddressSet":
 		new := OrderShippingAddressSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShippingInfoSet":
 		new := OrderShippingInfoSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderShippingRateInputSet":
 		new := OrderShippingRateInputSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -862,203 +862,203 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return new, nil
 	case "OrderStateChanged":
 		new := OrderStateChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderStateTransition":
 		new := OrderStateTransitionMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OrderStoreSet":
 		new := OrderStoreSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelAddedToDelivery":
 		new := ParcelAddedToDeliveryMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelItemsUpdated":
 		new := ParcelItemsUpdatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelMeasurementsUpdated":
 		new := ParcelMeasurementsUpdatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelRemovedFromDelivery":
 		new := ParcelRemovedFromDeliveryMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ParcelTrackingDataUpdated":
 		new := ParcelTrackingDataUpdatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentCreated":
 		new := PaymentCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentInteractionAdded":
 		new := PaymentInteractionAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentStatusInterfaceCodeSet":
 		new := PaymentStatusInterfaceCodeSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentStatusStateTransition":
 		new := PaymentStatusStateTransitionMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentTransactionAdded":
 		new := PaymentTransactionAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PaymentTransactionStateChanged":
 		new := PaymentTransactionStateChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductAddedToCategory":
 		new := ProductAddedToCategoryMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductCreated":
 		new := ProductCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductDeleted":
 		new := ProductDeletedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductImageAdded":
 		new := ProductImageAddedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductPriceDiscountsSet":
 		new := ProductPriceDiscountsSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductPriceExternalDiscountSet":
 		new := ProductPriceExternalDiscountSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductPublished":
 		new := ProductPublishedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductRemovedFromCategory":
 		new := ProductRemovedFromCategoryMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductRevertedStagedChanges":
 		new := ProductRevertedStagedChangesMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductSlugChanged":
 		new := ProductSlugChangedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductStateTransition":
 		new := ProductStateTransitionMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductUnpublished":
 		new := ProductUnpublishedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ProductVariantDeleted":
 		new := ProductVariantDeletedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReviewCreated":
 		new := ReviewCreatedMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReviewRatingSet":
 		new := ReviewRatingSetMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -1071,7 +1071,7 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return new, nil
 	case "ReviewStateTransition":
 		new := ReviewStateTransitionMessagePayload{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

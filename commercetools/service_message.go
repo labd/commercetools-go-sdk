@@ -8,28 +8,27 @@ import (
 	"net/url"
 )
 
-// AbstractMessageURLPath is the commercetools API path.
-const AbstractMessageURLPath = "messages"
-
-// AbstractMessageQuery allows querying for type Message
-func (client *Client) AbstractMessageQuery(ctx context.Context, input *QueryInput) (result *MessagePagedQueryResponse, err error) {
-	err = client.Query(ctx, AbstractMessageURLPath, input.toParams(), &result)
+// MessageQuery allows querying for type Message
+// for type MessagePagedQueryResponse
+func (client *Client) MessageQuery(ctx context.Context, input *QueryInput) (result *MessagePagedQueryResponse, err error) {
+	endpoint := "messages"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
 	return result, nil
 }
 
-// AbstractMessageGetWithID for type Message
-func (client *Client) AbstractMessageGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Message, err error) {
+// MessageGetWithID for type Message
+func (client *Client) MessageGetWithID(ctx context.Context, id string, opts ...RequestOption) (result Message, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("messages/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return mapDiscriminatorMessage(result)
 }

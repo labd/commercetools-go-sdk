@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// ChannelURLPath is the commercetools API path.
-const ChannelURLPath = "channels"
-
 // ChannelCreate creates a new instance of type Channel
 func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft, opts ...RequestOption) (result *Channel, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft, op
 		opt(&params)
 	}
 
-	err = client.Create(ctx, ChannelURLPath, params, draft, &result)
+	endpoint := "channels"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,8 +25,10 @@ func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft, op
 }
 
 // ChannelQuery allows querying for type Channel
+// for type ChannelPagedQueryResponse
 func (client *Client) ChannelQuery(ctx context.Context, input *QueryInput) (result *ChannelPagedQueryResponse, err error) {
-	err = client.Query(ctx, ChannelURLPath, input.toParams(), &result)
+	endpoint := "channels"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (client *Client) ChannelDeleteWithID(ctx context.Context, id string, versio
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("channels/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +58,7 @@ func (client *Client) ChannelGetWithID(ctx context.Context, id string, opts ...R
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("channels/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func (client *Client) ChannelUpdateWithID(ctx context.Context, input *ChannelUpd
 	}
 
 	endpoint := fmt.Sprintf("channels/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

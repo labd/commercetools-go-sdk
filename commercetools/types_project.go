@@ -24,63 +24,63 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 	switch discriminator {
 	case "changeCountries":
 		new := ProjectChangeCountriesAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeCountryTaxRateFallbackEnabled":
 		new := ProjectChangeCountryTaxRateFallbackEnabledAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeCurrencies":
 		new := ProjectChangeCurrenciesAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeLanguages":
 		new := ProjectChangeLanguagesAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeMessagesConfiguration":
 		new := ProjectChangeMessagesConfigurationAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeMessagesEnabled":
 		new := ProjectChangeMessagesEnabledAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := ProjectChangeNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExternalOAuth":
 		new := ProjectSetExternalOAuthAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setShippingRateInputType":
 		new := ProjectSetShippingRateInputTypeAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -111,21 +111,21 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 	switch discriminator {
 	case "CartClassification":
 		new := CartClassificationType{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CartScore":
 		new := CartScoreType{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "CartValue":
 		new := CartValueType{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

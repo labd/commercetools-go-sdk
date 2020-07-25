@@ -24,35 +24,35 @@ func mapDiscriminatorProductDiscountUpdateAction(input interface{}) (ProductDisc
 	switch discriminator {
 	case "changeIsActive":
 		new := ProductDiscountChangeIsActiveAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := ProductDiscountChangeNameAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changePredicate":
 		new := ProductDiscountChangePredicateAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeSortOrder":
 		new := ProductDiscountChangeSortOrderAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeValue":
 		new := ProductDiscountChangeValueAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -65,35 +65,35 @@ func mapDiscriminatorProductDiscountUpdateAction(input interface{}) (ProductDisc
 		return new, nil
 	case "setDescription":
 		new := ProductDiscountSetDescriptionAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := ProductDiscountSetKeyAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFrom":
 		new := ProductDiscountSetValidFromAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidFromAndUntil":
 		new := ProductDiscountSetValidFromAndUntilAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setValidUntil":
 		new := ProductDiscountSetValidUntilAction{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -118,7 +118,7 @@ func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountVal
 	switch discriminator {
 	case "absolute":
 		new := ProductDiscountValueAbsolute{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -128,14 +128,14 @@ func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountVal
 		return new, nil
 	case "external":
 		new := ProductDiscountValueExternal{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "relative":
 		new := ProductDiscountValueRelative{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -160,21 +160,21 @@ func mapDiscriminatorProductDiscountValueDraft(input interface{}) (ProductDiscou
 	switch discriminator {
 	case "absolute":
 		new := ProductDiscountValueAbsoluteDraft{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "external":
 		new := ProductDiscountValueExternalDraft{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "relative":
 		new := ProductDiscountValueRelativeDraft{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// CategoryURLPath is the commercetools API path.
-const CategoryURLPath = "categories"
-
 // CategoryCreate creates a new instance of type Category
 func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft, opts ...RequestOption) (result *Category, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft, 
 		opt(&params)
 	}
 
-	err = client.Create(ctx, CategoryURLPath, params, draft, &result)
+	endpoint := "categories"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -27,74 +25,10 @@ func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft, 
 }
 
 // CategoryQuery allows querying for type Category
+// for type CategoryPagedQueryResponse
 func (client *Client) CategoryQuery(ctx context.Context, input *QueryInput) (result *CategoryPagedQueryResponse, err error) {
-	err = client.Query(ctx, CategoryURLPath, input.toParams(), &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// CategoryDeleteWithKey for type Category
-func (client *Client) CategoryDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Category, err error) {
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("categories/key=%s", key)
-	err = client.Delete(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// CategoryGetWithKey for type Category
-func (client *Client) CategoryGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Category, err error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("categories/key=%s", key)
-	err = client.Get(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// CategoryUpdateWithKeyInput is input for function CategoryUpdateWithKey
-type CategoryUpdateWithKeyInput struct {
-	Key     string
-	Version int
-	Actions []CategoryUpdateAction
-}
-
-func (input *CategoryUpdateWithKeyInput) Validate() error {
-	if input.Key == "" {
-		return fmt.Errorf("no valid value for Key given")
-	}
-	if len(input.Actions) == 0 {
-		return fmt.Errorf("no update actions specified")
-	}
-	return nil
-}
-
-// CategoryUpdateWithKey for type Category
-func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *CategoryUpdateWithKeyInput, opts ...RequestOption) (result *Category, err error) {
-	if err := input.Validate(); err != nil {
-		return nil, err
-	}
-
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-
-	endpoint := fmt.Sprintf("categories/key=%s", input.Key)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	endpoint := "categories"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +44,23 @@ func (client *Client) CategoryDeleteWithID(ctx context.Context, id string, versi
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("categories/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// CategoryDeleteWithKey for type Category
+func (client *Client) CategoryDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("categories/key=%s", key)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +74,21 @@ func (client *Client) CategoryGetWithID(ctx context.Context, id string, opts ...
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("categories/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// CategoryGetWithKey for type Category
+func (client *Client) CategoryGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Category, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("categories/key=%s", key)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +124,43 @@ func (client *Client) CategoryUpdateWithID(ctx context.Context, input *CategoryU
 	}
 
 	endpoint := fmt.Sprintf("categories/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// CategoryUpdateWithKeyInput is input for function CategoryUpdateWithKey
+type CategoryUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []CategoryUpdateAction
+}
+
+func (input *CategoryUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// CategoryUpdateWithKey for type Category
+func (client *Client) CategoryUpdateWithKey(ctx context.Context, input *CategoryUpdateWithKeyInput, opts ...RequestOption) (result *Category, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("categories/key=%s", input.Key)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

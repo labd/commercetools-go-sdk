@@ -24,42 +24,42 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 	switch discriminator {
 	case "access_denied":
 		new := AccessDeniedError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ConcurrentModification":
 		new := ConcurrentModificationError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DiscountCodeNonApplicable":
 		new := DiscountCodeNonApplicableError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateAttributeValue":
 		new := DuplicateAttributeValueError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateAttributeValues":
 		new := DuplicateAttributeValuesError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateField":
 		new := DuplicateFieldError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -72,7 +72,7 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "DuplicateFieldWithConflictingResource":
 		new := DuplicateFieldWithConflictingResourceError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -85,182 +85,182 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "DuplicatePriceScope":
 		new := DuplicatePriceScopeError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateVariantValues":
 		new := DuplicateVariantValuesError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "EnumValueIsUsed":
 		new := EnumValueIsUsedError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ExtensionBadResponse":
 		new := ExtensionBadResponseError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ExtensionNoResponse":
 		new := ExtensionNoResponseError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ExtensionUpdateActionsFailed":
 		new := ExtensionUpdateActionsFailedError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "insufficient_scope":
 		new := InsufficientScopeError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidCredentials":
 		new := InvalidCredentialsError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidCurrentPassword":
 		new := InvalidCurrentPasswordError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidField":
 		new := InvalidFieldError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidInput":
 		new := InvalidInputError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidItemShippingDetails":
 		new := InvalidItemShippingDetailsError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidJsonInput":
 		new := InvalidJSONInputError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidOperation":
 		new := InvalidOperationError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidSubject":
 		new := InvalidSubjectError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "invalid_token":
 		new := InvalidTokenError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "LanguageUsedInStores":
 		new := LanguageUsedInStoresError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "MatchingPriceNotFound":
 		new := MatchingPriceNotFoundError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "MissingTaxRateForCountry":
 		new := MissingTaxRateForCountryError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "NoMatchingProductDiscountFound":
 		new := NoMatchingProductDiscountFoundError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OutOfStock":
 		new := OutOfStockError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PriceChanged":
 		new := PriceChangedError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReferenceExists":
 		new := ReferenceExistsError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "RequiredField":
 		new := RequiredFieldError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ResourceNotFound":
 		new := ResourceNotFoundError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ShippingMethodDoesNotMatchCart":
 		new := ShippingMethodDoesNotMatchCartError{}
-		err := DecodeStruct(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
