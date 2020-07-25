@@ -25,7 +25,6 @@ func (client *Client) MyCartCreate(ctx context.Context, draft *MyCartDraft, opts
 }
 
 // MyCartQuery allows querying for type
-// for type CartPagedQueryResponse
 func (client *Client) MyCartQuery(ctx context.Context, input *QueryInput) (result *CartPagedQueryResponse, err error) {
 	endpoint := "me/carts"
 	err = client.query(ctx, endpoint, input.toParams(), &result)
@@ -117,7 +116,6 @@ func (client *Client) MyOrderCreate(ctx context.Context, draft *MyOrderFromCartD
 }
 
 // MyOrderQuery allows querying for type
-// for type OrderPagedQueryResponse
 func (client *Client) MyOrderQuery(ctx context.Context, input *QueryInput) (result *OrderPagedQueryResponse, err error) {
 	endpoint := "me/orders"
 	err = client.query(ctx, endpoint, input.toParams(), &result)
@@ -157,7 +155,6 @@ func (client *Client) MyPaymentCreate(ctx context.Context, draft *MyPaymentDraft
 }
 
 // MyPaymentQuery allows querying for type
-// for type MyPaymentPagedQueryResponse
 func (client *Client) MyPaymentQuery(ctx context.Context, input *QueryInput) (result *MyPaymentPagedQueryResponse, err error) {
 	endpoint := "me/payments"
 	err = client.query(ctx, endpoint, input.toParams(), &result)
@@ -315,7 +312,6 @@ func (client *Client) MyShoppingListCreate(ctx context.Context, draft *MyShoppin
 }
 
 // MyShoppingListQuery allows querying for type
-// for type ShoppingListPagedQueryResponse
 func (client *Client) MyShoppingListQuery(ctx context.Context, input *QueryInput) (result *ShoppingListPagedQueryResponse, err error) {
 	endpoint := "me/shopping-lists"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

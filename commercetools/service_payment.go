@@ -25,7 +25,6 @@ func (client *Client) PaymentCreate(ctx context.Context, draft *PaymentDraft, op
 }
 
 // PaymentQuery allows querying for type Payment
-// for type PaymentPagedQueryResponse
 func (client *Client) PaymentQuery(ctx context.Context, input *QueryInput) (result *PaymentPagedQueryResponse, err error) {
 	endpoint := "payments"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

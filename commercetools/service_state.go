@@ -25,7 +25,6 @@ func (client *Client) StateCreate(ctx context.Context, draft *StateDraft, opts .
 }
 
 // StateQuery allows querying for type State
-// for type StatePagedQueryResponse
 func (client *Client) StateQuery(ctx context.Context, input *QueryInput) (result *StatePagedQueryResponse, err error) {
 	endpoint := "states"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

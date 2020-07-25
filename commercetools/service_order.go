@@ -25,7 +25,6 @@ func (client *Client) OrderCreate(ctx context.Context, draft *OrderFromCartDraft
 }
 
 // OrderQuery allows querying for type Order
-// for type OrderPagedQueryResponse
 func (client *Client) OrderQuery(ctx context.Context, input *QueryInput) (result *OrderPagedQueryResponse, err error) {
 	endpoint := "orders"
 	err = client.query(ctx, endpoint, input.toParams(), &result)
@@ -201,7 +200,6 @@ func (client *Client) OrderEditCreate(ctx context.Context, draft *OrderEditDraft
 }
 
 // OrderEditQuery allows querying for type Order
-// for type OrderEditPagedQueryResponse
 func (client *Client) OrderEditQuery(ctx context.Context, input *QueryInput) (result *OrderEditPagedQueryResponse, err error) {
 	endpoint := "orders/edits"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

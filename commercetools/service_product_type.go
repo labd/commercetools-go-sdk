@@ -25,7 +25,6 @@ func (client *Client) ProductTypeCreate(ctx context.Context, draft *ProductTypeD
 }
 
 // ProductTypeQuery allows querying for type ProductType
-// for type ProductTypePagedQueryResponse
 func (client *Client) ProductTypeQuery(ctx context.Context, input *QueryInput) (result *ProductTypePagedQueryResponse, err error) {
 	endpoint := "product-types"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

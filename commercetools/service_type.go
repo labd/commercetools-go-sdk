@@ -25,7 +25,6 @@ func (client *Client) TypeCreate(ctx context.Context, draft *TypeDraft, opts ...
 }
 
 // TypeQuery allows querying for type Type
-// for type TypePagedQueryResponse
 func (client *Client) TypeQuery(ctx context.Context, input *QueryInput) (result *TypePagedQueryResponse, err error) {
 	endpoint := "types"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

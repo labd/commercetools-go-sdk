@@ -25,7 +25,6 @@ func (client *Client) TaxCategoryCreate(ctx context.Context, draft *TaxCategoryD
 }
 
 // TaxCategoryQuery allows querying for type TaxCategory
-// for type TaxCategoryPagedQueryResponse
 func (client *Client) TaxCategoryQuery(ctx context.Context, input *QueryInput) (result *TaxCategoryPagedQueryResponse, err error) {
 	endpoint := "tax-categories"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

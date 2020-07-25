@@ -25,7 +25,6 @@ func (client *Client) CategoryCreate(ctx context.Context, draft *CategoryDraft, 
 }
 
 // CategoryQuery allows querying for type Category
-// for type CategoryPagedQueryResponse
 func (client *Client) CategoryQuery(ctx context.Context, input *QueryInput) (result *CategoryPagedQueryResponse, err error) {
 	endpoint := "categories"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

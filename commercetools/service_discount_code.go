@@ -25,7 +25,6 @@ func (client *Client) DiscountCodeCreate(ctx context.Context, draft *DiscountCod
 }
 
 // DiscountCodeQuery allows querying for type DiscountCode
-// for type DiscountCodePagedQueryResponse
 func (client *Client) DiscountCodeQuery(ctx context.Context, input *QueryInput) (result *DiscountCodePagedQueryResponse, err error) {
 	endpoint := "discount-codes"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

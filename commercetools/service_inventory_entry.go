@@ -25,7 +25,6 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 }
 
 // InventoryEntryQuery allows querying for type InventoryEntry
-// for type InventoryPagedQueryResponse
 func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput) (result *InventoryPagedQueryResponse, err error) {
 	endpoint := "inventory"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

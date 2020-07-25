@@ -25,7 +25,6 @@ func (client *Client) ShoppingListCreate(ctx context.Context, draft *ShoppingLis
 }
 
 // ShoppingListQuery allows querying for type ShoppingList
-// for type ShoppingListPagedQueryResponse
 func (client *Client) ShoppingListQuery(ctx context.Context, input *QueryInput) (result *ShoppingListPagedQueryResponse, err error) {
 	endpoint := "shopping-lists"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

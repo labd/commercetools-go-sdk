@@ -25,7 +25,6 @@ func (client *Client) ProductDiscountCreate(ctx context.Context, draft *ProductD
 }
 
 // ProductDiscountQuery allows querying for type ProductDiscount
-// for type ProductDiscountPagedQueryResponse
 func (client *Client) ProductDiscountQuery(ctx context.Context, input *QueryInput) (result *ProductDiscountPagedQueryResponse, err error) {
 	endpoint := "product-discounts"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

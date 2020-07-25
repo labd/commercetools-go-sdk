@@ -25,7 +25,6 @@ func (client *Client) ExtensionCreate(ctx context.Context, draft *ExtensionDraft
 }
 
 // ExtensionQuery allows querying for type Extension
-// for type ExtensionPagedQueryResponse
 func (client *Client) ExtensionQuery(ctx context.Context, input *QueryInput) (result *ExtensionPagedQueryResponse, err error) {
 	endpoint := "extensions"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

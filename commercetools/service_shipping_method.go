@@ -25,7 +25,6 @@ func (client *Client) ShippingMethodCreate(ctx context.Context, draft *ShippingM
 }
 
 // ShippingMethodQuery allows querying for type ShippingMethod
-// for type ShippingMethodPagedQueryResponse
 func (client *Client) ShippingMethodQuery(ctx context.Context, input *QueryInput) (result *ShippingMethodPagedQueryResponse, err error) {
 	endpoint := "shipping-methods"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

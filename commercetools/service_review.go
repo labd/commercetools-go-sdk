@@ -25,7 +25,6 @@ func (client *Client) ReviewCreate(ctx context.Context, draft *ReviewDraft, opts
 }
 
 // ReviewQuery allows querying for type Review
-// for type ReviewPagedQueryResponse
 func (client *Client) ReviewQuery(ctx context.Context, input *QueryInput) (result *ReviewPagedQueryResponse, err error) {
 	endpoint := "reviews"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

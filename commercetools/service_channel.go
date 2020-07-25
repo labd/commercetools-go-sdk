@@ -25,7 +25,6 @@ func (client *Client) ChannelCreate(ctx context.Context, draft *ChannelDraft, op
 }
 
 // ChannelQuery allows querying for type Channel
-// for type ChannelPagedQueryResponse
 func (client *Client) ChannelQuery(ctx context.Context, input *QueryInput) (result *ChannelPagedQueryResponse, err error) {
 	endpoint := "channels"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

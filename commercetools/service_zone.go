@@ -25,7 +25,6 @@ func (client *Client) ZoneCreate(ctx context.Context, draft *ZoneDraft, opts ...
 }
 
 // ZoneQuery allows querying for type Zone
-// for type ZonePagedQueryResponse
 func (client *Client) ZoneQuery(ctx context.Context, input *QueryInput) (result *ZonePagedQueryResponse, err error) {
 	endpoint := "zones"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

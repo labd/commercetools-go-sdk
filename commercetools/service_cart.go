@@ -25,7 +25,6 @@ func (client *Client) CartCreate(ctx context.Context, draft *CartDraft, opts ...
 }
 
 // CartQuery allows querying for type Cart
-// for type CartPagedQueryResponse
 func (client *Client) CartQuery(ctx context.Context, input *QueryInput) (result *CartPagedQueryResponse, err error) {
 	endpoint := "carts"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

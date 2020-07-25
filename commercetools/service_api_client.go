@@ -24,7 +24,6 @@ func (client *Client) APIClientCreate(ctx context.Context, draft *APIClientDraft
 }
 
 // APIClientQuery allows querying for type ApiClient
-// for type APIClientPagedQueryResponse
 func (client *Client) APIClientQuery(ctx context.Context, input *QueryInput) (result *APIClientPagedQueryResponse, err error) {
 	endpoint := "api-clients"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

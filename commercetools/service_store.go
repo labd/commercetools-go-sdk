@@ -25,7 +25,6 @@ func (client *Client) StoreCreate(ctx context.Context, draft *StoreDraft, opts .
 }
 
 // StoreQuery allows querying for type Store
-// for type StorePagedQueryResponse
 func (client *Client) StoreQuery(ctx context.Context, input *QueryInput) (result *StorePagedQueryResponse, err error) {
 	endpoint := "stores"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

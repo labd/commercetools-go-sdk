@@ -32,4 +32,10 @@ if __name__ == "__main__":
 
     with open(sys.argv[1], "r") as fh:
         data = yaml.load(fh, Loader)
-    print(yaml.dump(data))
+
+    output = yaml.dump(data)
+    if len(sys.argv) > 2:
+        with open(sys.argv[2], "w") as fh:
+            fh.write(output)
+    else:
+        print(output)

@@ -25,7 +25,6 @@ func (client *Client) CustomerGroupCreate(ctx context.Context, draft *CustomerGr
 }
 
 // CustomerGroupQuery allows querying for type CustomerGroup
-// for type CustomerGroupPagedQueryResponse
 func (client *Client) CustomerGroupQuery(ctx context.Context, input *QueryInput) (result *CustomerGroupPagedQueryResponse, err error) {
 	endpoint := "customer-groups"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

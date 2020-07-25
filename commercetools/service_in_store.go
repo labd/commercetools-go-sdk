@@ -146,7 +146,6 @@ func (client *Client) StoreCustomerCreate(ctx context.Context, storeKey string, 
 }
 
 // StoreCustomerQuery allows querying for type
-// for type CustomerPagedQueryResponse
 func (client *Client) StoreCustomerQuery(ctx context.Context, storeKey string, input *QueryInput) (result *CustomerPagedQueryResponse, err error) {
 	endpoint := fmt.Sprintf("in-store/key=%s/customers", storeKey)
 	err = client.query(ctx, endpoint, input.toParams(), &result)
@@ -428,7 +427,6 @@ func (client *Client) StoreMyCartCreate(ctx context.Context, storeKey string, dr
 }
 
 // StoreMyCartQuery allows querying for type
-// for type CartPagedQueryResponse
 func (client *Client) StoreMyCartQuery(ctx context.Context, storeKey string, input *QueryInput) (result *CartPagedQueryResponse, err error) {
 	endpoint := fmt.Sprintf("in-store/key=%s/me/carts", storeKey)
 	err = client.query(ctx, endpoint, input.toParams(), &result)
@@ -520,7 +518,6 @@ func (client *Client) StoreMyOrderCreate(ctx context.Context, storeKey string, d
 }
 
 // StoreMyOrderQuery allows querying for type
-// for type OrderPagedQueryResponse
 func (client *Client) StoreMyOrderQuery(ctx context.Context, storeKey string, input *QueryInput) (result *OrderPagedQueryResponse, err error) {
 	endpoint := fmt.Sprintf("in-store/key=%s/me/orders", storeKey)
 	err = client.query(ctx, endpoint, input.toParams(), &result)

@@ -25,7 +25,6 @@ func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft, 
 }
 
 // CustomerQuery allows querying for type Customer
-// for type CustomerPagedQueryResponse
 func (client *Client) CustomerQuery(ctx context.Context, input *QueryInput) (result *CustomerPagedQueryResponse, err error) {
 	endpoint := "customers"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

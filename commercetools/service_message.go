@@ -9,7 +9,6 @@ import (
 )
 
 // MessageQuery allows querying for type Message
-// for type MessagePagedQueryResponse
 func (client *Client) MessageQuery(ctx context.Context, input *QueryInput) (result *MessagePagedQueryResponse, err error) {
 	endpoint := "messages"
 	err = client.query(ctx, endpoint, input.toParams(), &result)

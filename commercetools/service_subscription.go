@@ -25,7 +25,6 @@ func (client *Client) SubscriptionCreate(ctx context.Context, draft *Subscriptio
 }
 
 // SubscriptionQuery allows querying for type Subscription
-// for type SubscriptionPagedQueryResponse
 func (client *Client) SubscriptionQuery(ctx context.Context, input *QueryInput) (result *SubscriptionPagedQueryResponse, err error) {
 	endpoint := "subscriptions"
 	err = client.query(ctx, endpoint, input.toParams(), &result)
