@@ -85,7 +85,7 @@ func (client *Client) ProductProjectionSearch(ctx context.Context, value *Produc
 	}
 
 	endpoint := "product-projections/search"
-	err = client.create(ctx, endpoint, params, value, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -107,7 +107,7 @@ func (client *Client) ProductProjectionSuggest(ctx context.Context, value *Produ
 	}
 
 	endpoint := "product-projections/suggest"
-	err = client.create(ctx, endpoint, params, value, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}

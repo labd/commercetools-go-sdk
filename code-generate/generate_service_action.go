@@ -15,13 +15,18 @@ func generateServiceAction(method ServiceMethod, objects map[string]RamlType) (c
 	}
 	extraParams := generateServiceArgumentCode(method)
 	methodParamList = append(methodParamList, extraParams...)
-	methodParamList = append(
-		methodParamList,
-		jen.Id("value").Op("*").Id(method.InputType),
-		jen.Id("opts").Op("...").Id("RequestOption"),
-	)
+	if method.InputType != "" {
+		methodParamList = append(methodParamList, jen.Id("value").Op("*").Id(method.InputType))
+	}
+	methodParamList = append(methodParamList, jen.Id("opts").Op("...").Id("RequestOption"))
 
-	clientMethod := "create"
+	var clientMethod string
+	switch method.HTTPMethod {
+	case "post":
+		clientMethod = "create"
+	case "get":
+		clientMethod = "get"
+	}
 
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 	description := fmt.Sprintf("for type %s", method.InputType)
@@ -86,13 +91,22 @@ func generateServiceAction(method ServiceMethod, objects map[string]RamlType) (c
 		).Line()
 
 		b.Id("endpoint").Op(":=").Add(generateServicePathCode(method))
-		b.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).Call(
-			jen.Id("ctx"),
-			jen.Id("endpoint"),
-			jen.Id("params"),
-			jen.Id("value"),
-			jen.Op("&").Id("result"),
-		)
+
+		b.Id("err").Op("=").Id("client").Op(".").Id(clientMethod).CallFunc(func(g *jen.Group) {
+			g.Id("ctx")
+			g.Id("endpoint")
+			g.Id("params")
+
+			if method.HTTPMethod == "post" {
+				if method.InputType != "" {
+					g.Id("value")
+				} else {
+					g.Nil()
+				}
+			}
+
+			g.Op("&").Id("result")
+		})
 		b.If(jen.Err().Op("!=").Nil()).Block(
 			jen.Return(jen.Nil(), jen.Err()),
 		)

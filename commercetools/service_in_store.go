@@ -9,6 +9,41 @@ import (
 	"strconv"
 )
 
+// StoreLogin Authenticate Customer (Sign In)
+func (client *Client) StoreLogin(ctx context.Context, storeKey string, value *CustomerSignin, opts ...RequestOption) (result *CustomerSignInResult, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/login", storeKey)
+	err = client.create(ctx, endpoint, params, value, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShippingMethodsForMatchingCartInput is input for function StoreShippingMethodsForMatchingCart
+type StoreShippingMethodsForMatchingCartInput struct {
+	CartID string `url:"cartId"`
+}
+
+// StoreShippingMethodsForMatchingCart for type StoreShippingMethodsForMatchingCartInput
+func (client *Client) StoreShippingMethodsForMatchingCart(ctx context.Context, storeKey string, value *StoreShippingMethodsForMatchingCartInput, opts ...RequestOption) (result *ShippingMethodPagedQueryResponse, err error) {
+	params := serializeQueryParams(value)
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/shipping-methods/matching-cart", storeKey)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // StoreCartCreate creates a new instance of type Cart
 func (client *Client) StoreCartCreate(ctx context.Context, storeKey string, draft *CartDraft, opts ...RequestOption) (result *Cart, err error) {
 	params := url.Values{}
@@ -405,6 +440,21 @@ func (client *Client) StoreCustomerPasswordreset(ctx context.Context, storeKey s
 
 	endpoint := fmt.Sprintf("in-store/key=%s/customers/password/reset", storeKey)
 	err = client.create(ctx, endpoint, params, value, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreMyActiveCart for type
+func (client *Client) StoreMyActiveCart(ctx context.Context, storeKey string, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/me/active-cart", storeKey)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}

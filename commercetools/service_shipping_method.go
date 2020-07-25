@@ -179,7 +179,7 @@ func (client *Client) ShippingMethodMatchingCart(ctx context.Context, value *Shi
 	}
 
 	endpoint := "shipping-methods/matching-cart"
-	err = client.create(ctx, endpoint, params, value, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +201,7 @@ func (client *Client) ShippingMethodMatchingLocation(ctx context.Context, value 
 	}
 
 	endpoint := "shipping-methods/matching-location"
-	err = client.create(ctx, endpoint, params, value, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +223,7 @@ func (client *Client) ShippingMethodMatchingOrderedit(ctx context.Context, value
 	}
 
 	endpoint := "shipping-methods/matching-orderedit"
-	err = client.create(ctx, endpoint, params, value, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}

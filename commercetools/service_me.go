@@ -9,6 +9,66 @@ import (
 	"strconv"
 )
 
+// MyActiveCart for type
+func (client *Client) MyActiveCart(ctx context.Context, opts ...RequestOption) (result *MyCart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := "me/active-cart"
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// MyLogin for type
+func (client *Client) MyLogin(ctx context.Context, opts ...RequestOption) (result *CustomerSignInResult, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := "me/login"
+	err = client.create(ctx, endpoint, params, nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// MyReset for type
+func (client *Client) MyReset(ctx context.Context, opts ...RequestOption) (result *MyCustomer, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := "me/password/reset"
+	err = client.create(ctx, endpoint, params, nil, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// MySignup for type MyCustomerDraft
+func (client *Client) MySignup(ctx context.Context, value *MyCustomerDraft, opts ...RequestOption) (result *CustomerSignInResult, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := "me/signup"
+	err = client.create(ctx, endpoint, params, value, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // MyCartCreate creates a new instance of type MyCart
 func (client *Client) MyCartCreate(ctx context.Context, draft *MyCartDraft, opts ...RequestOption) (result *MyCart, err error) {
 	params := url.Values{}

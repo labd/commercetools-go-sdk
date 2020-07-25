@@ -125,12 +125,25 @@ func createService(apiResource yaml.MapItem, parent *ServiceDomain) *ServiceDoma
 
 	if itemType == "base" {
 		for _, value := range currentData {
-			// if !strings.HasPrefix(value.Key.(string), "/") {
-			// 	continue
-			// }
+			if !strings.HasPrefix(value.Key.(string), "/") {
+				continue
+			}
 			child := createService(value, &serviceDomain)
 			if child != nil {
 				serviceDomain.methods = append(serviceDomain.methods, child.methods...)
+			}
+		}
+		if len(serviceDomain.methods) == 0 {
+			if parent == nil {
+				method := createActionServiceMethods("", currentData, &serviceDomain)
+				if method != nil {
+					serviceDomain.methods = append(serviceDomain.methods, *method)
+				}
+			} else {
+				method := createActionServiceMethods(currentKey, currentData, parent)
+				if method != nil {
+					serviceDomain.methods = append(serviceDomain.methods, *method)
+				}
 			}
 		}
 		return &serviceDomain
@@ -244,13 +257,22 @@ func createActionServiceMethods(key string, data yaml.MapSlice, sd *ServiceDomai
 	}
 	methodData := methodSlice.(yaml.MapSlice)
 
-	name := CreateCodeName(sd.ContextName) + CreateCodeName(key[1:])
+	name := CreateCodeName(sd.ContextName)
+	if key != "" {
+
+		// FIXME: Add (methodName) in raml specs?
+		if sd.ContextName == "Store" && strings.HasSuffix(sd.Path, "/shipping-methods") {
+			name += "ShippingMethodsFor"
+		}
+		name += CreateCodeName(key[1:])
+	}
 	method := &ServiceMethod{
 		Name:       name,
 		Context:    sd.ContextName,
 		Parameters: sd.PathParameters,
 		Path:       sd.Path + key,
 		Type:       "action",
+		HTTPMethod: methodKey,
 		InputType:  getInputType(methodData, sd, name),
 		ReturnType: getReturnType(methodData, sd),
 	}
@@ -426,10 +448,10 @@ func generateContextName(value string, parent *ServiceDomain) string {
 	case "login":
 		return "Login"
 	case "me":
-		if parent != nil && parent.ContextName == "" {
-			return ""
-		}
 		return "My"
+	}
+	if parent != nil && parent.ContextName != "" {
+		return parent.ContextName
 	}
 	return "dummy"
 }
