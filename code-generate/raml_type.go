@@ -59,7 +59,9 @@ func (r *RamlType) resolve(types map[string]*RamlType) {
 
 func (r *RamlType) isInterface() bool {
 	// TODO; check if 1 attribute and that is the discriminator
-	if len(r.Attributes) == 1 {
+	if r.Discriminator != "" {
+		return true
+	} else if len(r.Attributes) == 1 {
 		for _, attr := range r.Children {
 			if attr.Discriminator != "" {
 				return true
@@ -258,21 +260,5 @@ func postProcess(objects []RamlType) {
 
 	for i := range objects {
 		objects[i].resolve(objectMap)
-	}
-
-	for i := range objects {
-		if objects[i].Discriminator != "" {
-			objects[i].CodeName = "Abstract" + objects[i].CodeName
-		} else {
-			// TODO; check if 1 attribute and that is the discriminator
-			if len(objects[i].Attributes) == 1 {
-				for _, child := range objects[i].Children {
-					if child.Discriminator != "" {
-						objects[i].CodeName = "Abstract" + objects[i].CodeName
-						break
-					}
-				}
-			}
-		}
 	}
 }

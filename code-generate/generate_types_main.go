@@ -28,18 +28,25 @@ func generateTypes(objects []RamlType) {
 
 		for _, object := range packageObjects {
 			var stmt *jen.Statement
+			key := object.CodeName
+
+			// Just to keep sorting order (bit of a hack)
+			if object.isInterface() {
+				key = "Abstract" + key
+			}
+
 			if object.asMap {
 				stmt = generateMap(*object)
-				mapObjects[object.CodeName] = stmt
+				mapObjects[key] = stmt
 			} else if len(object.EnumValues) > 0 {
 				stmt := generateEnum(*object)
-				enumObjects[object.CodeName] = stmt
+				enumObjects[key] = stmt
 			} else if object.TypeName == "string" {
 				stmt := generateString(*object)
-				stringObjects[object.CodeName] = stmt
+				stringObjects[key] = stmt
 			} else {
 				stmt = generateStruct(*object)
-				structObjects[object.CodeName] = stmt
+				structObjects[key] = stmt
 			}
 		}
 

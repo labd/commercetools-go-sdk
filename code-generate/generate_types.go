@@ -86,12 +86,12 @@ func generateStruct(object RamlType) *jen.Statement {
 		}
 		c = c.Type().Id(object.InterfaceName).Interface().Line()
 
-		if len(fields) > 0 && !strings.HasPrefix(object.CodeName, "Abstract") {
+		if len(fields) > 0 && !object.isInterface() {
 			c = c.Type().Id(object.CodeName).Struct(fields...)
 		}
 	} else {
 		if object.TypeObject != nil {
-			if object.TypeObject.InterfaceName != object.TypeObject.CodeName {
+			if object.TypeObject.isInterface() {
 				c = c.Comment(fmt.Sprintf("%s implements the interface %s", object.CodeName, object.TypeObject.InterfaceName)).Line()
 			} else {
 				c = c.Comment(fmt.Sprintf("%s is of type %s", object.CodeName, object.TypeObject.CodeName)).Line()
@@ -114,7 +114,7 @@ func generateStruct(object RamlType) *jen.Statement {
 	}
 
 	// Generate UnmarshalJSON method
-	if len(fields) > 0 && !strings.HasPrefix(object.CodeName, "Abstract") {
+	if len(fields) > 0 && !object.isInterface() {
 		discriminatedAttributes := object.getDiscriminatedAttributes()
 		if len(discriminatedAttributes) > 0 {
 			unmarshalJSON := generateStructUnmarshalJSON(&object, discriminatedAttributes)
