@@ -38,8 +38,22 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return new, nil
+	case "addDistributionChannel":
+		new := StoresAddDistributionChannelsAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "removeDistributionChannel":
+		new := StoresRemoveDistributionChannelsAction{}
+		err := mapstructure.Decode(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDistributionChannels":
-		new := StoresStDistributionChannelsAction{}
+		new := StoresSetDistributionChannelsAction{}
 		err := mapstructure.Decode(input, &new)
 		if err != nil {
 			return nil, err
@@ -176,14 +190,42 @@ func (obj *StoreUpdate) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// StoresStDistributionChannelsAction implements the interface StoreUpdateAction
-type StoresStDistributionChannelsAction struct {
+// StoresAddDistributionChannelsAction implements the interface StoreUpdateAction
+type StoresAddDistributionChannelsAction struct {
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoresAddDistributionChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresAddDistributionChannelsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addDistributionChannel", Alias: (*Alias)(&obj)})
+}
+
+// StoresRemoveDistributionChannelsAction implements the interface StoreUpdateAction
+type StoresRemoveDistributionChannelsAction struct {
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoresRemoveDistributionChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresRemoveDistributionChannelsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeDistributionChannel", Alias: (*Alias)(&obj)})
+}
+
+// StoresSetDistributionChannelsAction implements the interface StoreUpdateAction
+type StoresSetDistributionChannelsAction struct {
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj StoresStDistributionChannelsAction) MarshalJSON() ([]byte, error) {
-	type Alias StoresStDistributionChannelsAction
+func (obj StoresSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresSetDistributionChannelsAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
