@@ -5,15 +5,13 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/labd/commercetools-go-sdk)](https://goreportcard.com/report/github.com/labd/commercetools-go-sdk)
 [![GoDoc](https://godoc.org/github.com/labd/commercetools-go-sdk?status.svg)](https://godoc.org/github.com/labd/commercetools-go-sdk)
 
-The Commercetools Go SDK was created for enabling the creation of the
-[Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools).
+The Commercetools Go SDK is automatically generated based on the official [API specifications](https://github.com/commercetools/commercetools-api-reference) 
+of Commercetools. It should therefore be nearly feature complete.
+
+The SDK was initially created for enabling the creation of the
+[Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools) 
 That provider enables you to use infrastructure-as-code principles with Commercetools.
 
-This means that the SDK is not feature complete at the moment. The SDK is
-currently not meant for building e-commerce front-ends with it, but aimed at
-maintaining the configuration of such a site. A front-end can be built using
-[one of the existing SDK's, provided and maintained by commercetools](https://docs.commercetools.com/software-development-kits). Or
-use our [unofficial Python SDK for Commercetools](https://github.com/labd/commercetools-python-sdk)!
 
 ## Using the SDK
 
@@ -79,7 +77,9 @@ func main() {
         },
     }
 
-    product, err := client.ProductCreate(ctx, productDraft)
+    // The last argument is optional for reference expansion
+    product, err := client.ProductCreate(
+        ctx, productDrafti, commercetools.WithReferenceExpansion("taxCategory"))
     if err != nil {
         log.Fatal(err)
     }
@@ -98,10 +98,5 @@ To generate code do the following steps:
 
 
 ### TODO for code generating the services:
-
-- Currently only /{ID} and /key={key} is supported, support other actions (f.e. Replicate cart)
-- Parse and use trait definitions (traits folder)
 - CustomObject service implementation
-- Implement other HTTPMethods/actions apart from get/post/delete (f.e. /images on product)
 - Implement all traits (f.e. priceSelecting)
-- Implement reference expansion
