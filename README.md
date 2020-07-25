@@ -79,7 +79,7 @@ func main() {
 
     // The last argument is optional for reference expansion
     product, err := client.ProductCreate(
-        ctx, productDrafti, commercetools.WithReferenceExpansion("taxCategory"))
+        ctx, productDraft, commercetools.WithReferenceExpansion("taxCategory"))
     if err != nil {
         log.Fatal(err)
     }
