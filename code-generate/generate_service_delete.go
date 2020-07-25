@@ -41,7 +41,7 @@ func generateServiceDelete(method ServiceMethod, objects map[string]RamlType) (c
 	methodParamList = append(methodParamList, jen.Id("opts").Op("...").Id("RequestOption"))
 
 	methodParams := jen.List(methodParamList...)
-	clientMethod := "Delete"
+	clientMethod := "delete"
 
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 

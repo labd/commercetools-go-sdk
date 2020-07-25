@@ -21,7 +21,7 @@ func generateServiceAction(method ServiceMethod, objects map[string]RamlType) (c
 		jen.Id("opts").Op("...").Id("RequestOption"),
 	)
 
-	clientMethod := "Create"
+	clientMethod := "create"
 
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 	description := fmt.Sprintf("for type %s", method.InputType)

@@ -52,7 +52,7 @@ func generateServiceUpdate(method ServiceMethod, objects map[string]RamlType) (c
 		jen.Id("input").Op("*").Id(updateStructID),
 		jen.Id("opts").Op("...").Id("RequestOption"),
 	)
-	clientMethod := "Update"
+	clientMethod := "update"
 
 	structReceiver := jen.Id("client").Op("*").Id("Client")
 	description := fmt.Sprintf("for type %s", method.ReturnType)

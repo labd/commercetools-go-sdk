@@ -36,9 +36,9 @@ func generateServiceCreate(method ServiceMethod, objects map[string]RamlType) (c
 		),
 		jen.Line(),
 
-		// err = client.Create(ctx, ProductURLPath, params, draft, &result)
+		// err = client.create(ctx, ProductURLPath, params, draft, &result)
 		jen.Id("endpoint").Op(":=").Add(generateServicePathCode(method)),
-		jen.Id("err").Op("=").Id("client").Op(".").Id("Create").Call(
+		jen.Id("err").Op("=").Id("client").Op(".").Id("create").Call(
 			jen.Id("ctx"),
 			jen.Id("endpoint"),
 			jen.Id("params"),

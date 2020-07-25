@@ -40,7 +40,7 @@ func generateServiceGet(method ServiceMethod, objects map[string]RamlType) (code
 		)
 
 		d.Id("endpoint").Op(":=").Add(generateServicePathCode(method))
-		d.Id("err").Op("=").Id("client").Op(".").Id("Get").Call(
+		d.Id("err").Op("=").Id("client").Op(".").Id("get").Call(
 			jen.Id("ctx"),
 			jen.Id("endpoint"),
 			jen.Id("params"),

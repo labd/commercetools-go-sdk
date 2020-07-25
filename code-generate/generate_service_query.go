@@ -27,7 +27,7 @@ func generateServiceQuery(method ServiceMethod, objects map[string]RamlType) (co
 
 	c.Func().Params(structReceiver).Id(method.Name).Params(jen.List(methodParamList...)).Parens(returnParams).Block(
 		jen.Id("endpoint").Op(":=").Add(generateServicePathCode(method)),
-		jen.Id("err").Op("=").Id("client").Op(".").Id("Query").Call(
+		jen.Id("err").Op("=").Id("client").Op(".").Id("query").Call(
 			jen.Id("ctx"),
 			jen.Id("endpoint"),
 			jen.Id("input").Op(".").Id("toParams").Call(),
