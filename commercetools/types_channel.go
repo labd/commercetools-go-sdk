@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ChannelRoleEnum is an enum type
@@ -38,63 +36,63 @@ func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction
 	switch discriminator {
 	case "addRoles":
 		new := ChannelAddRolesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeDescription":
 		new := ChannelChangeDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeKey":
 		new := ChannelChangeKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := ChannelChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeRoles":
 		new := ChannelRemoveRolesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAddress":
 		new := ChannelSetAddressAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := ChannelSetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := ChannelSetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setGeoLocation":
 		new := ChannelSetGeoLocationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -107,7 +105,7 @@ func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction
 		return new, nil
 	case "setRoles":
 		new := ChannelSetRolesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

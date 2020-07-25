@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ExtensionAction is an enum type
@@ -46,14 +44,14 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 	switch discriminator {
 	case "AWSLambda":
 		new := ExtensionAWSLambdaDestination{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "HTTP":
 		new := ExtensionHTTPDestination{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -84,14 +82,14 @@ func mapDiscriminatorExtensionHTTPDestinationAuthentication(input interface{}) (
 	switch discriminator {
 	case "AuthorizationHeader":
 		new := ExtensionAuthorizationHeaderAuthentication{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "AzureFunctions":
 		new := ExtensionAzureFunctionsAuthentication{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -116,7 +114,7 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 	switch discriminator {
 	case "changeDestination":
 		new := ExtensionChangeDestinationAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -129,21 +127,21 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 		return new, nil
 	case "changeTriggers":
 		new := ExtensionChangeTriggersAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := ExtensionSetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setTimeoutInMs":
 		new := ExtensionSetTimeoutInMsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

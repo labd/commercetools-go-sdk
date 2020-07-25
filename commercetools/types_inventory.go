@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // InventoryEntryUpdateAction uses action as discriminator attribute
@@ -26,56 +24,56 @@ func mapDiscriminatorInventoryEntryUpdateAction(input interface{}) (InventoryEnt
 	switch discriminator {
 	case "addQuantity":
 		new := InventoryEntryAddQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeQuantity":
 		new := InventoryEntryChangeQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeQuantity":
 		new := InventoryEntryRemoveQuantityAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := InventoryEntrySetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := InventoryEntrySetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExpectedDelivery":
 		new := InventoryEntrySetExpectedDeliveryAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setRestockableInDays":
 		new := InventoryEntrySetRestockableInDaysAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setSupplyChannel":
 		new := InventoryEntrySetSupplyChannelAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

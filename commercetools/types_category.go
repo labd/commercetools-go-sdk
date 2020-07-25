@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // CategoryUpdateAction uses action as discriminator attribute
@@ -26,154 +24,154 @@ func mapDiscriminatorCategoryUpdateAction(input interface{}) (CategoryUpdateActi
 	switch discriminator {
 	case "addAsset":
 		new := CategoryAddAssetAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAssetName":
 		new := CategoryChangeAssetNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeAssetOrder":
 		new := CategoryChangeAssetOrderAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeName":
 		new := CategoryChangeNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeOrderHint":
 		new := CategoryChangeOrderHintAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeParent":
 		new := CategoryChangeParentAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "changeSlug":
 		new := CategoryChangeSlugAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeAsset":
 		new := CategoryRemoveAssetAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetCustomField":
 		new := CategorySetAssetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetCustomType":
 		new := CategorySetAssetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetDescription":
 		new := CategorySetAssetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetKey":
 		new := CategorySetAssetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetSources":
 		new := CategorySetAssetSourcesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setAssetTags":
 		new := CategorySetAssetTagsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomField":
 		new := CategorySetCustomFieldAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setCustomType":
 		new := CategorySetCustomTypeAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDescription":
 		new := CategorySetDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setExternalId":
 		new := CategorySetExternalIDAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setKey":
 		new := CategorySetKeyAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMetaDescription":
 		new := CategorySetMetaDescriptionAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMetaKeywords":
 		new := CategorySetMetaKeywordsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setMetaTitle":
 		new := CategorySetMetaTitleAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

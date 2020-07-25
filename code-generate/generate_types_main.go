@@ -1,6 +1,10 @@
 package main
 
-import "github.com/dave/jennifer/jen"
+import (
+	"log"
+
+	"github.com/dave/jennifer/jen"
+)
 
 // Entry point to generate code object for a specific RamlType
 func generateTypes(objects []RamlType) {
@@ -12,6 +16,8 @@ func generateTypes(objects []RamlType) {
 	}
 
 	for pkg, packageObjects := range items {
+		filename := generateFilename(pkg)
+		log.Printf("Writing commercetools/%s\n", filename)
 		f := jen.NewFile("commercetools")
 		f.HeaderComment("Automatically generated, do not edit")
 
@@ -22,18 +28,25 @@ func generateTypes(objects []RamlType) {
 
 		for _, object := range packageObjects {
 			var stmt *jen.Statement
+			key := object.CodeName
+
+			// Just to keep sorting order (bit of a hack)
+			if object.isInterface() {
+				key = "Abstract" + key
+			}
+
 			if object.asMap {
 				stmt = generateMap(*object)
-				mapObjects[object.CodeName] = stmt
+				mapObjects[key] = stmt
 			} else if len(object.EnumValues) > 0 {
 				stmt := generateEnum(*object)
-				enumObjects[object.CodeName] = stmt
+				enumObjects[key] = stmt
 			} else if object.TypeName == "string" {
 				stmt := generateString(*object)
-				stringObjects[object.CodeName] = stmt
+				stringObjects[key] = stmt
 			} else {
 				stmt = generateStruct(*object)
-				structObjects[object.CodeName] = stmt
+				structObjects[key] = stmt
 			}
 		}
 
@@ -42,7 +55,6 @@ func generateTypes(objects []RamlType) {
 		addCodeObjects(f, mapObjects)
 		addCodeObjects(f, structObjects)
 
-		filename := generateFilename(pkg)
 		err := f.Save("commercetools/types_" + filename)
 		if err != nil {
 			panic(err)

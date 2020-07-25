@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // StoreUpdateAction uses action as discriminator attribute
@@ -26,35 +24,35 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 	switch discriminator {
 	case "setLanguages":
 		new := StoreSetLanguagesAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setName":
 		new := StoreSetNameAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "addDistributionChannel":
 		new := StoresAddDistributionChannelsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "removeDistributionChannel":
 		new := StoresRemoveDistributionChannelsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "setDistributionChannels":
 		new := StoresSetDistributionChannelsAction{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

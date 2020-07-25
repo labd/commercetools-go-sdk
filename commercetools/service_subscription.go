@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// SubscriptionURLPath is the commercetools API path.
-const SubscriptionURLPath = "subscriptions"
-
 // SubscriptionCreate creates a new instance of type Subscription
 func (client *Client) SubscriptionCreate(ctx context.Context, draft *SubscriptionDraft, opts ...RequestOption) (result *Subscription, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) SubscriptionCreate(ctx context.Context, draft *Subscriptio
 		opt(&params)
 	}
 
-	err = client.Create(ctx, SubscriptionURLPath, params, draft, &result)
+	endpoint := "subscriptions"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,73 +26,8 @@ func (client *Client) SubscriptionCreate(ctx context.Context, draft *Subscriptio
 
 // SubscriptionQuery allows querying for type Subscription
 func (client *Client) SubscriptionQuery(ctx context.Context, input *QueryInput) (result *SubscriptionPagedQueryResponse, err error) {
-	err = client.Query(ctx, SubscriptionURLPath, input.toParams(), &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// SubscriptionDeleteWithKey for type Subscription
-func (client *Client) SubscriptionDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Subscription, err error) {
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
-	err = client.Delete(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// SubscriptionGetWithKey Retrieves the representation of a subscription by its key.
-func (client *Client) SubscriptionGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Subscription, err error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
-	err = client.Get(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// SubscriptionUpdateWithKeyInput is input for function SubscriptionUpdateWithKey
-type SubscriptionUpdateWithKeyInput struct {
-	Key     string
-	Version int
-	Actions []SubscriptionUpdateAction
-}
-
-func (input *SubscriptionUpdateWithKeyInput) Validate() error {
-	if input.Key == "" {
-		return fmt.Errorf("no valid value for Key given")
-	}
-	if len(input.Actions) == 0 {
-		return fmt.Errorf("no update actions specified")
-	}
-	return nil
-}
-
-// SubscriptionUpdateWithKey for type Subscription
-func (client *Client) SubscriptionUpdateWithKey(ctx context.Context, input *SubscriptionUpdateWithKeyInput, opts ...RequestOption) (result *Subscription, err error) {
-	if err := input.Validate(); err != nil {
-		return nil, err
-	}
-
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-
-	endpoint := fmt.Sprintf("subscriptions/key=%s", input.Key)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	endpoint := "subscriptions"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +43,23 @@ func (client *Client) SubscriptionDeleteWithID(ctx context.Context, id string, v
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SubscriptionDeleteWithKey for type Subscription
+func (client *Client) SubscriptionDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *Subscription, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +73,21 @@ func (client *Client) SubscriptionGetWithID(ctx context.Context, id string, opts
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("subscriptions/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SubscriptionGetWithKey Retrieves the representation of a subscription by its key.
+func (client *Client) SubscriptionGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Subscription, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("subscriptions/key=%s", key)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +123,43 @@ func (client *Client) SubscriptionUpdateWithID(ctx context.Context, input *Subsc
 	}
 
 	endpoint := fmt.Sprintf("subscriptions/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// SubscriptionUpdateWithKeyInput is input for function SubscriptionUpdateWithKey
+type SubscriptionUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []SubscriptionUpdateAction
+}
+
+func (input *SubscriptionUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// SubscriptionUpdateWithKey for type Subscription
+func (client *Client) SubscriptionUpdateWithKey(ctx context.Context, input *SubscriptionUpdateWithKeyInput, opts ...RequestOption) (result *Subscription, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("subscriptions/key=%s", input.Key)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

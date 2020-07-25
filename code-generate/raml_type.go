@@ -59,7 +59,9 @@ func (r *RamlType) resolve(types map[string]*RamlType) {
 
 func (r *RamlType) isInterface() bool {
 	// TODO; check if 1 attribute and that is the discriminator
-	if len(r.Attributes) == 1 {
+	if r.Discriminator != "" {
+		return true
+	} else if len(r.Attributes) == 1 {
 		for _, attr := range r.Children {
 			if attr.Discriminator != "" {
 				return true
@@ -184,30 +186,63 @@ func (r *RamlTypeAttribute) resolve(types map[string]*RamlType) {
 	}
 }
 
-func getPropertyValue(input yaml.MapSlice, key string) interface{} {
-	for _, mapItem := range input {
-		if mapItem.Key == key {
-			return mapItem.Value
+func getPropertyValue(input yaml.MapSlice, keys ...string) interface{} {
+	source := input
+	numKeys := len(keys)
+	for i, key := range keys {
+		found := false
+		for _, mapItem := range source {
+			lookup := fmt.Sprintf("%v", mapItem.Key)
+			if lookup == key {
+				if i == numKeys-1 {
+					// log.Printf("For key '%s' found %s\n", strings.Join(keys, "#"), mapItem.Value)
+					return mapItem.Value
+				} else {
+					if _, ok := mapItem.Value.(yaml.MapSlice); !ok {
+						// log.Printf("Unable to resolve keys: %s", keys)
+						return nil
+					}
+					source = mapItem.Value.(yaml.MapSlice)
+					found = true
+					break
+				}
+			}
+		}
+
+		if !found {
+			// log.Printf("No key found '%s' (item %s does not exist)", strings.Join(keys, "#"), key)
+			return nil
 		}
 	}
 
 	return nil
 }
 
-func getPropertyInt(input yaml.MapSlice, key string) *int {
-	value := getPropertyValue(input, key)
+func getPropertyInt(input yaml.MapSlice, keys ...string) *int {
+	value := getPropertyValue(input, keys...)
 	if new, isOk := value.(int); isOk {
 		return &new
 	}
 	return nil
 }
 
-func getPropertyString(input yaml.MapSlice, key string) string {
-	value := getPropertyValue(input, key)
+func getPropertyString(input yaml.MapSlice, keys ...string) string {
+	value := getPropertyValue(input, keys...)
 	if new, isOk := value.(string); isOk {
 		return new
 	}
 	return ""
+}
+
+func getPropertyStringArray(input yaml.MapSlice, keys ...string) []string {
+	value := getPropertyValue(input, keys...)
+	if new, isOk := value.(string); isOk {
+		return []string{new}
+	}
+	if new, isOk := value.([]string); isOk {
+		return new
+	}
+	return []string{}
 }
 
 func postProcess(objects []RamlType) {
@@ -225,21 +260,5 @@ func postProcess(objects []RamlType) {
 
 	for i := range objects {
 		objects[i].resolve(objectMap)
-	}
-
-	for i := range objects {
-		if objects[i].Discriminator != "" {
-			objects[i].CodeName = "Abstract" + objects[i].CodeName
-		} else {
-			// TODO; check if 1 attribute and that is the discriminator
-			if len(objects[i].Attributes) == 1 {
-				for _, child := range objects[i].Children {
-					if child.Discriminator != "" {
-						objects[i].CodeName = "Abstract" + objects[i].CodeName
-						break
-					}
-				}
-			}
-		}
 	}
 }

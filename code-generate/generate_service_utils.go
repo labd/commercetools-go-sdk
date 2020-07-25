@@ -2,44 +2,64 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/dave/jennifer/jen"
 )
 
-type ResourceIdentifier struct {
-	ArgName         string
-	PublicName      string
-	endpointPattern string
+func createServiceReturnList(method ServiceMethod, ro RamlType) jen.Code {
+	if ro.isInterface() {
+		return jen.List(
+			jen.Id("result").Id(method.ReturnType),
+			jen.Err().Error(),
+		)
+	}
+	return jen.List(
+		jen.Id("result").Op("*").Id(method.ReturnType),
+		jen.Err().Error(),
+	)
 }
 
-func (ri *ResourceIdentifier) createEndpointCode(fromInput bool) jen.Code {
-	var source jen.Code
-	if fromInput {
-		source = jen.Id("input").Op(".").Id(ri.PublicName)
+func generateServicePathCode(method ServiceMethod) jen.Code {
+	// Replace placeholders with %s.
+	// E.g.  "/in-store/key={storeKey}/carts/{ID}" => "/in-store/key=%s/carts/%s"
+	var paramCodes []jen.Code
+
+	var parameters []string
+	if method.Type == "update" {
+		parameters = append(parameters, method.Parameters[:len(method.Parameters)-1]...)
+		lastParam := CreateCodeName(method.Parameters[len(method.Parameters)-1])
+		parameters = append(parameters, "input."+lastParam)
 	} else {
-		source = jen.Id(ri.ArgName)
+		parameters = method.Parameters
 	}
-	return jen.Id("endpoint").Op(":=").Qual("fmt", "Sprintf").Call(jen.Lit(ri.endpointPattern), source)
+
+	path := method.Path
+	for _, param := range method.Parameters {
+		path = strings.Replace(path, fmt.Sprintf("{%s}", param), "%s", 1)
+	}
+
+	for _, param := range parameters {
+		if param == "ID" {
+			param = "id"
+		}
+		paramCodes = append(paramCodes, jen.Id(param))
+	}
+
+	if len(paramCodes) < 1 {
+		return jen.Lit(path[1:])
+	}
+	return jen.Qual("fmt", "Sprintf").Call(jen.Lit(path[1:]), jen.List(paramCodes...))
+
 }
 
-func createResourceIdentifier(resourceService ResourceService, resourceMethod ResourceMethod) ResourceIdentifier {
-	ri := ResourceIdentifier{}
-
-	ri.PublicName = "ID"
-	if strings.Contains(resourceMethod.MethodName, "Key") {
-		ri.PublicName = "Key"
+func generateServiceArgumentCode(method ServiceMethod) []jen.Code {
+	var paramCodes []jen.Code
+	for _, param := range method.Parameters {
+		if param == "ID" {
+			param = "id"
+		}
+		paramCodes = append(paramCodes, jen.Id(param).String())
 	}
-	ri.ArgName = strings.ToLower(ri.PublicName)
-
-	if ri.PublicName == "ID" {
-		ri.endpointPattern = fmt.Sprintf("%s/%%s", resourceService.BasePath)
-	} else if ri.PublicName == "Key" {
-		ri.endpointPattern = fmt.Sprintf("%s/key=%%s", resourceService.BasePath)
-	} else {
-		log.Fatalf("Unrecognized PublicName %v", ri.PublicName)
-	}
-
-	return ri
+	return paramCodes
 }

@@ -6,8 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"time"
-
-	mapstructure "github.com/mitchellh/mapstructure"
 )
 
 // ErrorObject uses code as discriminator attribute
@@ -26,42 +24,42 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 	switch discriminator {
 	case "access_denied":
 		new := AccessDeniedError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ConcurrentModification":
 		new := ConcurrentModificationError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DiscountCodeNonApplicable":
 		new := DiscountCodeNonApplicableError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateAttributeValue":
 		new := DuplicateAttributeValueError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateAttributeValues":
 		new := DuplicateAttributeValuesError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateField":
 		new := DuplicateFieldError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +72,7 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "DuplicateFieldWithConflictingResource":
 		new := DuplicateFieldWithConflictingResourceError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
@@ -87,182 +85,182 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "DuplicatePriceScope":
 		new := DuplicatePriceScopeError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "DuplicateVariantValues":
 		new := DuplicateVariantValuesError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "EnumValueIsUsed":
 		new := EnumValueIsUsedError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ExtensionBadResponse":
 		new := ExtensionBadResponseError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ExtensionNoResponse":
 		new := ExtensionNoResponseError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ExtensionUpdateActionsFailed":
 		new := ExtensionUpdateActionsFailedError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "insufficient_scope":
 		new := InsufficientScopeError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidCredentials":
 		new := InvalidCredentialsError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidCurrentPassword":
 		new := InvalidCurrentPasswordError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidField":
 		new := InvalidFieldError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidInput":
 		new := InvalidInputError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidItemShippingDetails":
 		new := InvalidItemShippingDetailsError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidJsonInput":
 		new := InvalidJSONInputError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidOperation":
 		new := InvalidOperationError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "InvalidSubject":
 		new := InvalidSubjectError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "invalid_token":
 		new := InvalidTokenError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "LanguageUsedInStores":
 		new := LanguageUsedInStoresError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "MatchingPriceNotFound":
 		new := MatchingPriceNotFoundError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "MissingTaxRateForCountry":
 		new := MissingTaxRateForCountryError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "NoMatchingProductDiscountFound":
 		new := NoMatchingProductDiscountFoundError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "OutOfStock":
 		new := OutOfStockError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "PriceChanged":
 		new := PriceChangedError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ReferenceExists":
 		new := ReferenceExistsError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "RequiredField":
 		new := RequiredFieldError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ResourceNotFound":
 		new := ResourceNotFoundError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}
 		return new, nil
 	case "ShippingMethodDoesNotMatchCart":
 		new := ShippingMethodDoesNotMatchCartError{}
-		err := mapstructure.Decode(input, &new)
+		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
 		}

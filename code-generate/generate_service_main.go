@@ -2,62 +2,119 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"log"
+	"sort"
 
 	"github.com/dave/jennifer/jen"
 )
 
-// Entry point to generate services
-func generateServices(objects []RamlType, resources []ResourceService) {
-	typeMapping := map[string]*RamlType{}
+type ResourceMethods struct {
+	Name          string
+	ServiceDomain ServiceDomain
+	Get           []ServiceMethod
+	Query         []ServiceMethod
+	Create        []ServiceMethod
+	Update        []ServiceMethod
+	Delete        []ServiceMethod
+	Actions       []ServiceMethod
+}
 
-	for i := range objects {
-		item := objects[i]
-		typeMapping[item.Name] = &item
+func groupByResourceMethods(methods []ServiceMethod) ResourceMethods {
+	result := ResourceMethods{}
+
+	sort.Slice(methods, func(i, j int) bool {
+		return methods[i].Name < methods[j].Name
+	})
+
+	for _, method := range methods {
+		switch method.Type {
+		case "create":
+			result.Create = append(result.Create, method)
+		case "update":
+			result.Update = append(result.Update, method)
+		case "query":
+			result.Query = append(result.Query, method)
+		case "delete":
+			result.Delete = append(result.Delete, method)
+		case "get":
+			result.Get = append(result.Get, method)
+		case "action":
+			result.Actions = append(result.Actions, method)
+		default:
+			log.Fatalf("Unknown method type for %s::%s: '%s'\n", method.Context, method.Name, method.Type)
+		}
+	}
+	return result
+}
+
+// Entry point to generate services
+func generateServices(objects []RamlType, resources []ServiceDomain) {
+	typeMapping := map[string]string{}
+
+	for _, item := range objects {
+		typeMapping[item.Name] = item.CodeName
+
+		if item.Name == "Message" {
+			fmt.Println(item)
+		}
+	}
+	objectsMap := map[string]RamlType{}
+	for _, item := range objects {
+		objectsMap[item.Name] = item
 	}
 
 	for _, resourceService := range resources {
+
+		if len(resourceService.methods) < 1 {
+			log.Printf("! No methods found for domain %s\n", resourceService.ContextName)
+			continue
+		}
+
+		if resourceService.ContextName == "CustomObject" {
+			continue // Waiting on fix on api reference
+		}
+
+		filename := generateFilename(resourceService.Package)
+		log.Printf("Writing commercetools/%s\n", filename)
+
 		f := jen.NewFile("commercetools")
 		f.HeaderComment("Automatically generated, do not edit")
 
-		resource := typeMapping[resourceService.ResourceType]
+		contextNames, resourceMethods := orderServiceMethods(&resourceService, objectsMap)
+		for _, contextName := range contextNames {
+			value := resourceMethods[contextName]
 
-		if resource == nil {
-			continue
-		}
-		// Skip this because it has a weird RAML definition
-		if resource.CodeName == "CustomObject" {
-			continue
-		}
+			for _, method := range value.Create {
+				code := generateServiceCreate(method, objectsMap)
+				f.Add(code)
+			}
 
-		// TODO: ugly hack
-		resourceService.ResourceType = CreateCodeName(resourceService.ResourceType)
-		resourceService.ResourceDraftType = CreateCodeName(resourceService.ResourceDraftType)
-		resourceService.ResourceQueryType = CreateCodeName(resourceService.ResourceQueryType)
+			for _, method := range value.Query {
+				queryCode := generateServiceQuery(method, objectsMap)
+				f.Add(queryCode)
+			}
 
-		urlPathName := fmt.Sprintf("%sURLPath", resource.CodeName)
-		c := jen.Comment(fmt.Sprintf("%s is the commercetools API path.", urlPathName)).Line()
-		c.Const().Id(urlPathName).Op("=").Lit(resourceService.BasePath).Line()
-		f.Add(c)
+			for _, method := range value.Delete {
+				code := generateServiceDelete(method, objectsMap)
+				f.Add(code)
+			}
 
-		if resourceService.HasCreate {
-			funcName := fmt.Sprintf("%sCreate", resource.CodeName)
-			createCode := generateServiceCreate(funcName, resourceService, urlPathName)
-			f.Add(createCode)
-		}
+			for _, method := range value.Get {
+				code := generateServiceGet(method, objectsMap)
+				f.Add(code)
+			}
 
-		if resourceService.HasList {
-			funcName := fmt.Sprintf("%sQuery", resource.CodeName)
-			queryCode := generateServiceQuery(funcName, resourceService, urlPathName)
-			f.Add(queryCode)
-		}
+			for _, method := range value.Update {
+				code := generateServiceUpdate(method, objectsMap)
+				f.Add(code)
+			}
 
-		httpMethodsCode := generateResourceHTTPMethodsCode(resource, resourceService, urlPathName)
-		for _, httpMethodCode := range httpMethodsCode {
-			f.Add(httpMethodCode)
+			for _, method := range value.Actions {
+				code := generateServiceAction(method, objectsMap)
+				f.Add(code)
+			}
 		}
 
-		filename := generateFilename(resource.Package)
 		err := f.Save("commercetools/service_" + filename)
 		if err != nil {
 			panic(err)
@@ -65,29 +122,22 @@ func generateServices(objects []RamlType, resources []ResourceService) {
 	}
 }
 
-func generateResourceHTTPMethodsCode(resource *RamlType, resourceService ResourceService, urlPathName string) (httpMethodsCode []*jen.Statement) {
-	httpMethodsCode = make([]*jen.Statement, 0)
-	for _, resourceMethod := range resourceService.ResourceMethods {
-		for _, httpMethod := range resourceMethod.HTTPMethods {
-			switch httpMethod.HTTPMethod {
-			case "get":
-				funcName := fmt.Sprintf("%sGet%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-				c := generateServiceGet(funcName, resourceService, resourceMethod, httpMethod)
-				httpMethodsCode = append(httpMethodsCode, c)
-			case "post":
-				funcName := fmt.Sprintf("%sUpdate%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-				c := generateServiceUpdate(funcName, resource.CodeName, resourceService, resourceMethod, httpMethod)
-				httpMethodsCode = append(httpMethodsCode, c)
-			case "delete":
-				funcName := fmt.Sprintf("%sDelete%s", resource.CodeName, strings.Title(resourceMethod.MethodName))
-				c := generateServiceDelete(funcName, resourceService, resourceMethod, httpMethod)
-				httpMethodsCode = append(httpMethodsCode, c)
-			default:
-				continue
-
-			}
-
-		}
+func orderServiceMethods(sd *ServiceDomain, objects map[string]RamlType) ([]string, map[string]ResourceMethods) {
+	groupedMethods := map[string][]ServiceMethod{}
+	for _, item := range sd.methods {
+		item.Domain = *sd
+		item.UpdateTypeNames(objects)
+		groupedMethods[item.Context] = append(groupedMethods[item.Context], item)
 	}
-	return httpMethodsCode
+
+	groupedResourceMethods := map[string]ResourceMethods{}
+	contextNames := []string{}
+
+	for key, value := range groupedMethods {
+		groupedResourceMethods[key] = groupByResourceMethods(value)
+		contextNames = append(contextNames, key)
+	}
+	sort.Strings(contextNames)
+
+	return contextNames, groupedResourceMethods
 }

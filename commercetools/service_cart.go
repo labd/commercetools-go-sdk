@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// CartURLPath is the commercetools API path.
-const CartURLPath = "carts"
-
 // CartCreate creates a new instance of type Cart
 func (client *Client) CartCreate(ctx context.Context, draft *CartDraft, opts ...RequestOption) (result *Cart, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) CartCreate(ctx context.Context, draft *CartDraft, opts ...
 		opt(&params)
 	}
 
-	err = client.Create(ctx, CartURLPath, params, draft, &result)
+	endpoint := "carts"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +26,8 @@ func (client *Client) CartCreate(ctx context.Context, draft *CartDraft, opts ...
 
 // CartQuery allows querying for type Cart
 func (client *Client) CartQuery(ctx context.Context, input *QueryInput) (result *CartPagedQueryResponse, err error) {
-	err = client.Query(ctx, CartURLPath, input.toParams(), &result)
+	endpoint := "carts"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +43,27 @@ func (client *Client) CartDeleteWithID(ctx context.Context, id string, version i
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("carts/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+/*
+CartGetWithCustomerID Retrieves the active cart of the customer that has been modified most recently.
+It does not consider carts with CartOrigin Merchant. If no active cart exists, a 404 Not Found error is returned.
+
+The cart may not contain up-to-date prices, discounts etc. If you want to ensure they're up-to-date,
+send an Update request with the Recalculate update action instead.
+*/
+func (client *Client) CartGetWithCustomerID(ctx context.Context, customerId string, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("carts/customer-id=%s", customerId)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +80,7 @@ func (client *Client) CartGetWithID(ctx context.Context, id string, opts ...Requ
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("carts/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +116,22 @@ func (client *Client) CartUpdateWithID(ctx context.Context, input *CartUpdateWit
 	}
 
 	endpoint := fmt.Sprintf("carts/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// CartReplicate for type ReplicaCartDraft
+func (client *Client) CartReplicate(ctx context.Context, value *ReplicaCartDraft, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := "carts/replicate"
+	err = client.create(ctx, endpoint, params, value, &result)
 	if err != nil {
 		return nil, err
 	}

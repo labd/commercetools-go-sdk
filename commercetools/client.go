@@ -241,20 +241,20 @@ func (c *Client) ProjectKey() string {
 }
 
 // Get accomodates get requests tot the CommerceTools platform.
-func (c *Client) Get(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
+func (c *Client) get(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
 	err := c.doRequest(ctx, "GET", endpoint, queryParams, nil, output)
 	return err
 }
 
 // Query accomodates query requests tot the CommerceTools platform.
-func (c *Client) Query(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
+func (c *Client) query(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
 	err := c.doRequest(ctx, "GET", endpoint, queryParams, nil, output)
 	return err
 }
 
 // Create accomodates post intended for creation requests tot the CommerceTools
 // platform.
-func (c *Client) Create(ctx context.Context, endpoint string, queryParams url.Values, input interface{}, output interface{}) error {
+func (c *Client) create(ctx context.Context, endpoint string, queryParams url.Values, input interface{}, output interface{}) error {
 	data, err := serializeInput(input)
 	if err != nil {
 		return err
@@ -265,7 +265,7 @@ func (c *Client) Create(ctx context.Context, endpoint string, queryParams url.Va
 
 // Update accomodates post requests intended for updates tot the CommerceTools
 // platform.
-func (c *Client) Update(ctx context.Context, endpoint string, queryParams url.Values, version int, actions interface{}, output interface{}) error {
+func (c *Client) update(ctx context.Context, endpoint string, queryParams url.Values, version int, actions interface{}, output interface{}) error {
 	data, err := serializeInput(&map[string]interface{}{
 		"version": version,
 		"actions": actions,
@@ -278,7 +278,7 @@ func (c *Client) Update(ctx context.Context, endpoint string, queryParams url.Va
 }
 
 // Delete accomodates delete requests tot the CommerceTools platform.
-func (c *Client) Delete(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
+func (c *Client) delete(ctx context.Context, endpoint string, queryParams url.Values, output interface{}) error {
 	err := c.doRequest(ctx, "DELETE", endpoint, queryParams, nil, output)
 	return err
 }

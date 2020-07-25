@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// InventoryEntryURLPath is the commercetools API path.
-const InventoryEntryURLPath = "inventory"
-
 // InventoryEntryCreate creates a new instance of type InventoryEntry
 func (client *Client) InventoryEntryCreate(ctx context.Context, draft *InventoryEntryDraft, opts ...RequestOption) (result *InventoryEntry, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 		opt(&params)
 	}
 
-	err = client.Create(ctx, InventoryEntryURLPath, params, draft, &result)
+	endpoint := "inventory"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +26,8 @@ func (client *Client) InventoryEntryCreate(ctx context.Context, draft *Inventory
 
 // InventoryEntryQuery allows querying for type InventoryEntry
 func (client *Client) InventoryEntryQuery(ctx context.Context, input *QueryInput) (result *InventoryPagedQueryResponse, err error) {
-	err = client.Query(ctx, InventoryEntryURLPath, input.toParams(), &result)
+	endpoint := "inventory"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +43,7 @@ func (client *Client) InventoryEntryDeleteWithID(ctx context.Context, id string,
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("inventory/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -58,7 +57,7 @@ func (client *Client) InventoryEntryGetWithID(ctx context.Context, id string, op
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("inventory/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +93,7 @@ func (client *Client) InventoryEntryUpdateWithID(ctx context.Context, input *Inv
 	}
 
 	endpoint := fmt.Sprintf("inventory/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}

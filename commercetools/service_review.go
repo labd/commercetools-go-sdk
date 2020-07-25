@@ -9,9 +9,6 @@ import (
 	"strconv"
 )
 
-// ReviewURLPath is the commercetools API path.
-const ReviewURLPath = "reviews"
-
 // ReviewCreate creates a new instance of type Review
 func (client *Client) ReviewCreate(ctx context.Context, draft *ReviewDraft, opts ...RequestOption) (result *Review, err error) {
 	params := url.Values{}
@@ -19,7 +16,8 @@ func (client *Client) ReviewCreate(ctx context.Context, draft *ReviewDraft, opts
 		opt(&params)
 	}
 
-	err = client.Create(ctx, ReviewURLPath, params, draft, &result)
+	endpoint := "reviews"
+	err = client.create(ctx, endpoint, params, draft, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -28,73 +26,8 @@ func (client *Client) ReviewCreate(ctx context.Context, draft *ReviewDraft, opts
 
 // ReviewQuery allows querying for type Review
 func (client *Client) ReviewQuery(ctx context.Context, input *QueryInput) (result *ReviewPagedQueryResponse, err error) {
-	err = client.Query(ctx, ReviewURLPath, input.toParams(), &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ReviewDeleteWithKey for type Review
-func (client *Client) ReviewDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool, opts ...RequestOption) (result *Review, err error) {
-	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	params.Set("dataErasure", strconv.FormatBool(dataErasure))
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("reviews/key=%s", key)
-	err = client.Delete(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ReviewGetWithKey for type Review
-func (client *Client) ReviewGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Review, err error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("reviews/key=%s", key)
-	err = client.Get(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// ReviewUpdateWithKeyInput is input for function ReviewUpdateWithKey
-type ReviewUpdateWithKeyInput struct {
-	Key     string
-	Version int
-	Actions []ReviewUpdateAction
-}
-
-func (input *ReviewUpdateWithKeyInput) Validate() error {
-	if input.Key == "" {
-		return fmt.Errorf("no valid value for Key given")
-	}
-	if len(input.Actions) == 0 {
-		return fmt.Errorf("no update actions specified")
-	}
-	return nil
-}
-
-// ReviewUpdateWithKey for type Review
-func (client *Client) ReviewUpdateWithKey(ctx context.Context, input *ReviewUpdateWithKeyInput, opts ...RequestOption) (result *Review, err error) {
-	if err := input.Validate(); err != nil {
-		return nil, err
-	}
-
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-
-	endpoint := fmt.Sprintf("reviews/key=%s", input.Key)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	endpoint := "reviews"
+	err = client.query(ctx, endpoint, input.toParams(), &result)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +43,23 @@ func (client *Client) ReviewDeleteWithID(ctx context.Context, id string, version
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("reviews/%s", id)
-	err = client.Delete(ctx, endpoint, params, &result)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ReviewDeleteWithKey for type Review
+func (client *Client) ReviewDeleteWithKey(ctx context.Context, key string, version int, dataErasure bool, opts ...RequestOption) (result *Review, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("reviews/key=%s", key)
+	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +73,21 @@ func (client *Client) ReviewGetWithID(ctx context.Context, id string, opts ...Re
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("reviews/%s", id)
-	err = client.Get(ctx, endpoint, params, &result)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ReviewGetWithKey for type Review
+func (client *Client) ReviewGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *Review, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("reviews/key=%s", key)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +123,43 @@ func (client *Client) ReviewUpdateWithID(ctx context.Context, input *ReviewUpdat
 	}
 
 	endpoint := fmt.Sprintf("reviews/%s", input.ID)
-	err = client.Update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// ReviewUpdateWithKeyInput is input for function ReviewUpdateWithKey
+type ReviewUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []ReviewUpdateAction
+}
+
+func (input *ReviewUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// ReviewUpdateWithKey for type Review
+func (client *Client) ReviewUpdateWithKey(ctx context.Context, input *ReviewUpdateWithKeyInput, opts ...RequestOption) (result *Review, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("reviews/key=%s", input.Key)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
 	}
