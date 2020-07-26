@@ -231,7 +231,6 @@ func (c *Client) doRequest(ctx context.Context, method string, endpoint string, 
 }
 
 func (c *Client) getResponse(ctx context.Context, method string, url string, params url.Values, data io.Reader, headers map[string]string) (*http.Response, error) {
-	fmt.Println(url)
 	req, err := http.NewRequestWithContext(ctx, method, url, data)
 	if err != nil {
 		return nil, errors.Wrap(err, "Creating new request")
