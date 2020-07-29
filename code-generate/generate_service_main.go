@@ -70,10 +70,6 @@ func generateServices(objects []RamlType, resources []ServiceDomain) {
 			continue
 		}
 
-		if resourceService.ContextName == "CustomObject" {
-			continue // Waiting on fix on api reference
-		}
-
 		filename := generateFilename(resourceService.Package)
 		log.Printf("Writing commercetools/%s\n", filename)
 

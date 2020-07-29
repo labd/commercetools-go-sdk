@@ -110,14 +110,12 @@ func createService(apiResource yaml.MapItem, parent *ServiceDomain) *ServiceDoma
 		}
 	}
 
-	params := getPropertyValue(currentData, "uriParameters")
-	if params != nil {
-		for _, paramItem := range params.(yaml.MapSlice) {
-			serviceDomain.PathParameters = append(serviceDomain.PathParameters, paramItem.Key.(string))
-		}
-		if len(serviceDomain.PathParameters) > 1 {
-			panic(serviceDomain.PathParameters)
-		}
+	params := getParameters(currentData)
+	for _, param := range params {
+		serviceDomain.PathParameters = append(serviceDomain.PathParameters, param)
+	}
+	if len(serviceDomain.PathParameters) > 1 {
+		panic(serviceDomain.PathParameters)
 	}
 
 	itemType := getTypeInformation(apiResource)
