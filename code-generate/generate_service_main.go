@@ -70,7 +70,7 @@ func generateServices(objects []RamlType, resources []ServiceDomain) {
 			continue
 		}
 
-		filename := generateFilename(resourceService.Package)
+		filename := generateFilename(resourceService.Package, "")
 		log.Printf("Writing commercetools/%s\n", filename)
 
 		f := jen.NewFile("commercetools")

@@ -37,9 +37,10 @@ func main() {
 	log.Println("=================[ Parsing RAML ]=================")
 	objects, resources := parseYaml(t)
 	postProcess(objects)
-
 	log.Println("===============[ Generating types ]===============")
 	generateTypes(objects)
 	log.Println("==============[ Generating services ]=============")
 	generateServices(objects, resources)
+	log.Println("===============[ Generating tests ]===============")
+	generateTests(objects, resources)
 }
