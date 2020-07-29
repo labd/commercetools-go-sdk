@@ -16,7 +16,7 @@ func generateTypes(objects []RamlType) {
 	}
 
 	for pkg, packageObjects := range items {
-		filename := generateFilename(pkg)
+		filename := generateFilename(pkg, "")
 		log.Printf("Writing commercetools/%s\n", filename)
 		f := jen.NewFile("commercetools")
 		f.HeaderComment("Automatically generated, do not edit")

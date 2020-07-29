@@ -41,9 +41,14 @@ func ExtractCodeName(value string) string {
 	return strings.TrimSpace(values[0])
 }
 
-func generateFilename(name string) string {
+func generateFilename(name string, suffix string) string {
 	if name == "" {
 		panic("No package name found")
 	}
-	return strcase.ToSnake(name) + ".go"
+	filename := strcase.ToSnake(name)
+	if suffix != "" {
+		filename += suffix
+
+	}
+	return filename + ".go"
 }

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"sort"
 
@@ -53,10 +52,6 @@ func generateServices(objects []RamlType, resources []ServiceDomain) {
 
 	for _, item := range objects {
 		typeMapping[item.Name] = item.CodeName
-
-		if item.Name == "Message" {
-			fmt.Println(item)
-		}
 	}
 	objectsMap := map[string]RamlType{}
 	for _, item := range objects {
@@ -70,7 +65,7 @@ func generateServices(objects []RamlType, resources []ServiceDomain) {
 			continue
 		}
 
-		filename := generateFilename(resourceService.Package)
+		filename := generateFilename(resourceService.Package, "")
 		log.Printf("Writing commercetools/%s\n", filename)
 
 		f := jen.NewFile("commercetools")

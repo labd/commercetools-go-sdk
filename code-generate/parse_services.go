@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"regexp"
 	"strings"
@@ -22,6 +23,23 @@ type ServiceMethod struct {
 	Description     string
 	QueryParameters []RamlTypeAttribute
 	Traits          []string
+	ExampleData     string
+	exampleDataMap  map[string]interface{}
+}
+
+func (sm *ServiceMethod) getExampleValue(key string) interface{} {
+	if sm.exampleDataMap == nil {
+		err := json.Unmarshal([]byte(sm.ExampleData), &sm.exampleDataMap)
+		if err != nil {
+			panic(err)
+		}
+	}
+	for k, v := range sm.exampleDataMap {
+		if key == k {
+			return v
+		}
+	}
+	return nil
 }
 
 // HasTrait checks if a ServiceMethod has a certain trait
@@ -352,6 +370,12 @@ func parseResourceData(val yaml.MapSlice, method *ServiceMethod) {
 			}
 		}
 	}
+	if val != nil {
+		method.Description = getPropertyString(val, "description")
+	}
+
+	method.ExampleData = getPropertyString(val, "responses", "200", "body", "application/json", "example")
+
 	if val != nil {
 		method.Description = getPropertyString(val, "description")
 	}
