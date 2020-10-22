@@ -58,7 +58,7 @@ func (client *Client) StateDeleteWithKey(ctx context.Context, Key string, versio
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("states/key={key}", Key)
+	endpoint := fmt.Sprintf("states/key=%s", Key)
 	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
@@ -86,7 +86,7 @@ func (client *Client) StateGetWithKey(ctx context.Context, Key string, opts ...R
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("states/key={key}", Key)
+	endpoint := fmt.Sprintf("states/key=%s", Key)
 	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ func (client *Client) StateUpdateWithKey(ctx context.Context, input *StateUpdate
 		opt(&params)
 	}
 
-	endpoint := fmt.Sprintf("states/key={key}", input.Key)
+	endpoint := fmt.Sprintf("states/key=%s", input.Key)
 	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
