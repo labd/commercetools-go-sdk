@@ -84,17 +84,17 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 
 // Store is of type BaseResource
 type Store struct {
-	Version              int                         `json:"version"`
-	SupplyChannels       []ChannelResourceIdentifier `json:"supplyChannels,omitempty"`
-	Name                 *LocalizedString            `json:"name,omitempty"`
-	LastModifiedBy       *LastModifiedBy             `json:"lastModifiedBy,omitempty"`
-	LastModifiedAt       time.Time                   `json:"lastModifiedAt"`
-	Languages            []string                    `json:"languages,omitempty"`
-	Key                  string                      `json:"key"`
-	ID                   string                      `json:"id"`
-	DistributionChannels []ChannelReference          `json:"distributionChannels"`
-	CreatedBy            *CreatedBy                  `json:"createdBy,omitempty"`
-	CreatedAt            time.Time                   `json:"createdAt"`
+	Version              int                `json:"version"`
+	SupplyChannels       []ChannelReference `json:"supplyChannels,omitempty"`
+	Name                 *LocalizedString   `json:"name,omitempty"`
+	LastModifiedBy       *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
+	Languages            []string           `json:"languages,omitempty"`
+	Key                  string             `json:"key"`
+	ID                   string             `json:"id"`
+	DistributionChannels []ChannelReference `json:"distributionChannels"`
+	CreatedBy            *CreatedBy         `json:"createdBy,omitempty"`
+	CreatedAt            time.Time          `json:"createdAt"`
 }
 
 // StoreDraft is a standalone struct
