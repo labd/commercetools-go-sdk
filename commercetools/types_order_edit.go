@@ -630,6 +630,7 @@ type StagedOrderAddLineItemAction struct {
 	ExternalPrice       *Money                      `json:"externalPrice,omitempty"`
 	DistributionChannel *ChannelResourceIdentifier  `json:"distributionChannel,omitempty"`
 	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
+	AddedAt             *time.Time                  `json:"addedAt,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1221,6 +1222,21 @@ func (obj StagedOrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setLineItemCustomType", Alias: (*Alias)(&obj)})
+}
+
+// StagedOrderSetLineItemDistributionChannelAction implements the interface StagedOrderUpdateAction
+type StagedOrderSetLineItemDistributionChannelAction struct {
+	LineItemID          string                     `json:"lineItemId"`
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StagedOrderSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetLineItemDistributionChannelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setLineItemDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
 // StagedOrderSetLineItemPriceAction implements the interface StagedOrderUpdateAction

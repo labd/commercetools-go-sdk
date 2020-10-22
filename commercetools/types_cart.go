@@ -397,6 +397,13 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return new, nil
+	case "setLineItemDistributionChannel":
+		new := CartSetLineItemDistributionChannelAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemPrice":
 		new := CartSetLineItemPriceAction{}
 		err := decodeStruct(input, &new)
@@ -621,7 +628,7 @@ func (obj *Cart) UnmarshalJSON(data []byte) error {
 type CartAddCustomLineItemAction struct {
 	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	Slug            string                         `json:"slug"`
-	Quantity        float64                        `json:"quantity"`
+	Quantity        int                            `json:"quantity"`
 	Name            *LocalizedString               `json:"name"`
 	Money           *Money                         `json:"money"`
 	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
@@ -671,7 +678,7 @@ type CartAddLineItemAction struct {
 	SupplyChannel       *ChannelResourceIdentifier  `json:"supplyChannel,omitempty"`
 	SKU                 string                      `json:"sku,omitempty"`
 	ShippingDetails     *ItemShippingDetailsDraft   `json:"shippingDetails,omitempty"`
-	Quantity            float64                     `json:"quantity,omitempty"`
+	Quantity            int                         `json:"quantity,omitempty"`
 	ProductID           string                      `json:"productId,omitempty"`
 	ExternalTotalPrice  *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	ExternalTaxRate     *ExternalTaxRateDraft       `json:"externalTaxRate,omitempty"`
@@ -766,8 +773,8 @@ func (obj CartChangeCustomLineItemMoneyAction) MarshalJSON() ([]byte, error) {
 
 // CartChangeCustomLineItemQuantityAction implements the interface CartUpdateAction
 type CartChangeCustomLineItemQuantityAction struct {
-	Quantity         float64 `json:"quantity"`
-	CustomLineItemID string  `json:"customLineItemId"`
+	Quantity         int    `json:"quantity"`
+	CustomLineItemID string `json:"customLineItemId"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -781,7 +788,7 @@ func (obj CartChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, error) 
 
 // CartChangeLineItemQuantityAction implements the interface CartUpdateAction
 type CartChangeLineItemQuantityAction struct {
-	Quantity           float64                     `json:"quantity"`
+	Quantity           int                         `json:"quantity"`
 	LineItemID         string                      `json:"lineItemId"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
@@ -853,6 +860,7 @@ type CartDraft struct {
 	ItemShippingAddresses            []Address                         `json:"itemShippingAddresses,omitempty"`
 	InventoryMode                    InventoryMode                     `json:"inventoryMode,omitempty"`
 	ExternalTaxRateForShippingMethod *ExternalTaxRateDraft             `json:"externalTaxRateForShippingMethod,omitempty"`
+	DiscountCodes                    []string                          `json:"discountCodes,omitempty"`
 	DeleteDaysAfterLastModification  int                               `json:"deleteDaysAfterLastModification,omitempty"`
 	CustomerID                       string                            `json:"customerId,omitempty"`
 	CustomerGroup                    *CustomerGroupResourceIdentifier  `json:"customerGroup,omitempty"`
@@ -966,7 +974,7 @@ func (obj CartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 // CartRemoveLineItemAction implements the interface CartUpdateAction
 type CartRemoveLineItemAction struct {
 	ShippingDetailsToRemove *ItemShippingDetailsDraft   `json:"shippingDetailsToRemove,omitempty"`
-	Quantity                float64                     `json:"quantity,omitempty"`
+	Quantity                int                         `json:"quantity,omitempty"`
 	LineItemID              string                      `json:"lineItemId"`
 	ExternalTotalPrice      *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	ExternalPrice           *Money                      `json:"externalPrice,omitempty"`
@@ -1279,6 +1287,21 @@ func (obj CartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setLineItemCustomType", Alias: (*Alias)(&obj)})
 }
 
+// CartSetLineItemDistributionChannelAction implements the interface CartUpdateAction
+type CartSetLineItemDistributionChannelAction struct {
+	LineItemID          string                     `json:"lineItemId"`
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetLineItemDistributionChannelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setLineItemDistributionChannel", Alias: (*Alias)(&obj)})
+}
+
 // CartSetLineItemPriceAction implements the interface CartUpdateAction
 type CartSetLineItemPriceAction struct {
 	LineItemID    string `json:"lineItemId"`
@@ -1533,7 +1556,7 @@ type CustomLineItem struct {
 	State                      []ItemState                          `json:"state"`
 	Slug                       string                               `json:"slug"`
 	ShippingDetails            *ItemShippingDetails                 `json:"shippingDetails,omitempty"`
-	Quantity                   float64                              `json:"quantity"`
+	Quantity                   int                                  `json:"quantity"`
 	Name                       *LocalizedString                     `json:"name"`
 	Money                      TypedMoney                           `json:"money"`
 	ID                         string                               `json:"id"`
@@ -1571,7 +1594,7 @@ type CustomLineItemDraft struct {
 	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	Slug            string                         `json:"slug"`
 	ShippingDetails *ItemShippingDetailsDraft      `json:"shippingDetails,omitempty"`
-	Quantity        float64                        `json:"quantity"`
+	Quantity        int                            `json:"quantity"`
 	Name            *LocalizedString               `json:"name"`
 	Money           *Money                         `json:"money"`
 	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
@@ -1698,6 +1721,7 @@ type LineItem struct {
 	DistributionChannel        *ChannelReference                    `json:"distributionChannel,omitempty"`
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	Custom                     *CustomFields                        `json:"custom,omitempty"`
+	AddedAt                    *time.Time                           `json:"addedAt,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1731,6 +1755,7 @@ type LineItemDraft struct {
 	ExternalPrice       *Money                      `json:"externalPrice,omitempty"`
 	DistributionChannel *ChannelResourceIdentifier  `json:"distributionChannel,omitempty"`
 	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
+	AddedAt             *time.Time                  `json:"addedAt,omitempty"`
 }
 
 // ReplicaCartDraft is a standalone struct

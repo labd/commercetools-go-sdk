@@ -55,18 +55,14 @@ func (client *Client) CustomObjectDeleteWithContainerAndKey(ctx context.Context,
 	return result, nil
 }
 
-/*
-CustomObjectDeleteWithID The version control is optional. If the query contains a version, then it must match the version of the object.
-*/
-func (client *Client) CustomObjectDeleteWithID(ctx context.Context, id string, version int, dataErasure bool, opts ...RequestOption) (result *CustomObject, err error) {
+// CustomObjectGetWithContainer for type CustomObject
+func (client *Client) CustomObjectGetWithContainer(ctx context.Context, container string, opts ...RequestOption) (result *CustomObject, err error) {
 	params := url.Values{}
-	params.Set("version", strconv.Itoa(version))
-	params.Set("dataErasure", strconv.FormatBool(dataErasure))
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("custom-objects/%s", id)
-	err = client.delete(ctx, endpoint, params, &result)
+	endpoint := fmt.Sprintf("custom-objects/%s", container)
+	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -80,20 +76,6 @@ func (client *Client) CustomObjectGetWithContainerAndKey(ctx context.Context, co
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("custom-objects/%s/%s", container, key)
-	err = client.get(ctx, endpoint, params, &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
-}
-
-// CustomObjectGetWithID for type CustomObject
-func (client *Client) CustomObjectGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *CustomObject, err error) {
-	params := url.Values{}
-	for _, opt := range opts {
-		opt(&params)
-	}
-	endpoint := fmt.Sprintf("custom-objects/%s", id)
 	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err

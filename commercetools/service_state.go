@@ -50,6 +50,22 @@ func (client *Client) StateDeleteWithID(ctx context.Context, id string, version 
 	return result, nil
 }
 
+// StateDeleteWithKey for type State
+func (client *Client) StateDeleteWithKey(ctx context.Context, Key string, version int, opts ...RequestOption) (result *State, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("states/key={key}", Key)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // StateGetWithID for type State
 func (client *Client) StateGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *State, err error) {
 	params := url.Values{}
@@ -57,6 +73,20 @@ func (client *Client) StateGetWithID(ctx context.Context, id string, opts ...Req
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("states/%s", id)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StateGetWithKey for type State
+func (client *Client) StateGetWithKey(ctx context.Context, Key string, opts ...RequestOption) (result *State, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("states/key={key}", Key)
 	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
@@ -93,6 +123,42 @@ func (client *Client) StateUpdateWithID(ctx context.Context, input *StateUpdateW
 	}
 
 	endpoint := fmt.Sprintf("states/%s", input.ID)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StateUpdateWithKeyInput is input for function StateUpdateWithKey
+type StateUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []StateUpdateAction
+}
+
+func (input *StateUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// StateUpdateWithKey for type State
+func (client *Client) StateUpdateWithKey(ctx context.Context, input *StateUpdateWithKeyInput, opts ...RequestOption) (result *State, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("states/key={key}", input.Key)
 	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

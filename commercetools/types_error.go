@@ -244,6 +244,13 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "ReferencedResourceNotFound":
+		new := ReferencedResourceNotFoundError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "RequiredField":
 		new := RequiredFieldError{}
 		err := decodeStruct(input, &new)
@@ -924,6 +931,27 @@ func (obj ReferenceExistsError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj ReferenceExistsError) Error() string {
+	return obj.Message
+}
+
+// ReferencedResourceNotFoundError implements the interface ErrorObject
+type ReferencedResourceNotFoundError struct {
+	Message string          `json:"message"`
+	TypeID  ReferenceTypeID `json:"typeId"`
+	Key     string          `json:"key,omitempty"`
+	ID      string          `json:"id,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ReferencedResourceNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias ReferencedResourceNotFoundError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ReferencedResourceNotFound", Alias: (*Alias)(&obj)})
+}
+
+func (obj ReferencedResourceNotFoundError) Error() string {
 	return obj.Message
 }
 

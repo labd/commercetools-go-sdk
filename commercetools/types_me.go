@@ -162,6 +162,13 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 			return nil, err
 		}
 		return new, nil
+	case "setLineItemDistributionChannel":
+		new := MyCartSetLineItemDistributionChannelAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemShippingDetails":
 		new := MyCartSetLineItemShippingDetailsAction{}
 		err := decodeStruct(input, &new)
@@ -680,6 +687,7 @@ type MyCartAddLineItemAction struct {
 	ExternalPrice       *Money                      `json:"externalPrice,omitempty"`
 	DistributionChannel *ChannelResourceIdentifier  `json:"distributionChannel,omitempty"`
 	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
+	AddedAt             *time.Time                  `json:"addedAt,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -961,6 +969,21 @@ func (obj MyCartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setLineItemCustomType", Alias: (*Alias)(&obj)})
+}
+
+// MyCartSetLineItemDistributionChannelAction implements the interface MyCartUpdateAction
+type MyCartSetLineItemDistributionChannelAction struct {
+	LineItemID          string                     `json:"lineItemId"`
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj MyCartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, error) {
+	type Alias MyCartSetLineItemDistributionChannelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setLineItemDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
 // MyCartSetLineItemShippingDetailsAction implements the interface MyCartUpdateAction
@@ -1394,6 +1417,7 @@ type MyLineItemDraft struct {
 	ProductID           string                     `json:"productId"`
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	Custom              *CustomFieldsDraft         `json:"custom,omitempty"`
+	AddedAt             *time.Time                 `json:"addedAt,omitempty"`
 }
 
 // MyOrder is of type BaseResource

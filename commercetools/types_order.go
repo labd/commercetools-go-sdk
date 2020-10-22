@@ -725,6 +725,13 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			return nil, err
 		}
 		return new, nil
+	case "setLineItemDistributionChannel":
+		new := StagedOrderSetLineItemDistributionChannelAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemPrice":
 		new := StagedOrderSetLineItemPriceAction{}
 		err := decodeStruct(input, &new)

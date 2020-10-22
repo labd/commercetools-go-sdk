@@ -43,8 +43,22 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return new, nil
+	case "addSupplyChannel":
+		new := StoresAddSupplyChannelsAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "removeDistributionChannel":
 		new := StoresRemoveDistributionChannelsAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "removeSupplyChannel":
+		new := StoresRemoveSupplyChannelsAction{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -57,26 +71,35 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return new, nil
+	case "setSupplyChannels":
+		new := StoresSetSupplyChannelsAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	}
 	return nil, nil
 }
 
 // Store is of type BaseResource
 type Store struct {
-	Version              int                `json:"version"`
-	Name                 *LocalizedString   `json:"name,omitempty"`
-	LastModifiedBy       *LastModifiedBy    `json:"lastModifiedBy,omitempty"`
-	LastModifiedAt       time.Time          `json:"lastModifiedAt"`
-	Languages            []string           `json:"languages,omitempty"`
-	Key                  string             `json:"key"`
-	ID                   string             `json:"id"`
-	DistributionChannels []ChannelReference `json:"distributionChannels"`
-	CreatedBy            *CreatedBy         `json:"createdBy,omitempty"`
-	CreatedAt            time.Time          `json:"createdAt"`
+	Version              int                         `json:"version"`
+	SupplyChannels       []ChannelResourceIdentifier `json:"supplyChannels,omitempty"`
+	Name                 *LocalizedString            `json:"name,omitempty"`
+	LastModifiedBy       *LastModifiedBy             `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt       time.Time                   `json:"lastModifiedAt"`
+	Languages            []string                    `json:"languages,omitempty"`
+	Key                  string                      `json:"key"`
+	ID                   string                      `json:"id"`
+	DistributionChannels []ChannelReference          `json:"distributionChannels"`
+	CreatedBy            *CreatedBy                  `json:"createdBy,omitempty"`
+	CreatedAt            time.Time                   `json:"createdAt"`
 }
 
 // StoreDraft is a standalone struct
 type StoreDraft struct {
+	SupplyChannels       []ChannelResourceIdentifier `json:"supplyChannels,omitempty"`
 	Name                 *LocalizedString            `json:"name"`
 	Languages            []string                    `json:"languages,omitempty"`
 	Key                  string                      `json:"key"`
@@ -202,6 +225,20 @@ func (obj StoresAddDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
+// StoresAddSupplyChannelsAction implements the interface StoreUpdateAction
+type StoresAddSupplyChannelsAction struct {
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoresAddSupplyChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresAddSupplyChannelsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addSupplyChannel", Alias: (*Alias)(&obj)})
+}
+
 // StoresRemoveDistributionChannelsAction implements the interface StoreUpdateAction
 type StoresRemoveDistributionChannelsAction struct {
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel"`
@@ -216,6 +253,20 @@ func (obj StoresRemoveDistributionChannelsAction) MarshalJSON() ([]byte, error) 
 	}{Action: "removeDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
+// StoresRemoveSupplyChannelsAction implements the interface StoreUpdateAction
+type StoresRemoveSupplyChannelsAction struct {
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoresRemoveSupplyChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresRemoveSupplyChannelsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeSupplyChannel", Alias: (*Alias)(&obj)})
+}
+
 // StoresSetDistributionChannelsAction implements the interface StoreUpdateAction
 type StoresSetDistributionChannelsAction struct {
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels,omitempty"`
@@ -228,4 +279,18 @@ func (obj StoresSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDistributionChannels", Alias: (*Alias)(&obj)})
+}
+
+// StoresSetSupplyChannelsAction implements the interface StoreUpdateAction
+type StoresSetSupplyChannelsAction struct {
+	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StoresSetSupplyChannelsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoresSetSupplyChannelsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setSupplyChannels", Alias: (*Alias)(&obj)})
 }
