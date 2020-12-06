@@ -801,6 +801,10 @@ type CustomerUpdate struct {
 	Actions []CustomerUpdateAction `json:"actions"`
 }
 
+type CustomerCreatedResponse struct {
+	Customer *Customer   `json:"customer"`
+}
+
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
 func (obj *CustomerUpdate) UnmarshalJSON(data []byte) error {

@@ -11,17 +11,18 @@ import (
 
 // CustomerCreate creates a new instance of type Customer
 func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft, opts ...RequestOption) (result *Customer, err error) {
+	res := &CustomerCreatedResponse{}
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
 
 	endpoint := "customers"
-	err = client.create(ctx, endpoint, params, draft, &result)
+	err = client.create(ctx, endpoint, params, draft, res)
 	if err != nil {
 		return nil, err
 	}
-	return result, nil
+	return res.Customer, nil
 }
 
 // CustomerQuery allows querying for type Customer
