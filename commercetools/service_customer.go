@@ -11,7 +11,7 @@ import (
 
 // CustomerCreate creates a new instance of type Customer
 func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft, opts ...RequestOption) (result *Customer, err error) {
-	res := &CustomerCreatedResponse{}
+	res := &CustomerResponse{}
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
@@ -82,7 +82,7 @@ func (client *Client) CustomerGetWithEmailToken(ctx context.Context, emailToken 
 }
 
 // CustomerGetWithID for type Customer
-func (client *Client) CustomerGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *Customer, err error) {
+func (client *Client) CustomerGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *CustomerResponse, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)

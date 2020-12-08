@@ -801,7 +801,7 @@ type CustomerUpdate struct {
 	Actions []CustomerUpdateAction `json:"actions"`
 }
 
-type CustomerCreatedResponse struct {
+type CustomerResponse struct {
 	Customer *Customer   `json:"customer"`
 }
 
