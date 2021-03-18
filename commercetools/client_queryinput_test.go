@@ -67,6 +67,22 @@ func TestQueryInput(t *testing.T) {
 			},
 			rawQuery: "offset=20",
 		},
+		{
+			desc: "Extra",
+			input: &commercetools.QueryInput{
+				Limit:  23,
+				Offset: 42,
+				Extra: url.Values{
+					"staged": []string{"true"},
+				},
+			},
+			query: url.Values{
+				"limit":  []string{"23"},
+				"offset": []string{"42"},
+				"staged": []string{"true"},
+			},
+			rawQuery: "limit=23&offset=42&staged=true",
+		},
 	}
 
 	for _, tC := range testCases {
