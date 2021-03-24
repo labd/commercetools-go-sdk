@@ -40,12 +40,12 @@ func TestQueryInput(t *testing.T) {
 		{
 			desc: "Expand",
 			input: &commercetools.QueryInput{
-				Expand: "taxCategory",
+				Expand: []string{"taxCategory", "categories[*]"},
 			},
 			query: url.Values{
-				"expand": []string{"taxCategory"},
+				"expand": []string{"taxCategory", "categories[*]"},
 			},
-			rawQuery: "expand=taxCategory",
+			rawQuery: "expand=taxCategory&expand=categories%5B%2A%5D",
 		},
 		{
 			desc: "Limit",
