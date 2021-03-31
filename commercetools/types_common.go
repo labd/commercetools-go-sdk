@@ -22,29 +22,33 @@ type ReferenceTypeID string
 
 // Enum values for ReferenceTypeID
 const (
-	ReferenceTypeIDCart             ReferenceTypeID = "cart"
-	ReferenceTypeIDCartDiscount     ReferenceTypeID = "cart-discount"
-	ReferenceTypeIDCategory         ReferenceTypeID = "category"
-	ReferenceTypeIDChannel          ReferenceTypeID = "channel"
-	ReferenceTypeIDCustomer         ReferenceTypeID = "customer"
-	ReferenceTypeIDCustomerGroup    ReferenceTypeID = "customer-group"
-	ReferenceTypeIDDiscountCode     ReferenceTypeID = "discount-code"
-	ReferenceTypeIDKeyValueDocument ReferenceTypeID = "key-value-document"
-	ReferenceTypeIDPayment          ReferenceTypeID = "payment"
-	ReferenceTypeIDProduct          ReferenceTypeID = "product"
-	ReferenceTypeIDProductType      ReferenceTypeID = "product-type"
-	ReferenceTypeIDProductDiscount  ReferenceTypeID = "product-discount"
-	ReferenceTypeIDOrder            ReferenceTypeID = "order"
-	ReferenceTypeIDReview           ReferenceTypeID = "review"
-	ReferenceTypeIDShoppingList     ReferenceTypeID = "shopping-list"
-	ReferenceTypeIDShippingMethod   ReferenceTypeID = "shipping-method"
-	ReferenceTypeIDState            ReferenceTypeID = "state"
-	ReferenceTypeIDStore            ReferenceTypeID = "store"
-	ReferenceTypeIDTaxCategory      ReferenceTypeID = "tax-category"
-	ReferenceTypeIDType             ReferenceTypeID = "type"
-	ReferenceTypeIDZone             ReferenceTypeID = "zone"
-	ReferenceTypeIDInventoryEntry   ReferenceTypeID = "inventory-entry"
-	ReferenceTypeIDOrderEdit        ReferenceTypeID = "order-edit"
+	ReferenceTypeIDCart                  ReferenceTypeID = "cart"
+	ReferenceTypeIDCartDiscount          ReferenceTypeID = "cart-discount"
+	ReferenceTypeIDCategory              ReferenceTypeID = "category"
+	ReferenceTypeIDChannel               ReferenceTypeID = "channel"
+	ReferenceTypeIDCustomer              ReferenceTypeID = "customer"
+	ReferenceTypeIDCustomerEmailToken    ReferenceTypeID = "customer-email-token"
+	ReferenceTypeIDCustomerGroup         ReferenceTypeID = "customer-group"
+	ReferenceTypeIDCustomerPasswordToken ReferenceTypeID = "customer-password-token"
+	ReferenceTypeIDDiscountCode          ReferenceTypeID = "discount-code"
+	ReferenceTypeIDExtension             ReferenceTypeID = "extension"
+	ReferenceTypeIDInventoryEntry        ReferenceTypeID = "inventory-entry"
+	ReferenceTypeIDKeyValueDocument      ReferenceTypeID = "key-value-document"
+	ReferenceTypeIDOrder                 ReferenceTypeID = "order"
+	ReferenceTypeIDOrderEdit             ReferenceTypeID = "order-edit"
+	ReferenceTypeIDPayment               ReferenceTypeID = "payment"
+	ReferenceTypeIDProduct               ReferenceTypeID = "product"
+	ReferenceTypeIDProductDiscount       ReferenceTypeID = "product-discount"
+	ReferenceTypeIDProductType           ReferenceTypeID = "product-type"
+	ReferenceTypeIDReview                ReferenceTypeID = "review"
+	ReferenceTypeIDShippingMethod        ReferenceTypeID = "shipping-method"
+	ReferenceTypeIDShoppingList          ReferenceTypeID = "shopping-list"
+	ReferenceTypeIDState                 ReferenceTypeID = "state"
+	ReferenceTypeIDStore                 ReferenceTypeID = "store"
+	ReferenceTypeIDSubscription          ReferenceTypeID = "subscription"
+	ReferenceTypeIDTaxCategory           ReferenceTypeID = "tax-category"
+	ReferenceTypeIDType                  ReferenceTypeID = "type"
+	ReferenceTypeIDZone                  ReferenceTypeID = "zone"
 )
 
 // CountryCode is of type string
@@ -526,31 +530,32 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 
 // Address is a standalone struct
 type Address struct {
-	Title                 string      `json:"title,omitempty"`
-	StreetNumber          string      `json:"streetNumber,omitempty"`
-	StreetName            string      `json:"streetName,omitempty"`
-	State                 string      `json:"state,omitempty"`
-	Salutation            string      `json:"salutation,omitempty"`
-	Region                string      `json:"region,omitempty"`
-	PostalCode            string      `json:"postalCode,omitempty"`
-	Phone                 string      `json:"phone,omitempty"`
-	POBox                 string      `json:"pOBox,omitempty"`
-	Mobile                string      `json:"mobile,omitempty"`
-	LastName              string      `json:"lastName,omitempty"`
-	Key                   string      `json:"key,omitempty"`
-	ID                    string      `json:"id,omitempty"`
-	FirstName             string      `json:"firstName,omitempty"`
-	Fax                   string      `json:"fax,omitempty"`
-	ExternalID            string      `json:"externalId,omitempty"`
-	Email                 string      `json:"email,omitempty"`
-	Department            string      `json:"department,omitempty"`
-	Country               CountryCode `json:"country"`
-	Company               string      `json:"company,omitempty"`
-	City                  string      `json:"city,omitempty"`
-	Building              string      `json:"building,omitempty"`
-	Apartment             string      `json:"apartment,omitempty"`
-	AdditionalStreetInfo  string      `json:"additionalStreetInfo,omitempty"`
-	AdditionalAddressInfo string      `json:"additionalAddressInfo,omitempty"`
+	Title                 string        `json:"title,omitempty"`
+	StreetNumber          string        `json:"streetNumber,omitempty"`
+	StreetName            string        `json:"streetName,omitempty"`
+	State                 string        `json:"state,omitempty"`
+	Salutation            string        `json:"salutation,omitempty"`
+	Region                string        `json:"region,omitempty"`
+	PostalCode            string        `json:"postalCode,omitempty"`
+	Phone                 string        `json:"phone,omitempty"`
+	POBox                 string        `json:"pOBox,omitempty"`
+	Mobile                string        `json:"mobile,omitempty"`
+	LastName              string        `json:"lastName,omitempty"`
+	Key                   string        `json:"key,omitempty"`
+	ID                    string        `json:"id,omitempty"`
+	FirstName             string        `json:"firstName,omitempty"`
+	Fax                   string        `json:"fax,omitempty"`
+	ExternalID            string        `json:"externalId,omitempty"`
+	Email                 string        `json:"email,omitempty"`
+	Department            string        `json:"department,omitempty"`
+	Custom                *CustomFields `json:"custom,omitempty"`
+	Country               CountryCode   `json:"country"`
+	Company               string        `json:"company,omitempty"`
+	City                  string        `json:"city,omitempty"`
+	Building              string        `json:"building,omitempty"`
+	Apartment             string        `json:"apartment,omitempty"`
+	AdditionalStreetInfo  string        `json:"additionalStreetInfo,omitempty"`
+	AdditionalAddressInfo string        `json:"additionalAddressInfo,omitempty"`
 }
 
 // Asset is a standalone struct
@@ -614,8 +619,9 @@ func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 
 // CentPrecisionMoneyDraft implements the interface TypedMoneyDraft
 type CentPrecisionMoneyDraft struct {
-	CurrencyCode CurrencyCode `json:"currencyCode"`
-	CentAmount   int          `json:"centAmount"`
+	CurrencyCode   CurrencyCode `json:"currencyCode"`
+	CentAmount     int          `json:"centAmount"`
+	FractionDigits float64      `json:"fractionDigits,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -682,9 +688,10 @@ func (obj HighPrecisionMoney) MarshalJSON() ([]byte, error) {
 
 // HighPrecisionMoneyDraft implements the interface TypedMoneyDraft
 type HighPrecisionMoneyDraft struct {
-	CurrencyCode  CurrencyCode `json:"currencyCode"`
-	CentAmount    int          `json:"centAmount"`
-	PreciseAmount int          `json:"preciseAmount"`
+	CurrencyCode   CurrencyCode `json:"currencyCode"`
+	CentAmount     int          `json:"centAmount"`
+	FractionDigits float64      `json:"fractionDigits,omitempty"`
+	PreciseAmount  int          `json:"preciseAmount"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -730,7 +737,6 @@ type PagedQueryResponse struct {
 	Offset  int            `json:"offset"`
 	Meta    interface{}    `json:"meta,omitempty"`
 	Limit   int            `json:"limit"`
-	Facets  *FacetResults  `json:"facets,omitempty"`
 	Count   int            `json:"count"`
 }
 

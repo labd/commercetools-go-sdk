@@ -76,6 +76,20 @@ func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction
 			return nil, err
 		}
 		return new, nil
+	case "setAddressCustomField":
+		new := ChannelSetAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setAddressCustomType":
+		new := ChannelSetAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCustomField":
 		new := ChannelSetCustomFieldAction{}
 		err := decodeStruct(input, &new)
@@ -300,6 +314,36 @@ func (obj ChannelSetAddressAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setAddress", Alias: (*Alias)(&obj)})
+}
+
+// ChannelSetAddressCustomFieldAction implements the interface ChannelUpdateAction
+type ChannelSetAddressCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ChannelSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias ChannelSetAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// ChannelSetAddressCustomTypeAction implements the interface ChannelUpdateAction
+type ChannelSetAddressCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ChannelSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias ChannelSetAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAddressCustomType", Alias: (*Alias)(&obj)})
 }
 
 // ChannelSetCustomFieldAction implements the interface ChannelUpdateAction

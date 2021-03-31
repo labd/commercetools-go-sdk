@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-// StoreLogin Authenticate Customer (Sign In)
+// StoreLogin Authenticate Customer (Sign In) in store
 func (client *Client) StoreLogin(ctx context.Context, storeKey string, value *CustomerSignin, opts ...RequestOption) (result *CustomerSignInResult, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
@@ -86,6 +86,22 @@ func (client *Client) StoreCartDeleteWithID(ctx context.Context, storeKey string
 	return result, nil
 }
 
+// StoreCartDeleteWithKey for type Cart
+func (client *Client) StoreCartDeleteWithKey(ctx context.Context, storeKey string, key string, version int, dataErasure bool, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("in-store/key=%s/carts/key=%s", storeKey, key)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 /*
 StoreCartGetWithCustomerID Retrieves the active cart of the customer that has been modified most recently in a specific Store.
 The {storeKey} path parameter maps to a Store's key.
@@ -129,6 +145,26 @@ func (client *Client) StoreCartGetWithID(ctx context.Context, storeKey string, i
 	return result, nil
 }
 
+/*
+StoreCartGetWithKey Returns a cart by its key from a specific Store. The {storeKey} path parameter maps to a Store's key.
+If the cart exists in the commercetools project but does not have the store field,
+or the store field references a different store, this method returns a ResourceNotFound error.
+The cart may not contain up-to-date prices, discounts etc.
+If you want to ensure they're up-to-date, send an Update request with the Recalculate update action instead.
+*/
+func (client *Client) StoreCartGetWithKey(ctx context.Context, storeKey string, key string, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("in-store/key=%s/carts/key=%s", storeKey, key)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // StoreCartUpdateWithIDInput is input for function StoreCartUpdateWithID
 type StoreCartUpdateWithIDInput struct {
 	ID      string
@@ -159,6 +195,57 @@ func (client *Client) StoreCartUpdateWithID(ctx context.Context, storeKey string
 
 	endpoint := fmt.Sprintf("in-store/key=%s/carts/%s", storeKey, input.ID)
 	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreCartUpdateWithKeyInput is input for function StoreCartUpdateWithKey
+type StoreCartUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []CartUpdateAction
+}
+
+func (input *StoreCartUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// StoreCartUpdateWithKey for type Cart
+func (client *Client) StoreCartUpdateWithKey(ctx context.Context, storeKey string, input *StoreCartUpdateWithKeyInput, opts ...RequestOption) (result *Cart, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/carts/key=%s", storeKey, input.Key)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreCartReplicate for type ReplicaCartDraft
+func (client *Client) StoreCartReplicate(ctx context.Context, storeKey string, value *ReplicaCartDraft, opts ...RequestOption) (result *Cart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/carts/replicate", storeKey)
+	err = client.create(ctx, endpoint, params, value, &result)
 	if err != nil {
 		return nil, err
 	}
@@ -753,6 +840,163 @@ func (client *Client) StoreOrderUpdateWithOrderNumber(ctx context.Context, store
 	}
 
 	endpoint := fmt.Sprintf("in-store/key=%s/orders/order-number=%s", storeKey, input.OrderNumber)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListCreate creates a new instance of type ShoppingList
+func (client *Client) StoreShoppingListCreate(ctx context.Context, storeKey string, draft *ShoppingListDraft, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists", storeKey)
+	err = client.create(ctx, endpoint, params, draft, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListQuery allows querying for type
+func (client *Client) StoreShoppingListQuery(ctx context.Context, storeKey string, input *QueryInput) (result *ShoppingListPagedQueryResponse, err error) {
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists", storeKey)
+	err = client.query(ctx, endpoint, input.toParams(), &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListDeleteWithID for type ShoppingList
+func (client *Client) StoreShoppingListDeleteWithID(ctx context.Context, storeKey string, id string, version int, dataErasure bool, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists/%s", storeKey, id)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListDeleteWithKey for type ShoppingList
+func (client *Client) StoreShoppingListDeleteWithKey(ctx context.Context, storeKey string, key string, version int, dataErasure bool, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+	params.Set("dataErasure", strconv.FormatBool(dataErasure))
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists/key=%s", storeKey, key)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListGetWithID Gets a shopping list by ID.
+func (client *Client) StoreShoppingListGetWithID(ctx context.Context, storeKey string, id string, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists/%s", storeKey, id)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListGetWithKey Gets a shopping list by Key.
+func (client *Client) StoreShoppingListGetWithKey(ctx context.Context, storeKey string, key string, opts ...RequestOption) (result *ShoppingList, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists/key=%s", storeKey, key)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListUpdateWithIDInput is input for function StoreShoppingListUpdateWithID
+type StoreShoppingListUpdateWithIDInput struct {
+	ID      string
+	Version int
+	Actions []ShoppingListUpdateAction
+}
+
+func (input *StoreShoppingListUpdateWithIDInput) Validate() error {
+	if input.ID == "" {
+		return fmt.Errorf("no valid value for ID given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// StoreShoppingListUpdateWithID for type ShoppingList
+func (client *Client) StoreShoppingListUpdateWithID(ctx context.Context, storeKey string, input *StoreShoppingListUpdateWithIDInput, opts ...RequestOption) (result *ShoppingList, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists/%s", storeKey, input.ID)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// StoreShoppingListUpdateWithKeyInput is input for function StoreShoppingListUpdateWithKey
+type StoreShoppingListUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []ShoppingListUpdateAction
+}
+
+func (input *StoreShoppingListUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// StoreShoppingListUpdateWithKey for type ShoppingList
+func (client *Client) StoreShoppingListUpdateWithKey(ctx context.Context, storeKey string, input *StoreShoppingListUpdateWithKeyInput, opts ...RequestOption) (result *ShoppingList, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("in-store/key=%s/shopping-lists/key=%s", storeKey, input.Key)
 	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err

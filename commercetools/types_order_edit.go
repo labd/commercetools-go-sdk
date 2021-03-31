@@ -87,6 +87,20 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 			}
 		}
 		return new, nil
+	case "setBillingAddressCustomField":
+		new := OrderEditSetBillingAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setBillingAddressCustomType":
+		new := OrderEditSetBillingAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setComment":
 		new := OrderEditSetCommentAction{}
 		err := decodeStruct(input, &new)
@@ -108,8 +122,50 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 			return nil, err
 		}
 		return new, nil
+	case "setDeliveryAddressCustomField":
+		new := OrderEditSetDeliveryAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setDeliveryAddressCustomType":
+		new := OrderEditSetDeliveryAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setItemShippingAddressCustomField":
+		new := OrderEditSetItemShippingAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setItemShippingAddressCustomType":
+		new := OrderEditSetItemShippingAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setKey":
 		new := OrderEditSetKeyAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setShippingAddressCustomField":
+		new := OrderEditSetShippingAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setShippingAddressCustomType":
+		new := OrderEditSetShippingAddressCustomTypeAction{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -368,6 +424,36 @@ func (obj OrderEditResourceIdentifier) MarshalJSON() ([]byte, error) {
 	}{TypeID: "order-edit", Alias: (*Alias)(&obj)})
 }
 
+// OrderEditSetBillingAddressCustomFieldAction implements the interface OrderEditUpdateAction
+type OrderEditSetBillingAddressCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetBillingAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetBillingAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBillingAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetBillingAddressCustomTypeAction implements the interface OrderEditUpdateAction
+type OrderEditSetBillingAddressCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetBillingAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetBillingAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBillingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
 // OrderEditSetCommentAction implements the interface OrderEditUpdateAction
 type OrderEditSetCommentAction struct {
 	Comment string `json:"comment,omitempty"`
@@ -412,6 +498,70 @@ func (obj OrderEditSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+// OrderEditSetDeliveryAddressCustomFieldAction implements the interface OrderEditUpdateAction
+type OrderEditSetDeliveryAddressCustomFieldAction struct {
+	Type       *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields     *FieldContainer         `json:"fields,omitempty"`
+	DeliveryID string                  `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetDeliveryAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetDeliveryAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetDeliveryAddressCustomTypeAction implements the interface OrderEditUpdateAction
+type OrderEditSetDeliveryAddressCustomTypeAction struct {
+	Value      interface{} `json:"value,omitempty"`
+	Name       string      `json:"name"`
+	DeliveryID string      `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetDeliveryAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetItemShippingAddressCustomFieldAction implements the interface OrderEditUpdateAction
+type OrderEditSetItemShippingAddressCustomFieldAction struct {
+	Value      interface{} `json:"value,omitempty"`
+	Name       string      `json:"name"`
+	AddressKey string      `json:"addressKey"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetItemShippingAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetItemShippingAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setItemShippingAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetItemShippingAddressCustomTypeAction implements the interface OrderEditUpdateAction
+type OrderEditSetItemShippingAddressCustomTypeAction struct {
+	Type       *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields     *FieldContainer         `json:"fields,omitempty"`
+	AddressKey string                  `json:"addressKey"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetItemShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetItemShippingAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setItemShippingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
 // OrderEditSetKeyAction implements the interface OrderEditUpdateAction
 type OrderEditSetKeyAction struct {
 	Key string `json:"key,omitempty"`
@@ -424,6 +574,36 @@ func (obj OrderEditSetKeyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetShippingAddressCustomFieldAction implements the interface OrderEditUpdateAction
+type OrderEditSetShippingAddressCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetShippingAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetShippingAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// OrderEditSetShippingAddressCustomTypeAction implements the interface OrderEditUpdateAction
+type OrderEditSetShippingAddressCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderEditSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderEditSetShippingAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingAddressCustomType", Alias: (*Alias)(&obj)})
 }
 
 // OrderEditSetStagedActionsAction implements the interface OrderEditUpdateAction

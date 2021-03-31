@@ -162,6 +162,13 @@ func mapDiscriminatorShoppingListUpdateAction(input interface{}) (ShoppingListUp
 			return nil, err
 		}
 		return new, nil
+	case "setStore":
+		new := ShoppingListSetStoreAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setTextLineItemCustomField":
 		new := ShoppingListSetTextLineItemCustomFieldAction{}
 		err := decodeStruct(input, &new)
@@ -603,6 +610,20 @@ func (obj ShoppingListSetSlugAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setSlug", Alias: (*Alias)(&obj)})
+}
+
+// ShoppingListSetStoreAction implements the interface ShoppingListUpdateAction
+type ShoppingListSetStoreAction struct {
+	Store *StoreResourceIdentifier `json:"store,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShoppingListSetStoreAction) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListSetStoreAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setStore", Alias: (*Alias)(&obj)})
 }
 
 // ShoppingListSetTextLineItemCustomFieldAction implements the interface ShoppingListUpdateAction

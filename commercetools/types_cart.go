@@ -285,6 +285,20 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return new, nil
+	case "setBillingAddressCustomField":
+		new := CartSetBillingAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setBillingAddressCustomType":
+		new := CartSetBillingAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCartTotalTax":
 		new := CartSetCartTotalTaxAction{}
 		err := decodeStruct(input, &new)
@@ -383,6 +397,41 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return new, nil
+	case "setDeliveryAddressCustomField":
+		new := CartSetDeliveryAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setDeliveryAddressCustomType":
+		new := CartSetDeliveryAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setItemShippingAddressCustomField":
+		new := CartSetItemShippingAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setItemShippingAddressCustomType":
+		new := CartSetItemShippingAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setKey":
+		new := CartSetKeyAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLineItemCustomField":
 		new := CartSetLineItemCustomFieldAction{}
 		err := decodeStruct(input, &new)
@@ -448,6 +497,20 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		return new, nil
 	case "setShippingAddress":
 		new := CartSetShippingAddressAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setShippingAddressCustomField":
+		new := CartSetShippingAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setShippingAddressCustomType":
+		new := CartSetShippingAddressCustomTypeAction{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -581,6 +644,7 @@ type Cart struct {
 	LineItems                       []LineItem              `json:"lineItems"`
 	LastModifiedBy                  *LastModifiedBy         `json:"lastModifiedBy,omitempty"`
 	LastModifiedAt                  time.Time               `json:"lastModifiedAt"`
+	Key                             string                  `json:"key,omitempty"`
 	ItemShippingAddresses           []Address               `json:"itemShippingAddresses,omitempty"`
 	InventoryMode                   InventoryMode           `json:"inventoryMode,omitempty"`
 	ID                              string                  `json:"id"`
@@ -857,6 +921,7 @@ type CartDraft struct {
 	Origin                           CartOrigin                        `json:"origin,omitempty"`
 	Locale                           string                            `json:"locale,omitempty"`
 	LineItems                        []LineItemDraft                   `json:"lineItems,omitempty"`
+	Key                              string                            `json:"key,omitempty"`
 	ItemShippingAddresses            []Address                         `json:"itemShippingAddresses,omitempty"`
 	InventoryMode                    InventoryMode                     `json:"inventoryMode,omitempty"`
 	ExternalTaxRateForShippingMethod *ExternalTaxRateDraft             `json:"externalTaxRateForShippingMethod,omitempty"`
@@ -1044,6 +1109,36 @@ func (obj CartSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setBillingAddress", Alias: (*Alias)(&obj)})
+}
+
+// CartSetBillingAddressCustomFieldAction implements the interface CartUpdateAction
+type CartSetBillingAddressCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetBillingAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetBillingAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBillingAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// CartSetBillingAddressCustomTypeAction implements the interface CartUpdateAction
+type CartSetBillingAddressCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetBillingAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetBillingAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBillingAddressCustomType", Alias: (*Alias)(&obj)})
 }
 
 // CartSetCartTotalTaxAction implements the interface CartUpdateAction
@@ -1255,6 +1350,84 @@ func (obj CartSetDeleteDaysAfterLastModificationAction) MarshalJSON() ([]byte, e
 	}{Action: "setDeleteDaysAfterLastModification", Alias: (*Alias)(&obj)})
 }
 
+// CartSetDeliveryAddressCustomFieldAction implements the interface CartUpdateAction
+type CartSetDeliveryAddressCustomFieldAction struct {
+	Type       *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields     *FieldContainer         `json:"fields,omitempty"`
+	DeliveryID string                  `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetDeliveryAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetDeliveryAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// CartSetDeliveryAddressCustomTypeAction implements the interface CartUpdateAction
+type CartSetDeliveryAddressCustomTypeAction struct {
+	Value      interface{} `json:"value,omitempty"`
+	Name       string      `json:"name"`
+	DeliveryID string      `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetDeliveryAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+// CartSetItemShippingAddressCustomFieldAction implements the interface CartUpdateAction
+type CartSetItemShippingAddressCustomFieldAction struct {
+	Value      interface{} `json:"value,omitempty"`
+	Name       string      `json:"name"`
+	AddressKey string      `json:"addressKey"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetItemShippingAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetItemShippingAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setItemShippingAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// CartSetItemShippingAddressCustomTypeAction implements the interface CartUpdateAction
+type CartSetItemShippingAddressCustomTypeAction struct {
+	Type       *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields     *FieldContainer         `json:"fields,omitempty"`
+	AddressKey string                  `json:"addressKey"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetItemShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetItemShippingAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setItemShippingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+// CartSetKeyAction implements the interface CartUpdateAction
+type CartSetKeyAction struct {
+	Key string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
 // CartSetLineItemCustomFieldAction implements the interface CartUpdateAction
 type CartSetLineItemCustomFieldAction struct {
 	Value      interface{} `json:"value,omitempty"`
@@ -1403,6 +1576,36 @@ func (obj CartSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setShippingAddress", Alias: (*Alias)(&obj)})
+}
+
+// CartSetShippingAddressCustomFieldAction implements the interface CartUpdateAction
+type CartSetShippingAddressCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetShippingAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetShippingAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// CartSetShippingAddressCustomTypeAction implements the interface CartUpdateAction
+type CartSetShippingAddressCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CartSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetShippingAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingAddressCustomType", Alias: (*Alias)(&obj)})
 }
 
 // CartSetShippingMethodAction implements the interface CartUpdateAction
@@ -1598,7 +1801,20 @@ type CustomLineItemDraft struct {
 	Name            *LocalizedString               `json:"name"`
 	Money           *Money                         `json:"money"`
 	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
-	Custom          *CustomFields                  `json:"custom,omitempty"`
+	Custom          *CustomFieldsDraft             `json:"custom,omitempty"`
+}
+
+// CustomLineItemImportDraft is a standalone struct
+type CustomLineItemImportDraft struct {
+	TaxRate         *TaxRate                       `json:"taxRate,omitempty"`
+	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	State           []ItemState                    `json:"state,omitempty"`
+	Slug            string                         `json:"slug"`
+	ShippingDetails *ItemShippingDetailsDraft      `json:"shippingDetails,omitempty"`
+	Quantity        int                            `json:"quantity"`
+	Name            *LocalizedString               `json:"name"`
+	Money           *Money                         `json:"money"`
+	Custom          *CustomFieldsDraft             `json:"custom,omitempty"`
 }
 
 // DiscountCodeInfo is a standalone struct
@@ -1717,6 +1933,7 @@ type LineItem struct {
 	Price                      *Price                               `json:"price"`
 	Name                       *LocalizedString                     `json:"name"`
 	LineItemMode               LineItemMode                         `json:"lineItemMode"`
+	LastModifiedAt             *time.Time                           `json:"lastModifiedAt,omitempty"`
 	ID                         string                               `json:"id"`
 	DistributionChannel        *ChannelReference                    `json:"distributionChannel,omitempty"`
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
@@ -1761,6 +1978,7 @@ type LineItemDraft struct {
 // ReplicaCartDraft is a standalone struct
 type ReplicaCartDraft struct {
 	Reference Reference `json:"reference"`
+	Key       string    `json:"key,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1938,32 +2156,7 @@ func (obj *TaxedPrice) UnmarshalJSON(data []byte) error {
 
 // TaxedPriceDraft is a standalone struct
 type TaxedPriceDraft struct {
-	TotalNet    TypedMoneyDraft   `json:"totalNet"`
-	TotalGross  TypedMoneyDraft   `json:"totalGross"`
+	TotalNet    *Money            `json:"totalNet"`
+	TotalGross  *Money            `json:"totalGross"`
 	TaxPortions []TaxPortionDraft `json:"taxPortions"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *TaxedPriceDraft) UnmarshalJSON(data []byte) error {
-	type Alias TaxedPriceDraft
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.TotalGross != nil {
-		var err error
-		obj.TotalGross, err = mapDiscriminatorTypedMoneyDraft(obj.TotalGross)
-		if err != nil {
-			return err
-		}
-	}
-	if obj.TotalNet != nil {
-		var err error
-		obj.TotalNet, err = mapDiscriminatorTypedMoneyDraft(obj.TotalNet)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }

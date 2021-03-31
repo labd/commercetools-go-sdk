@@ -110,6 +110,22 @@ func (client *Client) MyCartDeleteWithID(ctx context.Context, id string, version
 	return result, nil
 }
 
+// MyCartDeleteWithKey for type MyCart
+func (client *Client) MyCartDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *MyCart, err error) {
+	params := url.Values{}
+	params.Set("version", strconv.Itoa(version))
+
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("me/carts/key=%s", key)
+	err = client.delete(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 // MyCartGetWithID for type MyCart
 func (client *Client) MyCartGetWithID(ctx context.Context, id string, opts ...RequestOption) (result *MyCart, err error) {
 	params := url.Values{}
@@ -117,6 +133,20 @@ func (client *Client) MyCartGetWithID(ctx context.Context, id string, opts ...Re
 		opt(&params)
 	}
 	endpoint := fmt.Sprintf("me/carts/%s", id)
+	err = client.get(ctx, endpoint, params, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// MyCartGetWithKey for type MyCart
+func (client *Client) MyCartGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *MyCart, err error) {
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+	endpoint := fmt.Sprintf("me/carts/key=%s", key)
 	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
@@ -153,6 +183,42 @@ func (client *Client) MyCartUpdateWithID(ctx context.Context, input *MyCartUpdat
 	}
 
 	endpoint := fmt.Sprintf("me/carts/%s", input.ID)
+	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// MyCartUpdateWithKeyInput is input for function MyCartUpdateWithKey
+type MyCartUpdateWithKeyInput struct {
+	Key     string
+	Version int
+	Actions []MyCartUpdateAction
+}
+
+func (input *MyCartUpdateWithKeyInput) Validate() error {
+	if input.Key == "" {
+		return fmt.Errorf("no valid value for Key given")
+	}
+	if len(input.Actions) == 0 {
+		return fmt.Errorf("no update actions specified")
+	}
+	return nil
+}
+
+// MyCartUpdateWithKey for type MyCart
+func (client *Client) MyCartUpdateWithKey(ctx context.Context, input *MyCartUpdateWithKeyInput, opts ...RequestOption) (result *MyCart, err error) {
+	if err := input.Validate(); err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	for _, opt := range opts {
+		opt(&params)
+	}
+
+	endpoint := fmt.Sprintf("me/carts/key=%s", input.Key)
 	err = client.update(ctx, endpoint, params, input.Version, input.Actions, &result)
 	if err != nil {
 		return nil, err
