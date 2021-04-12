@@ -41,6 +41,7 @@
 | ProductPublishedMessagePayload.RemovedImageUrls        | []interface{}     | []string
 | TaxedPriceDraft.TotalNet                               | TypedMoneyDraft   | *Money
 | TaxedPriceDraft.TotalGross                             | TypedMoneyDraft   | *Money
+| ShippingMethodDraft.LocalizedDescription               | string            | *LocalizedDescription
 
 0.2.0 (2020-07-20)
 ==================

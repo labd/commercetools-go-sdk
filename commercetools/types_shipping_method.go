@@ -452,7 +452,7 @@ func (obj ShippingMethodSetKeyAction) MarshalJSON() ([]byte, error) {
 
 // ShippingMethodSetLocalizedDescriptionAction implements the interface ShippingMethodUpdateAction
 type ShippingMethodSetLocalizedDescriptionAction struct {
-	LocalizedDescription string `json:"localizedDescription,omitempty"`
+	LocalizedDescription *LocalizedString `json:"localizedDescription,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
