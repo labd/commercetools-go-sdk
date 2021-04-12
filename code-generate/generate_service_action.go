@@ -55,6 +55,8 @@ func generateServiceAction(method ServiceMethod, objects map[string]RamlType) (c
 
 				if param.ItemsObject != nil {
 					line.Map(jen.String()).Add(typeCode)
+				} else if param.Many {
+					line.Index().Add(typeCode)
 				} else {
 					line.Add(typeCode)
 				}
