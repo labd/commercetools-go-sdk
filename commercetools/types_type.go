@@ -13,6 +13,7 @@ type ResourceTypeID string
 
 // Enum values for ResourceTypeID
 const (
+	ResourceTypeIDAddress                     ResourceTypeID = "address"
 	ResourceTypeIDAsset                       ResourceTypeID = "asset"
 	ResourceTypeIDCategory                    ResourceTypeID = "category"
 	ResourceTypeIDChannel                     ResourceTypeID = "channel"
@@ -26,6 +27,7 @@ const (
 	ResourceTypeIDPayment                     ResourceTypeID = "payment"
 	ResourceTypeIDPaymentInterfaceInteraction ResourceTypeID = "payment-interface-interaction"
 	ResourceTypeIDReview                      ResourceTypeID = "review"
+	ResourceTypeIDShippingMethod              ResourceTypeID = "shipping-method"
 	ResourceTypeIDShoppingList                ResourceTypeID = "shopping-list"
 	ResourceTypeIDShoppingListTextLineItem    ResourceTypeID = "shopping-list-text-line-item"
 	ResourceTypeIDDiscountCode                ResourceTypeID = "discount-code"

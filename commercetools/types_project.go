@@ -8,6 +8,16 @@ import (
 	"time"
 )
 
+// SearchIndexingConfigurationStatus is an enum type
+type SearchIndexingConfigurationStatus string
+
+// Enum values for SearchIndexingConfigurationStatus
+const (
+	SearchIndexingConfigurationStatusActivated   SearchIndexingConfigurationStatus = "Activated"
+	SearchIndexingConfigurationStatusDeactivated SearchIndexingConfigurationStatus = "Deactivated"
+	SearchIndexingConfigurationStatusIndexing    SearchIndexingConfigurationStatus = "Indexing"
+)
+
 // ProjectUpdateAction uses action as discriminator attribute
 type ProjectUpdateAction interface{}
 
@@ -22,6 +32,13 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 		return nil, errors.New("Invalid data")
 	}
 	switch discriminator {
+	case "changeCartsConfiguration":
+		new := ProjectChangeCartsConfiguration{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "changeCountries":
 		new := ProjectChangeCountriesAction{}
 		err := decodeStruct(input, &new)
@@ -66,6 +83,13 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 		return new, nil
 	case "changeName":
 		new := ProjectChangeNameAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "changeProductSearchIndexingEnabled":
+		new := ProjectChangeProductSearchIndexingEnabledAction{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -174,7 +198,8 @@ func (obj CartValueType) MarshalJSON() ([]byte, error) {
 
 // CartsConfiguration is a standalone struct
 type CartsConfiguration struct {
-	CountryTaxRateFallbackEnabled bool `json:"countryTaxRateFallbackEnabled"`
+	DeleteDaysAfterLastModification int  `json:"deleteDaysAfterLastModification,omitempty"`
+	CountryTaxRateFallbackEnabled   bool `json:"countryTaxRateFallbackEnabled"`
 }
 
 // ExternalOAuth is a standalone struct
@@ -185,18 +210,19 @@ type ExternalOAuth struct {
 
 // Project is a standalone struct
 type Project struct {
-	Version               int                   `json:"version"`
-	TrialUntil            string                `json:"trialUntil,omitempty"`
-	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
-	Name                  string                `json:"name"`
-	Messages              *MessageConfiguration `json:"messages"`
-	Languages             []Locale              `json:"languages"`
-	Key                   string                `json:"key"`
-	ExternalOAuth         *ExternalOAuth        `json:"externalOAuth,omitempty"`
-	Currencies            []CurrencyCode        `json:"currencies"`
-	CreatedAt             time.Time             `json:"createdAt"`
-	Countries             []CountryCode         `json:"countries"`
-	Carts                 *CartsConfiguration   `json:"carts"`
+	Version               int                          `json:"version"`
+	TrialUntil            string                       `json:"trialUntil,omitempty"`
+	ShippingRateInputType ShippingRateInputType        `json:"shippingRateInputType,omitempty"`
+	SearchIndexing        *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
+	Name                  string                       `json:"name"`
+	Messages              *MessageConfiguration        `json:"messages"`
+	Languages             []Locale                     `json:"languages"`
+	Key                   string                       `json:"key"`
+	ExternalOAuth         *ExternalOAuth               `json:"externalOAuth,omitempty"`
+	Currencies            []CurrencyCode               `json:"currencies"`
+	CreatedAt             time.Time                    `json:"createdAt"`
+	Countries             []CountryCode                `json:"countries"`
+	Carts                 *CartsConfiguration          `json:"carts"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -215,6 +241,20 @@ func (obj *Project) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// ProjectChangeCartsConfiguration implements the interface ProjectUpdateAction
+type ProjectChangeCartsConfiguration struct {
+	CartsConfiguration *CartsConfiguration `json:"cartsConfiguration,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProjectChangeCartsConfiguration) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeCartsConfiguration
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCartsConfiguration", Alias: (*Alias)(&obj)})
 }
 
 // ProjectChangeCountriesAction implements the interface ProjectUpdateAction
@@ -315,6 +355,20 @@ func (obj ProjectChangeNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
 }
 
+// ProjectChangeProductSearchIndexingEnabledAction implements the interface ProjectUpdateAction
+type ProjectChangeProductSearchIndexingEnabledAction struct {
+	Enabled bool `json:"enabled"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProjectChangeProductSearchIndexingEnabledAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeProductSearchIndexingEnabledAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeProductSearchIndexingEnabled", Alias: (*Alias)(&obj)})
+}
+
 // ProjectSetExternalOAuthAction implements the interface ProjectUpdateAction
 type ProjectSetExternalOAuthAction struct {
 	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
@@ -383,4 +437,16 @@ func (obj *ProjectUpdate) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// SearchIndexingConfiguration is a standalone struct
+type SearchIndexingConfiguration struct {
+	Products *SearchIndexingConfigurationValues `json:"products,omitempty"`
+}
+
+// SearchIndexingConfigurationValues is a standalone struct
+type SearchIndexingConfigurationValues struct {
+	Status         SearchIndexingConfigurationStatus `json:"status,omitempty"`
+	LastModifiedBy *LastModifiedBy                   `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt *time.Time                        `json:"lastModifiedAt,omitempty"`
 }

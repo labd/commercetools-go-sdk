@@ -29,6 +29,34 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "AnonymousIdAlreadyInUse":
+		new := AnonymousIdAlreadyInUseError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "AttributeDefinitionAlreadyExists":
+		new := AttributeDefinitionAlreadyExistsError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "AttributeDefinitionTypeConflict":
+		new := AttributeDefinitionTypeConflictError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "AttributeNameDoesNotExist":
+		new := AttributeNameDoesNotExistError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ConcurrentModification":
 		new := ConcurrentModificationError{}
 		err := decodeStruct(input, &new)
@@ -52,6 +80,13 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return new, nil
 	case "DuplicateAttributeValues":
 		new := DuplicateAttributeValuesError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "DuplicateEnumValues":
+		new := DuplicateEnumValuesError{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -97,8 +132,36 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "EditPreviewFailed":
+		new := EditPreviewFailedError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "EnumKeyAlreadyExists":
+		new := EnumKeyAlreadyExistsError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "EnumKeyDoesNotExist":
+		new := EnumKeyDoesNotExistError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "EnumValueIsUsed":
 		new := EnumValueIsUsedError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "EnumValuesMustMatch":
+		new := EnumValuesMustMatchError{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -125,8 +188,36 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "ExternalOAuthFailed":
+		new := ExternalOAuthFailedError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "FeatureRemoved":
+		new := FeatureRemovedError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "General":
+		new := GeneralError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "insufficient_scope":
 		new := InsufficientScopeError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "InternalConstraintViolated":
+		new := InternalConstraintViolatedError{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -209,6 +300,20 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "MaxResourceLimitExceeded":
+		new := MaxResourceLimitExceededError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "MissingRoleOnChannel":
+		new := MissingRoleOnChannelError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "MissingTaxRateForCountry":
 		new := MissingTaxRateForCountryError{}
 		err := decodeStruct(input, &new)
@@ -223,6 +328,20 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "NotEnabled":
+		new := NotEnabledError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "ObjectNotFound":
+		new := ObjectNotFoundError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "OutOfStock":
 		new := OutOfStockError{}
 		err := decodeStruct(input, &new)
@@ -230,8 +349,43 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "OverCapacity":
+		new := OverCapacityError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "PendingOperation":
+		new := PendingOperationError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "PriceChanged":
 		new := PriceChangedError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "ProjectNotConfiguredForLanguages":
+		new := ProjectNotConfiguredForLanguagesError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "QueryComplexityLimitExceeded":
+		new := QueryComplexityLimitExceededError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "QueryTimedOut":
+		new := QueryTimedOutError{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -265,8 +419,64 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return new, nil
+	case "ResourceSizeLimitExceeded":
+		new := ResourceSizeLimitExceededError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "SearchDeactivated":
+		new := SearchDeactivatedError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "SearchExecutionFailure":
+		new := SearchExecutionFailureError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "SearchFacetPathNotFound":
+		new := SearchFacetPathNotFoundError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "SearchIndexingInProgress":
+		new := SearchIndexingInProgressError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "SemanticError":
+		new := SemanticErrorError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ShippingMethodDoesNotMatchCart":
 		new := ShippingMethodDoesNotMatchCartError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "SyntaxError":
+		new := SyntaxErrorError{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "WeakPassword":
+		new := WeakPasswordError{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -291,6 +501,85 @@ func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj AccessDeniedError) Error() string {
+	return obj.Message
+}
+
+// AnonymousIdAlreadyInUseError implements the interface ErrorObject
+type AnonymousIdAlreadyInUseError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj AnonymousIdAlreadyInUseError) MarshalJSON() ([]byte, error) {
+	type Alias AnonymousIdAlreadyInUseError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "AnonymousIdAlreadyInUse", Alias: (*Alias)(&obj)})
+}
+
+func (obj AnonymousIdAlreadyInUseError) Error() string {
+	return obj.Message
+}
+
+// AttributeDefinitionAlreadyExistsError implements the interface ErrorObject
+type AttributeDefinitionAlreadyExistsError struct {
+	Message                    string `json:"message"`
+	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
+	ConflictingProductTypeID   string `json:"conflictingProductTypeId"`
+	ConflictingAttributeName   string `json:"conflictingAttributeName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj AttributeDefinitionAlreadyExistsError) MarshalJSON() ([]byte, error) {
+	type Alias AttributeDefinitionAlreadyExistsError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "AttributeDefinitionAlreadyExists", Alias: (*Alias)(&obj)})
+}
+
+func (obj AttributeDefinitionAlreadyExistsError) Error() string {
+	return obj.Message
+}
+
+// AttributeDefinitionTypeConflictError implements the interface ErrorObject
+type AttributeDefinitionTypeConflictError struct {
+	Message                    string `json:"message"`
+	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
+	ConflictingProductTypeID   string `json:"conflictingProductTypeId"`
+	ConflictingAttributeName   string `json:"conflictingAttributeName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj AttributeDefinitionTypeConflictError) MarshalJSON() ([]byte, error) {
+	type Alias AttributeDefinitionTypeConflictError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "AttributeDefinitionTypeConflict", Alias: (*Alias)(&obj)})
+}
+
+func (obj AttributeDefinitionTypeConflictError) Error() string {
+	return obj.Message
+}
+
+// AttributeNameDoesNotExistError implements the interface ErrorObject
+type AttributeNameDoesNotExistError struct {
+	Message              string `json:"message"`
+	InvalidAttributeName string `json:"invalidAttributeName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj AttributeNameDoesNotExistError) MarshalJSON() ([]byte, error) {
+	type Alias AttributeNameDoesNotExistError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "AttributeNameDoesNotExist", Alias: (*Alias)(&obj)})
+}
+
+func (obj AttributeNameDoesNotExistError) Error() string {
 	return obj.Message
 }
 
@@ -372,6 +661,25 @@ func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj DuplicateAttributeValuesError) Error() string {
+	return obj.Message
+}
+
+// DuplicateEnumValuesError implements the interface ErrorObject
+type DuplicateEnumValuesError struct {
+	Message    string   `json:"message"`
+	Duplicates []string `json:"duplicates"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj DuplicateEnumValuesError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateEnumValuesError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "DuplicateEnumValues", Alias: (*Alias)(&obj)})
+}
+
+func (obj DuplicateEnumValuesError) Error() string {
 	return obj.Message
 }
 
@@ -491,6 +799,65 @@ func (obj DuplicateVariantValuesError) Error() string {
 	return obj.Message
 }
 
+// EditPreviewFailedError implements the interface ErrorObject
+type EditPreviewFailedError struct {
+	Message string                   `json:"message"`
+	Result  *OrderEditPreviewFailure `json:"result"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj EditPreviewFailedError) MarshalJSON() ([]byte, error) {
+	type Alias EditPreviewFailedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "EditPreviewFailed", Alias: (*Alias)(&obj)})
+}
+
+func (obj EditPreviewFailedError) Error() string {
+	return obj.Message
+}
+
+// EnumKeyAlreadyExistsError implements the interface ErrorObject
+type EnumKeyAlreadyExistsError struct {
+	Message                  string `json:"message"`
+	ConflictingEnumKey       string `json:"conflictingEnumKey"`
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj EnumKeyAlreadyExistsError) MarshalJSON() ([]byte, error) {
+	type Alias EnumKeyAlreadyExistsError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "EnumKeyAlreadyExists", Alias: (*Alias)(&obj)})
+}
+
+func (obj EnumKeyAlreadyExistsError) Error() string {
+	return obj.Message
+}
+
+// EnumKeyDoesNotExistError implements the interface ErrorObject
+type EnumKeyDoesNotExistError struct {
+	Message                  string `json:"message"`
+	ConflictingEnumKey       string `json:"conflictingEnumKey"`
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj EnumKeyDoesNotExistError) MarshalJSON() ([]byte, error) {
+	type Alias EnumKeyDoesNotExistError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "EnumKeyDoesNotExist", Alias: (*Alias)(&obj)})
+}
+
+func (obj EnumKeyDoesNotExistError) Error() string {
+	return obj.Message
+}
+
 // EnumValueIsUsedError implements the interface ErrorObject
 type EnumValueIsUsedError struct {
 	Message string `json:"message"`
@@ -506,6 +873,24 @@ func (obj EnumValueIsUsedError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj EnumValueIsUsedError) Error() string {
+	return obj.Message
+}
+
+// EnumValuesMustMatchError implements the interface ErrorObject
+type EnumValuesMustMatchError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj EnumValuesMustMatchError) MarshalJSON() ([]byte, error) {
+	type Alias EnumValuesMustMatchError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "EnumValuesMustMatch", Alias: (*Alias)(&obj)})
+}
+
+func (obj EnumValuesMustMatchError) Error() string {
 	return obj.Message
 }
 
@@ -569,10 +954,9 @@ func (obj ExtensionBadResponseError) Error() string {
 
 // ExtensionNoResponseError implements the interface ErrorObject
 type ExtensionNoResponseError struct {
-	Message            string            `json:"message"`
-	LocalizedMessage   *LocalizedString  `json:"localizedMessage,omitempty"`
-	ExtensionExtraInfo interface{}       `json:"extensionExtraInfo,omitempty"`
-	ErrorByExtension   *ErrorByExtension `json:"errorByExtension"`
+	Message      string `json:"message"`
+	ExtensionKey string `json:"extensionKey,omitempty"`
+	ExtensionID  string `json:"extensionId"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -609,6 +993,60 @@ func (obj ExtensionUpdateActionsFailedError) Error() string {
 	return obj.Message
 }
 
+// ExternalOAuthFailedError implements the interface ErrorObject
+type ExternalOAuthFailedError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ExternalOAuthFailedError) MarshalJSON() ([]byte, error) {
+	type Alias ExternalOAuthFailedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ExternalOAuthFailed", Alias: (*Alias)(&obj)})
+}
+
+func (obj ExternalOAuthFailedError) Error() string {
+	return obj.Message
+}
+
+// FeatureRemovedError implements the interface ErrorObject
+type FeatureRemovedError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj FeatureRemovedError) MarshalJSON() ([]byte, error) {
+	type Alias FeatureRemovedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "FeatureRemoved", Alias: (*Alias)(&obj)})
+}
+
+func (obj FeatureRemovedError) Error() string {
+	return obj.Message
+}
+
+// GeneralError implements the interface ErrorObject
+type GeneralError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj GeneralError) MarshalJSON() ([]byte, error) {
+	type Alias GeneralError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "General", Alias: (*Alias)(&obj)})
+}
+
+func (obj GeneralError) Error() string {
+	return obj.Message
+}
+
 // InsufficientScopeError implements the interface ErrorObject
 type InsufficientScopeError struct {
 	Message string `json:"message"`
@@ -624,6 +1062,24 @@ func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj InsufficientScopeError) Error() string {
+	return obj.Message
+}
+
+// InternalConstraintViolatedError implements the interface ErrorObject
+type InternalConstraintViolatedError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj InternalConstraintViolatedError) MarshalJSON() ([]byte, error) {
+	type Alias InternalConstraintViolatedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "InternalConstraintViolated", Alias: (*Alias)(&obj)})
+}
+
+func (obj InternalConstraintViolatedError) Error() string {
 	return obj.Message
 }
 
@@ -836,6 +1292,45 @@ func (obj MatchingPriceNotFoundError) Error() string {
 	return obj.Message
 }
 
+// MaxResourceLimitExceededError implements the interface ErrorObject
+type MaxResourceLimitExceededError struct {
+	Message          string          `json:"message"`
+	ExceededResource ReferenceTypeID `json:"exceededResource"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj MaxResourceLimitExceededError) MarshalJSON() ([]byte, error) {
+	type Alias MaxResourceLimitExceededError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "MaxResourceLimitExceeded", Alias: (*Alias)(&obj)})
+}
+
+func (obj MaxResourceLimitExceededError) Error() string {
+	return obj.Message
+}
+
+// MissingRoleOnChannelError implements the interface ErrorObject
+type MissingRoleOnChannelError struct {
+	Message     string                     `json:"message"`
+	MissingRole ChannelRoleEnum            `json:"missingRole"`
+	Channel     *ChannelResourceIdentifier `json:"channel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj MissingRoleOnChannelError) MarshalJSON() ([]byte, error) {
+	type Alias MissingRoleOnChannelError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "MissingRoleOnChannel", Alias: (*Alias)(&obj)})
+}
+
+func (obj MissingRoleOnChannelError) Error() string {
+	return obj.Message
+}
+
 // MissingTaxRateForCountryError implements the interface ErrorObject
 type MissingTaxRateForCountryError struct {
 	Message       string `json:"message"`
@@ -875,6 +1370,42 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 	return obj.Message
 }
 
+// NotEnabledError implements the interface ErrorObject
+type NotEnabledError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj NotEnabledError) MarshalJSON() ([]byte, error) {
+	type Alias NotEnabledError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "NotEnabled", Alias: (*Alias)(&obj)})
+}
+
+func (obj NotEnabledError) Error() string {
+	return obj.Message
+}
+
+// ObjectNotFoundError implements the interface ErrorObject
+type ObjectNotFoundError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ObjectNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias ObjectNotFoundError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ObjectNotFound", Alias: (*Alias)(&obj)})
+}
+
+func (obj ObjectNotFoundError) Error() string {
+	return obj.Message
+}
+
 // OutOfStockError implements the interface ErrorObject
 type OutOfStockError struct {
 	Message   string   `json:"message"`
@@ -895,6 +1426,42 @@ func (obj OutOfStockError) Error() string {
 	return obj.Message
 }
 
+// OverCapacityError implements the interface ErrorObject
+type OverCapacityError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OverCapacityError) MarshalJSON() ([]byte, error) {
+	type Alias OverCapacityError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "OverCapacity", Alias: (*Alias)(&obj)})
+}
+
+func (obj OverCapacityError) Error() string {
+	return obj.Message
+}
+
+// PendingOperationError implements the interface ErrorObject
+type PendingOperationError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj PendingOperationError) MarshalJSON() ([]byte, error) {
+	type Alias PendingOperationError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "PendingOperation", Alias: (*Alias)(&obj)})
+}
+
+func (obj PendingOperationError) Error() string {
+	return obj.Message
+}
+
 // PriceChangedError implements the interface ErrorObject
 type PriceChangedError struct {
 	Message   string   `json:"message"`
@@ -912,6 +1479,61 @@ func (obj PriceChangedError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj PriceChangedError) Error() string {
+	return obj.Message
+}
+
+// ProjectNotConfiguredForLanguagesError implements the interface ErrorObject
+type ProjectNotConfiguredForLanguagesError struct {
+	Message   string   `json:"message"`
+	Languages []string `json:"languages,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProjectNotConfiguredForLanguagesError) MarshalJSON() ([]byte, error) {
+	type Alias ProjectNotConfiguredForLanguagesError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ProjectNotConfiguredForLanguages", Alias: (*Alias)(&obj)})
+}
+
+func (obj ProjectNotConfiguredForLanguagesError) Error() string {
+	return obj.Message
+}
+
+// QueryComplexityLimitExceededError implements the interface ErrorObject
+type QueryComplexityLimitExceededError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj QueryComplexityLimitExceededError) MarshalJSON() ([]byte, error) {
+	type Alias QueryComplexityLimitExceededError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "QueryComplexityLimitExceeded", Alias: (*Alias)(&obj)})
+}
+
+func (obj QueryComplexityLimitExceededError) Error() string {
+	return obj.Message
+}
+
+// QueryTimedOutError implements the interface ErrorObject
+type QueryTimedOutError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj QueryTimedOutError) MarshalJSON() ([]byte, error) {
+	type Alias QueryTimedOutError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "QueryTimedOut", Alias: (*Alias)(&obj)})
+}
+
+func (obj QueryTimedOutError) Error() string {
 	return obj.Message
 }
 
@@ -992,6 +1614,114 @@ func (obj ResourceNotFoundError) Error() string {
 	return obj.Message
 }
 
+// ResourceSizeLimitExceededError implements the interface ErrorObject
+type ResourceSizeLimitExceededError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ResourceSizeLimitExceededError) MarshalJSON() ([]byte, error) {
+	type Alias ResourceSizeLimitExceededError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "ResourceSizeLimitExceeded", Alias: (*Alias)(&obj)})
+}
+
+func (obj ResourceSizeLimitExceededError) Error() string {
+	return obj.Message
+}
+
+// SearchDeactivatedError implements the interface ErrorObject
+type SearchDeactivatedError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj SearchDeactivatedError) MarshalJSON() ([]byte, error) {
+	type Alias SearchDeactivatedError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "SearchDeactivated", Alias: (*Alias)(&obj)})
+}
+
+func (obj SearchDeactivatedError) Error() string {
+	return obj.Message
+}
+
+// SearchExecutionFailureError implements the interface ErrorObject
+type SearchExecutionFailureError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj SearchExecutionFailureError) MarshalJSON() ([]byte, error) {
+	type Alias SearchExecutionFailureError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "SearchExecutionFailure", Alias: (*Alias)(&obj)})
+}
+
+func (obj SearchExecutionFailureError) Error() string {
+	return obj.Message
+}
+
+// SearchFacetPathNotFoundError implements the interface ErrorObject
+type SearchFacetPathNotFoundError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj SearchFacetPathNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias SearchFacetPathNotFoundError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "SearchFacetPathNotFound", Alias: (*Alias)(&obj)})
+}
+
+func (obj SearchFacetPathNotFoundError) Error() string {
+	return obj.Message
+}
+
+// SearchIndexingInProgressError implements the interface ErrorObject
+type SearchIndexingInProgressError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj SearchIndexingInProgressError) MarshalJSON() ([]byte, error) {
+	type Alias SearchIndexingInProgressError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "SearchIndexingInProgress", Alias: (*Alias)(&obj)})
+}
+
+func (obj SearchIndexingInProgressError) Error() string {
+	return obj.Message
+}
+
+// SemanticErrorError implements the interface ErrorObject
+type SemanticErrorError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj SemanticErrorError) MarshalJSON() ([]byte, error) {
+	type Alias SemanticErrorError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "SemanticError", Alias: (*Alias)(&obj)})
+}
+
+func (obj SemanticErrorError) Error() string {
+	return obj.Message
+}
+
 // ShippingMethodDoesNotMatchCartError implements the interface ErrorObject
 type ShippingMethodDoesNotMatchCartError struct {
 	Message string `json:"message"`
@@ -1010,9 +1740,45 @@ func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 	return obj.Message
 }
 
+// SyntaxErrorError implements the interface ErrorObject
+type SyntaxErrorError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj SyntaxErrorError) MarshalJSON() ([]byte, error) {
+	type Alias SyntaxErrorError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "SyntaxError", Alias: (*Alias)(&obj)})
+}
+
+func (obj SyntaxErrorError) Error() string {
+	return obj.Message
+}
+
 // VariantValues is a standalone struct
 type VariantValues struct {
 	SKU        string       `json:"sku,omitempty"`
 	Prices     []PriceDraft `json:"prices"`
 	Attributes []Attribute  `json:"attributes"`
+}
+
+// WeakPasswordError implements the interface ErrorObject
+type WeakPasswordError struct {
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj WeakPasswordError) MarshalJSON() ([]byte, error) {
+	type Alias WeakPasswordError
+	return json.Marshal(struct {
+		Code string `json:"code"`
+		*Alias
+	}{Code: "WeakPassword", Alias: (*Alias)(&obj)})
+}
+
+func (obj WeakPasswordError) Error() string {
+	return obj.Message
 }

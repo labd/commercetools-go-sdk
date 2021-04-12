@@ -14,6 +14,7 @@ func TestGeneratedMyCartGetWithID(t *testing.T) {
 	responseData := ` {
 	  "type": "Cart",
 	  "id": "2a3baa00-44fa-4ab8-bec7-933c31e18dcc",
+	  "key": "test-key",
 	  "version": 5,
 	  "createdAt": "2015-09-22T15:36:17.510Z",
 	  "lastModifiedAt": "2015-09-22T15:41:55.816Z",
@@ -121,6 +122,127 @@ func TestGeneratedMyCartGetWithID(t *testing.T) {
 	assert.NotEmpty(t, my_cart.TaxCalculationMode)
 	assert.NotEmpty(t, my_cart.Origin)
 	assert.NotEmpty(t, my_cart.LastModifiedAt)
+	assert.NotEmpty(t, my_cart.Key)
+	assert.NotEmpty(t, my_cart.InventoryMode)
+	assert.NotEmpty(t, my_cart.ID)
+	assert.NotEmpty(t, my_cart.CreatedAt)
+	assert.NotEmpty(t, my_cart.CartState)
+
+}
+
+func TestGeneratedMyCartGetWithKey(t *testing.T) {
+	responseData := ` {
+	  "type": "Cart",
+	  "id": "2a3baa00-44fa-4ab8-bec7-933c31e18dcc",
+	  "key": "test-key",
+	  "version": 5,
+	  "createdAt": "2015-09-22T15:36:17.510Z",
+	  "lastModifiedAt": "2015-09-22T15:41:55.816Z",
+	  "lineItems": [
+	    {
+	      "id": "b925a817-d5ad-48bb-a407-29ad8e0649b5",
+	      "productId": "9f10dcfb-5cc9-4a18-843a-c07f7e22d01f",
+	      "name": {
+	        "en": "SAPPHIRE"
+	      },
+	      "productType": {
+	        "typeId": "product-type",
+	        "id": "2543e1d8-4915-4f72-a3c9-1df9b1b0082d",
+	        "version": 8
+	      },
+	      "productSlug": {
+	        "en": "sapphire1421832124423"
+	      },
+	      "variant": {
+	        "id": 1,
+	        "sku": "sku_SAPPHIRE_variant1_1421832124423",
+	        "prices": [
+	          {
+	            "value": {
+	              "type": "centPrecision",
+	              "fractionDigits": 2,
+	              "currencyCode": "EUR",
+	              "centAmount": 2800
+	            },
+	            "id": "8da659ef-9e54-447d-9c36-84912db1848f"
+	          }
+	        ],
+	        "images": [
+	          {
+	            "url": "https://www.commercetools.com/cli/data/252542005_1.jpg",
+	            "dimensions": {
+	              "w": 1400,
+	              "h": 1400
+	            }
+	          }
+	        ],
+	        "attributes": [],
+	        "assets": []
+	      },
+	      "price": {
+	        "value": {
+	          "type": "centPrecision",
+	          "fractionDigits": 2,
+	          "currencyCode": "EUR",
+	          "centAmount": 2800
+	        },
+	        "id": "8da659ef-9e54-447d-9c36-84912db1848f"
+	      },
+	      "quantity": 2,
+	      "discountedPricePerQuantity": [],
+	      "state": [
+	        {
+	          "quantity": 2,
+	          "state": {
+	            "typeId": "state",
+	            "id": "7c2e2694-aefe-43d7-888e-6a99514caaca"
+	          }
+	        }
+	      ],
+	      "priceMode": "Platform",
+	      "lineItemMode": "Standard",
+	      "totalPrice": {
+	        "type": "centPrecision",
+	        "fractionDigits": 2,
+	        "currencyCode": "EUR",
+	        "centAmount": 5600
+	      }
+	    }
+	  ],
+	  "store": {
+	    "typeId": "store",
+	    "key": "test-key"
+	  },
+	  "cartState": "Active",
+	  "totalPrice": {
+	    "type": "centPrecision",
+	    "fractionDigits": 2,
+	    "currencyCode": "EUR",
+	    "centAmount": 5600
+	  },
+	  "customLineItems": [],
+	  "discountCodes": [],
+	  "inventoryMode": "None",
+	  "taxMode": "Platform",
+	  "taxRoundingMode": "HalfEven",
+	  "taxCalculationMode": "LineItemLevel",
+	  "refusedGifts": [],
+	  "origin": "Customer"
+	} `
+	client, server := testutil.MockClient(t, responseData, nil, nil)
+	defer server.Close()
+	my_cart, err := client.MyCartGetWithKey(context.TODO(), "dummy-id")
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.NotNil(t, my_cart)
+	assert.NotNil(t, my_cart.Version)
+	assert.NotEmpty(t, my_cart.TaxRoundingMode)
+	assert.NotEmpty(t, my_cart.TaxMode)
+	assert.NotEmpty(t, my_cart.TaxCalculationMode)
+	assert.NotEmpty(t, my_cart.Origin)
+	assert.NotEmpty(t, my_cart.LastModifiedAt)
+	assert.NotEmpty(t, my_cart.Key)
 	assert.NotEmpty(t, my_cart.InventoryMode)
 	assert.NotEmpty(t, my_cart.ID)
 	assert.NotEmpty(t, my_cart.CreatedAt)
@@ -132,6 +254,7 @@ func TestGeneratedMyCartDeleteWithID(t *testing.T) {
 	responseData := ` {
 	  "type": "Cart",
 	  "id": "2a3baa00-44fa-4ab8-bec7-933c31e18dcc",
+	  "key": "test-key",
 	  "version": 5,
 	  "createdAt": "2015-09-22T15:36:17.510Z",
 	  "lastModifiedAt": "2015-09-22T15:41:55.816Z",
@@ -239,6 +362,127 @@ func TestGeneratedMyCartDeleteWithID(t *testing.T) {
 	assert.NotEmpty(t, my_cart.TaxCalculationMode)
 	assert.NotEmpty(t, my_cart.Origin)
 	assert.NotEmpty(t, my_cart.LastModifiedAt)
+	assert.NotEmpty(t, my_cart.Key)
+	assert.NotEmpty(t, my_cart.InventoryMode)
+	assert.NotEmpty(t, my_cart.ID)
+	assert.NotEmpty(t, my_cart.CreatedAt)
+	assert.NotEmpty(t, my_cart.CartState)
+
+}
+
+func TestGeneratedMyCartDeleteWithKey(t *testing.T) {
+	responseData := ` {
+	  "type": "Cart",
+	  "id": "2a3baa00-44fa-4ab8-bec7-933c31e18dcc",
+	  "key": "test-key",
+	  "version": 5,
+	  "createdAt": "2015-09-22T15:36:17.510Z",
+	  "lastModifiedAt": "2015-09-22T15:41:55.816Z",
+	  "lineItems": [
+	    {
+	      "id": "b925a817-d5ad-48bb-a407-29ad8e0649b5",
+	      "productId": "9f10dcfb-5cc9-4a18-843a-c07f7e22d01f",
+	      "name": {
+	        "en": "SAPPHIRE"
+	      },
+	      "productType": {
+	        "typeId": "product-type",
+	        "id": "2543e1d8-4915-4f72-a3c9-1df9b1b0082d",
+	        "version": 8
+	      },
+	      "productSlug": {
+	        "en": "sapphire1421832124423"
+	      },
+	      "variant": {
+	        "id": 1,
+	        "sku": "sku_SAPPHIRE_variant1_1421832124423",
+	        "prices": [
+	          {
+	            "value": {
+	              "type": "centPrecision",
+	              "fractionDigits": 2,
+	              "currencyCode": "EUR",
+	              "centAmount": 2800
+	            },
+	            "id": "8da659ef-9e54-447d-9c36-84912db1848f"
+	          }
+	        ],
+	        "images": [
+	          {
+	            "url": "https://www.commercetools.com/cli/data/252542005_1.jpg",
+	            "dimensions": {
+	              "w": 1400,
+	              "h": 1400
+	            }
+	          }
+	        ],
+	        "attributes": [],
+	        "assets": []
+	      },
+	      "price": {
+	        "value": {
+	          "type": "centPrecision",
+	          "fractionDigits": 2,
+	          "currencyCode": "EUR",
+	          "centAmount": 2800
+	        },
+	        "id": "8da659ef-9e54-447d-9c36-84912db1848f"
+	      },
+	      "quantity": 2,
+	      "discountedPricePerQuantity": [],
+	      "state": [
+	        {
+	          "quantity": 2,
+	          "state": {
+	            "typeId": "state",
+	            "id": "7c2e2694-aefe-43d7-888e-6a99514caaca"
+	          }
+	        }
+	      ],
+	      "priceMode": "Platform",
+	      "lineItemMode": "Standard",
+	      "totalPrice": {
+	        "type": "centPrecision",
+	        "fractionDigits": 2,
+	        "currencyCode": "EUR",
+	        "centAmount": 5600
+	      }
+	    }
+	  ],
+	  "store": {
+	    "typeId": "store",
+	    "key": "test-key"
+	  },
+	  "cartState": "Active",
+	  "totalPrice": {
+	    "type": "centPrecision",
+	    "fractionDigits": 2,
+	    "currencyCode": "EUR",
+	    "centAmount": 5600
+	  },
+	  "customLineItems": [],
+	  "discountCodes": [],
+	  "inventoryMode": "None",
+	  "taxMode": "Platform",
+	  "taxRoundingMode": "HalfEven",
+	  "taxCalculationMode": "LineItemLevel",
+	  "refusedGifts": [],
+	  "origin": "Customer"
+	} `
+	client, server := testutil.MockClient(t, responseData, nil, nil)
+	defer server.Close()
+	my_cart, err := client.MyCartDeleteWithKey(context.TODO(), "dummy-id", 1)
+	if err != nil {
+		t.Fatal(err)
+	}
+	assert.NotNil(t, my_cart)
+	assert.NotNil(t, my_cart.Version)
+	assert.NotEmpty(t, my_cart.TaxRoundingMode)
+	assert.NotEmpty(t, my_cart.TaxMode)
+	assert.NotEmpty(t, my_cart.TaxCalculationMode)
+	assert.NotEmpty(t, my_cart.Origin)
+	assert.NotEmpty(t, my_cart.LastModifiedAt)
+	assert.NotEmpty(t, my_cart.Key)
 	assert.NotEmpty(t, my_cart.InventoryMode)
 	assert.NotEmpty(t, my_cart.ID)
 	assert.NotEmpty(t, my_cart.CreatedAt)

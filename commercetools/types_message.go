@@ -106,6 +106,13 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			return nil, err
 		}
 		return new, nil
+	case "CustomerPasswordUpdated":
+		new := CustomerPasswordUpdatedMessage{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "DeliveryAdded":
 		new := DeliveryAddedMessage{}
 		err := decodeStruct(input, &new)
@@ -503,6 +510,13 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			return nil, err
 		}
 		return new, nil
+	case "ProductVariantAdded":
+		new := ProductVariantAddedMessage{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ProductVariantDeleted":
 		new := ProductVariantDeletedMessage{}
 		err := decodeStruct(input, &new)
@@ -541,6 +555,13 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			if err != nil {
 				return nil, err
 			}
+		}
+		return new, nil
+	case "ShoppingListStoreSet":
+		new := ShoppingListStoreSetMessage{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
 		}
 		return new, nil
 	}
@@ -640,6 +661,13 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return new, nil
 	case "CustomerGroupSet":
 		new := CustomerGroupSetMessagePayload{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "CustomerPasswordUpdated":
+		new := CustomerPasswordUpdatedMessagePayload{}
 		err := decodeStruct(input, &new)
 		if err != nil {
 			return nil, err
@@ -1042,6 +1070,13 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return new, nil
+	case "ProductVariantAdded":
+		new := ProductVariantAddedMessagePayload{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "ProductVariantDeleted":
 		new := ProductVariantDeletedMessagePayload{}
 		err := decodeStruct(input, &new)
@@ -1080,6 +1115,13 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			if err != nil {
 				return nil, err
 			}
+		}
+		return new, nil
+	case "ShoppingListStoreSet":
+		new := ShoppingListStoreSetMessagePayload{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
 		}
 		return new, nil
 	}
@@ -1137,6 +1179,7 @@ type CategorySlugChangedMessage struct {
 	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
 	CreatedAt                       time.Time                `json:"createdAt"`
 	Slug                            *LocalizedString         `json:"slug"`
+	OldSlug                         *LocalizedString         `json:"oldSlug,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1150,7 +1193,8 @@ func (obj CategorySlugChangedMessage) MarshalJSON() ([]byte, error) {
 
 // CategorySlugChangedMessagePayload implements the interface MessagePayload
 type CategorySlugChangedMessagePayload struct {
-	Slug *LocalizedString `json:"slug"`
+	Slug    *LocalizedString `json:"slug"`
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1545,6 +1589,44 @@ func (obj CustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{Type: "CustomerGroupSet", Alias: (*Alias)(&obj)})
+}
+
+// CustomerPasswordUpdatedMessage implements the interface Message
+type CustomerPasswordUpdatedMessage struct {
+	Version                         int                      `json:"version"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	LastModifiedBy                  *LastModifiedBy          `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Reset                           bool                     `json:"reset"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomerPasswordUpdatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias CustomerPasswordUpdatedMessage
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "CustomerPasswordUpdated", Alias: (*Alias)(&obj)})
+}
+
+// CustomerPasswordUpdatedMessagePayload implements the interface MessagePayload
+type CustomerPasswordUpdatedMessagePayload struct {
+	Reset bool `json:"reset"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomerPasswordUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerPasswordUpdatedMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "CustomerPasswordUpdated", Alias: (*Alias)(&obj)})
 }
 
 // DeliveryAddedMessage implements the interface Message
@@ -3633,7 +3715,7 @@ type ProductPublishedMessage struct {
 	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
 	CreatedAt                       time.Time                `json:"createdAt"`
 	Scope                           ProductPublishScope      `json:"scope"`
-	RemovedImageUrls                []interface{}            `json:"removedImageUrls"`
+	RemovedImageUrls                []string                 `json:"removedImageUrls"`
 	ProductProjection               *ProductProjection       `json:"productProjection"`
 }
 
@@ -3649,7 +3731,7 @@ func (obj ProductPublishedMessage) MarshalJSON() ([]byte, error) {
 // ProductPublishedMessagePayload implements the interface MessagePayload
 type ProductPublishedMessagePayload struct {
 	Scope             ProductPublishScope `json:"scope"`
-	RemovedImageUrls  []interface{}       `json:"removedImageUrls"`
+	RemovedImageUrls  []string            `json:"removedImageUrls"`
 	ProductProjection *ProductProjection  `json:"productProjection"`
 }
 
@@ -3753,6 +3835,7 @@ type ProductSlugChangedMessage struct {
 	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
 	CreatedAt                       time.Time                `json:"createdAt"`
 	Slug                            *LocalizedString         `json:"slug"`
+	OldSlug                         *LocalizedString         `json:"oldSlug,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -3766,7 +3849,8 @@ func (obj ProductSlugChangedMessage) MarshalJSON() ([]byte, error) {
 
 // ProductSlugChangedMessagePayload implements the interface MessagePayload
 type ProductSlugChangedMessagePayload struct {
-	Slug *LocalizedString `json:"slug"`
+	Slug    *LocalizedString `json:"slug"`
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -3851,6 +3935,46 @@ func (obj ProductUnpublishedMessagePayload) MarshalJSON() ([]byte, error) {
 		Type string `json:"type"`
 		*Alias
 	}{Type: "ProductUnpublished", Alias: (*Alias)(&obj)})
+}
+
+// ProductVariantAddedMessage implements the interface Message
+type ProductVariantAddedMessage struct {
+	Version                         int                      `json:"version"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	LastModifiedBy                  *LastModifiedBy          `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Variant                         *ProductVariant          `json:"variant"`
+	Staged                          bool                     `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductVariantAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantAddedMessage
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "ProductVariantAdded", Alias: (*Alias)(&obj)})
+}
+
+// ProductVariantAddedMessagePayload implements the interface MessagePayload
+type ProductVariantAddedMessagePayload struct {
+	Variant *ProductVariant `json:"variant"`
+	Staged  bool            `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ProductVariantAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantAddedMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "ProductVariantAdded", Alias: (*Alias)(&obj)})
 }
 
 // ProductVariantDeletedMessage implements the interface Message
@@ -4093,6 +4217,44 @@ func (obj *ReviewStateTransitionMessagePayload) UnmarshalJSON(data []byte) error
 	}
 
 	return nil
+}
+
+// ShoppingListStoreSetMessage implements the interface Message
+type ShoppingListStoreSetMessage struct {
+	Version                         int                      `json:"version"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Resource                        Reference                `json:"resource"`
+	LastModifiedBy                  *LastModifiedBy          `json:"lastModifiedBy,omitempty"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	ID                              string                   `json:"id"`
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	Store                           *StoreKeyReference       `json:"store"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShoppingListStoreSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListStoreSetMessage
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "ShoppingListStoreSet", Alias: (*Alias)(&obj)})
+}
+
+// ShoppingListStoreSetMessagePayload implements the interface MessagePayload
+type ShoppingListStoreSetMessagePayload struct {
+	Store *StoreKeyReference `json:"store"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShoppingListStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListStoreSetMessagePayload
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		*Alias
+	}{Type: "ShoppingListStoreSet", Alias: (*Alias)(&obj)})
 }
 
 // UserProvidedIdentifiers is a standalone struct

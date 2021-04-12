@@ -1,3 +1,44 @@
+0.3.0 (draft)
+=============
+ - Upgrade services and types from commercetools-api-reference@7184cde891c72d52e611cc6e91fcd29fc4caf78b (#59)
+
+## Breaking changes
+
+### Removed
+ - ExtensionNoResponseError.ErrorByExtension
+ - ExtensionNoResponseError.ExtensionExtraInfo
+ - ExtensionNoResponseError.LocalizedMessage
+ - PagedQueryResponse.Facets
+ - TaxedPriceDraft.UnmarshalJSON()
+
+## Renamed
+ - StoresAddDistributionChannelsAction renamed to StoreAddDistributionChannelAction
+ - StoresAddSupplyChannelsAction renamed to StoreAddSupplyChannelAction
+ - StoresRemoveDistributionChannelsAction renamed to StoreRemoveDistributionChannelAction
+ - StoresRemoveSupplyChannelsAction renamed to StoreRemoveSupplyChannelAction
+ - StoresSetDistributionChannelsAction renamed to StoreSetDistributionChannelsAction
+ - StoresSetSupplyChannelsAction renamed to StoreSetSupplyChannelsAction
+
+### Changes
+
+| struct                                                 | old type          | new type
+|--------------------------------------------------------|-------------------|------------------------
+| CartDiscount.Value                                     | CartDiscountValue | CartDiscountValueDraft
+| CartDiscountValueGiftLineItemDraft.DistributionChannel | *ChannelReference | *ChannelResourceIdentifier
+| CartDiscountValueGiftLineItemDraft.Product             | *ProductReference | *ProductResourceIdentifier
+| CartDiscountValueGiftLineItemDraft.SupplyChannel       | *ChannelReference | *ChannelResourceIdentifier
+| CartSetShippingMethodAction.Custom                     | *CustomFields     | *CustomFieldsDraft
+| CustomerSignInResult.Cart                              | interface{}       | *Cart
+| DeliveryAddedMessage.RemovedImageUrls                  | []interface{}     | []string
+| DeliveryItem.Quantity                                  | float64           | int
+| FacetResultRange.Total                                 | int               | float64
+| MyCartAddLineItemAction.Quantity                       | float64           | int
+| MyCartChangeLineItemQuantityAction.Quantity            | float64           | int
+| MyCartRemoveLineItemAction.Quantity                    | float64           | int
+| ProductPublishedMessagePayload.RemovedImageUrls        | []interface{}     | []string
+| TaxedPriceDraft.TotalNet                               | TypedMoneyDraft   | *Money
+| TaxedPriceDraft.TotalGross                             | TypedMoneyDraft   | *Money
+
 0.2.0 (2020-07-20)
 ==================
  - *Backwards incompatible:* Add context parameter to all method calls. (#51)

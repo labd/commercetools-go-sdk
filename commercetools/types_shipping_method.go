@@ -81,6 +81,20 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 			return nil, err
 		}
 		return new, nil
+	case "setCustomField":
+		new := ShippingMethodSetCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setCustomType":
+		new := ShippingMethodSetCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setDescription":
 		new := ShippingMethodSetDescriptionAction{}
 		err := decodeStruct(input, &new)
@@ -221,6 +235,7 @@ type ShippingMethod struct {
 	IsDefault            bool                  `json:"isDefault"`
 	ID                   string                `json:"id"`
 	Description          string                `json:"description,omitempty"`
+	Custom               *CustomFields         `json:"custom,omitempty"`
 	CreatedBy            *CreatedBy            `json:"createdBy,omitempty"`
 	CreatedAt            time.Time             `json:"createdAt"`
 }
@@ -306,6 +321,7 @@ type ShippingMethodDraft struct {
 	Key                  string                         `json:"key,omitempty"`
 	IsDefault            bool                           `json:"isDefault"`
 	Description          string                         `json:"description,omitempty"`
+	Custom               *CustomFieldsDraft             `json:"custom,omitempty"`
 }
 
 // ShippingMethodPagedQueryResponse is a standalone struct
@@ -374,6 +390,36 @@ func (obj ShippingMethodResourceIdentifier) MarshalJSON() ([]byte, error) {
 		TypeID string `json:"typeId"`
 		*Alias
 	}{TypeID: "shipping-method", Alias: (*Alias)(&obj)})
+}
+
+// ShippingMethodSetCustomFieldAction implements the interface ShippingMethodUpdateAction
+type ShippingMethodSetCustomFieldAction struct {
+	Value interface{} `json:"value,omitempty"`
+	Name  string      `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShippingMethodSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias ShippingMethodSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+// ShippingMethodSetCustomTypeAction implements the interface ShippingMethodUpdateAction
+type ShippingMethodSetCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShippingMethodSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias ShippingMethodSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
 // ShippingMethodSetDescriptionAction implements the interface ShippingMethodUpdateAction

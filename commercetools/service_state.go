@@ -51,14 +51,14 @@ func (client *Client) StateDeleteWithID(ctx context.Context, id string, version 
 }
 
 // StateDeleteWithKey for type State
-func (client *Client) StateDeleteWithKey(ctx context.Context, Key string, version int, opts ...RequestOption) (result *State, err error) {
+func (client *Client) StateDeleteWithKey(ctx context.Context, key string, version int, opts ...RequestOption) (result *State, err error) {
 	params := url.Values{}
 	params.Set("version", strconv.Itoa(version))
 
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("states/key=%s", Key)
+	endpoint := fmt.Sprintf("states/key=%s", key)
 	err = client.delete(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err
@@ -81,12 +81,12 @@ func (client *Client) StateGetWithID(ctx context.Context, id string, opts ...Req
 }
 
 // StateGetWithKey for type State
-func (client *Client) StateGetWithKey(ctx context.Context, Key string, opts ...RequestOption) (result *State, err error) {
+func (client *Client) StateGetWithKey(ctx context.Context, key string, opts ...RequestOption) (result *State, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
 	}
-	endpoint := fmt.Sprintf("states/key=%s", Key)
+	endpoint := fmt.Sprintf("states/key=%s", key)
 	err = client.get(ctx, endpoint, params, &result)
 	if err != nil {
 		return nil, err

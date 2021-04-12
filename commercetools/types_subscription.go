@@ -358,6 +358,7 @@ type ResourceDeletedDelivery struct {
 	ProjectKey                      string                   `json:"projectKey"`
 	Version                         int                      `json:"version"`
 	ModifiedAt                      time.Time                `json:"modifiedAt"`
+	DataErasure                     bool                     `json:"dataErasure"`
 }
 
 // MarshalJSON override to set the discriminator value

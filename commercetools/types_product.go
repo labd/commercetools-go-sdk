@@ -473,7 +473,7 @@ func (obj CustomTokenizer) MarshalJSON() ([]byte, error) {
 
 // FacetResultRange is a standalone struct
 type FacetResultRange struct {
-	Total        int     `json:"total"`
+	Total        float64 `json:"total"`
 	ToStr        string  `json:"toStr"`
 	To           float64 `json:"to"`
 	ProductCount int     `json:"productCount,omitempty"`
@@ -848,6 +848,7 @@ type ProductProjectionPagedSearchResponse struct {
 	Total   int                 `json:"total,omitempty"`
 	Results []ProductProjection `json:"results"`
 	Offset  int                 `json:"offset"`
+	Limit   int                 `json:"limit"`
 	Facets  *FacetResults       `json:"facets"`
 	Count   int                 `json:"count"`
 }

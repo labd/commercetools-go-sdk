@@ -101,6 +101,20 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 			return nil, err
 		}
 		return new, nil
+	case "setAddressCustomField":
+		new := CustomerSetAddressCustomFieldAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
+	case "setAddressCustomType":
+		new := CustomerSetAddressCustomTypeAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setCompanyName":
 		new := CustomerSetCompanyNameAction{}
 		err := decodeStruct(input, &new)
@@ -399,6 +413,7 @@ type CustomerDraft struct {
 	BillingAddresses       []int                            `json:"billingAddresses,omitempty"`
 	AnonymousID            string                           `json:"anonymousId,omitempty"`
 	AnonymousCartID        string                           `json:"anonymousCartId,omitempty"`
+	AnonymousCart          *CartResourceIdentifier          `json:"anonymousCart,omitempty"`
 	Addresses              []Address                        `json:"addresses,omitempty"`
 }
 
@@ -511,6 +526,38 @@ func (obj CustomerResourceIdentifier) MarshalJSON() ([]byte, error) {
 		TypeID string `json:"typeId"`
 		*Alias
 	}{TypeID: "customer", Alias: (*Alias)(&obj)})
+}
+
+// CustomerSetAddressCustomFieldAction implements the interface CustomerUpdateAction
+type CustomerSetAddressCustomFieldAction struct {
+	Value     interface{} `json:"value,omitempty"`
+	Name      string      `json:"name"`
+	AddressID string      `json:"addressId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomerSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CustomerSetAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+// CustomerSetAddressCustomTypeAction implements the interface CustomerUpdateAction
+type CustomerSetAddressCustomTypeAction struct {
+	Type      *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields    *FieldContainer         `json:"fields,omitempty"`
+	AddressID string                  `json:"addressId"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj CustomerSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CustomerSetAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAddressCustomType", Alias: (*Alias)(&obj)})
 }
 
 // CustomerSetCompanyNameAction implements the interface CustomerUpdateAction
@@ -771,8 +818,8 @@ func (obj CustomerSetVatIDAction) MarshalJSON() ([]byte, error) {
 
 // CustomerSignInResult is a standalone struct
 type CustomerSignInResult struct {
-	Customer *Customer   `json:"customer"`
-	Cart     interface{} `json:"cart,omitempty"`
+	Customer *Customer `json:"customer"`
+	Cart     *Cart     `json:"cart,omitempty"`
 }
 
 // CustomerSignin is a standalone struct
@@ -783,6 +830,7 @@ type CustomerSignin struct {
 	AnonymousID             string                  `json:"anonymousId,omitempty"`
 	AnonymousCartSignInMode AnonymousCartSignInMode `json:"anonymousCartSignInMode,omitempty"`
 	AnonymousCartID         string                  `json:"anonymousCartId,omitempty"`
+	AnonymousCart           *CartResourceIdentifier `json:"anonymousCart,omitempty"`
 }
 
 // CustomerToken is a standalone struct
