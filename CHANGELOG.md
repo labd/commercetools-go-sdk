@@ -1,6 +1,6 @@
 0.3.0 (2021-04-12)
 ==================
- - Upgrade services and types from commercetools-api-reference@7184cde891c72d52e611cc6e91fcd29fc4caf78b (#59)
+ - Upgrade services and types from commercetools-api-reference [#59](https://github.com/labd/commercetools-go-sdk/pull/59)
  - Add validation for structs for Update calls
  - Enable custom objects endpoint after raml update
  - *Backwards incompatible:* DateOfBirth fields now take a `*Date` instead of a `Date` value
