@@ -10,13 +10,14 @@ import (
 	mapstructure "github.com/mitchellh/mapstructure"
 )
 
+var reMap = regexp.MustCompile(`([^\]]+)\[([^\]]+)]$`)
+
 func serializeQueryParams(v interface{}) url.Values {
-	re := regexp.MustCompile(`([^\]]+)\[([^\]]+)]$`)
 	values, _ := query.Values(v)
 
 	newValues := url.Values{}
 	for key, values := range values {
-		newKey := re.ReplaceAllString(key, "$1.$2")
+		newKey := reMap.ReplaceAllString(key, "$1.$2")
 		for _, value := range values {
 			newValues.Add(newKey, value)
 		}
