@@ -17,10 +17,14 @@ func TestProductProjectionSearch(t *testing.T) {
 	defer server.Close()
 
 	queryInput := commercetools.ProductProjectionSearchInput{
-		Text: map[string]string{"nl": "foobar"},
+		Text:   map[string]string{"nl": "foobar"},
+		Filter: []string{"category.id:foo", "category.id:bar"},
 	}
 	_, err := client.ProductProjectionSearch(context.TODO(), &queryInput)
 
 	assert.Nil(t, err)
-	assert.Equal(t, url.Values{"text.nl": []string{"foobar"}}, output.URL.Query())
+	assert.Equal(t, url.Values{
+		"text.nl": {"foobar"},
+		"filter":  {"category.id:foo", "category.id:bar"},
+	}, output.URL.Query())
 }
