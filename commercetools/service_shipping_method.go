@@ -168,7 +168,8 @@ func (client *Client) ShippingMethodUpdateWithKey(ctx context.Context, input *Sh
 
 // ShippingMethodMatchingCartInput is input for function ShippingMethodMatchingCart
 type ShippingMethodMatchingCartInput struct {
-	CartID string `url:"cartId"`
+	CartID string   `url:"cartId"`
+	Expand []string `url:"expand,omitempty"`
 }
 
 // ShippingMethodMatchingCart Get ShippingMethods for a cart
@@ -188,9 +189,10 @@ func (client *Client) ShippingMethodMatchingCart(ctx context.Context, value *Shi
 
 // ShippingMethodMatchingLocationInput is input for function ShippingMethodMatchingLocation
 type ShippingMethodMatchingLocationInput struct {
-	Country  string `url:"country"`
-	Currency string `url:"currency,omitempty"`
-	State    string `url:"state,omitempty"`
+	Country  string   `url:"country"`
+	Currency string   `url:"currency,omitempty"`
+	State    string   `url:"state,omitempty"`
+	Expand   []string `url:"expand,omitempty"`
 }
 
 // ShippingMethodMatchingLocation Get ShippingMethods for a location

@@ -70,6 +70,16 @@ type ProductProjectionSearchInput struct {
 	FuzzyLevel           float64           `url:"fuzzyLevel,omitempty"`
 	MarkMatchingVariants bool              `url:"markMatchingVariants,omitempty"`
 	Staged               bool              `url:"staged,omitempty"`
+	Limit                float64           `url:"limit,omitempty"`
+	Offset               float64           `url:"offset,omitempty"`
+	WithTotal            bool              `url:"withTotal,omitempty"`
+	LocaleProjection     string            `url:"localeProjection,omitempty"`
+	PriceChannel         string            `url:"priceChannel,omitempty"`
+	PriceCountry         string            `url:"priceCountry,omitempty"`
+	PriceCurrency        string            `url:"priceCurrency,omitempty"`
+	PriceCustomerGroup   string            `url:"priceCustomerGroup,omitempty"`
+	StoreProjection      string            `url:"storeProjection,omitempty"`
+	Expand               []string          `url:"expand,omitempty"`
 }
 
 /*
@@ -97,6 +107,9 @@ type ProductProjectionSuggestInput struct {
 	SearchKeywords map[string]string `url:"searchKeywords"`
 	Fuzzy          bool              `url:"fuzzy,omitempty"`
 	Staged         bool              `url:"staged,omitempty"`
+	Limit          float64           `url:"limit,omitempty"`
+	Offset         float64           `url:"offset,omitempty"`
+	WithTotal      bool              `url:"withTotal,omitempty"`
 }
 
 // ProductProjectionSuggest The source of data for suggestions is the searchKeyword field in a product
