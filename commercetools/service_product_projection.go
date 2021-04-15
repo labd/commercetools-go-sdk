@@ -62,10 +62,10 @@ func (client *Client) ProductProjectionGetWithKey(ctx context.Context, key strin
 // ProductProjectionSearchInput is input for function ProductProjectionSearch
 type ProductProjectionSearchInput struct {
 	Text                 map[string]string `url:"text"`
-	Facet                string            `url:"facet,omitempty"`
-	FilterFacets         string            `url:"filter.facets,omitempty"`
-	FilterQuery          string            `url:"filter.query,omitempty"`
-	Filter               string            `url:"filter,omitempty"`
+	Facet                []string          `url:"facet,omitempty"`
+	FilterFacets         []string          `url:"filter.facets,omitempty"`
+	FilterQuery          []string          `url:"filter.query,omitempty"`
+	Filter               []string          `url:"filter,omitempty"`
 	Fuzzy                bool              `url:"fuzzy,omitempty"`
 	FuzzyLevel           float64           `url:"fuzzyLevel,omitempty"`
 	MarkMatchingVariants bool              `url:"markMatchingVariants,omitempty"`
