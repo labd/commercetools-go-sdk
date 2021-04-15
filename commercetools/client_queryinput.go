@@ -35,7 +35,7 @@ type QueryInput struct {
 	// use-case. Reference expansion can be used when creating, updating,
 	// querying, and deleting these resources.
 	// https://docs.commercetools.com/http-api.html#reference-expansion
-	Expand string
+	Expand []string
 
 	Limit  int
 	Offset int
@@ -52,8 +52,8 @@ func (qi QueryInput) toParams() (values url.Values) {
 		values.Add("sort", qi.Sort[i])
 	}
 
-	if qi.Expand != "" {
-		values.Set("expand", qi.Expand)
+	for i := range qi.Expand {
+		values.Add("expand", qi.Expand[i])
 	}
 
 	if qi.Limit != 0 {
