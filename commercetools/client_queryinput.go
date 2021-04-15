@@ -39,6 +39,9 @@ type QueryInput struct {
 
 	Limit  int
 	Offset int
+
+	// Extra query arguments.
+	Extra url.Values
 }
 
 func (qi QueryInput) toParams() (values url.Values) {
@@ -64,5 +67,8 @@ func (qi QueryInput) toParams() (values url.Values) {
 		values.Set("offset", strconv.Itoa(qi.Offset))
 	}
 
+	for k, v := range qi.Extra {
+		values[k] = v
+	}
 	return
 }
