@@ -388,6 +388,31 @@ func parseResourceData(val yaml.MapSlice, method *ServiceMethod) {
 		}
 	}
 
+	for _, name := range method.Traits {
+		trait := getTrait(name)
+		if trait == nil {
+			continue
+		}
+		qparams := getPropertyValue(trait, "queryParameters")
+		if qparams != nil {
+			for _, item := range qparams.(yaml.MapSlice) {
+				obj := createRamlTypeAttribute(item.Key.(string), item.Value)
+				// traits are supposed to be optional
+				obj.Optional = true
+				exists := false
+				for _, existing := range method.QueryParameters {
+					if existing.Name == obj.Name {
+						exists = true
+						break
+					}
+				}
+				if !exists {
+					method.QueryParameters = append(method.QueryParameters, obj)
+				}
+			}
+		}
+	}
+
 }
 
 func getTypeInformation(item yaml.MapItem) string {

@@ -26,7 +26,8 @@ func (client *Client) StoreLogin(ctx context.Context, storeKey string, value *Cu
 
 // StoreShippingMethodsForMatchingCartInput is input for function StoreShippingMethodsForMatchingCart
 type StoreShippingMethodsForMatchingCartInput struct {
-	CartID string `url:"cartId"`
+	CartID string   `url:"cartId"`
+	Expand []string `url:"expand,omitempty"`
 }
 
 // StoreShippingMethodsForMatchingCart for type StoreShippingMethodsForMatchingCartInput
