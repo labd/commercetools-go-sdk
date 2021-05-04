@@ -230,6 +230,9 @@ func createDomainMethod(item yaml.MapItem, sd *ServiceDomain) *ServiceMethod {
 			ReturnType: sd.ResourceType,
 			Type:       "create",
 		}
+		if sd.ResourceDraft == "CustomerDraft" {
+			method.ReturnType = "CustomerSignInResult"
+		}
 	default:
 		if strings.HasPrefix(key, "/") {
 			method = createActionServiceMethods(key, value, sd)
