@@ -1292,7 +1292,7 @@ type OrderImportDraft struct {
 	CustomerID            string                           `json:"customerId,omitempty"`
 	CustomerGroup         *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	CustomerEmail         string                           `json:"customerEmail,omitempty"`
-	CustomLineItems       []CustomLineItemDraft            `json:"customLineItems,omitempty"`
+	CustomLineItems       []CustomLineItemImportDraft      `json:"customLineItems,omitempty"`
 	Custom                *CustomFieldsDraft               `json:"custom,omitempty"`
 	Country               string                           `json:"country,omitempty"`
 	CompletedAt           *time.Time                       `json:"completedAt,omitempty"`
