@@ -345,6 +345,10 @@ func generateStructField(object RamlTypeAttribute) jen.Code {
 	}
 	code := jen.Id(object.CodeName)
 
+	if object.Name == "transitions" && object.TypeName == "StateResourceIdentifier" {
+		code = code.Op("*")
+	}
+
 	if object.Many {
 		code = code.Index()
 	}
