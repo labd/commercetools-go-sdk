@@ -186,13 +186,13 @@ func (obj StateChangeTypeAction) MarshalJSON() ([]byte, error) {
 
 // StateDraft is a standalone struct
 type StateDraft struct {
-	Type        StateTypeEnum             `json:"type"`
-	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
-	Roles       []StateRoleEnum           `json:"roles,omitempty"`
-	Name        *LocalizedString          `json:"name,omitempty"`
-	Key         string                    `json:"key"`
-	Initial     bool                      `json:"initial"`
-	Description *LocalizedString          `json:"description,omitempty"`
+	Type        StateTypeEnum              `json:"type"`
+	Transitions *[]StateResourceIdentifier `json:"transitions,omitempty"`
+	Roles       []StateRoleEnum            `json:"roles,omitempty"`
+	Name        *LocalizedString           `json:"name,omitempty"`
+	Key         string                     `json:"key"`
+	Initial     bool                       `json:"initial"`
+	Description *LocalizedString           `json:"description,omitempty"`
 }
 
 // StatePagedQueryResponse is a standalone struct
@@ -292,7 +292,7 @@ func (obj StateSetRolesAction) MarshalJSON() ([]byte, error) {
 
 // StateSetTransitionsAction implements the interface StateUpdateAction
 type StateSetTransitionsAction struct {
-	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
+	Transitions *[]StateResourceIdentifier `json:"transitions,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value

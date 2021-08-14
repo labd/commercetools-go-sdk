@@ -12,50 +12,114 @@ import (
 )
 
 func TestStateCreate(t *testing.T) {
-	output := testutil.RequestData{}
-
-	client, server := testutil.MockClient(t, "{}", &output, nil)
-	defer server.Close()
-
-	input := &commercetools.StateDraft{
-		Key:  "state",
-		Type: commercetools.StateTypeEnum("ProductState"),
-		Name: &commercetools.LocalizedString{
-			"en": "State machine",
-		},
-		Description: &commercetools.LocalizedString{
-			"en": "This is a state machine. Beep beep boop.",
-		},
-		Initial: true,
-		Transitions: []commercetools.StateResourceIdentifier{
-			{
-				ID: "1",
+	testCases := []struct {
+		desc        string
+		input       *commercetools.StateDraft
+		requestBody string
+	}{
+		{
+			desc: "default",
+			input: &commercetools.StateDraft{
+				Key:  "state",
+				Type: commercetools.StateTypeEnum("ProductState"),
+				Name: &commercetools.LocalizedString{
+					"en": "State machine",
+				},
+				Description: &commercetools.LocalizedString{
+					"en": "This is a state machine. Beep beep boop.",
+				},
+				Initial: true,
+				Transitions: &[]commercetools.StateResourceIdentifier{
+					{
+						ID: "1",
+					},
+				},
 			},
+			requestBody: `{
+				"key": "state",
+				"type": "ProductState",
+				"name": {
+					"en": "State machine"
+				},
+				"description": {
+					"en": "This is a state machine. Beep beep boop."
+				},
+				"initial": true,
+				"transitions": [
+					{
+						"typeId": "state",
+						"id": "1"
+					}
+				]
+			}`,
+		},
+		{
+			desc: "no transitions",
+			input: &commercetools.StateDraft{
+				Key:  "state",
+				Type: commercetools.StateTypeEnum("ProductState"),
+				Name: &commercetools.LocalizedString{
+					"en": "State machine",
+				},
+				Description: &commercetools.LocalizedString{
+					"en": "This is a state machine. Beep beep boop.",
+				},
+				Initial: true,
+			},
+			requestBody: `{
+				"key": "state",
+				"type": "ProductState",
+				"name": {
+					"en": "State machine"
+				},
+				"description": {
+					"en": "This is a state machine. Beep beep boop."
+				},
+				"initial": true
+			}`,
+		},
+		{
+			desc: "empty transitions",
+			input: &commercetools.StateDraft{
+				Key:  "state",
+				Type: commercetools.StateTypeEnum("ProductState"),
+				Name: &commercetools.LocalizedString{
+					"en": "State machine",
+				},
+				Description: &commercetools.LocalizedString{
+					"en": "This is a state machine. Beep beep boop.",
+				},
+				Initial:     true,
+				Transitions: &[]commercetools.StateResourceIdentifier{},
+			},
+			requestBody: `{
+				"key": "state",
+				"type": "ProductState",
+				"name": {
+					"en": "State machine"
+				},
+				"description": {
+					"en": "This is a state machine. Beep beep boop."
+				},
+				"initial": true,
+				"transitions": []
+			}`,
 		},
 	}
 
-	_, err := client.StateCreate(context.TODO(), input)
-	assert.Nil(t, err)
+	for _, tC := range testCases {
+		t.Run(tC.desc, func(t *testing.T) {
+			output := testutil.RequestData{}
 
-	expectedBody := `{
-		"key": "state",
-		"type": "ProductState",
-		"name": {
-			"en": "State machine"
-		},
-		"description": {
-			"en": "This is a state machine. Beep beep boop."
-		},
-		"initial": true,
-		"transitions": [
-			{
-				"typeId": "state",
-				"id": "1"
-			}
-		]
-	}`
+			client, server := testutil.MockClient(t, "{}", &output, nil)
+			defer server.Close()
 
-	assert.JSONEq(t, expectedBody, output.JSON)
+			_, err := client.StateCreate(context.TODO(), tC.input)
+			assert.Nil(t, err)
+
+			assert.JSONEq(t, tC.requestBody, output.JSON)
+		})
+	}
 }
 
 func TestStateUpdate(t *testing.T) {
@@ -184,7 +248,7 @@ func TestStateUpdate(t *testing.T) {
 				Version: 2,
 				Actions: []commercetools.StateUpdateAction{
 					&commercetools.StateSetTransitionsAction{
-						Transitions: []commercetools.StateResourceIdentifier{
+						Transitions: &[]commercetools.StateResourceIdentifier{
 							{
 								ID: "1",
 							},
@@ -203,6 +267,45 @@ func TestStateUpdate(t *testing.T) {
 								"id": "1"
 							}
 						]
+					}
+				]
+			}`,
+		},
+		{
+			desc: "Set transitions (empty)",
+			input: &commercetools.StateUpdateWithIDInput{
+				ID:      "1234",
+				Version: 2,
+				Actions: []commercetools.StateUpdateAction{
+					&commercetools.StateSetTransitionsAction{
+						Transitions: &[]commercetools.StateResourceIdentifier{},
+					},
+				},
+			},
+			requestBody: `{
+				"version": 2,
+				"actions": [
+					{
+						"action": "setTransitions",
+						"transitions": []
+					}
+				]
+			}`,
+		},
+		{
+			desc: "Unset transitions",
+			input: &commercetools.StateUpdateWithIDInput{
+				ID:      "1234",
+				Version: 2,
+				Actions: []commercetools.StateUpdateAction{
+					&commercetools.StateSetTransitionsAction{},
+				},
+			},
+			requestBody: `{
+				"version": 2,
+				"actions": [
+					{
+						"action": "setTransitions"
 					}
 				]
 			}`,
