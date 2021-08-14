@@ -5,11 +5,11 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/labd/commercetools-go-sdk)](https://goreportcard.com/report/github.com/labd/commercetools-go-sdk)
 [![GoDoc](https://godoc.org/github.com/labd/commercetools-go-sdk?status.svg)](https://godoc.org/github.com/labd/commercetools-go-sdk)
 
-The Commercetools Go SDK is automatically generated based on the official [API specifications](https://github.com/commercetools/commercetools-api-reference) 
+The Commercetools Go SDK is automatically generated based on the official [API specifications](https://github.com/commercetools/commercetools-api-reference)
 of Commercetools. It should therefore be nearly feature complete.
 
 The SDK was initially created for enabling the creation of the
-[Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools) 
+[Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools)
 That provider enables you to use infrastructure-as-code principles with Commercetools.
 
 
@@ -25,8 +25,8 @@ import (
     "log"
     "math/rand"
     "time"
-    
-    "github.com/labd/commercetools-go-sdk/commercetools"
+    "golang.org/x/oauth2/clientcredentials"
+    "github.com/labd/commercetools-go-sdk/platform"
 )
 
 func main() {
@@ -34,27 +34,39 @@ func main() {
     // Create the new client. When an empty value is passed it will use the CTP_*
     // environment variables to get the value. The HTTPClient arg is optional,
     // and when empty will automatically be created using the env values.
-    client, err := commercetools.NewClient(&commercetools.ClientConfig{
-        ProjectKey: "<project-key>",
-        Endpoints:  commercetools.NewClientEndpoints("europe-west1", "gcp"),
-        Credentials: &commercetools.ClientCredentials{
+    client, err := platform.NewClient(&platform.ClientConfig{
+        URL: "https://api.europe-west1.gcp.commercetools.com",
+        Credentials: &clientcredentials.Config{
+            TokenURL:     "https://auth.europe-west1.gcp.commercetools.com/oauth/token",
             ClientID:     "<client-id>",
             ClientSecret: "<client-secret>",
-            Scopes:       []string{"<scope>"},
+            Scopes:       []string{"manage_project:<project-key>"},
         },
     })
-    
+
+    projectClient := client.WithProjectKey("<project-key>")
+
     ctx := context.Background()
 
     // Get or Createa product type
-    productTypeDraft := commercetools.ProductTypeDraft{
+    productTypeDraft := platform.ProductTypeDraft{
         Name: "a-product-type",
         Key:  "a-product-type",
     }
 
-    productType, err := client.ProductTypeGetWithKey(ctx, productTypeDraft.Key)
+    productType, err := (
+        projectClient.
+        ProductTypes().
+        WithKey(productTypeDraft.Key).
+        Execute(ctx))
+
     if productType == nil {
-        productType, err = client.ProductTypeCreate(ctx, &productTypeDraft)
+        productType, err = (
+            projectClient.
+            ProductTypes().
+            Post(&productTypeDraft).
+            Execute(ctx))
+
         if err != nil {
             log.Println(err)
         }
@@ -62,41 +74,51 @@ func main() {
 
     r := rand.New(rand.NewSource(time.Now().UnixNano()))
     randomID := r.Int()
-    productDraft := &commercetools.ProductDraft{
+    productDraft := &platform.ProductDraft{
         Key: fmt.Sprintf("test-product-%d", randomID),
-        Name: &commercetools.LocalizedString{
+        Name: &platform.LocalizedString{
             "nl": "Een test product",
             "en": "A test product",
         },
-        ProductType: &commercetools.ProductTypeResourceIdentifier{
+        ProductType: &platform.ProductTypeResourceIdentifier{
             ID: productType.ID,
         },
-        Slug: &commercetools.LocalizedString{
+        Slug: &platform.LocalizedString{
             "nl": fmt.Sprintf("een-test-product-%d", randomID),
             "en": fmt.Sprintf("a-test-product-%d", randomID),
         },
     }
 
     // The last argument is optional for reference expansion
-    product, err := client.ProductCreate(
-        ctx, productDraft, commercetools.WithReferenceExpansion("taxCategory"))
+    product, err := projectClient.
+        Products().
+        Post(productDraft).
+        WithQueryParams(
+            &platform.ByProjectKeyProductsRequestMethodPostInput{
+                Expand: []{"foobar"},
+            }
+        ).
+        Execute(ctx)
+
+    // Alternatively you can pass query params via methods
+    projectClient.
+        Products().
+        Post(productDraft).
+        Expand([]{"foobar"})
+        Execute(ctx)
+
     if err != nil {
         log.Fatal(err)
     }
-    
+
     log.Print(product)
 }
 ```
 
 ## Generating code
 
-To generate code do the following steps:
-- `pip install pyyaml`
-- install yq (f.e. `brew install yq` on macOS)
-- `git clone https://github.com/commercetools/commercetools-api-reference.git` in the folder on the same level as the commercetools-go-sdk folder
-- `make generate`
-
-
-### TODO for code generating the services:
-- CustomObject service implementation
-- Implement all traits (f.e. priceSelecting)
+To re-generate the API based on new RAML files take the following steps:
+ - Install rmf-codegen (see https://github.com/commercetools/rmf-codegen)
+ - Clone the API specifications https://github.com/commercetools/commercetools-api-reference
+   in the parent directory
+ - Run `make generate`

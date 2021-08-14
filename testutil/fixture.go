@@ -3,10 +3,10 @@ package testutil
 import "io/ioutil"
 
 // Fixture loads a fixture file to a string
-func Fixture(path string) string {
-	b, err := ioutil.ReadFile("testdata/" + path)
+func Fixture(path string, statusCode int) ResponseData {
+	b, err := ioutil.ReadFile("fixtures/" + path)
 	if err != nil {
 		panic(err)
 	}
-	return string(b)
+	return ResponseData{StatusCode: statusCode, Body: string(b)}
 }

@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/labd/commercetools-go-sdk/commercetools"
+	"github.com/labd/commercetools-go-sdk/platform"
 	"golang.org/x/oauth2"
 )
 
@@ -23,15 +23,20 @@ type RequestData struct {
 	JSON   string
 }
 
+type ResponseData struct {
+	Body       string
+	StatusCode int
+}
+
 // HTTPHandler type defines callback from doing a mock HTTP request
 type HTTPHandler func(w http.ResponseWriter, r *http.Request)
 
 // MockClient returns a client to mock HTTP requests with a callback function
 func MockClient(
 	t *testing.T,
-	fixture string,
+	fixture ResponseData,
 	output *RequestData,
-	callback HTTPHandler) (*commercetools.Client, *httptest.Server) {
+	callback HTTPHandler) (*platform.Client, *httptest.Server) {
 
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		body, err := ioutil.ReadAll(r.Body)
@@ -61,8 +66,8 @@ func MockClient(
 			callback(w, r)
 		} else {
 			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			fmt.Fprint(w, fixture)
+			w.WriteHeader(fixture.StatusCode)
+			fmt.Fprint(w, fixture.Body)
 		}
 
 	}
@@ -71,14 +76,16 @@ func MockClient(
 
 	httpClient := oauth2.NewClient(context.TODO(), oauth2.StaticTokenSource(&oauth2.Token{
 		AccessToken: "unittest",
-	}),
-	)
-
-	client := commercetools.New(&commercetools.Config{
-		ProjectKey: "unittest",
+	}))
+	client, err := platform.NewClient(&platform.ClientConfig{
 		URL:        ts.URL,
 		HTTPClient: httpClient,
+		LogLevel:   0,
 	})
+
+	if err != nil {
+		panic(err)
+	}
 
 	return client, ts
 }
