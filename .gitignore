@@ -1,4 +1,5 @@
 vendor/
+generated/
 run.sh
 code-generate/code-generate
 
