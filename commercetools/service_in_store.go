@@ -253,8 +253,8 @@ func (client *Client) StoreCartReplicate(ctx context.Context, storeKey string, v
 	return result, nil
 }
 
-// StoreCustomerCreate creates a new instance of type Customer
-func (client *Client) StoreCustomerCreate(ctx context.Context, storeKey string, draft *CustomerDraft, opts ...RequestOption) (result *Customer, err error) {
+// StoreCustomerCreate creates a new instance of type CustomerSignInResult
+func (client *Client) StoreCustomerCreate(ctx context.Context, storeKey string, draft *CustomerDraft, opts ...RequestOption) (result *CustomerSignInResult, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)

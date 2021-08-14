@@ -9,8 +9,8 @@ import (
 	"strconv"
 )
 
-// CustomerCreate creates a new instance of type Customer
-func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft, opts ...RequestOption) (result *Customer, err error) {
+// CustomerCreate creates a new instance of type CustomerSignInResult
+func (client *Client) CustomerCreate(ctx context.Context, draft *CustomerDraft, opts ...RequestOption) (result *CustomerSignInResult, err error) {
 	params := url.Values{}
 	for _, opt := range opts {
 		opt(&params)
