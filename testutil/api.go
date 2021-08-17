@@ -44,12 +44,26 @@ func MockClient(
 			output.URL = *r.URL
 		}
 
+		if r.URL.Path == "/oauth/token" {
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+
+			oAuthBody := `{
+				"access_token": "dummy-token",
+				"scope": "user",
+				"token_type": "bearer",
+				"expires_in": 86400
+			}`
+			fmt.Fprint(w, oAuthBody)
+			return
+		}
+
 		if r.Method == "POST" || r.Method == "PATCH" {
 
 			// Check if the body is valid JSON
 			var dummy map[string]interface{}
 			if err := json.Unmarshal(body, &dummy); err != nil {
-				log.Printf("Error on unmarshal: %v\n", body)
+				log.Printf("Error on unmarshal: %v\n", string(body))
 			}
 
 			if output != nil {
@@ -74,11 +88,19 @@ func MockClient(
 	}),
 	)
 
-	client := commercetools.New(&commercetools.Config{
+	client, err := commercetools.NewClient(&commercetools.ClientConfig{
 		ProjectKey: "unittest",
-		URL:        ts.URL,
+		Endpoints: &commercetools.ClientEndpoints{
+			Auth:              fmt.Sprintf("%s/oauth/token", ts.URL),
+			API:               ts.URL,
+			MerchantCenterAPI: ts.URL,
+		},
 		HTTPClient: httpClient,
 	})
+
+	if err != nil {
+		panic(err)
+	}
 
 	return client, ts
 }
