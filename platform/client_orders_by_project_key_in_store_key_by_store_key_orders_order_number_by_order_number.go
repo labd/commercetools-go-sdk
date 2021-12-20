@@ -1,0 +1,52 @@
+// Generated file, please do not change!!!
+package platform
+
+import (
+	"fmt"
+)
+
+type ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder struct {
+	projectKey  string
+	storeKey    string
+	orderNumber string
+	client      *Client
+}
+
+/**
+*	Returns an order by its order number from a specific Store.
+*	The {storeKey} path parameter maps to a Store's key.
+*	If the order exists in the commercetools project but does not have the store field,
+*	or the store field references a different store, this method returns a ResourceNotFound error.
+*	In case the orderNumber does not match the regular expression [a-zA-Z0-9_\-]+,
+*	it should be provided in URL-encoded format.
+*
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodGet {
+	return &ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodGet{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/orders/order-number=%s", rb.projectKey, rb.storeKey, rb.orderNumber),
+		client: rb.client,
+	}
+}
+
+/**
+*	Updates an order in the store specified by {storeKey}. The {storeKey} path parameter maps to a Store's key.
+*	If the order exists in the commercetools project but does not have the store field,
+*	or the store field references a different store, this method returns a ResourceNotFound error.
+*	In case the orderNumber does not match the regular expression [a-zA-Z0-9_\-]+,
+*	it should be provided in URL-encoded format.
+*
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder) Post(body OrderUpdate) *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodPost {
+	return &ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodPost{
+		body:   body,
+		url:    fmt.Sprintf("/%s/in-store/key=%s/orders/order-number=%s", rb.projectKey, rb.storeKey, rb.orderNumber),
+		client: rb.client,
+	}
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodDelete {
+	return &ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodDelete{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/orders/order-number=%s", rb.projectKey, rb.storeKey, rb.orderNumber),
+		client: rb.client,
+	}
+}

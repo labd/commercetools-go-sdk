@@ -17,8 +17,8 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
     - name: Install dependencies
-      run: 	go get ./commercetools
+      run: go get ./...
     - name: Run tests
-      run: 	go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./commercetools ./commercetools
+      run: go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
     - name: Upload to codecov
       uses: codecov/codecov-action@v1.0.6
