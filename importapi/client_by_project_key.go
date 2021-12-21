@@ -92,9 +92,3 @@ func (rb *ByProjectKeyRequestBuilder) Customers() *ByProjectKeyCustomersRequestB
 		client:     rb.client,
 	}
 }
-func (rb *ByProjectKeyRequestBuilder) Inventories() *ByProjectKeyInventoriesRequestBuilder {
-	return &ByProjectKeyInventoriesRequestBuilder{
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}

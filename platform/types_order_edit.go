@@ -573,6 +573,8 @@ type StagedOrderAddDeliveryAction struct {
 	Items   []DeliveryItem `json:"items,omitempty"`
 	Address *BaseAddress   `json:"address,omitempty"`
 	Parcels []ParcelDraft  `json:"parcels,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1191,6 +1193,37 @@ func (obj StagedOrderSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDeliveryAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type StagedOrderSetDeliveryCustomFieldAction struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StagedOrderSetDeliveryCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetDeliveryCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryCustomField", Alias: (*Alias)(&obj)})
+}
+
+type StagedOrderSetDeliveryCustomTypeAction struct {
+	// If set, the custom type is set to this new value.
+	// If absent, the custom type and any existing custom fields are removed.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// If set, the custom fields are set to this new value.
+	Fields *interface{} `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj StagedOrderSetDeliveryCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetDeliveryCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryCustomType", Alias: (*Alias)(&obj)})
 }
 
 type StagedOrderSetDeliveryItemsAction struct {

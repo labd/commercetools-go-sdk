@@ -85,12 +85,6 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "inventory":
-		obj := InventoryImportRequest{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	}
 	return nil, nil
 }
@@ -282,22 +276,4 @@ func (obj CustomerImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "customer", Alias: (*Alias)(&obj)})
-}
-
-/**
-*	The request body to [import Inventories](#import-inventories). Contains data for [Inventories](/../api//projects/inventory#inventoryentry) to be created or updated in a commercetools Project.
-*
- */
-type InventoryImportRequest struct {
-	// The inventory import resources of this request.
-	Resources []InventoryImport `json:"resources"`
-}
-
-// MarshalJSON override to set the discriminator value
-func (obj InventoryImportRequest) MarshalJSON() ([]byte, error) {
-	type Alias InventoryImportRequest
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "inventory", Alias: (*Alias)(&obj)})
 }

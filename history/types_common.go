@@ -111,7 +111,9 @@ type Delivery struct {
 	CreatedAt string         `json:"createdAt"`
 	Items     []DeliveryItem `json:"items"`
 	Parcels   []Parcel       `json:"parcels"`
-	Address   Address        `json:"address"`
+	Address   *Address       `json:"address,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type DeliveryItem struct {

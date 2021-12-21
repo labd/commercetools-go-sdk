@@ -843,6 +843,9 @@ type LineItem struct {
 	// The unique ID of this LineItem.
 	ID        string `json:"id"`
 	ProductId string `json:"productId"`
+	// User-defined unique identifier for the [Product](ctp:api:type:Product).
+	// Only present on Line Items in a [Cart](ctp:api:type:Cart) when the `key` is available on that specific Product at the time the Line Item is created or updated on the Cart. On [Order](/ctp:api:type:Order) resources this field is only present when the `key` is available on the specific Product at the time the Order is created from the Cart. This field is in general not present on Carts that had no updates until 3 December 2021 and on Orders created before this date.
+	ProductKey *string `json:"productKey,omitempty"`
 	// The product name.
 	Name LocalizedString `json:"name"`
 	// The slug of a product is inserted on the fly.

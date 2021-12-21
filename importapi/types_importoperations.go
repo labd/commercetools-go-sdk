@@ -7,7 +7,7 @@ import (
 )
 
 /**
-*	Shows the import status of a specific resource.
+*	Import Operation describes the import status of a specific resource.
 *
  */
 type ImportOperation struct {

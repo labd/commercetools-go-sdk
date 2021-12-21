@@ -341,6 +341,18 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setTransactionCustomField":
+		obj := PaymentSetTransactionCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setTransactionCustomType":
+		obj := PaymentSetTransactionCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "transitionState":
 		obj := PaymentTransitionStateAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -364,6 +376,8 @@ type Transaction struct {
 	InteractionId *string `json:"interactionId,omitempty"`
 	// The state of this transaction.
 	State *TransactionState `json:"state,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -395,6 +409,8 @@ type TransactionDraft struct {
 	// The state of this transaction.
 	// If not set, defaults to `Initial`.
 	State *TransactionState `json:"state,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type TransactionState string
@@ -705,6 +721,37 @@ func (obj PaymentSetStatusInterfaceTextAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setStatusInterfaceText", Alias: (*Alias)(&obj)})
+}
+
+type PaymentSetTransactionCustomFieldAction struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj PaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetTransactionCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setTransactionCustomField", Alias: (*Alias)(&obj)})
+}
+
+type PaymentSetTransactionCustomTypeAction struct {
+	// If set, the custom type is set to this new value.
+	// If absent, the custom type and any existing custom fields are removed.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the custom fields to this value.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj PaymentSetTransactionCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetTransactionCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setTransactionCustomType", Alias: (*Alias)(&obj)})
 }
 
 type PaymentTransitionStateAction struct {

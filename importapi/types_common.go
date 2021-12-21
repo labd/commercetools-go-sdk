@@ -704,7 +704,6 @@ const (
 	ImportResourceTypeProductVariant      ImportResourceType = "product-variant"
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
 	ImportResourceTypeCustomer            ImportResourceType = "customer"
-	ImportResourceTypeInventory           ImportResourceType = "inventory"
 )
 
 /**

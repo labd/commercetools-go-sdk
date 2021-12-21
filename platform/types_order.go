@@ -292,6 +292,18 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			return nil, err
 		}
 		return obj, nil
+	case "setDeliveryCustomField":
+		obj := StagedOrderSetDeliveryCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setDeliveryCustomType":
+		obj := StagedOrderSetDeliveryCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setDeliveryItems":
 		obj := StagedOrderSetDeliveryItemsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -515,6 +527,8 @@ type Delivery struct {
 	Items   []DeliveryItem `json:"items"`
 	Parcels []Parcel       `json:"parcels"`
 	Address *Address       `json:"address,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type DeliveryItem struct {
@@ -957,6 +971,18 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "setDeliveryCustomField":
+		obj := OrderSetDeliveryCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setDeliveryCustomType":
+		obj := OrderSetDeliveryCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setDeliveryItems":
 		obj := OrderSetDeliveryItemsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1332,6 +1358,8 @@ type OrderAddDeliveryAction struct {
 	Items   []DeliveryItem `json:"items,omitempty"`
 	Address *BaseAddress   `json:"address,omitempty"`
 	Parcels []ParcelDraft  `json:"parcels,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
@@ -1700,6 +1728,34 @@ func (obj OrderSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error)
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDeliveryAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type OrderSetDeliveryCustomFieldAction struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderSetDeliveryCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderSetDeliveryCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryCustomField", Alias: (*Alias)(&obj)})
+}
+
+type OrderSetDeliveryCustomTypeAction struct {
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj OrderSetDeliveryCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderSetDeliveryCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDeliveryCustomType", Alias: (*Alias)(&obj)})
 }
 
 type OrderSetDeliveryItemsAction struct {

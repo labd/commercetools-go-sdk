@@ -91,7 +91,7 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 
 	switch discriminator {
 	case "changeCartsConfiguration":
-		obj := ProjectChangeCartsConfiguration{}
+		obj := ProjectChangeCartsConfigurationAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -145,7 +145,7 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 		}
 		return obj, nil
 	case "changeShoppingListsConfiguration":
-		obj := ProjectChangeShoppingListsConfiguration{}
+		obj := ProjectChangeShoppingListsConfigurationAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -275,13 +275,13 @@ type ShoppingListsConfiguration struct {
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
-type ProjectChangeCartsConfiguration struct {
+type ProjectChangeCartsConfigurationAction struct {
 	CartsConfiguration *CartsConfiguration `json:"cartsConfiguration,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj ProjectChangeCartsConfiguration) MarshalJSON() ([]byte, error) {
-	type Alias ProjectChangeCartsConfiguration
+func (obj ProjectChangeCartsConfigurationAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeCartsConfigurationAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
@@ -396,13 +396,13 @@ func (obj ProjectChangeProductSearchIndexingEnabledAction) MarshalJSON() ([]byte
 	}{Action: "changeProductSearchIndexingEnabled", Alias: (*Alias)(&obj)})
 }
 
-type ProjectChangeShoppingListsConfiguration struct {
+type ProjectChangeShoppingListsConfigurationAction struct {
 	ShoppingListsConfiguration *ShoppingListsConfiguration `json:"shoppingListsConfiguration,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value
-func (obj ProjectChangeShoppingListsConfiguration) MarshalJSON() ([]byte, error) {
-	type Alias ProjectChangeShoppingListsConfiguration
+func (obj ProjectChangeShoppingListsConfigurationAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeShoppingListsConfigurationAction
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias

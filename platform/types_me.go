@@ -563,6 +563,12 @@ func mapDiscriminatorMyPaymentUpdateAction(input interface{}) (MyPaymentUpdateAc
 			return nil, err
 		}
 		return obj, nil
+	case "setTransactionCustomField":
+		obj := MyPaymentSetTransactionCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -741,6 +747,8 @@ type MyTransactionDraft struct {
 	// the corresponding interaction should be findable with this ID.
 	// The `state` is set to the `Initial` TransactionState.
 	InteractionId *string `json:"interactionId,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type MyCartAddDiscountCodeAction struct {
@@ -1485,6 +1493,20 @@ func (obj MyPaymentSetMethodInfoNameAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMethodInfoName", Alias: (*Alias)(&obj)})
+}
+
+type MyPaymentSetTransactionCustomFieldAction struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj MyPaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias MyPaymentSetTransactionCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setTransactionCustomField", Alias: (*Alias)(&obj)})
 }
 
 type MyShoppingListAddLineItemAction struct {

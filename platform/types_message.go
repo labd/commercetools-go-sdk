@@ -7,6 +7,17 @@ import (
 	"time"
 )
 
+/**
+*	Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
+*
+ */
+type ContainerAndKey struct {
+	// User-defined identifier that is unique within the given container.
+	Key string `json:"key"`
+	// Namespace to group Custom Objects.
+	Container string `json:"container"`
+}
+
 type Message interface{}
 
 func mapDiscriminatorMessage(input interface{}) (Message, error) {
@@ -4743,6 +4754,8 @@ type UserProvidedIdentifiers struct {
 	CustomerNumber *string          `json:"customerNumber,omitempty"`
 	Sku            *string          `json:"sku,omitempty"`
 	Slug           *LocalizedString `json:"slug,omitempty"`
+	// Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
+	ContainerAndKey *ContainerAndKey `json:"containerAndKey,omitempty"`
 }
 
 type MessagePayload interface{}
