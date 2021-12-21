@@ -9,7 +9,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"path"
 	"runtime"
 )
 
@@ -67,12 +66,11 @@ func NewClient(cfg *ClientConfig) (*Client, error) {
 }
 
 func (c *Client) createEndpoint(p string) (*url.URL, error) {
-	url, err := url.Parse(c.url.String())
+	url, err := url.Parse(p)
 	if err != nil {
 		return nil, err
 	}
-	url.Path = path.Join(url.Path, p)
-	return url, nil
+	return c.url.ResolveReference(url), nil
 }
 
 func (c *Client) head(ctx context.Context, path string, queryParams url.Values, headers http.Header) (*http.Response, error) {
