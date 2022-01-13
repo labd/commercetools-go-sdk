@@ -109,6 +109,13 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 			return nil, err
 		}
 		return new, nil
+	case "setLocalizedName":
+		new := ShippingMethodSetLocalizedNameAction{}
+		err := decodeStruct(input, &new)
+		if err != nil {
+			return nil, err
+		}
+		return new, nil
 	case "setLocalizedDescription":
 		new := ShippingMethodSetLocalizedDescriptionAction{}
 		err := decodeStruct(input, &new)
@@ -228,6 +235,7 @@ type ShippingMethod struct {
 	TaxCategory          *TaxCategoryReference `json:"taxCategory"`
 	Predicate            string                `json:"predicate,omitempty"`
 	Name                 string                `json:"name"`
+	LocalizedName        *LocalizedString      `json:"localizedName,omitempty"`
 	LocalizedDescription *LocalizedString      `json:"localizedDescription,omitempty"`
 	LastModifiedBy       *LastModifiedBy       `json:"lastModifiedBy,omitempty"`
 	LastModifiedAt       time.Time             `json:"lastModifiedAt"`
@@ -317,6 +325,7 @@ type ShippingMethodDraft struct {
 	TaxCategory          *TaxCategoryResourceIdentifier `json:"taxCategory"`
 	Predicate            string                         `json:"predicate,omitempty"`
 	Name                 string                         `json:"name"`
+	LocalizedName        *LocalizedString               `json:"localizedName,omitempty"`
 	LocalizedDescription *LocalizedString               `json:"localizedDescription,omitempty"`
 	Key                  string                         `json:"key,omitempty"`
 	IsDefault            bool                           `json:"isDefault"`
@@ -448,6 +457,20 @@ func (obj ShippingMethodSetKeyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+// ShippingMethodSetLocalizedNameAction implements the interface ShippingMethodUpdateAction
+type ShippingMethodSetLocalizedNameAction struct {
+	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value
+func (obj ShippingMethodSetLocalizedNameAction) MarshalJSON() ([]byte, error) {
+	type Alias ShippingMethodSetLocalizedNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setLocalizedName", Alias: (*Alias)(&obj)})
 }
 
 // ShippingMethodSetLocalizedDescriptionAction implements the interface ShippingMethodUpdateAction

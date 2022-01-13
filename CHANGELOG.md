@@ -1,3 +1,8 @@
+0.3.2 (2022-01-13)
+==================
+ - Add LocalizedName to ShippingMethod
+
+
 0.3.0 (2021-04-12)
 ==================
  - Upgrade services and types from commercetools-api-reference [#59](https://github.com/labd/commercetools-go-sdk/pull/59)
