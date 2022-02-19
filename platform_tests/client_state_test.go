@@ -102,7 +102,8 @@ func TestStateCreate(t *testing.T) {
 				"description": {
 					"en": "This is a state machine. Beep beep boop."
 				},
-				"initial": true
+				"initial": true,
+				"transitions": []
 			}`,
 		},
 	}
@@ -280,7 +281,8 @@ func TestStateUpdate(t *testing.T) {
 				"version": 2,
 				"actions": [
 					{
-						"action": "setTransitions"
+						"action": "setTransitions",
+						"transitions": []
 					}
 				]
 			}`,
