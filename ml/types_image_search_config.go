@@ -43,7 +43,8 @@ type ChangeStatusUpdateAction struct {
 	Status ImageSearchConfigStatus `json:"status"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeStatusUpdateAction) MarshalJSON() ([]byte, error) {
 	type Alias ChangeStatusUpdateAction
 	return json.Marshal(struct {

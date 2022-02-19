@@ -45,9 +45,32 @@ type TaxCategoryDraft struct {
 	// Description of the TaxCategory.
 	Description *string `json:"description,omitempty"`
 	// Tax rates and subrates of states and countries.
-	Rates []TaxRateDraft `json:"rates,omitempty"`
+	Rates []TaxRateDraft `json:"rates"`
 	// User-defined unique identifier for the TaxCategory.
 	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TaxCategoryDraft) MarshalJSON() ([]byte, error) {
+	type Alias TaxCategoryDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["rates"] == nil {
+		delete(target, "rates")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -83,7 +106,8 @@ type TaxCategoryReference struct {
 	Obj *TaxCategory `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryReference) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryReference
 	return json.Marshal(struct {
@@ -103,7 +127,8 @@ type TaxCategoryResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryResourceIdentifier
 	return json.Marshal(struct {
@@ -200,7 +225,30 @@ type TaxRate struct {
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
 	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
-	SubRates []SubRate `json:"subRates,omitempty"`
+	SubRates []SubRate `json:"subRates"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TaxRate) MarshalJSON() ([]byte, error) {
+	type Alias TaxRate
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["subRates"] == nil {
+		delete(target, "subRates")
+	}
+
+	return json.Marshal(target)
 }
 
 type TaxRateDraft struct {
@@ -217,7 +265,30 @@ type TaxRateDraft struct {
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
 	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
-	SubRates []SubRate `json:"subRates,omitempty"`
+	SubRates []SubRate `json:"subRates"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TaxRateDraft) MarshalJSON() ([]byte, error) {
+	type Alias TaxRateDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["subRates"] == nil {
+		delete(target, "subRates")
+	}
+
+	return json.Marshal(target)
 }
 
 type TaxCategoryAddTaxRateAction struct {
@@ -225,7 +296,8 @@ type TaxCategoryAddTaxRateAction struct {
 	TaxRate TaxRateDraft `json:"taxRate"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryAddTaxRateAction) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryAddTaxRateAction
 	return json.Marshal(struct {
@@ -239,7 +311,8 @@ type TaxCategoryChangeNameAction struct {
 	Name string `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryChangeNameAction
 	return json.Marshal(struct {
@@ -253,7 +326,8 @@ type TaxCategoryRemoveTaxRateAction struct {
 	TaxRateId string `json:"taxRateId"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryRemoveTaxRateAction) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryRemoveTaxRateAction
 	return json.Marshal(struct {
@@ -269,7 +343,8 @@ type TaxCategoryReplaceTaxRateAction struct {
 	TaxRate TaxRateDraft `json:"taxRate"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryReplaceTaxRateAction) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryReplaceTaxRateAction
 	return json.Marshal(struct {
@@ -283,7 +358,8 @@ type TaxCategorySetDescriptionAction struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategorySetDescriptionAction
 	return json.Marshal(struct {
@@ -297,7 +373,8 @@ type TaxCategorySetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategorySetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategorySetKeyAction
 	return json.Marshal(struct {

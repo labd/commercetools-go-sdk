@@ -2,6 +2,7 @@
 package ml
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -12,15 +13,42 @@ type ProductSetSelector struct {
 	// The project containing the project set.
 	ProjectKey string `json:"projectKey"`
 	// An array of Product IDs to compare. If unspecified, no Product ID filter is applied.
-	ProductIds []string `json:"productIds,omitempty"`
+	ProductIds []string `json:"productIds"`
 	// An array of product type IDs. Only products with product types in this array are compared. If unspecified, no product type filter is applied.
-	ProductTypeIds []string `json:"productTypeIds,omitempty"`
+	ProductTypeIds []string `json:"productTypeIds"`
 	// Specifies use of staged or current product data.
 	Staged *bool `json:"staged,omitempty"`
 	// Specifies use of product variants. If set to `true`, all product variants are compared, not just the master variant.
 	IncludeVariants *bool `json:"includeVariants,omitempty"`
 	// Maximum number of products to check (if unspecified, all products are considered). Note that the maximum number of product comparisons between two productSets is 20,000,000. This limit cannot be exceeded. If you need a higher limit, contact https://support.commercetools.com
 	ProductSetLimit *int `json:"productSetLimit,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSetSelector) MarshalJSON() ([]byte, error) {
+	type Alias ProductSetSelector
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productIds"] == nil {
+		delete(target, "productIds")
+	}
+
+	if target["productTypeIds"] == nil {
+		delete(target, "productTypeIds")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -49,9 +77,32 @@ type SimilarProductSearchRequest struct {
 	// `similarityMeasures` defines the attributes taken into account to measure product similarity.
 	SimilarityMeasures *SimilarityMeasures `json:"similarityMeasures,omitempty"`
 	// Array of length 2 of ProductSetSelector
-	ProductSetSelectors []ProductSetSelector `json:"productSetSelectors,omitempty"`
+	ProductSetSelectors []ProductSetSelector `json:"productSetSelectors"`
 	ConfidenceMin       *float64             `json:"confidenceMin,omitempty"`
 	ConfidenceMax       *float64             `json:"confidenceMax,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SimilarProductSearchRequest) MarshalJSON() ([]byte, error) {
+	type Alias SimilarProductSearchRequest
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productSetSelectors"] == nil {
+		delete(target, "productSetSelectors")
+	}
+
+	return json.Marshal(target)
 }
 
 /**

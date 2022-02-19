@@ -25,7 +25,7 @@ type ProductDraftImport struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// The Reference to the [Categories](/../api/projects/categories#category) with which the ProductDraft is associated.
 	// If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
-	Categories []CategoryKeyReference `json:"categories,omitempty"`
+	Categories []CategoryKeyReference `json:"categories"`
 	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
 	// ```json
 	// {
@@ -54,7 +54,7 @@ type ProductDraftImport struct {
 	// Required if the `variants` array contains a Product Variant.
 	MasterVariant *ProductVariantDraftImport `json:"masterVariant,omitempty"`
 	// An array of related Product Variants.
-	Variants []ProductVariantDraftImport `json:"variants,omitempty"`
+	Variants []ProductVariantDraftImport `json:"variants"`
 	// The Reference to the [TaxCategory](/../api/projects/taxCategories#taxcategory) with which the ProductDraft is associated.
 	// If referenced TaxCategory does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary TaxCategory is created.
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
@@ -86,6 +86,33 @@ type ProductDraftImport struct {
 	Publish *bool `json:"publish,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductDraftImport) MarshalJSON() ([]byte, error) {
+	type Alias ProductDraftImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["categories"] == nil {
+		delete(target, "categories")
+	}
+
+	if target["variants"] == nil {
+		delete(target, "variants")
+	}
+
+	return json.Marshal(target)
+}
+
 /**
 *	The representation of a Product Variant Draft for the import purpose.
 *
@@ -93,10 +120,10 @@ type ProductDraftImport struct {
 type ProductVariantDraftImport struct {
 	Sku        *string            `json:"sku,omitempty"`
 	Key        string             `json:"key"`
-	Prices     []PriceDraftImport `json:"prices,omitempty"`
-	Attributes []Attribute        `json:"attributes,omitempty"`
-	Images     []Image            `json:"images,omitempty"`
-	Assets     []Asset            `json:"assets,omitempty"`
+	Prices     []PriceDraftImport `json:"prices"`
+	Attributes []Attribute        `json:"attributes"`
+	Images     []Image            `json:"images"`
+	Assets     []Asset            `json:"assets"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -108,6 +135,41 @@ func (obj *ProductVariantDraftImport) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantDraftImport) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantDraftImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["prices"] == nil {
+		delete(target, "prices")
+	}
+
+	if target["attributes"] == nil {
+		delete(target, "attributes")
+	}
+
+	if target["images"] == nil {
+		delete(target, "images")
+	}
+
+	if target["assets"] == nil {
+		delete(target, "assets")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -130,7 +192,7 @@ type PriceDraftImport struct {
 	// Sets a discounted price from an external service.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// The tiered prices for this price.
-	Tiers []PriceTier `json:"tiers,omitempty"`
+	Tiers []PriceTier `json:"tiers"`
 	Key   *string     `json:"key,omitempty"`
 }
 
@@ -149,4 +211,27 @@ func (obj *PriceDraftImport) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PriceDraftImport) MarshalJSON() ([]byte, error) {
+	type Alias PriceDraftImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
 }

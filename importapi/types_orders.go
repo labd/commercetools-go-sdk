@@ -49,7 +49,7 @@ type LineItemPrice struct {
 	// Sets a discounted price from an external service.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// The tiered prices for this price.
-	Tiers []PriceTier `json:"tiers,omitempty"`
+	Tiers []PriceTier `json:"tiers"`
 	// Maps to `Price.custom`.
 	Custom *Custom `json:"custom,omitempty"`
 }
@@ -71,17 +71,40 @@ func (obj *LineItemPrice) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LineItemPrice) MarshalJSON() ([]byte, error) {
+	type Alias LineItemPrice
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
+}
+
 type LineItemProductVariantImportDraft struct {
 	// Maps to `ProductVariant.product`.
 	ProductVariant *ProductVariantKeyReference `json:"productVariant,omitempty"`
 	// Maps to `ProductVariantImportDraft.sku`.
 	Sku *string `json:"sku,omitempty"`
 	// Maps to `ProductVariantImportDraft.prices`
-	Prices []LineItemPrice `json:"prices,omitempty"`
+	Prices []LineItemPrice `json:"prices"`
 	// Maps to `ProductVariantImportDraft.attributes`
-	Attributes []Attribute `json:"attributes,omitempty"`
+	Attributes []Attribute `json:"attributes"`
 	// Maps to `ProductVariantImportDraft.images`.
-	Images []Image `json:"images,omitempty"`
+	Images []Image `json:"images"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -93,6 +116,37 @@ func (obj *LineItemProductVariantImportDraft) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LineItemProductVariantImportDraft) MarshalJSON() ([]byte, error) {
+	type Alias LineItemProductVariantImportDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["prices"] == nil {
+		delete(target, "prices")
+	}
+
+	if target["attributes"] == nil {
+		delete(target, "attributes")
+	}
+
+	if target["images"] == nil {
+		delete(target, "images")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -113,7 +167,7 @@ type LineItemImportDraft struct {
 	Price LineItemPrice `json:"price"`
 	// Maps to `LineItem.quantity`.
 	Quantity float64     `json:"quantity"`
-	State    []ItemState `json:"state,omitempty"`
+	State    []ItemState `json:"state"`
 	// Maps to `LineItem.supplyChannel`.
 	// The Reference to the Supply [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
 	// If referenced Supply Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Supply Channel is created.
@@ -126,6 +180,29 @@ type LineItemImportDraft struct {
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
 	// Maps to LineItem.shippingDetails.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LineItemImportDraft) MarshalJSON() ([]byte, error) {
+	type Alias LineItemImportDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["state"] == nil {
+		delete(target, "state")
+	}
+
+	return json.Marshal(target)
 }
 
 type ShippingRateTierType string
@@ -179,7 +256,8 @@ func (obj *CartClassificationTier) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 	type Alias CartClassificationTier
 	return json.Marshal(struct {
@@ -191,7 +269,7 @@ func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 type ShippingRateDraft struct {
 	Price     Money                   `json:"price"`
 	FreeAbove *Money                  `json:"freeAbove,omitempty"`
-	Tiers     []ShippingRatePriceTier `json:"tiers,omitempty"`
+	Tiers     []ShippingRatePriceTier `json:"tiers"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -203,6 +281,29 @@ func (obj *ShippingRateDraft) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShippingRateDraft) MarshalJSON() ([]byte, error) {
+	type Alias ShippingRateDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
 }
 
 type ParcelMeasurements struct {
@@ -230,7 +331,30 @@ type Parcel struct {
 	CreatedAt    time.Time           `json:"createdAt"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items,omitempty"`
+	Items        []DeliveryItem      `json:"items"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Parcel) MarshalJSON() ([]byte, error) {
+	type Alias Parcel
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["items"] == nil {
+		delete(target, "items")
+	}
+
+	return json.Marshal(target)
 }
 
 type Delivery struct {
@@ -275,7 +399,7 @@ type ShippingInfoImportDraft struct {
 	// References a shipping method by key.
 	ShippingMethod *ShippingMethodKeyReference `json:"shippingMethod,omitempty"`
 	// Note that you can not add a `DeliveryItem` on import, as `LineItems` and `CustomLineItems` are not yet referencable by an `id`.
-	Deliveries          []Delivery                    `json:"deliveries,omitempty"`
+	Deliveries          []Delivery                    `json:"deliveries"`
 	DiscountedPrice     *DiscountedLineItemPriceDraft `json:"discountedPrice,omitempty"`
 	ShippingMethodState *ShippingMethodState          `json:"shippingMethodState,omitempty"`
 }
@@ -297,13 +421,59 @@ func (obj *ShippingInfoImportDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShippingInfoImportDraft) MarshalJSON() ([]byte, error) {
+	type Alias ShippingInfoImportDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["deliveries"] == nil {
+		delete(target, "deliveries")
+	}
+
+	return json.Marshal(target)
+}
+
 type ExternalTaxRateDraft struct {
 	Name            string    `json:"name"`
 	Amount          *float64  `json:"amount,omitempty"`
 	Country         string    `json:"country"`
 	State           *string   `json:"state,omitempty"`
-	SubRates        []SubRate `json:"subRates,omitempty"`
+	SubRates        []SubRate `json:"subRates"`
 	IncludedInPrice *bool     `json:"includedInPrice,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExternalTaxRateDraft) MarshalJSON() ([]byte, error) {
+	type Alias ExternalTaxRateDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["subRates"] == nil {
+		delete(target, "subRates")
+	}
+
+	return json.Marshal(target)
 }
 
 type CustomLineItemTaxedPrice struct {
@@ -353,12 +523,12 @@ type CustomLineItemDraft struct {
 	TotalPrice TypedMoney  `json:"totalPrice"`
 	Slug       string      `json:"slug"`
 	Quantity   float64     `json:"quantity"`
-	State      []ItemState `json:"state,omitempty"`
+	State      []ItemState `json:"state"`
 	// References a tax category by key.
 	TaxCategory                *TaxCategoryKeyReference       `json:"taxCategory,omitempty"`
 	TaxRate                    *TaxRate                       `json:"taxRate,omitempty"`
 	ExternalTaxRate            *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
-	DiscountedPricePerQuantity []DiscountedLineItemPriceDraft `json:"discountedPricePerQuantity,omitempty"`
+	DiscountedPricePerQuantity []DiscountedLineItemPriceDraft `json:"discountedPricePerQuantity"`
 	ShippingDetails            *ItemShippingDetailsDraft      `json:"shippingDetails,omitempty"`
 }
 
@@ -384,6 +554,33 @@ func (obj *CustomLineItemDraft) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomLineItemDraft) MarshalJSON() ([]byte, error) {
+	type Alias CustomLineItemDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["state"] == nil {
+		delete(target, "state")
+	}
+
+	if target["discountedPricePerQuantity"] == nil {
+		delete(target, "discountedPricePerQuantity")
+	}
+
+	return json.Marshal(target)
 }
 
 type TaxPortion struct {
@@ -591,7 +788,8 @@ type ClassificationShippingRateInput struct {
 	Label LocalizedString `json:"label"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ClassificationShippingRateInput) MarshalJSON() ([]byte, error) {
 	type Alias ClassificationShippingRateInput
 	return json.Marshal(struct {
@@ -604,7 +802,8 @@ type ScoreShippingRateInput struct {
 	Score float64 `json:"score"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ScoreShippingRateInput) MarshalJSON() ([]byte, error) {
 	type Alias ScoreShippingRateInput
 	return json.Marshal(struct {
@@ -630,9 +829,9 @@ type OrderImport struct {
 	// Maps to `Order.customerEmail`.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// Maps to `Order.lineItems`.
-	LineItems []LineItemImportDraft `json:"lineItems,omitempty"`
+	LineItems []LineItemImportDraft `json:"lineItems"`
 	// Maps to `Order.customLineItems`
-	CustomLineItems []CustomLineItemDraft `json:"customLineItems,omitempty"`
+	CustomLineItems []CustomLineItemDraft `json:"customLineItems"`
 	// Maps to `Order.totalPrice`. TypedMoney is what is called BaseMoney in the HTTP API.
 	TotalPrice TypedMoney `json:"totalPrice"`
 	// Maps to `Order.taxedPrice`.
@@ -666,7 +865,7 @@ type OrderImport struct {
 	// Maps to `Order.origin`.
 	Origin *CartOrigin `json:"origin,omitempty"`
 	// Maps to `Order.itemShippingAddresses`.
-	ItemShippingAddresses []Address `json:"itemShippingAddresses,omitempty"`
+	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -684,4 +883,35 @@ func (obj *OrderImport) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderImport) MarshalJSON() ([]byte, error) {
+	type Alias OrderImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["lineItems"] == nil {
+		delete(target, "lineItems")
+	}
+
+	if target["customLineItems"] == nil {
+		delete(target, "customLineItems")
+	}
+
+	if target["itemShippingAddresses"] == nil {
+		delete(target, "itemShippingAddresses")
+	}
+
+	return json.Marshal(target)
 }

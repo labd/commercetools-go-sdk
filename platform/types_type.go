@@ -167,7 +167,8 @@ func mapDiscriminatorFieldType(input interface{}) (FieldType, error) {
 type CustomFieldBooleanType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldBooleanType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldBooleanType
 	return json.Marshal(struct {
@@ -179,7 +180,8 @@ func (obj CustomFieldBooleanType) MarshalJSON() ([]byte, error) {
 type CustomFieldDateTimeType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldDateTimeType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldDateTimeType
 	return json.Marshal(struct {
@@ -191,7 +193,8 @@ func (obj CustomFieldDateTimeType) MarshalJSON() ([]byte, error) {
 type CustomFieldDateType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldDateType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldDateType
 	return json.Marshal(struct {
@@ -204,7 +207,8 @@ type CustomFieldEnumType struct {
 	Values []CustomFieldEnumValue `json:"values"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldEnumType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldEnumType
 	return json.Marshal(struct {
@@ -217,7 +221,8 @@ type CustomFieldLocalizedEnumType struct {
 	Values []CustomFieldLocalizedEnumValue `json:"values"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldLocalizedEnumType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldLocalizedEnumType
 	return json.Marshal(struct {
@@ -229,7 +234,8 @@ func (obj CustomFieldLocalizedEnumType) MarshalJSON() ([]byte, error) {
 type CustomFieldLocalizedStringType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldLocalizedStringType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldLocalizedStringType
 	return json.Marshal(struct {
@@ -241,7 +247,8 @@ func (obj CustomFieldLocalizedStringType) MarshalJSON() ([]byte, error) {
 type CustomFieldMoneyType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldMoneyType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldMoneyType
 	return json.Marshal(struct {
@@ -253,7 +260,8 @@ func (obj CustomFieldMoneyType) MarshalJSON() ([]byte, error) {
 type CustomFieldNumberType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldNumberType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldNumberType
 	return json.Marshal(struct {
@@ -266,7 +274,8 @@ type CustomFieldReferenceType struct {
 	ReferenceTypeId ReferenceTypeId `json:"referenceTypeId"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldReferenceType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldReferenceType
 	return json.Marshal(struct {
@@ -296,7 +305,8 @@ func (obj *CustomFieldSetType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldSetType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldSetType
 	return json.Marshal(struct {
@@ -308,7 +318,8 @@ func (obj CustomFieldSetType) MarshalJSON() ([]byte, error) {
 type CustomFieldStringType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldStringType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldStringType
 	return json.Marshal(struct {
@@ -320,7 +331,8 @@ func (obj CustomFieldStringType) MarshalJSON() ([]byte, error) {
 type CustomFieldTimeType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomFieldTimeType) MarshalJSON() ([]byte, error) {
 	type Alias CustomFieldTimeType
 	return json.Marshal(struct {
@@ -382,7 +394,30 @@ type TypeDraft struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// The IDs of the resources that can be customized with this type.
 	ResourceTypeIds  []ResourceTypeId  `json:"resourceTypeIds"`
-	FieldDefinitions []FieldDefinition `json:"fieldDefinitions,omitempty"`
+	FieldDefinitions []FieldDefinition `json:"fieldDefinitions"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TypeDraft) MarshalJSON() ([]byte, error) {
+	type Alias TypeDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["fieldDefinitions"] == nil {
+		delete(target, "fieldDefinitions")
+	}
+
+	return json.Marshal(target)
 }
 
 type TypePagedQueryResponse struct {
@@ -399,7 +434,8 @@ type TypeReference struct {
 	Obj *Type  `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeReference) MarshalJSON() ([]byte, error) {
 	type Alias TypeReference
 	return json.Marshal(struct {
@@ -415,7 +451,8 @@ type TypeResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias TypeResourceIdentifier
 	return json.Marshal(struct {
@@ -555,7 +592,8 @@ type TypeAddEnumValueAction struct {
 	Value     CustomFieldEnumValue `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeAddEnumValueAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeAddEnumValueAction
 	return json.Marshal(struct {
@@ -568,7 +606,8 @@ type TypeAddFieldDefinitionAction struct {
 	FieldDefinition FieldDefinition `json:"fieldDefinition"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeAddFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeAddFieldDefinitionAction
 	return json.Marshal(struct {
@@ -582,7 +621,8 @@ type TypeAddLocalizedEnumValueAction struct {
 	Value     CustomFieldLocalizedEnumValue `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeAddLocalizedEnumValueAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeAddLocalizedEnumValueAction
 	return json.Marshal(struct {
@@ -596,7 +636,8 @@ type TypeChangeEnumValueLabelAction struct {
 	Value     CustomFieldEnumValue `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeEnumValueLabelAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeEnumValueLabelAction
 	return json.Marshal(struct {
@@ -610,7 +651,8 @@ type TypeChangeEnumValueOrderAction struct {
 	Keys      []string `json:"keys"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeEnumValueOrderAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeEnumValueOrderAction
 	return json.Marshal(struct {
@@ -623,7 +665,8 @@ type TypeChangeFieldDefinitionOrderAction struct {
 	FieldNames []string `json:"fieldNames"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeFieldDefinitionOrderAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeFieldDefinitionOrderAction
 	return json.Marshal(struct {
@@ -637,7 +680,8 @@ type TypeChangeInputHintAction struct {
 	InputHint TypeTextInputHint `json:"inputHint"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeInputHintAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeInputHintAction
 	return json.Marshal(struct {
@@ -650,7 +694,8 @@ type TypeChangeKeyAction struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeKeyAction
 	return json.Marshal(struct {
@@ -664,7 +709,8 @@ type TypeChangeLabelAction struct {
 	Label     LocalizedString `json:"label"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeLabelAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeLabelAction
 	return json.Marshal(struct {
@@ -678,7 +724,8 @@ type TypeChangeLocalizedEnumValueLabelAction struct {
 	Value     CustomFieldLocalizedEnumValue `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeLocalizedEnumValueLabelAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeLocalizedEnumValueLabelAction
 	return json.Marshal(struct {
@@ -692,7 +739,8 @@ type TypeChangeLocalizedEnumValueOrderAction struct {
 	Keys      []string `json:"keys"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeLocalizedEnumValueOrderAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeLocalizedEnumValueOrderAction
 	return json.Marshal(struct {
@@ -705,7 +753,8 @@ type TypeChangeNameAction struct {
 	Name LocalizedString `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeChangeNameAction
 	return json.Marshal(struct {
@@ -718,7 +767,8 @@ type TypeRemoveFieldDefinitionAction struct {
 	FieldName string `json:"fieldName"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeRemoveFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeRemoveFieldDefinitionAction
 	return json.Marshal(struct {
@@ -731,7 +781,8 @@ type TypeSetDescriptionAction struct {
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeSetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias TypeSetDescriptionAction
 	return json.Marshal(struct {

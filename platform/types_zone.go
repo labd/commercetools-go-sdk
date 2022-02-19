@@ -48,7 +48,30 @@ type ZoneDraft struct {
 	// Description of the Zone.
 	Description *string `json:"description,omitempty"`
 	// List of locations that belong to the Zone.
-	Locations []Location `json:"locations,omitempty"`
+	Locations []Location `json:"locations"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ZoneDraft) MarshalJSON() ([]byte, error) {
+	type Alias ZoneDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["locations"] == nil {
+		delete(target, "locations")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -84,7 +107,8 @@ type ZoneReference struct {
 	Obj *Zone `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneReference) MarshalJSON() ([]byte, error) {
 	type Alias ZoneReference
 	return json.Marshal(struct {
@@ -104,7 +128,8 @@ type ZoneResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias ZoneResourceIdentifier
 	return json.Marshal(struct {
@@ -185,7 +210,8 @@ type ZoneAddLocationAction struct {
 	Location Location `json:"location"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneAddLocationAction) MarshalJSON() ([]byte, error) {
 	type Alias ZoneAddLocationAction
 	return json.Marshal(struct {
@@ -199,7 +225,8 @@ type ZoneChangeNameAction struct {
 	Name string `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias ZoneChangeNameAction
 	return json.Marshal(struct {
@@ -213,7 +240,8 @@ type ZoneRemoveLocationAction struct {
 	Location Location `json:"location"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneRemoveLocationAction) MarshalJSON() ([]byte, error) {
 	type Alias ZoneRemoveLocationAction
 	return json.Marshal(struct {
@@ -227,7 +255,8 @@ type ZoneSetDescriptionAction struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneSetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias ZoneSetDescriptionAction
 	return json.Marshal(struct {
@@ -241,7 +270,8 @@ type ZoneSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ZoneSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias ZoneSetKeyAction
 	return json.Marshal(struct {

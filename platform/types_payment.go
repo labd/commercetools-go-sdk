@@ -105,16 +105,43 @@ type PaymentDraft struct {
 	PaymentMethodInfo *PaymentMethodInfo  `json:"paymentMethodInfo,omitempty"`
 	PaymentStatus     *PaymentStatusDraft `json:"paymentStatus,omitempty"`
 	// A list of financial transactions of different TransactionTypes with different TransactionStates.
-	Transactions []TransactionDraft `json:"transactions,omitempty"`
+	Transactions []TransactionDraft `json:"transactions"`
 	// Interface interactions can be requests send to the PSP, responses received from the PSP or notifications received from the PSP.
 	// Some interactions may result in a transaction.
 	// If so, the `interactionId` in the Transaction should be set to match the ID of the PSP for the interaction.
 	// Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
-	InterfaceInteractions []CustomFieldsDraft `json:"interfaceInteractions,omitempty"`
+	InterfaceInteractions []CustomFieldsDraft `json:"interfaceInteractions"`
 	Custom                *CustomFieldsDraft  `json:"custom,omitempty"`
 	// User-specific unique identifier for the payment (max.
 	// 256 characters).
 	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentDraft) MarshalJSON() ([]byte, error) {
+	type Alias PaymentDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["transactions"] == nil {
+		delete(target, "transactions")
+	}
+
+	if target["interfaceInteractions"] == nil {
+		delete(target, "interfaceInteractions")
+	}
+
+	return json.Marshal(target)
 }
 
 type PaymentMethodInfo struct {
@@ -145,7 +172,8 @@ type PaymentReference struct {
 	Obj *Payment `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 	type Alias PaymentReference
 	return json.Marshal(struct {
@@ -161,7 +189,8 @@ type PaymentResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias PaymentResourceIdentifier
 	return json.Marshal(struct {
@@ -437,7 +466,8 @@ type PaymentAddInterfaceInteractionAction struct {
 	Fields *FieldContainer        `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentAddInterfaceInteractionAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentAddInterfaceInteractionAction
 	return json.Marshal(struct {
@@ -450,7 +480,8 @@ type PaymentAddTransactionAction struct {
 	Transaction TransactionDraft `json:"transaction"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentAddTransactionAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentAddTransactionAction
 	return json.Marshal(struct {
@@ -463,7 +494,8 @@ type PaymentChangeAmountPlannedAction struct {
 	Amount Money `json:"amount"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentChangeAmountPlannedAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentChangeAmountPlannedAction
 	return json.Marshal(struct {
@@ -477,7 +509,8 @@ type PaymentChangeTransactionInteractionIdAction struct {
 	InteractionId string `json:"interactionId"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentChangeTransactionInteractionIdAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentChangeTransactionInteractionIdAction
 	return json.Marshal(struct {
@@ -491,7 +524,8 @@ type PaymentChangeTransactionStateAction struct {
 	State         TransactionState `json:"state"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentChangeTransactionStateAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentChangeTransactionStateAction
 	return json.Marshal(struct {
@@ -505,7 +539,8 @@ type PaymentChangeTransactionTimestampAction struct {
 	Timestamp     time.Time `json:"timestamp"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentChangeTransactionTimestampAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentChangeTransactionTimestampAction
 	return json.Marshal(struct {
@@ -518,7 +553,8 @@ type PaymentSetAmountPaidAction struct {
 	Amount *Money `json:"amount,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetAmountPaidAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetAmountPaidAction
 	return json.Marshal(struct {
@@ -531,7 +567,8 @@ type PaymentSetAmountRefundedAction struct {
 	Amount *Money `json:"amount,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetAmountRefundedAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetAmountRefundedAction
 	return json.Marshal(struct {
@@ -546,7 +583,8 @@ type PaymentSetAnonymousIdAction struct {
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetAnonymousIdAction
 	return json.Marshal(struct {
@@ -560,7 +598,8 @@ type PaymentSetAuthorizationAction struct {
 	Until  *time.Time `json:"until,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetAuthorizationAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetAuthorizationAction
 	return json.Marshal(struct {
@@ -574,7 +613,8 @@ type PaymentSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetCustomFieldAction
 	return json.Marshal(struct {
@@ -591,7 +631,8 @@ type PaymentSetCustomTypeAction struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetCustomTypeAction
 	return json.Marshal(struct {
@@ -605,7 +646,8 @@ type PaymentSetCustomerAction struct {
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetCustomerAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetCustomerAction
 	return json.Marshal(struct {
@@ -618,7 +660,8 @@ type PaymentSetExternalIdAction struct {
 	ExternalId *string `json:"externalId,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetExternalIdAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetExternalIdAction
 	return json.Marshal(struct {
@@ -631,7 +674,8 @@ type PaymentSetInterfaceIdAction struct {
 	InterfaceId string `json:"interfaceId"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetInterfaceIdAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetInterfaceIdAction
 	return json.Marshal(struct {
@@ -647,7 +691,8 @@ type PaymentSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetKeyAction
 	return json.Marshal(struct {
@@ -660,7 +705,8 @@ type PaymentSetMethodInfoInterfaceAction struct {
 	Interface string `json:"interface"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetMethodInfoInterfaceAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetMethodInfoInterfaceAction
 	return json.Marshal(struct {
@@ -674,7 +720,8 @@ type PaymentSetMethodInfoMethodAction struct {
 	Method *string `json:"method,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetMethodInfoMethodAction
 	return json.Marshal(struct {
@@ -688,7 +735,8 @@ type PaymentSetMethodInfoNameAction struct {
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetMethodInfoNameAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetMethodInfoNameAction
 	return json.Marshal(struct {
@@ -701,7 +749,8 @@ type PaymentSetStatusInterfaceCodeAction struct {
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetStatusInterfaceCodeAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetStatusInterfaceCodeAction
 	return json.Marshal(struct {
@@ -714,7 +763,8 @@ type PaymentSetStatusInterfaceTextAction struct {
 	InterfaceText string `json:"interfaceText"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetStatusInterfaceTextAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetStatusInterfaceTextAction
 	return json.Marshal(struct {
@@ -728,7 +778,8 @@ type PaymentSetTransactionCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetTransactionCustomFieldAction
 	return json.Marshal(struct {
@@ -745,7 +796,8 @@ type PaymentSetTransactionCustomTypeAction struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentSetTransactionCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentSetTransactionCustomTypeAction
 	return json.Marshal(struct {
@@ -759,7 +811,8 @@ type PaymentTransitionStateAction struct {
 	Force *bool                   `json:"force,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentTransitionStateAction) MarshalJSON() ([]byte, error) {
 	type Alias PaymentTransitionStateAction
 	return json.Marshal(struct {

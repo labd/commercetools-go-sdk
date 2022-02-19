@@ -83,7 +83,8 @@ type CategoryReference struct {
 	ID string `json:"id"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryReference) MarshalJSON() ([]byte, error) {
 	type Alias CategoryReference
 	return json.Marshal(struct {
@@ -96,7 +97,8 @@ type ProductReference struct {
 	ID string `json:"id"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductReference
 	return json.Marshal(struct {
@@ -109,7 +111,8 @@ type ProductTypeReference struct {
 	ID string `json:"id"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductTypeReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductTypeReference
 	return json.Marshal(struct {

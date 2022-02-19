@@ -24,9 +24,9 @@ type ImportOperation struct {
 	// The version of the impmorted resource when the import was successful.
 	ResourceVersion *int `json:"resourceVersion,omitempty"`
 	// Contains an error if the import of the resource was not successful. See [Errors](/error).
-	Errors []ErrorObject `json:"errors,omitempty"`
+	Errors []ErrorObject `json:"errors"`
 	// In case of unresolved status this array will show the unresolved references
-	UnresolvedReferences []UnresolvedReferences `json:"unresolvedReferences,omitempty"`
+	UnresolvedReferences []UnresolvedReferences `json:"unresolvedReferences"`
 	// The time when the ImportOperation was created.
 	CreatedAt time.Time `json:"createdAt"`
 	// The last time When the ImportOperation was modified.
@@ -44,6 +44,33 @@ func (obj *ImportOperation) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ImportOperation) MarshalJSON() ([]byte, error) {
+	type Alias ImportOperation
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["errors"] == nil {
+		delete(target, "errors")
+	}
+
+	if target["unresolvedReferences"] == nil {
+		delete(target, "unresolvedReferences")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -82,7 +109,7 @@ type ImportOperationStatus struct {
 	State ImportOperationState `json:"state"`
 	// The validation errors for the [ImportOperation](#importoperation).
 	// See [Errors](/error).
-	Errors []ErrorObject `json:"errors,omitempty"`
+	Errors []ErrorObject `json:"errors"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -94,4 +121,27 @@ func (obj *ImportOperationStatus) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ImportOperationStatus) MarshalJSON() ([]byte, error) {
+	type Alias ImportOperationStatus
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["errors"] == nil {
+		delete(target, "errors")
+	}
+
+	return json.Marshal(target)
 }

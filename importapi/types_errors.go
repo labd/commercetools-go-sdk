@@ -23,7 +23,7 @@ type ErrorResponse struct {
 	// understanding the error.
 	ErrorDescription *string `json:"error_description,omitempty"`
 	// The errors that caused this error response.
-	Errors []ErrorObject `json:"errors,omitempty"`
+	Errors []ErrorObject `json:"errors"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -37,6 +37,28 @@ func (obj *ErrorResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
+	type Alias ErrorResponse
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["errors"] == nil {
+		delete(target, "errors")
+	}
+
+	return json.Marshal(target)
+}
 func (obj ErrorResponse) Error() string {
 	return obj.Message
 }
@@ -206,7 +228,8 @@ type AccessDeniedError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
 	type Alias AccessDeniedError
 	return json.Marshal(struct {
@@ -226,7 +249,8 @@ type InvalidScopeError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidScopeError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidScopeError
 	return json.Marshal(struct {
@@ -247,7 +271,8 @@ type InvalidOperation struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidOperation) MarshalJSON() ([]byte, error) {
 	type Alias InvalidOperation
 	return json.Marshal(struct {
@@ -282,7 +307,8 @@ func (obj *DuplicateAttributeValueError) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateAttributeValueError
 	return json.Marshal(struct {
@@ -313,7 +339,8 @@ func (obj *DuplicateAttributeValuesError) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateAttributeValuesError
 	return json.Marshal(struct {
@@ -336,7 +363,8 @@ type DuplicateFieldError struct {
 	DuplicateValue interface{} `json:"duplicateValue,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DuplicateFieldError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateFieldError
 	return json.Marshal(struct {
@@ -359,7 +387,8 @@ type DuplicateVariantValuesError struct {
 	VariantValues VariantValues `json:"variantValues"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateVariantValuesError
 	return json.Marshal(struct {
@@ -392,7 +421,8 @@ type InsufficientScopeError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 	type Alias InsufficientScopeError
 	return json.Marshal(struct {
@@ -408,7 +438,8 @@ type InvalidCredentialsError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidCredentialsError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidCredentialsError
 	return json.Marshal(struct {
@@ -424,7 +455,8 @@ type InvalidTokenError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidTokenError
 	return json.Marshal(struct {
@@ -448,17 +480,32 @@ type InvalidFieldError struct {
 	// The invalid value.
 	InvalidValue interface{} `json:"invalidValue"`
 	// The set of allowed values for the field, if any.
-	AllowedValues []interface{} `json:"allowedValues,omitempty"`
+	AllowedValues []interface{} `json:"allowedValues"`
 	ResourceIndex *int          `json:"resourceIndex,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidFieldError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidFieldError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["allowedValues"] == nil {
+		delete(target, "allowedValues")
+	}
+
+	return json.Marshal(target)
 }
 func (obj InvalidFieldError) Error() string {
 	return obj.Message
@@ -474,7 +521,8 @@ type InvalidJsonInput struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidJsonInput) MarshalJSON() ([]byte, error) {
 	type Alias InvalidJsonInput
 	return json.Marshal(struct {
@@ -492,7 +540,8 @@ type InvalidInput struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidInput) MarshalJSON() ([]byte, error) {
 	type Alias InvalidInput
 	return json.Marshal(struct {
@@ -506,7 +555,8 @@ type ResourceNotFoundError struct {
 	Resource interface{} `json:"resource,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceNotFoundError
 	return json.Marshal(struct {
@@ -523,7 +573,8 @@ type ResourceCreationError struct {
 	Resource interface{} `json:"resource,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceCreationError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceCreationError
 	return json.Marshal(struct {
@@ -540,7 +591,8 @@ type ResourceUpdateError struct {
 	Resource interface{} `json:"resource,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceUpdateError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceUpdateError
 	return json.Marshal(struct {
@@ -557,7 +609,8 @@ type ResourceDeletionError struct {
 	Resource interface{} `json:"resource,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceDeletionError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceDeletionError
 	return json.Marshal(struct {
@@ -578,7 +631,8 @@ type RequiredFieldError struct {
 	Field string `json:"field"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RequiredFieldError) MarshalJSON() ([]byte, error) {
 	type Alias RequiredFieldError
 	return json.Marshal(struct {
@@ -598,7 +652,8 @@ type InvalidStateTransitionError struct {
 	NewState ProcessingState `json:"newState"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InvalidStateTransitionError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidStateTransitionError
 	return json.Marshal(struct {
@@ -626,7 +681,8 @@ type ConcurrentModificationError struct {
 	ConflictedResource interface{} `json:"conflictedResource,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ConcurrentModificationError) MarshalJSON() ([]byte, error) {
 	type Alias ConcurrentModificationError
 	return json.Marshal(struct {
@@ -642,7 +698,8 @@ type ContentionError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ContentionError) MarshalJSON() ([]byte, error) {
 	type Alias ContentionError
 	return json.Marshal(struct {
@@ -658,7 +715,8 @@ type GenericError struct {
 	Message string `json:"message"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj GenericError) MarshalJSON() ([]byte, error) {
 	type Alias GenericError
 	return json.Marshal(struct {

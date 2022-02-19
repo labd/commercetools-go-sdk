@@ -70,7 +70,8 @@ type CustomTokenizer struct {
 	Inputs []string `json:"inputs"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomTokenizer) MarshalJSON() ([]byte, error) {
 	type Alias CustomTokenizer
 	return json.Marshal(struct {
@@ -82,7 +83,8 @@ func (obj CustomTokenizer) MarshalJSON() ([]byte, error) {
 type WhitespaceTokenizer struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj WhitespaceTokenizer) MarshalJSON() ([]byte, error) {
 	type Alias WhitespaceTokenizer
 	return json.Marshal(struct {
@@ -114,7 +116,7 @@ type ProductImport struct {
 	// Maps to `Product.categories`.
 	// The References to the [Categories](/../api/projects/categories#category) with which the Product is associated.
 	// If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
-	Categories []CategoryKeyReference `json:"categories,omitempty"`
+	Categories []CategoryKeyReference `json:"categories"`
 	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
 	// ```json
 	// {
@@ -168,4 +170,27 @@ type ProductImport struct {
 	// If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
 	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product in the platform, the import induces no change in the existing Product whether `publish` is set or not.
 	Publish *bool `json:"publish,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductImport) MarshalJSON() ([]byte, error) {
+	type Alias ProductImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["categories"] == nil {
+		delete(target, "categories")
+	}
+
+	return json.Marshal(target)
 }

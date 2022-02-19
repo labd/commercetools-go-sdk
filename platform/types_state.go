@@ -28,13 +28,40 @@ type State struct {
 	Initial bool `json:"initial"`
 	// Builtin states are integral parts of the project that cannot be deleted nor the key can be changed.
 	BuiltIn bool            `json:"builtIn"`
-	Roles   []StateRoleEnum `json:"roles,omitempty"`
+	Roles   []StateRoleEnum `json:"roles"`
 	// Transitions are a way to describe possible transformations of the current state to other states of the same `type` (e.g.: _Initial_ -> _Shipped_).
 	// When performing a `transitionState` update action and `transitions` is set, the currently referenced state must have a transition to the new state.
 	// If `transitions` is an empty list, it means the current state is a final state and no further transitions are allowed.
 	// If `transitions` is not set, the validation is turned off.
 	// When performing a `transitionState` update action, any other state of the same `type` can be transitioned to.
-	Transitions []StateReference `json:"transitions,omitempty"`
+	Transitions []StateReference `json:"transitions"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj State) MarshalJSON() ([]byte, error) {
+	type Alias State
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["roles"] == nil {
+		delete(target, "roles")
+	}
+
+	if target["transitions"] == nil {
+		delete(target, "transitions")
+	}
+
+	return json.Marshal(target)
 }
 
 type StateDraft struct {
@@ -43,8 +70,35 @@ type StateDraft struct {
 	Name        *LocalizedString          `json:"name,omitempty"`
 	Description *LocalizedString          `json:"description,omitempty"`
 	Initial     *bool                     `json:"initial,omitempty"`
-	Roles       []StateRoleEnum           `json:"roles,omitempty"`
-	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
+	Roles       []StateRoleEnum           `json:"roles"`
+	Transitions []StateResourceIdentifier `json:"transitions"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StateDraft) MarshalJSON() ([]byte, error) {
+	type Alias StateDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["roles"] == nil {
+		delete(target, "roles")
+	}
+
+	if target["transitions"] == nil {
+		delete(target, "transitions")
+	}
+
+	return json.Marshal(target)
 }
 
 type StatePagedQueryResponse struct {
@@ -61,7 +115,8 @@ type StateReference struct {
 	Obj *State `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateReference) MarshalJSON() ([]byte, error) {
 	type Alias StateReference
 	return json.Marshal(struct {
@@ -77,7 +132,8 @@ type StateResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias StateResourceIdentifier
 	return json.Marshal(struct {
@@ -196,7 +252,8 @@ type StateAddRolesAction struct {
 	Roles []StateRoleEnum `json:"roles"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateAddRolesAction) MarshalJSON() ([]byte, error) {
 	type Alias StateAddRolesAction
 	return json.Marshal(struct {
@@ -209,7 +266,8 @@ type StateChangeInitialAction struct {
 	Initial bool `json:"initial"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateChangeInitialAction) MarshalJSON() ([]byte, error) {
 	type Alias StateChangeInitialAction
 	return json.Marshal(struct {
@@ -222,7 +280,8 @@ type StateChangeKeyAction struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateChangeKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias StateChangeKeyAction
 	return json.Marshal(struct {
@@ -235,7 +294,8 @@ type StateChangeTypeAction struct {
 	Type StateTypeEnum `json:"type"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateChangeTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias StateChangeTypeAction
 	return json.Marshal(struct {
@@ -248,7 +308,8 @@ type StateRemoveRolesAction struct {
 	Roles []StateRoleEnum `json:"roles"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateRemoveRolesAction) MarshalJSON() ([]byte, error) {
 	type Alias StateRemoveRolesAction
 	return json.Marshal(struct {
@@ -261,7 +322,8 @@ type StateSetDescriptionAction struct {
 	Description LocalizedString `json:"description"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateSetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias StateSetDescriptionAction
 	return json.Marshal(struct {
@@ -274,7 +336,8 @@ type StateSetNameAction struct {
 	Name LocalizedString `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateSetNameAction) MarshalJSON() ([]byte, error) {
 	type Alias StateSetNameAction
 	return json.Marshal(struct {
@@ -287,7 +350,8 @@ type StateSetRolesAction struct {
 	Roles []StateRoleEnum `json:"roles"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateSetRolesAction) MarshalJSON() ([]byte, error) {
 	type Alias StateSetRolesAction
 	return json.Marshal(struct {
@@ -297,14 +361,29 @@ func (obj StateSetRolesAction) MarshalJSON() ([]byte, error) {
 }
 
 type StateSetTransitionsAction struct {
-	Transitions []StateResourceIdentifier `json:"transitions,omitempty"`
+	Transitions []StateResourceIdentifier `json:"transitions"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateSetTransitionsAction) MarshalJSON() ([]byte, error) {
 	type Alias StateSetTransitionsAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setTransitions", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["transitions"] == nil {
+		delete(target, "transitions")
+	}
+
+	return json.Marshal(target)
 }

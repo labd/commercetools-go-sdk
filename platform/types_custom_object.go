@@ -44,7 +44,8 @@ type CustomObjectReference struct {
 	Obj *CustomObject `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomObjectReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomObjectReference
 	return json.Marshal(struct {

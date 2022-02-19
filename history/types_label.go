@@ -81,7 +81,8 @@ type CustomObjectLabel struct {
 	Container string `json:"container"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomObjectLabel) MarshalJSON() ([]byte, error) {
 	type Alias CustomObjectLabel
 	return json.Marshal(struct {
@@ -96,7 +97,8 @@ type CustomerLabel struct {
 	CustomerNumber string `json:"customerNumber"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerLabel) MarshalJSON() ([]byte, error) {
 	type Alias CustomerLabel
 	return json.Marshal(struct {
@@ -109,7 +111,8 @@ type LocalizedLabel struct {
 	Value LocalizedString `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizedLabel) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedLabel
 	return json.Marshal(struct {
@@ -123,7 +126,8 @@ type OrderLabel struct {
 	OrderNumber   string `json:"orderNumber"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLabel) MarshalJSON() ([]byte, error) {
 	type Alias OrderLabel
 	return json.Marshal(struct {
@@ -137,7 +141,8 @@ type PaymentLabel struct {
 	AmountPlanned Money  `json:"amountPlanned"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentLabel) MarshalJSON() ([]byte, error) {
 	type Alias PaymentLabel
 	return json.Marshal(struct {
@@ -151,7 +156,8 @@ type ProductLabel struct {
 	Name LocalizedString `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductLabel) MarshalJSON() ([]byte, error) {
 	type Alias ProductLabel
 	return json.Marshal(struct {
@@ -165,7 +171,8 @@ type ReviewLabel struct {
 	Title string `json:"title"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewLabel) MarshalJSON() ([]byte, error) {
 	type Alias ReviewLabel
 	return json.Marshal(struct {
@@ -178,7 +185,8 @@ type StringLabel struct {
 	Value string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StringLabel) MarshalJSON() ([]byte, error) {
 	type Alias StringLabel
 	return json.Marshal(struct {

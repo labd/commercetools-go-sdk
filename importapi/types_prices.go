@@ -19,7 +19,30 @@ type TaxRate struct {
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country  string    `json:"country"`
 	State    *string   `json:"state,omitempty"`
-	SubRates []SubRate `json:"subRates,omitempty"`
+	SubRates []SubRate `json:"subRates"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TaxRate) MarshalJSON() ([]byte, error) {
+	type Alias TaxRate
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["subRates"] == nil {
+		delete(target, "subRates")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -47,7 +70,7 @@ type PriceImport struct {
 	// Only the Price updates will be published to `staged` and `current` projection.
 	Publish *bool `json:"publish,omitempty"`
 	// The tiered prices for this price.
-	Tiers []PriceTier `json:"tiers,omitempty"`
+	Tiers []PriceTier `json:"tiers"`
 	// The custom fields for this price.
 	Custom *Custom `json:"custom,omitempty"`
 	// The ProductVariant in which this Price is contained.
@@ -75,4 +98,27 @@ func (obj *PriceImport) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PriceImport) MarshalJSON() ([]byte, error) {
+	type Alias PriceImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
 }

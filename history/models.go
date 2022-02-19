@@ -130,9 +130,31 @@ type ErrorResponse struct {
 	Message          string        `json:"message"`
 	ErrorMessage     *string       `json:"error,omitempty"`
 	ErrorDescription *string       `json:"error_description,omitempty"`
-	Errors           []ErrorObject `json:"errors,omitempty"`
+	Errors           []ErrorObject `json:"errors"`
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
+	type Alias ErrorResponse
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["errors"] == nil {
+		delete(target, "errors")
+	}
+
+	return json.Marshal(target)
+}
 func (obj ErrorResponse) Error() string {
 	return obj.Message
 }

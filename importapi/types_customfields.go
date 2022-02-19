@@ -195,7 +195,8 @@ type BooleanField struct {
 	Value bool `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj BooleanField) MarshalJSON() ([]byte, error) {
 	type Alias BooleanField
 	return json.Marshal(struct {
@@ -211,7 +212,8 @@ type StringField struct {
 	Value string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StringField) MarshalJSON() ([]byte, error) {
 	type Alias StringField
 	return json.Marshal(struct {
@@ -234,7 +236,8 @@ type LocalizedStringField struct {
 	Value LocalizedString `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizedStringField) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedStringField
 	return json.Marshal(struct {
@@ -250,7 +253,8 @@ type EnumField struct {
 	Value string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj EnumField) MarshalJSON() ([]byte, error) {
 	type Alias EnumField
 	return json.Marshal(struct {
@@ -266,7 +270,8 @@ type LocalizedEnumField struct {
 	Value string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizedEnumField) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedEnumField
 	return json.Marshal(struct {
@@ -282,7 +287,8 @@ type NumberField struct {
 	Value float64 `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj NumberField) MarshalJSON() ([]byte, error) {
 	type Alias NumberField
 	return json.Marshal(struct {
@@ -315,7 +321,8 @@ func (obj *MoneyField) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj MoneyField) MarshalJSON() ([]byte, error) {
 	type Alias MoneyField
 	return json.Marshal(struct {
@@ -331,7 +338,8 @@ type DateField struct {
 	Value Date `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateField) MarshalJSON() ([]byte, error) {
 	type Alias DateField
 	return json.Marshal(struct {
@@ -347,7 +355,8 @@ type TimeField struct {
 	Value time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TimeField) MarshalJSON() ([]byte, error) {
 	type Alias TimeField
 	return json.Marshal(struct {
@@ -363,7 +372,8 @@ type DateTimeField struct {
 	Value time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateTimeField) MarshalJSON() ([]byte, error) {
 	type Alias DateTimeField
 	return json.Marshal(struct {
@@ -397,7 +407,8 @@ func (obj *ReferenceField) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReferenceField) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceField
 	return json.Marshal(struct {
@@ -413,7 +424,8 @@ type BooleanSetField struct {
 	Value []bool `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj BooleanSetField) MarshalJSON() ([]byte, error) {
 	type Alias BooleanSetField
 	return json.Marshal(struct {
@@ -429,7 +441,8 @@ type StringSetField struct {
 	Value []string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StringSetField) MarshalJSON() ([]byte, error) {
 	type Alias StringSetField
 	return json.Marshal(struct {
@@ -445,7 +458,8 @@ type LocalizedStringSetField struct {
 	Value []LocalizedString `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizedStringSetField) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedStringSetField
 	return json.Marshal(struct {
@@ -461,7 +475,8 @@ type EnumSetField struct {
 	Value []string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj EnumSetField) MarshalJSON() ([]byte, error) {
 	type Alias EnumSetField
 	return json.Marshal(struct {
@@ -477,7 +492,8 @@ type LocalizedEnumSetField struct {
 	Value []string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizedEnumSetField) MarshalJSON() ([]byte, error) {
 	type Alias LocalizedEnumSetField
 	return json.Marshal(struct {
@@ -493,7 +509,8 @@ type NumberSetField struct {
 	Value []float64 `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj NumberSetField) MarshalJSON() ([]byte, error) {
 	type Alias NumberSetField
 	return json.Marshal(struct {
@@ -509,7 +526,8 @@ type MoneySetField struct {
 	Value []Money `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj MoneySetField) MarshalJSON() ([]byte, error) {
 	type Alias MoneySetField
 	return json.Marshal(struct {
@@ -525,7 +543,8 @@ type DateSetField struct {
 	Value []Date `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateSetField) MarshalJSON() ([]byte, error) {
 	type Alias DateSetField
 	return json.Marshal(struct {
@@ -541,7 +560,8 @@ type TimeSetField struct {
 	Value []time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TimeSetField) MarshalJSON() ([]byte, error) {
 	type Alias TimeSetField
 	return json.Marshal(struct {
@@ -557,7 +577,8 @@ type DateTimeSetField struct {
 	Value []time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateTimeSetField) MarshalJSON() ([]byte, error) {
 	type Alias DateTimeSetField
 	return json.Marshal(struct {
@@ -584,7 +605,8 @@ func (obj *ReferenceSetField) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReferenceSetField) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceSetField
 	return json.Marshal(struct {

@@ -49,7 +49,8 @@ type InventoryEntryReference struct {
 	Obj *InventoryEntry `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryReference
 	return json.Marshal(struct {
@@ -65,7 +66,8 @@ type InventoryEntryResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryResourceIdentifier
 	return json.Marshal(struct {
@@ -169,7 +171,8 @@ type InventoryEntryAddQuantityAction struct {
 	Quantity int `json:"quantity"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryAddQuantityAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryAddQuantityAction
 	return json.Marshal(struct {
@@ -182,7 +185,8 @@ type InventoryEntryChangeQuantityAction struct {
 	Quantity int `json:"quantity"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryChangeQuantityAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryChangeQuantityAction
 	return json.Marshal(struct {
@@ -195,7 +199,8 @@ type InventoryEntryRemoveQuantityAction struct {
 	Quantity int `json:"quantity"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryRemoveQuantityAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryRemoveQuantityAction
 	return json.Marshal(struct {
@@ -209,7 +214,8 @@ type InventoryEntrySetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntrySetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntrySetCustomFieldAction
 	return json.Marshal(struct {
@@ -226,7 +232,8 @@ type InventoryEntrySetCustomTypeAction struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntrySetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntrySetCustomTypeAction
 	return json.Marshal(struct {
@@ -239,7 +246,8 @@ type InventoryEntrySetExpectedDeliveryAction struct {
 	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntrySetExpectedDeliveryAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntrySetExpectedDeliveryAction
 	return json.Marshal(struct {
@@ -252,7 +260,8 @@ type InventoryEntrySetRestockableInDaysAction struct {
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntrySetRestockableInDaysAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntrySetRestockableInDaysAction
 	return json.Marshal(struct {
@@ -267,7 +276,8 @@ type InventoryEntrySetSupplyChannelAction struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntrySetSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntrySetSupplyChannelAction
 	return json.Marshal(struct {

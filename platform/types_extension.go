@@ -92,7 +92,8 @@ type ExtensionAWSLambdaDestination struct {
 	AccessSecret string `json:"accessSecret"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionAWSLambdaDestination) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionAWSLambdaDestination
 	return json.Marshal(struct {
@@ -154,7 +155,8 @@ func (obj *ExtensionHttpDestination) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionHttpDestination) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionHttpDestination
 	return json.Marshal(struct {
@@ -198,7 +200,8 @@ type ExtensionAuthorizationHeaderAuthentication struct {
 	HeaderValue string `json:"headerValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionAuthorizationHeaderAuthentication) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionAuthorizationHeaderAuthentication
 	return json.Marshal(struct {
@@ -211,7 +214,8 @@ type ExtensionAzureFunctionsAuthentication struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionAzureFunctionsAuthentication) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionAzureFunctionsAuthentication
 	return json.Marshal(struct {
@@ -351,7 +355,8 @@ func (obj *ExtensionChangeDestinationAction) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionChangeDestinationAction) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionChangeDestinationAction
 	return json.Marshal(struct {
@@ -364,7 +369,8 @@ type ExtensionChangeTriggersAction struct {
 	Triggers []ExtensionTrigger `json:"triggers"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionChangeTriggersAction) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionChangeTriggersAction
 	return json.Marshal(struct {
@@ -378,7 +384,8 @@ type ExtensionSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionSetKeyAction
 	return json.Marshal(struct {
@@ -395,7 +402,8 @@ type ExtensionSetTimeoutInMsAction struct {
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ExtensionSetTimeoutInMsAction) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionSetTimeoutInMsAction
 	return json.Marshal(struct {

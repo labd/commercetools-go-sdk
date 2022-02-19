@@ -30,9 +30,32 @@ type Asset struct {
 	Sources     []AssetSource    `json:"sources"`
 	Name        LocalizedString  `json:"name"`
 	Description *LocalizedString `json:"description,omitempty"`
-	Tags        []string         `json:"tags,omitempty"`
+	Tags        []string         `json:"tags"`
 	Custom      *CustomFields    `json:"custom,omitempty"`
 	Key         *string          `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Asset) MarshalJSON() ([]byte, error) {
+	type Alias Asset
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tags"] == nil {
+		delete(target, "tags")
+	}
+
+	return json.Marshal(target)
 }
 
 type AssetDimensions struct {
@@ -44,9 +67,32 @@ type AssetDraft struct {
 	Sources     []AssetSource      `json:"sources"`
 	Name        LocalizedString    `json:"name"`
 	Description *LocalizedString   `json:"description,omitempty"`
-	Tags        []string           `json:"tags,omitempty"`
+	Tags        []string           `json:"tags"`
 	Custom      *CustomFieldsDraft `json:"custom,omitempty"`
 	Key         *string            `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AssetDraft) MarshalJSON() ([]byte, error) {
+	type Alias AssetDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tags"] == nil {
+		delete(target, "tags")
+	}
+
+	return json.Marshal(target)
 }
 
 type AssetSource struct {
@@ -222,7 +268,8 @@ type GeoJsonPoint struct {
 	Coordinates []float64 `json:"coordinates"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj GeoJsonPoint) MarshalJSON() ([]byte, error) {
 	type Alias GeoJsonPoint
 	return json.Marshal(struct {
@@ -301,7 +348,7 @@ type Price struct {
 	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
 	Discounted    *DiscountedPrice        `json:"discounted,omitempty"`
 	Custom        *CustomFields           `json:"custom,omitempty"`
-	Tiers         []PriceTier             `json:"tiers,omitempty"`
+	Tiers         []PriceTier             `json:"tiers"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -321,6 +368,29 @@ func (obj *Price) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Price) MarshalJSON() ([]byte, error) {
+	type Alias Price
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
+}
+
 type PriceDraft struct {
 	Value Money `json:"value"`
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
@@ -331,8 +401,31 @@ type PriceDraft struct {
 	ValidFrom     *time.Time                       `json:"validFrom,omitempty"`
 	ValidUntil    *time.Time                       `json:"validUntil,omitempty"`
 	Custom        *CustomFieldsDraft               `json:"custom,omitempty"`
-	Tiers         []PriceTierDraft                 `json:"tiers,omitempty"`
+	Tiers         []PriceTierDraft                 `json:"tiers"`
 	Discounted    *DiscountedPriceDraft            `json:"discounted,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PriceDraft) MarshalJSON() ([]byte, error) {
+	type Alias PriceDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
 }
 
 type PriceTier struct {
@@ -374,7 +467,30 @@ type QueryPrice struct {
 	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
 	Discounted    *DiscountedPriceDraft   `json:"discounted,omitempty"`
 	Custom        *CustomFields           `json:"custom,omitempty"`
-	Tiers         []PriceTierDraft        `json:"tiers,omitempty"`
+	Tiers         []PriceTierDraft        `json:"tiers"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QueryPrice) MarshalJSON() ([]byte, error) {
+	type Alias QueryPrice
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
 }
 
 type Reference interface{}
@@ -794,7 +910,8 @@ type CentPrecisionMoney struct {
 	CurrencyCode string `json:"currencyCode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 	type Alias CentPrecisionMoney
 	return json.Marshal(struct {
@@ -811,7 +928,8 @@ type HighPrecisionMoney struct {
 	PreciseAmount int    `json:"preciseAmount"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj HighPrecisionMoney) MarshalJSON() ([]byte, error) {
 	type Alias HighPrecisionMoney
 	return json.Marshal(struct {
@@ -858,7 +976,8 @@ type CentPrecisionMoneyDraft struct {
 	FractionDigits *int   `json:"fractionDigits,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CentPrecisionMoneyDraft) MarshalJSON() ([]byte, error) {
 	type Alias CentPrecisionMoneyDraft
 	return json.Marshal(struct {
@@ -875,7 +994,8 @@ type HighPrecisionMoneyDraft struct {
 	PreciseAmount  int    `json:"preciseAmount"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj HighPrecisionMoneyDraft) MarshalJSON() ([]byte, error) {
 	type Alias HighPrecisionMoneyDraft
 	return json.Marshal(struct {

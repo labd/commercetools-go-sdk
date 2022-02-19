@@ -155,7 +155,8 @@ func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
 type AttributeBooleanType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeBooleanType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeBooleanType
 	return json.Marshal(struct {
@@ -167,7 +168,8 @@ func (obj AttributeBooleanType) MarshalJSON() ([]byte, error) {
 type AttributeDateTimeType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeDateTimeType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeDateTimeType
 	return json.Marshal(struct {
@@ -179,7 +181,8 @@ func (obj AttributeDateTimeType) MarshalJSON() ([]byte, error) {
 type AttributeDateType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeDateType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeDateType
 	return json.Marshal(struct {
@@ -192,7 +195,8 @@ type AttributeEnumType struct {
 	Values []AttributePlainEnumValue `json:"values"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeEnumType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeEnumType
 	return json.Marshal(struct {
@@ -209,7 +213,8 @@ type AttributePlainEnumValue struct {
 type AttributeLocalizableTextType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeLocalizableTextType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeLocalizableTextType
 	return json.Marshal(struct {
@@ -222,7 +227,8 @@ type AttributeLocalizedEnumType struct {
 	Values []AttributeLocalizedEnumValue `json:"values"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeLocalizedEnumType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeLocalizedEnumType
 	return json.Marshal(struct {
@@ -246,7 +252,8 @@ type AttributeLocalizedEnumValue struct {
 type AttributeMoneyType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeMoneyType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeMoneyType
 	return json.Marshal(struct {
@@ -260,7 +267,8 @@ type AttributeNestedType struct {
 	TypeReference ProductTypeKeyReference `json:"typeReference"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeNestedType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeNestedType
 	return json.Marshal(struct {
@@ -272,7 +280,8 @@ func (obj AttributeNestedType) MarshalJSON() ([]byte, error) {
 type AttributeNumberType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeNumberType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeNumberType
 	return json.Marshal(struct {
@@ -286,7 +295,8 @@ type AttributeReferenceType struct {
 	ReferenceTypeId ReferenceType `json:"referenceTypeId"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeReferenceType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeReferenceType
 	return json.Marshal(struct {
@@ -316,7 +326,8 @@ func (obj *AttributeSetType) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeSetType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeSetType
 	return json.Marshal(struct {
@@ -328,7 +339,8 @@ func (obj AttributeSetType) MarshalJSON() ([]byte, error) {
 type AttributeTextType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeTextType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeTextType
 	return json.Marshal(struct {
@@ -340,7 +352,8 @@ func (obj AttributeTextType) MarshalJSON() ([]byte, error) {
 type AttributeTimeType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AttributeTimeType) MarshalJSON() ([]byte, error) {
 	type Alias AttributeTimeType
 	return json.Marshal(struct {
@@ -376,5 +389,28 @@ type ProductTypeImport struct {
 	// Maps to `ProductType.description`.
 	Description string `json:"description"`
 	// The `attributes` of [ProductType](/../api/projects/productTypes#producttype).
-	Attributes []AttributeDefinition `json:"attributes,omitempty"`
+	Attributes []AttributeDefinition `json:"attributes"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTypeImport) MarshalJSON() ([]byte, error) {
+	type Alias ProductTypeImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["attributes"] == nil {
+		delete(target, "attributes")
+	}
+
+	return json.Marshal(target)
 }

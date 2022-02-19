@@ -46,7 +46,8 @@ type DeliveryCloudEventsFormat struct {
 	CloudEventsVersion string `json:"cloudEventsVersion"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryCloudEventsFormat) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryCloudEventsFormat
 	return json.Marshal(struct {
@@ -58,7 +59,8 @@ func (obj DeliveryCloudEventsFormat) MarshalJSON() ([]byte, error) {
 type DeliveryPlatformFormat struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryPlatformFormat) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryPlatformFormat
 	return json.Marshal(struct {
@@ -133,7 +135,8 @@ type AzureEventGridDestination struct {
 	AccessKey string `json:"accessKey"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AzureEventGridDestination) MarshalJSON() ([]byte, error) {
 	type Alias AzureEventGridDestination
 	return json.Marshal(struct {
@@ -146,7 +149,8 @@ type AzureServiceBusDestination struct {
 	ConnectionString string `json:"connectionString"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AzureServiceBusDestination) MarshalJSON() ([]byte, error) {
 	type Alias AzureServiceBusDestination
 	return json.Marshal(struct {
@@ -166,7 +170,8 @@ type EventBridgeDestination struct {
 	AccountId string `json:"accountId"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj EventBridgeDestination) MarshalJSON() ([]byte, error) {
 	type Alias EventBridgeDestination
 	return json.Marshal(struct {
@@ -180,7 +185,8 @@ type GoogleCloudPubSubDestination struct {
 	Topic     string `json:"topic"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj GoogleCloudPubSubDestination) MarshalJSON() ([]byte, error) {
 	type Alias GoogleCloudPubSubDestination
 	return json.Marshal(struct {
@@ -193,7 +199,8 @@ type IronMqDestination struct {
 	Uri string `json:"uri"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 	type Alias IronMqDestination
 	return json.Marshal(struct {
@@ -204,7 +211,30 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 
 type MessageSubscription struct {
 	ResourceTypeId string   `json:"resourceTypeId"`
-	Types          []string `json:"types,omitempty"`
+	Types          []string `json:"types"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MessageSubscription) MarshalJSON() ([]byte, error) {
+	type Alias MessageSubscription
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["types"] == nil {
+		delete(target, "types")
+	}
+
+	return json.Marshal(target)
 }
 
 type PayloadNotIncluded struct {
@@ -218,7 +248,8 @@ type SnsDestination struct {
 	TopicArn     string `json:"topicArn"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SnsDestination) MarshalJSON() ([]byte, error) {
 	type Alias SnsDestination
 	return json.Marshal(struct {
@@ -234,7 +265,8 @@ type SqsDestination struct {
 	Region       string `json:"region"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SqsDestination) MarshalJSON() ([]byte, error) {
 	type Alias SqsDestination
 	return json.Marshal(struct {
@@ -385,7 +417,8 @@ func (obj *MessageDelivery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj MessageDelivery) MarshalJSON() ([]byte, error) {
 	type Alias MessageDelivery
 	return json.Marshal(struct {
@@ -419,7 +452,8 @@ func (obj *ResourceCreatedDelivery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceCreatedDelivery) MarshalJSON() ([]byte, error) {
 	type Alias ResourceCreatedDelivery
 	return json.Marshal(struct {
@@ -454,7 +488,8 @@ func (obj *ResourceDeletedDelivery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceDeletedDelivery) MarshalJSON() ([]byte, error) {
 	type Alias ResourceDeletedDelivery
 	return json.Marshal(struct {
@@ -489,7 +524,8 @@ func (obj *ResourceUpdatedDelivery) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ResourceUpdatedDelivery) MarshalJSON() ([]byte, error) {
 	type Alias ResourceUpdatedDelivery
 	return json.Marshal(struct {
@@ -499,10 +535,10 @@ func (obj ResourceUpdatedDelivery) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionDraft struct {
-	Changes     []ChangeSubscription  `json:"changes,omitempty"`
+	Changes     []ChangeSubscription  `json:"changes"`
 	Destination Destination           `json:"destination"`
 	Key         *string               `json:"key,omitempty"`
-	Messages    []MessageSubscription `json:"messages,omitempty"`
+	Messages    []MessageSubscription `json:"messages"`
 	Format      DeliveryFormat        `json:"format,omitempty"`
 }
 
@@ -528,6 +564,33 @@ func (obj *SubscriptionDraft) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SubscriptionDraft) MarshalJSON() ([]byte, error) {
+	type Alias SubscriptionDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["changes"] == nil {
+		delete(target, "changes")
+	}
+
+	if target["messages"] == nil {
+		delete(target, "messages")
+	}
+
+	return json.Marshal(target)
 }
 
 type SubscriptionHealthStatus string
@@ -634,7 +697,8 @@ func (obj *SubscriptionChangeDestinationAction) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SubscriptionChangeDestinationAction) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionChangeDestinationAction
 	return json.Marshal(struct {
@@ -644,16 +708,31 @@ func (obj SubscriptionChangeDestinationAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetChangesAction struct {
-	Changes []ChangeSubscription `json:"changes,omitempty"`
+	Changes []ChangeSubscription `json:"changes"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SubscriptionSetChangesAction) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionSetChangesAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setChanges", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["changes"] == nil {
+		delete(target, "changes")
+	}
+
+	return json.Marshal(target)
 }
 
 type SubscriptionSetKeyAction struct {
@@ -661,7 +740,8 @@ type SubscriptionSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SubscriptionSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionSetKeyAction
 	return json.Marshal(struct {
@@ -671,14 +751,29 @@ func (obj SubscriptionSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetMessagesAction struct {
-	Messages []MessageSubscription `json:"messages,omitempty"`
+	Messages []MessageSubscription `json:"messages"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SubscriptionSetMessagesAction) MarshalJSON() ([]byte, error) {
 	type Alias SubscriptionSetMessagesAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMessages", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["messages"] == nil {
+		delete(target, "messages")
+	}
+
+	return json.Marshal(target)
 }

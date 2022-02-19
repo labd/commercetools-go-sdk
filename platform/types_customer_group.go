@@ -72,7 +72,8 @@ type CustomerGroupReference struct {
 	Obj *CustomerGroup `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupReference
 	return json.Marshal(struct {
@@ -92,7 +93,8 @@ type CustomerGroupResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupResourceIdentifier
 	return json.Marshal(struct {
@@ -169,7 +171,8 @@ type CustomerGroupChangeNameAction struct {
 	Name string `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupChangeNameAction
 	return json.Marshal(struct {
@@ -188,7 +191,8 @@ type CustomerGroupSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupSetCustomFieldAction
 	return json.Marshal(struct {
@@ -210,7 +214,8 @@ type CustomerGroupSetCustomTypeAction struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupSetCustomTypeAction
 	return json.Marshal(struct {
@@ -224,7 +229,8 @@ type CustomerGroupSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupSetKeyAction
 	return json.Marshal(struct {

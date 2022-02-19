@@ -1171,7 +1171,8 @@ func (obj *CategoryCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CategoryCreatedMessage
 	return json.Marshal(struct {
@@ -1214,7 +1215,8 @@ func (obj *CategorySlugChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySlugChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CategorySlugChangedMessage
 	return json.Marshal(struct {
@@ -1260,7 +1262,8 @@ func (obj *CustomLineItemStateTransitionMessage) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomLineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomLineItemStateTransitionMessage
 	return json.Marshal(struct {
@@ -1302,7 +1305,8 @@ func (obj *CustomerAddressAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerAddressAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerAddressAddedMessage
 	return json.Marshal(struct {
@@ -1344,7 +1348,8 @@ func (obj *CustomerAddressChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerAddressChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerAddressChangedMessage
 	return json.Marshal(struct {
@@ -1386,7 +1391,8 @@ func (obj *CustomerAddressRemovedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerAddressRemovedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerAddressRemovedMessage
 	return json.Marshal(struct {
@@ -1428,7 +1434,8 @@ func (obj *CustomerCompanyNameSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerCompanyNameSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerCompanyNameSetMessage
 	return json.Marshal(struct {
@@ -1470,7 +1477,8 @@ func (obj *CustomerCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerCreatedMessage
 	return json.Marshal(struct {
@@ -1512,7 +1520,8 @@ func (obj *CustomerDateOfBirthSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerDateOfBirthSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerDateOfBirthSetMessage
 	return json.Marshal(struct {
@@ -1553,7 +1562,8 @@ func (obj *CustomerDeletedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerDeletedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerDeletedMessage
 	return json.Marshal(struct {
@@ -1595,7 +1605,8 @@ func (obj *CustomerEmailChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerEmailChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerEmailChangedMessage
 	return json.Marshal(struct {
@@ -1636,7 +1647,8 @@ func (obj *CustomerEmailVerifiedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerEmailVerifiedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerEmailVerifiedMessage
 	return json.Marshal(struct {
@@ -1678,7 +1690,8 @@ func (obj *CustomerFirstNameSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerFirstNameSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerFirstNameSetMessage
 	return json.Marshal(struct {
@@ -1721,7 +1734,8 @@ func (obj *CustomerGroupSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupSetMessage
 	return json.Marshal(struct {
@@ -1763,7 +1777,8 @@ func (obj *CustomerLastNameSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerLastNameSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerLastNameSetMessage
 	return json.Marshal(struct {
@@ -1806,7 +1821,8 @@ func (obj *CustomerPasswordUpdatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerPasswordUpdatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerPasswordUpdatedMessage
 	return json.Marshal(struct {
@@ -1848,7 +1864,8 @@ func (obj *CustomerTitleSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerTitleSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias CustomerTitleSetMessage
 	return json.Marshal(struct {
@@ -1890,7 +1907,8 @@ func (obj *DeliveryAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryAddedMessage
 	return json.Marshal(struct {
@@ -1934,7 +1952,8 @@ func (obj *DeliveryAddressSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryAddressSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryAddressSetMessage
 	return json.Marshal(struct {
@@ -1978,7 +1997,8 @@ func (obj *DeliveryItemsUpdatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryItemsUpdatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryItemsUpdatedMessage
 	return json.Marshal(struct {
@@ -2020,7 +2040,8 @@ func (obj *DeliveryRemovedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryRemovedMessage) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryRemovedMessage
 	return json.Marshal(struct {
@@ -2062,7 +2083,8 @@ func (obj *InventoryEntryCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryCreatedMessage
 	return json.Marshal(struct {
@@ -2105,7 +2127,8 @@ func (obj *InventoryEntryDeletedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryDeletedMessage) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryDeletedMessage
 	return json.Marshal(struct {
@@ -2151,7 +2174,8 @@ func (obj *InventoryEntryQuantitySetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryQuantitySetMessage) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryQuantitySetMessage
 	return json.Marshal(struct {
@@ -2197,7 +2221,8 @@ func (obj *LineItemStateTransitionMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	type Alias LineItemStateTransitionMessage
 	return json.Marshal(struct {
@@ -2269,7 +2294,8 @@ func (obj *OrderBillingAddressSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderBillingAddressSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderBillingAddressSetMessage
 	return json.Marshal(struct {
@@ -2311,7 +2337,8 @@ func (obj *OrderCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderCreatedMessage
 	return json.Marshal(struct {
@@ -2355,7 +2382,8 @@ func (obj *OrderCustomLineItemDiscountSetMessage) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomLineItemDiscountSetMessage
 	return json.Marshal(struct {
@@ -2398,7 +2426,8 @@ func (obj *OrderCustomerEmailSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomerEmailSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomerEmailSetMessage
 	return json.Marshal(struct {
@@ -2443,7 +2472,8 @@ func (obj *OrderCustomerGroupSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomerGroupSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomerGroupSetMessage
 	return json.Marshal(struct {
@@ -2490,7 +2520,8 @@ func (obj *OrderCustomerSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomerSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomerSetMessage
 	return json.Marshal(struct {
@@ -2532,7 +2563,8 @@ func (obj *OrderDeletedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDeletedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderDeletedMessage
 	return json.Marshal(struct {
@@ -2574,7 +2606,8 @@ func (obj *OrderDiscountCodeAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDiscountCodeAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderDiscountCodeAddedMessage
 	return json.Marshal(struct {
@@ -2616,7 +2649,8 @@ func (obj *OrderDiscountCodeRemovedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDiscountCodeRemovedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderDiscountCodeRemovedMessage
 	return json.Marshal(struct {
@@ -2660,7 +2694,8 @@ func (obj *OrderDiscountCodeStateSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDiscountCodeStateSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderDiscountCodeStateSetMessage
 	return json.Marshal(struct {
@@ -2703,7 +2738,8 @@ func (obj *OrderEditAppliedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderEditAppliedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderEditAppliedMessage
 	return json.Marshal(struct {
@@ -2745,7 +2781,8 @@ func (obj *OrderImportedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderImportedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderImportedMessage
 	return json.Marshal(struct {
@@ -2788,7 +2825,8 @@ func (obj *OrderLineItemAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemAddedMessage
 	return json.Marshal(struct {
@@ -2833,7 +2871,8 @@ func (obj *OrderLineItemDiscountSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemDiscountSetMessage
 	return json.Marshal(struct {
@@ -2876,7 +2915,8 @@ func (obj *OrderLineItemDistributionChannelSetMessage) UnmarshalJSON(data []byte
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemDistributionChannelSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemDistributionChannelSetMessage
 	return json.Marshal(struct {
@@ -2932,7 +2972,8 @@ func (obj *OrderLineItemRemovedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemRemovedMessage
 	return json.Marshal(struct {
@@ -2975,7 +3016,8 @@ func (obj *OrderPaymentStateChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderPaymentStateChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderPaymentStateChangedMessage
 	return json.Marshal(struct {
@@ -3017,7 +3059,8 @@ func (obj *OrderReturnInfoAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderReturnInfoAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderReturnInfoAddedMessage
 	return json.Marshal(struct {
@@ -3039,7 +3082,7 @@ type OrderReturnInfoSetMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ReturnInfo                      []ReturnInfo             `json:"returnInfo,omitempty"`
+	ReturnInfo                      []ReturnInfo             `json:"returnInfo"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3059,13 +3102,28 @@ func (obj *OrderReturnInfoSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderReturnInfoSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderReturnInfoSetMessage
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ReturnInfoSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["returnInfo"] == nil {
+		delete(target, "returnInfo")
+	}
+
+	return json.Marshal(target)
 }
 
 type OrderReturnShipmentStateChangedMessage struct {
@@ -3102,7 +3160,8 @@ func (obj *OrderReturnShipmentStateChangedMessage) UnmarshalJSON(data []byte) er
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderReturnShipmentStateChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderReturnShipmentStateChangedMessage
 	return json.Marshal(struct {
@@ -3145,7 +3204,8 @@ func (obj *OrderShipmentStateChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShipmentStateChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderShipmentStateChangedMessage
 	return json.Marshal(struct {
@@ -3188,7 +3248,8 @@ func (obj *OrderShippingAddressSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShippingAddressSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderShippingAddressSetMessage
 	return json.Marshal(struct {
@@ -3231,7 +3292,8 @@ func (obj *OrderShippingInfoSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShippingInfoSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderShippingInfoSetMessage
 	return json.Marshal(struct {
@@ -3288,7 +3350,8 @@ func (obj *OrderShippingRateInputSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShippingRateInputSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderShippingRateInputSetMessage
 	return json.Marshal(struct {
@@ -3331,7 +3394,8 @@ func (obj *OrderStateChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderStateChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderStateChangedMessage
 	return json.Marshal(struct {
@@ -3375,7 +3439,8 @@ func (obj *OrderStateTransitionMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderStateTransitionMessage
 	return json.Marshal(struct {
@@ -3417,7 +3482,8 @@ func (obj *OrderStoreSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderStoreSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias OrderStoreSetMessage
 	return json.Marshal(struct {
@@ -3460,7 +3526,8 @@ func (obj *ParcelAddedToDeliveryMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelAddedToDeliveryMessage) MarshalJSON() ([]byte, error) {
 	type Alias ParcelAddedToDeliveryMessage
 	return json.Marshal(struct {
@@ -3505,7 +3572,8 @@ func (obj *ParcelItemsUpdatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelItemsUpdatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ParcelItemsUpdatedMessage
 	return json.Marshal(struct {
@@ -3549,7 +3617,8 @@ func (obj *ParcelMeasurementsUpdatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelMeasurementsUpdatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ParcelMeasurementsUpdatedMessage
 	return json.Marshal(struct {
@@ -3592,7 +3661,8 @@ func (obj *ParcelRemovedFromDeliveryMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelRemovedFromDeliveryMessage) MarshalJSON() ([]byte, error) {
 	type Alias ParcelRemovedFromDeliveryMessage
 	return json.Marshal(struct {
@@ -3636,7 +3706,8 @@ func (obj *ParcelTrackingDataUpdatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelTrackingDataUpdatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ParcelTrackingDataUpdatedMessage
 	return json.Marshal(struct {
@@ -3678,7 +3749,8 @@ func (obj *PaymentCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias PaymentCreatedMessage
 	return json.Marshal(struct {
@@ -3720,7 +3792,8 @@ func (obj *PaymentInteractionAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentInteractionAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias PaymentInteractionAddedMessage
 	return json.Marshal(struct {
@@ -3763,7 +3836,8 @@ func (obj *PaymentStatusInterfaceCodeSetMessage) UnmarshalJSON(data []byte) erro
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentStatusInterfaceCodeSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias PaymentStatusInterfaceCodeSetMessage
 	return json.Marshal(struct {
@@ -3806,7 +3880,8 @@ func (obj *PaymentStatusStateTransitionMessage) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentStatusStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	type Alias PaymentStatusStateTransitionMessage
 	return json.Marshal(struct {
@@ -3848,7 +3923,8 @@ func (obj *PaymentTransactionAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentTransactionAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias PaymentTransactionAddedMessage
 	return json.Marshal(struct {
@@ -3891,7 +3967,8 @@ func (obj *PaymentTransactionStateChangedMessage) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentTransactionStateChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias PaymentTransactionStateChangedMessage
 	return json.Marshal(struct {
@@ -3934,7 +4011,8 @@ func (obj *ProductAddedToCategoryMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductAddedToCategoryMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductAddedToCategoryMessage
 	return json.Marshal(struct {
@@ -3976,7 +4054,8 @@ func (obj *ProductCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductCreatedMessage
 	return json.Marshal(struct {
@@ -4019,7 +4098,8 @@ func (obj *ProductDeletedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductDeletedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductDeletedMessage
 	return json.Marshal(struct {
@@ -4063,7 +4143,8 @@ func (obj *ProductImageAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductImageAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductImageAddedMessage
 	return json.Marshal(struct {
@@ -4105,7 +4186,8 @@ func (obj *ProductPriceDiscountsSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductPriceDiscountsSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductPriceDiscountsSetMessage
 	return json.Marshal(struct {
@@ -4161,7 +4243,8 @@ func (obj *ProductPriceExternalDiscountSetMessage) UnmarshalJSON(data []byte) er
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductPriceExternalDiscountSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductPriceExternalDiscountSetMessage
 	return json.Marshal(struct {
@@ -4205,7 +4288,8 @@ func (obj *ProductPublishedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductPublishedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductPublishedMessage
 	return json.Marshal(struct {
@@ -4248,7 +4332,8 @@ func (obj *ProductRemovedFromCategoryMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductRemovedFromCategoryMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductRemovedFromCategoryMessage
 	return json.Marshal(struct {
@@ -4290,7 +4375,8 @@ func (obj *ProductRevertedStagedChangesMessage) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductRevertedStagedChangesMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductRevertedStagedChangesMessage
 	return json.Marshal(struct {
@@ -4333,7 +4419,8 @@ func (obj *ProductSlugChangedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductSlugChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductSlugChangedMessage
 	return json.Marshal(struct {
@@ -4376,7 +4463,8 @@ func (obj *ProductStateTransitionMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductStateTransitionMessage
 	return json.Marshal(struct {
@@ -4417,7 +4505,8 @@ func (obj *ProductUnpublishedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductUnpublishedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductUnpublishedMessage
 	return json.Marshal(struct {
@@ -4460,7 +4549,8 @@ func (obj *ProductVariantAddedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantAddedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantAddedMessage
 	return json.Marshal(struct {
@@ -4503,7 +4593,8 @@ func (obj *ProductVariantDeletedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantDeletedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantDeletedMessage
 	return json.Marshal(struct {
@@ -4545,7 +4636,8 @@ func (obj *ReviewCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ReviewCreatedMessage
 	return json.Marshal(struct {
@@ -4597,7 +4689,8 @@ func (obj *ReviewRatingSetMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewRatingSetMessage) MarshalJSON() ([]byte, error) {
 	type Alias ReviewRatingSetMessage
 	return json.Marshal(struct {
@@ -4651,7 +4744,8 @@ func (obj *ReviewStateTransitionMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	type Alias ReviewStateTransitionMessage
 	return json.Marshal(struct {
@@ -4697,7 +4791,8 @@ func (obj *StoreCreatedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias StoreCreatedMessage
 	return json.Marshal(struct {
@@ -4738,7 +4833,8 @@ func (obj *StoreDeletedMessage) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreDeletedMessage) MarshalJSON() ([]byte, error) {
 	type Alias StoreDeletedMessage
 	return json.Marshal(struct {
@@ -5314,7 +5410,8 @@ type CategoryCreatedMessagePayload struct {
 	Category Category `json:"category"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CategoryCreatedMessagePayload
 	return json.Marshal(struct {
@@ -5328,7 +5425,8 @@ type CategorySlugChangedMessagePayload struct {
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CategorySlugChangedMessagePayload
 	return json.Marshal(struct {
@@ -5345,7 +5443,8 @@ type CustomLineItemStateTransitionMessagePayload struct {
 	ToState          StateReference `json:"toState"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomLineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomLineItemStateTransitionMessagePayload
 	return json.Marshal(struct {
@@ -5358,7 +5457,8 @@ type CustomerAddressAddedMessagePayload struct {
 	Address Address `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerAddressAddedMessagePayload
 	return json.Marshal(struct {
@@ -5371,7 +5471,8 @@ type CustomerAddressChangedMessagePayload struct {
 	Address Address `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerAddressChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerAddressChangedMessagePayload
 	return json.Marshal(struct {
@@ -5384,7 +5485,8 @@ type CustomerAddressRemovedMessagePayload struct {
 	Address Address `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerAddressRemovedMessagePayload
 	return json.Marshal(struct {
@@ -5397,7 +5499,8 @@ type CustomerCompanyNameSetMessagePayload struct {
 	CompanyName *string `json:"companyName,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerCompanyNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerCompanyNameSetMessagePayload
 	return json.Marshal(struct {
@@ -5410,7 +5513,8 @@ type CustomerCreatedMessagePayload struct {
 	Customer Customer `json:"customer"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerCreatedMessagePayload
 	return json.Marshal(struct {
@@ -5423,7 +5527,8 @@ type CustomerDateOfBirthSetMessagePayload struct {
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerDateOfBirthSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerDateOfBirthSetMessagePayload
 	return json.Marshal(struct {
@@ -5435,7 +5540,8 @@ func (obj CustomerDateOfBirthSetMessagePayload) MarshalJSON() ([]byte, error) {
 type CustomerDeletedMessagePayload struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerDeletedMessagePayload
 	return json.Marshal(struct {
@@ -5448,7 +5554,8 @@ type CustomerEmailChangedMessagePayload struct {
 	Email string `json:"email"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerEmailChangedMessagePayload
 	return json.Marshal(struct {
@@ -5460,7 +5567,8 @@ func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
 type CustomerEmailVerifiedMessagePayload struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerEmailVerifiedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerEmailVerifiedMessagePayload
 	return json.Marshal(struct {
@@ -5473,7 +5581,8 @@ type CustomerFirstNameSetMessagePayload struct {
 	FirstName *string `json:"firstName,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerFirstNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerFirstNameSetMessagePayload
 	return json.Marshal(struct {
@@ -5487,7 +5596,8 @@ type CustomerGroupSetMessagePayload struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupSetMessagePayload
 	return json.Marshal(struct {
@@ -5500,7 +5610,8 @@ type CustomerLastNameSetMessagePayload struct {
 	LastName *string `json:"lastName,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerLastNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerLastNameSetMessagePayload
 	return json.Marshal(struct {
@@ -5514,7 +5625,8 @@ type CustomerPasswordUpdatedMessagePayload struct {
 	Reset bool `json:"reset"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerPasswordUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerPasswordUpdatedMessagePayload
 	return json.Marshal(struct {
@@ -5527,7 +5639,8 @@ type CustomerTitleSetMessagePayload struct {
 	Title *string `json:"title,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerTitleSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias CustomerTitleSetMessagePayload
 	return json.Marshal(struct {
@@ -5540,7 +5653,8 @@ type DeliveryAddedMessagePayload struct {
 	Delivery Delivery `json:"delivery"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryAddedMessagePayload
 	return json.Marshal(struct {
@@ -5555,7 +5669,8 @@ type DeliveryAddressSetMessagePayload struct {
 	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryAddressSetMessagePayload
 	return json.Marshal(struct {
@@ -5570,7 +5685,8 @@ type DeliveryItemsUpdatedMessagePayload struct {
 	OldItems   []DeliveryItem `json:"oldItems"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryItemsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryItemsUpdatedMessagePayload
 	return json.Marshal(struct {
@@ -5583,7 +5699,8 @@ type DeliveryRemovedMessagePayload struct {
 	Delivery Delivery `json:"delivery"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DeliveryRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias DeliveryRemovedMessagePayload
 	return json.Marshal(struct {
@@ -5596,7 +5713,8 @@ type InventoryEntryCreatedMessagePayload struct {
 	InventoryEntry InventoryEntry `json:"inventoryEntry"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryCreatedMessagePayload
 	return json.Marshal(struct {
@@ -5610,7 +5728,8 @@ type InventoryEntryDeletedMessagePayload struct {
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryDeletedMessagePayload
 	return json.Marshal(struct {
@@ -5627,7 +5746,8 @@ type InventoryEntryQuantitySetMessagePayload struct {
 	SupplyChannel        *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj InventoryEntryQuantitySetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias InventoryEntryQuantitySetMessagePayload
 	return json.Marshal(struct {
@@ -5644,7 +5764,8 @@ type LineItemStateTransitionMessagePayload struct {
 	ToState        StateReference `json:"toState"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias LineItemStateTransitionMessagePayload
 	return json.Marshal(struct {
@@ -5658,7 +5779,8 @@ type OrderBillingAddressSetMessagePayload struct {
 	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderBillingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderBillingAddressSetMessagePayload
 	return json.Marshal(struct {
@@ -5671,7 +5793,8 @@ type OrderCreatedMessagePayload struct {
 	Order Order `json:"order"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderCreatedMessagePayload
 	return json.Marshal(struct {
@@ -5686,7 +5809,8 @@ type OrderCustomLineItemDiscountSetMessagePayload struct {
 	TaxedPrice                 *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomLineItemDiscountSetMessagePayload
 	return json.Marshal(struct {
@@ -5700,7 +5824,8 @@ type OrderCustomerEmailSetMessagePayload struct {
 	OldEmail *string `json:"oldEmail,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomerEmailSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomerEmailSetMessagePayload
 	return json.Marshal(struct {
@@ -5716,7 +5841,8 @@ type OrderCustomerGroupSetMessagePayload struct {
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomerGroupSetMessagePayload
 	return json.Marshal(struct {
@@ -5734,7 +5860,8 @@ type OrderCustomerSetMessagePayload struct {
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderCustomerSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderCustomerSetMessagePayload
 	return json.Marshal(struct {
@@ -5747,7 +5874,8 @@ type OrderDeletedMessagePayload struct {
 	Order Order `json:"order"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderDeletedMessagePayload
 	return json.Marshal(struct {
@@ -5760,7 +5888,8 @@ type OrderDiscountCodeAddedMessagePayload struct {
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDiscountCodeAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderDiscountCodeAddedMessagePayload
 	return json.Marshal(struct {
@@ -5773,7 +5902,8 @@ type OrderDiscountCodeRemovedMessagePayload struct {
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDiscountCodeRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderDiscountCodeRemovedMessagePayload
 	return json.Marshal(struct {
@@ -5788,7 +5918,8 @@ type OrderDiscountCodeStateSetMessagePayload struct {
 	OldState     *DiscountCodeState    `json:"oldState,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderDiscountCodeStateSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderDiscountCodeStateSetMessagePayload
 	return json.Marshal(struct {
@@ -5802,7 +5933,8 @@ type OrderEditAppliedMessagePayload struct {
 	Result OrderEditApplied   `json:"result"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderEditAppliedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderEditAppliedMessagePayload
 	return json.Marshal(struct {
@@ -5815,7 +5947,8 @@ type OrderImportedMessagePayload struct {
 	Order Order `json:"order"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderImportedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderImportedMessagePayload
 	return json.Marshal(struct {
@@ -5829,7 +5962,8 @@ type OrderLineItemAddedMessagePayload struct {
 	AddedQuantity int      `json:"addedQuantity"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemAddedMessagePayload
 	return json.Marshal(struct {
@@ -5845,7 +5979,8 @@ type OrderLineItemDiscountSetMessagePayload struct {
 	TaxedPrice                 *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemDiscountSetMessagePayload
 	return json.Marshal(struct {
@@ -5859,7 +5994,8 @@ type OrderLineItemDistributionChannelSetMessagePayload struct {
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemDistributionChannelSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemDistributionChannelSetMessagePayload
 	return json.Marshal(struct {
@@ -5896,7 +6032,8 @@ func (obj *OrderLineItemRemovedMessagePayload) UnmarshalJSON(data []byte) error 
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderLineItemRemovedMessagePayload
 	return json.Marshal(struct {
@@ -5910,7 +6047,8 @@ type OrderPaymentStateChangedMessagePayload struct {
 	OldPaymentState *PaymentState `json:"oldPaymentState,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderPaymentStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderPaymentStateChangedMessagePayload
 	return json.Marshal(struct {
@@ -5923,7 +6061,8 @@ type OrderReturnInfoAddedMessagePayload struct {
 	ReturnInfo ReturnInfo `json:"returnInfo"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderReturnInfoAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderReturnInfoAddedMessagePayload
 	return json.Marshal(struct {
@@ -5933,16 +6072,31 @@ func (obj OrderReturnInfoAddedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderReturnInfoSetMessagePayload struct {
-	ReturnInfo []ReturnInfo `json:"returnInfo,omitempty"`
+	ReturnInfo []ReturnInfo `json:"returnInfo"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderReturnInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderReturnInfoSetMessagePayload
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ReturnInfoSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["returnInfo"] == nil {
+		delete(target, "returnInfo")
+	}
+
+	return json.Marshal(target)
 }
 
 type OrderReturnShipmentStateChangedMessagePayload struct {
@@ -5950,7 +6104,8 @@ type OrderReturnShipmentStateChangedMessagePayload struct {
 	ReturnShipmentState ReturnShipmentState `json:"returnShipmentState"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderReturnShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderReturnShipmentStateChangedMessagePayload
 	return json.Marshal(struct {
@@ -5964,7 +6119,8 @@ type OrderShipmentStateChangedMessagePayload struct {
 	OldShipmentState *ShipmentState `json:"oldShipmentState,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderShipmentStateChangedMessagePayload
 	return json.Marshal(struct {
@@ -5978,7 +6134,8 @@ type OrderShippingAddressSetMessagePayload struct {
 	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShippingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderShippingAddressSetMessagePayload
 	return json.Marshal(struct {
@@ -5992,7 +6149,8 @@ type OrderShippingInfoSetMessagePayload struct {
 	OldShippingInfo *ShippingInfo `json:"oldShippingInfo,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShippingInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderShippingInfoSetMessagePayload
 	return json.Marshal(struct {
@@ -6030,7 +6188,8 @@ func (obj *OrderShippingRateInputSetMessagePayload) UnmarshalJSON(data []byte) e
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderShippingRateInputSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderShippingRateInputSetMessagePayload
 	return json.Marshal(struct {
@@ -6044,7 +6203,8 @@ type OrderStateChangedMessagePayload struct {
 	OldOrderState OrderState `json:"oldOrderState"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderStateChangedMessagePayload
 	return json.Marshal(struct {
@@ -6059,7 +6219,8 @@ type OrderStateTransitionMessagePayload struct {
 	Force    bool            `json:"force"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderStateTransitionMessagePayload
 	return json.Marshal(struct {
@@ -6072,7 +6233,8 @@ type OrderStoreSetMessagePayload struct {
 	Store StoreKeyReference `json:"store"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias OrderStoreSetMessagePayload
 	return json.Marshal(struct {
@@ -6086,7 +6248,8 @@ type ParcelAddedToDeliveryMessagePayload struct {
 	Parcel   Parcel   `json:"parcel"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelAddedToDeliveryMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ParcelAddedToDeliveryMessagePayload
 	return json.Marshal(struct {
@@ -6102,7 +6265,8 @@ type ParcelItemsUpdatedMessagePayload struct {
 	OldItems   []DeliveryItem `json:"oldItems"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelItemsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ParcelItemsUpdatedMessagePayload
 	return json.Marshal(struct {
@@ -6117,7 +6281,8 @@ type ParcelMeasurementsUpdatedMessagePayload struct {
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelMeasurementsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ParcelMeasurementsUpdatedMessagePayload
 	return json.Marshal(struct {
@@ -6131,7 +6296,8 @@ type ParcelRemovedFromDeliveryMessagePayload struct {
 	Parcel     Parcel `json:"parcel"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelRemovedFromDeliveryMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ParcelRemovedFromDeliveryMessagePayload
 	return json.Marshal(struct {
@@ -6146,7 +6312,8 @@ type ParcelTrackingDataUpdatedMessagePayload struct {
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ParcelTrackingDataUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ParcelTrackingDataUpdatedMessagePayload
 	return json.Marshal(struct {
@@ -6159,7 +6326,8 @@ type PaymentCreatedMessagePayload struct {
 	Payment Payment `json:"payment"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias PaymentCreatedMessagePayload
 	return json.Marshal(struct {
@@ -6172,7 +6340,8 @@ type PaymentInteractionAddedMessagePayload struct {
 	Interaction CustomFields `json:"interaction"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentInteractionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias PaymentInteractionAddedMessagePayload
 	return json.Marshal(struct {
@@ -6186,7 +6355,8 @@ type PaymentStatusInterfaceCodeSetMessagePayload struct {
 	InterfaceCode string `json:"interfaceCode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentStatusInterfaceCodeSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias PaymentStatusInterfaceCodeSetMessagePayload
 	return json.Marshal(struct {
@@ -6200,7 +6370,8 @@ type PaymentStatusStateTransitionMessagePayload struct {
 	Force bool           `json:"force"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentStatusStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias PaymentStatusStateTransitionMessagePayload
 	return json.Marshal(struct {
@@ -6213,7 +6384,8 @@ type PaymentTransactionAddedMessagePayload struct {
 	Transaction Transaction `json:"transaction"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentTransactionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias PaymentTransactionAddedMessagePayload
 	return json.Marshal(struct {
@@ -6227,7 +6399,8 @@ type PaymentTransactionStateChangedMessagePayload struct {
 	State         TransactionState `json:"state"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentTransactionStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias PaymentTransactionStateChangedMessagePayload
 	return json.Marshal(struct {
@@ -6241,7 +6414,8 @@ type ProductAddedToCategoryMessagePayload struct {
 	Staged   bool              `json:"staged"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductAddedToCategoryMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductAddedToCategoryMessagePayload
 	return json.Marshal(struct {
@@ -6254,7 +6428,8 @@ type ProductCreatedMessagePayload struct {
 	ProductProjection ProductProjection `json:"productProjection"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductCreatedMessagePayload
 	return json.Marshal(struct {
@@ -6268,7 +6443,8 @@ type ProductDeletedMessagePayload struct {
 	CurrentProjection ProductProjection `json:"currentProjection"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductDeletedMessagePayload
 	return json.Marshal(struct {
@@ -6283,7 +6459,8 @@ type ProductImageAddedMessagePayload struct {
 	Staged    bool  `json:"staged"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductImageAddedMessagePayload
 	return json.Marshal(struct {
@@ -6296,7 +6473,8 @@ type ProductPriceDiscountsSetMessagePayload struct {
 	UpdatedPrices []ProductPriceDiscountsSetUpdatedPrice `json:"updatedPrices"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductPriceDiscountsSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductPriceDiscountsSetMessagePayload
 	return json.Marshal(struct {
@@ -6314,7 +6492,8 @@ type ProductPriceExternalDiscountSetMessagePayload struct {
 	Staged     bool             `json:"staged"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductPriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductPriceExternalDiscountSetMessagePayload
 	return json.Marshal(struct {
@@ -6329,7 +6508,8 @@ type ProductPublishedMessagePayload struct {
 	Scope             ProductPublishScope `json:"scope"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductPublishedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductPublishedMessagePayload
 	return json.Marshal(struct {
@@ -6343,7 +6523,8 @@ type ProductRemovedFromCategoryMessagePayload struct {
 	Staged   bool              `json:"staged"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductRemovedFromCategoryMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductRemovedFromCategoryMessagePayload
 	return json.Marshal(struct {
@@ -6356,7 +6537,8 @@ type ProductRevertedStagedChangesMessagePayload struct {
 	RemovedImageUrls []string `json:"removedImageUrls"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductRevertedStagedChangesMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductRevertedStagedChangesMessagePayload
 	return json.Marshal(struct {
@@ -6370,7 +6552,8 @@ type ProductSlugChangedMessagePayload struct {
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductSlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductSlugChangedMessagePayload
 	return json.Marshal(struct {
@@ -6384,7 +6567,8 @@ type ProductStateTransitionMessagePayload struct {
 	Force bool           `json:"force"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductStateTransitionMessagePayload
 	return json.Marshal(struct {
@@ -6396,7 +6580,8 @@ func (obj ProductStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductUnpublishedMessagePayload struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductUnpublishedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductUnpublishedMessagePayload
 	return json.Marshal(struct {
@@ -6410,7 +6595,8 @@ type ProductVariantAddedMessagePayload struct {
 	Staged  bool           `json:"staged"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantAddedMessagePayload
 	return json.Marshal(struct {
@@ -6424,7 +6610,8 @@ type ProductVariantDeletedMessagePayload struct {
 	RemovedImageUrls []string       `json:"removedImageUrls"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantDeletedMessagePayload
 	return json.Marshal(struct {
@@ -6437,7 +6624,8 @@ type ReviewCreatedMessagePayload struct {
 	Review Review `json:"review"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ReviewCreatedMessagePayload
 	return json.Marshal(struct {
@@ -6470,7 +6658,8 @@ func (obj *ReviewRatingSetMessagePayload) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewRatingSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ReviewRatingSetMessagePayload
 	return json.Marshal(struct {
@@ -6505,7 +6694,8 @@ func (obj *ReviewStateTransitionMessagePayload) UnmarshalJSON(data []byte) error
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ReviewStateTransitionMessagePayload
 	return json.Marshal(struct {
@@ -6518,7 +6708,8 @@ type ShoppingListStoreSetMessagePayload struct {
 	Store StoreKeyReference `json:"store"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShoppingListStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ShoppingListStoreSetMessagePayload
 	return json.Marshal(struct {
@@ -6535,7 +6726,8 @@ type StoreCreatedMessagePayload struct {
 	Custom               *CustomFields      `json:"custom,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias StoreCreatedMessagePayload
 	return json.Marshal(struct {
@@ -6547,7 +6739,8 @@ func (obj StoreCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 type StoreDeletedMessagePayload struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias StoreDeletedMessagePayload
 	return json.Marshal(struct {

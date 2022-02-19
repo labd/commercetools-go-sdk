@@ -110,7 +110,8 @@ type ChangeTargetCustomLineItemsChangeValue struct {
 	Predicate string `json:"predicate"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTargetCustomLineItemsChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTargetCustomLineItemsChangeValue
 	return json.Marshal(struct {
@@ -126,7 +127,8 @@ type ChangeTargetLineItemsChangeValue struct {
 	Predicate string `json:"predicate"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTargetLineItemsChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTargetLineItemsChangeValue
 	return json.Marshal(struct {
@@ -149,7 +151,8 @@ type ChangeTargetMultiBuyCustomLineItemsChangeValue struct {
 	SelectionMode SelectionMode `json:"selectionMode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTargetMultiBuyCustomLineItemsChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTargetMultiBuyCustomLineItemsChangeValue
 	return json.Marshal(struct {
@@ -172,7 +175,8 @@ type ChangeTargetMultiBuyLineItemsChangeValue struct {
 	SelectionMode SelectionMode `json:"selectionMode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTargetMultiBuyLineItemsChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTargetMultiBuyLineItemsChangeValue
 	return json.Marshal(struct {
@@ -187,7 +191,8 @@ func (obj ChangeTargetMultiBuyLineItemsChangeValue) MarshalJSON() ([]byte, error
 type ChangeTargetShippingChangeValue struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTargetShippingChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTargetShippingChangeValue
 	return json.Marshal(struct {
@@ -203,7 +208,8 @@ type ChangeValueAbsoluteChangeValue struct {
 	Money []Money `json:"money"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeValueAbsoluteChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeValueAbsoluteChangeValue
 	return json.Marshal(struct {
@@ -218,7 +224,8 @@ func (obj ChangeValueAbsoluteChangeValue) MarshalJSON() ([]byte, error) {
 type ChangeValueExternalChangeValue struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeValueExternalChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeValueExternalChangeValue
 	return json.Marshal(struct {
@@ -237,7 +244,8 @@ type ChangeValueGiftLineItemChangeValue struct {
 	DistributionChannel Reference  `json:"distributionChannel"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeValueGiftLineItemChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeValueGiftLineItemChangeValue
 	return json.Marshal(struct {
@@ -253,7 +261,8 @@ type ChangeValueRelativeChangeValue struct {
 	Permyriad int `json:"permyriad"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeValueRelativeChangeValue) MarshalJSON() ([]byte, error) {
 	type Alias ChangeValueRelativeChangeValue
 	return json.Marshal(struct {

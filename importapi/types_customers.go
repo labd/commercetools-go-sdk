@@ -1,6 +1,10 @@
 // Generated file, please do not change!!!
 package importapi
 
+import (
+	"encoding/json"
+)
+
 /**
 *	Different from Address in that `key` is required and `id` is not supported.
 *
@@ -48,7 +52,7 @@ type CustomerImport struct {
 	// Maps to `Customer.password`.
 	Password string `json:"password"`
 	// The References to the Stores with which the Customer is associated. If referenced Stores do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Stores are created.
-	Stores []StoreKeyReference `json:"stores,omitempty"`
+	Stores []StoreKeyReference `json:"stores"`
 	// Maps to `Customer.firstName`.
 	FirstName *string `json:"firstName,omitempty"`
 	// Maps to `Customer.lastName`.
@@ -77,13 +81,44 @@ type CustomerImport struct {
 	// The index of the address in the addresses array. The `defaultBillingAddressId` of the customer will be set to the ID of that address.
 	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
 	// The indices of the billing addresses in the addresses array. The `billingAddressIds` of the customer will be set to the IDs of that addresses.
-	BillingAddresses []int `json:"billingAddresses,omitempty"`
+	BillingAddresses []int `json:"billingAddresses"`
 	// The index of the address in the addresses array. The `defaultShippingAddressId` of the customer will be set to the ID of that address.
 	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
 	// The indices of the shipping addresses in the addresses array. The `shippingAddressIds` of the customer will be set to the IDs of that addresses.
-	ShippingAddresses []int `json:"shippingAddresses,omitempty"`
+	ShippingAddresses []int `json:"shippingAddresses"`
 	// Maps to `Customer.locale`.
 	Locale *string `json:"locale,omitempty"`
 	// The custom fields for this Customer.
 	Custom *Custom `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerImport) MarshalJSON() ([]byte, error) {
+	type Alias CustomerImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["stores"] == nil {
+		delete(target, "stores")
+	}
+
+	if target["billingAddresses"] == nil {
+		delete(target, "billingAddresses")
+	}
+
+	if target["shippingAddresses"] == nil {
+		delete(target, "shippingAddresses")
+	}
+
+	return json.Marshal(target)
 }

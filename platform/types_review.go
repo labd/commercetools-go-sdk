@@ -94,7 +94,8 @@ type ReviewReference struct {
 	Obj *Review `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewReference) MarshalJSON() ([]byte, error) {
 	type Alias ReviewReference
 	return json.Marshal(struct {
@@ -110,7 +111,8 @@ type ReviewResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias ReviewResourceIdentifier
 	return json.Marshal(struct {
@@ -225,7 +227,8 @@ type ReviewSetAuthorNameAction struct {
 	AuthorName *string `json:"authorName,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetAuthorNameAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetAuthorNameAction
 	return json.Marshal(struct {
@@ -239,7 +242,8 @@ type ReviewSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetCustomFieldAction
 	return json.Marshal(struct {
@@ -256,7 +260,8 @@ type ReviewSetCustomTypeAction struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetCustomTypeAction
 	return json.Marshal(struct {
@@ -271,7 +276,8 @@ type ReviewSetCustomerAction struct {
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetCustomerAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetCustomerAction
 	return json.Marshal(struct {
@@ -285,7 +291,8 @@ type ReviewSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetKeyAction
 	return json.Marshal(struct {
@@ -299,7 +306,8 @@ type ReviewSetLocaleAction struct {
 	Locale *string `json:"locale,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetLocaleAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetLocaleAction
 	return json.Marshal(struct {
@@ -314,7 +322,8 @@ type ReviewSetRatingAction struct {
 	Rating *int `json:"rating,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetRatingAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetRatingAction
 	return json.Marshal(struct {
@@ -330,7 +339,8 @@ type ReviewSetTargetAction struct {
 	Target interface{} `json:"target"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetTargetAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetTargetAction
 	return json.Marshal(struct {
@@ -344,7 +354,8 @@ type ReviewSetTextAction struct {
 	Text *string `json:"text,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetTextAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetTextAction
 	return json.Marshal(struct {
@@ -358,7 +369,8 @@ type ReviewSetTitleAction struct {
 	Title *string `json:"title,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewSetTitleAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewSetTitleAction
 	return json.Marshal(struct {
@@ -372,7 +384,8 @@ type ReviewTransitionStateAction struct {
 	Force *bool                   `json:"force,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReviewTransitionStateAction) MarshalJSON() ([]byte, error) {
 	type Alias ReviewTransitionStateAction
 	return json.Marshal(struct {

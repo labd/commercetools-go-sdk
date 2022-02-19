@@ -1578,7 +1578,8 @@ type AddAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias AddAddressChange
 	return json.Marshal(struct {
@@ -1594,7 +1595,8 @@ type AddAssetChange struct {
 	PreviousValue Asset  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddAssetChange) MarshalJSON() ([]byte, error) {
 	type Alias AddAssetChange
 	return json.Marshal(struct {
@@ -1609,7 +1611,8 @@ type AddAttributeDefinitionChange struct {
 	NextValue AttributeDefinition `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddAttributeDefinitionChange) MarshalJSON() ([]byte, error) {
 	type Alias AddAttributeDefinitionChange
 	return json.Marshal(struct {
@@ -1626,7 +1629,8 @@ type AddBillingAddressIdChange struct {
 	Address       Address  `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddBillingAddressIdChange) MarshalJSON() ([]byte, error) {
 	type Alias AddBillingAddressIdChange
 	return json.Marshal(struct {
@@ -1641,7 +1645,8 @@ type AddChannelRolesChange struct {
 	NextValue     []ChannelRole `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddChannelRolesChange) MarshalJSON() ([]byte, error) {
 	type Alias AddChannelRolesChange
 	return json.Marshal(struct {
@@ -1657,7 +1662,8 @@ type AddCustomLineItemChange struct {
 	PreviousValue CustomLineItem `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddCustomLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias AddCustomLineItemChange
 	return json.Marshal(struct {
@@ -1673,7 +1679,8 @@ type AddDeliveryChange struct {
 	PreviousValue DeliveryChangeValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddDeliveryChange) MarshalJSON() ([]byte, error) {
 	type Alias AddDeliveryChange
 	return json.Marshal(struct {
@@ -1688,7 +1695,8 @@ type AddDiscountCodeChange struct {
 	NextValue DiscountCodeInfo `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddDiscountCodeChange) MarshalJSON() ([]byte, error) {
 	type Alias AddDiscountCodeChange
 	return json.Marshal(struct {
@@ -1705,7 +1713,8 @@ type AddEnumValueChange struct {
 	NextValue EnumValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddEnumValueChange) MarshalJSON() ([]byte, error) {
 	type Alias AddEnumValueChange
 	return json.Marshal(struct {
@@ -1722,7 +1731,8 @@ type AddExternalImageChange struct {
 	NextValue     []Image `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddExternalImageChange) MarshalJSON() ([]byte, error) {
 	type Alias AddExternalImageChange
 	return json.Marshal(struct {
@@ -1737,7 +1747,8 @@ type AddFieldDefinitionChange struct {
 	NextValue FieldDefinition `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddFieldDefinitionChange) MarshalJSON() ([]byte, error) {
 	type Alias AddFieldDefinitionChange
 	return json.Marshal(struct {
@@ -1753,7 +1764,8 @@ type AddInterfaceInteractionChange struct {
 	NextValue CustomFieldExpandedValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddInterfaceInteractionChange) MarshalJSON() ([]byte, error) {
 	type Alias AddInterfaceInteractionChange
 	return json.Marshal(struct {
@@ -1769,7 +1781,8 @@ type AddItemShippingAddressesChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddItemShippingAddressesChange) MarshalJSON() ([]byte, error) {
 	type Alias AddItemShippingAddressesChange
 	return json.Marshal(struct {
@@ -1788,7 +1801,8 @@ type AddLocalizedEnumValueChange struct {
 	NextValue     LocalizedEnumValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddLocalizedEnumValueChange) MarshalJSON() ([]byte, error) {
 	type Alias AddLocalizedEnumValueChange
 	return json.Marshal(struct {
@@ -1806,7 +1820,8 @@ type AddLocationChange struct {
 	NextValue Location `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddLocationChange) MarshalJSON() ([]byte, error) {
 	type Alias AddLocationChange
 	return json.Marshal(struct {
@@ -1821,7 +1836,8 @@ type AddOrderLineItemChange struct {
 	NextValue     LineItem `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddOrderLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias AddOrderLineItemChange
 	return json.Marshal(struct {
@@ -1837,7 +1853,8 @@ type AddParcelToDeliveryChange struct {
 	NextValue  Parcel `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddParcelToDeliveryChange) MarshalJSON() ([]byte, error) {
 	type Alias AddParcelToDeliveryChange
 	return json.Marshal(struct {
@@ -1853,7 +1870,8 @@ type AddPaymentChange struct {
 	PreviousValue PaymentInfo `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddPaymentChange) MarshalJSON() ([]byte, error) {
 	type Alias AddPaymentChange
 	return json.Marshal(struct {
@@ -1870,7 +1888,8 @@ type AddPlainEnumValueChange struct {
 	NextValue     EnumValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddPlainEnumValueChange) MarshalJSON() ([]byte, error) {
 	type Alias AddPlainEnumValueChange
 	return json.Marshal(struct {
@@ -1887,7 +1906,8 @@ type AddPriceChange struct {
 	NextValue   Price  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias AddPriceChange
 	return json.Marshal(struct {
@@ -1904,7 +1924,8 @@ type AddPropertyChange struct {
 	NextValue interface{} `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddPropertyChange) MarshalJSON() ([]byte, error) {
 	type Alias AddPropertyChange
 	return json.Marshal(struct {
@@ -1919,7 +1940,8 @@ type AddReturnInfoChange struct {
 	NextValue ReturnInfo `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddReturnInfoChange) MarshalJSON() ([]byte, error) {
 	type Alias AddReturnInfoChange
 	return json.Marshal(struct {
@@ -1936,7 +1958,8 @@ type AddShippingAddressIdChange struct {
 	Address       Address  `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddShippingAddressIdChange) MarshalJSON() ([]byte, error) {
 	type Alias AddShippingAddressIdChange
 	return json.Marshal(struct {
@@ -1951,7 +1974,8 @@ type AddShoppingListLineItemChange struct {
 	NextValue     LineItem `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddShoppingListLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias AddShoppingListLineItemChange
 	return json.Marshal(struct {
@@ -1966,7 +1990,8 @@ type AddStateRolesChange struct {
 	NextValue     []StateRole `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddStateRolesChange) MarshalJSON() ([]byte, error) {
 	type Alias AddStateRolesChange
 	return json.Marshal(struct {
@@ -1982,7 +2007,8 @@ type AddTaxRateChange struct {
 	NextValue TaxRate `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddTaxRateChange) MarshalJSON() ([]byte, error) {
 	type Alias AddTaxRateChange
 	return json.Marshal(struct {
@@ -1996,7 +2022,8 @@ type AddTextLineItemChange struct {
 	NextValue TextLineItem `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddTextLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias AddTextLineItemChange
 	return json.Marshal(struct {
@@ -2013,7 +2040,8 @@ type AddToCategoryChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddToCategoryChange) MarshalJSON() ([]byte, error) {
 	type Alias AddToCategoryChange
 	return json.Marshal(struct {
@@ -2028,7 +2056,8 @@ type AddTransactionChange struct {
 	NextValue Transaction `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddTransactionChange) MarshalJSON() ([]byte, error) {
 	type Alias AddTransactionChange
 	return json.Marshal(struct {
@@ -2045,7 +2074,8 @@ type AddVariantChange struct {
 	NextValue     Variant `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj AddVariantChange) MarshalJSON() ([]byte, error) {
 	type Alias AddVariantChange
 	return json.Marshal(struct {
@@ -2061,7 +2091,8 @@ type ChangeAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAddressChange
 	return json.Marshal(struct {
@@ -2077,7 +2108,8 @@ type ChangeAmountAuthorizedChange struct {
 	NextValue     Money  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAmountAuthorizedChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAmountAuthorizedChange
 	return json.Marshal(struct {
@@ -2092,7 +2124,8 @@ type ChangeAmountPlannedChange struct {
 	NextValue     Money  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAmountPlannedChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAmountPlannedChange
 	return json.Marshal(struct {
@@ -2109,7 +2142,8 @@ type ChangeAssetNameChange struct {
 	PreviousValue LocalizedString  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAssetNameChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAssetNameChange
 	return json.Marshal(struct {
@@ -2124,7 +2158,8 @@ type ChangeAssetOrderChange struct {
 	NextValue     []LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAssetOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAssetOrderChange
 	return json.Marshal(struct {
@@ -2141,7 +2176,8 @@ type ChangeAttributeConstraintChange struct {
 	NextValue     AttributeConstraintEnum `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAttributeConstraintChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAttributeConstraintChange
 	return json.Marshal(struct {
@@ -2157,7 +2193,8 @@ type ChangeAttributeOrderByNameChange struct {
 	NextValue     []string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeAttributeOrderByNameChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeAttributeOrderByNameChange
 	return json.Marshal(struct {
@@ -2173,7 +2210,8 @@ type ChangeCartDiscountsChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeCartDiscountsChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeCartDiscountsChange
 	return json.Marshal(struct {
@@ -2189,7 +2227,8 @@ type ChangeCartPredicateChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeCartPredicateChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeCartPredicateChange
 	return json.Marshal(struct {
@@ -2207,7 +2246,8 @@ type ChangeCustomLineItemQuantityChange struct {
 	PreviousValue    int             `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeCustomLineItemQuantityChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeCustomLineItemQuantityChange
 	return json.Marshal(struct {
@@ -2223,7 +2263,8 @@ type ChangeDescriptionChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeDescriptionChange
 	return json.Marshal(struct {
@@ -2239,7 +2280,8 @@ type ChangeEmailChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeEmailChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeEmailChange
 	return json.Marshal(struct {
@@ -2259,7 +2301,8 @@ type ChangeEnumValueLabelChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeEnumValueLabelChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeEnumValueLabelChange
 	return json.Marshal(struct {
@@ -2277,7 +2320,8 @@ type ChangeEnumValueOrderChange struct {
 	PreviousValue []EnumValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeEnumValueOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeEnumValueOrderChange
 	return json.Marshal(struct {
@@ -2293,7 +2337,8 @@ type ChangeFieldDefinitionOrderChange struct {
 	NextValue     []FieldDefinitionOrderValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeFieldDefinitionOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeFieldDefinitionOrderChange
 	return json.Marshal(struct {
@@ -2309,7 +2354,8 @@ type ChangeGroupsChange struct {
 	NextValue     []string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeGroupsChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeGroupsChange
 	return json.Marshal(struct {
@@ -2325,7 +2371,8 @@ type ChangeInitialChange struct {
 	NextValue     bool   `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeInitialChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeInitialChange
 	return json.Marshal(struct {
@@ -2345,7 +2392,8 @@ type ChangeInputHintChange struct {
 	PreviousValue TextInputHint `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeInputHintChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeInputHintChange
 	return json.Marshal(struct {
@@ -2361,7 +2409,8 @@ type ChangeIsActiveChange struct {
 	NextValue     bool   `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeIsActiveChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeIsActiveChange
 	return json.Marshal(struct {
@@ -2379,7 +2428,8 @@ type ChangeIsSearchableChange struct {
 	PreviousValue bool   `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeIsSearchableChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeIsSearchableChange
 	return json.Marshal(struct {
@@ -2395,7 +2445,8 @@ type ChangeKeyChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeKeyChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeKeyChange
 	return json.Marshal(struct {
@@ -2415,7 +2466,8 @@ type ChangeLabelChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeLabelChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeLabelChange
 	return json.Marshal(struct {
@@ -2435,7 +2487,8 @@ type ChangeLineItemQuantityChange struct {
 	PreviousValue int `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeLineItemQuantityChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeLineItemQuantityChange
 	return json.Marshal(struct {
@@ -2451,7 +2504,8 @@ type ChangeLocalizedDescriptionChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeLocalizedDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeLocalizedDescriptionChange
 	return json.Marshal(struct {
@@ -2473,7 +2527,8 @@ type ChangeLocalizedEnumValueLabelChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeLocalizedEnumValueLabelChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeLocalizedEnumValueLabelChange
 	return json.Marshal(struct {
@@ -2493,7 +2548,8 @@ type ChangeLocalizedEnumValueOrderChange struct {
 	PreviousValue []LocalizedEnumValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeLocalizedEnumValueOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeLocalizedEnumValueOrderChange
 	return json.Marshal(struct {
@@ -2509,7 +2565,8 @@ type ChangeLocalizedNameChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeLocalizedNameChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeLocalizedNameChange
 	return json.Marshal(struct {
@@ -2526,7 +2583,8 @@ type ChangeMasterVariantChange struct {
 	NextValue     Variant `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeMasterVariantChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeMasterVariantChange
 	return json.Marshal(struct {
@@ -2542,7 +2600,8 @@ type ChangeNameChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeNameChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeNameChange
 	return json.Marshal(struct {
@@ -2558,7 +2617,8 @@ type ChangeOrderHintChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeOrderHintChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeOrderHintChange
 	return json.Marshal(struct {
@@ -2574,7 +2634,8 @@ type ChangeOrderStateChange struct {
 	PreviousValue OrderState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeOrderStateChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeOrderStateChange
 	return json.Marshal(struct {
@@ -2590,7 +2651,8 @@ type ChangeParentChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeParentChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeParentChange
 	return json.Marshal(struct {
@@ -2606,7 +2668,8 @@ type ChangePaymentStateChange struct {
 	PreviousValue PaymentState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangePaymentStateChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangePaymentStateChange
 	return json.Marshal(struct {
@@ -2626,7 +2689,8 @@ type ChangePlainEnumValueLabelChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangePlainEnumValueLabelChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangePlainEnumValueLabelChange
 	return json.Marshal(struct {
@@ -2644,7 +2708,8 @@ type ChangePlainEnumValueOrderChange struct {
 	PreviousValue []EnumValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangePlainEnumValueOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangePlainEnumValueOrderChange
 	return json.Marshal(struct {
@@ -2660,7 +2725,8 @@ type ChangePredicateChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangePredicateChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangePredicateChange
 	return json.Marshal(struct {
@@ -2678,7 +2744,8 @@ type ChangePriceChange struct {
 	NextValue     Price  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangePriceChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangePriceChange
 	return json.Marshal(struct {
@@ -2696,7 +2763,8 @@ type ChangeQuantityChange struct {
 	PreviousValue InventoryQuantityValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeQuantityChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeQuantityChange
 	return json.Marshal(struct {
@@ -2712,7 +2780,8 @@ type ChangeRequiresDiscountCodeChange struct {
 	NextValue     bool   `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeRequiresDiscountCodeChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeRequiresDiscountCodeChange
 	return json.Marshal(struct {
@@ -2728,7 +2797,8 @@ type ChangeReviewRatingStatisticsChange struct {
 	PreviousValue ReviewRatingStatistics `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeReviewRatingStatisticsChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeReviewRatingStatisticsChange
 	return json.Marshal(struct {
@@ -2744,7 +2814,8 @@ type ChangeShipmentStateChange struct {
 	PreviousValue ShipmentState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeShipmentStateChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeShipmentStateChange
 	return json.Marshal(struct {
@@ -2760,7 +2831,8 @@ type ChangeShoppingListLineItemQuantityChange struct {
 	NextValue     int                       `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeShoppingListLineItemQuantityChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeShoppingListLineItemQuantityChange
 	return json.Marshal(struct {
@@ -2775,7 +2847,8 @@ type ChangeShoppingListLineItemsOrderChange struct {
 	NextValue     []ShoppingListLineItemValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeShoppingListLineItemsOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeShoppingListLineItemsOrderChange
 	return json.Marshal(struct {
@@ -2791,7 +2864,8 @@ type ChangeSlugChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeSlugChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeSlugChange
 	return json.Marshal(struct {
@@ -2807,7 +2881,8 @@ type ChangeSortOrderChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeSortOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeSortOrderChange
 	return json.Marshal(struct {
@@ -2823,7 +2898,8 @@ type ChangeStackingModeChange struct {
 	PreviousValue StackingMode `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeStackingModeChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeStackingModeChange
 	return json.Marshal(struct {
@@ -2839,7 +2915,8 @@ type ChangeStateTypeChange struct {
 	NextValue     StateType `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeStateTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeStateTypeChange
 	return json.Marshal(struct {
@@ -2879,7 +2956,8 @@ func (obj *ChangeTargetChange) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTargetChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTargetChange
 	return json.Marshal(struct {
@@ -2895,7 +2973,8 @@ type ChangeTaxCalculationModeChange struct {
 	NextValue     TaxCalculationMode `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTaxCalculationModeChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTaxCalculationModeChange
 	return json.Marshal(struct {
@@ -2911,7 +2990,8 @@ type ChangeTaxModeChange struct {
 	NextValue     TaxMode `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTaxModeChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTaxModeChange
 	return json.Marshal(struct {
@@ -2927,7 +3007,8 @@ type ChangeTaxRoundingModeChange struct {
 	NextValue     RoundingMode `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTaxRoundingModeChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTaxRoundingModeChange
 	return json.Marshal(struct {
@@ -2944,7 +3025,8 @@ type ChangeTextLineItemNameChange struct {
 	PreviousValue LocalizedString   `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTextLineItemNameChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTextLineItemNameChange
 	return json.Marshal(struct {
@@ -2960,7 +3042,8 @@ type ChangeTextLineItemQuantityChange struct {
 	NextValue     int               `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTextLineItemQuantityChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTextLineItemQuantityChange
 	return json.Marshal(struct {
@@ -2975,7 +3058,8 @@ type ChangeTextLineItemsOrderChange struct {
 	NextValue     []TextLineItemValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTextLineItemsOrderChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTextLineItemsOrderChange
 	return json.Marshal(struct {
@@ -2992,7 +3076,8 @@ type ChangeTransactionInteractionIdChange struct {
 	PreviousValue string                 `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTransactionInteractionIdChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTransactionInteractionIdChange
 	return json.Marshal(struct {
@@ -3009,7 +3094,8 @@ type ChangeTransactionStateChange struct {
 	PreviousValue TransactionState       `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTransactionStateChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTransactionStateChange
 	return json.Marshal(struct {
@@ -3026,7 +3112,8 @@ type ChangeTransactionTimestampChange struct {
 	PreviousValue string                 `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeTransactionTimestampChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeTransactionTimestampChange
 	return json.Marshal(struct {
@@ -3066,7 +3153,8 @@ func (obj *ChangeValueChange) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChangeValueChange) MarshalJSON() ([]byte, error) {
 	type Alias ChangeValueChange
 	return json.Marshal(struct {
@@ -3083,7 +3171,8 @@ type MoveImageToPositionChange struct {
 	NextValue     []Image `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj MoveImageToPositionChange) MarshalJSON() ([]byte, error) {
 	type Alias MoveImageToPositionChange
 	return json.Marshal(struct {
@@ -3096,7 +3185,8 @@ type PublishChange struct {
 	Change string `json:"change"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PublishChange) MarshalJSON() ([]byte, error) {
 	type Alias PublishChange
 	return json.Marshal(struct {
@@ -3111,7 +3201,8 @@ type RemoveAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveAddressChange
 	return json.Marshal(struct {
@@ -3126,7 +3217,8 @@ type RemoveAssetChange struct {
 	PreviousValue Asset  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveAssetChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveAssetChange
 	return json.Marshal(struct {
@@ -3141,7 +3233,8 @@ type RemoveAttributeDefinitionChange struct {
 	PreviousValue AttributeDefinition `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveAttributeDefinitionChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveAttributeDefinitionChange
 	return json.Marshal(struct {
@@ -3158,7 +3251,8 @@ type RemoveBillingAddressIdChange struct {
 	Address       Address  `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveBillingAddressIdChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveBillingAddressIdChange
 	return json.Marshal(struct {
@@ -3173,7 +3267,8 @@ type RemoveChannelRolesChange struct {
 	NextValue     []ChannelRole `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveChannelRolesChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveChannelRolesChange
 	return json.Marshal(struct {
@@ -3189,7 +3284,8 @@ type RemoveCustomLineItemChange struct {
 	PreviousValue CustomLineItem `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveCustomLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveCustomLineItemChange
 	return json.Marshal(struct {
@@ -3204,7 +3300,8 @@ type RemoveDeliveryItemsChange struct {
 	PreviousValue Delivery `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveDeliveryItemsChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveDeliveryItemsChange
 	return json.Marshal(struct {
@@ -3219,7 +3316,8 @@ type RemoveDiscountCodeChange struct {
 	PreviousValue DiscountCodeInfo `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveDiscountCodeChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveDiscountCodeChange
 	return json.Marshal(struct {
@@ -3236,7 +3334,8 @@ type RemoveEnumValuesChange struct {
 	PreviousValue EnumValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveEnumValuesChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveEnumValuesChange
 	return json.Marshal(struct {
@@ -3251,7 +3350,8 @@ type RemoveFieldDefinitionChange struct {
 	PreviousValue FieldDefinition `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveFieldDefinitionChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveFieldDefinitionChange
 	return json.Marshal(struct {
@@ -3268,7 +3368,8 @@ type RemoveFromCategoryChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveFromCategoryChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveFromCategoryChange
 	return json.Marshal(struct {
@@ -3285,7 +3386,8 @@ type RemoveImageChange struct {
 	NextValue     []Image `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveImageChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveImageChange
 	return json.Marshal(struct {
@@ -3301,7 +3403,8 @@ type RemoveItemShippingAddressesChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveItemShippingAddressesChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveItemShippingAddressesChange
 	return json.Marshal(struct {
@@ -3318,7 +3421,8 @@ type RemoveLocalizedEnumValuesChange struct {
 	PreviousValue LocalizedEnumValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveLocalizedEnumValuesChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveLocalizedEnumValuesChange
 	return json.Marshal(struct {
@@ -3336,7 +3440,8 @@ type RemoveLocationChange struct {
 	NextValue Location `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveLocationChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveLocationChange
 	return json.Marshal(struct {
@@ -3351,7 +3456,8 @@ type RemoveOrderLineItemChange struct {
 	NextValue     LineItem `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveOrderLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveOrderLineItemChange
 	return json.Marshal(struct {
@@ -3367,7 +3473,8 @@ type RemoveParcelFromDeliveryChange struct {
 	PreviousValue Parcel `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveParcelFromDeliveryChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveParcelFromDeliveryChange
 	return json.Marshal(struct {
@@ -3383,7 +3490,8 @@ type RemovePaymentChange struct {
 	PreviousValue PaymentInfo `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemovePaymentChange) MarshalJSON() ([]byte, error) {
 	type Alias RemovePaymentChange
 	return json.Marshal(struct {
@@ -3401,7 +3509,8 @@ type RemovePriceChange struct {
 	NextValue     Price  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemovePriceChange) MarshalJSON() ([]byte, error) {
 	type Alias RemovePriceChange
 	return json.Marshal(struct {
@@ -3418,7 +3527,8 @@ type RemovePropertyChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemovePropertyChange) MarshalJSON() ([]byte, error) {
 	type Alias RemovePropertyChange
 	return json.Marshal(struct {
@@ -3435,7 +3545,8 @@ type RemoveShippingAddressIdChange struct {
 	Address       Address  `json:"address"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveShippingAddressIdChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveShippingAddressIdChange
 	return json.Marshal(struct {
@@ -3450,7 +3561,8 @@ type RemoveShoppingListLineItemChange struct {
 	NextValue     LineItem `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveShoppingListLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveShoppingListLineItemChange
 	return json.Marshal(struct {
@@ -3465,7 +3577,8 @@ type RemoveStateRolesChange struct {
 	NextValue     []StateRole `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveStateRolesChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveStateRolesChange
 	return json.Marshal(struct {
@@ -3483,7 +3596,8 @@ type RemoveTaxRateChange struct {
 	NextValue TaxRate `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveTaxRateChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveTaxRateChange
 	return json.Marshal(struct {
@@ -3498,7 +3612,8 @@ type RemoveTextLineItemChange struct {
 	NextValue     TextLineItem `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveTextLineItemChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveTextLineItemChange
 	return json.Marshal(struct {
@@ -3515,7 +3630,8 @@ type RemoveVariantChange struct {
 	NextValue     Variant `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj RemoveVariantChange) MarshalJSON() ([]byte, error) {
 	type Alias RemoveVariantChange
 	return json.Marshal(struct {
@@ -3531,7 +3647,8 @@ type SetAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAddressChange
 	return json.Marshal(struct {
@@ -3547,7 +3664,8 @@ type SetAnonymousIdChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAnonymousIdChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAnonymousIdChange
 	return json.Marshal(struct {
@@ -3563,7 +3681,8 @@ type SetApplicationVersionChange struct {
 	NextValue     int    `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetApplicationVersionChange) MarshalJSON() ([]byte, error) {
 	type Alias SetApplicationVersionChange
 	return json.Marshal(struct {
@@ -3582,7 +3701,8 @@ type SetAssetCustomFieldChange struct {
 	PreviousValue interface{}      `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAssetCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAssetCustomFieldChange
 	return json.Marshal(struct {
@@ -3599,7 +3719,8 @@ type SetAssetCustomTypeChange struct {
 	PreviousValue CustomFields     `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAssetCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAssetCustomTypeChange
 	return json.Marshal(struct {
@@ -3616,7 +3737,8 @@ type SetAssetDescriptionChange struct {
 	PreviousValue LocalizedString  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAssetDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAssetDescriptionChange
 	return json.Marshal(struct {
@@ -3633,7 +3755,8 @@ type SetAssetKeyChange struct {
 	PreviousValue string           `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAssetKeyChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAssetKeyChange
 	return json.Marshal(struct {
@@ -3650,7 +3773,8 @@ type SetAssetSourcesChange struct {
 	PreviousValue []AssetSource    `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAssetSourcesChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAssetSourcesChange
 	return json.Marshal(struct {
@@ -3667,7 +3791,8 @@ type SetAssetTagsChange struct {
 	PreviousValue []string         `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAssetTagsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAssetTagsChange
 	return json.Marshal(struct {
@@ -3684,7 +3809,8 @@ type SetAttributeChange struct {
 	NextValue     interface{} `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAttributeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAttributeChange
 	return json.Marshal(struct {
@@ -3700,7 +3826,8 @@ type SetAuthorNameChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetAuthorNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetAuthorNameChange
 	return json.Marshal(struct {
@@ -3716,7 +3843,8 @@ type SetBillingAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetBillingAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias SetBillingAddressChange
 	return json.Marshal(struct {
@@ -3732,7 +3860,8 @@ type SetCartPredicateChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCartPredicateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCartPredicateChange
 	return json.Marshal(struct {
@@ -3750,7 +3879,8 @@ type SetCategoryOrderHintChange struct {
 	NextValue     CategoryOrderHints `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCategoryOrderHintChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCategoryOrderHintChange
 	return json.Marshal(struct {
@@ -3765,7 +3895,8 @@ type SetChannelRolesChange struct {
 	NextValue     []ChannelRole `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetChannelRolesChange) MarshalJSON() ([]byte, error) {
 	type Alias SetChannelRolesChange
 	return json.Marshal(struct {
@@ -3781,7 +3912,8 @@ type SetCompanyNameChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCompanyNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCompanyNameChange
 	return json.Marshal(struct {
@@ -3799,7 +3931,8 @@ type SetCountryChange struct {
 	NextValue string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCountryChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCountryChange
 	return json.Marshal(struct {
@@ -3818,7 +3951,8 @@ type SetCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomFieldChange
 	return json.Marshal(struct {
@@ -3837,7 +3971,8 @@ type SetCustomLineItemCustomFieldChange struct {
 	PreviousValue    interface{}     `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemCustomFieldChange
 	return json.Marshal(struct {
@@ -3855,7 +3990,8 @@ type SetCustomLineItemCustomTypeChange struct {
 	PreviousValue    CustomFields    `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemCustomTypeChange
 	return json.Marshal(struct {
@@ -3873,7 +4009,8 @@ type SetCustomLineItemMoneyChange struct {
 	PreviousValue    Money           `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemMoneyChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemMoneyChange
 	return json.Marshal(struct {
@@ -3890,7 +4027,8 @@ type SetCustomLineItemShippingDetailsChange struct {
 	PreviousValue    ItemShippingDetails `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemShippingDetailsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemShippingDetailsChange
 	return json.Marshal(struct {
@@ -3911,7 +4049,8 @@ type SetCustomLineItemTaxAmountChange struct {
 	PreviousValue TaxRate `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemTaxAmountChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemTaxAmountChange
 	return json.Marshal(struct {
@@ -3929,7 +4068,8 @@ type SetCustomLineItemTaxCategoryChange struct {
 	PreviousValue    Reference       `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemTaxCategoryChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemTaxCategoryChange
 	return json.Marshal(struct {
@@ -3950,7 +4090,8 @@ type SetCustomLineItemTaxRateChange struct {
 	PreviousValue TaxRate `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemTaxRateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemTaxRateChange
 	return json.Marshal(struct {
@@ -3968,7 +4109,8 @@ type SetCustomLineItemTaxedPriceChange struct {
 	PreviousValue    Money           `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemTaxedPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemTaxedPriceChange
 	return json.Marshal(struct {
@@ -3986,7 +4128,8 @@ type SetCustomLineItemTotalPriceChange struct {
 	PreviousValue    Money           `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomLineItemTotalPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomLineItemTotalPriceChange
 	return json.Marshal(struct {
@@ -4002,7 +4145,8 @@ type SetCustomShippingMethodChange struct {
 	PreviousValue CustomShippingMethodChangeValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomShippingMethodChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomShippingMethodChange
 	return json.Marshal(struct {
@@ -4018,7 +4162,8 @@ type SetCustomTypeChange struct {
 	PreviousValue CustomFields `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomTypeChange
 	return json.Marshal(struct {
@@ -4034,7 +4179,8 @@ type SetCustomerChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomerChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomerChange
 	return json.Marshal(struct {
@@ -4050,7 +4196,8 @@ type SetCustomerEmailChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomerEmailChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomerEmailChange
 	return json.Marshal(struct {
@@ -4066,7 +4213,8 @@ type SetCustomerGroupChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomerGroupChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomerGroupChange
 	return json.Marshal(struct {
@@ -4082,7 +4230,8 @@ type SetCustomerIdChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomerIdChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomerIdChange
 	return json.Marshal(struct {
@@ -4098,7 +4247,8 @@ type SetCustomerNumberChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetCustomerNumberChange) MarshalJSON() ([]byte, error) {
 	type Alias SetCustomerNumberChange
 	return json.Marshal(struct {
@@ -4114,7 +4264,8 @@ type SetDateOfBirthChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDateOfBirthChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDateOfBirthChange
 	return json.Marshal(struct {
@@ -4130,7 +4281,8 @@ type SetDefaultBillingAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDefaultBillingAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDefaultBillingAddressChange
 	return json.Marshal(struct {
@@ -4146,7 +4298,8 @@ type SetDefaultShippingAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDefaultShippingAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDefaultShippingAddressChange
 	return json.Marshal(struct {
@@ -4162,7 +4315,8 @@ type SetDeleteDaysAfterLastModificationChange struct {
 	NextValue     int    `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDeleteDaysAfterLastModificationChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDeleteDaysAfterLastModificationChange
 	return json.Marshal(struct {
@@ -4179,7 +4333,8 @@ type SetDeliveryAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDeliveryAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDeliveryAddressChange
 	return json.Marshal(struct {
@@ -4196,7 +4351,8 @@ type SetDeliveryItemsChange struct {
 	PreviousValue []DeliveryItem `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDeliveryItemsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDeliveryItemsChange
 	return json.Marshal(struct {
@@ -4212,7 +4368,8 @@ type SetDescriptionChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDescriptionChange
 	return json.Marshal(struct {
@@ -4231,7 +4388,8 @@ type SetDiscountedPriceChange struct {
 	NextValue     Price  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDiscountedPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDiscountedPriceChange
 	return json.Marshal(struct {
@@ -4247,7 +4405,8 @@ type SetDistributionChannelsChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetDistributionChannelsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetDistributionChannelsChange
 	return json.Marshal(struct {
@@ -4263,7 +4422,8 @@ type SetExpectedDeliveryChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetExpectedDeliveryChange) MarshalJSON() ([]byte, error) {
 	type Alias SetExpectedDeliveryChange
 	return json.Marshal(struct {
@@ -4279,7 +4439,8 @@ type SetExternalIdChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetExternalIdChange) MarshalJSON() ([]byte, error) {
 	type Alias SetExternalIdChange
 	return json.Marshal(struct {
@@ -4295,7 +4456,8 @@ type SetFirstNameChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetFirstNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetFirstNameChange
 	return json.Marshal(struct {
@@ -4311,7 +4473,8 @@ type SetGeoLocationChange struct {
 	PreviousValue GeoLocation `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetGeoLocationChange) MarshalJSON() ([]byte, error) {
 	type Alias SetGeoLocationChange
 	return json.Marshal(struct {
@@ -4328,7 +4491,8 @@ type SetImageLabelChange struct {
 	NextValue     Image  `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetImageLabelChange) MarshalJSON() ([]byte, error) {
 	type Alias SetImageLabelChange
 	return json.Marshal(struct {
@@ -4346,7 +4510,8 @@ type SetInputTipChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetInputTipChange) MarshalJSON() ([]byte, error) {
 	type Alias SetInputTipChange
 	return json.Marshal(struct {
@@ -4362,7 +4527,8 @@ type SetInterfaceIdChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetInterfaceIdChange) MarshalJSON() ([]byte, error) {
 	type Alias SetInterfaceIdChange
 	return json.Marshal(struct {
@@ -4378,7 +4544,8 @@ type SetIsValidChange struct {
 	NextValue     bool   `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetIsValidChange) MarshalJSON() ([]byte, error) {
 	type Alias SetIsValidChange
 	return json.Marshal(struct {
@@ -4394,7 +4561,8 @@ type SetKeyChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetKeyChange) MarshalJSON() ([]byte, error) {
 	type Alias SetKeyChange
 	return json.Marshal(struct {
@@ -4410,7 +4578,8 @@ type SetLanguagesChange struct {
 	NextValue     []string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLanguagesChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLanguagesChange
 	return json.Marshal(struct {
@@ -4426,7 +4595,8 @@ type SetLastNameChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLastNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLastNameChange
 	return json.Marshal(struct {
@@ -4444,7 +4614,8 @@ type SetLineItemDiscountedPriceChange struct {
 	PreviousValue DiscountedLineItemPrice `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemDiscountedPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemDiscountedPriceChange
 	return json.Marshal(struct {
@@ -4462,7 +4633,8 @@ type SetLineItemDiscountedPricePerQuantityChange struct {
 	PreviousValue DiscountedLineItemPriceForQuantity `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemDiscountedPricePerQuantityChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemDiscountedPricePerQuantityChange
 	return json.Marshal(struct {
@@ -4480,7 +4652,8 @@ type SetLineItemDistributionChannelChange struct {
 	PreviousValue Reference       `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemDistributionChannelChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemDistributionChannelChange
 	return json.Marshal(struct {
@@ -4497,7 +4670,8 @@ type SetLineItemPriceChange struct {
 	PreviousValue Price           `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemPriceChange
 	return json.Marshal(struct {
@@ -4515,7 +4689,8 @@ type SetLineItemProductSlugChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemProductSlugChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemProductSlugChange
 	return json.Marshal(struct {
@@ -4532,7 +4707,8 @@ type SetLineItemShippingDetailsChange struct {
 	PreviousValue ItemShippingDetails `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemShippingDetailsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemShippingDetailsChange
 	return json.Marshal(struct {
@@ -4553,7 +4729,8 @@ type SetLineItemTaxAmountChange struct {
 	PreviousValue TaxRate `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemTaxAmountChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemTaxAmountChange
 	return json.Marshal(struct {
@@ -4574,7 +4751,8 @@ type SetLineItemTaxRateChange struct {
 	PreviousValue TaxRate `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemTaxRateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemTaxRateChange
 	return json.Marshal(struct {
@@ -4592,7 +4770,8 @@ type SetLineItemTaxedPriceChange struct {
 	PreviousValue TaxedItemPrice  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemTaxedPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemTaxedPriceChange
 	return json.Marshal(struct {
@@ -4609,7 +4788,8 @@ type SetLineItemTotalPriceChange struct {
 	PreviousValue Money           `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLineItemTotalPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLineItemTotalPriceChange
 	return json.Marshal(struct {
@@ -4627,7 +4807,8 @@ type SetLocaleChange struct {
 	NextValue string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLocaleChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLocaleChange
 	return json.Marshal(struct {
@@ -4643,7 +4824,8 @@ type SetLocalizedDescriptionChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetLocalizedDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias SetLocalizedDescriptionChange
 	return json.Marshal(struct {
@@ -4659,7 +4841,8 @@ type SetMaxApplicationsChange struct {
 	NextValue     int    `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMaxApplicationsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMaxApplicationsChange
 	return json.Marshal(struct {
@@ -4675,7 +4858,8 @@ type SetMaxApplicationsPerCustomerChange struct {
 	NextValue     int    `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMaxApplicationsPerCustomerChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMaxApplicationsPerCustomerChange
 	return json.Marshal(struct {
@@ -4691,7 +4875,8 @@ type SetMetaDescriptionChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMetaDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMetaDescriptionChange
 	return json.Marshal(struct {
@@ -4707,7 +4892,8 @@ type SetMetaKeywordsChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMetaKeywordsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMetaKeywordsChange
 	return json.Marshal(struct {
@@ -4723,7 +4909,8 @@ type SetMetaTitleChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMetaTitleChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMetaTitleChange
 	return json.Marshal(struct {
@@ -4739,7 +4926,8 @@ type SetMethodInfoInterfaceChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMethodInfoInterfaceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMethodInfoInterfaceChange
 	return json.Marshal(struct {
@@ -4755,7 +4943,8 @@ type SetMethodInfoMethodChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMethodInfoMethodChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMethodInfoMethodChange
 	return json.Marshal(struct {
@@ -4771,7 +4960,8 @@ type SetMethodInfoNameChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMethodInfoNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMethodInfoNameChange
 	return json.Marshal(struct {
@@ -4787,7 +4977,8 @@ type SetMiddleNameChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetMiddleNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetMiddleNameChange
 	return json.Marshal(struct {
@@ -4803,7 +4994,8 @@ type SetNameChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetNameChange) MarshalJSON() ([]byte, error) {
 	type Alias SetNameChange
 	return json.Marshal(struct {
@@ -4823,7 +5015,8 @@ type SetOrderLineItemCustomFieldChange struct {
 	PreviousValue interface{}     `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetOrderLineItemCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetOrderLineItemCustomFieldChange
 	return json.Marshal(struct {
@@ -4841,7 +5034,8 @@ type SetOrderLineItemCustomTypeChange struct {
 	PreviousValue CustomFields    `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetOrderLineItemCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetOrderLineItemCustomTypeChange
 	return json.Marshal(struct {
@@ -4857,7 +5051,8 @@ type SetOrderNumberChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetOrderNumberChange) MarshalJSON() ([]byte, error) {
 	type Alias SetOrderNumberChange
 	return json.Marshal(struct {
@@ -4874,7 +5069,8 @@ type SetOrderTaxedPriceChange struct {
 	PreviousValue TaxedItemPrice `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetOrderTaxedPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetOrderTaxedPriceChange
 	return json.Marshal(struct {
@@ -4890,7 +5086,8 @@ type SetOrderTotalPriceChange struct {
 	PreviousValue Money  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetOrderTotalPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetOrderTotalPriceChange
 	return json.Marshal(struct {
@@ -4907,7 +5104,8 @@ type SetOrderTotalTaxChange struct {
 	PreviousValue Money   `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetOrderTotalTaxChange) MarshalJSON() ([]byte, error) {
 	type Alias SetOrderTotalTaxChange
 	return json.Marshal(struct {
@@ -4924,7 +5122,8 @@ type SetParcelItemsChange struct {
 	PreviousValue []DeliveryItem    `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetParcelItemsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetParcelItemsChange
 	return json.Marshal(struct {
@@ -4941,7 +5140,8 @@ type SetParcelMeasurementsChange struct {
 	PreviousValue ParcelMeasurements `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetParcelMeasurementsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetParcelMeasurementsChange
 	return json.Marshal(struct {
@@ -4958,7 +5158,8 @@ type SetParcelTrackingDataChange struct {
 	PreviousValue TrackingData      `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetParcelTrackingDataChange) MarshalJSON() ([]byte, error) {
 	type Alias SetParcelTrackingDataChange
 	return json.Marshal(struct {
@@ -4976,7 +5177,8 @@ type SetPricesChange struct {
 	NextValue     []Price `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetPricesChange) MarshalJSON() ([]byte, error) {
 	type Alias SetPricesChange
 	return json.Marshal(struct {
@@ -4993,7 +5195,8 @@ type SetProductPriceCustomFieldChange struct {
 	NextValue     CustomFields `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetProductPriceCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetProductPriceCustomFieldChange
 	return json.Marshal(struct {
@@ -5010,7 +5213,8 @@ type SetProductPriceCustomTypeChange struct {
 	NextValue     CustomFields `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetProductPriceCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetProductPriceCustomTypeChange
 	return json.Marshal(struct {
@@ -5027,7 +5231,8 @@ type SetProductVariantKeyChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetProductVariantKeyChange) MarshalJSON() ([]byte, error) {
 	type Alias SetProductVariantKeyChange
 	return json.Marshal(struct {
@@ -5045,7 +5250,8 @@ type SetPropertyChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetPropertyChange) MarshalJSON() ([]byte, error) {
 	type Alias SetPropertyChange
 	return json.Marshal(struct {
@@ -5061,7 +5267,8 @@ type SetRatingChange struct {
 	NextValue     int    `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetRatingChange) MarshalJSON() ([]byte, error) {
 	type Alias SetRatingChange
 	return json.Marshal(struct {
@@ -5077,7 +5284,8 @@ type SetReservationsChange struct {
 	PreviousValue []Reservation `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetReservationsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetReservationsChange
 	return json.Marshal(struct {
@@ -5093,7 +5301,8 @@ type SetRestockableInDaysChange struct {
 	NextValue     int    `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetRestockableInDaysChange) MarshalJSON() ([]byte, error) {
 	type Alias SetRestockableInDaysChange
 	return json.Marshal(struct {
@@ -5109,7 +5318,8 @@ type SetReturnPaymentStateChange struct {
 	PreviousValue ReturnPaymentState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetReturnPaymentStateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetReturnPaymentStateChange
 	return json.Marshal(struct {
@@ -5125,7 +5335,8 @@ type SetReturnShipmentStateChange struct {
 	PreviousValue ReturnShipmentState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetReturnShipmentStateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetReturnShipmentStateChange
 	return json.Marshal(struct {
@@ -5141,7 +5352,8 @@ type SetSalutationChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetSalutationChange) MarshalJSON() ([]byte, error) {
 	type Alias SetSalutationChange
 	return json.Marshal(struct {
@@ -5158,7 +5370,8 @@ type SetSearchKeywordsChange struct {
 	NextValue     SearchKeywords `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetSearchKeywordsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetSearchKeywordsChange
 	return json.Marshal(struct {
@@ -5174,7 +5387,8 @@ type SetShippingAddressChange struct {
 	PreviousValue Address `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingAddressChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingAddressChange
 	return json.Marshal(struct {
@@ -5190,7 +5404,8 @@ type SetShippingInfoPriceChange struct {
 	PreviousValue Money  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingInfoPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingInfoPriceChange
 	return json.Marshal(struct {
@@ -5206,7 +5421,8 @@ type SetShippingInfoTaxedPriceChange struct {
 	PreviousValue TaxedPrice `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingInfoTaxedPriceChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingInfoTaxedPriceChange
 	return json.Marshal(struct {
@@ -5222,7 +5438,8 @@ type SetShippingMethodChange struct {
 	PreviousValue ShippingMethodChangeValue `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingMethodChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingMethodChange
 	return json.Marshal(struct {
@@ -5239,7 +5456,8 @@ type SetShippingMethodTaxAmountChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingMethodTaxAmountChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingMethodTaxAmountChange
 	return json.Marshal(struct {
@@ -5258,7 +5476,8 @@ type SetShippingMethodTaxRateChange struct {
 	PreviousValue TaxRate `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingMethodTaxRateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingMethodTaxRateChange
 	return json.Marshal(struct {
@@ -5274,7 +5493,8 @@ type SetShippingRateChange struct {
 	PreviousValue Money  `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingRateChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingRateChange
 	return json.Marshal(struct {
@@ -5290,7 +5510,8 @@ type SetShippingRateInputChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShippingRateInputChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShippingRateInputChange
 	return json.Marshal(struct {
@@ -5309,7 +5530,8 @@ type SetShoppingListLineItemCustomFieldChange struct {
 	PreviousValue interface{}               `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShoppingListLineItemCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShoppingListLineItemCustomFieldChange
 	return json.Marshal(struct {
@@ -5326,7 +5548,8 @@ type SetShoppingListLineItemCustomTypeChange struct {
 	PreviousValue CustomFields              `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetShoppingListLineItemCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetShoppingListLineItemCustomTypeChange
 	return json.Marshal(struct {
@@ -5343,7 +5566,8 @@ type SetSkuChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetSkuChange) MarshalJSON() ([]byte, error) {
 	type Alias SetSkuChange
 	return json.Marshal(struct {
@@ -5359,7 +5583,8 @@ type SetSlugChange struct {
 	NextValue     LocalizedString `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetSlugChange) MarshalJSON() ([]byte, error) {
 	type Alias SetSlugChange
 	return json.Marshal(struct {
@@ -5374,7 +5599,8 @@ type SetStateRolesChange struct {
 	NextValue     []StateRole `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetStateRolesChange) MarshalJSON() ([]byte, error) {
 	type Alias SetStateRolesChange
 	return json.Marshal(struct {
@@ -5390,7 +5616,8 @@ type SetStatusInterfaceCodeChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetStatusInterfaceCodeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetStatusInterfaceCodeChange
 	return json.Marshal(struct {
@@ -5406,7 +5633,8 @@ type SetStatusInterfaceTextChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetStatusInterfaceTextChange) MarshalJSON() ([]byte, error) {
 	type Alias SetStatusInterfaceTextChange
 	return json.Marshal(struct {
@@ -5422,7 +5650,8 @@ type SetStoreChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetStoreChange) MarshalJSON() ([]byte, error) {
 	type Alias SetStoreChange
 	return json.Marshal(struct {
@@ -5438,7 +5667,8 @@ type SetStoresChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetStoresChange) MarshalJSON() ([]byte, error) {
 	type Alias SetStoresChange
 	return json.Marshal(struct {
@@ -5454,7 +5684,8 @@ type SetSupplyChannelChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetSupplyChannelChange) MarshalJSON() ([]byte, error) {
 	type Alias SetSupplyChannelChange
 	return json.Marshal(struct {
@@ -5470,7 +5701,8 @@ type SetSupplyChannelsChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetSupplyChannelsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetSupplyChannelsChange
 	return json.Marshal(struct {
@@ -5486,7 +5718,8 @@ type SetTargetChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTargetChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTargetChange
 	return json.Marshal(struct {
@@ -5502,7 +5735,8 @@ type SetTaxCategoryChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTaxCategoryChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTaxCategoryChange
 	return json.Marshal(struct {
@@ -5518,7 +5752,8 @@ type SetTextChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTextChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTextChange
 	return json.Marshal(struct {
@@ -5537,7 +5772,8 @@ type SetTextLineItemCustomFieldChange struct {
 	PreviousValue interface{}       `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTextLineItemCustomFieldChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTextLineItemCustomFieldChange
 	return json.Marshal(struct {
@@ -5554,7 +5790,8 @@ type SetTextLineItemCustomTypeChange struct {
 	PreviousValue CustomFields      `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTextLineItemCustomTypeChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTextLineItemCustomTypeChange
 	return json.Marshal(struct {
@@ -5570,7 +5807,8 @@ type SetTextLineItemDescriptionChange struct {
 	NextValue     LocalizedString   `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTextLineItemDescriptionChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTextLineItemDescriptionChange
 	return json.Marshal(struct {
@@ -5586,7 +5824,8 @@ type SetTitleChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTitleChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTitleChange
 	return json.Marshal(struct {
@@ -5602,7 +5841,8 @@ type SetTransitionsChange struct {
 	NextValue     []Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetTransitionsChange) MarshalJSON() ([]byte, error) {
 	type Alias SetTransitionsChange
 	return json.Marshal(struct {
@@ -5619,7 +5859,8 @@ type SetValidFromAndUntilChange struct {
 	NextValue ValidFromAndUntilValue `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetValidFromAndUntilChange) MarshalJSON() ([]byte, error) {
 	type Alias SetValidFromAndUntilChange
 	return json.Marshal(struct {
@@ -5635,7 +5876,8 @@ type SetValidFromChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetValidFromChange) MarshalJSON() ([]byte, error) {
 	type Alias SetValidFromChange
 	return json.Marshal(struct {
@@ -5651,7 +5893,8 @@ type SetValidUntilChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetValidUntilChange) MarshalJSON() ([]byte, error) {
 	type Alias SetValidUntilChange
 	return json.Marshal(struct {
@@ -5667,7 +5910,8 @@ type SetValueChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetValueChange) MarshalJSON() ([]byte, error) {
 	type Alias SetValueChange
 	return json.Marshal(struct {
@@ -5685,7 +5929,8 @@ type SetVariantAvailabilityChange struct {
 	NextValue     ProductVariantAvailability `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetVariantAvailabilityChange) MarshalJSON() ([]byte, error) {
 	type Alias SetVariantAvailabilityChange
 	return json.Marshal(struct {
@@ -5701,7 +5946,8 @@ type SetVatIdChange struct {
 	NextValue     string `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj SetVatIdChange) MarshalJSON() ([]byte, error) {
 	type Alias SetVatIdChange
 	return json.Marshal(struct {
@@ -5719,7 +5965,8 @@ type TransitionCustomLineItemStateChange struct {
 	PreviousValue []ItemState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TransitionCustomLineItemStateChange) MarshalJSON() ([]byte, error) {
 	type Alias TransitionCustomLineItemStateChange
 	return json.Marshal(struct {
@@ -5737,7 +5984,8 @@ type TransitionLineItemStateChange struct {
 	PreviousValue []ItemState `json:"previousValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TransitionLineItemStateChange) MarshalJSON() ([]byte, error) {
 	type Alias TransitionLineItemStateChange
 	return json.Marshal(struct {
@@ -5753,7 +6001,8 @@ type TransitionStateChange struct {
 	NextValue     Reference `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TransitionStateChange) MarshalJSON() ([]byte, error) {
 	type Alias TransitionStateChange
 	return json.Marshal(struct {
@@ -5768,7 +6017,8 @@ type UnknownChange struct {
 	NextValue     interface{} `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj UnknownChange) MarshalJSON() ([]byte, error) {
 	type Alias UnknownChange
 	return json.Marshal(struct {
@@ -5781,7 +6031,8 @@ type UnpublishChange struct {
 	Change string `json:"change"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj UnpublishChange) MarshalJSON() ([]byte, error) {
 	type Alias UnpublishChange
 	return json.Marshal(struct {
@@ -5797,7 +6048,8 @@ type UpdateSyncInfoChange struct {
 	NextValue SyncInfo `json:"nextValue"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj UpdateSyncInfoChange) MarshalJSON() ([]byte, error) {
 	type Alias UpdateSyncInfoChange
 	return json.Marshal(struct {
@@ -5810,7 +6062,8 @@ type VerifyEmailChange struct {
 	Change string `json:"change"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj VerifyEmailChange) MarshalJSON() ([]byte, error) {
 	type Alias VerifyEmailChange
 	return json.Marshal(struct {

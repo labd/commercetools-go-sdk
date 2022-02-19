@@ -35,9 +35,32 @@ type Category struct {
 	MetaKeywords    *LocalizedString `json:"metaKeywords,omitempty"`
 	Custom          *CustomFields    `json:"custom,omitempty"`
 	// Can be used to store images, icons or movies related to this category.
-	Assets []Asset `json:"assets,omitempty"`
+	Assets []Asset `json:"assets"`
 	// User-specific unique identifier for the category.
 	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Category) MarshalJSON() ([]byte, error) {
+	type Alias Category
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["assets"] == nil {
+		delete(target, "assets")
+	}
+
+	return json.Marshal(target)
 }
 
 type CategoryDraft struct {
@@ -60,10 +83,33 @@ type CategoryDraft struct {
 	MetaKeywords    *LocalizedString `json:"metaKeywords,omitempty"`
 	// The custom fields.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	Assets []AssetDraft       `json:"assets,omitempty"`
+	Assets []AssetDraft       `json:"assets"`
 	// User-defined unique identifier for the category.
 	// Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
 	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategoryDraft) MarshalJSON() ([]byte, error) {
+	type Alias CategoryDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["assets"] == nil {
+		delete(target, "assets")
+	}
+
+	return json.Marshal(target)
 }
 
 type CategoryPagedQueryResponse struct {
@@ -80,7 +126,8 @@ type CategoryReference struct {
 	Obj *Category `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryReference) MarshalJSON() ([]byte, error) {
 	type Alias CategoryReference
 	return json.Marshal(struct {
@@ -96,7 +143,8 @@ type CategoryResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias CategoryResourceIdentifier
 	return json.Marshal(struct {
@@ -278,7 +326,8 @@ type CategoryAddAssetAction struct {
 	Position *int `json:"position,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryAddAssetAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryAddAssetAction
 	return json.Marshal(struct {
@@ -293,7 +342,8 @@ type CategoryChangeAssetNameAction struct {
 	Name     LocalizedString `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryChangeAssetNameAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryChangeAssetNameAction
 	return json.Marshal(struct {
@@ -306,7 +356,8 @@ type CategoryChangeAssetOrderAction struct {
 	AssetOrder []string `json:"assetOrder"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryChangeAssetOrderAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryChangeAssetOrderAction
 	return json.Marshal(struct {
@@ -319,7 +370,8 @@ type CategoryChangeNameAction struct {
 	Name LocalizedString `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryChangeNameAction
 	return json.Marshal(struct {
@@ -332,7 +384,8 @@ type CategoryChangeOrderHintAction struct {
 	OrderHint string `json:"orderHint"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryChangeOrderHintAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryChangeOrderHintAction
 	return json.Marshal(struct {
@@ -345,7 +398,8 @@ type CategoryChangeParentAction struct {
 	Parent CategoryResourceIdentifier `json:"parent"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryChangeParentAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryChangeParentAction
 	return json.Marshal(struct {
@@ -360,7 +414,8 @@ type CategoryChangeSlugAction struct {
 	Slug LocalizedString `json:"slug"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryChangeSlugAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryChangeSlugAction
 	return json.Marshal(struct {
@@ -374,7 +429,8 @@ type CategoryRemoveAssetAction struct {
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryRemoveAssetAction) MarshalJSON() ([]byte, error) {
 	type Alias CategoryRemoveAssetAction
 	return json.Marshal(struct {
@@ -390,7 +446,8 @@ type CategorySetAssetCustomFieldAction struct {
 	Value    interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetAssetCustomFieldAction
 	return json.Marshal(struct {
@@ -409,7 +466,8 @@ type CategorySetAssetCustomTypeAction struct {
 	Fields *interface{} `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetAssetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetAssetCustomTypeAction
 	return json.Marshal(struct {
@@ -424,7 +482,8 @@ type CategorySetAssetDescriptionAction struct {
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetAssetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetAssetDescriptionAction
 	return json.Marshal(struct {
@@ -440,7 +499,8 @@ type CategorySetAssetKeyAction struct {
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetAssetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetAssetKeyAction
 	return json.Marshal(struct {
@@ -455,7 +515,8 @@ type CategorySetAssetSourcesAction struct {
 	Sources  []AssetSource `json:"sources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetAssetSourcesAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetAssetSourcesAction
 	return json.Marshal(struct {
@@ -467,16 +528,31 @@ func (obj CategorySetAssetSourcesAction) MarshalJSON() ([]byte, error) {
 type CategorySetAssetTagsAction struct {
 	AssetId  *string  `json:"assetId,omitempty"`
 	AssetKey *string  `json:"assetKey,omitempty"`
-	Tags     []string `json:"tags,omitempty"`
+	Tags     []string `json:"tags"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetAssetTagsAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetAssetTagsAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setAssetTags", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tags"] == nil {
+		delete(target, "tags")
+	}
+
+	return json.Marshal(target)
 }
 
 type CategorySetCustomFieldAction struct {
@@ -484,7 +560,8 @@ type CategorySetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetCustomFieldAction
 	return json.Marshal(struct {
@@ -500,7 +577,8 @@ type CategorySetCustomTypeAction struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetCustomTypeAction
 	return json.Marshal(struct {
@@ -513,7 +591,8 @@ type CategorySetDescriptionAction struct {
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetDescriptionAction
 	return json.Marshal(struct {
@@ -527,7 +606,8 @@ type CategorySetExternalIdAction struct {
 	ExternalId *string `json:"externalId,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetExternalIdAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetExternalIdAction
 	return json.Marshal(struct {
@@ -543,7 +623,8 @@ type CategorySetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetKeyAction
 	return json.Marshal(struct {
@@ -556,7 +637,8 @@ type CategorySetMetaDescriptionAction struct {
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetMetaDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetMetaDescriptionAction
 	return json.Marshal(struct {
@@ -569,7 +651,8 @@ type CategorySetMetaKeywordsAction struct {
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetMetaKeywordsAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetMetaKeywordsAction
 	return json.Marshal(struct {
@@ -582,7 +665,8 @@ type CategorySetMetaTitleAction struct {
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategorySetMetaTitleAction) MarshalJSON() ([]byte, error) {
 	type Alias CategorySetMetaTitleAction
 	return json.Marshal(struct {

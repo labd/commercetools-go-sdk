@@ -68,7 +68,8 @@ type ShippingMethodReference struct {
 	Obj *ShippingMethod `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodReference) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodReference
 	return json.Marshal(struct {
@@ -84,7 +85,8 @@ type ShippingMethodResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodResourceIdentifier
 	return json.Marshal(struct {
@@ -255,7 +257,7 @@ type ShippingRateDraft struct {
 	// Use a Cart Discount to set the shipping price to 0 to avoid providing free shipping in invalid discount scenarios.
 	FreeAbove *Money `json:"freeAbove,omitempty"`
 	// A list of shipping rate price tiers.
-	Tiers []ShippingRatePriceTier `json:"tiers,omitempty"`
+	Tiers []ShippingRatePriceTier `json:"tiers"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -267,6 +269,29 @@ func (obj *ShippingRateDraft) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShippingRateDraft) MarshalJSON() ([]byte, error) {
+	type Alias ShippingRateDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tiers"] == nil {
+		delete(target, "tiers")
+	}
+
+	return json.Marshal(target)
 }
 
 type ShippingRatePriceTier interface{}
@@ -312,7 +337,8 @@ type CartClassificationTier struct {
 	IsMatching *bool  `json:"isMatching,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 	type Alias CartClassificationTier
 	return json.Marshal(struct {
@@ -328,7 +354,8 @@ type CartScoreTier struct {
 	IsMatching    *bool          `json:"isMatching,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartScoreTier) MarshalJSON() ([]byte, error) {
 	type Alias CartScoreTier
 	return json.Marshal(struct {
@@ -343,7 +370,8 @@ type CartValueTier struct {
 	IsMatching        *bool `json:"isMatching,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartValueTier) MarshalJSON() ([]byte, error) {
 	type Alias CartValueTier
 	return json.Marshal(struct {
@@ -377,7 +405,8 @@ type ShippingMethodAddShippingRateAction struct {
 	ShippingRate ShippingRateDraft      `json:"shippingRate"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodAddShippingRateAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodAddShippingRateAction
 	return json.Marshal(struct {
@@ -390,7 +419,8 @@ type ShippingMethodAddZoneAction struct {
 	Zone ZoneResourceIdentifier `json:"zone"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodAddZoneAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodAddZoneAction
 	return json.Marshal(struct {
@@ -404,7 +434,8 @@ type ShippingMethodChangeIsDefaultAction struct {
 	IsDefault bool `json:"isDefault"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodChangeIsDefaultAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodChangeIsDefaultAction
 	return json.Marshal(struct {
@@ -417,7 +448,8 @@ type ShippingMethodChangeNameAction struct {
 	Name string `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodChangeNameAction
 	return json.Marshal(struct {
@@ -430,7 +462,8 @@ type ShippingMethodChangeTaxCategoryAction struct {
 	TaxCategory TaxCategoryResourceIdentifier `json:"taxCategory"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodChangeTaxCategoryAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodChangeTaxCategoryAction
 	return json.Marshal(struct {
@@ -444,7 +477,8 @@ type ShippingMethodRemoveShippingRateAction struct {
 	ShippingRate ShippingRateDraft      `json:"shippingRate"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodRemoveShippingRateAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodRemoveShippingRateAction
 	return json.Marshal(struct {
@@ -457,7 +491,8 @@ type ShippingMethodRemoveZoneAction struct {
 	Zone ZoneResourceIdentifier `json:"zone"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodRemoveZoneAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodRemoveZoneAction
 	return json.Marshal(struct {
@@ -471,7 +506,8 @@ type ShippingMethodSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetCustomFieldAction
 	return json.Marshal(struct {
@@ -485,7 +521,8 @@ type ShippingMethodSetCustomTypeAction struct {
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetCustomTypeAction
 	return json.Marshal(struct {
@@ -498,7 +535,8 @@ type ShippingMethodSetDescriptionAction struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetDescriptionAction
 	return json.Marshal(struct {
@@ -512,7 +550,8 @@ type ShippingMethodSetKeyAction struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetKeyAction
 	return json.Marshal(struct {
@@ -525,7 +564,8 @@ type ShippingMethodSetLocalizedDescriptionAction struct {
 	LocalizedDescription *LocalizedString `json:"localizedDescription,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetLocalizedDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetLocalizedDescriptionAction
 	return json.Marshal(struct {
@@ -538,7 +578,8 @@ type ShippingMethodSetLocalizedNameAction struct {
 	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetLocalizedNameAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetLocalizedNameAction
 	return json.Marshal(struct {
@@ -553,7 +594,8 @@ type ShippingMethodSetPredicateAction struct {
 	Predicate *string `json:"predicate,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodSetPredicateAction) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodSetPredicateAction
 	return json.Marshal(struct {

@@ -2,6 +2,7 @@
 package ml
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -38,16 +39,62 @@ type MissingAttributes struct {
 	// The names of the attributes of the product type that the variant is missing, sorted by attribute importance in descending order.
 	MissingAttributeValues []string `json:"missingAttributeValues"`
 	// The names of the attributes of the product type that the variant is missing, sorted by attribute importance in descending order.
-	MissingAttributeNames []string           `json:"missingAttributeNames,omitempty"`
+	MissingAttributeNames []string           `json:"missingAttributeNames"`
 	AttributeCount        *AttributeCount    `json:"attributeCount,omitempty"`
 	AttributeCoverage     *AttributeCoverage `json:"attributeCoverage,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MissingAttributes) MarshalJSON() ([]byte, error) {
+	type Alias MissingAttributes
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["missingAttributeNames"] == nil {
+		delete(target, "missingAttributeNames")
+	}
+
+	return json.Marshal(target)
 }
 
 type MissingAttributesMeta struct {
 	ProductLevel MissingAttributesDetails `json:"productLevel"`
 	VariantLevel MissingAttributesDetails `json:"variantLevel"`
 	// The IDs of the product types containing the requested `attributeName`.
-	ProductTypeIds []string `json:"productTypeIds,omitempty"`
+	ProductTypeIds []string `json:"productTypeIds"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MissingAttributesMeta) MarshalJSON() ([]byte, error) {
+	type Alias MissingAttributesMeta
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productTypeIds"] == nil {
+		delete(target, "productTypeIds")
+	}
+
+	return json.Marshal(target)
 }
 
 type MissingAttributesSearchRequest struct {
@@ -70,13 +117,40 @@ type MissingAttributesSearchRequest struct {
 	ShowMissingAttributeNames *bool `json:"showMissingAttributeNames,omitempty"`
 	// Filters results by the provided Product IDs.
 	// Cannot be applied in combination with any other filter.
-	ProductIds []string `json:"productIds,omitempty"`
+	ProductIds []string `json:"productIds"`
 	// Filters results by the provided product type IDs.
 	// Cannot be applied in combination with any other filter.
-	ProductTypeIds []string `json:"productTypeIds,omitempty"`
+	ProductTypeIds []string `json:"productTypeIds"`
 	// Filters results by the provided attribute name. If provided,  products are only checked for this attribute. Therefore, only products of product types which define the attribute name are considered. These product type IDs
 	// are then listed in `MissingAttributesMeta`. The  `attributeCount` and `attributeCoverage` fields are not part of the response when using this filter. Cannot be applied in combination with any other filter.
 	AttributeName *string `json:"attributeName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MissingAttributesSearchRequest) MarshalJSON() ([]byte, error) {
+	type Alias MissingAttributesSearchRequest
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productIds"] == nil {
+		delete(target, "productIds")
+	}
+
+	if target["productTypeIds"] == nil {
+		delete(target, "productTypeIds")
+	}
+
+	return json.Marshal(target)
 }
 
 type MissingAttributesPagedQueryResult struct {
@@ -147,9 +221,36 @@ type MissingImagesSearchRequest struct {
 	// The minimum number of images a product variant must have. Anything below this value is considered a product variant with missing images.
 	Threshold *int `json:"threshold,omitempty"`
 	// Filters results by the provided Product IDs. Cannot be applied in combination with any other filter.
-	ProductIds []string `json:"productIds,omitempty"`
+	ProductIds []string `json:"productIds"`
 	// Filters results by the provided product type IDs. It cannot be applied in combination with any other filter.
-	ProductTypeIds []string `json:"productTypeIds,omitempty"`
+	ProductTypeIds []string `json:"productTypeIds"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MissingImagesSearchRequest) MarshalJSON() ([]byte, error) {
+	type Alias MissingImagesSearchRequest
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productIds"] == nil {
+		delete(target, "productIds")
+	}
+
+	if target["productTypeIds"] == nil {
+		delete(target, "productTypeIds")
+	}
+
+	return json.Marshal(target)
 }
 
 type MissingImagesPagedQueryResult struct {
@@ -219,9 +320,36 @@ type MissingPricesSearchRequest struct {
 	// Ending date of the range to check. If no value is given, it is equal to `validFrom`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Filters results by the provided Product IDs. Cannot be applied in combination with the `productTypeIds` filter.
-	ProductIds []string `json:"productIds,omitempty"`
+	ProductIds []string `json:"productIds"`
 	// Filters results by the provided product type IDs. Cannot be applied in combination with the `productIds` filter.
-	ProductTypeIds []string `json:"productTypeIds,omitempty"`
+	ProductTypeIds []string `json:"productTypeIds"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MissingPricesSearchRequest) MarshalJSON() ([]byte, error) {
+	type Alias MissingPricesSearchRequest
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productIds"] == nil {
+		delete(target, "productIds")
+	}
+
+	if target["productTypeIds"] == nil {
+		delete(target, "productTypeIds")
+	}
+
+	return json.Marshal(target)
 }
 
 type MissingPricesPagedQueryResult struct {

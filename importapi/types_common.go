@@ -27,9 +27,32 @@ type Asset struct {
 	// }
 	// ```
 	Description *LocalizedString `json:"description,omitempty"`
-	Tags        []string         `json:"tags,omitempty"`
+	Tags        []string         `json:"tags"`
 	// The representation to be sent to the server when creating a resource with custom fields.
 	Custom *Custom `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Asset) MarshalJSON() ([]byte, error) {
+	type Alias Asset
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["tags"] == nil {
+		delete(target, "tags")
+	}
+
+	return json.Marshal(target)
 }
 
 /**
@@ -245,7 +268,8 @@ type CartKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias CartKeyReference
 	return json.Marshal(struct {
@@ -261,7 +285,8 @@ type CartDiscountKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartDiscountKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias CartDiscountKeyReference
 	return json.Marshal(struct {
@@ -277,7 +302,8 @@ type CategoryKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias CategoryKeyReference
 	return json.Marshal(struct {
@@ -293,7 +319,8 @@ type ChannelKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias ChannelKeyReference
 	return json.Marshal(struct {
@@ -309,7 +336,8 @@ type CustomerKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomerKeyReference
 	return json.Marshal(struct {
@@ -325,7 +353,8 @@ type CustomerGroupKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerGroupKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomerGroupKeyReference
 	return json.Marshal(struct {
@@ -341,7 +370,8 @@ type DiscountCodeKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DiscountCodeKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias DiscountCodeKeyReference
 	return json.Marshal(struct {
@@ -357,7 +387,8 @@ type OrderKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias OrderKeyReference
 	return json.Marshal(struct {
@@ -373,7 +404,8 @@ type PaymentKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PaymentKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias PaymentKeyReference
 	return json.Marshal(struct {
@@ -389,7 +421,8 @@ type PriceKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PriceKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias PriceKeyReference
 	return json.Marshal(struct {
@@ -405,7 +438,8 @@ type ProductKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductKeyReference
 	return json.Marshal(struct {
@@ -421,7 +455,8 @@ type ProductDiscountKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductDiscountKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductDiscountKeyReference
 	return json.Marshal(struct {
@@ -437,7 +472,8 @@ type ProductTypeKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductTypeKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductTypeKeyReference
 	return json.Marshal(struct {
@@ -453,7 +489,8 @@ type ProductVariantKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantKeyReference
 	return json.Marshal(struct {
@@ -469,7 +506,8 @@ type ShippingMethodKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ShippingMethodKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodKeyReference
 	return json.Marshal(struct {
@@ -485,7 +523,8 @@ type StateKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StateKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias StateKeyReference
 	return json.Marshal(struct {
@@ -501,7 +540,8 @@ type StoreKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias StoreKeyReference
 	return json.Marshal(struct {
@@ -517,7 +557,8 @@ type TaxCategoryKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TaxCategoryKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias TaxCategoryKeyReference
 	return json.Marshal(struct {
@@ -533,7 +574,8 @@ type TypeKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TypeKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias TypeKeyReference
 	return json.Marshal(struct {
@@ -550,7 +592,8 @@ type CustomObjectKeyReference struct {
 	Container string `json:"container"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomObjectKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias CustomObjectKeyReference
 	return json.Marshal(struct {
@@ -611,7 +654,8 @@ type HighPrecisionMoney struct {
 	PreciseAmount int    `json:"preciseAmount"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj HighPrecisionMoney) MarshalJSON() ([]byte, error) {
 	type Alias HighPrecisionMoney
 	return json.Marshal(struct {
@@ -627,7 +671,8 @@ type Money struct {
 	CurrencyCode string `json:"currencyCode"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj Money) MarshalJSON() ([]byte, error) {
 	type Alias Money
 	return json.Marshal(struct {

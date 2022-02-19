@@ -189,7 +189,8 @@ type BooleanAttribute struct {
 	Value bool    `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj BooleanAttribute) MarshalJSON() ([]byte, error) {
 	type Alias BooleanAttribute
 	return json.Marshal(struct {
@@ -210,7 +211,8 @@ type BooleanSetAttribute struct {
 	Value []bool  `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj BooleanSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias BooleanSetAttribute
 	return json.Marshal(struct {
@@ -231,7 +233,8 @@ type DateAttribute struct {
 	Value Date    `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateAttribute) MarshalJSON() ([]byte, error) {
 	type Alias DateAttribute
 	return json.Marshal(struct {
@@ -252,7 +255,8 @@ type DateSetAttribute struct {
 	Value []Date  `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias DateSetAttribute
 	return json.Marshal(struct {
@@ -273,7 +277,8 @@ type DateTimeAttribute struct {
 	Value time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateTimeAttribute) MarshalJSON() ([]byte, error) {
 	type Alias DateTimeAttribute
 	return json.Marshal(struct {
@@ -294,7 +299,8 @@ type DateTimeSetAttribute struct {
 	Value []time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj DateTimeSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias DateTimeSetAttribute
 	return json.Marshal(struct {
@@ -316,7 +322,8 @@ type EnumAttribute struct {
 	Value string  `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj EnumAttribute) MarshalJSON() ([]byte, error) {
 	type Alias EnumAttribute
 	return json.Marshal(struct {
@@ -338,7 +345,8 @@ type EnumSetAttribute struct {
 	Value []string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj EnumSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias EnumSetAttribute
 	return json.Marshal(struct {
@@ -360,7 +368,8 @@ type LocalizableEnumAttribute struct {
 	Value string  `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizableEnumAttribute) MarshalJSON() ([]byte, error) {
 	type Alias LocalizableEnumAttribute
 	return json.Marshal(struct {
@@ -382,7 +391,8 @@ type LocalizableEnumSetAttribute struct {
 	Value []string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizableEnumSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias LocalizableEnumSetAttribute
 	return json.Marshal(struct {
@@ -410,7 +420,8 @@ type LocalizableTextAttribute struct {
 	Value LocalizedString `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizableTextAttribute) MarshalJSON() ([]byte, error) {
 	type Alias LocalizableTextAttribute
 	return json.Marshal(struct {
@@ -431,7 +442,8 @@ type LocalizableTextSetAttribute struct {
 	Value []LocalizedString `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj LocalizableTextSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias LocalizableTextSetAttribute
 	return json.Marshal(struct {
@@ -469,7 +481,8 @@ func (obj *MoneyAttribute) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj MoneyAttribute) MarshalJSON() ([]byte, error) {
 	type Alias MoneyAttribute
 	return json.Marshal(struct {
@@ -502,7 +515,8 @@ func (obj *MoneySetAttribute) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj MoneySetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias MoneySetAttribute
 	return json.Marshal(struct {
@@ -523,7 +537,8 @@ type NumberAttribute struct {
 	Value float64 `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj NumberAttribute) MarshalJSON() ([]byte, error) {
 	type Alias NumberAttribute
 	return json.Marshal(struct {
@@ -544,7 +559,8 @@ type NumberSetAttribute struct {
 	Value []float64 `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj NumberSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias NumberSetAttribute
 	return json.Marshal(struct {
@@ -583,7 +599,8 @@ func (obj *ReferenceAttribute) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReferenceAttribute) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceAttribute
 	return json.Marshal(struct {
@@ -615,7 +632,8 @@ func (obj *ReferenceSetAttribute) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ReferenceSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceSetAttribute
 	return json.Marshal(struct {
@@ -636,7 +654,8 @@ type TextAttribute struct {
 	Value string  `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TextAttribute) MarshalJSON() ([]byte, error) {
 	type Alias TextAttribute
 	return json.Marshal(struct {
@@ -657,7 +676,8 @@ type TextSetAttribute struct {
 	Value []string `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TextSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias TextSetAttribute
 	return json.Marshal(struct {
@@ -678,7 +698,8 @@ type TimeAttribute struct {
 	Value time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TimeAttribute) MarshalJSON() ([]byte, error) {
 	type Alias TimeAttribute
 	return json.Marshal(struct {
@@ -699,7 +720,8 @@ type TimeSetAttribute struct {
 	Value []time.Time `json:"value"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj TimeSetAttribute) MarshalJSON() ([]byte, error) {
 	type Alias TimeSetAttribute
 	return json.Marshal(struct {
@@ -720,11 +742,11 @@ type ProductVariantImport struct {
 	IsMasterVariant bool `json:"isMasterVariant"`
 	// Maps to `ProductVariant.attributes`.
 	// The referenced attribute must be defined in an already existing ProductType in the commercetools project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
-	Attributes []Attribute `json:"attributes,omitempty"`
+	Attributes []Attribute `json:"attributes"`
 	// Maps to `ProductVariant.images`.
-	Images []Image `json:"images,omitempty"`
+	Images []Image `json:"images"`
 	// Maps to `ProductVariant.assets`.
-	Assets []Asset `json:"assets,omitempty"`
+	Assets []Asset `json:"assets"`
 	// If `publish` is set to either `true` or `false`, both staged and current projections are set to the same value provided by the import data.
 	// If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
 	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product in the platform, the import induces no change in the existing Product whether `publish` is set or not.
@@ -744,6 +766,37 @@ func (obj *ProductVariantImport) UnmarshalJSON(data []byte) error {
 	}
 
 	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantImport) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["attributes"] == nil {
+		delete(target, "attributes")
+	}
+
+	if target["images"] == nil {
+		delete(target, "images")
+	}
+
+	if target["assets"] == nil {
+		delete(target, "assets")
+	}
+
+	return json.Marshal(target)
 }
 
 /**

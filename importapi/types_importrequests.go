@@ -107,7 +107,8 @@ type CategoryImportRequest struct {
 	Resources []CategoryImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CategoryImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias CategoryImportRequest
 	return json.Marshal(struct {
@@ -125,7 +126,8 @@ type ProductImportRequest struct {
 	Resources []ProductImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias ProductImportRequest
 	return json.Marshal(struct {
@@ -143,7 +145,8 @@ type ProductDraftImportRequest struct {
 	Resources []ProductDraftImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductDraftImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias ProductDraftImportRequest
 	return json.Marshal(struct {
@@ -161,7 +164,8 @@ type ProductTypeImportRequest struct {
 	Resources []ProductTypeImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductTypeImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias ProductTypeImportRequest
 	return json.Marshal(struct {
@@ -179,7 +183,8 @@ type ProductVariantImportRequest struct {
 	Resources []ProductVariantImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantImportRequest
 	return json.Marshal(struct {
@@ -197,7 +202,8 @@ type PriceImportRequest struct {
 	Resources []PriceImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj PriceImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias PriceImportRequest
 	return json.Marshal(struct {
@@ -215,7 +221,8 @@ type OrderImportRequest struct {
 	Resources []OrderImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias OrderImportRequest
 	return json.Marshal(struct {
@@ -233,7 +240,8 @@ type OrderPatchImportRequest struct {
 	Patches []OrderPatchImport `json:"patches"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj OrderPatchImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias OrderPatchImportRequest
 	return json.Marshal(struct {
@@ -251,7 +259,8 @@ type ProductVariantPatchRequest struct {
 	Patches []ProductVariantPatch `json:"patches"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProductVariantPatchRequest) MarshalJSON() ([]byte, error) {
 	type Alias ProductVariantPatchRequest
 	return json.Marshal(struct {
@@ -269,7 +278,8 @@ type CustomerImportRequest struct {
 	Resources []CustomerImport `json:"resources"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CustomerImportRequest) MarshalJSON() ([]byte, error) {
 	type Alias CustomerImportRequest
 	return json.Marshal(struct {

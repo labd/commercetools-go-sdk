@@ -2,6 +2,7 @@
 package importapi
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -38,13 +39,59 @@ type DeliveryParcel struct {
 	DeliveryId   string              `json:"deliveryId"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items,omitempty"`
+	Items        []DeliveryItem      `json:"items"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryParcel) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryParcel
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["items"] == nil {
+		delete(target, "items")
+	}
+
+	return json.Marshal(target)
 }
 
 type DeliveryParcelDraft struct {
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items,omitempty"`
+	Items        []DeliveryItem      `json:"items"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryParcelDraft) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryParcelDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["items"] == nil {
+		delete(target, "items")
+	}
+
+	return json.Marshal(target)
 }
 
 type DeliveryDraft struct {
@@ -70,7 +117,30 @@ type ParcelTrackingData struct {
 
 type ParcelItems struct {
 	ParcelId string         `json:"parcelId"`
-	Items    []DeliveryItem `json:"items,omitempty"`
+	Items    []DeliveryItem `json:"items"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ParcelItems) MarshalJSON() ([]byte, error) {
+	type Alias ParcelItems
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["items"] == nil {
+		delete(target, "items")
+	}
+
+	return json.Marshal(target)
 }
 
 type RemoveDeliveryDraft struct {
@@ -91,7 +161,7 @@ type OrderField struct {
 	// Maps to `Order.delivery`
 	AddParcelToDelivery *DeliveryParcel `json:"addParcelToDelivery,omitempty"`
 	// Maps to `Order.delivery`
-	AddDeliveries []DeliveryDraft `json:"addDeliveries,omitempty"`
+	AddDeliveries []DeliveryDraft `json:"addDeliveries"`
 	// Maps to `Order.removeDelivery`
 	RemoveDelivery *RemoveDeliveryDraft `json:"removeDelivery,omitempty"`
 	// Maps to `Order.removeParcelFromDelivery`
@@ -103,7 +173,34 @@ type OrderField struct {
 	// Maps to `Order.parcelTrackingData`
 	SetParcelTrackingData *ParcelTrackingData `json:"setParcelTrackingData,omitempty"`
 	// Maps to `Order.parcelItems`
-	SetParcelItems []ParcelItems `json:"setParcelItems,omitempty"`
+	SetParcelItems []ParcelItems `json:"setParcelItems"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderField) MarshalJSON() ([]byte, error) {
+	type Alias OrderField
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["addDeliveries"] == nil {
+		delete(target, "addDeliveries")
+	}
+
+	if target["setParcelItems"] == nil {
+		delete(target, "setParcelItems")
+	}
+
+	return json.Marshal(target)
 }
 
 /**

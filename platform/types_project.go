@@ -237,7 +237,8 @@ type CartClassificationType struct {
 	Values []CustomFieldLocalizedEnumValue `json:"values"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartClassificationType) MarshalJSON() ([]byte, error) {
 	type Alias CartClassificationType
 	return json.Marshal(struct {
@@ -249,7 +250,8 @@ func (obj CartClassificationType) MarshalJSON() ([]byte, error) {
 type CartScoreType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartScoreType) MarshalJSON() ([]byte, error) {
 	type Alias CartScoreType
 	return json.Marshal(struct {
@@ -261,7 +263,8 @@ func (obj CartScoreType) MarshalJSON() ([]byte, error) {
 type CartValueType struct {
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj CartValueType) MarshalJSON() ([]byte, error) {
 	type Alias CartValueType
 	return json.Marshal(struct {
@@ -279,7 +282,8 @@ type ProjectChangeCartsConfigurationAction struct {
 	CartsConfiguration *CartsConfiguration `json:"cartsConfiguration,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeCartsConfigurationAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeCartsConfigurationAction
 	return json.Marshal(struct {
@@ -293,7 +297,8 @@ type ProjectChangeCountriesAction struct {
 	Countries []string `json:"countries"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeCountriesAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeCountriesAction
 	return json.Marshal(struct {
@@ -307,7 +312,8 @@ type ProjectChangeCountryTaxRateFallbackEnabledAction struct {
 	CountryTaxRateFallbackEnabled bool `json:"countryTaxRateFallbackEnabled"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeCountryTaxRateFallbackEnabledAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeCountryTaxRateFallbackEnabledAction
 	return json.Marshal(struct {
@@ -321,7 +327,8 @@ type ProjectChangeCurrenciesAction struct {
 	Currencies []string `json:"currencies"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeCurrenciesAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeCurrenciesAction
 	return json.Marshal(struct {
@@ -335,7 +342,8 @@ type ProjectChangeLanguagesAction struct {
 	Languages []string `json:"languages"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeLanguagesAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeLanguagesAction
 	return json.Marshal(struct {
@@ -348,7 +356,8 @@ type ProjectChangeMessagesConfigurationAction struct {
 	MessagesConfiguration MessageConfigurationDraft `json:"messagesConfiguration"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeMessagesConfigurationAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeMessagesConfigurationAction
 	return json.Marshal(struct {
@@ -361,7 +370,8 @@ type ProjectChangeMessagesEnabledAction struct {
 	MessagesEnabled bool `json:"messagesEnabled"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeMessagesEnabledAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeMessagesEnabledAction
 	return json.Marshal(struct {
@@ -374,7 +384,8 @@ type ProjectChangeNameAction struct {
 	Name string `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeNameAction
 	return json.Marshal(struct {
@@ -387,7 +398,8 @@ type ProjectChangeProductSearchIndexingEnabledAction struct {
 	Enabled bool `json:"enabled"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeProductSearchIndexingEnabledAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeProductSearchIndexingEnabledAction
 	return json.Marshal(struct {
@@ -400,7 +412,8 @@ type ProjectChangeShoppingListsConfigurationAction struct {
 	ShoppingListsConfiguration *ShoppingListsConfiguration `json:"shoppingListsConfiguration,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectChangeShoppingListsConfigurationAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectChangeShoppingListsConfigurationAction
 	return json.Marshal(struct {
@@ -415,7 +428,8 @@ type ProjectSetExternalOAuthAction struct {
 	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectSetExternalOAuthAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectSetExternalOAuthAction
 	return json.Marshal(struct {
@@ -446,7 +460,8 @@ func (obj *ProjectSetShippingRateInputTypeAction) UnmarshalJSON(data []byte) err
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ProjectSetShippingRateInputTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias ProjectSetShippingRateInputTypeAction
 	return json.Marshal(struct {

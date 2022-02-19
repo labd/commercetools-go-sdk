@@ -56,7 +56,7 @@ func (obj *Channel) UnmarshalJSON(data []byte) error {
 type ChannelDraft struct {
 	Key string `json:"key"`
 	// If not specified, then channel will get InventorySupply role by default
-	Roles       []ChannelRoleEnum `json:"roles,omitempty"`
+	Roles       []ChannelRoleEnum `json:"roles"`
 	Name        *LocalizedString  `json:"name,omitempty"`
 	Description *LocalizedString  `json:"description,omitempty"`
 	Address     *BaseAddress      `json:"address,omitempty"`
@@ -82,6 +82,29 @@ func (obj *ChannelDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChannelDraft) MarshalJSON() ([]byte, error) {
+	type Alias ChannelDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["roles"] == nil {
+		delete(target, "roles")
+	}
+
+	return json.Marshal(target)
+}
+
 type ChannelPagedQueryResponse struct {
 	Limit   int       `json:"limit"`
 	Count   int       `json:"count"`
@@ -96,7 +119,8 @@ type ChannelReference struct {
 	Obj *Channel `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelReference) MarshalJSON() ([]byte, error) {
 	type Alias ChannelReference
 	return json.Marshal(struct {
@@ -112,7 +136,8 @@ type ChannelResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias ChannelResourceIdentifier
 	return json.Marshal(struct {
@@ -249,7 +274,8 @@ type ChannelAddRolesAction struct {
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelAddRolesAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelAddRolesAction
 	return json.Marshal(struct {
@@ -262,7 +288,8 @@ type ChannelChangeDescriptionAction struct {
 	Description LocalizedString `json:"description"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelChangeDescriptionAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelChangeDescriptionAction
 	return json.Marshal(struct {
@@ -275,7 +302,8 @@ type ChannelChangeKeyAction struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelChangeKeyAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelChangeKeyAction
 	return json.Marshal(struct {
@@ -288,7 +316,8 @@ type ChannelChangeNameAction struct {
 	Name LocalizedString `json:"name"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelChangeNameAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelChangeNameAction
 	return json.Marshal(struct {
@@ -301,7 +330,8 @@ type ChannelRemoveRolesAction struct {
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelRemoveRolesAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelRemoveRolesAction
 	return json.Marshal(struct {
@@ -314,7 +344,8 @@ type ChannelSetAddressAction struct {
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetAddressAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetAddressAction
 	return json.Marshal(struct {
@@ -328,7 +359,8 @@ type ChannelSetAddressCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetAddressCustomFieldAction
 	return json.Marshal(struct {
@@ -342,7 +374,8 @@ type ChannelSetAddressCustomTypeAction struct {
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetAddressCustomTypeAction
 	return json.Marshal(struct {
@@ -356,7 +389,8 @@ type ChannelSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetCustomFieldAction
 	return json.Marshal(struct {
@@ -370,7 +404,8 @@ type ChannelSetCustomTypeAction struct {
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetCustomTypeAction
 	return json.Marshal(struct {
@@ -400,7 +435,8 @@ func (obj *ChannelSetGeoLocationAction) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetGeoLocationAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetGeoLocationAction
 	return json.Marshal(struct {
@@ -413,7 +449,8 @@ type ChannelSetRolesAction struct {
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj ChannelSetRolesAction) MarshalJSON() ([]byte, error) {
 	type Alias ChannelSetRolesAction
 	return json.Marshal(struct {

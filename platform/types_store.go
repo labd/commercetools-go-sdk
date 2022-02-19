@@ -22,12 +22,39 @@ type Store struct {
 	Key string `json:"key"`
 	// The name of the store
 	Name      *LocalizedString `json:"name,omitempty"`
-	Languages []string         `json:"languages,omitempty"`
+	Languages []string         `json:"languages"`
 	// Set of References to a Channel with `ProductDistribution` role
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
 	// Set of ResourceIdentifiers of Channels with `InventorySupply` role
-	SupplyChannels []ChannelReference `json:"supplyChannels,omitempty"`
+	SupplyChannels []ChannelReference `json:"supplyChannels"`
 	Custom         *CustomFields      `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Store) MarshalJSON() ([]byte, error) {
+	type Alias Store
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["languages"] == nil {
+		delete(target, "languages")
+	}
+
+	if target["supplyChannels"] == nil {
+		delete(target, "supplyChannels")
+	}
+
+	return json.Marshal(target)
 }
 
 type StoreDraft struct {
@@ -37,19 +64,51 @@ type StoreDraft struct {
 	Key string `json:"key"`
 	// The name of the store
 	Name      *LocalizedString `json:"name,omitempty"`
-	Languages []string         `json:"languages,omitempty"`
+	Languages []string         `json:"languages"`
 	// Set of ResourceIdentifiers to a Channel with `ProductDistribution` role
-	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels,omitempty"`
+	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 	// Set of ResourceIdentifiers of Channels with `InventorySupply` role
-	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels,omitempty"`
+	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
 	Custom         *CustomFieldsDraft          `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreDraft) MarshalJSON() ([]byte, error) {
+	type Alias StoreDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["languages"] == nil {
+		delete(target, "languages")
+	}
+
+	if target["distributionChannels"] == nil {
+		delete(target, "distributionChannels")
+	}
+
+	if target["supplyChannels"] == nil {
+		delete(target, "supplyChannels")
+	}
+
+	return json.Marshal(target)
 }
 
 type StoreKeyReference struct {
 	Key string `json:"key"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 	type Alias StoreKeyReference
 	return json.Marshal(struct {
@@ -72,7 +131,8 @@ type StoreReference struct {
 	Obj *Store `json:"obj,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreReference) MarshalJSON() ([]byte, error) {
 	type Alias StoreReference
 	return json.Marshal(struct {
@@ -88,7 +148,8 @@ type StoreResourceIdentifier struct {
 	Key *string `json:"key,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreResourceIdentifier) MarshalJSON() ([]byte, error) {
 	type Alias StoreResourceIdentifier
 	return json.Marshal(struct {
@@ -196,7 +257,8 @@ type StoreAddDistributionChannelAction struct {
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreAddDistributionChannelAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreAddDistributionChannelAction
 	return json.Marshal(struct {
@@ -209,7 +271,8 @@ type StoreAddSupplyChannelAction struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreAddSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreAddSupplyChannelAction
 	return json.Marshal(struct {
@@ -222,7 +285,8 @@ type StoreRemoveDistributionChannelAction struct {
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreRemoveDistributionChannelAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreRemoveDistributionChannelAction
 	return json.Marshal(struct {
@@ -235,7 +299,8 @@ type StoreRemoveSupplyChannelAction struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreRemoveSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreRemoveSupplyChannelAction
 	return json.Marshal(struct {
@@ -249,7 +314,8 @@ type StoreSetCustomFieldAction struct {
 	Value interface{} `json:"value,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetCustomFieldAction
 	return json.Marshal(struct {
@@ -267,7 +333,8 @@ type StoreSetCustomTypeAction struct {
 	Fields *interface{} `json:"fields,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetCustomTypeAction
 	return json.Marshal(struct {
@@ -277,29 +344,59 @@ func (obj StoreSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetDistributionChannelsAction struct {
-	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels,omitempty"`
+	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetDistributionChannelsAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDistributionChannels", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["distributionChannels"] == nil {
+		delete(target, "distributionChannels")
+	}
+
+	return json.Marshal(target)
 }
 
 type StoreSetLanguagesAction struct {
-	Languages []string `json:"languages,omitempty"`
+	Languages []string `json:"languages"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreSetLanguagesAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetLanguagesAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setLanguages", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["languages"] == nil {
+		delete(target, "languages")
+	}
+
+	return json.Marshal(target)
 }
 
 type StoreSetNameAction struct {
@@ -307,7 +404,8 @@ type StoreSetNameAction struct {
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreSetNameAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetNameAction
 	return json.Marshal(struct {
@@ -317,14 +415,29 @@ func (obj StoreSetNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetSupplyChannelsAction struct {
-	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels,omitempty"`
+	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
 }
 
-// MarshalJSON override to set the discriminator value
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
 func (obj StoreSetSupplyChannelsAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetSupplyChannelsAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setSupplyChannels", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["supplyChannels"] == nil {
+		delete(target, "supplyChannels")
+	}
+
+	return json.Marshal(target)
 }

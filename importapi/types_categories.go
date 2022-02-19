@@ -1,6 +1,10 @@
 // Generated file, please do not change!!!
 package importapi
 
+import (
+	"encoding/json"
+)
+
 /**
 *	The data representation for a Category to be imported that is persisted as a [Category](/../api/projects/categories#category) in the Project.
 *
@@ -28,7 +32,30 @@ type CategoryImport struct {
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 	// Maps to `Category.metaKeywords`.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	Assets       []Asset          `json:"assets,omitempty"`
+	Assets       []Asset          `json:"assets"`
 	// The custom fields for this Category.
 	Custom *Custom `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategoryImport) MarshalJSON() ([]byte, error) {
+	type Alias CategoryImport
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["assets"] == nil {
+		delete(target, "assets")
+	}
+
+	return json.Marshal(target)
 }
