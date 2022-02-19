@@ -12,6 +12,9 @@ The SDK was initially created for enabling the creation of the
 [Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools)
 That provider enables you to use infrastructure-as-code principles with Commercetools.
 
+Note that since this SDK is automatically generated we cannot guarantee backwards 
+compatibility between releases. Please pin the dependency correctly and be aware 
+of potential changes when updating
 
 ## Using the SDK
 
