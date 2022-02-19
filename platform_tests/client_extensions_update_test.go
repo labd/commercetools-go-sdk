@@ -47,7 +47,7 @@ func TestChangeTriggersMarshall(t *testing.T) {
 
 func TestChangeDestinationMarshall(t *testing.T) {
 	obj := platform.ExtensionChangeDestinationAction{
-		Destination: platform.ExtensionHttpDestination{
+		Destination: platform.HttpDestination{
 			Url: "http://example.com",
 		},
 	}

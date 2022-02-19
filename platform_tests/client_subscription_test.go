@@ -177,7 +177,7 @@ func TestSubscriptionCreate(t *testing.T) {
 						ResourceTypeId: "product",
 					},
 				},
-				Format: platform.DeliveryCloudEventsFormat{
+				Format: platform.CloudEventsFormat{
 					CloudEventsVersion: "0.1",
 				},
 				Messages: []platform.MessageSubscription{

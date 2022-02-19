@@ -27,7 +27,7 @@ func TestProjectGet(t *testing.T) {
 		Languages:  []string{"en"},
 		CreatedAt:  timestamp,
 		TrialUntil: ctutils.StringRef("2013-11-01T15:14:34.325Z"),
-		Messages: platform.MessageConfiguration{
+		Messages: platform.MessagesConfiguration{
 			Enabled: false,
 		},
 		ShippingRateInputType: platform.CartScoreType{},

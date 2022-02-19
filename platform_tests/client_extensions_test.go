@@ -19,7 +19,7 @@ func TestExtensionCreate(t *testing.T) {
 
 	draft := platform.ExtensionDraft{
 		Key: ctutils.StringRef("test"),
-		Destination: platform.ExtensionHttpDestination{
+		Destination: platform.HttpDestination{
 			Url: "http://example.com",
 		},
 		Triggers: []platform.ExtensionTrigger{
@@ -44,7 +44,7 @@ func TestExtensionUpdate(t *testing.T) {
 		Version: 2,
 		Actions: []platform.ExtensionUpdateAction{
 			platform.ExtensionChangeDestinationAction{
-				Destination: platform.ExtensionAWSLambdaDestination{
+				Destination: platform.AWSLambdaDestination{
 					Arn:          "arn:aws:lambda:<region>:<accountid>:function:<functionName>",
 					AccessKey:    "qwer",
 					AccessSecret: "secret",
