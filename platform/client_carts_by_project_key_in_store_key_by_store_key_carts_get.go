@@ -26,7 +26,6 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) Dump() map[strin
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGetInput struct {
-	CustomerId   *string
 	Expand       []string
 	Sort         []string
 	Limit        *int
@@ -38,9 +37,6 @@ type ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGetInput struct {
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	if input.CustomerId != nil {
-		values.Add("customerId", fmt.Sprintf("%v", *input.CustomerId))
-	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
@@ -69,14 +65,6 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGetInput) Values(
 		}
 	}
 	return values
-}
-
-func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) CustomerId(v string) *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGetInput{}
-	}
-	rb.params.CustomerId = &v
-	return rb
 }
 
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet {
@@ -145,9 +133,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) WithHeaders(hea
 }
 
 /**
-*	Queries carts in a specific Store. The {storeKey} path parameter maps to a Store's key.
+*	Queries carts in a specific Store.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) Execute(ctx context.Context) (result *interface{}, err error) {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) Execute(ctx context.Context) (result *CartPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

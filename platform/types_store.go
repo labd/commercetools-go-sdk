@@ -7,6 +7,20 @@ import (
 	"time"
 )
 
+type ProductSelectionSetting struct {
+	// Reference to a Product Selection
+	ProductSelection ProductSelectionReference `json:"productSelection"`
+	// If `true` all Products assigned to this Product Selection are part of the Store's assortment.
+	Active bool `json:"active"`
+}
+
+type ProductSelectionSettingDraft struct {
+	// Resource Identifier of a Product Selection
+	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
+	// If `true` all Products assigned to this Product Selection become part of the Store's assortment.
+	Active *bool `json:"active,omitempty"`
+}
+
 type Store struct {
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
@@ -27,7 +41,11 @@ type Store struct {
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
 	// Set of ResourceIdentifiers of Channels with `InventorySupply` role
 	SupplyChannels []ChannelReference `json:"supplyChannels"`
-	Custom         *CustomFields      `json:"custom,omitempty"`
+	// Set of References to Product Selections along with settings.
+	// If `productSelections` is empty all products in the project are available in this Store.
+	// If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+	ProductSelections []ProductSelectionSetting `json:"productSelections"`
+	Custom            *CustomFields             `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -54,6 +72,10 @@ func (obj Store) MarshalJSON() ([]byte, error) {
 		delete(target, "supplyChannels")
 	}
 
+	if target["productSelections"] == nil {
+		delete(target, "productSelections")
+	}
+
 	return json.Marshal(target)
 }
 
@@ -69,7 +91,11 @@ type StoreDraft struct {
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 	// Set of ResourceIdentifiers of Channels with `InventorySupply` role
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
-	Custom         *CustomFieldsDraft          `json:"custom,omitempty"`
+	// Set of ResourceIdentifiers of Product Selections along with settings.
+	// If `productSelections` is empty all products in the project are available in this Store.
+	// If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
+	Custom            *CustomFieldsDraft             `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -98,6 +124,10 @@ func (obj StoreDraft) MarshalJSON() ([]byte, error) {
 
 	if target["supplyChannels"] == nil {
 		delete(target, "supplyChannels")
+	}
+
+	if target["productSelections"] == nil {
+		delete(target, "productSelections")
 	}
 
 	return json.Marshal(target)
@@ -195,16 +225,48 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "addProductSelection":
+		obj := StoreAddProductSelectionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "addSupplyChannel":
 		obj := StoreAddSupplyChannelAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
+	case "changeProductSelectionActive":
+		obj := StoreChangeProductSelectionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ProductSelection != nil {
+			var err error
+			obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "removeDistributionChannel":
 		obj := StoreRemoveDistributionChannelAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		return obj, nil
+	case "removeProductSelection":
+		obj := StoreRemoveProductSelectionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ProductSelection != nil {
+			var err error
+			obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "removeSupplyChannel":
@@ -243,6 +305,12 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "setProductSelections":
+		obj := StoreSetProductSelectionsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setSupplyChannels":
 		obj := StoreSetSupplyChannelsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -267,6 +335,21 @@ func (obj StoreAddDistributionChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
+type StoreAddProductSelectionAction struct {
+	// A Product Selection to be added to the current Product Selections of this Store.
+	ProductSelection ProductSelectionSettingDraft `json:"productSelection"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreAddProductSelectionAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreAddProductSelectionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addProductSelection", Alias: (*Alias)(&obj)})
+}
+
 type StoreAddSupplyChannelAction struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
@@ -281,6 +364,40 @@ func (obj StoreAddSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addSupplyChannel", Alias: (*Alias)(&obj)})
 }
 
+type StoreChangeProductSelectionAction struct {
+	// A current Product Selection of this Store that is to be activated or deactivated.
+	ProductSelection ResourceIdentifier `json:"productSelection"`
+	// If `true` all Products assigned to the Product Selection become part of the Store's assortment.
+	Active *bool `json:"active,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreChangeProductSelectionAction) UnmarshalJSON(data []byte) error {
+	type Alias StoreChangeProductSelectionAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ProductSelection != nil {
+		var err error
+		obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreChangeProductSelectionAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreChangeProductSelectionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeProductSelectionActive", Alias: (*Alias)(&obj)})
+}
+
 type StoreRemoveDistributionChannelAction struct {
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
 }
@@ -293,6 +410,38 @@ func (obj StoreRemoveDistributionChannelAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeDistributionChannel", Alias: (*Alias)(&obj)})
+}
+
+type StoreRemoveProductSelectionAction struct {
+	// A Product Selection to be removed from the current Product Selections of this Store.
+	ProductSelection ResourceIdentifier `json:"productSelection"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreRemoveProductSelectionAction) UnmarshalJSON(data []byte) error {
+	type Alias StoreRemoveProductSelectionAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ProductSelection != nil {
+		var err error
+		obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreRemoveProductSelectionAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreRemoveProductSelectionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeProductSelection", Alias: (*Alias)(&obj)})
 }
 
 type StoreRemoveSupplyChannelAction struct {
@@ -310,7 +459,25 @@ func (obj StoreRemoveSupplyChannelAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetCustomFieldAction struct {
-	Name  string      `json:"name"`
+	Name string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -412,6 +579,21 @@ func (obj StoreSetNameAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setName", Alias: (*Alias)(&obj)})
+}
+
+type StoreSetProductSelectionsAction struct {
+	// The total of Product Selections to be set for this Store.
+	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetProductSelectionsAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetProductSelectionsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setProductSelections", Alias: (*Alias)(&obj)})
 }
 
 type StoreSetSupplyChannelsAction struct {

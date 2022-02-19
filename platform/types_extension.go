@@ -64,19 +64,19 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 
 	switch discriminator {
 	case "AWSLambda":
-		obj := ExtensionAWSLambdaDestination{}
+		obj := AWSLambdaDestination{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
 	case "HTTP":
-		obj := ExtensionHttpDestination{}
+		obj := HttpDestination{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		if obj.Authentication != nil {
 			var err error
-			obj.Authentication, err = mapDiscriminatorExtensionHttpDestinationAuthentication(obj.Authentication)
+			obj.Authentication, err = mapDiscriminatorHttpDestinationAuthentication(obj.Authentication)
 			if err != nil {
 				return nil, err
 			}
@@ -86,7 +86,7 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 	return nil, nil
 }
 
-type ExtensionAWSLambdaDestination struct {
+type AWSLambdaDestination struct {
 	Arn          string `json:"arn"`
 	AccessKey    string `json:"accessKey"`
 	AccessSecret string `json:"accessSecret"`
@@ -94,8 +94,8 @@ type ExtensionAWSLambdaDestination struct {
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj ExtensionAWSLambdaDestination) MarshalJSON() ([]byte, error) {
-	type Alias ExtensionAWSLambdaDestination
+func (obj AWSLambdaDestination) MarshalJSON() ([]byte, error) {
+	type Alias AWSLambdaDestination
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
@@ -131,97 +131,6 @@ func (obj *ExtensionDraft) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
-}
-
-type ExtensionHttpDestination struct {
-	Url            string                                 `json:"url"`
-	Authentication ExtensionHttpDestinationAuthentication `json:"authentication,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *ExtensionHttpDestination) UnmarshalJSON(data []byte) error {
-	type Alias ExtensionHttpDestination
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Authentication != nil {
-		var err error
-		obj.Authentication, err = mapDiscriminatorExtensionHttpDestinationAuthentication(obj.Authentication)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ExtensionHttpDestination) MarshalJSON() ([]byte, error) {
-	type Alias ExtensionHttpDestination
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "HTTP", Alias: (*Alias)(&obj)})
-}
-
-type ExtensionHttpDestinationAuthentication interface{}
-
-func mapDiscriminatorExtensionHttpDestinationAuthentication(input interface{}) (ExtensionHttpDestinationAuthentication, error) {
-
-	var discriminator string
-	if data, ok := input.(map[string]interface{}); ok {
-		discriminator, ok = data["type"].(string)
-		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
-		}
-	} else {
-		return nil, errors.New("Invalid data")
-	}
-
-	switch discriminator {
-	case "AuthorizationHeader":
-		obj := ExtensionAuthorizationHeaderAuthentication{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "AzureFunctions":
-		obj := ExtensionAzureFunctionsAuthentication{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	}
-	return nil, nil
-}
-
-type ExtensionAuthorizationHeaderAuthentication struct {
-	HeaderValue string `json:"headerValue"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ExtensionAuthorizationHeaderAuthentication) MarshalJSON() ([]byte, error) {
-	type Alias ExtensionAuthorizationHeaderAuthentication
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "AuthorizationHeader", Alias: (*Alias)(&obj)})
-}
-
-type ExtensionAzureFunctionsAuthentication struct {
-	Key string `json:"key"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ExtensionAzureFunctionsAuthentication) MarshalJSON() ([]byte, error) {
-	type Alias ExtensionAzureFunctionsAuthentication
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "AzureFunctions", Alias: (*Alias)(&obj)})
 }
 
 type ExtensionInput struct {
@@ -332,6 +241,97 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 		return obj, nil
 	}
 	return nil, nil
+}
+
+type HttpDestination struct {
+	Url            string                        `json:"url"`
+	Authentication HttpDestinationAuthentication `json:"authentication,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *HttpDestination) UnmarshalJSON(data []byte) error {
+	type Alias HttpDestination
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Authentication != nil {
+		var err error
+		obj.Authentication, err = mapDiscriminatorHttpDestinationAuthentication(obj.Authentication)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj HttpDestination) MarshalJSON() ([]byte, error) {
+	type Alias HttpDestination
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "HTTP", Alias: (*Alias)(&obj)})
+}
+
+type HttpDestinationAuthentication interface{}
+
+func mapDiscriminatorHttpDestinationAuthentication(input interface{}) (HttpDestinationAuthentication, error) {
+
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+
+	switch discriminator {
+	case "AuthorizationHeader":
+		obj := AuthorizationHeaderAuthentication{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AzureFunctions":
+		obj := AzureFunctionsAuthentication{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type AuthorizationHeaderAuthentication struct {
+	HeaderValue string `json:"headerValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AuthorizationHeaderAuthentication) MarshalJSON() ([]byte, error) {
+	type Alias AuthorizationHeaderAuthentication
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AuthorizationHeader", Alias: (*Alias)(&obj)})
+}
+
+type AzureFunctionsAuthentication struct {
+	Key string `json:"key"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AzureFunctionsAuthentication) MarshalJSON() ([]byte, error) {
+	type Alias AzureFunctionsAuthentication
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AzureFunctions", Alias: (*Alias)(&obj)})
 }
 
 type ExtensionChangeDestinationAction struct {

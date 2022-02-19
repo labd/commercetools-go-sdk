@@ -19,6 +19,16 @@ type ExternalOAuth struct {
 	AuthorizationHeader string `json:"authorizationHeader"`
 }
 
+/**
+*	Activated indicates that the Order Search feature is active. Deactivated means that the namely feature is currently configured to be inactive.
+ */
+type OrderSearchStatus string
+
+const (
+	OrderSearchStatusActivated   OrderSearchStatus = "Activated"
+	OrderSearchStatusDeactivated OrderSearchStatus = "Deactivated"
+)
+
 type Project struct {
 	// The current version of the project.
 	Version int `json:"version"`
@@ -34,7 +44,7 @@ type Project struct {
 	CreatedAt  time.Time `json:"createdAt"`
 	// The time is in the format Year-Month `YYYY-MM`.
 	TrialUntil            *string                      `json:"trialUntil,omitempty"`
-	Messages              MessageConfiguration         `json:"messages"`
+	Messages              MessagesConfiguration        `json:"messages"`
 	ShippingRateInputType ShippingRateInputType        `json:"shippingRateInputType,omitempty"`
 	ExternalOAuth         *ExternalOAuth               `json:"externalOAuth,omitempty"`
 	Carts                 CartsConfiguration           `json:"carts"`
@@ -138,6 +148,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "changeOrderSearchStatus":
+		obj := ProjectChangeOrderSearchStatusAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeProductSearchIndexingEnabled":
 		obj := ProjectChangeProductSearchIndexingEnabledAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -174,7 +190,10 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 }
 
 type SearchIndexingConfiguration struct {
+	// Configuration for endpoints serving indexed [Product](ctp:api:type:Product) information.
 	Products *SearchIndexingConfigurationValues `json:"products,omitempty"`
+	// Configuration for the [Order Search](/../api/projects/order-search) feature.
+	Orders *SearchIndexingConfigurationValues `json:"orders,omitempty"`
 }
 
 /**
@@ -353,7 +372,7 @@ func (obj ProjectChangeLanguagesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeMessagesConfigurationAction struct {
-	MessagesConfiguration MessageConfigurationDraft `json:"messagesConfiguration"`
+	MessagesConfiguration MessagesConfigurationDraft `json:"messagesConfiguration"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -392,6 +411,21 @@ func (obj ProjectChangeNameAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
+}
+
+type ProjectChangeOrderSearchStatusAction struct {
+	// Activated indicates that the Order Search feature is active. Deactivated means that the namely feature is currently configured to be inactive.
+	Status OrderSearchStatus `json:"status"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectChangeOrderSearchStatusAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeOrderSearchStatusAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeOrderSearchStatus", Alias: (*Alias)(&obj)})
 }
 
 type ProjectChangeProductSearchIndexingEnabledAction struct {

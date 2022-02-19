@@ -80,3 +80,23 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShoppingLists() *ByPro
 		client:     rb.client,
 	}
 }
+
+/**
+*	A projected representation of a product shows the product with its current or staged data. The current or staged
+*	representation of a product in a catalog is called a product projection.
+*
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ProductProjections() *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ProductSelectionAssignments() *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}

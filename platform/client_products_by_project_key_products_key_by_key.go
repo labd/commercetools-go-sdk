@@ -11,6 +11,14 @@ type ByProjectKeyProductsKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) ProductSelections() *ByProjectKeyProductsKeyByKeyProductSelectionsRequestBuilder {
+	return &ByProjectKeyProductsKeyByKeyProductSelectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		key:        rb.key,
+		client:     rb.client,
+	}
+}
+
 /**
 *	Gets the full representation of a product by Key.
  */

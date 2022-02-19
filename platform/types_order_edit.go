@@ -542,7 +542,25 @@ func (obj OrderEditSetCommentAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderEditSetCustomFieldAction struct {
-	Name  string      `json:"name"`
+	Name string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -616,14 +634,17 @@ func (obj OrderEditSetStagedActionsAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderAddCustomLineItemAction struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Money    Money           `json:"money"`
 	Name     LocalizedString `json:"name"`
 	Quantity *float64        `json:"quantity,omitempty"`
 	Slug     string          `json:"slug"`
 	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
-	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	Custom          *CustomFieldsDraft             `json:"custom,omitempty"`
-	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
+	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -701,18 +722,23 @@ func (obj StagedOrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error)
 }
 
 type StagedOrderAddLineItemAction struct {
-	Custom              *CustomFieldsDraft          `json:"custom,omitempty"`
-	DistributionChannel *ChannelResourceIdentifier  `json:"distributionChannel,omitempty"`
-	ExternalTaxRate     *ExternalTaxRateDraft       `json:"externalTaxRate,omitempty"`
-	ProductId           *string                     `json:"productId,omitempty"`
-	VariantId           *int                        `json:"variantId,omitempty"`
-	Sku                 *string                     `json:"sku,omitempty"`
-	Quantity            *float64                    `json:"quantity,omitempty"`
-	AddedAt             *time.Time                  `json:"addedAt,omitempty"`
-	SupplyChannel       *ChannelResourceIdentifier  `json:"supplyChannel,omitempty"`
-	ExternalPrice       *Money                      `json:"externalPrice,omitempty"`
-	ExternalTotalPrice  *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
-	ShippingDetails     *ItemShippingDetailsDraft   `json:"shippingDetails,omitempty"`
+	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
+	ExternalTaxRate     *ExternalTaxRateDraft      `json:"externalTaxRate,omitempty"`
+	ProductId           *string                    `json:"productId,omitempty"`
+	VariantId           *int                       `json:"variantId,omitempty"`
+	Sku                 *string                    `json:"sku,omitempty"`
+	Quantity            *float64                   `json:"quantity,omitempty"`
+	AddedAt             *time.Time                 `json:"addedAt,omitempty"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
+	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
+	ShippingDetails    *ItemShippingDetailsDraft   `json:"shippingDetails,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -787,9 +813,11 @@ func (obj StagedOrderAddReturnInfoAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderAddShoppingListAction struct {
-	ShoppingList        ShoppingListResourceIdentifier `json:"shoppingList"`
-	SupplyChannel       *ChannelResourceIdentifier     `json:"supplyChannel,omitempty"`
-	DistributionChannel *ChannelResourceIdentifier     `json:"distributionChannel,omitempty"`
+	ShoppingList ShoppingListResourceIdentifier `json:"shoppingList"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -804,7 +832,9 @@ func (obj StagedOrderAddShoppingListAction) MarshalJSON() ([]byte, error) {
 
 type StagedOrderChangeCustomLineItemMoneyAction struct {
 	CustomLineItemId string `json:"customLineItemId"`
-	Money            Money  `json:"money"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	Money Money `json:"money"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -833,8 +863,10 @@ func (obj StagedOrderChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, 
 }
 
 type StagedOrderChangeLineItemQuantityAction struct {
-	LineItemId         string                      `json:"lineItemId"`
-	Quantity           float64                     `json:"quantity"`
+	LineItemId string  `json:"lineItemId"`
+	Quantity   float64 `json:"quantity"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 }
@@ -1020,8 +1052,10 @@ func (obj StagedOrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, err
 }
 
 type StagedOrderRemoveLineItemAction struct {
-	LineItemId              string                      `json:"lineItemId"`
-	Quantity                *float64                    `json:"quantity,omitempty"`
+	LineItemId string   `json:"lineItemId"`
+	Quantity   *float64 `json:"quantity,omitempty"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice           *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice      *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	ShippingDetailsToRemove *ItemShippingDetailsDraft   `json:"shippingDetailsToRemove,omitempty"`
@@ -1080,7 +1114,25 @@ func (obj StagedOrderSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetBillingAddressCustomFieldAction struct {
-	Name  string      `json:"name"`
+	Name string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -1095,6 +1147,7 @@ func (obj StagedOrderSetBillingAddressCustomFieldAction) MarshalJSON() ([]byte, 
 }
 
 type StagedOrderSetBillingAddressCustomTypeAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
 	Type   *TypeResourceIdentifier `json:"type,omitempty"`
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
@@ -1124,7 +1177,25 @@ func (obj StagedOrderSetCountryAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetCustomFieldAction struct {
-	Name  string      `json:"name"`
+	Name string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -1139,9 +1210,27 @@ func (obj StagedOrderSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetCustomLineItemCustomFieldAction struct {
-	CustomLineItemId string      `json:"customLineItemId"`
-	Name             string      `json:"name"`
-	Value            interface{} `json:"value,omitempty"`
+	CustomLineItemId string `json:"customLineItemId"`
+	Name             string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
+	Value interface{} `json:"value,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1155,9 +1244,10 @@ func (obj StagedOrderSetCustomLineItemCustomFieldAction) MarshalJSON() ([]byte, 
 }
 
 type StagedOrderSetCustomLineItemCustomTypeAction struct {
-	CustomLineItemId string                  `json:"customLineItemId"`
-	Type             *TypeResourceIdentifier `json:"type,omitempty"`
-	Fields           *FieldContainer         `json:"fields,omitempty"`
+	CustomLineItemId string `json:"customLineItemId"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1234,6 +1324,7 @@ func (obj StagedOrderSetCustomShippingMethodAction) MarshalJSON() ([]byte, error
 }
 
 type StagedOrderSetCustomTypeAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
 	Type   *TypeResourceIdentifier `json:"type,omitempty"`
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
@@ -1307,9 +1398,27 @@ func (obj StagedOrderSetDeliveryAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetDeliveryAddressCustomFieldAction struct {
-	DeliveryId string      `json:"deliveryId"`
-	Name       string      `json:"name"`
-	Value      interface{} `json:"value,omitempty"`
+	DeliveryId string `json:"deliveryId"`
+	Name       string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
+	Value interface{} `json:"value,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1323,9 +1432,10 @@ func (obj StagedOrderSetDeliveryAddressCustomFieldAction) MarshalJSON() ([]byte,
 }
 
 type StagedOrderSetDeliveryAddressCustomTypeAction struct {
-	DeliveryId string                  `json:"deliveryId"`
-	Type       *TypeResourceIdentifier `json:"type,omitempty"`
-	Fields     *FieldContainer         `json:"fields,omitempty"`
+	DeliveryId string `json:"deliveryId"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1339,8 +1449,9 @@ func (obj StagedOrderSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, 
 }
 
 type StagedOrderSetDeliveryCustomFieldAction struct {
-	Name  string      `json:"name"`
-	Value interface{} `json:"value,omitempty"`
+	DeliveryId string      `json:"deliveryId"`
+	Name       string      `json:"name"`
+	Value      interface{} `json:"value,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1354,6 +1465,7 @@ func (obj StagedOrderSetDeliveryCustomFieldAction) MarshalJSON() ([]byte, error)
 }
 
 type StagedOrderSetDeliveryCustomTypeAction struct {
+	DeliveryId string `json:"deliveryId"`
 	// If set, the custom type is set to this new value.
 	// If absent, the custom type and any existing custom fields are removed.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -1387,9 +1499,27 @@ func (obj StagedOrderSetDeliveryItemsAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetItemShippingAddressCustomFieldAction struct {
-	AddressKey string      `json:"addressKey"`
-	Name       string      `json:"name"`
-	Value      interface{} `json:"value,omitempty"`
+	AddressKey string `json:"addressKey"`
+	Name       string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
+	Value interface{} `json:"value,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1403,9 +1533,10 @@ func (obj StagedOrderSetItemShippingAddressCustomFieldAction) MarshalJSON() ([]b
 }
 
 type StagedOrderSetItemShippingAddressCustomTypeAction struct {
-	AddressKey string                  `json:"addressKey"`
-	Type       *TypeResourceIdentifier `json:"type,omitempty"`
-	Fields     *FieldContainer         `json:"fields,omitempty"`
+	AddressKey string `json:"addressKey"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1419,9 +1550,27 @@ func (obj StagedOrderSetItemShippingAddressCustomTypeAction) MarshalJSON() ([]by
 }
 
 type StagedOrderSetLineItemCustomFieldAction struct {
-	LineItemId string      `json:"lineItemId"`
-	Name       string      `json:"name"`
-	Value      interface{} `json:"value,omitempty"`
+	LineItemId string `json:"lineItemId"`
+	Name       string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
+	Value interface{} `json:"value,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1435,9 +1584,10 @@ func (obj StagedOrderSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error)
 }
 
 type StagedOrderSetLineItemCustomTypeAction struct {
-	LineItemId string                  `json:"lineItemId"`
-	Type       *TypeResourceIdentifier `json:"type,omitempty"`
-	Fields     *FieldContainer         `json:"fields,omitempty"`
+	LineItemId string `json:"lineItemId"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
+	Type   *TypeResourceIdentifier `json:"type,omitempty"`
+	Fields *FieldContainer         `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1451,7 +1601,8 @@ func (obj StagedOrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 }
 
 type StagedOrderSetLineItemDistributionChannelAction struct {
-	LineItemId          string                     `json:"lineItemId"`
+	LineItemId string `json:"lineItemId"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -1466,7 +1617,9 @@ func (obj StagedOrderSetLineItemDistributionChannelAction) MarshalJSON() ([]byte
 }
 
 type StagedOrderSetLineItemPriceAction struct {
-	LineItemId    string `json:"lineItemId"`
+	LineItemId string `json:"lineItemId"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 }
 
@@ -1569,6 +1722,8 @@ func (obj StagedOrderSetOrderNumberAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetOrderTotalTaxAction struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalTotalGross  Money             `json:"externalTotalGross"`
 	ExternalTaxPortions []TaxPortionDraft `json:"externalTaxPortions"`
 }
@@ -1595,6 +1750,41 @@ func (obj StagedOrderSetOrderTotalTaxAction) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(target)
+}
+
+type StagedOrderSetParcelCustomFieldAction struct {
+	ParcelId string      `json:"parcelId"`
+	Name     string      `json:"name"`
+	Value    interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetParcelCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetParcelCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setParcelCustomField", Alias: (*Alias)(&obj)})
+}
+
+type StagedOrderSetParcelCustomTypeAction struct {
+	ParcelId string `json:"parcelId"`
+	// If set, the custom type is set to this new value.
+	// If absent, the custom type and any existing custom fields are removed.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// If set, the custom fields are set to this new value.
+	Fields *interface{} `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetParcelCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetParcelCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setParcelCustomType", Alias: (*Alias)(&obj)})
 }
 
 type StagedOrderSetParcelItemsAction struct {
@@ -1668,6 +1858,41 @@ func (obj StagedOrderSetReturnInfoAction) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(target)
+}
+
+type StagedOrderSetReturnItemCustomFieldAction struct {
+	ReturnItemId string      `json:"returnItemId"`
+	Name         string      `json:"name"`
+	Value        interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetReturnItemCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetReturnItemCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setReturnItemCustomField", Alias: (*Alias)(&obj)})
+}
+
+type StagedOrderSetReturnItemCustomTypeAction struct {
+	ReturnItemId string `json:"returnItemId"`
+	// If set, the custom type is set to this new value.
+	// If absent, the custom type and any existing custom fields are removed.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// If set, the custom fields are set to this new value.
+	Fields *interface{} `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetReturnItemCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetReturnItemCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setReturnItemCustomType", Alias: (*Alias)(&obj)})
 }
 
 type StagedOrderSetReturnPaymentStateAction struct {
@@ -1750,7 +1975,25 @@ func (obj StagedOrderSetShippingAddressAndShippingMethodAction) MarshalJSON() ([
 }
 
 type StagedOrderSetShippingAddressCustomFieldAction struct {
-	Name  string      `json:"name"`
+	Name string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -1765,6 +2008,7 @@ func (obj StagedOrderSetShippingAddressCustomFieldAction) MarshalJSON() ([]byte,
 }
 
 type StagedOrderSetShippingAddressCustomTypeAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
 	Type   *TypeResourceIdentifier `json:"type,omitempty"`
 	Fields *FieldContainer         `json:"fields,omitempty"`
 }
@@ -1854,9 +2098,11 @@ func (obj StagedOrderSetShippingRateInputAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderTransitionCustomLineItemStateAction struct {
-	CustomLineItemId     string                  `json:"customLineItemId"`
-	Quantity             int                     `json:"quantity"`
-	FromState            StateResourceIdentifier `json:"fromState"`
+	CustomLineItemId string `json:"customLineItemId"`
+	Quantity         int    `json:"quantity"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	FromState StateResourceIdentifier `json:"fromState"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
 	ToState              StateResourceIdentifier `json:"toState"`
 	ActualTransitionDate *time.Time              `json:"actualTransitionDate,omitempty"`
 }
@@ -1872,9 +2118,11 @@ func (obj StagedOrderTransitionCustomLineItemStateAction) MarshalJSON() ([]byte,
 }
 
 type StagedOrderTransitionLineItemStateAction struct {
-	LineItemId           string                  `json:"lineItemId"`
-	Quantity             int                     `json:"quantity"`
-	FromState            StateResourceIdentifier `json:"fromState"`
+	LineItemId string `json:"lineItemId"`
+	Quantity   int    `json:"quantity"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	FromState StateResourceIdentifier `json:"fromState"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
 	ToState              StateResourceIdentifier `json:"toState"`
 	ActualTransitionDate *time.Time              `json:"actualTransitionDate,omitempty"`
 }
@@ -1890,6 +2138,7 @@ func (obj StagedOrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error
 }
 
 type StagedOrderTransitionStateAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
 	State StateResourceIdentifier `json:"state"`
 	Force *bool                   `json:"force,omitempty"`
 }
@@ -1919,6 +2168,7 @@ func (obj StagedOrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, err
 }
 
 type StagedOrderUpdateSyncInfoAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
 	Channel    ChannelResourceIdentifier `json:"channel"`
 	ExternalId *string                   `json:"externalId,omitempty"`
 	SyncedAt   *time.Time                `json:"syncedAt,omitempty"`

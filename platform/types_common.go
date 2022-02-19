@@ -31,8 +31,9 @@ type Asset struct {
 	Name        LocalizedString  `json:"name"`
 	Description *LocalizedString `json:"description,omitempty"`
 	Tags        []string         `json:"tags"`
-	Custom      *CustomFields    `json:"custom,omitempty"`
-	Key         *string          `json:"key,omitempty"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Custom *CustomFields `json:"custom,omitempty"`
+	Key    *string       `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -64,12 +65,13 @@ type AssetDimensions struct {
 }
 
 type AssetDraft struct {
-	Sources     []AssetSource      `json:"sources"`
-	Name        LocalizedString    `json:"name"`
-	Description *LocalizedString   `json:"description,omitempty"`
-	Tags        []string           `json:"tags"`
-	Custom      *CustomFieldsDraft `json:"custom,omitempty"`
-	Key         *string            `json:"key,omitempty"`
+	Sources     []AssetSource    `json:"sources"`
+	Name        LocalizedString  `json:"name"`
+	Description *LocalizedString `json:"description,omitempty"`
+	Tags        []string         `json:"tags"`
+	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	Key    *string            `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -213,6 +215,7 @@ type CreatedBy struct {
 }
 
 type DiscountedPrice struct {
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
 	Value    TypedMoney               `json:"value"`
 	Discount ProductDiscountReference `json:"discount"`
 }
@@ -235,6 +238,8 @@ func (obj *DiscountedPrice) UnmarshalJSON(data []byte) error {
 }
 
 type DiscountedPriceDraft struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Value    Money                    `json:"value"`
 	Discount ProductDiscountReference `json:"discount"`
 }
@@ -323,12 +328,25 @@ type LastModifiedBy struct {
 
 // LocalizedString is something
 type LocalizedString map[string]string
+
+/**
+*	Draft type that stores amounts in cent precision for the specified currency.
+*	For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+*
+ */
 type Money struct {
+	// amount in the smallest indivisible unit of a currency, such as
+	//
+	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
 	CentAmount int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
 }
 
+/**
+*	The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits.
+ */
 type MoneyType string
 
 const (
@@ -337,18 +355,21 @@ const (
 )
 
 type Price struct {
-	ID    string     `json:"id"`
+	ID string `json:"id"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
 	Value TypedMoney `json:"value"`
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
 	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Channel       *ChannelReference       `json:"channel,omitempty"`
-	ValidFrom     *time.Time              `json:"validFrom,omitempty"`
-	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
-	Discounted    *DiscountedPrice        `json:"discounted,omitempty"`
-	Custom        *CustomFields           `json:"custom,omitempty"`
-	Tiers         []PriceTier             `json:"tiers"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	Channel    *ChannelReference `json:"channel,omitempty"`
+	ValidFrom  *time.Time        `json:"validFrom,omitempty"`
+	ValidUntil *time.Time        `json:"validUntil,omitempty"`
+	Discounted *DiscountedPrice  `json:"discounted,omitempty"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Custom *CustomFields `json:"custom,omitempty"`
+	Tiers  []PriceTier   `json:"tiers"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -392,17 +413,21 @@ func (obj Price) MarshalJSON() ([]byte, error) {
 }
 
 type PriceDraft struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Value Money `json:"value"`
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
 	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
-	Channel       *ChannelResourceIdentifier       `json:"channel,omitempty"`
-	ValidFrom     *time.Time                       `json:"validFrom,omitempty"`
-	ValidUntil    *time.Time                       `json:"validUntil,omitempty"`
-	Custom        *CustomFieldsDraft               `json:"custom,omitempty"`
-	Tiers         []PriceTierDraft                 `json:"tiers"`
-	Discounted    *DiscountedPriceDraft            `json:"discounted,omitempty"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	Channel    *ChannelResourceIdentifier `json:"channel,omitempty"`
+	ValidFrom  *time.Time                 `json:"validFrom,omitempty"`
+	ValidUntil *time.Time                 `json:"validUntil,omitempty"`
+	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	Custom     *CustomFieldsDraft    `json:"custom,omitempty"`
+	Tiers      []PriceTierDraft      `json:"tiers"`
+	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -429,8 +454,9 @@ func (obj PriceDraft) MarshalJSON() ([]byte, error) {
 }
 
 type PriceTier struct {
-	MinimumQuantity int        `json:"minimumQuantity"`
-	Value           TypedMoney `json:"value"`
+	MinimumQuantity int `json:"minimumQuantity"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	Value TypedMoney `json:"value"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -451,23 +477,29 @@ func (obj *PriceTier) UnmarshalJSON(data []byte) error {
 }
 
 type PriceTierDraft struct {
-	MinimumQuantity int   `json:"minimumQuantity"`
-	Value           Money `json:"value"`
+	MinimumQuantity int `json:"minimumQuantity"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	Value Money `json:"value"`
 }
 
 type QueryPrice struct {
-	ID    string `json:"id"`
-	Value Money  `json:"value"`
+	ID string `json:"id"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	Value Money `json:"value"`
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
 	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Channel       *ChannelReference       `json:"channel,omitempty"`
-	ValidFrom     *time.Time              `json:"validFrom,omitempty"`
-	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
-	Discounted    *DiscountedPriceDraft   `json:"discounted,omitempty"`
-	Custom        *CustomFields           `json:"custom,omitempty"`
-	Tiers         []PriceTierDraft        `json:"tiers"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	Channel    *ChannelReference     `json:"channel,omitempty"`
+	ValidFrom  *time.Time            `json:"validFrom,omitempty"`
+	ValidUntil *time.Time            `json:"validUntil,omitempty"`
+	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Custom *CustomFields    `json:"custom,omitempty"`
+	Tiers  []PriceTierDraft `json:"tiers"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -586,6 +618,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "product-selection":
+		obj := ProductSelectionReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "product-type":
 		obj := ProductTypeReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -670,6 +708,7 @@ const (
 	ReferenceTypeIdPayment               ReferenceTypeId = "payment"
 	ReferenceTypeIdProduct               ReferenceTypeId = "product"
 	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
+	ReferenceTypeIdProductSelection      ReferenceTypeId = "product-selection"
 	ReferenceTypeIdProductType           ReferenceTypeId = "product-type"
 	ReferenceTypeIdReview                ReferenceTypeId = "review"
 	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
@@ -769,6 +808,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 			return nil, err
 		}
 		return obj, nil
+	case "product-selection":
+		obj := ProductSelectionResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "product-type":
 		obj := ProductTypeResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -834,18 +879,22 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 }
 
 type ScopedPrice struct {
-	ID           string     `json:"id"`
-	Value        TypedMoney `json:"value"`
+	ID string `json:"id"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	Value TypedMoney `json:"value"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
 	CurrentValue TypedMoney `json:"currentValue"`
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
 	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Channel       *ChannelReference       `json:"channel,omitempty"`
-	ValidFrom     *time.Time              `json:"validFrom,omitempty"`
-	ValidUntil    *time.Time              `json:"validUntil,omitempty"`
-	Discounted    *DiscountedPrice        `json:"discounted,omitempty"`
-	Custom        *CustomFields           `json:"custom,omitempty"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	Channel    *ChannelReference `json:"channel,omitempty"`
+	ValidFrom  *time.Time        `json:"validFrom,omitempty"`
+	ValidUntil *time.Time        `json:"validUntil,omitempty"`
+	Discounted *DiscountedPrice  `json:"discounted,omitempty"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -872,6 +921,10 @@ func (obj *ScopedPrice) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+*
+ */
 type TypedMoney interface{}
 
 func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
@@ -904,10 +957,18 @@ func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
 }
 
 type CentPrecisionMoney struct {
-	FractionDigits int `json:"fractionDigits"`
-	CentAmount     int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
+	// amount in the smallest indivisible unit of a currency, such as
+	//
+	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+	CentAmount int `json:"centAmount"`
+	// number of digits after the decimal separator
+	//
+	// * equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
+	// * greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
+	FractionDigits int `json:"fractionDigits"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -920,12 +981,24 @@ func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 	}{Action: "centPrecision", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Money object that stores an amount of a fraction of the smallest indivisible unit of the specified currency.
+ */
 type HighPrecisionMoney struct {
-	FractionDigits int `json:"fractionDigits"`
-	CentAmount     int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-	CurrencyCode  string `json:"currencyCode"`
-	PreciseAmount int    `json:"preciseAmount"`
+	CurrencyCode string `json:"currencyCode"`
+	// amount in the smallest indivisible unit of a currency, such as
+	//
+	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+	CentAmount int `json:"centAmount"`
+	// number of digits after the decimal separator
+	//
+	// * equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
+	// * greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
+	FractionDigits int `json:"fractionDigits"`
+	// amount in 1 / (10 ^ `fractionDigits`) of a currency.
+	PreciseAmount int `json:"preciseAmount"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -970,10 +1043,15 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 }
 
 type CentPrecisionMoneyDraft struct {
+	// amount in the smallest indivisible unit of a currency, such as
+	//
+	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
 	CentAmount int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-	CurrencyCode   string `json:"currencyCode"`
-	FractionDigits *int   `json:"fractionDigits,omitempty"`
+	CurrencyCode string `json:"currencyCode"`
+	// Must be equal to the default number of fraction digits for the specified currency.
+	FractionDigits *int `json:"fractionDigits,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -986,12 +1064,21 @@ func (obj CentPrecisionMoneyDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "centPrecision", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Money draft object to store an amount of a fraction of the smallest indivisible unit of the specified currency.
+ */
 type HighPrecisionMoneyDraft struct {
+	// amount in the smallest indivisible unit of a currency, such as
+	//
+	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
+	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
 	CentAmount int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-	CurrencyCode   string `json:"currencyCode"`
-	FractionDigits *int   `json:"fractionDigits,omitempty"`
-	PreciseAmount  int    `json:"preciseAmount"`
+	CurrencyCode string `json:"currencyCode"`
+	// Must be equal to the default number of fraction digits for the specified currency.
+	FractionDigits *int `json:"fractionDigits,omitempty"`
+	// amount in 1 / (10 ^ `fractionDigits`) of a currency.
+	PreciseAmount int `json:"preciseAmount"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -14,7 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder struct
 /**
 *	Set a new password using a token.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder) Post(body CustomerResetPassword) *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPost {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestBuilder) Post(body MyCustomerResetPassword) *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPost{
 		body:   body,
 		url:    fmt.Sprintf("/%s/in-store/key=%s/customers/password/reset", rb.projectKey, rb.storeKey),

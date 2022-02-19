@@ -18,6 +18,13 @@ func (rb *ByProjectKeyProductsByIDRequestBuilder) Images() *ByProjectKeyProducts
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyProductsByIDRequestBuilder) ProductSelections() *ByProjectKeyProductsByIDProductSelectionsRequestBuilder {
+	return &ByProjectKeyProductsByIDProductSelectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		id:         rb.id,
+		client:     rb.client,
+	}
+}
 
 /**
 *	Gets the full representation of a product by ID.

@@ -7,45 +7,93 @@ import (
 	"time"
 )
 
+/**
+*	Defines an allowed value of a [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType) field.
+*
+ */
 type CustomFieldEnumValue struct {
-	Key   string `json:"key"`
+	// Key of the value used as a programmatic identifier.
+	Key string `json:"key"`
+	// Descriptive label of the value.
 	Label string `json:"label"`
 }
 
+/**
+*	Defines an allowed value of a [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) field.
+*
+ */
 type CustomFieldLocalizedEnumValue struct {
-	Key   string          `json:"key"`
+	// Key of the value used as a programmatic identifier.
+	Key string `json:"key"`
+	// Descriptive localized label of the value.
 	Label LocalizedString `json:"label"`
 }
 
+/**
+*	Defines which resource type a [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType) can reference.
+*
+ */
+type CustomFieldReferenceValue string
+
+const (
+	CustomFieldReferenceValueCart             CustomFieldReferenceValue = "cart"
+	CustomFieldReferenceValueCategory         CustomFieldReferenceValue = "category"
+	CustomFieldReferenceValueChannel          CustomFieldReferenceValue = "channel"
+	CustomFieldReferenceValueCustomer         CustomFieldReferenceValue = "customer"
+	CustomFieldReferenceValueKeyValueDocument CustomFieldReferenceValue = "key-value-document"
+	CustomFieldReferenceValueOrder            CustomFieldReferenceValue = "order"
+	CustomFieldReferenceValueProduct          CustomFieldReferenceValue = "product"
+	CustomFieldReferenceValueProductType      CustomFieldReferenceValue = "product-type"
+	CustomFieldReferenceValueReview           CustomFieldReferenceValue = "review"
+	CustomFieldReferenceValueState            CustomFieldReferenceValue = "state"
+	CustomFieldReferenceValueShippingMethod   CustomFieldReferenceValue = "shipping-method"
+	CustomFieldReferenceValueZone             CustomFieldReferenceValue = "zone"
+)
+
+/**
+*	Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+*
+ */
 type CustomFields struct {
+	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// A valid JSON object, based on FieldDefinition.
+	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#list-of-customizable-data-types).
 	Fields FieldContainer `json:"fields"`
 }
 
+/**
+*	The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+*
+ */
 type CustomFieldsDraft struct {
-	// The `id` or the `key` of the type to use.
+	// `id` or `key` of the [Type](ctp:api:type:Type).
 	Type TypeResourceIdentifier `json:"type"`
-	// A valid JSON object, based on the FieldDefinitions of the Type.
+	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#list-of-customizable-data-types).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 // FieldContainer is something
 type FieldContainer map[string]interface{}
+
+/**
+*	Defines a [Custom Field](/../api/projects/custom-fields) and its meta-information.
+*	This FieldDefinition is similar to an [AttributeDefinition](ctp:api:type:AttributeDefinition) of [Product Types](/../api/projects/productTypes).
+*
+ */
 type FieldDefinition struct {
-	// Describes the type of the field.
+	// Data type of the Custom Field to define.
 	Type FieldType `json:"type"`
-	// The name of the field.
-	// The name must be between two and 36 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
-	// The name must be unique for a given resource type ID.
-	// In case there is a field with the same name in another type it has to have the same FieldType also.
+	// Name of the Custom Field to define.
+	// Must be unique for a given [ResourceTypeId](ctp:api:type:ResourceTypeId).
+	// In case there is a FieldDefinition with the same `name` in another [Type](ctp:api:type:Type), both FieldDefinitions must have the same `type`.
 	Name string `json:"name"`
 	// A human-readable label for the field.
 	Label LocalizedString `json:"label"`
-	// Whether the field is required to have a value.
+	// Defines whether the field is required to have a value.
 	Required bool `json:"required"`
-	// Provides a visual representation type for this field.
-	// It is only relevant for string-based field types like StringType and LocalizedStringType.
+	// Must be either `SingleLine` or `MultiLine`.
+	// Defines the visual representation of the field in user interfaces like the Merchant Center.
+	// It is only relevant for string-based [FieldTypes](ctp:api:type:FieldType) like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType).
 	InputHint *TypeTextInputHint `json:"inputHint,omitempty"`
 }
 
@@ -164,6 +212,10 @@ func mapDiscriminatorFieldType(input interface{}) (FieldType, error) {
 	return nil, nil
 }
 
+/**
+*	Field type for Boolean values.
+*
+ */
 type CustomFieldBooleanType struct {
 }
 
@@ -177,6 +229,10 @@ func (obj CustomFieldBooleanType) MarshalJSON() ([]byte, error) {
 	}{Action: "Boolean", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for [DateTime](ctp:api:type:DateTime) values.
+*
+ */
 type CustomFieldDateTimeType struct {
 }
 
@@ -190,6 +246,10 @@ func (obj CustomFieldDateTimeType) MarshalJSON() ([]byte, error) {
 	}{Action: "DateTime", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for [Date](ctp:api:type:Date) values.
+*
+ */
 type CustomFieldDateType struct {
 }
 
@@ -203,7 +263,12 @@ func (obj CustomFieldDateType) MarshalJSON() ([]byte, error) {
 	}{Action: "Date", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for enum values.
+*
+ */
 type CustomFieldEnumType struct {
+	// Allowed values.
 	Values []CustomFieldEnumValue `json:"values"`
 }
 
@@ -217,7 +282,12 @@ func (obj CustomFieldEnumType) MarshalJSON() ([]byte, error) {
 	}{Action: "Enum", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for localized enum values.
+*
+ */
 type CustomFieldLocalizedEnumType struct {
+	// Allowed values.
 	Values []CustomFieldLocalizedEnumValue `json:"values"`
 }
 
@@ -231,6 +301,10 @@ func (obj CustomFieldLocalizedEnumType) MarshalJSON() ([]byte, error) {
 	}{Action: "LocalizedEnum", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for [LocalizedString](ctp:api:type:LocalizedString) values.
+*
+ */
 type CustomFieldLocalizedStringType struct {
 }
 
@@ -244,6 +318,10 @@ func (obj CustomFieldLocalizedStringType) MarshalJSON() ([]byte, error) {
 	}{Action: "LocalizedString", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney) values.
+*
+ */
 type CustomFieldMoneyType struct {
 }
 
@@ -257,6 +335,10 @@ func (obj CustomFieldMoneyType) MarshalJSON() ([]byte, error) {
 	}{Action: "Money", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for number values.
+*
+ */
 type CustomFieldNumberType struct {
 }
 
@@ -270,8 +352,13 @@ func (obj CustomFieldNumberType) MarshalJSON() ([]byte, error) {
 	}{Action: "Number", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for [Reference](ctp:api:type:Reference) values.
+*
+ */
 type CustomFieldReferenceType struct {
-	ReferenceTypeId ReferenceTypeId `json:"referenceTypeId"`
+	// Resource type the Custom Field can reference.
+	ReferenceTypeId CustomFieldReferenceValue `json:"referenceTypeId"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -284,7 +371,12 @@ func (obj CustomFieldReferenceType) MarshalJSON() ([]byte, error) {
 	}{Action: "Reference", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Values of a SetType Custom Field are sets of values of the specified `elementType`.
+*
+ */
 type CustomFieldSetType struct {
+	// Field type of the elements in the set.
 	ElementType FieldType `json:"elementType"`
 }
 
@@ -315,6 +407,10 @@ func (obj CustomFieldSetType) MarshalJSON() ([]byte, error) {
 	}{Action: "Set", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for string values.
+*
+ */
 type CustomFieldStringType struct {
 }
 
@@ -328,6 +424,10 @@ func (obj CustomFieldStringType) MarshalJSON() ([]byte, error) {
 	}{Action: "String", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Field type for [Time](ctp:api:type:Time) values.
+*
+ */
 type CustomFieldTimeType struct {
 }
 
@@ -341,59 +441,73 @@ func (obj CustomFieldTimeType) MarshalJSON() ([]byte, error) {
 	}{Action: "Time", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	IDs indicating the [customizable resources and data types](/../api/projects/types#list-of-customizable-data-types).
+*
+ */
 type ResourceTypeId string
 
 const (
 	ResourceTypeIdAddress                     ResourceTypeId = "address"
 	ResourceTypeIdAsset                       ResourceTypeId = "asset"
+	ResourceTypeIdCartDiscount                ResourceTypeId = "cart-discount"
 	ResourceTypeIdCategory                    ResourceTypeId = "category"
 	ResourceTypeIdChannel                     ResourceTypeId = "channel"
 	ResourceTypeIdCustomer                    ResourceTypeId = "customer"
-	ResourceTypeIdOrder                       ResourceTypeId = "order"
-	ResourceTypeIdOrderEdit                   ResourceTypeId = "order-edit"
+	ResourceTypeIdCustomerGroup               ResourceTypeId = "customer-group"
+	ResourceTypeIdCustomLineItem              ResourceTypeId = "custom-line-item"
+	ResourceTypeIdDiscountCode                ResourceTypeId = "discount-code"
 	ResourceTypeIdInventoryEntry              ResourceTypeId = "inventory-entry"
 	ResourceTypeIdLineItem                    ResourceTypeId = "line-item"
-	ResourceTypeIdCustomLineItem              ResourceTypeId = "custom-line-item"
-	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
+	ResourceTypeIdOrder                       ResourceTypeId = "order"
+	ResourceTypeIdOrderEdit                   ResourceTypeId = "order-edit"
+	ResourceTypeIdOrderDelivery               ResourceTypeId = "order-delivery"
 	ResourceTypeIdPayment                     ResourceTypeId = "payment"
 	ResourceTypeIdPaymentInterfaceInteraction ResourceTypeId = "payment-interface-interaction"
+	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
 	ResourceTypeIdShippingMethod              ResourceTypeId = "shipping-method"
 	ResourceTypeIdShoppingList                ResourceTypeId = "shopping-list"
 	ResourceTypeIdShoppingListTextLineItem    ResourceTypeId = "shopping-list-text-line-item"
-	ResourceTypeIdDiscountCode                ResourceTypeId = "discount-code"
-	ResourceTypeIdCartDiscount                ResourceTypeId = "cart-discount"
-	ResourceTypeIdCustomerGroup               ResourceTypeId = "customer-group"
 	ResourceTypeIdStore                       ResourceTypeId = "store"
+	ResourceTypeIdTransaction                 ResourceTypeId = "transaction"
 )
 
 type Type struct {
-	// The unique ID of the type.
+	// Unique ID of the Type.
 	ID string `json:"id"`
-	// The current version of the type.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the Type.
+	Version int `json:"version"`
+	// Date and time (UTC) the Type was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Type was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Identifier for the type (max.
-	// 256 characters).
-	Key         string           `json:"key"`
-	Name        LocalizedString  `json:"name"`
+	// User-defined unique identifier for the Type.
+	Key string `json:"key"`
+	// Name of the Type.
+	Name LocalizedString `json:"name"`
+	// Description of the Type.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Defines for which resource(s) the type is valid.
-	ResourceTypeIds  []ResourceTypeId  `json:"resourceTypeIds"`
+	// Resources and/or data types for which the Type is defined.
+	ResourceTypeIds []ResourceTypeId `json:"resourceTypeIds"`
+	// Defines Custom Fields.
 	FieldDefinitions []FieldDefinition `json:"fieldDefinitions"`
 }
 
 type TypeDraft struct {
-	Key         string           `json:"key"`
-	Name        LocalizedString  `json:"name"`
+	// User-defined unique identifier for the Type.
+	Key string `json:"key"`
+	// Name of the Type.
+	Name LocalizedString `json:"name"`
+	// Description of the Type.
 	Description *LocalizedString `json:"description,omitempty"`
-	// The IDs of the resources that can be customized with this type.
-	ResourceTypeIds  []ResourceTypeId  `json:"resourceTypeIds"`
+	// Resources and/or data types for which the Type is defined.
+	ResourceTypeIds []ResourceTypeId `json:"resourceTypeIds"`
+	// Defines Custom Fields.
 	FieldDefinitions []FieldDefinition `json:"fieldDefinitions"`
 }
 
@@ -420,18 +534,37 @@ func (obj TypeDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Types](ctp:api:type:Type).
+*
+ */
 type TypePagedQueryResponse struct {
-	Limit   int    `json:"limit"`
-	Count   int    `json:"count"`
-	Total   *int   `json:"total,omitempty"`
-	Offset  int    `json:"offset"`
+	// Number of results requested in the query request.
+	Limit int `json:"limit"`
+	// Offset supplied by the client or server default. It is the number of elements skipped, not a page number.
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Types](ctp:api:type:Type) matching the query.
 	Results []Type `json:"results"`
 }
 
+/**
+*	[Reference](/../api/types#reference) to a [Type](ctp:api:type:Type).
+*
+ */
 type TypeReference struct {
-	// Unique ID of the referenced resource.
-	ID  string `json:"id"`
-	Obj *Type  `json:"obj,omitempty"`
+	// Unique ID of the referenced [Type](ctp:api:type:Type).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Type.
+	// Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Types.
+	Obj *Type `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -444,10 +577,14 @@ func (obj TypeReference) MarshalJSON() ([]byte, error) {
 	}{Action: "type", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
+*
+ */
 type TypeResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Unique ID of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// Unique key of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -461,6 +598,10 @@ func (obj TypeResourceIdentifier) MarshalJSON() ([]byte, error) {
 	}{Action: "type", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Provides a visual representation type for this field. It is only relevant for string-based field types like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType). Following values are supported:
+*
+ */
 type TypeTextInputHint string
 
 const (
@@ -469,7 +610,10 @@ const (
 )
 
 type TypeUpdate struct {
-	Version int                `json:"version"`
+	// Expected version of the type on which the changes should be applied.
+	// If the expected version does not match the actual version, a 409 Conflict will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Type.
 	Actions []TypeUpdateAction `json:"actions"`
 }
 
@@ -525,6 +669,12 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 		return obj, nil
 	case "changeEnumValueOrder":
 		obj := TypeChangeEnumValueOrderAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeFieldDefinitionLabel":
+		obj := TypeChangeFieldDefinitionLabelAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -587,9 +737,16 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 	return nil, nil
 }
 
+/**
+*	Adds a value to an [EnumType](ctp:api:type:CustomFieldEnumType).
+*	This update action can be used to update an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [EnumType](ctp:api:type:CustomFieldEnumType).
+*
+ */
 type TypeAddEnumValueAction struct {
-	FieldName string               `json:"fieldName"`
-	Value     CustomFieldEnumValue `json:"value"`
+	// `name` of the [Field Definition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// Value to append to the array.
+	Value CustomFieldEnumValue `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -603,6 +760,7 @@ func (obj TypeAddEnumValueAction) MarshalJSON() ([]byte, error) {
 }
 
 type TypeAddFieldDefinitionAction struct {
+	// Value to append to the array.
 	FieldDefinition FieldDefinition `json:"fieldDefinition"`
 }
 
@@ -616,9 +774,16 @@ func (obj TypeAddFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addFieldDefinition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds a value to a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType).
+*	This update action can be used to update a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType).
+*
+ */
 type TypeAddLocalizedEnumValueAction struct {
-	FieldName string                        `json:"fieldName"`
-	Value     CustomFieldLocalizedEnumValue `json:"value"`
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// Value to append to the array.
+	Value CustomFieldLocalizedEnumValue `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -631,9 +796,16 @@ func (obj TypeAddLocalizedEnumValueAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addLocalizedEnumValue", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changes the `label` of an [EnumValue](ctp:api:type:CustomFieldEnumValue) of an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition.
+*
+ */
 type TypeChangeEnumValueLabelAction struct {
-	FieldName string               `json:"fieldName"`
-	Value     CustomFieldEnumValue `json:"value"`
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// New value to set.
+	// Must not be empty.
+	Value CustomFieldEnumValue `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -646,9 +818,16 @@ func (obj TypeChangeEnumValueLabelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeEnumValueLabel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changes the order of [EnumValues](ctp:api:type:CustomFieldEnumValue) in an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition.
+*	This update action can be used to update an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [EnumType](ctp:api:type:CustomFieldEnumType).
+*
+ */
 type TypeChangeEnumValueOrderAction struct {
-	FieldName string   `json:"fieldName"`
-	Keys      []string `json:"keys"`
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// Must match the set of `key`s of the EnumValues in the FieldDefinition (apart from their order).
+	Keys []string `json:"keys"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -661,7 +840,26 @@ func (obj TypeChangeEnumValueOrderAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeEnumValueOrder", Alias: (*Alias)(&obj)})
 }
 
+type TypeChangeFieldDefinitionLabelAction struct {
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// New value to set.
+	// Must not be empty.
+	Label LocalizedString `json:"label"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TypeChangeFieldDefinitionLabelAction) MarshalJSON() ([]byte, error) {
+	type Alias TypeChangeFieldDefinitionLabelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeFieldDefinitionLabel", Alias: (*Alias)(&obj)})
+}
+
 type TypeChangeFieldDefinitionOrderAction struct {
+	// Must match the set of `name`s of FieldDefinitions (up to order).
 	FieldNames []string `json:"fieldNames"`
 }
 
@@ -675,8 +873,15 @@ func (obj TypeChangeFieldDefinitionOrderAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeFieldDefinitionOrder", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changes the `inputHint` of [CustomFieldStringType](ctp:api:type:CustomFieldStringType) [FieldDefinition](ctp:api:type:FieldDefinition), a [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) [FieldDefinition](ctp:api:type:FieldDefinition), and [CustomFieldSetType](ctp:api:type:CustomFieldSetType) [FieldDefinition](ctp:api:type:FieldDefinition) of these string-based FieldTypes.
+*
+ */
 type TypeChangeInputHintAction struct {
-	FieldName string            `json:"fieldName"`
+	// `name` of the [Field Definition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// New value to set.
+	// Must not be empty.
 	InputHint TypeTextInputHint `json:"inputHint"`
 }
 
@@ -691,6 +896,8 @@ func (obj TypeChangeInputHintAction) MarshalJSON() ([]byte, error) {
 }
 
 type TypeChangeKeyAction struct {
+	// New value to set.
+	// Must not be empty.
 	Key string `json:"key"`
 }
 
@@ -705,6 +912,7 @@ func (obj TypeChangeKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type TypeChangeLabelAction struct {
+	// Name of the [Field Definition](ctp:api:type:FieldDefinition) to update.
 	FieldName string          `json:"fieldName"`
 	Label     LocalizedString `json:"label"`
 }
@@ -719,9 +927,16 @@ func (obj TypeChangeLabelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeLabel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changes the `label` of a [LocalizedEnumValue](ctp:api:type:CustomFieldLocalizedEnumValue) of an [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition.
+*
+ */
 type TypeChangeLocalizedEnumValueLabelAction struct {
-	FieldName string                        `json:"fieldName"`
-	Value     CustomFieldLocalizedEnumValue `json:"value"`
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// New value to set.
+	// Must not be empty.
+	Value CustomFieldLocalizedEnumValue `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -734,9 +949,16 @@ func (obj TypeChangeLocalizedEnumValueLabelAction) MarshalJSON() ([]byte, error)
 	}{Action: "changeLocalizedEnumValueLabel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changes the order of [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) in a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition.
+*	This update action can be used to update a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) of [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinitions.
+*
+ */
 type TypeChangeLocalizedEnumValueOrderAction struct {
-	FieldName string   `json:"fieldName"`
-	Keys      []string `json:"keys"`
+	// `name` of the [Field Definition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// Must match the set of `key`s of the LocalizedEnumValues in the FieldDefinition (up to order).
+	Keys []string `json:"keys"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -750,6 +972,8 @@ func (obj TypeChangeLocalizedEnumValueOrderAction) MarshalJSON() ([]byte, error)
 }
 
 type TypeChangeNameAction struct {
+	// New value to set.
+	// Must not be empty.
 	Name LocalizedString `json:"name"`
 }
 
@@ -764,6 +988,8 @@ func (obj TypeChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type TypeRemoveFieldDefinitionAction struct {
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to remove.
+	// The removal of a FieldDefinition deletes [asynchronously](/../api/general-concepts#eventual-consistency) all Custom Fields using the FieldDefinition as well.
 	FieldName string `json:"fieldName"`
 }
 
@@ -778,6 +1004,7 @@ func (obj TypeRemoveFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 }
 
 type TypeSetDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

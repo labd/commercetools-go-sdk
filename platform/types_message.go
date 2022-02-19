@@ -59,19 +59,6 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
-	case "CustomLineItemStateTransition":
-		obj := CustomLineItemStateTransitionMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
 	case "CustomerAddressAdded":
 		obj := CustomerAddressAddedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -254,58 +241,6 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
-	case "DeliveryAdded":
-		obj := DeliveryAddedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "DeliveryAddressSet":
-		obj := DeliveryAddressSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "DeliveryItemsUpdated":
-		obj := DeliveryItemsUpdatedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "DeliveryRemoved":
-		obj := DeliveryRemovedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
 	case "InventoryEntryCreated":
 		obj := InventoryEntryCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -345,445 +280,8 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
-	case "LineItemStateTransition":
-		obj := LineItemStateTransitionMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderBillingAddressSet":
-		obj := OrderBillingAddressSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderCreated":
-		obj := OrderCreatedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderCustomLineItemDiscountSet":
-		obj := OrderCustomLineItemDiscountSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderCustomerEmailSet":
-		obj := OrderCustomerEmailSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderCustomerGroupSet":
-		obj := OrderCustomerGroupSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderCustomerSet":
-		obj := OrderCustomerSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderDeleted":
-		obj := OrderDeletedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderDiscountCodeAdded":
-		obj := OrderDiscountCodeAddedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderDiscountCodeRemoved":
-		obj := OrderDiscountCodeRemovedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderDiscountCodeStateSet":
-		obj := OrderDiscountCodeStateSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderEditApplied":
-		obj := OrderEditAppliedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderImported":
-		obj := OrderImportedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderLineItemAdded":
-		obj := OrderLineItemAddedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderLineItemDiscountSet":
-		obj := OrderLineItemDiscountSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderLineItemDistributionChannelSet":
-		obj := OrderLineItemDistributionChannelSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderLineItemRemoved":
-		obj := OrderLineItemRemovedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		if obj.NewTotalPrice != nil {
-			var err error
-			obj.NewTotalPrice, err = mapDiscriminatorTypedMoney(obj.NewTotalPrice)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderPaymentStateChanged":
-		obj := OrderPaymentStateChangedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ReturnInfoAdded":
-		obj := OrderReturnInfoAddedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ReturnInfoSet":
-		obj := OrderReturnInfoSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderReturnShipmentStateChanged":
-		obj := OrderReturnShipmentStateChangedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderShipmentStateChanged":
-		obj := OrderShipmentStateChangedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderShippingAddressSet":
-		obj := OrderShippingAddressSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderShippingInfoSet":
-		obj := OrderShippingInfoSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderShippingRateInputSet":
-		obj := OrderShippingRateInputSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		if obj.ShippingRateInput != nil {
-			var err error
-			obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
-			if err != nil {
-				return nil, err
-			}
-		}
-		if obj.OldShippingRateInput != nil {
-			var err error
-			obj.OldShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.OldShippingRateInput)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderStateChanged":
-		obj := OrderStateChangedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderStateTransition":
-		obj := OrderStateTransitionMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "OrderStoreSet":
-		obj := OrderStoreSetMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ParcelAddedToDelivery":
-		obj := ParcelAddedToDeliveryMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ParcelItemsUpdated":
-		obj := ParcelItemsUpdatedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ParcelMeasurementsUpdated":
-		obj := ParcelMeasurementsUpdatedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ParcelRemovedFromDelivery":
-		obj := ParcelRemovedFromDeliveryMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ParcelTrackingDataUpdated":
-		obj := ParcelTrackingDataUpdatedMessage{}
+	case "OrderPaymentAdded":
+		obj := OrderPaymentAddedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -990,6 +488,65 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "ProductSelectionCreated":
+		obj := ProductSelectionCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.ProductSelection != nil {
+			var err error
+			obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductSelectionDeleted":
+		obj := ProductSelectionDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductSelectionProductAdded":
+		obj := ProductSelectionProductAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductSelectionProductRemoved":
+		obj := ProductSelectionProductRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "ProductSlugChanged":
 		obj := ProductSlugChangedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1134,6 +691,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StoreProductSelectionsChanged":
+		obj := StoreProductSelectionsChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -1223,53 +793,6 @@ func (obj CategorySlugChangedMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "CategorySlugChanged", Alias: (*Alias)(&obj)})
-}
-
-type CustomLineItemStateTransitionMessage struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CustomLineItemId                string                   `json:"customLineItemId"`
-	TransitionDate                  time.Time                `json:"transitionDate"`
-	Quantity                        int                      `json:"quantity"`
-	FromState                       StateReference           `json:"fromState"`
-	ToState                         StateReference           `json:"toState"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *CustomLineItemStateTransitionMessage) UnmarshalJSON(data []byte) error {
-	type Alias CustomLineItemStateTransitionMessage
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomLineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
-	type Alias CustomLineItemStateTransitionMessage
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomLineItemStateTransition", Alias: (*Alias)(&obj)})
 }
 
 type CustomerAddressAddedMessage struct {
@@ -1874,6 +1397,754 @@ func (obj CustomerTitleSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerTitleSet", Alias: (*Alias)(&obj)})
 }
 
+type InventoryEntryCreatedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	InventoryEntry                  InventoryEntry           `json:"inventoryEntry"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntryCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
+}
+
+type InventoryEntryDeletedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Sku                             string                   `json:"sku"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntryDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryDeleted", Alias: (*Alias)(&obj)})
+}
+
+type InventoryEntryQuantitySetMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	OldQuantityOnStock              int                      `json:"oldQuantityOnStock"`
+	NewQuantityOnStock              int                      `json:"newQuantityOnStock"`
+	OldAvailableQuantity            int                      `json:"oldAvailableQuantity"`
+	NewAvailableQuantity            int                      `json:"newAvailableQuantity"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntryQuantitySetMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryQuantitySetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryQuantitySetMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryQuantitySetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
+}
+
+type MessagePagedQueryResponse struct {
+	Limit   int       `json:"limit"`
+	Count   int       `json:"count"`
+	Total   *int      `json:"total,omitempty"`
+	Offset  int       `json:"offset"`
+	Results []Message `json:"results"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MessagePagedQueryResponse) UnmarshalJSON(data []byte) error {
+	type Alias MessagePagedQueryResponse
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type MessagesConfiguration struct {
+	Enabled                 bool `json:"enabled"`
+	DeleteDaysAfterCreation *int `json:"deleteDaysAfterCreation,omitempty"`
+}
+
+type MessagesConfigurationDraft struct {
+	Enabled                 bool `json:"enabled"`
+	DeleteDaysAfterCreation int  `json:"deleteDaysAfterCreation"`
+}
+
+type OrderMessage interface{}
+
+func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
+
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+
+	switch discriminator {
+	case "CustomLineItemStateTransition":
+		obj := CustomLineItemStateTransitionMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryAdded":
+		obj := DeliveryAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryAddressSet":
+		obj := DeliveryAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryItemsUpdated":
+		obj := DeliveryItemsUpdatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryRemoved":
+		obj := DeliveryRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "LineItemStateTransition":
+		obj := LineItemStateTransitionMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderBillingAddressSet":
+		obj := OrderBillingAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCreated":
+		obj := OrderCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCustomLineItemDiscountSet":
+		obj := OrderCustomLineItemDiscountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCustomerEmailSet":
+		obj := OrderCustomerEmailSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCustomerGroupSet":
+		obj := OrderCustomerGroupSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCustomerSet":
+		obj := OrderCustomerSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderDeleted":
+		obj := OrderDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderDiscountCodeAdded":
+		obj := OrderDiscountCodeAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderDiscountCodeRemoved":
+		obj := OrderDiscountCodeRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderDiscountCodeStateSet":
+		obj := OrderDiscountCodeStateSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderEditApplied":
+		obj := OrderEditAppliedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderImported":
+		obj := OrderImportedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderLineItemAdded":
+		obj := OrderLineItemAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderLineItemDiscountSet":
+		obj := OrderLineItemDiscountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderLineItemDistributionChannelSet":
+		obj := OrderLineItemDistributionChannelSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderLineItemRemoved":
+		obj := OrderLineItemRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.NewTotalPrice != nil {
+			var err error
+			obj.NewTotalPrice, err = mapDiscriminatorTypedMoney(obj.NewTotalPrice)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderPaymentStateChanged":
+		obj := OrderPaymentStateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ReturnInfoAdded":
+		obj := OrderReturnInfoAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ReturnInfoSet":
+		obj := OrderReturnInfoSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderReturnShipmentStateChanged":
+		obj := OrderReturnShipmentStateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderShipmentStateChanged":
+		obj := OrderShipmentStateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderShippingAddressSet":
+		obj := OrderShippingAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderShippingInfoSet":
+		obj := OrderShippingInfoSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderShippingRateInputSet":
+		obj := OrderShippingRateInputSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.ShippingRateInput != nil {
+			var err error
+			obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.OldShippingRateInput != nil {
+			var err error
+			obj.OldShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.OldShippingRateInput)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderStateChanged":
+		obj := OrderStateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderStateTransition":
+		obj := OrderStateTransitionMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderStoreSet":
+		obj := OrderStoreSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ParcelAddedToDelivery":
+		obj := ParcelAddedToDeliveryMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ParcelItemsUpdated":
+		obj := ParcelItemsUpdatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ParcelMeasurementsUpdated":
+		obj := ParcelMeasurementsUpdatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ParcelRemovedFromDelivery":
+		obj := ParcelRemovedFromDeliveryMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ParcelTrackingDataUpdated":
+		obj := ParcelTrackingDataUpdatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type CustomLineItemStateTransitionMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	CustomLineItemId                string                   `json:"customLineItemId"`
+	TransitionDate                  time.Time                `json:"transitionDate"`
+	Quantity                        int                      `json:"quantity"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	FromState StateReference `json:"fromState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	ToState StateReference `json:"toState"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CustomLineItemStateTransitionMessage) UnmarshalJSON(data []byte) error {
+	type Alias CustomLineItemStateTransitionMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomLineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
+	type Alias CustomLineItemStateTransitionMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomLineItemStateTransition", Alias: (*Alias)(&obj)})
+}
+
 type DeliveryAddedMessage struct {
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
@@ -2050,140 +2321,6 @@ func (obj DeliveryRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryRemoved", Alias: (*Alias)(&obj)})
 }
 
-type InventoryEntryCreatedMessage struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	InventoryEntry                  InventoryEntry           `json:"inventoryEntry"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *InventoryEntryCreatedMessage) UnmarshalJSON(data []byte) error {
-	type Alias InventoryEntryCreatedMessage
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj InventoryEntryCreatedMessage) MarshalJSON() ([]byte, error) {
-	type Alias InventoryEntryCreatedMessage
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
-}
-
-type InventoryEntryDeletedMessage struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Sku                             string                   `json:"sku"`
-	SupplyChannel                   *ChannelReference        `json:"supplyChannel,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *InventoryEntryDeletedMessage) UnmarshalJSON(data []byte) error {
-	type Alias InventoryEntryDeletedMessage
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj InventoryEntryDeletedMessage) MarshalJSON() ([]byte, error) {
-	type Alias InventoryEntryDeletedMessage
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "InventoryEntryDeleted", Alias: (*Alias)(&obj)})
-}
-
-type InventoryEntryQuantitySetMessage struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	OldQuantityOnStock              int                      `json:"oldQuantityOnStock"`
-	NewQuantityOnStock              int                      `json:"newQuantityOnStock"`
-	OldAvailableQuantity            int                      `json:"oldAvailableQuantity"`
-	NewAvailableQuantity            int                      `json:"newAvailableQuantity"`
-	SupplyChannel                   *ChannelReference        `json:"supplyChannel,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *InventoryEntryQuantitySetMessage) UnmarshalJSON(data []byte) error {
-	type Alias InventoryEntryQuantitySetMessage
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj InventoryEntryQuantitySetMessage) MarshalJSON() ([]byte, error) {
-	type Alias InventoryEntryQuantitySetMessage
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
-}
-
 type LineItemStateTransitionMessage struct {
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
@@ -2200,8 +2337,10 @@ type LineItemStateTransitionMessage struct {
 	LineItemId                      string                   `json:"lineItemId"`
 	TransitionDate                  time.Time                `json:"transitionDate"`
 	Quantity                        int                      `json:"quantity"`
-	FromState                       StateReference           `json:"fromState"`
-	ToState                         StateReference           `json:"toState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	FromState StateReference `json:"fromState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	ToState StateReference `json:"toState"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2229,35 +2368,6 @@ func (obj LineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "LineItemStateTransition", Alias: (*Alias)(&obj)})
-}
-
-type MessageConfiguration struct {
-	Enabled                 bool `json:"enabled"`
-	DeleteDaysAfterCreation *int `json:"deleteDaysAfterCreation,omitempty"`
-}
-
-type MessageConfigurationDraft struct {
-	Enabled                 bool `json:"enabled"`
-	DeleteDaysAfterCreation int  `json:"deleteDaysAfterCreation"`
-}
-
-type MessagePagedQueryResponse struct {
-	Limit   int       `json:"limit"`
-	Count   int       `json:"count"`
-	Total   *int      `json:"total,omitempty"`
-	Offset  int       `json:"offset"`
-	Results []Message `json:"results"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *MessagePagedQueryResponse) UnmarshalJSON(data []byte) error {
-	type Alias MessagePagedQueryResponse
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 type OrderBillingAddressSetMessage struct {
@@ -2850,8 +2960,10 @@ type OrderLineItemDiscountSetMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
 	LineItemId                      string                               `json:"lineItemId"`
 	DiscountedPricePerQuantity      []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	TotalPrice                      Money                                `json:"totalPrice"`
-	TaxedPrice                      *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	TotalPrice Money           `json:"totalPrice"`
+	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2895,7 +3007,8 @@ type OrderLineItemDistributionChannelSetMessage struct {
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	LineItemId                      string                   `json:"lineItemId"`
-	DistributionChannel             *ChannelReference        `json:"distributionChannel,omitempty"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2942,10 +3055,11 @@ type OrderLineItemRemovedMessage struct {
 	RemovedQuantity                 int                      `json:"removedQuantity"`
 	NewQuantity                     int                      `json:"newQuantity"`
 	NewState                        []ItemState              `json:"newState"`
-	NewTotalPrice                   TypedMoney               `json:"newTotalPrice"`
-	NewTaxedPrice                   *TaxedItemPrice          `json:"newTaxedPrice,omitempty"`
-	NewPrice                        *Price                   `json:"newPrice,omitempty"`
-	NewShippingDetail               *ItemShippingDetails     `json:"newShippingDetail,omitempty"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	NewTotalPrice     TypedMoney           `json:"newTotalPrice"`
+	NewTaxedPrice     *TaxedItemPrice      `json:"newTaxedPrice,omitempty"`
+	NewPrice          *Price               `json:"newPrice,omitempty"`
+	NewShippingDetail *ItemShippingDetails `json:"newShippingDetail,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2980,6 +3094,49 @@ func (obj OrderLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "OrderLineItemRemoved", Alias: (*Alias)(&obj)})
+}
+
+type OrderPaymentAddedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Payment                         PaymentReference         `json:"payment"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderPaymentAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderPaymentAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderPaymentAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderPaymentAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderPaymentAdded", Alias: (*Alias)(&obj)})
 }
 
 type OrderPaymentStateChangedMessage struct {
@@ -3417,9 +3574,11 @@ type OrderStateTransitionMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	State                           StateReference           `json:"state"`
-	OldState                        *StateReference          `json:"oldState,omitempty"`
-	Force                           bool                     `json:"force"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	State StateReference `json:"state"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	OldState *StateReference `json:"oldState,omitempty"`
+	Force    bool            `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3772,7 +3931,8 @@ type PaymentInteractionAddedMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Interaction                     CustomFields             `json:"interaction"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Interaction CustomFields `json:"interaction"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3859,8 +4019,9 @@ type PaymentStatusStateTransitionMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	State                           StateReference           `json:"state"`
-	Force                           bool                     `json:"force"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	State StateReference `json:"state"`
+	Force bool           `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4385,6 +4546,185 @@ func (obj ProductRevertedStagedChangesMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductRevertedStagedChanges", Alias: (*Alias)(&obj)})
 }
 
+type ProductSelectionCreatedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	ProductSelection                ProductSelectionType     `json:"productSelection"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.ProductSelection != nil {
+		var err error
+		obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionCreated", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionDeletedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Name                            LocalizedString          `json:"name"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionDeleted", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionProductAddedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Product                         ProductReference         `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionProductAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionProductAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionProductAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionProductAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionProductAdded", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionProductRemovedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Product                         ProductReference         `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionProductRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionProductRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionProductRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionProductRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionProductRemoved", Alias: (*Alias)(&obj)})
+}
+
 type ProductSlugChangedMessage struct {
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
@@ -4442,8 +4782,9 @@ type ProductStateTransitionMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	State                           StateReference           `json:"state"`
-	Force                           bool                     `json:"force"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	State StateReference `json:"state"`
+	Force bool           `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4712,12 +5053,14 @@ type ReviewStateTransitionMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	OldState                        StateReference           `json:"oldState"`
-	NewState                        StateReference           `json:"newState"`
-	OldIncludedInStatistics         bool                     `json:"oldIncludedInStatistics"`
-	NewIncludedInStatistics         bool                     `json:"newIncludedInStatistics"`
-	Target                          Reference                `json:"target"`
-	Force                           bool                     `json:"force"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	OldState StateReference `json:"oldState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	NewState                StateReference `json:"newState"`
+	OldIncludedInStatistics bool           `json:"oldIncludedInStatistics"`
+	NewIncludedInStatistics bool           `json:"newIncludedInStatistics"`
+	Target                  Reference      `json:"target"`
+	Force                   bool           `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4762,16 +5105,18 @@ type StoreCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Name                            *LocalizedString         `json:"name,omitempty"`
-	Languages                       []string                 `json:"languages"`
-	DistributionChannels            []ChannelReference       `json:"distributionChannels"`
-	SupplyChannels                  []ChannelReference       `json:"supplyChannels"`
-	Custom                          *CustomFields            `json:"custom,omitempty"`
+	CreatedBy                       *CreatedBy                `json:"createdBy,omitempty"`
+	SequenceNumber                  int                       `json:"sequenceNumber"`
+	Resource                        Reference                 `json:"resource"`
+	ResourceVersion                 int                       `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers  `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Name                            *LocalizedString          `json:"name,omitempty"`
+	Languages                       []string                  `json:"languages"`
+	DistributionChannels            []ChannelReference        `json:"distributionChannels"`
+	SupplyChannels                  []ChannelReference        `json:"supplyChannels"`
+	ProductSelections               []ProductSelectionSetting `json:"productSelections"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4843,6 +5188,73 @@ func (obj StoreDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StoreDeleted", Alias: (*Alias)(&obj)})
 }
 
+type StoreProductSelectionsChangedMessage struct {
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy                       *CreatedBy                `json:"createdBy,omitempty"`
+	SequenceNumber                  int                       `json:"sequenceNumber"`
+	Resource                        Reference                 `json:"resource"`
+	ResourceVersion                 int                       `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers  `json:"resourceUserProvidedIdentifiers,omitempty"`
+	AddedProductSelections          []ProductSelectionSetting `json:"addedProductSelections"`
+	RemovedProductSelections        []ProductSelectionSetting `json:"removedProductSelections"`
+	UpdatedProductSelections        []ProductSelectionSetting `json:"updatedProductSelections"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreProductSelectionsChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StoreProductSelectionsChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreProductSelectionsChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StoreProductSelectionsChangedMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreProductSelectionsChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["addedProductSelections"] == nil {
+		delete(target, "addedProductSelections")
+	}
+
+	if target["removedProductSelections"] == nil {
+		delete(target, "removedProductSelections")
+	}
+
+	if target["updatedProductSelections"] == nil {
+		delete(target, "updatedProductSelections")
+	}
+
+	return json.Marshal(target)
+}
+
 type UserProvidedIdentifiers struct {
 	Key            *string          `json:"key,omitempty"`
 	ExternalId     *string          `json:"externalId,omitempty"`
@@ -4877,12 +5289,6 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "CategorySlugChanged":
 		obj := CategorySlugChangedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "CustomLineItemStateTransition":
-		obj := CustomLineItemStateTransitionMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -4971,6 +5377,536 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "InventoryEntryCreated":
+		obj := InventoryEntryCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InventoryEntryDeleted":
+		obj := InventoryEntryDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InventoryEntryQuantitySet":
+		obj := InventoryEntryQuantitySetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OrderPaymentAdded":
+		obj := OrderPaymentAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentCreated":
+		obj := PaymentCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentInteractionAdded":
+		obj := PaymentInteractionAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentStatusInterfaceCodeSet":
+		obj := PaymentStatusInterfaceCodeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentStatusStateTransition":
+		obj := PaymentStatusStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentTransactionAdded":
+		obj := PaymentTransactionAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentTransactionStateChanged":
+		obj := PaymentTransactionStateChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductAddedToCategory":
+		obj := ProductAddedToCategoryMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductCreated":
+		obj := ProductCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductDeleted":
+		obj := ProductDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductImageAdded":
+		obj := ProductImageAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceDiscountsSet":
+		obj := ProductPriceDiscountsSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceExternalDiscountSet":
+		obj := ProductPriceExternalDiscountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPublished":
+		obj := ProductPublishedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductRemovedFromCategory":
+		obj := ProductRemovedFromCategoryMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductRevertedStagedChanges":
+		obj := ProductRevertedStagedChangesMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductSelectionCreated":
+		obj := ProductSelectionCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ProductSelection != nil {
+			var err error
+			obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductSelectionDeleted":
+		obj := ProductSelectionDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductSelectionProductAdded":
+		obj := ProductSelectionProductAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductSelectionProductRemoved":
+		obj := ProductSelectionProductRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductSlugChanged":
+		obj := ProductSlugChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductStateTransition":
+		obj := ProductStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductUnpublished":
+		obj := ProductUnpublishedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductVariantAdded":
+		obj := ProductVariantAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductVariantDeleted":
+		obj := ProductVariantDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ReviewCreated":
+		obj := ReviewCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ReviewRatingSet":
+		obj := ReviewRatingSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Target != nil {
+			var err error
+			obj.Target, err = mapDiscriminatorReference(obj.Target)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ReviewStateTransition":
+		obj := ReviewStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Target != nil {
+			var err error
+			obj.Target, err = mapDiscriminatorReference(obj.Target)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ShoppingListStoreSet":
+		obj := ShoppingListStoreSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreCreated":
+		obj := StoreCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreDeleted":
+		obj := StoreDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreProductSelectionsChanged":
+		obj := StoreProductSelectionsChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type CategoryCreatedMessagePayload struct {
+	Category Category `json:"category"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategoryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CategoryCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CategoryCreated", Alias: (*Alias)(&obj)})
+}
+
+type CategorySlugChangedMessagePayload struct {
+	Slug    LocalizedString  `json:"slug"`
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategorySlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CategorySlugChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CategorySlugChanged", Alias: (*Alias)(&obj)})
+}
+
+type CustomerAddressAddedMessagePayload struct {
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerAddressAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+type CustomerAddressChangedMessagePayload struct {
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerAddressChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerAddressChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerAddressChanged", Alias: (*Alias)(&obj)})
+}
+
+type CustomerAddressRemovedMessagePayload struct {
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerAddressRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+type CustomerCompanyNameSetMessagePayload struct {
+	CompanyName *string `json:"companyName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerCompanyNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerCompanyNameSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerCompanyNameSet", Alias: (*Alias)(&obj)})
+}
+
+type CustomerCreatedMessagePayload struct {
+	Customer Customer `json:"customer"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerCreated", Alias: (*Alias)(&obj)})
+}
+
+type CustomerDateOfBirthSetMessagePayload struct {
+	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerDateOfBirthSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerDateOfBirthSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerDateOfBirthSet", Alias: (*Alias)(&obj)})
+}
+
+type CustomerDeletedMessagePayload struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerDeleted", Alias: (*Alias)(&obj)})
+}
+
+type CustomerEmailChangedMessagePayload struct {
+	Email string `json:"email"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerEmailChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerEmailChanged", Alias: (*Alias)(&obj)})
+}
+
+type CustomerEmailVerifiedMessagePayload struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerEmailVerifiedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerEmailVerifiedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerEmailVerified", Alias: (*Alias)(&obj)})
+}
+
+type CustomerFirstNameSetMessagePayload struct {
+	FirstName *string `json:"firstName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerFirstNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerFirstNameSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerFirstNameSet", Alias: (*Alias)(&obj)})
+}
+
+type CustomerGroupSetMessagePayload struct {
+	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupSet", Alias: (*Alias)(&obj)})
+}
+
+type CustomerLastNameSetMessagePayload struct {
+	LastName *string `json:"lastName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerLastNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerLastNameSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerLastNameSet", Alias: (*Alias)(&obj)})
+}
+
+type CustomerPasswordUpdatedMessagePayload struct {
+	// true, if password has been updated during Customer's Password Reset workflow.
+	Reset bool `json:"reset"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerPasswordUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerPasswordUpdatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerPasswordUpdated", Alias: (*Alias)(&obj)})
+}
+
+type CustomerTitleSetMessagePayload struct {
+	Title *string `json:"title,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerTitleSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerTitleSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerTitleSet", Alias: (*Alias)(&obj)})
+}
+
+type InventoryEntryCreatedMessagePayload struct {
+	InventoryEntry InventoryEntry `json:"inventoryEntry"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
+}
+
+type InventoryEntryDeletedMessagePayload struct {
+	Sku string `json:"sku"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryDeleted", Alias: (*Alias)(&obj)})
+}
+
+type InventoryEntryQuantitySetMessagePayload struct {
+	OldQuantityOnStock   int `json:"oldQuantityOnStock"`
+	NewQuantityOnStock   int `json:"newQuantityOnStock"`
+	OldAvailableQuantity int `json:"oldAvailableQuantity"`
+	NewAvailableQuantity int `json:"newAvailableQuantity"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryQuantitySetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryQuantitySetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
+}
+
+type OrderMessagePayload interface{}
+
+func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload, error) {
+
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+
+	switch discriminator {
+	case "CustomLineItemStateTransition":
+		obj := CustomLineItemStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DeliveryAdded":
 		obj := DeliveryAddedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -4991,24 +5927,6 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "DeliveryRemoved":
 		obj := DeliveryRemovedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "InventoryEntryCreated":
-		obj := InventoryEntryCreatedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "InventoryEntryDeleted":
-		obj := InventoryEntryDeletedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "InventoryEntryQuantitySet":
-		obj := InventoryEntryQuantitySetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -5232,215 +6150,18 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "PaymentCreated":
-		obj := PaymentCreatedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "PaymentInteractionAdded":
-		obj := PaymentInteractionAddedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "PaymentStatusInterfaceCodeSet":
-		obj := PaymentStatusInterfaceCodeSetMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "PaymentStatusStateTransition":
-		obj := PaymentStatusStateTransitionMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "PaymentTransactionAdded":
-		obj := PaymentTransactionAddedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "PaymentTransactionStateChanged":
-		obj := PaymentTransactionStateChangedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductAddedToCategory":
-		obj := ProductAddedToCategoryMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductCreated":
-		obj := ProductCreatedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductDeleted":
-		obj := ProductDeletedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductImageAdded":
-		obj := ProductImageAddedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductPriceDiscountsSet":
-		obj := ProductPriceDiscountsSetMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductPriceExternalDiscountSet":
-		obj := ProductPriceExternalDiscountSetMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductPublished":
-		obj := ProductPublishedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductRemovedFromCategory":
-		obj := ProductRemovedFromCategoryMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductRevertedStagedChanges":
-		obj := ProductRevertedStagedChangesMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductSlugChanged":
-		obj := ProductSlugChangedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductStateTransition":
-		obj := ProductStateTransitionMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductUnpublished":
-		obj := ProductUnpublishedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductVariantAdded":
-		obj := ProductVariantAddedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ProductVariantDeleted":
-		obj := ProductVariantDeletedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ReviewCreated":
-		obj := ReviewCreatedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ReviewRatingSet":
-		obj := ReviewRatingSetMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Target != nil {
-			var err error
-			obj.Target, err = mapDiscriminatorReference(obj.Target)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ReviewStateTransition":
-		obj := ReviewStateTransitionMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Target != nil {
-			var err error
-			obj.Target, err = mapDiscriminatorReference(obj.Target)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ShoppingListStoreSet":
-		obj := ShoppingListStoreSetMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "StoreCreated":
-		obj := StoreCreatedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "StoreDeleted":
-		obj := StoreDeletedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	}
 	return nil, nil
 }
 
-type CategoryCreatedMessagePayload struct {
-	Category Category `json:"category"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CategoryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CategoryCreatedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CategoryCreated", Alias: (*Alias)(&obj)})
-}
-
-type CategorySlugChangedMessagePayload struct {
-	Slug    LocalizedString  `json:"slug"`
-	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CategorySlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CategorySlugChangedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CategorySlugChanged", Alias: (*Alias)(&obj)})
-}
-
 type CustomLineItemStateTransitionMessagePayload struct {
-	CustomLineItemId string         `json:"customLineItemId"`
-	TransitionDate   time.Time      `json:"transitionDate"`
-	Quantity         int            `json:"quantity"`
-	FromState        StateReference `json:"fromState"`
-	ToState          StateReference `json:"toState"`
+	CustomLineItemId string    `json:"customLineItemId"`
+	TransitionDate   time.Time `json:"transitionDate"`
+	Quantity         int       `json:"quantity"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	FromState StateReference `json:"fromState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	ToState StateReference `json:"toState"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -5451,202 +6172,6 @@ func (obj CustomLineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, er
 		Action string `json:"type"`
 		*Alias
 	}{Action: "CustomLineItemStateTransition", Alias: (*Alias)(&obj)})
-}
-
-type CustomerAddressAddedMessagePayload struct {
-	Address Address `json:"address"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerAddressAddedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerAddressAdded", Alias: (*Alias)(&obj)})
-}
-
-type CustomerAddressChangedMessagePayload struct {
-	Address Address `json:"address"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerAddressChangedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerAddressChangedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerAddressChanged", Alias: (*Alias)(&obj)})
-}
-
-type CustomerAddressRemovedMessagePayload struct {
-	Address Address `json:"address"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerAddressRemovedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerAddressRemoved", Alias: (*Alias)(&obj)})
-}
-
-type CustomerCompanyNameSetMessagePayload struct {
-	CompanyName *string `json:"companyName,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerCompanyNameSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerCompanyNameSetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerCompanyNameSet", Alias: (*Alias)(&obj)})
-}
-
-type CustomerCreatedMessagePayload struct {
-	Customer Customer `json:"customer"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerCreatedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerCreatedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerCreated", Alias: (*Alias)(&obj)})
-}
-
-type CustomerDateOfBirthSetMessagePayload struct {
-	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerDateOfBirthSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerDateOfBirthSetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerDateOfBirthSet", Alias: (*Alias)(&obj)})
-}
-
-type CustomerDeletedMessagePayload struct {
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerDeletedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerDeletedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerDeleted", Alias: (*Alias)(&obj)})
-}
-
-type CustomerEmailChangedMessagePayload struct {
-	Email string `json:"email"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerEmailChangedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerEmailChanged", Alias: (*Alias)(&obj)})
-}
-
-type CustomerEmailVerifiedMessagePayload struct {
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerEmailVerifiedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerEmailVerifiedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerEmailVerified", Alias: (*Alias)(&obj)})
-}
-
-type CustomerFirstNameSetMessagePayload struct {
-	FirstName *string `json:"firstName,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerFirstNameSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerFirstNameSetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerFirstNameSet", Alias: (*Alias)(&obj)})
-}
-
-type CustomerGroupSetMessagePayload struct {
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
-	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerGroupSetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerGroupSet", Alias: (*Alias)(&obj)})
-}
-
-type CustomerLastNameSetMessagePayload struct {
-	LastName *string `json:"lastName,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerLastNameSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerLastNameSetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerLastNameSet", Alias: (*Alias)(&obj)})
-}
-
-type CustomerPasswordUpdatedMessagePayload struct {
-	// true, if password has been updated during Customer's Password Reset workflow.
-	Reset bool `json:"reset"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerPasswordUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerPasswordUpdatedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerPasswordUpdated", Alias: (*Alias)(&obj)})
-}
-
-type CustomerTitleSetMessagePayload struct {
-	Title *string `json:"title,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomerTitleSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias CustomerTitleSetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "CustomerTitleSet", Alias: (*Alias)(&obj)})
 }
 
 type DeliveryAddedMessagePayload struct {
@@ -5709,59 +6234,14 @@ func (obj DeliveryRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryRemoved", Alias: (*Alias)(&obj)})
 }
 
-type InventoryEntryCreatedMessagePayload struct {
-	InventoryEntry InventoryEntry `json:"inventoryEntry"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj InventoryEntryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias InventoryEntryCreatedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
-}
-
-type InventoryEntryDeletedMessagePayload struct {
-	Sku           string            `json:"sku"`
-	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj InventoryEntryDeletedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias InventoryEntryDeletedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "InventoryEntryDeleted", Alias: (*Alias)(&obj)})
-}
-
-type InventoryEntryQuantitySetMessagePayload struct {
-	OldQuantityOnStock   int               `json:"oldQuantityOnStock"`
-	NewQuantityOnStock   int               `json:"newQuantityOnStock"`
-	OldAvailableQuantity int               `json:"oldAvailableQuantity"`
-	NewAvailableQuantity int               `json:"newAvailableQuantity"`
-	SupplyChannel        *ChannelReference `json:"supplyChannel,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj InventoryEntryQuantitySetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias InventoryEntryQuantitySetMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
-}
-
 type LineItemStateTransitionMessagePayload struct {
-	LineItemId     string         `json:"lineItemId"`
-	TransitionDate time.Time      `json:"transitionDate"`
-	Quantity       int            `json:"quantity"`
-	FromState      StateReference `json:"fromState"`
-	ToState        StateReference `json:"toState"`
+	LineItemId     string    `json:"lineItemId"`
+	TransitionDate time.Time `json:"transitionDate"`
+	Quantity       int       `json:"quantity"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	FromState StateReference `json:"fromState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	ToState StateReference `json:"toState"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -5975,8 +6455,10 @@ func (obj OrderLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) {
 type OrderLineItemDiscountSetMessagePayload struct {
 	LineItemId                 string                               `json:"lineItemId"`
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	TotalPrice                 Money                                `json:"totalPrice"`
-	TaxedPrice                 *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	TotalPrice Money           `json:"totalPrice"`
+	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -5990,7 +6472,8 @@ func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) 
 }
 
 type OrderLineItemDistributionChannelSetMessagePayload struct {
-	LineItemId          string            `json:"lineItemId"`
+	LineItemId string `json:"lineItemId"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
@@ -6005,10 +6488,11 @@ func (obj OrderLineItemDistributionChannelSetMessagePayload) MarshalJSON() ([]by
 }
 
 type OrderLineItemRemovedMessagePayload struct {
-	LineItemId        string               `json:"lineItemId"`
-	RemovedQuantity   int                  `json:"removedQuantity"`
-	NewQuantity       int                  `json:"newQuantity"`
-	NewState          []ItemState          `json:"newState"`
+	LineItemId      string      `json:"lineItemId"`
+	RemovedQuantity int         `json:"removedQuantity"`
+	NewQuantity     int         `json:"newQuantity"`
+	NewState        []ItemState `json:"newState"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
 	NewTotalPrice     TypedMoney           `json:"newTotalPrice"`
 	NewTaxedPrice     *TaxedItemPrice      `json:"newTaxedPrice,omitempty"`
 	NewPrice          *Price               `json:"newPrice,omitempty"`
@@ -6040,6 +6524,20 @@ func (obj OrderLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "OrderLineItemRemoved", Alias: (*Alias)(&obj)})
+}
+
+type OrderPaymentAddedMessagePayload struct {
+	Payment PaymentReference `json:"payment"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderPaymentAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderPaymentAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderPaymentAdded", Alias: (*Alias)(&obj)})
 }
 
 type OrderPaymentStateChangedMessagePayload struct {
@@ -6214,7 +6712,9 @@ func (obj OrderStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderStateTransitionMessagePayload struct {
-	State    StateReference  `json:"state"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	State StateReference `json:"state"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
 	OldState *StateReference `json:"oldState,omitempty"`
 	Force    bool            `json:"force"`
 }
@@ -6337,6 +6837,7 @@ func (obj PaymentCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentInteractionAddedMessagePayload struct {
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
 	Interaction CustomFields `json:"interaction"`
 }
 
@@ -6366,6 +6867,7 @@ func (obj PaymentStatusInterfaceCodeSetMessagePayload) MarshalJSON() ([]byte, er
 }
 
 type PaymentStatusStateTransitionMessagePayload struct {
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
 	Force bool           `json:"force"`
 }
@@ -6547,6 +7049,79 @@ func (obj ProductRevertedStagedChangesMessagePayload) MarshalJSON() ([]byte, err
 	}{Action: "ProductRevertedStagedChanges", Alias: (*Alias)(&obj)})
 }
 
+type ProductSelectionCreatedMessagePayload struct {
+	ProductSelection ProductSelectionType `json:"productSelection"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionCreatedMessagePayload) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionCreatedMessagePayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ProductSelection != nil {
+		var err error
+		obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionCreated", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionDeletedMessagePayload struct {
+	Name LocalizedString `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionDeleted", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionProductAddedMessagePayload struct {
+	Product ProductReference `json:"product"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionProductAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionProductAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionProductAdded", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionProductRemovedMessagePayload struct {
+	Product ProductReference `json:"product"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionProductRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionProductRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductSelectionProductRemoved", Alias: (*Alias)(&obj)})
+}
+
 type ProductSlugChangedMessagePayload struct {
 	Slug    LocalizedString  `json:"slug"`
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
@@ -6563,6 +7138,7 @@ func (obj ProductSlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductStateTransitionMessagePayload struct {
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
 	Force bool           `json:"force"`
 }
@@ -6669,7 +7245,9 @@ func (obj ReviewRatingSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewStateTransitionMessagePayload struct {
-	OldState                StateReference `json:"oldState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	OldState StateReference `json:"oldState"`
+	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
 	NewState                StateReference `json:"newState"`
 	OldIncludedInStatistics bool           `json:"oldIncludedInStatistics"`
 	NewIncludedInStatistics bool           `json:"newIncludedInStatistics"`
@@ -6719,11 +7297,13 @@ func (obj ShoppingListStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type StoreCreatedMessagePayload struct {
-	Name                 *LocalizedString   `json:"name,omitempty"`
-	Languages            []string           `json:"languages"`
-	DistributionChannels []ChannelReference `json:"distributionChannels"`
-	SupplyChannels       []ChannelReference `json:"supplyChannels"`
-	Custom               *CustomFields      `json:"custom,omitempty"`
+	Name                 *LocalizedString          `json:"name,omitempty"`
+	Languages            []string                  `json:"languages"`
+	DistributionChannels []ChannelReference        `json:"distributionChannels"`
+	SupplyChannels       []ChannelReference        `json:"supplyChannels"`
+	ProductSelections    []ProductSelectionSetting `json:"productSelections"`
+	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -6747,4 +7327,42 @@ func (obj StoreDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreDeleted", Alias: (*Alias)(&obj)})
+}
+
+type StoreProductSelectionsChangedMessagePayload struct {
+	AddedProductSelections   []ProductSelectionSetting `json:"addedProductSelections"`
+	RemovedProductSelections []ProductSelectionSetting `json:"removedProductSelections"`
+	UpdatedProductSelections []ProductSelectionSetting `json:"updatedProductSelections"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreProductSelectionsChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StoreProductSelectionsChangedMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreProductSelectionsChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["addedProductSelections"] == nil {
+		delete(target, "addedProductSelections")
+	}
+
+	if target["removedProductSelections"] == nil {
+		delete(target, "removedProductSelections")
+	}
+
+	if target["updatedProductSelections"] == nil {
+		delete(target, "updatedProductSelections")
+	}
+
+	return json.Marshal(target)
 }

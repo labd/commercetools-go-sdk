@@ -54,7 +54,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodGet) WithHeaders
 }
 
 /**
-*	Returns a cart by its ID from a specific Store. The {storeKey} path parameter maps to a Store's key.
+*	Returns a cart by its ID from a specific Store.
 *	If the cart exists in the commercetools project but does not have the store field,
 *	or the store field references a different store, this method returns a ResourceNotFound error.
 *	The cart may not contain up-to-date prices, discounts etc.

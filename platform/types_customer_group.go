@@ -105,8 +105,7 @@ func (obj CustomerGroupResourceIdentifier) MarshalJSON() ([]byte, error) {
 
 type CustomerGroupUpdate struct {
 	// Expected version of the Customer Group on which the changes should be applied.
-	// If the expected version does not match the actual version, a 409 Conflict
-	// will be returned.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Customer Group.
 	Actions []CustomerGroupUpdateAction `json:"actions"`
@@ -184,7 +183,6 @@ func (obj CustomerGroupChangeNameAction) MarshalJSON() ([]byte, error) {
 type CustomerGroupSetCustomFieldAction struct {
 	// Name of the Custom Field.
 	Name string `json:"name"`
-	// Value must be of type [Value](/../api/projects/custom-fields#value).
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
 	// If `value` is provided, it is set for the field defined by `name`.
@@ -203,14 +201,14 @@ func (obj CustomerGroupSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	This action sets or removes the custom type for an existing Customer Group.
-*	If present, this action overwrites any existing [custom](/../api/projects/custom-fields#custom) type and fields.
+*	If present, this action overwrites any existing [custom](/../api/projects/custom-fields) type and fields.
 *
  */
 type CustomerGroupSetCustomTypeAction struct {
-	// If absent, the [custom](/../api/projects/custom-fields#custom) type and any existing [CustomFields](/../api/projects/custom-fields) are removed.
+	// If absent, the [custom](/../api/projects/custom-fields) type and any existing [CustomFields](/../api/projects/custom-fields) are removed.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
 	// Valid JSON object, based on the [FieldDefinitions](/../api/projects/types#fielddefinition) of the [Type](/../api/projects/types#type).
-	// Sets the [custom](/../api/projects/custom-fields#custom) fields to this value.
+	// Sets the [custom](/../api/projects/custom-fields) fields to this value.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

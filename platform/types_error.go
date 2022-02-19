@@ -437,6 +437,7 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 
 type AccessDeniedError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -454,6 +455,7 @@ func (obj AccessDeniedError) Error() string {
 
 type AnonymousIdAlreadyInUseError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -470,7 +472,8 @@ func (obj AnonymousIdAlreadyInUseError) Error() string {
 }
 
 type AttributeDefinitionAlreadyExistsError struct {
-	Message                    string `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ConflictingProductTypeId   string `json:"conflictingProductTypeId"`
 	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
 	ConflictingAttributeName   string `json:"conflictingAttributeName"`
@@ -490,7 +493,8 @@ func (obj AttributeDefinitionAlreadyExistsError) Error() string {
 }
 
 type AttributeDefinitionTypeConflictError struct {
-	Message                    string `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ConflictingProductTypeId   string `json:"conflictingProductTypeId"`
 	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
 	ConflictingAttributeName   string `json:"conflictingAttributeName"`
@@ -510,7 +514,8 @@ func (obj AttributeDefinitionTypeConflictError) Error() string {
 }
 
 type AttributeNameDoesNotExistError struct {
-	Message              string `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	InvalidAttributeName string `json:"invalidAttributeName"`
 }
 
@@ -529,6 +534,7 @@ func (obj AttributeNameDoesNotExistError) Error() string {
 
 type BadGatewayError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -545,8 +551,9 @@ func (obj BadGatewayError) Error() string {
 }
 
 type ConcurrentModificationError struct {
-	Message        string `json:"message"`
-	CurrentVersion *int   `json:"currentVersion,omitempty"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
+	CurrentVersion *int `json:"currentVersion,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -563,7 +570,8 @@ func (obj ConcurrentModificationError) Error() string {
 }
 
 type DiscountCodeNonApplicableError struct {
-	Message           string     `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	DiscountCode      *string    `json:"discountCode,omitempty"`
 	Reason            *string    `json:"reason,omitempty"`
 	DicountCodeId     *string    `json:"dicountCodeId,omitempty"`
@@ -586,7 +594,8 @@ func (obj DiscountCodeNonApplicableError) Error() string {
 }
 
 type DuplicateAttributeValueError struct {
-	Message   string    `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Attribute Attribute `json:"attribute"`
 }
 
@@ -604,7 +613,8 @@ func (obj DuplicateAttributeValueError) Error() string {
 }
 
 type DuplicateAttributeValuesError struct {
-	Message    string      `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Attributes []Attribute `json:"attributes"`
 }
 
@@ -622,7 +632,8 @@ func (obj DuplicateAttributeValuesError) Error() string {
 }
 
 type DuplicateEnumValuesError struct {
-	Message    string   `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Duplicates []string `json:"duplicates"`
 }
 
@@ -640,7 +651,8 @@ func (obj DuplicateEnumValuesError) Error() string {
 }
 
 type DuplicateFieldError struct {
-	Message             string      `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Field               *string     `json:"field,omitempty"`
 	DuplicateValue      interface{} `json:"duplicateValue,omitempty"`
 	ConflictingResource Reference   `json:"conflictingResource,omitempty"`
@@ -677,7 +689,8 @@ func (obj DuplicateFieldError) Error() string {
 }
 
 type DuplicateFieldWithConflictingResourceError struct {
-	Message             string      `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Field               string      `json:"field"`
 	DuplicateValue      interface{} `json:"duplicateValue"`
 	ConflictingResource Reference   `json:"conflictingResource"`
@@ -714,7 +727,8 @@ func (obj DuplicateFieldWithConflictingResourceError) Error() string {
 }
 
 type DuplicatePriceScopeError struct {
-	Message           string  `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ConflictingPrices []Price `json:"conflictingPrices"`
 }
 
@@ -732,7 +746,8 @@ func (obj DuplicatePriceScopeError) Error() string {
 }
 
 type DuplicateVariantValuesError struct {
-	Message       string        `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	VariantValues VariantValues `json:"variantValues"`
 }
 
@@ -750,8 +765,9 @@ func (obj DuplicateVariantValuesError) Error() string {
 }
 
 type EditPreviewFailedError struct {
-	Message string                  `json:"message"`
-	Result  OrderEditPreviewFailure `json:"result"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
+	Result OrderEditPreviewFailure `json:"result"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -768,7 +784,8 @@ func (obj EditPreviewFailedError) Error() string {
 }
 
 type EnumKeyAlreadyExistsError struct {
-	Message                  string `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ConflictingEnumKey       string `json:"conflictingEnumKey"`
 	ConflictingAttributeName string `json:"conflictingAttributeName"`
 }
@@ -787,7 +804,8 @@ func (obj EnumKeyAlreadyExistsError) Error() string {
 }
 
 type EnumKeyDoesNotExistError struct {
-	Message                  string `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ConflictingEnumKey       string `json:"conflictingEnumKey"`
 	ConflictingAttributeName string `json:"conflictingAttributeName"`
 }
@@ -807,6 +825,7 @@ func (obj EnumKeyDoesNotExistError) Error() string {
 
 type EnumValueIsUsedError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -824,6 +843,7 @@ func (obj EnumValueIsUsedError) Error() string {
 
 type EnumValuesMustMatchError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -885,7 +905,8 @@ func (obj ErrorResponse) Error() string {
 }
 
 type ExtensionBadResponseError struct {
-	Message            string           `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
@@ -905,7 +926,8 @@ func (obj ExtensionBadResponseError) Error() string {
 }
 
 type ExtensionNoResponseError struct {
-	Message      string  `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ExtensionId  string  `json:"extensionId"`
 	ExtensionKey *string `json:"extensionKey,omitempty"`
 }
@@ -924,7 +946,8 @@ func (obj ExtensionNoResponseError) Error() string {
 }
 
 type ExtensionUpdateActionsFailedError struct {
-	Message            string           `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
@@ -945,6 +968,7 @@ func (obj ExtensionUpdateActionsFailedError) Error() string {
 
 type ExternalOAuthFailedError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -962,6 +986,7 @@ func (obj ExternalOAuthFailedError) Error() string {
 
 type FeatureRemovedError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -979,6 +1004,7 @@ func (obj FeatureRemovedError) Error() string {
 
 type GeneralError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -996,6 +1022,7 @@ func (obj GeneralError) Error() string {
 
 type InsufficientScopeError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1013,6 +1040,7 @@ func (obj InsufficientScopeError) Error() string {
 
 type InternalConstraintViolatedError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1030,6 +1058,7 @@ func (obj InternalConstraintViolatedError) Error() string {
 
 type InvalidCredentialsError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1047,6 +1076,7 @@ func (obj InvalidCredentialsError) Error() string {
 
 type InvalidCurrentPasswordError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1063,7 +1093,8 @@ func (obj InvalidCurrentPasswordError) Error() string {
 }
 
 type InvalidFieldError struct {
-	Message       string        `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Field         string        `json:"field"`
 	InvalidValue  interface{}   `json:"invalidValue"`
 	AllowedValues []interface{} `json:"allowedValues"`
@@ -1098,6 +1129,7 @@ func (obj InvalidFieldError) Error() string {
 
 type InvalidInputError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1115,6 +1147,7 @@ func (obj InvalidInputError) Error() string {
 
 type InvalidItemShippingDetailsError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Subject string `json:"subject"`
 	ItemId  string `json:"itemId"`
 }
@@ -1134,6 +1167,7 @@ func (obj InvalidItemShippingDetailsError) Error() string {
 
 type InvalidJsonInputError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1151,6 +1185,7 @@ func (obj InvalidJsonInputError) Error() string {
 
 type InvalidOperationError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1168,6 +1203,7 @@ func (obj InvalidOperationError) Error() string {
 
 type InvalidSubjectError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1185,6 +1221,7 @@ func (obj InvalidSubjectError) Error() string {
 
 type InvalidTokenError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1202,6 +1239,7 @@ func (obj InvalidTokenError) Error() string {
 
 type LanguageUsedInStoresError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1218,14 +1256,16 @@ func (obj LanguageUsedInStoresError) Error() string {
 }
 
 type MatchingPriceNotFoundError struct {
-	Message   string  `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ProductId string  `json:"productId"`
 	VariantId int     `json:"variantId"`
 	Currency  *string `json:"currency,omitempty"`
 	Country   *string `json:"country,omitempty"`
 	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	Channel       *ChannelReference       `json:"channel,omitempty"`
+	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	Channel *ChannelReference `json:"channel,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1242,7 +1282,8 @@ func (obj MatchingPriceNotFoundError) Error() string {
 }
 
 type MaxResourceLimitExceededError struct {
-	Message          string          `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ExceededResource ReferenceTypeId `json:"exceededResource"`
 }
 
@@ -1260,9 +1301,12 @@ func (obj MaxResourceLimitExceededError) Error() string {
 }
 
 type MissingRoleOnChannelError struct {
-	Message     string                     `json:"message"`
-	Channel     *ChannelResourceIdentifier `json:"channel,omitempty"`
-	MissingRole ChannelRoleEnum            `json:"missingRole"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Describes the purpose and type of the Channel. A Channel can have one or more roles.
+	MissingRole ChannelRoleEnum `json:"missingRole"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1279,7 +1323,8 @@ func (obj MissingRoleOnChannelError) Error() string {
 }
 
 type MissingTaxRateForCountryError struct {
-	Message       string  `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	TaxCategoryId string  `json:"taxCategoryId"`
 	Country       *string `json:"country,omitempty"`
 	State         *string `json:"state,omitempty"`
@@ -1300,6 +1345,7 @@ func (obj MissingTaxRateForCountryError) Error() string {
 
 type NoMatchingProductDiscountFoundError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1317,6 +1363,7 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 
 type NotEnabledError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1334,6 +1381,7 @@ func (obj NotEnabledError) Error() string {
 
 type ObjectNotFoundError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1350,7 +1398,8 @@ func (obj ObjectNotFoundError) Error() string {
 }
 
 type OutOfStockError struct {
-	Message   string   `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	LineItems []string `json:"lineItems"`
 	Skus      []string `json:"skus"`
 }
@@ -1370,6 +1419,7 @@ func (obj OutOfStockError) Error() string {
 
 type OverCapacityError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1387,6 +1437,7 @@ func (obj OverCapacityError) Error() string {
 
 type PendingOperationError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1403,7 +1454,8 @@ func (obj PendingOperationError) Error() string {
 }
 
 type PriceChangedError struct {
-	Message   string   `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	LineItems []string `json:"lineItems"`
 	Shipping  bool     `json:"shipping"`
 }
@@ -1422,7 +1474,8 @@ func (obj PriceChangedError) Error() string {
 }
 
 type ProjectNotConfiguredForLanguagesError struct {
-	Message   string   `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	Languages []string `json:"languages"`
 }
 
@@ -1455,6 +1508,7 @@ func (obj ProjectNotConfiguredForLanguagesError) Error() string {
 
 type QueryComplexityLimitExceededError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1472,6 +1526,7 @@ func (obj QueryComplexityLimitExceededError) Error() string {
 
 type QueryTimedOutError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1488,7 +1543,8 @@ func (obj QueryTimedOutError) Error() string {
 }
 
 type ReferenceExistsError struct {
-	Message      string           `json:"message"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
 	ReferencedBy *ReferenceTypeId `json:"referencedBy,omitempty"`
 }
 
@@ -1506,10 +1562,11 @@ func (obj ReferenceExistsError) Error() string {
 }
 
 type ReferencedResourceNotFoundError struct {
-	Message string          `json:"message"`
-	TypeId  ReferenceTypeId `json:"typeId"`
-	ID      *string         `json:"id,omitempty"`
-	Key     *string         `json:"key,omitempty"`
+	Message string `json:"message"`
+	// interface{} `json:"//"`
+	TypeId ReferenceTypeId `json:"typeId"`
+	ID     *string         `json:"id,omitempty"`
+	Key    *string         `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1527,7 +1584,8 @@ func (obj ReferencedResourceNotFoundError) Error() string {
 
 type RequiredFieldError struct {
 	Message string `json:"message"`
-	Field   string `json:"field"`
+	// interface{} `json:"//"`
+	Field string `json:"field"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1545,6 +1603,7 @@ func (obj RequiredFieldError) Error() string {
 
 type ResourceNotFoundError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1562,6 +1621,7 @@ func (obj ResourceNotFoundError) Error() string {
 
 type ResourceSizeLimitExceededError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1579,6 +1639,7 @@ func (obj ResourceSizeLimitExceededError) Error() string {
 
 type SearchDeactivatedError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1596,6 +1657,7 @@ func (obj SearchDeactivatedError) Error() string {
 
 type SearchExecutionFailureError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1613,6 +1675,7 @@ func (obj SearchExecutionFailureError) Error() string {
 
 type SearchFacetPathNotFoundError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1630,6 +1693,7 @@ func (obj SearchFacetPathNotFoundError) Error() string {
 
 type SearchIndexingInProgressError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1647,6 +1711,7 @@ func (obj SearchIndexingInProgressError) Error() string {
 
 type SemanticErrorError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1664,6 +1729,7 @@ func (obj SemanticErrorError) Error() string {
 
 type ShippingMethodDoesNotMatchCartError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1681,6 +1747,7 @@ func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 
 type SyntaxErrorError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1704,6 +1771,7 @@ type VariantValues struct {
 
 type WeakPasswordError struct {
 	Message string `json:"message"`
+	// interface{} `json:"//"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

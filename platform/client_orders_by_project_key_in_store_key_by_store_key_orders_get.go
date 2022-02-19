@@ -133,7 +133,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodGet) WithHeaders(he
 }
 
 /**
-*	Queries orders in a specific Store. The {storeKey} path parameter maps to a Store's key.
+*	Queries orders in a specific Store.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodGet) Execute(ctx context.Context) (result *OrderPagedQueryResponse, err error) {
 	var queryParams url.Values

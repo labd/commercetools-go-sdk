@@ -6,7 +6,7 @@ import (
 )
 
 type ApiClient struct {
-	// Unique ID of the API client.
+	// Unique ID of the API Client.
 	// This is the OAuth2 `client_id` that can be used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
 	ID string `json:"id"`
 	// Name of the API Client.
@@ -18,10 +18,14 @@ type ApiClient struct {
 	Secret *string `json:"secret,omitempty"`
 	// Date of the last day this API Client was used to [obtain an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
 	LastUsedAt *Date `json:"lastUsedAt,omitempty"`
-	// If set, the client will be deleted on (or shortly after) this point in time.
+	// If set, the Client will be deleted on (or shortly after) this point in time.
 	DeleteAt *time.Time `json:"deleteAt,omitempty"`
-	// Date and time (UTC) the API Client was initially created.
+	// Date and time (UTC) the API Client was initially created at.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	// Expiration time in seconds for each access token obtained by the API Client. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
+	AccessTokenValiditySeconds *int `json:"accessTokenValiditySeconds,omitempty"`
+	// Inactivity expiration time in seconds for each refresh token obtained by the API Client. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
+	RefreshTokenValiditySeconds *int `json:"refreshTokenValiditySeconds,omitempty"`
 }
 
 type ApiClientDraft struct {
@@ -29,8 +33,12 @@ type ApiClientDraft struct {
 	Name string `json:"name"`
 	// Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#requesting-an-access-token-using-commercetools-oauth-20-server).
 	Scope string `json:"scope"`
-	// If set, the client will be deleted after the specified amount of days.
+	// If set, the Client will be deleted after the specified amount of days.
 	DeleteDaysAfterCreation *int `json:"deleteDaysAfterCreation,omitempty"`
+	// Expiration time in seconds for each access token obtained by the API Client. If not set the default value applies.
+	AccessTokenValiditySeconds *int `json:"accessTokenValiditySeconds,omitempty"`
+	// Inactivity expiration time in seconds for each refresh token obtained by the API Client. The expiration time for refresh tokens is restarted each time the token is used. If not set the default value applies.
+	RefreshTokenValiditySeconds *int `json:"refreshTokenValiditySeconds,omitempty"`
 }
 
 /**

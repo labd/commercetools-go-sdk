@@ -27,13 +27,13 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 
 	switch discriminator {
 	case "CloudEvents":
-		obj := DeliveryCloudEventsFormat{}
+		obj := CloudEventsFormat{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
 	case "Platform":
-		obj := DeliveryPlatformFormat{}
+		obj := PlatformFormat{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -42,31 +42,89 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 	return nil, nil
 }
 
-type DeliveryCloudEventsFormat struct {
+type CloudEventsFormat struct {
 	CloudEventsVersion string `json:"cloudEventsVersion"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj DeliveryCloudEventsFormat) MarshalJSON() ([]byte, error) {
-	type Alias DeliveryCloudEventsFormat
+func (obj CloudEventsFormat) MarshalJSON() ([]byte, error) {
+	type Alias CloudEventsFormat
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "CloudEvents", Alias: (*Alias)(&obj)})
 }
 
-type DeliveryPlatformFormat struct {
-}
+type DeliveryPayload interface{}
 
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj DeliveryPlatformFormat) MarshalJSON() ([]byte, error) {
-	type Alias DeliveryPlatformFormat
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "Platform", Alias: (*Alias)(&obj)})
+func mapDiscriminatorDeliveryPayload(input interface{}) (DeliveryPayload, error) {
+
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["notificationType"].(string)
+		if !ok {
+			return nil, errors.New("Error processing discriminator field 'notificationType'")
+		}
+	} else {
+		return nil, errors.New("Invalid data")
+	}
+
+	switch discriminator {
+	case "Message":
+		obj := MessageDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ResourceCreated":
+		obj := ResourceCreatedDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ResourceDeleted":
+		obj := ResourceDeletedDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ResourceUpdated":
+		obj := ResourceUpdatedDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	}
+	return nil, nil
 }
 
 type Destination interface{}
@@ -209,6 +267,46 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 	}{Action: "IronMQ", Alias: (*Alias)(&obj)})
 }
 
+type MessageDeliveryPayload struct {
+	ProjectKey                      string                   `json:"projectKey"`
+	Resource                        Reference                `json:"resource"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	ID                              string                   `json:"id"`
+	Version                         int                      `json:"version"`
+	CreatedAt                       time.Time                `json:"createdAt"`
+	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
+	SequenceNumber                  int                      `json:"sequenceNumber"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	PayloadNotIncluded              PayloadNotIncluded       `json:"payloadNotIncluded"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MessageDeliveryPayload) UnmarshalJSON(data []byte) error {
+	type Alias MessageDeliveryPayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MessageDeliveryPayload) MarshalJSON() ([]byte, error) {
+	type Alias MessageDeliveryPayload
+	return json.Marshal(struct {
+		Action string `json:"notificationType"`
+		*Alias
+	}{Action: "Message", Alias: (*Alias)(&obj)})
+}
+
 type MessageSubscription struct {
 	ResourceTypeId string   `json:"resourceTypeId"`
 	Types          []string `json:"types"`
@@ -240,6 +338,126 @@ func (obj MessageSubscription) MarshalJSON() ([]byte, error) {
 type PayloadNotIncluded struct {
 	Reason      string `json:"reason"`
 	PayloadType string `json:"payloadType"`
+}
+
+type PlatformFormat struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PlatformFormat) MarshalJSON() ([]byte, error) {
+	type Alias PlatformFormat
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "Platform", Alias: (*Alias)(&obj)})
+}
+
+type ResourceCreatedDeliveryPayload struct {
+	ProjectKey                      string                   `json:"projectKey"`
+	Resource                        Reference                `json:"resource"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Version                         int                      `json:"version"`
+	ModifiedAt                      time.Time                `json:"modifiedAt"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ResourceCreatedDeliveryPayload) UnmarshalJSON(data []byte) error {
+	type Alias ResourceCreatedDeliveryPayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ResourceCreatedDeliveryPayload) MarshalJSON() ([]byte, error) {
+	type Alias ResourceCreatedDeliveryPayload
+	return json.Marshal(struct {
+		Action string `json:"notificationType"`
+		*Alias
+	}{Action: "ResourceCreated", Alias: (*Alias)(&obj)})
+}
+
+type ResourceDeletedDeliveryPayload struct {
+	ProjectKey                      string                   `json:"projectKey"`
+	Resource                        Reference                `json:"resource"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Version                         int                      `json:"version"`
+	ModifiedAt                      time.Time                `json:"modifiedAt"`
+	DataErasure                     *bool                    `json:"dataErasure,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ResourceDeletedDeliveryPayload) UnmarshalJSON(data []byte) error {
+	type Alias ResourceDeletedDeliveryPayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ResourceDeletedDeliveryPayload) MarshalJSON() ([]byte, error) {
+	type Alias ResourceDeletedDeliveryPayload
+	return json.Marshal(struct {
+		Action string `json:"notificationType"`
+		*Alias
+	}{Action: "ResourceDeleted", Alias: (*Alias)(&obj)})
+}
+
+type ResourceUpdatedDeliveryPayload struct {
+	ProjectKey                      string                   `json:"projectKey"`
+	Resource                        Reference                `json:"resource"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	Version                         int                      `json:"version"`
+	OldVersion                      int                      `json:"oldVersion"`
+	ModifiedAt                      time.Time                `json:"modifiedAt"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ResourceUpdatedDeliveryPayload) UnmarshalJSON(data []byte) error {
+	type Alias ResourceUpdatedDeliveryPayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ResourceUpdatedDeliveryPayload) MarshalJSON() ([]byte, error) {
+	type Alias ResourceUpdatedDeliveryPayload
+	return json.Marshal(struct {
+		Action string `json:"notificationType"`
+		*Alias
+	}{Action: "ResourceUpdated", Alias: (*Alias)(&obj)})
 }
 
 type SnsDestination struct {
@@ -314,224 +532,6 @@ func (obj *Subscription) UnmarshalJSON(data []byte) error {
 		}
 	}
 	return nil
-}
-
-type SubscriptionDelivery interface{}
-
-func mapDiscriminatorSubscriptionDelivery(input interface{}) (SubscriptionDelivery, error) {
-
-	var discriminator string
-	if data, ok := input.(map[string]interface{}); ok {
-		discriminator, ok = data["notificationType"].(string)
-		if !ok {
-			return nil, errors.New("Error processing discriminator field 'notificationType'")
-		}
-	} else {
-		return nil, errors.New("Invalid data")
-	}
-
-	switch discriminator {
-	case "Message":
-		obj := MessageDelivery{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ResourceCreated":
-		obj := ResourceCreatedDelivery{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ResourceDeleted":
-		obj := ResourceDeletedDelivery{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ResourceUpdated":
-		obj := ResourceUpdatedDelivery{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	}
-	return nil, nil
-}
-
-type MessageDelivery struct {
-	ProjectKey                      string                   `json:"projectKey"`
-	Resource                        Reference                `json:"resource"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ID                              string                   `json:"id"`
-	Version                         int                      `json:"version"`
-	CreatedAt                       time.Time                `json:"createdAt"`
-	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	PayloadNotIncluded              PayloadNotIncluded       `json:"payloadNotIncluded"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *MessageDelivery) UnmarshalJSON(data []byte) error {
-	type Alias MessageDelivery
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj MessageDelivery) MarshalJSON() ([]byte, error) {
-	type Alias MessageDelivery
-	return json.Marshal(struct {
-		Action string `json:"notificationType"`
-		*Alias
-	}{Action: "Message", Alias: (*Alias)(&obj)})
-}
-
-type ResourceCreatedDelivery struct {
-	ProjectKey                      string                   `json:"projectKey"`
-	Resource                        Reference                `json:"resource"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Version                         int                      `json:"version"`
-	ModifiedAt                      time.Time                `json:"modifiedAt"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *ResourceCreatedDelivery) UnmarshalJSON(data []byte) error {
-	type Alias ResourceCreatedDelivery
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ResourceCreatedDelivery) MarshalJSON() ([]byte, error) {
-	type Alias ResourceCreatedDelivery
-	return json.Marshal(struct {
-		Action string `json:"notificationType"`
-		*Alias
-	}{Action: "ResourceCreated", Alias: (*Alias)(&obj)})
-}
-
-type ResourceDeletedDelivery struct {
-	ProjectKey                      string                   `json:"projectKey"`
-	Resource                        Reference                `json:"resource"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Version                         int                      `json:"version"`
-	ModifiedAt                      time.Time                `json:"modifiedAt"`
-	DataErasure                     *bool                    `json:"dataErasure,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *ResourceDeletedDelivery) UnmarshalJSON(data []byte) error {
-	type Alias ResourceDeletedDelivery
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ResourceDeletedDelivery) MarshalJSON() ([]byte, error) {
-	type Alias ResourceDeletedDelivery
-	return json.Marshal(struct {
-		Action string `json:"notificationType"`
-		*Alias
-	}{Action: "ResourceDeleted", Alias: (*Alias)(&obj)})
-}
-
-type ResourceUpdatedDelivery struct {
-	ProjectKey                      string                   `json:"projectKey"`
-	Resource                        Reference                `json:"resource"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Version                         int                      `json:"version"`
-	OldVersion                      int                      `json:"oldVersion"`
-	ModifiedAt                      time.Time                `json:"modifiedAt"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *ResourceUpdatedDelivery) UnmarshalJSON(data []byte) error {
-	type Alias ResourceUpdatedDelivery
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ResourceUpdatedDelivery) MarshalJSON() ([]byte, error) {
-	type Alias ResourceUpdatedDelivery
-	return json.Marshal(struct {
-		Action string `json:"notificationType"`
-		*Alias
-	}{Action: "ResourceUpdated", Alias: (*Alias)(&obj)})
 }
 
 type SubscriptionDraft struct {

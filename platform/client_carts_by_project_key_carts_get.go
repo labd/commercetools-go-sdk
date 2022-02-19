@@ -26,7 +26,6 @@ func (r *ByProjectKeyCartsRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ByProjectKeyCartsRequestMethodGetInput struct {
-	CustomerId   *string
 	Expand       []string
 	Sort         []string
 	Limit        *int
@@ -38,9 +37,6 @@ type ByProjectKeyCartsRequestMethodGetInput struct {
 
 func (input *ByProjectKeyCartsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	if input.CustomerId != nil {
-		values.Add("customerId", fmt.Sprintf("%v", *input.CustomerId))
-	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
@@ -69,14 +65,6 @@ func (input *ByProjectKeyCartsRequestMethodGetInput) Values() url.Values {
 		}
 	}
 	return values
-}
-
-func (rb *ByProjectKeyCartsRequestMethodGet) CustomerId(v string) *ByProjectKeyCartsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyCartsRequestMethodGetInput{}
-	}
-	rb.params.CustomerId = &v
-	return rb
 }
 
 func (rb *ByProjectKeyCartsRequestMethodGet) Expand(v []string) *ByProjectKeyCartsRequestMethodGet {

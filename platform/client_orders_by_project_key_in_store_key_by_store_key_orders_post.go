@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodPost) WithHeaders(h
 }
 
 /**
-*	Creates an order from a Cart from a specific Store. The {storeKey} path parameter maps to a Store's key.
+*	Creates an order from a Cart from a specific Store.
 *	When using this endpoint the orders's store field is always set to the store specified in the path parameter.
 *	The cart must have a shipping address set before creating an order. When using the Platform TaxMode,
 *	the shipping address is used for tax calculation.

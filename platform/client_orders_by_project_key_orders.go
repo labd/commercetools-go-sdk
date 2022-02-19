@@ -40,6 +40,17 @@ func (rb *ByProjectKeyOrdersRequestBuilder) WithId(id string) *ByProjectKeyOrder
 		client:     rb.client,
 	}
 }
+
+/**
+*	This endpoint provides high performance search queries over Orders. The order search allows searching through all orders (currently supporting a limit of the 10.000.000 newest orders) in your project.
+*
+ */
+func (rb *ByProjectKeyOrdersRequestBuilder) Search() *ByProjectKeyOrdersSearchRequestBuilder {
+	return &ByProjectKeyOrdersSearchRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyOrdersRequestBuilder) Get() *ByProjectKeyOrdersRequestMethodGet {
 	return &ByProjectKeyOrdersRequestMethodGet{
 		url:    fmt.Sprintf("/%s/orders", rb.projectKey),

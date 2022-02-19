@@ -10,8 +10,9 @@ type ByProjectKeyMePasswordResetRequestBuilder struct {
 	client     *Client
 }
 
-func (rb *ByProjectKeyMePasswordResetRequestBuilder) Post() *ByProjectKeyMePasswordResetRequestMethodPost {
+func (rb *ByProjectKeyMePasswordResetRequestBuilder) Post(body MyCustomerResetPassword) *ByProjectKeyMePasswordResetRequestMethodPost {
 	return &ByProjectKeyMePasswordResetRequestMethodPost{
+		body:   body,
 		url:    fmt.Sprintf("/%s/me/password/reset", rb.projectKey),
 		client: rb.client,
 	}

@@ -11,6 +11,7 @@ import (
 )
 
 type ByProjectKeyMePasswordResetRequestMethodPost struct {
+	body    MyCustomerResetPassword
 	url     string
 	client  *Client
 	headers http.Header
@@ -27,13 +28,17 @@ func (rb *ByProjectKeyMePasswordResetRequestMethodPost) WithHeaders(headers http
 	return rb
 }
 func (rb *ByProjectKeyMePasswordResetRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
+	data, err := serializeInput(rb.body)
+	if err != nil {
+		return nil, err
+	}
 	queryParams := url.Values{}
 	resp, err := rb.client.post(
 		ctx,
 		rb.url,
 		queryParams,
 		rb.headers,
-		nil,
+		data,
 	)
 
 	if err != nil {

@@ -51,7 +51,7 @@ func (obj TaxRate) MarshalJSON() ([]byte, error) {
  */
 type PriceImport struct {
 	Key string `json:"key"`
-	// Maps to `Price.value`. TypedMoney is what is called BaseMoney in the HTTP API.
+	// Maps to `Price.value`.
 	Value TypedMoney `json:"value"`
 	// Maps to `Price.county`.
 	Country *string `json:"country,omitempty"`

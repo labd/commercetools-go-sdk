@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodPost) WithHeaders(he
 }
 
 /**
-*	Creates a cart in the store specified by {storeKey}. The {storeKey} path parameter maps to a Store's key.
+*	Creates a cart in the store specified by {storeKey}.
 *	When using this endpoint the cart's store field is always set to the store specified in the path parameter.
 *	Creating a cart can fail with an InvalidOperation if the referenced shipping method
 *	in the CartDraft has a predicate which does not match the cart.

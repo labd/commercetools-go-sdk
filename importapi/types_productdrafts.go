@@ -177,7 +177,6 @@ func (obj ProductVariantDraftImport) MarshalJSON() ([]byte, error) {
 *
  */
 type PriceDraftImport struct {
-	// TypedMoney is what is called BaseMoney in the HTTP API.
 	Value TypedMoney `json:"value"`
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`

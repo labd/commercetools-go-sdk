@@ -2,12 +2,12 @@
 package importapi
 
 /**
-*	Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingState).
+*	Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingstate).
 *	Can be used to monitor the import progress per [Import Container](/import-container).
 *
  */
 type ImportSummary struct {
-	// The import status of an [ImportContainer](/import-container#importcontainer) given by the number of resources in each [Processing State](/processing-state#processingState).
+	// The import status of an [ImportContainer](/import-container#importcontainer) given by the number of resources in each [Processing State](/processing-state#processingstate).
 	States OperationStates `json:"states"`
 	// The total number of [ImportOperations](/import-operation#importoperation) received for this Import Summary.
 	Total int `json:"total"`

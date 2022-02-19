@@ -14,7 +14,6 @@ type ByProjectKeyInStoreKeyByStoreKeyCartsCustomerIdByCustomerIdRequestBuilder s
 
 /**
 *	Retrieves the active cart of the customer that has been modified most recently in a specific Store.
-*	The {storeKey} path parameter maps to a Store's key.
 *
 *	If the cart exists in the commercetools project but does not have the store field, or the store field
 *	references a different store, this method returns a ResourceNotFound error.

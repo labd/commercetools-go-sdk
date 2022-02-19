@@ -98,8 +98,8 @@ type CartDiscountDraft struct {
 	RequiresDiscountCode *bool `json:"requiresDiscountCode,omitempty"`
 	// Specifies whether the application of this discount causes the following discounts to be ignored.
 	// Defaults to Stacking.
-	StackingMode *StackingMode `json:"stackingMode,omitempty"`
-	Custom       *CustomFields `json:"custom,omitempty"`
+	StackingMode *StackingMode      `json:"stackingMode,omitempty"`
+	Custom       *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

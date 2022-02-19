@@ -11,7 +11,7 @@ import (
 )
 
 type ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPost struct {
-	body    CustomerResetPassword
+	body    MyCustomerResetPassword
 	url     string
 	client  *Client
 	headers http.Header

@@ -8,31 +8,33 @@ import (
 )
 
 type Channel struct {
-	// The unique ID of the channel.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique ID of the Channel.
+	ID string `json:"id"`
+	// Current version of the Channel.
+	Version int `json:"version"`
+	// Date and time (UTC) the Channel was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Channel was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Any arbitrary string key that uniquely identifies this channel within the project.
+	// User-defined unique identifier for the Channel.
 	Key string `json:"key"`
-	// The roles of this channel.
-	// Each channel must have at least one role.
+	// Roles of the Channel.
 	Roles []ChannelRoleEnum `json:"roles"`
-	// A human-readable name of the channel.
+	// Name of the Channel.
 	Name *LocalizedString `json:"name,omitempty"`
-	// A human-readable description of the channel.
+	// Description of the Channel.
 	Description *LocalizedString `json:"description,omitempty"`
-	// The address where this channel is located (e.g.
-	// if the channel is a physical store).
+	// Address where the Channel is located (for example, if the Channel is a physical store).
 	Address *Address `json:"address,omitempty"`
-	// Statistics about the review ratings taken into account for this channel.
+	// Statistics about the review ratings taken into account for the Channel.
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
-	Custom                 *CustomFields           `json:"custom,omitempty"`
-	// A GeoJSON geometry object encoding the geo location of the channel.
+	// Custom Fields defined for the Channel.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// GeoJSON geometry object encoding the geo location of the Channel.
 	GeoLocation GeoJson `json:"geoLocation,omitempty"`
 }
 
@@ -54,15 +56,23 @@ func (obj *Channel) UnmarshalJSON(data []byte) error {
 }
 
 type ChannelDraft struct {
+	// User-defined unique identifier for the Channel.
 	Key string `json:"key"`
-	// If not specified, then channel will get InventorySupply role by default
-	Roles       []ChannelRoleEnum `json:"roles"`
-	Name        *LocalizedString  `json:"name,omitempty"`
-	Description *LocalizedString  `json:"description,omitempty"`
-	Address     *BaseAddress      `json:"address,omitempty"`
-	// The custom fields.
-	Custom      *CustomFieldsDraft `json:"custom,omitempty"`
-	GeoLocation GeoJson            `json:"geoLocation,omitempty"`
+	// Roles of the Channel.
+	// Each channel must have at least one role.
+	// If not specified, then `InventorySupply` is assigned by default.
+	Roles []ChannelRoleEnum `json:"roles"`
+	// Name of the Channel.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Description of the Channel.
+	Description *LocalizedString `json:"description,omitempty"`
+	// Address where the Channel is located.
+	Address *BaseAddress `json:"address,omitempty"`
+	// Custom fields defined for the Channel.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// GeoJSON geometry object encoding the geo location of the Channel.
+	// Currently, only the [Point](/../api/types#point) type is supported.
+	GeoLocation GeoJson `json:"geoLocation,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -105,17 +115,37 @@ func (obj ChannelDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Channel](ctp:api:type:Channel).
+*
+ */
 type ChannelPagedQueryResponse struct {
-	Limit   int       `json:"limit"`
-	Count   int       `json:"count"`
-	Total   *int      `json:"total,omitempty"`
-	Offset  int       `json:"offset"`
+	// Number of results requested in the query request.
+	Limit int `json:"limit"`
+	// Offset supplied by the client or server default.
+	// It is the number of elements skipped, not a page number.
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Channels](ctp:api:type:Channel) matching the query.
 	Results []Channel `json:"results"`
 }
 
+/**
+*	[Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+*
+ */
 type ChannelReference struct {
-	// Unique ID of the referenced resource.
-	ID  string   `json:"id"`
+	// Unique ID of the referenced [Channel](ctp:api:type:Channel).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Channel.
+	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Channels.
 	Obj *Channel `json:"obj,omitempty"`
 }
 
@@ -129,10 +159,14 @@ func (obj ChannelReference) MarshalJSON() ([]byte, error) {
 	}{Action: "channel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+*
+ */
 type ChannelResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Unique ID of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// Unique key of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -146,6 +180,10 @@ func (obj ChannelResourceIdentifier) MarshalJSON() ([]byte, error) {
 	}{Action: "channel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Describes the purpose and type of the Channel. A Channel can have one or more roles.
+*
+ */
 type ChannelRoleEnum string
 
 const (
@@ -157,7 +195,9 @@ const (
 )
 
 type ChannelUpdate struct {
-	Version int                   `json:"version"`
+	// Expected version of the Channel on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Channel.
 	Actions []ChannelUpdateAction `json:"actions"`
 }
 
@@ -271,6 +311,7 @@ func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction
 }
 
 type ChannelAddRolesAction struct {
+	// Value to append to the array.
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
@@ -285,6 +326,7 @@ func (obj ChannelAddRolesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelChangeDescriptionAction struct {
+	// New value to set. Must not be empty.
 	Description LocalizedString `json:"description"`
 }
 
@@ -299,6 +341,7 @@ func (obj ChannelChangeDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelChangeKeyAction struct {
+	// New value to set. Must not be empty.
 	Key string `json:"key"`
 }
 
@@ -313,6 +356,7 @@ func (obj ChannelChangeKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelChangeNameAction struct {
+	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
 
@@ -327,6 +371,7 @@ func (obj ChannelChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelRemoveRolesAction struct {
+	// Value to remove from the array.
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
@@ -341,6 +386,7 @@ func (obj ChannelRemoveRolesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetAddressAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -355,7 +401,10 @@ func (obj ChannelSetAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetAddressCustomFieldAction struct {
-	Name  string      `json:"name"`
+	// Name of the Custom Fields.
+	Name string `json:"name"`
+	// Specifies the format of the value of the Custom Field defined by `name`.
+	// If `value` is absent or `null`, this field will be removed, if it exists. Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -370,8 +419,11 @@ func (obj ChannelSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetAddressCustomTypeAction struct {
-	Type   *TypeResourceIdentifier `json:"type,omitempty"`
-	Fields *FieldContainer         `json:"fields,omitempty"`
+	// If absent, the [custom](/../api/projects/custom-fields) type and any existing [CustomFields](/../api/projects/custom-fields) are removed from the address.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Valid JSON object, based on the [FieldDefinitions](/../api/projects/types#fielddefinition) of the [Type](/../api/projects/types#type).
+	// Sets the [custom](/../api/projects/custom-fields) fields to this value.
+	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -385,7 +437,12 @@ func (obj ChannelSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetCustomFieldAction struct {
-	Name  string      `json:"name"`
+	// Name of the Custom Field.
+	Name string `json:"name"`
+	// Value must be of type [Value](/../api/projects/custom-fields#customfieldvalue).
+	// If `value` is absent or `null`, this field will be removed, if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// If `value` is provided, it is for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -400,8 +457,11 @@ func (obj ChannelSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetCustomTypeAction struct {
-	Type   *TypeResourceIdentifier `json:"type,omitempty"`
-	Fields *FieldContainer         `json:"fields,omitempty"`
+	// If absent, the [custom](/../api/projects/custom-fields) type and any existing [CustomFields](/../api/projects/custom-fields) are removed.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Valid JSON object, based on the [FieldDefinitions](/../api/projects/types#fielddefinition) of the [Type](/../api/projects/types#type).
+	// Sets the [custom](/../api/projects/custom-fields) fields to this value.
+	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -415,6 +475,7 @@ func (obj ChannelSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetGeoLocationAction struct {
+	// Value to set.
 	GeoLocation GeoJson `json:"geoLocation,omitempty"`
 }
 
@@ -446,6 +507,7 @@ func (obj ChannelSetGeoLocationAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetRolesAction struct {
+	// Value to set. If not specified, then `InventorySupply` is assigned by default.
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 

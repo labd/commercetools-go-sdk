@@ -187,6 +187,21 @@ func (rb *ByProjectKeyRequestBuilder) ProductProjections() *ByProjectKeyProductP
 }
 
 /**
+*	Manage individual Store assortments through Product Selections.
+*
+*	After you have created Product Selections and populated them by Products,
+*	you can manage Store assortments by assigning Product Selections to Stores.
+*	Product Selections may be used by a single Store or shared across several Stores.
+*
+ */
+func (rb *ByProjectKeyRequestBuilder) ProductSelections() *ByProjectKeyProductSelectionsRequestBuilder {
+	return &ByProjectKeyProductSelectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	Product Types are used to describe common characteristics, most importantly common custom attributes,
 *	of many concrete products.
 *

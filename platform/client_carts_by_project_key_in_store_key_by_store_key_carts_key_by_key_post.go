@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestMethodPost) WithHe
 }
 
 /**
-*	Updates a cart in the store specified by {storeKey}. The {storeKey} path parameter maps to a Store's key.
+*	Updates a cart in the store specified by {storeKey}.
 *	If the cart exists in the commercetools project but does not have the store field,
 *	or the store field references a different store, this method returns a ResourceNotFound error.
 *

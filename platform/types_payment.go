@@ -27,10 +27,13 @@ type Payment struct {
 	InterfaceId *string `json:"interfaceId,omitempty"`
 	// How much money this payment intends to receive from the customer.
 	// The value usually matches the cart or order gross total.
-	AmountPlanned     TypedMoney        `json:"amountPlanned"`
-	AmountAuthorized  TypedMoney        `json:"amountAuthorized,omitempty"`
-	AuthorizedUntil   *string           `json:"authorizedUntil,omitempty"`
-	AmountPaid        TypedMoney        `json:"amountPaid,omitempty"`
+	AmountPlanned TypedMoney `json:"amountPlanned"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	AmountAuthorized TypedMoney `json:"amountAuthorized,omitempty"`
+	AuthorizedUntil  *string    `json:"authorizedUntil,omitempty"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	AmountPaid TypedMoney `json:"amountPaid,omitempty"`
+	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
 	AmountRefunded    TypedMoney        `json:"amountRefunded,omitempty"`
 	PaymentMethodInfo PaymentMethodInfo `json:"paymentMethodInfo"`
 	PaymentStatus     PaymentStatus     `json:"paymentStatus"`
@@ -97,10 +100,16 @@ type PaymentDraft struct {
 	InterfaceId *string `json:"interfaceId,omitempty"`
 	// How much money this payment intends to receive from the customer.
 	// The value usually matches the cart or order gross total.
-	AmountPlanned     Money               `json:"amountPlanned"`
-	AmountAuthorized  *Money              `json:"amountAuthorized,omitempty"`
-	AuthorizedUntil   *string             `json:"authorizedUntil,omitempty"`
-	AmountPaid        *Money              `json:"amountPaid,omitempty"`
+	AmountPlanned Money `json:"amountPlanned"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	AmountAuthorized *Money  `json:"amountAuthorized,omitempty"`
+	AuthorizedUntil  *string `json:"authorizedUntil,omitempty"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	AmountPaid *Money `json:"amountPaid,omitempty"`
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	AmountRefunded    *Money              `json:"amountRefunded,omitempty"`
 	PaymentMethodInfo *PaymentMethodInfo  `json:"paymentMethodInfo,omitempty"`
 	PaymentStatus     *PaymentStatusDraft `json:"paymentStatus,omitempty"`
@@ -208,9 +217,10 @@ type PaymentStatus struct {
 }
 
 type PaymentStatusDraft struct {
-	InterfaceCode *string                  `json:"interfaceCode,omitempty"`
-	InterfaceText *string                  `json:"interfaceText,omitempty"`
-	State         *StateResourceIdentifier `json:"state,omitempty"`
+	InterfaceCode *string `json:"interfaceCode,omitempty"`
+	InterfaceText *string `json:"interfaceText,omitempty"`
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	State *StateResourceIdentifier `json:"state,omitempty"`
 }
 
 type PaymentUpdate struct {
@@ -439,7 +449,7 @@ type TransactionDraft struct {
 	// If not set, defaults to `Initial`.
 	State *TransactionState `json:"state,omitempty"`
 	// Custom Fields for the Transaction.
-	Custom *CustomFields `json:"custom,omitempty"`
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 type TransactionState string
@@ -550,6 +560,8 @@ func (obj PaymentChangeTransactionTimestampAction) MarshalJSON() ([]byte, error)
 }
 
 type PaymentSetAmountPaidAction struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount *Money `json:"amount,omitempty"`
 }
 
@@ -564,6 +576,8 @@ func (obj PaymentSetAmountPaidAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAmountRefundedAction struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount *Money `json:"amount,omitempty"`
 }
 
@@ -594,6 +608,8 @@ func (obj PaymentSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAuthorizationAction struct {
+	// Draft type that stores amounts in cent precision for the specified currency.
+	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount *Money     `json:"amount,omitempty"`
 	Until  *time.Time `json:"until,omitempty"`
 }
@@ -609,7 +625,25 @@ func (obj PaymentSetAuthorizationAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetCustomFieldAction struct {
-	Name  string      `json:"name"`
+	Name string `json:"name"`
+	// The value of a Custom Field.
+	// The data type of the value depends on the specific [FieldType](/projects/types#fieldtype) given in the `type` field of the [FieldDefinition](/ctp:api:type:FieldDefinition) for a Custom Field.
+	// It can be any of the following:
+	//
+	//  Field type                                                 | Data type                                                                                                                                                                 |
+	//  ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+	//  [CustomFieldBooleanType](ctp:api:type:CustomFieldBooleanType)                 | Boolean (`true` or `false`)                                                                                                                                                     |
+	//  [CustomFieldStringType](ctp:api:type:CustomFieldStringType)                   | String                                                                                                                                                                |
+	//  [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType) | [LocalizedString](ctp:api:type:LocalizedString)                                                                                                                             |
+	//  [CustomFieldEnumType](ctp:api:type:CustomFieldEnumType)                       | String. Must be a `key` of one of the [EnumValues](ctp:api:type:CustomFieldEnumValue) defined in the [EnumType](ctp:api:type:CustomFiedEnumType)                                     |
+	//  [CustomFieldLocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType)     | String. Must be a `key` of one of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) defined in the [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) |
+	//  [CustomFieldNumberType](ctp:api:type:CustomFieldNumberType)                   | Number                                                                                                                                                                |
+	//  [CustomFieldMoneyType](ctp:api:type:CustomFieldMoneyType)                     | [CentPrecisionMoney](/../api/types#centprecisionmoney)                                                                                                                                         |
+	//  [CustomFieldDateType](ctp:api:type:CustomFieldDateType)                       | [Date](ctp:api:type:Date)                                                                                                                                                   |
+	//  [CustomFieldTimeType](ctp:api:type:CustomFieldTimeType)                       | [Time](ctp:api:type:Time)                                                                                                                                                   |
+	//  [CustomFieldDateTimeType](ctp:api:type:CustomFieldDateTimeType)               | [DateTime](ctp:api:type:DateTime)                                                                                                                                           |
+	//  [CustomFieldReferenceType](ctp:api:type:CustomFieldReferenceType)             | [Reference](/../api/types#reference)                                                                                                                                         |
+	//  [CustomFieldSetType](ctp:api:type:CustomFieldSetType)                         | JSON array without duplicates consisting of [CustomFieldValues](ctp:api:type:CustomFieldValue) of a single [FieldType](ctp:api:type:FieldType). For example, a Custom Field of SetType of DateType takes a JSON array of mutually different Dates for its value. The order of items in the array is not fixed. For more examples, see the [example FieldContainer](ctp:api:type:FieldContainer).|
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -774,8 +808,9 @@ func (obj PaymentSetStatusInterfaceTextAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetTransactionCustomFieldAction struct {
-	Name  string      `json:"name"`
-	Value interface{} `json:"value,omitempty"`
+	TransactionId string      `json:"transactionId"`
+	Name          string      `json:"name"`
+	Value         interface{} `json:"value,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -789,6 +824,7 @@ func (obj PaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error) 
 }
 
 type PaymentSetTransactionCustomTypeAction struct {
+	TransactionId string `json:"transactionId"`
 	// If set, the custom type is set to this new value.
 	// If absent, the custom type and any existing custom fields are removed.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`

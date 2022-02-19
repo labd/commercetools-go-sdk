@@ -34,7 +34,7 @@ type ItemShippingDetailsDraft struct {
 }
 
 type LineItemPrice struct {
-	// Maps to `Price.value`. TypedMoney is what is called BaseMoney in the HTTP API.
+	// Maps to `Price.value`.
 	Value TypedMoney `json:"value"`
 	// Maps to `Price.county`.
 	Country *string `json:"country,omitempty"`
@@ -389,11 +389,10 @@ const (
 *
  */
 type ShippingInfoImportDraft struct {
-	ShippingMethodName string `json:"shippingMethodName"`
-	// TypedMoney is what is called BaseMoney in the HTTP API.
-	Price        TypedMoney        `json:"price"`
-	ShippingRate ShippingRateDraft `json:"shippingRate"`
-	TaxRate      *TaxRate          `json:"taxRate,omitempty"`
+	ShippingMethodName string            `json:"shippingMethodName"`
+	Price              TypedMoney        `json:"price"`
+	ShippingRate       ShippingRateDraft `json:"shippingRate"`
+	TaxRate            *TaxRate          `json:"taxRate,omitempty"`
 	// References a tax category by key.
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
 	// References a shipping method by key.
@@ -477,9 +476,7 @@ func (obj ExternalTaxRateDraft) MarshalJSON() ([]byte, error) {
 }
 
 type CustomLineItemTaxedPrice struct {
-	// TypedMoney is what is called BaseMoney in the HTTP API.
-	TotalNet TypedMoney `json:"totalNet"`
-	// TypedMoney is what is called BaseMoney in the HTTP API.
+	TotalNet   TypedMoney `json:"totalNet"`
 	TotalGross TypedMoney `json:"totalGross"`
 }
 
@@ -515,15 +512,13 @@ type CustomLineItemDraft struct {
 	//   "en": "dog food"
 	// }
 	// ```
-	Name LocalizedString `json:"name"`
-	// TypedMoney is what is called BaseMoney in the HTTP API.
+	Name       LocalizedString           `json:"name"`
 	Money      TypedMoney                `json:"money"`
 	TaxedPrice *CustomLineItemTaxedPrice `json:"taxedPrice,omitempty"`
-	// TypedMoney is what is called BaseMoney in the HTTP API.
-	TotalPrice TypedMoney  `json:"totalPrice"`
-	Slug       string      `json:"slug"`
-	Quantity   float64     `json:"quantity"`
-	State      []ItemState `json:"state"`
+	TotalPrice TypedMoney                `json:"totalPrice"`
+	Slug       string                    `json:"slug"`
+	Quantity   float64                   `json:"quantity"`
+	State      []ItemState               `json:"state"`
 	// References a tax category by key.
 	TaxCategory                *TaxCategoryKeyReference       `json:"taxCategory,omitempty"`
 	TaxRate                    *TaxRate                       `json:"taxRate,omitempty"`
@@ -584,9 +579,8 @@ func (obj CustomLineItemDraft) MarshalJSON() ([]byte, error) {
 }
 
 type TaxPortion struct {
-	Name *string `json:"name,omitempty"`
-	Rate float64 `json:"rate"`
-	// TypedMoney is what is called BaseMoney in the HTTP API.
+	Name   *string    `json:"name,omitempty"`
+	Rate   float64    `json:"rate"`
 	Amount TypedMoney `json:"amount"`
 }
 
@@ -832,7 +826,7 @@ type OrderImport struct {
 	LineItems []LineItemImportDraft `json:"lineItems"`
 	// Maps to `Order.customLineItems`
 	CustomLineItems []CustomLineItemDraft `json:"customLineItems"`
-	// Maps to `Order.totalPrice`. TypedMoney is what is called BaseMoney in the HTTP API.
+	// Maps to `Order.totalPrice`.
 	TotalPrice TypedMoney `json:"totalPrice"`
 	// Maps to `Order.taxedPrice`.
 	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
