@@ -81,22 +81,27 @@ func (obj *ProjectUpdate) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorProjectUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type ProjectUpdateAction interface{}
 
 func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'action'")
+			return nil, errors.New("error processing discriminator field 'action'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -218,15 +223,14 @@ type SearchIndexingConfigurationValues struct {
 type ShippingRateInputType interface{}
 
 func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInputType, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

@@ -21,15 +21,14 @@ type ContainerAndKey struct {
 type Message interface{}
 
 func mapDiscriminatorMessage(input interface{}) (Message, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -1548,7 +1547,13 @@ func (obj *MessagePagedQueryResponse) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Results {
+		var err error
+		obj.Results[i], err = mapDiscriminatorMessage(obj.Results[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -1565,15 +1570,14 @@ type MessagesConfigurationDraft struct {
 type OrderMessage interface{}
 
 func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -5269,15 +5273,14 @@ type UserProvidedIdentifiers struct {
 type MessagePayload interface{}
 
 func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -5889,15 +5892,14 @@ func (obj InventoryEntryQuantitySetMessagePayload) MarshalJSON() ([]byte, error)
 type OrderMessagePayload interface{}
 
 func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

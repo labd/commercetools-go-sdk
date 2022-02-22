@@ -74,7 +74,7 @@ func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
 		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
 	if input.WithTotal != nil {
-		if *input.WithTotal == true {
+		if *input.WithTotal {
 			values.Add("withTotal", "true")
 		} else {
 			values.Add("withTotal", "false")
@@ -228,6 +228,9 @@ func (rb *ByProjectKeyProductsRequestMethodGet) Execute(ctx context.Context) (re
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
@@ -247,7 +250,7 @@ func (rb *ByProjectKeyProductsRequestMethodGet) Execute(ctx context.Context) (re
 		}
 		return nil, result
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

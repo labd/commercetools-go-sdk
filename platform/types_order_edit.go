@@ -40,6 +40,13 @@ func (obj *OrderEdit) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
+	for i := range obj.StagedActions {
+		var err error
+		obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		if err != nil {
+			return err
+		}
+	}
 	if obj.Result != nil {
 		var err error
 		obj.Result, err = mapDiscriminatorOrderEditResult(obj.Result)
@@ -77,7 +84,13 @@ func (obj *OrderEditDraft) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.StagedActions {
+		var err error
+		obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -148,15 +161,14 @@ func (obj OrderEditResourceIdentifier) MarshalJSON() ([]byte, error) {
 type OrderEditResult interface{}
 
 func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -177,11 +189,25 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		for i := range obj.Errors {
+			var err error
+			obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "PreviewSuccess":
 		obj := OrderEditPreviewSuccess{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.MessagePayloads {
+			var err error
+			obj.MessagePayloads[i], err = mapDiscriminatorMessagePayload(obj.MessagePayloads[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	}
@@ -228,7 +254,13 @@ func (obj *OrderEditPreviewFailure) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Errors {
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -254,7 +286,13 @@ func (obj *OrderEditPreviewSuccess) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.MessagePayloads {
+		var err error
+		obj.MessagePayloads[i], err = mapDiscriminatorMessagePayload(obj.MessagePayloads[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -281,22 +319,27 @@ func (obj *OrderEditUpdate) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorOrderEditUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type OrderEditUpdateAction interface{}
 
 func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAction, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'action'")
+			return nil, errors.New("error processing discriminator field 'action'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -341,6 +384,13 @@ func mapDiscriminatorOrderEditUpdateAction(input interface{}) (OrderEditUpdateAc
 		obj := OrderEditSetStagedActionsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.StagedActions {
+			var err error
+			obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	}
@@ -619,7 +669,13 @@ func (obj *OrderEditSetStagedActionsAction) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.StagedActions {
+		var err error
+		obj.StagedActions[i], err = mapDiscriminatorStagedOrderUpdateAction(obj.StagedActions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

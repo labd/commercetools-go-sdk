@@ -69,6 +69,13 @@ func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	for i := range obj.References {
+		var err error
+		obj.References[i], err = mapDiscriminatorReference(obj.References[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -170,15 +177,14 @@ func (obj CartDiscountResourceIdentifier) MarshalJSON() ([]byte, error) {
 type CartDiscountTarget interface{}
 
 func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -269,22 +275,27 @@ func (obj *CartDiscountUpdate) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorCartDiscountUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type CartDiscountUpdateAction interface{}
 
 func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUpdateAction, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'action'")
+			return nil, errors.New("error processing discriminator field 'action'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -399,15 +410,14 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 type CartDiscountValue interface{}
 
 func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -416,11 +426,25 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		for i := range obj.Money {
+			var err error
+			obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "fixed":
 		obj := CartDiscountValueFixed{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.Money {
+			var err error
+			obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "giftLineItem":
@@ -450,7 +474,13 @@ func (obj *CartDiscountValueAbsolute) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Money {
+		var err error
+		obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -467,15 +497,14 @@ func (obj CartDiscountValueAbsolute) MarshalJSON() ([]byte, error) {
 type CartDiscountValueDraft interface{}
 
 func mapDiscriminatorCartDiscountValueDraft(input interface{}) (CartDiscountValueDraft, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -532,7 +561,13 @@ func (obj *CartDiscountValueFixed) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Money {
+		var err error
+		obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

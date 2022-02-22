@@ -200,22 +200,27 @@ func (obj *StoreUpdate) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorStoreUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type StoreUpdateAction interface{}
 
 func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'action'")
+			return nil, errors.New("error processing discriminator field 'action'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

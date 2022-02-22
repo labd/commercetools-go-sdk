@@ -15,15 +15,14 @@ type ErrorByExtension struct {
 type ErrorObject interface{}
 
 func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["code"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'code'")
+			return nil, errors.New("error processing discriminator field 'code'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -874,7 +873,13 @@ func (obj *ErrorResponse) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Errors {
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

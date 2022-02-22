@@ -39,13 +39,16 @@ func (rb *ByProjectKeyMissingDataAttributesStatusByTaskIdRequestMethodGet) Execu
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

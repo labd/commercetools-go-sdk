@@ -42,7 +42,13 @@ func (obj *ImportOperation) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Errors {
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -119,7 +125,13 @@ func (obj *ImportOperationStatus) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Errors {
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

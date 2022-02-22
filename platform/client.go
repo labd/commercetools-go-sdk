@@ -38,7 +38,7 @@ func NewClient(cfg *ClientConfig) (*Client, error) {
 	if cfg.HTTPClient != nil {
 		if cfg.Credentials != nil {
 			httpClient = cfg.Credentials.Client(
-				context.WithValue(oauth2.NoContext, oauth2.HTTPClient, cfg.HTTPClient))
+				context.WithValue(context.TODO(), oauth2.HTTPClient, cfg.HTTPClient))
 		} else {
 			httpClient = cfg.HTTPClient
 		}
@@ -105,7 +105,7 @@ func (c *Client) execute(ctx context.Context, method string, path string, params
 
 	req, err := http.NewRequestWithContext(ctx, method, endpoint.String(), body)
 	if err != nil {
-		return nil, fmt.Errorf("Creating new request: %w", err)
+		return nil, fmt.Errorf("creating new request: %w", err)
 	}
 
 	if headers != nil {

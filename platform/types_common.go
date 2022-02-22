@@ -247,15 +247,14 @@ type DiscountedPriceDraft struct {
 type GeoJson interface{}
 
 func mapDiscriminatorGeoJson(input interface{}) (GeoJson, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -297,15 +296,14 @@ type ImageDimensions struct {
 type KeyReference interface{}
 
 func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["typeId"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'typeId'")
+			return nil, errors.New("error processing discriminator field 'typeId'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -528,15 +526,14 @@ func (obj QueryPrice) MarshalJSON() ([]byte, error) {
 type Reference interface{}
 
 func mapDiscriminatorReference(input interface{}) (Reference, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["typeId"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'typeId'")
+			return nil, errors.New("error processing discriminator field 'typeId'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -724,15 +721,14 @@ const (
 type ResourceIdentifier interface{}
 
 func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["typeId"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'typeId'")
+			return nil, errors.New("error processing discriminator field 'typeId'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -928,15 +924,14 @@ func (obj *ScopedPrice) UnmarshalJSON(data []byte) error {
 type TypedMoney interface{}
 
 func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -1014,15 +1009,14 @@ func (obj HighPrecisionMoney) MarshalJSON() ([]byte, error) {
 type TypedMoneyDraft interface{}
 
 func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

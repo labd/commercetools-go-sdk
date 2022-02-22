@@ -45,7 +45,7 @@ type ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestMethodGetInput str
 func (input *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
 	if input.Staged != nil {
-		if *input.Staged == true {
+		if *input.Staged {
 			values.Add("staged", "true")
 		} else {
 			values.Add("staged", "false")
@@ -82,7 +82,7 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestMethodGetI
 		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
 	if input.WithTotal != nil {
-		if *input.WithTotal == true {
+		if *input.WithTotal {
 			values.Add("withTotal", "true")
 		} else {
 			values.Add("withTotal", "false")
@@ -244,6 +244,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestMethodGet) Ex
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
@@ -263,7 +266,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsRequestMethodGet) Ex
 		}
 		return nil, result
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

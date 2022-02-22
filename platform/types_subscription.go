@@ -14,15 +14,14 @@ type ChangeSubscription struct {
 type DeliveryFormat interface{}
 
 func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -59,15 +58,14 @@ func (obj CloudEventsFormat) MarshalJSON() ([]byte, error) {
 type DeliveryPayload interface{}
 
 func mapDiscriminatorDeliveryPayload(input interface{}) (DeliveryPayload, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["notificationType"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'notificationType'")
+			return nil, errors.New("error processing discriminator field 'notificationType'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -130,15 +128,14 @@ func mapDiscriminatorDeliveryPayload(input interface{}) (DeliveryPayload, error)
 type Destination interface{}
 
 func mapDiscriminatorDestination(input interface{}) (Destination, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -622,22 +619,27 @@ func (obj *SubscriptionUpdate) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorSubscriptionUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type SubscriptionUpdateAction interface{}
 
 func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUpdateAction, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'action'")
+			return nil, errors.New("error processing discriminator field 'action'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

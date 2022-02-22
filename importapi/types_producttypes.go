@@ -51,15 +51,14 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
 type AttributeType interface{}
 
 func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["name"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'name'")
+			return nil, errors.New("error processing discriminator field 'name'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

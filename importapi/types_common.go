@@ -125,15 +125,14 @@ type ImportResource struct {
 type KeyReference interface{}
 
 func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["typeId"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'typeId'")
+			return nil, errors.New("error processing discriminator field 'typeId'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -618,15 +617,14 @@ const (
 type TypedMoney interface{}
 
 func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

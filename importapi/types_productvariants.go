@@ -15,15 +15,14 @@ import (
 type Attribute interface{}
 
 func mapDiscriminatorAttribute(input interface{}) (Attribute, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -117,6 +116,13 @@ func mapDiscriminatorAttribute(input interface{}) (Attribute, error) {
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		for i := range obj.Value {
+			var err error
+			obj.Value[i], err = mapDiscriminatorTypedMoney(obj.Value[i])
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "number":
 		obj := NumberAttribute{}
@@ -147,6 +153,13 @@ func mapDiscriminatorAttribute(input interface{}) (Attribute, error) {
 		obj := ReferenceSetAttribute{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.Value {
+			var err error
+			obj.Value[i], err = mapDiscriminatorKeyReference(obj.Value[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "text":
@@ -510,7 +523,13 @@ func (obj *MoneySetAttribute) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Value {
+		var err error
+		obj.Value[i], err = mapDiscriminatorTypedMoney(obj.Value[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -627,7 +646,13 @@ func (obj *ReferenceSetAttribute) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Value {
+		var err error
+		obj.Value[i], err = mapDiscriminatorKeyReference(obj.Value[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -763,7 +788,13 @@ func (obj *ProductVariantImport) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Attributes {
+		var err error
+		obj.Attributes[i], err = mapDiscriminatorAttribute(obj.Attributes[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

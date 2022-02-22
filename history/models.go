@@ -56,6 +56,13 @@ func (obj *Record) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	for i := range obj.Changes {
+		var err error
+		obj.Changes[i], err = mapDiscriminatorChange(obj.Changes[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

@@ -76,7 +76,7 @@ func (input *ByProjectKeyByResourceTypeByIDRequestMethodGetInput) Values() url.V
 		values.Add("excludePlatformInitiatedChanges", fmt.Sprintf("%v", v))
 	}
 	if input.Expand != nil {
-		if *input.Expand == true {
+		if *input.Expand {
 			values.Add("expand", "true")
 		} else {
 			values.Add("expand", "false")
@@ -207,6 +207,9 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Execute(ctx context.Co
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
@@ -220,7 +223,7 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Execute(ctx context.Co
 		}
 		return nil, errorObj
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

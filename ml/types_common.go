@@ -45,15 +45,14 @@ const (
 type Reference interface{}
 
 func mapDiscriminatorReference(input interface{}) (Reference, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["typeId"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'typeId'")
+			return nil, errors.New("error processing discriminator field 'typeId'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

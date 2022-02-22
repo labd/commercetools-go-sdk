@@ -133,7 +133,13 @@ func (obj *ProductVariantDraftImport) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Attributes {
+		var err error
+		obj.Attributes[i], err = mapDiscriminatorAttribute(obj.Attributes[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

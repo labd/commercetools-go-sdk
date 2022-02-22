@@ -26,15 +26,14 @@ type FieldContainer map[string]CustomField
 type CustomField interface{}
 
 func mapDiscriminatorCustomField(input interface{}) (CustomField, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -182,6 +181,13 @@ func mapDiscriminatorCustomField(input interface{}) (CustomField, error) {
 		obj := ReferenceSetField{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.Value {
+			var err error
+			obj.Value[i], err = mapDiscriminatorKeyReference(obj.Value[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	}
@@ -601,7 +607,13 @@ func (obj *ReferenceSetField) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Value {
+		var err error
+		obj.Value[i], err = mapDiscriminatorKeyReference(obj.Value[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

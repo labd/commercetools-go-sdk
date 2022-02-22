@@ -155,6 +155,9 @@ func (rb *ByProjectKeyProductsRequestMethodPost) Execute(ctx context.Context) (r
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 201:
@@ -174,7 +177,7 @@ func (rb *ByProjectKeyProductsRequestMethodPost) Execute(ctx context.Context) (r
 		}
 		return nil, result
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

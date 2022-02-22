@@ -38,7 +38,7 @@ type ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput struct {
 func (input *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
 	if input.Staged != nil {
-		if *input.Staged == true {
+		if *input.Staged {
 			values.Add("staged", "true")
 		} else {
 			values.Add("staged", "false")
@@ -165,6 +165,9 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) Execute(ctx co
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
@@ -184,7 +187,7 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) Execute(ctx co
 		}
 		return nil, result
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

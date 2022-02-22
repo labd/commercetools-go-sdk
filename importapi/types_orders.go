@@ -114,7 +114,13 @@ func (obj *LineItemProductVariantImportDraft) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Attributes {
+		var err error
+		obj.Attributes[i], err = mapDiscriminatorAttribute(obj.Attributes[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -216,15 +222,14 @@ const (
 type ShippingRatePriceTier interface{}
 
 func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePriceTier, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -232,6 +237,13 @@ func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePrice
 		obj := CartClassificationTier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.Tiers {
+			var err error
+			obj.Tiers[i], err = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	}
@@ -252,7 +264,13 @@ func (obj *CartClassificationTier) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Tiers {
+		var err error
+		obj.Tiers[i], err = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -279,7 +297,13 @@ func (obj *ShippingRateDraft) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Tiers {
+		var err error
+		obj.Tiers[i], err = mapDiscriminatorShippingRatePriceTier(obj.Tiers[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -742,15 +766,14 @@ const (
 type ShippingRateInput interface{}
 
 func mapDiscriminatorShippingRateInput(input interface{}) (ShippingRateInput, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

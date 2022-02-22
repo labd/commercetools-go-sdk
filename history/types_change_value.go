@@ -9,15 +9,14 @@ import (
 type ChangeTargetChangeValue interface{}
 
 func mapDiscriminatorChangeTargetChangeValue(input interface{}) (ChangeTargetChangeValue, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -58,15 +57,14 @@ func mapDiscriminatorChangeTargetChangeValue(input interface{}) (ChangeTargetCha
 type ChangeValueChangeValue interface{}
 
 func mapDiscriminatorChangeValueChangeValue(input interface{}) (ChangeValueChangeValue, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

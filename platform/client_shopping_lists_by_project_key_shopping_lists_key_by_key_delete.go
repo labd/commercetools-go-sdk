@@ -34,7 +34,7 @@ type ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput struct {
 func (input *ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
 	if input.DataErasure != nil {
-		if *input.DataErasure == true {
+		if *input.DataErasure {
 			values.Add("dataErasure", "true")
 		} else {
 			values.Add("dataErasure", "false")
@@ -98,6 +98,9 @@ func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) Execute(ctx cont
 		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
@@ -117,7 +120,7 @@ func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) Execute(ctx cont
 		}
 		return nil, result
 	default:
-		return nil, fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

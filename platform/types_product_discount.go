@@ -57,6 +57,13 @@ func (obj *ProductDiscount) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	for i := range obj.References {
+		var err error
+		obj.References[i], err = mapDiscriminatorReference(obj.References[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -160,22 +167,27 @@ func (obj *ProductDiscountUpdate) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorProductDiscountUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type ProductDiscountUpdateAction interface{}
 
 func mapDiscriminatorProductDiscountUpdateAction(input interface{}) (ProductDiscountUpdateAction, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["action"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'action'")
+			return nil, errors.New("error processing discriminator field 'action'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -253,15 +265,14 @@ func mapDiscriminatorProductDiscountUpdateAction(input interface{}) (ProductDisc
 type ProductDiscountValue interface{}
 
 func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountValue, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {
@@ -269,6 +280,13 @@ func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountVal
 		obj := ProductDiscountValueAbsolute{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		for i := range obj.Money {
+			var err error
+			obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "external":
@@ -298,7 +316,13 @@ func (obj *ProductDiscountValueAbsolute) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-
+	for i := range obj.Money {
+		var err error
+		obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -315,15 +339,14 @@ func (obj ProductDiscountValueAbsolute) MarshalJSON() ([]byte, error) {
 type ProductDiscountValueDraft interface{}
 
 func mapDiscriminatorProductDiscountValueDraft(input interface{}) (ProductDiscountValueDraft, error) {
-
 	var discriminator string
 	if data, ok := input.(map[string]interface{}); ok {
 		discriminator, ok = data["type"].(string)
 		if !ok {
-			return nil, errors.New("Error processing discriminator field 'type'")
+			return nil, errors.New("error processing discriminator field 'type'")
 		}
 	} else {
-		return nil, errors.New("Invalid data")
+		return nil, errors.New("invalid data")
 	}
 
 	switch discriminator {

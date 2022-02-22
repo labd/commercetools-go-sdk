@@ -45,6 +45,9 @@ func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context
 		return err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 400, 401, 403, 500, 502, 503:
@@ -61,7 +64,7 @@ func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context
 		}
 		return result
 	default:
-		return fmt.Errorf("Unhandled StatusCode: %d", resp.StatusCode)
+		return fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }
