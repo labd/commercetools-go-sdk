@@ -18,7 +18,6 @@ const Version = "0.1.0"
 type Client struct {
 	httpClient *http.Client
 	url        *url.URL
-	logLevel   int
 	userAgent  string
 }
 
@@ -57,7 +56,6 @@ func NewClient(cfg *ClientConfig) (*Client, error) {
 	}
 	client := &Client{
 		url:        url,
-		logLevel:   cfg.LogLevel,
 		httpClient: httpClient,
 		userAgent:  userAgent,
 	}
@@ -115,17 +113,9 @@ func (c *Client) execute(ctx context.Context, method string, path string, params
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	req.Header.Set("User-Agent", c.userAgent)
 
-	if c.logLevel > 0 {
-		logRequest(req)
-	}
-
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return nil, err
-	}
-
-	if c.logLevel > 0 {
-		logResponse(resp)
 	}
 
 	return resp, nil
