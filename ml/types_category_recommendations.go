@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package ml
+
+// Generated file, please do not change!!!
 
 type ProjectCategoryRecommendation struct {
 	// A category that is recommended for a product.

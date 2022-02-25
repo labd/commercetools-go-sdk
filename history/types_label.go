@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package history
+
+// Generated file, please do not change!!!
 
 import (
 	"encoding/json"

@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package importapi
+
+// Generated file, please do not change!!!
 
 /**
 *	Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingstate).

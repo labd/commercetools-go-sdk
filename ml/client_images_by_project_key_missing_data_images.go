@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package ml
+
+// Generated file, please do not change!!!
 
 import (
 	"fmt"

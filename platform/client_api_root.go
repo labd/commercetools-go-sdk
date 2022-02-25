@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package platform
+
+// Generated file, please do not change!!!
 
 /**
 *	The Project endpoint is used to retrieve certain information from a project.

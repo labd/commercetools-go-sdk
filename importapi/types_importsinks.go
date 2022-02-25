@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package importapi
+
+// Generated file, please do not change!!!
 
 import (
 	"time"

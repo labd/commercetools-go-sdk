@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package ml
+
+// Generated file, please do not change!!!
 
 type GeneralCategoryRecommendation struct {
 	// An English category name that is recommended for a product.

@@ -1,5 +1,6 @@
-// Generated file, please do not change!!!
 package platform
+
+// Generated file, please do not change!!!
 
 import (
 	"time"
