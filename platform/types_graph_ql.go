@@ -54,5 +54,4 @@ func (obj GraphQLResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
-// GraphQLVariablesMap is something
 type GraphQLVariablesMap map[string]interface{}

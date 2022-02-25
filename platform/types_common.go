@@ -324,7 +324,6 @@ type LastModifiedBy struct {
 	AnonymousId    *string            `json:"anonymousId,omitempty"`
 }
 
-// LocalizedString is something
 type LocalizedString map[string]string
 
 /**

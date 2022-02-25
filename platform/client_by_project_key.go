@@ -339,11 +339,6 @@ func (rb *ByProjectKeyRequestBuilder) InStoreKeyWithStoreKeyValue(storeKey strin
 		client:     rb.client,
 	}
 }
-
-/**
-*	The Endpoint is responding a limited set of information about settings and configuration of the project.
-*
- */
 func (rb *ByProjectKeyRequestBuilder) Get() *ByProjectKeyRequestMethodGet {
 	return &ByProjectKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s", rb.projectKey),
@@ -351,9 +346,6 @@ func (rb *ByProjectKeyRequestBuilder) Get() *ByProjectKeyRequestMethodGet {
 	}
 }
 
-/**
-*	Update project
- */
 func (rb *ByProjectKeyRequestBuilder) Post(body ProjectUpdate) *ByProjectKeyRequestMethodPost {
 	return &ByProjectKeyRequestMethodPost{
 		body:   body,

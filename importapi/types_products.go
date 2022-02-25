@@ -6,7 +6,27 @@ import (
 	"errors"
 )
 
-// SearchKeywords is something
+/**
+*	Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
+*	```json
+*	{
+*	  "en": [
+*	    { "text": "Multi tool" },
+*	    { "text": "Swiss Army Knife", "suggestTokenizer": { "type": "whitespace" } }
+*	  ],
+*	  "de": [
+*	    {
+*	      "text": "Schweizer Messer",
+*	      "suggestTokenizer": {
+*	        "type": "custom",
+*	        "inputs": ["schweizer messer", "offiziersmesser", "sackmesser"]
+*	      }
+*	    }
+*	  ]
+*	}
+*	```
+*
+ */
 type SearchKeywords map[string][]SearchKeyword
 type SearchKeyword struct {
 	Text string `json:"text"`

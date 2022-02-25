@@ -105,7 +105,16 @@ type LocalizedEnumValue struct {
 	Label LocalizedString `json:"label"`
 }
 
-// LocalizedString is something
+/**
+*	A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
+*	```json
+*	{
+*	  "de": "Hundefutter",
+*	  "en": "dog food"
+*	}
+*	```
+*
+ */
 type LocalizedString map[string]string
 
 /**

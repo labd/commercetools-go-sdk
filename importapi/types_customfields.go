@@ -17,7 +17,9 @@ type Custom struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// FieldContainer is something
+/**
+*	Maps the custom field names to the actual values.
+ */
 type FieldContainer map[string]CustomField
 
 /**

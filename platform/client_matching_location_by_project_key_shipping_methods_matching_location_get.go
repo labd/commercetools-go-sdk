@@ -29,6 +29,7 @@ type ByProjectKeyShippingMethodsMatchingLocationRequestMethodGetInput struct {
 	State    *string
 	Currency *string
 	Expand   []string
+	Sort     []string
 }
 
 func (input *ByProjectKeyShippingMethodsMatchingLocationRequestMethodGetInput) Values() url.Values {
@@ -42,6 +43,9 @@ func (input *ByProjectKeyShippingMethodsMatchingLocationRequestMethodGetInput) V
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.Sort {
+		values.Add("sort", fmt.Sprintf("%v", v))
 	}
 	return values
 }
@@ -75,6 +79,14 @@ func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestMethodGet) Expand(v 
 		rb.params = &ByProjectKeyShippingMethodsMatchingLocationRequestMethodGetInput{}
 	}
 	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestMethodGet) Sort(v []string) *ByProjectKeyShippingMethodsMatchingLocationRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyShippingMethodsMatchingLocationRequestMethodGetInput{}
+	}
+	rb.params.Sort = v
 	return rb
 }
 

@@ -8,19 +8,27 @@ import (
 )
 
 type CartsConfiguration struct {
-	// if country - no state tax rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all tax categories of a cart line items. Default value 'false'
-	CountryTaxRateFallbackEnabled *bool `json:"countryTaxRateFallbackEnabled,omitempty"`
-	// The default value for the deleteDaysAfterLastModification parameter of the CartDraft. Initially set to 90 for projects created after December 2019.
+	// Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft). This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
+	// Indicates if country _- no state_ Tax Rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all Tax Categories of a Cart Line Items. This field may not be present on Projects created before June 2020.
+	CountryTaxRateFallbackEnabled *bool `json:"countryTaxRateFallbackEnabled,omitempty"`
 }
 
+/**
+*	Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server).
+*
+*	You can only configure **one** external OAuth 2.0 endpoint per Project. To authenticate using multiple external services (such as social network logins), use a middle layer authentication service.
+*
+ */
 type ExternalOAuth struct {
-	Url                 string `json:"url"`
+	// URL with authorization header.
+	Url string `json:"url"`
+	// Partially hidden on retrieval.
 	AuthorizationHeader string `json:"authorizationHeader"`
 }
 
 /**
-*	Activated indicates that the Order Search feature is active. Deactivated means that the namely feature is currently configured to be inactive.
+*	Specifies the status of the [Order Search](/../api/projects/order-search) index.
  */
 type OrderSearchStatus string
 
@@ -30,26 +38,34 @@ const (
 )
 
 type Project struct {
-	// The current version of the project.
+	// Current version of the Project.
 	Version int `json:"version"`
-	// The unique key of the project.
+	// User-defined unique identifier of the Project.
 	Key string `json:"key"`
-	// The name of the project.
+	// Name of the Project.
 	Name string `json:"name"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Country code of the geographic location.
 	Countries []string `json:"countries"`
-	// A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-	Currencies []string  `json:"currencies"`
-	Languages  []string  `json:"languages"`
-	CreatedAt  time.Time `json:"createdAt"`
-	// The time is in the format Year-Month `YYYY-MM`.
-	TrialUntil            *string                      `json:"trialUntil,omitempty"`
-	Messages              MessagesConfiguration        `json:"messages"`
-	ShippingRateInputType ShippingRateInputType        `json:"shippingRateInputType,omitempty"`
-	ExternalOAuth         *ExternalOAuth               `json:"externalOAuth,omitempty"`
-	Carts                 CartsConfiguration           `json:"carts"`
-	SearchIndexing        *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
-	ShoppingLists         *ShoppingListsConfiguration  `json:"shoppingLists,omitempty"`
+	// Currency code of the country. A Project must have at least one currency.
+	Currencies []string `json:"currencies"`
+	// Language of the country. A Project must have at least one language.
+	Languages []string `json:"languages"`
+	// Date and time (UTC) the Project was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date in YYYY-MM format specifying when the trial period for the Project ends. Only present on Projects in trial period.
+	TrialUntil *string `json:"trialUntil,omitempty"`
+	// Holds the configuration for the [Messages Query](/../api/projects/messages) feature.
+	Messages MessagesConfiguration `json:"messages"`
+	// Holds the configuration for the [Carts](/../api/projects/carts) feature.
+	Carts CartsConfiguration `json:"carts"`
+	// Holds the configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature. This field may not be present on Projects created before January 2020.
+	ShoppingLists *ShoppingListsConfiguration `json:"shoppingLists,omitempty"`
+	// Holds the configuration for the [tiered shipping rates](ctp:api:type:ShippingRatePriceTier) feature.
+	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
+	// Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint.
+	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
+	// Controls indexing of resources to be provided on high performance read-only search endpoints.
+	SearchIndexing *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -70,7 +86,9 @@ func (obj *Project) UnmarshalJSON(data []byte) error {
 }
 
 type ProjectUpdate struct {
-	Version int                   `json:"version"`
+	// Expected version of the Project on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Project.
 	Actions []ProjectUpdateAction `json:"actions"`
 }
 
@@ -194,15 +212,19 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 	return nil, nil
 }
 
+/**
+*	Controls indexing of resources to be provided on high performance read-only search endpoints.
+*
+ */
 type SearchIndexingConfiguration struct {
-	// Configuration for endpoints serving indexed [Product](ctp:api:type:Product) information.
+	// Configuration for the [Product Projection Search](/../api/projects/products-search) and [Product Suggestions](/../api/projects/products-suggestions) endpoints.
 	Products *SearchIndexingConfigurationValues `json:"products,omitempty"`
 	// Configuration for the [Order Search](/../api/projects/order-search) feature.
 	Orders *SearchIndexingConfigurationValues `json:"orders,omitempty"`
 }
 
 /**
-*	Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built.
+*	Status of resource indexing.
  */
 type SearchIndexingConfigurationStatus string
 
@@ -213,11 +235,12 @@ const (
 )
 
 type SearchIndexingConfigurationValues struct {
-	// Can be one of the following or absent. "Activated" or absent means that the search and suggest endpoints for the specified resource type are active. "Deactivated" means that the search and suggest endpoints for the specified resource type cannot be used. "Indexing" indicates that the search and suggest endpoints can _temporally_ not be used because the search index is being re-built.
-	Status         *SearchIndexingConfigurationStatus `json:"status,omitempty"`
-	LastModifiedAt *time.Time                         `json:"lastModifiedAt,omitempty"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Current status of resource indexing. Present on Projects from 1 February 2019.
+	Status *SearchIndexingConfigurationStatus `json:"status,omitempty"`
+	// Date and time (UTC) the Project was last updated.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	LastModifiedBy *string `json:"lastModifiedBy,omitempty"`
 }
 
 type ShippingRateInputType interface{}
@@ -257,6 +280,7 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 }
 
 type CartClassificationType struct {
+	// The classification items that can be used for specifiying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
 	Values []CustomFieldLocalizedEnumValue `json:"values"`
 }
 
@@ -297,12 +321,14 @@ func (obj CartValueType) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListsConfiguration struct {
-	// The default value for the deleteDaysAfterLastModification parameter of the ShoppingListDraft. Initially set to 360 for projects created after December 2019.
+	// Default value for the `deleteDaysAfterLastModification` parameter of the [ShoppingListDraft](ctp:api:type:ShoppingListDraft).
+	// This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
 type ProjectChangeCartsConfigurationAction struct {
-	CartsConfiguration *CartsConfiguration `json:"cartsConfiguration,omitempty"`
+	// Configuration for the [Carts](/../api/projects/carts) feature.
+	CartsConfiguration CartsConfiguration `json:"cartsConfiguration"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -316,7 +342,7 @@ func (obj ProjectChangeCartsConfigurationAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeCountriesAction struct {
-	// A two-digit country code as per country code.
+	// New value to set. Must not be empty.
 	Countries []string `json:"countries"`
 }
 
@@ -331,7 +357,7 @@ func (obj ProjectChangeCountriesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeCountryTaxRateFallbackEnabledAction struct {
-	// default value is `false`
+	// When `true`, country _- no state_ Tax Rate is used as fallback. See [CartsConfiguration](ctp:api:type:CartsConfiguration).
 	CountryTaxRateFallbackEnabled bool `json:"countryTaxRateFallbackEnabled"`
 }
 
@@ -346,7 +372,7 @@ func (obj ProjectChangeCountryTaxRateFallbackEnabledAction) MarshalJSON() ([]byt
 }
 
 type ProjectChangeCurrenciesAction struct {
-	// A three-digit currency code as per currency code.
+	// New value to set. Must not be empty.
 	Currencies []string `json:"currencies"`
 }
 
@@ -360,8 +386,12 @@ func (obj ProjectChangeCurrenciesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeCurrencies", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If a language is used by a [Store](ctp:api:type:Store), it cannot be deleted. Attempts to delete such language will lead to [LanguageUsedInStores](/../api/errors#projects-400-language-used-in-stores) errors.
+*
+ */
 type ProjectChangeLanguagesAction struct {
-	//  .
+	// New value to set. Must not be empty.
 	Languages []string `json:"languages"`
 }
 
@@ -376,6 +406,7 @@ func (obj ProjectChangeLanguagesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeMessagesConfigurationAction struct {
+	// Configuration for the [Messages Query](/../api/projects/messages) feature.
 	MessagesConfiguration MessagesConfigurationDraft `json:"messagesConfiguration"`
 }
 
@@ -404,6 +435,7 @@ func (obj ProjectChangeMessagesEnabledAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeNameAction struct {
+	// New value to set. Must not be empty.
 	Name string `json:"name"`
 }
 
@@ -418,7 +450,7 @@ func (obj ProjectChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeOrderSearchStatusAction struct {
-	// Activated indicates that the Order Search feature is active. Deactivated means that the namely feature is currently configured to be inactive.
+	// Activates or deactivates the [Order Search](/../api/projects/order-search) feature. Activation will trigger building a search index for the Orders in the Project.
 	Status OrderSearchStatus `json:"status"`
 }
 
@@ -433,6 +465,9 @@ func (obj ProjectChangeOrderSearchStatusAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeProductSearchIndexingEnabledAction struct {
+	// If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
+	//
+	// If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
 	Enabled bool `json:"enabled"`
 }
 
@@ -447,7 +482,8 @@ func (obj ProjectChangeProductSearchIndexingEnabledAction) MarshalJSON() ([]byte
 }
 
 type ProjectChangeShoppingListsConfigurationAction struct {
-	ShoppingListsConfiguration *ShoppingListsConfiguration `json:"shoppingListsConfiguration,omitempty"`
+	// Configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature.
+	ShoppingListsConfiguration ShoppingListsConfiguration `json:"shoppingListsConfiguration"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -461,8 +497,7 @@ func (obj ProjectChangeShoppingListsConfigurationAction) MarshalJSON() ([]byte, 
 }
 
 type ProjectSetExternalOAuthAction struct {
-	// If you do not provide the `externalOAuth` field or provide a value
-	// of `null`, the update action unsets the External OAuth provider.
+	// Value to set. If empty, any existing value will be removed.
 	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
 }
 
@@ -477,7 +512,7 @@ func (obj ProjectSetExternalOAuthAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectSetShippingRateInputTypeAction struct {
-	// If not set, removes existing shippingRateInputType.
+	// Value to set. If empty, any existing value will be removed.
 	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
 }
 

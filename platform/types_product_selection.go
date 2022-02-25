@@ -62,6 +62,8 @@ type ProductSelection struct {
 	ProductCount int `json:"productCount"`
 	// Specifies in which way the Products are assigned to the Product Selection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
 	Type ProductSelectionTypeEnum `json:"type"`
+	// Custom Fields of this Product Selection.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 /**
@@ -79,6 +81,8 @@ type ProductSelectionDraft struct {
 	Key *string `json:"key,omitempty"`
 	// Name of the Product Selection. Not checked for uniqueness, but distinct names are recommended.
 	Name LocalizedString `json:"name"`
+	// Custom Fields of this Product Selection.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 /**
@@ -262,6 +266,18 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 			return nil, err
 		}
 		return obj, nil
+	case "setCustomField":
+		obj := ProductSelectionSetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomType":
+		obj := ProductSelectionSetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setKey":
 		obj := ProductSelectionSetKeyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -337,6 +353,43 @@ func (obj ProductSelectionRemoveProductAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeProduct", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionSetCustomFieldAction struct {
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+type ProductSelectionSetCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the ProductSelection with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the ProductSelection.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ProductSelection.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
 type ProductSelectionSetKeyAction struct {

@@ -6,7 +6,6 @@ import (
 	"errors"
 )
 
-// LocalizedString is something
 type LocalizedString map[string]string
 type Money struct {
 	CentAmount int `json:"centAmount"`

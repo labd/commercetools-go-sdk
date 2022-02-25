@@ -72,7 +72,6 @@ type CustomFieldsDraft struct {
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
-// FieldContainer is something
 type FieldContainer map[string]interface{}
 
 /**
@@ -464,6 +463,7 @@ const (
 	ResourceTypeIdPayment                     ResourceTypeId = "payment"
 	ResourceTypeIdPaymentInterfaceInteraction ResourceTypeId = "payment-interface-interaction"
 	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
+	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
 	ResourceTypeIdShippingMethod              ResourceTypeId = "shipping-method"
 	ResourceTypeIdShoppingList                ResourceTypeId = "shopping-list"

@@ -1557,14 +1557,26 @@ func (obj *MessagePagedQueryResponse) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	Holds the configuration for the [Messages Query](/../api/projects/messages) feature for the Project.
+ */
 type MessagesConfiguration struct {
-	Enabled                 bool `json:"enabled"`
+	// When `true`, the [Messages Query](/../api/projects/messages) feature is active.
+	Enabled bool `json:"enabled"`
+	// Specifies the number of days each Message should be available via the [Messages Query](/../api/projects/messages) API.
+	// For Messages older than the specified period, it is not guaranteed that they are still accessible via the API.
+	// This field may not be present on Projects created before 8 October 2018.
 	DeleteDaysAfterCreation *int `json:"deleteDaysAfterCreation,omitempty"`
 }
 
+/**
+*	Defines the configuration for the [Messages Query](/../api/projects/messages) feature for the Project.
+ */
 type MessagesConfigurationDraft struct {
-	Enabled                 bool `json:"enabled"`
-	DeleteDaysAfterCreation int  `json:"deleteDaysAfterCreation"`
+	// Setting to `true` activates the [Messages Query](/../api/projects/messages) feature.
+	Enabled bool `json:"enabled"`
+	// Specifies the number of days each Message should be available via the [Messages Query](/../api/projects/messages) API. For Messages older than the specified period, it is not guaranteed that they are still accessible via the API.
+	DeleteDaysAfterCreation int `json:"deleteDaysAfterCreation"`
 }
 
 type OrderMessage interface{}

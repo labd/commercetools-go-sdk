@@ -1,7 +1,6 @@
 // Generated file, please do not change!!!
 package history
 
-// LocalizedString is something
 type LocalizedString map[string]string
 type Address struct {
 	ID                   string `json:"id"`
@@ -75,7 +74,6 @@ type AttributeDefinition struct {
 	IsSearchable bool `json:"isSearchable"`
 }
 
-// CategoryOrderHints is something
 type CategoryOrderHints map[string]string
 type ChannelRole string
 
@@ -288,7 +286,6 @@ type ProductVariantChannelAvailability struct {
 	AvailableQuantity int  `json:"availableQuantity"`
 }
 
-// ProductVariantChannelAvailabilityMap is something
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
 type Reference struct {
 	ID     string          `json:"id"`
@@ -396,7 +393,6 @@ type SearchKeyword struct {
 	SuggestTokenizer SuggestTokenizer `json:"suggestTokenizer"`
 }
 
-// SearchKeywords is something
 type SearchKeywords map[string][]SearchKeyword
 type SelectionMode string
 

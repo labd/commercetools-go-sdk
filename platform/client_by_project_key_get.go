@@ -26,11 +26,6 @@ func (rb *ByProjectKeyRequestMethodGet) WithHeaders(headers http.Header) *ByProj
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	The Endpoint is responding a limited set of information about settings and configuration of the project.
-*
- */
 func (rb *ByProjectKeyRequestMethodGet) Execute(ctx context.Context) (result *Project, err error) {
 	queryParams := url.Values{}
 	resp, err := rb.client.get(

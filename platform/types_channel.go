@@ -406,7 +406,7 @@ func (obj ChannelSetAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetAddressCustomFieldAction struct {
-	// Name of the Custom Fields.
+	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// Specifies the format of the value of the Custom Field defined by `name`.
 	// If `value` is absent or `null`, this field will be removed, if it exists. Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
@@ -424,10 +424,10 @@ func (obj ChannelSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetAddressCustomTypeAction struct {
-	// If absent, the [custom](/../api/projects/custom-fields) type and any existing [CustomFields](/../api/projects/custom-fields) are removed from the address.
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Valid JSON object, based on the [FieldDefinitions](/../api/projects/types#fielddefinition) of the [Type](/../api/projects/types#type).
-	// Sets the [custom](/../api/projects/custom-fields) fields to this value.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -442,12 +442,11 @@ func (obj ChannelSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetCustomFieldAction struct {
-	// Name of the Custom Field.
+	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
-	// Value must be of type [Value](/../api/projects/custom-fields#customfieldvalue).
-	// If `value` is absent or `null`, this field will be removed, if it exists.
+	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
-	// If `value` is provided, it is for the field defined by `name`.
+	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -462,10 +461,10 @@ func (obj ChannelSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetCustomTypeAction struct {
-	// If absent, the [custom](/../api/projects/custom-fields) type and any existing [CustomFields](/../api/projects/custom-fields) are removed.
+	// Defines the [Type](ctp:api:type:Type) that extends the Channel with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the Channel.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Valid JSON object, based on the [FieldDefinitions](/../api/projects/types#fielddefinition) of the [Type](/../api/projects/types#type).
-	// Sets the [custom](/../api/projects/custom-fields) fields to this value.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Channel.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

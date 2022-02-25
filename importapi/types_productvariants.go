@@ -846,5 +846,4 @@ type ProductVariantPatch struct {
 	Staged *bool `json:"staged,omitempty"`
 }
 
-// Attributes is something
 type Attributes map[string]interface{}
