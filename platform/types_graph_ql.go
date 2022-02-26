@@ -13,7 +13,10 @@ type GraphQLError struct {
 }
 
 func (obj GraphQLError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown GraphQLError: failed to parse error response"
 }
 
 type GraphQLErrorLocation struct {

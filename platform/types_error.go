@@ -450,7 +450,10 @@ func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
 	}{Action: "access_denied", Alias: (*Alias)(&obj)})
 }
 func (obj AccessDeniedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AccessDeniedError: failed to parse error response"
 }
 
 type AnonymousIdAlreadyInUseError struct {
@@ -468,7 +471,10 @@ func (obj AnonymousIdAlreadyInUseError) MarshalJSON() ([]byte, error) {
 	}{Action: "AnonymousIdAlreadyInUse", Alias: (*Alias)(&obj)})
 }
 func (obj AnonymousIdAlreadyInUseError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AnonymousIdAlreadyInUseError: failed to parse error response"
 }
 
 type AttributeDefinitionAlreadyExistsError struct {
@@ -489,7 +495,10 @@ func (obj AttributeDefinitionAlreadyExistsError) MarshalJSON() ([]byte, error) {
 	}{Action: "AttributeDefinitionAlreadyExists", Alias: (*Alias)(&obj)})
 }
 func (obj AttributeDefinitionAlreadyExistsError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AttributeDefinitionAlreadyExistsError: failed to parse error response"
 }
 
 type AttributeDefinitionTypeConflictError struct {
@@ -510,7 +519,10 @@ func (obj AttributeDefinitionTypeConflictError) MarshalJSON() ([]byte, error) {
 	}{Action: "AttributeDefinitionTypeConflict", Alias: (*Alias)(&obj)})
 }
 func (obj AttributeDefinitionTypeConflictError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AttributeDefinitionTypeConflictError: failed to parse error response"
 }
 
 type AttributeNameDoesNotExistError struct {
@@ -529,7 +541,10 @@ func (obj AttributeNameDoesNotExistError) MarshalJSON() ([]byte, error) {
 	}{Action: "AttributeNameDoesNotExist", Alias: (*Alias)(&obj)})
 }
 func (obj AttributeNameDoesNotExistError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AttributeNameDoesNotExistError: failed to parse error response"
 }
 
 type BadGatewayError struct {
@@ -547,7 +562,10 @@ func (obj BadGatewayError) MarshalJSON() ([]byte, error) {
 	}{Action: "BadGateway", Alias: (*Alias)(&obj)})
 }
 func (obj BadGatewayError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown BadGatewayError: failed to parse error response"
 }
 
 type ConcurrentModificationError struct {
@@ -566,7 +584,10 @@ func (obj ConcurrentModificationError) MarshalJSON() ([]byte, error) {
 	}{Action: "ConcurrentModification", Alias: (*Alias)(&obj)})
 }
 func (obj ConcurrentModificationError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ConcurrentModificationError: failed to parse error response"
 }
 
 type DiscountCodeNonApplicableError struct {
@@ -590,7 +611,10 @@ func (obj DiscountCodeNonApplicableError) MarshalJSON() ([]byte, error) {
 	}{Action: "DiscountCodeNonApplicable", Alias: (*Alias)(&obj)})
 }
 func (obj DiscountCodeNonApplicableError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DiscountCodeNonApplicableError: failed to parse error response"
 }
 
 type DuplicateAttributeValueError struct {
@@ -609,7 +633,10 @@ func (obj DuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
 	}{Action: "DuplicateAttributeValue", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicateAttributeValueError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateAttributeValueError: failed to parse error response"
 }
 
 type DuplicateAttributeValuesError struct {
@@ -628,7 +655,10 @@ func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
 	}{Action: "DuplicateAttributeValues", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicateAttributeValuesError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateAttributeValuesError: failed to parse error response"
 }
 
 type DuplicateEnumValuesError struct {
@@ -647,7 +677,10 @@ func (obj DuplicateEnumValuesError) MarshalJSON() ([]byte, error) {
 	}{Action: "DuplicateEnumValues", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicateEnumValuesError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateEnumValuesError: failed to parse error response"
 }
 
 type DuplicateFieldError struct {
@@ -685,7 +718,10 @@ func (obj DuplicateFieldError) MarshalJSON() ([]byte, error) {
 	}{Action: "DuplicateField", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicateFieldError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateFieldError: failed to parse error response"
 }
 
 type DuplicateFieldWithConflictingResourceError struct {
@@ -723,7 +759,10 @@ func (obj DuplicateFieldWithConflictingResourceError) MarshalJSON() ([]byte, err
 	}{Action: "DuplicateFieldWithConflictingResource", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicateFieldWithConflictingResourceError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateFieldWithConflictingResourceError: failed to parse error response"
 }
 
 type DuplicatePriceScopeError struct {
@@ -742,7 +781,10 @@ func (obj DuplicatePriceScopeError) MarshalJSON() ([]byte, error) {
 	}{Action: "DuplicatePriceScope", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicatePriceScopeError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicatePriceScopeError: failed to parse error response"
 }
 
 type DuplicateVariantValuesError struct {
@@ -761,7 +803,10 @@ func (obj DuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
 	}{Action: "DuplicateVariantValues", Alias: (*Alias)(&obj)})
 }
 func (obj DuplicateVariantValuesError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateVariantValuesError: failed to parse error response"
 }
 
 type EditPreviewFailedError struct {
@@ -780,7 +825,10 @@ func (obj EditPreviewFailedError) MarshalJSON() ([]byte, error) {
 	}{Action: "EditPreviewFailed", Alias: (*Alias)(&obj)})
 }
 func (obj EditPreviewFailedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown EditPreviewFailedError: failed to parse error response"
 }
 
 type EnumKeyAlreadyExistsError struct {
@@ -800,7 +848,10 @@ func (obj EnumKeyAlreadyExistsError) MarshalJSON() ([]byte, error) {
 	}{Action: "EnumKeyAlreadyExists", Alias: (*Alias)(&obj)})
 }
 func (obj EnumKeyAlreadyExistsError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown EnumKeyAlreadyExistsError: failed to parse error response"
 }
 
 type EnumKeyDoesNotExistError struct {
@@ -820,7 +871,10 @@ func (obj EnumKeyDoesNotExistError) MarshalJSON() ([]byte, error) {
 	}{Action: "EnumKeyDoesNotExist", Alias: (*Alias)(&obj)})
 }
 func (obj EnumKeyDoesNotExistError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown EnumKeyDoesNotExistError: failed to parse error response"
 }
 
 type EnumValueIsUsedError struct {
@@ -838,7 +892,10 @@ func (obj EnumValueIsUsedError) MarshalJSON() ([]byte, error) {
 	}{Action: "EnumValueIsUsed", Alias: (*Alias)(&obj)})
 }
 func (obj EnumValueIsUsedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown EnumValueIsUsedError: failed to parse error response"
 }
 
 type EnumValuesMustMatchError struct {
@@ -856,7 +913,10 @@ func (obj EnumValuesMustMatchError) MarshalJSON() ([]byte, error) {
 	}{Action: "EnumValuesMustMatch", Alias: (*Alias)(&obj)})
 }
 func (obj EnumValuesMustMatchError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown EnumValuesMustMatchError: failed to parse error response"
 }
 
 type ErrorResponse struct {
@@ -907,7 +967,10 @@ func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 func (obj ErrorResponse) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ErrorResponse: failed to parse error response"
 }
 
 type ExtensionBadResponseError struct {
@@ -928,7 +991,10 @@ func (obj ExtensionBadResponseError) MarshalJSON() ([]byte, error) {
 	}{Action: "ExtensionBadResponse", Alias: (*Alias)(&obj)})
 }
 func (obj ExtensionBadResponseError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionBadResponseError: failed to parse error response"
 }
 
 type ExtensionNoResponseError struct {
@@ -948,7 +1014,10 @@ func (obj ExtensionNoResponseError) MarshalJSON() ([]byte, error) {
 	}{Action: "ExtensionNoResponse", Alias: (*Alias)(&obj)})
 }
 func (obj ExtensionNoResponseError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionNoResponseError: failed to parse error response"
 }
 
 type ExtensionUpdateActionsFailedError struct {
@@ -969,7 +1038,10 @@ func (obj ExtensionUpdateActionsFailedError) MarshalJSON() ([]byte, error) {
 	}{Action: "ExtensionUpdateActionsFailed", Alias: (*Alias)(&obj)})
 }
 func (obj ExtensionUpdateActionsFailedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionUpdateActionsFailedError: failed to parse error response"
 }
 
 type ExternalOAuthFailedError struct {
@@ -987,7 +1059,10 @@ func (obj ExternalOAuthFailedError) MarshalJSON() ([]byte, error) {
 	}{Action: "ExternalOAuthFailed", Alias: (*Alias)(&obj)})
 }
 func (obj ExternalOAuthFailedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExternalOAuthFailedError: failed to parse error response"
 }
 
 type FeatureRemovedError struct {
@@ -1005,7 +1080,10 @@ func (obj FeatureRemovedError) MarshalJSON() ([]byte, error) {
 	}{Action: "FeatureRemoved", Alias: (*Alias)(&obj)})
 }
 func (obj FeatureRemovedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown FeatureRemovedError: failed to parse error response"
 }
 
 type GeneralError struct {
@@ -1023,7 +1101,10 @@ func (obj GeneralError) MarshalJSON() ([]byte, error) {
 	}{Action: "General", Alias: (*Alias)(&obj)})
 }
 func (obj GeneralError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown GeneralError: failed to parse error response"
 }
 
 type InsufficientScopeError struct {
@@ -1041,7 +1122,10 @@ func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 	}{Action: "insufficient_scope", Alias: (*Alias)(&obj)})
 }
 func (obj InsufficientScopeError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InsufficientScopeError: failed to parse error response"
 }
 
 type InternalConstraintViolatedError struct {
@@ -1059,7 +1143,10 @@ func (obj InternalConstraintViolatedError) MarshalJSON() ([]byte, error) {
 	}{Action: "InternalConstraintViolated", Alias: (*Alias)(&obj)})
 }
 func (obj InternalConstraintViolatedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InternalConstraintViolatedError: failed to parse error response"
 }
 
 type InvalidCredentialsError struct {
@@ -1077,7 +1164,10 @@ func (obj InvalidCredentialsError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidCredentials", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidCredentialsError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidCredentialsError: failed to parse error response"
 }
 
 type InvalidCurrentPasswordError struct {
@@ -1095,7 +1185,10 @@ func (obj InvalidCurrentPasswordError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidCurrentPassword", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidCurrentPasswordError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidCurrentPasswordError: failed to parse error response"
 }
 
 type InvalidFieldError struct {
@@ -1130,7 +1223,10 @@ func (obj InvalidFieldError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 func (obj InvalidFieldError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidFieldError: failed to parse error response"
 }
 
 type InvalidInputError struct {
@@ -1148,7 +1244,10 @@ func (obj InvalidInputError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidInput", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidInputError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidInputError: failed to parse error response"
 }
 
 type InvalidItemShippingDetailsError struct {
@@ -1168,7 +1267,10 @@ func (obj InvalidItemShippingDetailsError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidItemShippingDetails", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidItemShippingDetailsError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidItemShippingDetailsError: failed to parse error response"
 }
 
 type InvalidJsonInputError struct {
@@ -1186,7 +1288,10 @@ func (obj InvalidJsonInputError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidJsonInput", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidJsonInputError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidJsonInputError: failed to parse error response"
 }
 
 type InvalidOperationError struct {
@@ -1204,7 +1309,10 @@ func (obj InvalidOperationError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidOperation", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidOperationError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidOperationError: failed to parse error response"
 }
 
 type InvalidSubjectError struct {
@@ -1222,7 +1330,10 @@ func (obj InvalidSubjectError) MarshalJSON() ([]byte, error) {
 	}{Action: "InvalidSubject", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidSubjectError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidSubjectError: failed to parse error response"
 }
 
 type InvalidTokenError struct {
@@ -1240,7 +1351,10 @@ func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 	}{Action: "invalid_token", Alias: (*Alias)(&obj)})
 }
 func (obj InvalidTokenError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidTokenError: failed to parse error response"
 }
 
 type LanguageUsedInStoresError struct {
@@ -1258,7 +1372,10 @@ func (obj LanguageUsedInStoresError) MarshalJSON() ([]byte, error) {
 	}{Action: "LanguageUsedInStores", Alias: (*Alias)(&obj)})
 }
 func (obj LanguageUsedInStoresError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown LanguageUsedInStoresError: failed to parse error response"
 }
 
 type MatchingPriceNotFoundError struct {
@@ -1284,7 +1401,10 @@ func (obj MatchingPriceNotFoundError) MarshalJSON() ([]byte, error) {
 	}{Action: "MatchingPriceNotFound", Alias: (*Alias)(&obj)})
 }
 func (obj MatchingPriceNotFoundError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MatchingPriceNotFoundError: failed to parse error response"
 }
 
 type MaxResourceLimitExceededError struct {
@@ -1303,7 +1423,10 @@ func (obj MaxResourceLimitExceededError) MarshalJSON() ([]byte, error) {
 	}{Action: "MaxResourceLimitExceeded", Alias: (*Alias)(&obj)})
 }
 func (obj MaxResourceLimitExceededError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MaxResourceLimitExceededError: failed to parse error response"
 }
 
 type MissingRoleOnChannelError struct {
@@ -1325,7 +1448,10 @@ func (obj MissingRoleOnChannelError) MarshalJSON() ([]byte, error) {
 	}{Action: "MissingRoleOnChannel", Alias: (*Alias)(&obj)})
 }
 func (obj MissingRoleOnChannelError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MissingRoleOnChannelError: failed to parse error response"
 }
 
 type MissingTaxRateForCountryError struct {
@@ -1346,7 +1472,10 @@ func (obj MissingTaxRateForCountryError) MarshalJSON() ([]byte, error) {
 	}{Action: "MissingTaxRateForCountry", Alias: (*Alias)(&obj)})
 }
 func (obj MissingTaxRateForCountryError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MissingTaxRateForCountryError: failed to parse error response"
 }
 
 type NoMatchingProductDiscountFoundError struct {
@@ -1364,7 +1493,10 @@ func (obj NoMatchingProductDiscountFoundError) MarshalJSON() ([]byte, error) {
 	}{Action: "NoMatchingProductDiscountFound", Alias: (*Alias)(&obj)})
 }
 func (obj NoMatchingProductDiscountFoundError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown NoMatchingProductDiscountFoundError: failed to parse error response"
 }
 
 type NotEnabledError struct {
@@ -1382,7 +1514,10 @@ func (obj NotEnabledError) MarshalJSON() ([]byte, error) {
 	}{Action: "NotEnabled", Alias: (*Alias)(&obj)})
 }
 func (obj NotEnabledError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown NotEnabledError: failed to parse error response"
 }
 
 type ObjectNotFoundError struct {
@@ -1400,7 +1535,10 @@ func (obj ObjectNotFoundError) MarshalJSON() ([]byte, error) {
 	}{Action: "ObjectNotFound", Alias: (*Alias)(&obj)})
 }
 func (obj ObjectNotFoundError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ObjectNotFoundError: failed to parse error response"
 }
 
 type OutOfStockError struct {
@@ -1420,7 +1558,10 @@ func (obj OutOfStockError) MarshalJSON() ([]byte, error) {
 	}{Action: "OutOfStock", Alias: (*Alias)(&obj)})
 }
 func (obj OutOfStockError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown OutOfStockError: failed to parse error response"
 }
 
 type OverCapacityError struct {
@@ -1438,7 +1579,10 @@ func (obj OverCapacityError) MarshalJSON() ([]byte, error) {
 	}{Action: "OverCapacity", Alias: (*Alias)(&obj)})
 }
 func (obj OverCapacityError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown OverCapacityError: failed to parse error response"
 }
 
 type PendingOperationError struct {
@@ -1456,7 +1600,10 @@ func (obj PendingOperationError) MarshalJSON() ([]byte, error) {
 	}{Action: "PendingOperation", Alias: (*Alias)(&obj)})
 }
 func (obj PendingOperationError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown PendingOperationError: failed to parse error response"
 }
 
 type PriceChangedError struct {
@@ -1476,7 +1623,10 @@ func (obj PriceChangedError) MarshalJSON() ([]byte, error) {
 	}{Action: "PriceChanged", Alias: (*Alias)(&obj)})
 }
 func (obj PriceChangedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown PriceChangedError: failed to parse error response"
 }
 
 type ProjectNotConfiguredForLanguagesError struct {
@@ -1509,7 +1659,10 @@ func (obj ProjectNotConfiguredForLanguagesError) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 func (obj ProjectNotConfiguredForLanguagesError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ProjectNotConfiguredForLanguagesError: failed to parse error response"
 }
 
 type QueryComplexityLimitExceededError struct {
@@ -1527,7 +1680,10 @@ func (obj QueryComplexityLimitExceededError) MarshalJSON() ([]byte, error) {
 	}{Action: "QueryComplexityLimitExceeded", Alias: (*Alias)(&obj)})
 }
 func (obj QueryComplexityLimitExceededError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown QueryComplexityLimitExceededError: failed to parse error response"
 }
 
 type QueryTimedOutError struct {
@@ -1545,7 +1701,10 @@ func (obj QueryTimedOutError) MarshalJSON() ([]byte, error) {
 	}{Action: "QueryTimedOut", Alias: (*Alias)(&obj)})
 }
 func (obj QueryTimedOutError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown QueryTimedOutError: failed to parse error response"
 }
 
 type ReferenceExistsError struct {
@@ -1564,7 +1723,10 @@ func (obj ReferenceExistsError) MarshalJSON() ([]byte, error) {
 	}{Action: "ReferenceExists", Alias: (*Alias)(&obj)})
 }
 func (obj ReferenceExistsError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ReferenceExistsError: failed to parse error response"
 }
 
 type ReferencedResourceNotFoundError struct {
@@ -1585,7 +1747,10 @@ func (obj ReferencedResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	}{Action: "ReferencedResourceNotFound", Alias: (*Alias)(&obj)})
 }
 func (obj ReferencedResourceNotFoundError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ReferencedResourceNotFoundError: failed to parse error response"
 }
 
 type RequiredFieldError struct {
@@ -1604,7 +1769,10 @@ func (obj RequiredFieldError) MarshalJSON() ([]byte, error) {
 	}{Action: "RequiredField", Alias: (*Alias)(&obj)})
 }
 func (obj RequiredFieldError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown RequiredFieldError: failed to parse error response"
 }
 
 type ResourceNotFoundError struct {
@@ -1622,7 +1790,10 @@ func (obj ResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	}{Action: "ResourceNotFound", Alias: (*Alias)(&obj)})
 }
 func (obj ResourceNotFoundError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ResourceNotFoundError: failed to parse error response"
 }
 
 type ResourceSizeLimitExceededError struct {
@@ -1640,7 +1811,10 @@ func (obj ResourceSizeLimitExceededError) MarshalJSON() ([]byte, error) {
 	}{Action: "ResourceSizeLimitExceeded", Alias: (*Alias)(&obj)})
 }
 func (obj ResourceSizeLimitExceededError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ResourceSizeLimitExceededError: failed to parse error response"
 }
 
 type SearchDeactivatedError struct {
@@ -1658,7 +1832,10 @@ func (obj SearchDeactivatedError) MarshalJSON() ([]byte, error) {
 	}{Action: "SearchDeactivated", Alias: (*Alias)(&obj)})
 }
 func (obj SearchDeactivatedError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SearchDeactivatedError: failed to parse error response"
 }
 
 type SearchExecutionFailureError struct {
@@ -1676,7 +1853,10 @@ func (obj SearchExecutionFailureError) MarshalJSON() ([]byte, error) {
 	}{Action: "SearchExecutionFailure", Alias: (*Alias)(&obj)})
 }
 func (obj SearchExecutionFailureError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SearchExecutionFailureError: failed to parse error response"
 }
 
 type SearchFacetPathNotFoundError struct {
@@ -1694,7 +1874,10 @@ func (obj SearchFacetPathNotFoundError) MarshalJSON() ([]byte, error) {
 	}{Action: "SearchFacetPathNotFound", Alias: (*Alias)(&obj)})
 }
 func (obj SearchFacetPathNotFoundError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SearchFacetPathNotFoundError: failed to parse error response"
 }
 
 type SearchIndexingInProgressError struct {
@@ -1712,7 +1895,10 @@ func (obj SearchIndexingInProgressError) MarshalJSON() ([]byte, error) {
 	}{Action: "SearchIndexingInProgress", Alias: (*Alias)(&obj)})
 }
 func (obj SearchIndexingInProgressError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SearchIndexingInProgressError: failed to parse error response"
 }
 
 type SemanticErrorError struct {
@@ -1730,7 +1916,10 @@ func (obj SemanticErrorError) MarshalJSON() ([]byte, error) {
 	}{Action: "SemanticError", Alias: (*Alias)(&obj)})
 }
 func (obj SemanticErrorError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SemanticErrorError: failed to parse error response"
 }
 
 type ShippingMethodDoesNotMatchCartError struct {
@@ -1748,7 +1937,10 @@ func (obj ShippingMethodDoesNotMatchCartError) MarshalJSON() ([]byte, error) {
 	}{Action: "ShippingMethodDoesNotMatchCart", Alias: (*Alias)(&obj)})
 }
 func (obj ShippingMethodDoesNotMatchCartError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ShippingMethodDoesNotMatchCartError: failed to parse error response"
 }
 
 type SyntaxErrorError struct {
@@ -1766,7 +1958,10 @@ func (obj SyntaxErrorError) MarshalJSON() ([]byte, error) {
 	}{Action: "SyntaxError", Alias: (*Alias)(&obj)})
 }
 func (obj SyntaxErrorError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SyntaxErrorError: failed to parse error response"
 }
 
 type VariantValues struct {
@@ -1790,5 +1985,8 @@ func (obj WeakPasswordError) MarshalJSON() ([]byte, error) {
 	}{Action: "WeakPassword", Alias: (*Alias)(&obj)})
 }
 func (obj WeakPasswordError) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown WeakPasswordError: failed to parse error response"
 }

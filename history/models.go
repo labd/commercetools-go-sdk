@@ -130,7 +130,10 @@ type ErrorObject struct {
 }
 
 func (obj ErrorObject) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ErrorObject: failed to parse error response"
 }
 
 type ErrorResponse struct {
@@ -164,7 +167,10 @@ func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 func (obj ErrorResponse) Error() string {
-	return obj.Message
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ErrorResponse: failed to parse error response"
 }
 
 /**
