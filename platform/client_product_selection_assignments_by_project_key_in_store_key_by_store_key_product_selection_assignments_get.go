@@ -15,14 +15,40 @@ type ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet
 	url     string
 	client  *Client
 	headers http.Header
+	params  *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput
 }
 
 func (r *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Dump() map[string]interface{} {
 	return map[string]interface{}{
-		"url": r.url,
+		"url":    r.url,
+		"params": r.params,
 	}
 }
 
+type ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput struct {
+	Expand []string
+}
+
+func (input *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput) Values() url.Values {
+	values := url.Values{}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
+	}
+	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput{}
+	}
+	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	rb.params = &input
+	return rb
+}
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
 	rb.headers = headers
 	return rb
@@ -32,7 +58,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMeth
 *	Queries Product Selection assignments in a specific Store.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Execute(ctx context.Context) (result *ProductsInStorePagedQueryResponse, err error) {
-	queryParams := url.Values{}
+	var queryParams url.Values
+	if rb.params != nil {
+		queryParams = rb.params.Values()
+	} else {
+		queryParams = url.Values{}
+	}
 	resp, err := rb.client.get(
 		ctx,
 		rb.url,

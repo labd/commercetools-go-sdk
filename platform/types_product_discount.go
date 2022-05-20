@@ -9,38 +9,40 @@ import (
 )
 
 type ProductDiscount struct {
-	// The unique ID of the product discount
+	// Platform-generated unique identifier of the ProductDiscount.
 	ID string `json:"id"`
-	// The current version of the product discount.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the ProductDiscount.
+	Version int `json:"version"`
+	// Date and time (UTC) the ProductDiscount was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the ProductDiscount was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy *CreatedBy      `json:"createdBy,omitempty"`
-	Name      LocalizedString `json:"name"`
-	// User-specific unique identifier for a product discount.
-	// Must be unique across a project.
-	Key         *string              `json:"key,omitempty"`
-	Description *LocalizedString     `json:"description,omitempty"`
-	Value       ProductDiscountValue `json:"value"`
-	// A valid ProductDiscount Predicate.
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Name of the ProductDiscount.
+	Name LocalizedString `json:"name"`
+	// User-defined unique identifier of the ProductDiscount.
+	Key *string `json:"key,omitempty"`
+	// Description of the ProductDiscount.
+	Description *LocalizedString `json:"description,omitempty"`
+	// Type of Discount and its corresponding value.
+	Value ProductDiscountValue `json:"value"`
+	// Valid [ProductDiscount predicate](/../api/projects/predicates#productdiscount-predicates).
 	Predicate string `json:"predicate"`
-	// The string contains a number between 0 and 1.
-	// A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
-	// A sortOrder must be unambiguous.
+	// Unique decimal value between 0 and 1 (stored as String literal) defining the order of Product Discounts to apply in case more than one is applicable and active.
+	// A Product Discount with a higher value is prioritized.
 	SortOrder string `json:"sortOrder"`
-	// Only active discount will be applied to product prices.
+	// If `true` the Product Discount is applied to Products matching the `predicate`.
 	IsActive bool `json:"isActive"`
-	// The platform will generate this array from the predicate.
-	// It contains the references of all the resources that are addressed in the predicate.
+	// References of all the resources that are addressed in the `predicate`.
 	References []Reference `json:"references"`
-	// The time from which the discount should be effective.
-	// Please take Eventual Consistency into account for calculated product discount values.
+	// Date and time (UTC) from which the Discount is effective.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated discount values.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// The time from which the discount should be ineffective.
-	// Please take Eventual Consistency into account for calculated undiscounted values.
+	// Date and time (UTC) until which the Discount is effective.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
@@ -69,25 +71,26 @@ func (obj *ProductDiscount) UnmarshalJSON(data []byte) error {
 }
 
 type ProductDiscountDraft struct {
+	// Name of the ProductDiscount.
 	Name LocalizedString `json:"name"`
-	// User-specific unique identifier for a product discount.
-	// Must be unique across a project.
-	// The field can be reset using the Set Key UpdateAction
-	Key         *string                   `json:"key,omitempty"`
-	Description *LocalizedString          `json:"description,omitempty"`
-	Value       ProductDiscountValueDraft `json:"value"`
-	// A valid ProductDiscount Predicate.
+	// User-defined unique identifier for the ProductDiscount.
+	Key *string `json:"key,omitempty"`
+	// Description of the ProductDiscount.
+	Description *LocalizedString `json:"description,omitempty"`
+	// Type of Discount and its corresponding value.
+	Value ProductDiscountValueDraft `json:"value"`
+	// Valid [ProductDiscount predicate](/../api/projects/predicates#productdiscount-predicates).
 	Predicate string `json:"predicate"`
-	// The string must contain a decimal number between 0 and 1.
-	// A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
+	// Decimal value between 0 and 1 (passed as String literal) that defines the order of ProductDiscounts to apply in case more than one is applicable and active. A ProductDiscount with a higher `sortOrder` is prioritized.
+	// The value must be **unique** among all ProductDiscounts in the [Project](ctp:api:type:Project).
 	SortOrder string `json:"sortOrder"`
-	// If set to `true` the discount will be applied to product prices.
+	// Set to `true` to activate the ProductDiscount, set to `false` to deactivate it (even though the `predicate` matches).
 	IsActive bool `json:"isActive"`
-	// The time from which the discount should be effective.
-	// Please take Eventual Consistency into account for calculated product discount values.
+	// Date and time (UTC) from which the Discount is effective.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated discount values.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// The time from which the discount should be effective.
-	// Please take Eventual Consistency into account for calculated undiscounted values.
+	// Date and time (UTC) until which the Discount is effective.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
@@ -109,23 +112,46 @@ func (obj *ProductDiscountDraft) UnmarshalJSON(data []byte) error {
 }
 
 type ProductDiscountMatchQuery struct {
-	ProductId string     `json:"productId"`
-	VariantId int        `json:"variantId"`
-	Staged    bool       `json:"staged"`
-	Price     QueryPrice `json:"price"`
+	// ID of the specified Product.
+	ProductId string `json:"productId"`
+	// ID of the specified Product Variant.
+	VariantId int `json:"variantId"`
+	// Controls which [projected representation](/../api/projects/productProjections#current--staged) is applied for the query.
+	// Set to `true` for the `staged` Product Projection of the specified Product Variant, set to `false` for the `current` one.
+	Staged bool `json:"staged"`
+	// Specified Price of the specified Product Variant.
+	Price QueryPrice `json:"price"`
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ProductDiscount](ctp:api:type:ProductDiscount).
+*
+ */
 type ProductDiscountPagedQueryResponse struct {
-	Limit   int               `json:"limit"`
-	Count   int               `json:"count"`
-	Total   *int              `json:"total,omitempty"`
-	Offset  int               `json:"offset"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int `json:"limit"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [ProductDiscounts](ctp:api:type:ProductDiscount) matching the query.
 	Results []ProductDiscount `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [ProductDiscount](ctp:api:type:ProductDiscount).
+*
+ */
 type ProductDiscountReference struct {
-	// Unique ID of the referenced resource.
-	ID  string           `json:"id"`
+	// Platform-generated unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount).
+	ID string `json:"id"`
+	// Contains the representation of the expanded ProductDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductDiscounts.
 	Obj *ProductDiscount `json:"obj,omitempty"`
 }
 
@@ -139,10 +165,14 @@ func (obj ProductDiscountReference) MarshalJSON() ([]byte, error) {
 	}{Action: "product-discount", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductDiscount](ctp:api:type:ProductDiscount).
+*
+ */
 type ProductDiscountResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -157,7 +187,9 @@ func (obj ProductDiscountResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountUpdate struct {
-	Version int                           `json:"version"`
+	// Expected version of the ProductDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the ProductDiscount.
 	Actions []ProductDiscountUpdateAction `json:"actions"`
 }
 
@@ -282,13 +314,6 @@ func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountVal
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		for i := range obj.Money {
-			var err error
-			obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "external":
 		obj := ProductDiscountValueExternal{}
@@ -306,25 +331,12 @@ func mapDiscriminatorProductDiscountValue(input interface{}) (ProductDiscountVal
 	return nil, nil
 }
 
+/**
+*	Discounts the Product's Price by a fixed amount, defined by the `money` field.
+ */
 type ProductDiscountValueAbsolute struct {
-	Money []TypedMoney `json:"money"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *ProductDiscountValueAbsolute) UnmarshalJSON(data []byte) error {
-	type Alias ProductDiscountValueAbsolute
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Money {
-		var err error
-		obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	// Money values in different currencies. An absolute [ProductDiscount](ctp:api:type:ProductDiscount) will only match a price if this array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15\$.
+	Money []CentPrecisionMoney `json:"money"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -373,8 +385,13 @@ func mapDiscriminatorProductDiscountValueDraft(input interface{}) (ProductDiscou
 	return nil, nil
 }
 
+/**
+*	Discounts the Product Price by a fixed amount, defined by the `money` field.
+*
+ */
 type ProductDiscountValueAbsoluteDraft struct {
-	Money []Money `json:"money"`
+	// Money values in different currencies. An absolute [ProductDiscount](ctp:api:type:ProductDiscount) will only match a price if this array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15\$.
+	Money []CentPrecisionMoneyDraft `json:"money"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -387,6 +404,11 @@ func (obj ProductDiscountValueAbsoluteDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "absolute", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+*	Used when setting discounts using an external service.
+*
+ */
 type ProductDiscountValueExternal struct {
 }
 
@@ -400,6 +422,11 @@ func (obj ProductDiscountValueExternal) MarshalJSON() ([]byte, error) {
 	}{Action: "external", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+*	Use this when setting discounts using an external service.
+*
+ */
 type ProductDiscountValueExternalDraft struct {
 }
 
@@ -413,7 +440,11 @@ func (obj ProductDiscountValueExternalDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "external", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discounts the product price by a percentage, defined by the `permyriad` field.
+ */
 type ProductDiscountValueRelative struct {
+	// Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
 	Permyriad int `json:"permyriad"`
 }
 
@@ -427,7 +458,12 @@ func (obj ProductDiscountValueRelative) MarshalJSON() ([]byte, error) {
 	}{Action: "relative", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discounts the Product Price by a percentage, defined by the `permyriad` field.
+*
+ */
 type ProductDiscountValueRelativeDraft struct {
+	// Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
 	Permyriad int `json:"permyriad"`
 }
 
@@ -442,6 +478,8 @@ func (obj ProductDiscountValueRelativeDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountChangeIsActiveAction struct {
+	// New value to set.
+	// If set to `true`, the Discount will be applied to Product Prices.
 	IsActive bool `json:"isActive"`
 }
 
@@ -456,6 +494,7 @@ func (obj ProductDiscountChangeIsActiveAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountChangeNameAction struct {
+	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
 
@@ -470,7 +509,7 @@ func (obj ProductDiscountChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountChangePredicateAction struct {
-	// A valid ProductDiscount Predicate.
+	// New value to set. Must be a valid [ProductDiscount predicate](/../api/projects/predicates#productdiscount-predicates).
 	Predicate string `json:"predicate"`
 }
 
@@ -485,8 +524,10 @@ func (obj ProductDiscountChangePredicateAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountChangeSortOrderAction struct {
-	// The string must contain a number between 0 and 1.
-	// A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
+	// New value to set.
+	// Must not be empty.
+	// The string value must be a number between `0` and `1`.
+	// A Discount with a higher sortOrder is prioritized.
 	SortOrder string `json:"sortOrder"`
 }
 
@@ -501,6 +542,7 @@ func (obj ProductDiscountChangeSortOrderAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountChangeValueAction struct {
+	// New value to set. Must not be empty.
 	Value ProductDiscountValueDraft `json:"value"`
 }
 
@@ -532,6 +574,7 @@ func (obj ProductDiscountChangeValueAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountSetDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -546,8 +589,7 @@ func (obj ProductDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountSetKeyAction struct {
-	// The key to set.
-	// If you provide a `null` value or do not set this field at all, the existing `key` field is removed.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -562,8 +604,9 @@ func (obj ProductDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountSetValidFromAction struct {
-	// The time from which the discount should be effective.
-	// Please take Eventual Consistency into account for calculated product discount values.
+	// Value to set.
+	// If empty, any existing value will be removed.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated discount values.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
@@ -578,9 +621,11 @@ func (obj ProductDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountSetValidFromAndUntilAction struct {
+	// Value to set.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// The timeframe for which the discount should be effective.
-	// Please take Eventual Consistency into account for calculated undiscounted values.
+	// Value to set.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
@@ -595,8 +640,9 @@ func (obj ProductDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, erro
 }
 
 type ProductDiscountSetValidUntilAction struct {
-	// The time from which the discount should be ineffective.
-	// Please take Eventual Consistency into account for calculated undiscounted values.
+	// Value to set.
+	// If empty, any existing value will be removed.
+	// Take [Eventual Consistency](/../api/general-concepts#eventual-consistency) into account for calculated undiscounted values.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 

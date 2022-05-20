@@ -9,7 +9,7 @@ import (
 )
 
 type ShoppingList struct {
-	// The unique ID of the shopping list.
+	// Platform-generated unique identifier of the ShoppingList.
 	ID string `json:"id"`
 	// The current version of the shopping list.
 	Version        int       `json:"version"`
@@ -24,7 +24,7 @@ type ShoppingList struct {
 	// The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
 	DeleteDaysAfterLastModification *int             `json:"deleteDaysAfterLastModification,omitempty"`
 	Description                     *LocalizedString `json:"description,omitempty"`
-	// User-specific unique identifier for the shopping list.
+	// User-defined unique identifier of the ShoppingList.
 	Key       *string                `json:"key,omitempty"`
 	LineItems []ShoppingListLineItem `json:"lineItems"`
 	Name      LocalizedString        `json:"name"`
@@ -72,7 +72,7 @@ type ShoppingListDraft struct {
 	// The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
 	DeleteDaysAfterLastModification *int             `json:"deleteDaysAfterLastModification,omitempty"`
 	Description                     *LocalizedString `json:"description,omitempty"`
-	// User-specific unique identifier for the shopping list.
+	// User-defined unique identifier for the ShoppingList.
 	Key       *string                     `json:"key,omitempty"`
 	LineItems []ShoppingListLineItemDraft `json:"lineItems"`
 	Name      LocalizedString             `json:"name"`
@@ -116,16 +116,20 @@ func (obj ShoppingListDraft) MarshalJSON() ([]byte, error) {
 type ShoppingListLineItem struct {
 	AddedAt time.Time `json:"addedAt"`
 	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
-	Custom        *CustomFields        `json:"custom,omitempty"`
-	DeactivatedAt *time.Time           `json:"deactivatedAt,omitempty"`
-	ID            string               `json:"id"`
-	Name          LocalizedString      `json:"name"`
-	ProductId     string               `json:"productId"`
-	ProductSlug   *LocalizedString     `json:"productSlug,omitempty"`
-	ProductType   ProductTypeReference `json:"productType"`
-	Quantity      int                  `json:"quantity"`
-	Variant       *ProductVariant      `json:"variant,omitempty"`
-	VariantId     *int                 `json:"variantId,omitempty"`
+	Custom        *CustomFields `json:"custom,omitempty"`
+	DeactivatedAt *time.Time    `json:"deactivatedAt,omitempty"`
+	// Platform-generated unique identifier of the ShoppingListLineItem.
+	ID string `json:"id"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name      LocalizedString `json:"name"`
+	ProductId string          `json:"productId"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	ProductSlug *LocalizedString `json:"productSlug,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
+	ProductType ProductTypeReference `json:"productType"`
+	Quantity    int                  `json:"quantity"`
+	Variant     *ProductVariant      `json:"variant,omitempty"`
+	VariantId   *int                 `json:"variantId,omitempty"`
 }
 
 type ShoppingListLineItemDraft struct {
@@ -139,16 +143,23 @@ type ShoppingListLineItemDraft struct {
 }
 
 type ShoppingListPagedQueryResponse struct {
-	Limit   int            `json:"limit"`
-	Count   int            `json:"count"`
-	Total   *int           `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int            `json:"offset"`
 	Results []ShoppingList `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [ShoppingList](ctp:api:type:ShoppingList).
+*
+ */
 type ShoppingListReference struct {
-	// Unique ID of the referenced resource.
-	ID  string        `json:"id"`
+	// Platform-generated unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList).
+	ID string `json:"id"`
+	// Contains the representation of the expanded ShoppingList. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShoppingLists.
 	Obj *ShoppingList `json:"obj,omitempty"`
 }
 
@@ -162,10 +173,14 @@ func (obj ShoppingListReference) MarshalJSON() ([]byte, error) {
 	}{Action: "shopping-list", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList).
+*
+ */
 type ShoppingListResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -368,7 +383,7 @@ type TextLineItem struct {
 	AddedAt     time.Time        `json:"addedAt"`
 	Custom      *CustomFields    `json:"custom,omitempty"`
 	Description *LocalizedString `json:"description,omitempty"`
-	// The unique ID of this TextLineItem.
+	// Platform-generated unique identifier of the TextLineItem.
 	ID       string          `json:"id"`
 	Name     LocalizedString `json:"name"`
 	Quantity int             `json:"quantity"`
@@ -406,7 +421,9 @@ func (obj ShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListAddTextLineItemAction struct {
-	Name        LocalizedString  `json:"name"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name LocalizedString `json:"name"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Description *LocalizedString `json:"description,omitempty"`
 	Quantity    *int             `json:"quantity,omitempty"`
 	AddedAt     *time.Time       `json:"addedAt,omitempty"`
@@ -468,8 +485,9 @@ func (obj ShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListChangeTextLineItemNameAction struct {
-	TextLineItemId string          `json:"textLineItemId"`
-	Name           LocalizedString `json:"name"`
+	TextLineItemId string `json:"textLineItemId"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name LocalizedString `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -758,8 +776,9 @@ func (obj ShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, er
 }
 
 type ShoppingListSetTextLineItemDescriptionAction struct {
-	TextLineItemId string           `json:"textLineItemId"`
-	Description    *LocalizedString `json:"description,omitempty"`
+	TextLineItemId string `json:"textLineItemId"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Description *LocalizedString `json:"description,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

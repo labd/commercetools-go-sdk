@@ -25,6 +25,12 @@ func (rb *ByProjectKeyMeCartsRequestBuilder) WithId(id string) *ByProjectKeyMeCa
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyMeCartsRequestBuilder) Replicate() *ByProjectKeyMeCartsReplicateRequestBuilder {
+	return &ByProjectKeyMeCartsReplicateRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyMeCartsRequestBuilder) Get() *ByProjectKeyMeCartsRequestMethodGet {
 	return &ByProjectKeyMeCartsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/carts", rb.projectKey),

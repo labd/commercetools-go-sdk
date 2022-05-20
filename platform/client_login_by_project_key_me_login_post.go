@@ -12,7 +12,7 @@ import (
 )
 
 type ByProjectKeyMeLoginRequestMethodPost struct {
-	body    CustomerSignin
+	body    MyCustomerSignin
 	url     string
 	client  *Client
 	headers http.Header

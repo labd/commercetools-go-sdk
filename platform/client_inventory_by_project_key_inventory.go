@@ -18,6 +18,13 @@ func (rb *ByProjectKeyInventoryRequestBuilder) WithId(id string) *ByProjectKeyIn
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyInventoryRequestBuilder) WithKey(key string) *ByProjectKeyInventoryKeyByKeyRequestBuilder {
+	return &ByProjectKeyInventoryKeyByKeyRequestBuilder{
+		key:        key,
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyInventoryRequestBuilder) Get() *ByProjectKeyInventoryRequestMethodGet {
 	return &ByProjectKeyInventoryRequestMethodGet{
 		url:    fmt.Sprintf("/%s/inventory", rb.projectKey),

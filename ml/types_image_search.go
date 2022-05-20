@@ -9,7 +9,7 @@ package ml
 type ImageSearchResponse struct {
 	// The maximum number of results to return from a query.
 	Count int `json:"count"`
-	// The offset into the results matching the query. An offset of 0 is the default value indicating that no results should be skipped.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset float64 `json:"offset"`
 	// The total number of product images that were have been analyzed.
 	Total int `json:"total"`

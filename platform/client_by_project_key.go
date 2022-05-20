@@ -84,7 +84,7 @@ func (rb *ByProjectKeyRequestBuilder) CustomObjects() *ByProjectKeyCustomObjects
 }
 
 /**
-*	Discount codes can be added to a discount-code to enable certain discount-code discounts.
+*	Discount Codes can be added to a discount-code to enable certain discount-code discounts.
  */
 func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodesRequestBuilder {
 	return &ByProjectKeyDiscountCodesRequestBuilder{
@@ -336,6 +336,16 @@ func (rb *ByProjectKeyRequestBuilder) Stores() *ByProjectKeyStoresRequestBuilder
 func (rb *ByProjectKeyRequestBuilder) InStoreKeyWithStoreKeyValue(storeKey string) *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyRequestBuilder{
 		storeKey:   storeKey,
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A standalone price assigns a price to a product variant for a given scope. The platform will use the standalone prices associated with a Product if its field [`priceMode`](/projects/products#pricemode) is set to `Standalone` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum).
+ */
+func (rb *ByProjectKeyRequestBuilder) StandalonePrices() *ByProjectKeyStandalonePricesRequestBuilder {
+	return &ByProjectKeyStandalonePricesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}

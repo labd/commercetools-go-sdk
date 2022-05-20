@@ -53,10 +53,6 @@ func (rb *ByProjectKeyExtensionsByIDRequestMethodGet) WithHeaders(headers http.H
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Retrieves the representation of an extension by its id.
- */
 func (rb *ByProjectKeyExtensionsByIDRequestMethodGet) Execute(ctx context.Context) (result *Extension, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

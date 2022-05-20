@@ -11,7 +11,7 @@ type ByProjectKeyMeLoginRequestBuilder struct {
 	client     *Client
 }
 
-func (rb *ByProjectKeyMeLoginRequestBuilder) Post(body CustomerSignin) *ByProjectKeyMeLoginRequestMethodPost {
+func (rb *ByProjectKeyMeLoginRequestBuilder) Post(body MyCustomerSignin) *ByProjectKeyMeLoginRequestMethodPost {
 	return &ByProjectKeyMeLoginRequestMethodPost{
 		body:   body,
 		url:    fmt.Sprintf("/%s/me/login", rb.projectKey),

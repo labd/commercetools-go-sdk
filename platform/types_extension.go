@@ -9,19 +9,27 @@ import (
 )
 
 type Extension struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Platform-generated unique identifier of the Extension.
+	ID string `json:"id"`
+	// Current version of the Extension.
+	Version int `json:"version"`
+	// Date and time (UTC) the Extension was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Extension was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy   *CreatedBy           `json:"createdBy,omitempty"`
-	Key         *string              `json:"key,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// User-defined unique identifier of the Extension.
+	Key *string `json:"key,omitempty"`
+	// Information necessary for the commercetools Platform to call the Extension.
 	Destination ExtensionDestination `json:"destination"`
-	Triggers    []ExtensionTrigger   `json:"triggers"`
-	// The maximum time the commercetools platform waits for a response from the extension.
-	// If not present, `2000` (2 seconds) is used.
+	// Describes what triggers the Extension.
+	Triggers []ExtensionTrigger `json:"triggers"`
+	// Maximum time (in milliseconds) the commercetools Platform waits for a response from the Extension.
+	// If no timeout is provided, the default value is used for all types of Extensions.
+	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 
@@ -42,6 +50,10 @@ func (obj *Extension) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	An Extension gets called during any of the following requests of an API call, but before the result is persisted.
+*
+ */
 type ExtensionAction string
 
 const (
@@ -49,6 +61,9 @@ const (
 	ExtensionActionUpdate ExtensionAction = "Update"
 )
 
+/**
+*	Generic type for destinations.
+ */
 type ExtensionDestination interface{}
 
 func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestination, error) {
@@ -86,9 +101,16 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 	return nil, nil
 }
 
+/**
+*	We recommend creating an Identify and Access Management (IAM) user with an `accessKey` and `accessSecret` pair, specifically for each Extension that only has the `lambda:InvokeFunction` permission on this function.
+*
+ */
 type AWSLambdaDestination struct {
-	Arn          string `json:"arn"`
-	AccessKey    string `json:"accessKey"`
+	// Amazon Resource Name (ARN) of the Lambda function in the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>`.
+	Arn string `json:"arn"`
+	// Partially hidden on retrieval for security reasons.
+	AccessKey string `json:"accessKey"`
+	// Partially hidden on retrieval for security reasons.
 	AccessSecret string `json:"accessSecret"`
 }
 
@@ -103,16 +125,18 @@ func (obj AWSLambdaDestination) MarshalJSON() ([]byte, error) {
 }
 
 type ExtensionDraft struct {
-	// User-specific unique identifier for the extension
+	// User-defined unique identifier for the Extension.
 	Key *string `json:"key,omitempty"`
-	// Details where the extension can be reached
+	// Defines where the Extension can be reached.
 	Destination ExtensionDestination `json:"destination"`
-	// Describes what triggers the extension
+	// Describes what triggers the Extension.
 	Triggers []ExtensionTrigger `json:"triggers"`
-	// The maximum time the commercetools platform waits for a response from the extension.
-	// The maximum value is 2000 ms (2 seconds).
-	// This limit can be increased per project after we review the performance impact.
-	// Please contact Support via the [Support Portal](https://support.commercetools.com) and provide the region, project key and use case.
+	// Maximum time (in milliseconds) the commercetools Platform waits for a response from the Extension.
+	// If no timeout is provided, the default value is used for all types of Extensions.
+	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+	//
+	// This limit can be increased per Project after we review the performance impact.
+	// Please contact our support via the [support portal](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 
@@ -134,8 +158,10 @@ func (obj *ExtensionDraft) UnmarshalJSON(data []byte) error {
 }
 
 type ExtensionInput struct {
-	Action   ExtensionAction `json:"action"`
-	Resource Reference       `json:"resource"`
+	// `Create` or `Update` request.
+	Action ExtensionAction `json:"action"`
+	// Expanded reference to the resource that triggered the Extension.
+	Resource Reference `json:"resource"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -155,14 +181,31 @@ func (obj *ExtensionInput) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Extension](ctp:api:type:Extension).
+*
+ */
 type ExtensionPagedQueryResponse struct {
-	Limit   int         `json:"limit"`
-	Count   int         `json:"count"`
-	Total   *int        `json:"total,omitempty"`
-	Offset  int         `json:"offset"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int `json:"limit"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// Extensions matching the query.
 	Results []Extension `json:"results"`
 }
 
+/**
+*	Extensions are available for:
+*
+ */
 type ExtensionResourceTypeId string
 
 const (
@@ -173,12 +216,16 @@ const (
 )
 
 type ExtensionTrigger struct {
+	// `cart`, `order`, `payment`, and `customer` are supported.
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
-	Actions        []ExtensionAction       `json:"actions"`
+	// `Create` and `Update` requests are supported.
+	Actions []ExtensionAction `json:"actions"`
 }
 
 type ExtensionUpdate struct {
-	Version int                     `json:"version"`
+	// Expected version of the Extension on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Extension.
 	Actions []ExtensionUpdateAction `json:"actions"`
 }
 
@@ -248,8 +295,14 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 	return nil, nil
 }
 
+/**
+*	We recommend an encrypted `HTTPS` connection for production setups. However, we also accept unencrypted `HTTP` connections for development purposes. HTTP redirects will not be followed and cache headers will be ignored.
+*
+ */
 type HttpDestination struct {
-	Url            string                        `json:"url"`
+	// URL to the target destination.
+	Url string `json:"url"`
+	// Authentication methods (such as `Basic` or `Bearer`).
 	Authentication HttpDestinationAuthentication `json:"authentication,omitempty"`
 }
 
@@ -310,7 +363,14 @@ func mapDiscriminatorHttpDestinationAuthentication(input interface{}) (HttpDesti
 	return nil, nil
 }
 
+/**
+*	The `Authorization` header will be set to the content of `headerValue`. The authentication scheme (such as `Basic` or `Bearer`) should be included in the `headerValue`.
+*
+*	For example, the `headerValue` for [Basic Authentication](https://datatracker.ietf.org/doc/html/rfc7617) should be set to `Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==`.
+*
+ */
 type AuthorizationHeaderAuthentication struct {
+	// Partially hidden on retrieval for security reasons.
 	HeaderValue string `json:"headerValue"`
 }
 
@@ -324,7 +384,15 @@ func (obj AuthorizationHeaderAuthentication) MarshalJSON() ([]byte, error) {
 	}{Action: "AuthorizationHeader", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To protect your Azure Function, set its `authLevel` to `function` and provide the functions key. The commercetools Platform will set the `x-functions-key` header. For more information, see the [Azure Functions documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook#keys).
+*
+*	To protect the secret key from being exposed, remove the code parameter and secret key from the URL. For example, use `https://foo.azurewebsites.net/api/bar` instead of
+*	`https://foo.azurewebsites.net/api/bar?code=secret`.
+*
+ */
 type AzureFunctionsAuthentication struct {
+	// Partially hidden on retrieval for security reasons.
 	Key string `json:"key"`
 }
 
@@ -339,6 +407,7 @@ func (obj AzureFunctionsAuthentication) MarshalJSON() ([]byte, error) {
 }
 
 type ExtensionChangeDestinationAction struct {
+	// New value to set. Must not be empty.
 	Destination ExtensionDestination `json:"destination"`
 }
 
@@ -370,6 +439,7 @@ func (obj ExtensionChangeDestinationAction) MarshalJSON() ([]byte, error) {
 }
 
 type ExtensionChangeTriggersAction struct {
+	// New value to set. Must not be empty.
 	Triggers []ExtensionTrigger `json:"triggers"`
 }
 
@@ -384,7 +454,7 @@ func (obj ExtensionChangeTriggersAction) MarshalJSON() ([]byte, error) {
 }
 
 type ExtensionSetKeyAction struct {
-	// If `key` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -399,10 +469,12 @@ func (obj ExtensionSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ExtensionSetTimeoutInMsAction struct {
-	// The maximum time the commercetools platform waits for a response from the extension.
-	// The maximum value is 2000 ms (2 seconds).
-	// This limit can be increased per project after we review the performance impact.
-	// Please contact Support via the support and provide the region, project key and use case.
+	// Value to set. If not defined, the maximum value is used.
+	// If no timeout is provided, the default value is used for all types of Extensions.
+	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+	//
+	// This limit can be increased per Project after we review the performance impact.
+	// Please contact our support via the [Support Portal](https://support.commercetools.com/) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 

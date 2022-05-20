@@ -9,7 +9,7 @@ import (
 )
 
 type CartDiscount struct {
-	// The unique ID of the cart discount.
+	// Platform-generated unique identifier of the CartDiscount.
 	ID string `json:"id"`
 	// The current version of the cart discount.
 	Version        int       `json:"version"`
@@ -20,8 +20,7 @@ type CartDiscount struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy      `json:"createdBy,omitempty"`
 	Name      LocalizedString `json:"name"`
-	// User-specific unique identifier for a cart discount.
-	// Must be unique across a project.
+	// User-defined unique identifier of the CartDiscount.
 	Key         *string           `json:"key,omitempty"`
 	Description *LocalizedString  `json:"description,omitempty"`
 	Value       CartDiscountValue `json:"value"`
@@ -82,9 +81,7 @@ func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
 
 type CartDiscountDraft struct {
 	Name LocalizedString `json:"name"`
-	// User-specific unique identifier for a cart discount.
-	// Must be unique across a project.
-	// The field can be reset using the Set Key UpdateAction.
+	// User-defined unique identifier for the CartDiscount.
 	Key         *string                `json:"key,omitempty"`
 	Description *LocalizedString       `json:"description,omitempty"`
 	Value       CartDiscountValueDraft `json:"value"`
@@ -135,16 +132,23 @@ func (obj *CartDiscountDraft) UnmarshalJSON(data []byte) error {
 }
 
 type CartDiscountPagedQueryResponse struct {
-	Limit   int            `json:"limit"`
-	Count   int            `json:"count"`
-	Total   *int           `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int            `json:"offset"`
 	Results []CartDiscount `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [CartDiscount](ctp:api:type:CartDiscount).
+*
+ */
 type CartDiscountReference struct {
-	// Unique ID of the referenced resource.
-	ID  string        `json:"id"`
+	// Platform-generated unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount).
+	ID string `json:"id"`
+	// Contains the representation of the expanded CartDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CartDiscounts.
 	Obj *CartDiscount `json:"obj,omitempty"`
 }
 
@@ -158,10 +162,14 @@ func (obj CartDiscountReference) MarshalJSON() ([]byte, error) {
 	}{Action: "cart-discount", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CartDiscount](ctp:api:type:CartDiscount).
+*
+ */
 type CartDiscountResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -597,6 +605,7 @@ func (obj CartDiscountValueFixedDraft) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountValueGiftLineItem struct {
+	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
 	Product   ProductReference `json:"product"`
 	VariantId int              `json:"variantId"`
 	// The channel must have the role `InventorySupply`
@@ -616,6 +625,7 @@ func (obj CartDiscountValueGiftLineItem) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountValueGiftLineItemDraft struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product).
 	Product   ProductResourceIdentifier `json:"product"`
 	VariantId int                       `json:"variantId"`
 	// The channel must have the role `InventorySupply`

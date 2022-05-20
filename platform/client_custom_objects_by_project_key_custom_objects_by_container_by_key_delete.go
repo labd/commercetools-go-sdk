@@ -28,8 +28,8 @@ func (r *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) Dump() ma
 
 type ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDeleteInput struct {
 	Version     *int
-	DataErasure *bool
 	Expand      []string
+	DataErasure *bool
 }
 
 func (input *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDeleteInput) Values() url.Values {
@@ -37,15 +37,15 @@ func (input *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDeleteInput) 
 	if input.Version != nil {
 		values.Add("version", strconv.Itoa(*input.Version))
 	}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
+	}
 	if input.DataErasure != nil {
 		if *input.DataErasure {
 			values.Add("dataErasure", "true")
 		} else {
 			values.Add("dataErasure", "false")
 		}
-	}
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	return values
 }
@@ -58,19 +58,19 @@ func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) Version(
 	return rb
 }
 
-func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) DataErasure(v bool) *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDeleteInput{}
-	}
-	rb.params.DataErasure = &v
-	return rb
-}
-
 func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) Expand(v []string) *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDeleteInput{}
 	}
 	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) DataErasure(v bool) *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDeleteInput{}
+	}
+	rb.params.DataErasure = &v
 	return rb
 }
 
@@ -82,10 +82,6 @@ func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) WithHead
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Delete CustomObject by container and key
- */
 func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) Execute(ctx context.Context) (result *CustomObject, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

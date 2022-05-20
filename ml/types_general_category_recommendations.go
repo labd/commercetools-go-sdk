@@ -10,8 +10,9 @@ type GeneralCategoryRecommendation struct {
 }
 
 type GeneralCategoryRecommendationPagedQueryResponse struct {
-	Count   int                             `json:"count"`
-	Total   int                             `json:"total"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int                             `json:"offset"`
 	Results []GeneralCategoryRecommendation `json:"results"`
 }

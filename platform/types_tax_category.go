@@ -18,7 +18,7 @@ type SubRate struct {
 }
 
 type TaxCategory struct {
-	// Unique ID of the TaxCategory.
+	// Platform-generated unique identifier of the TaxCategory.
 	ID string `json:"id"`
 	// Current version of the TaxCategory.
 	Version int `json:"version"`
@@ -36,7 +36,7 @@ type TaxCategory struct {
 	Description *string `json:"description,omitempty"`
 	// Tax rates and subrates of states and countries. Each TaxRate in the array has a unique ID assigned by the platform.
 	Rates []TaxRate `json:"rates"`
-	// User-defined unique identifier for the TaxCategory.
+	// User-defined unique identifier of the TaxCategory.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -79,10 +79,9 @@ func (obj TaxCategoryDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type TaxCategoryPagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -97,13 +96,13 @@ type TaxCategoryPagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [TaxCategory](ctp:api:type:TaxCategory).
+*	[Reference](ctp:api:type:Reference) to a [TaxCategory](ctp:api:type:TaxCategory).
 *
  */
 type TaxCategoryReference struct {
-	// Unique ID of the referenced [TaxCategory](ctp:api:type:TaxCategory).
+	// Platform-generated unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory).
 	ID string `json:"id"`
-	// Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategory.
+	// Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategories.
 	Obj *TaxCategory `json:"obj,omitempty"`
 }
 
@@ -118,13 +117,13 @@ func (obj TaxCategoryReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
 *
  */
 type TaxCategoryResourceIdentifier struct {
-	// Unique ID of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 

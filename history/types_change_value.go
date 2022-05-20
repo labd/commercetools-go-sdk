@@ -102,6 +102,11 @@ type AssetChangeValue struct {
 	Name LocalizedString `json:"name"`
 }
 
+type AttributeValue struct {
+	Name  string      `json:"name"`
+	Value interface{} `json:"value"`
+}
+
 /**
 *	Shape of the value for cart discounts line item and custom line items target.
  */
@@ -338,6 +343,12 @@ type SetCartScoreShippingRateInputValue struct {
 type ShippingMethodChangeValue struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type ShippingMethodTaxAmountChangeValue struct {
+	TaxedPrice TaxedPrice `json:"taxedPrice"`
+	// Shape of the value for `addTaxRate` and `removeTaxRate` actions
+	TaxRate TaxRate `json:"taxRate"`
 }
 
 type ShoppingListLineItemValue struct {

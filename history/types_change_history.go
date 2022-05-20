@@ -29,8 +29,10 @@ type Record struct {
 	// Shows the differences in the resource between `previousVersion` and `version`.
 	// The value is not identical to the actual array of update actions that was sent to the platform and is not limited to update actions (see, for example, [Optimistic  Concurrency Control](/general-concepts#optimistic-concurrency-control)).
 	Changes []Change `json:"changes"`
-	// [Reference](/types#reference) to the changed resource.
+	// Reference to the changed resource.
 	Resource Reference `json:"resource"`
+	// References to the [Stores](ctp:api:type:Store) attached to the [Change](ctp:history:type:Change).
+	Stores []KeyReference `json:"stores"`
 	// `true` if no change was detected.
 	// The version number of the resource can be increased even without any change in the resource.
 	WithoutChanges bool `json:"withoutChanges"`
@@ -72,14 +74,14 @@ func (obj *Record) UnmarshalJSON(data []byte) error {
 *
  */
 type RecordPagedQueryResponse struct {
-	// Maximum number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
 	// This number is an estimation and not [strongly consistent](/general-concepts#strong-consistency).
 	Total int `json:"total"`
-	// The number of elements skipped, not a page number. Supplied by the client or the server default.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int      `json:"offset"`
 	Results []Record `json:"results"`
 }
@@ -200,6 +202,17 @@ type ModifiedBy struct {
 	// `true` if the change was made via Merchant Center or [ImpEx](https://impex.europe-west1.gcp.commercetools.com/).
 	IsPlatformClient bool `json:"isPlatformClient"`
 }
+
+type PlatformInitiatedChange string
+
+const (
+	PlatformInitiatedChangeExcludeAll                   PlatformInitiatedChange = "excludeAll"
+	PlatformInitiatedChangeChangeLineItemName           PlatformInitiatedChange = "changeLineItemName"
+	PlatformInitiatedChangeChangeReviewRatingStatistics PlatformInitiatedChange = "changeReviewRatingStatistics"
+	PlatformInitiatedChangeSetApplicationVersion        PlatformInitiatedChange = "setApplicationVersion"
+	PlatformInitiatedChangeSetIsValid                   PlatformInitiatedChange = "setIsValid"
+	PlatformInitiatedChangeSetVariantAvailability       PlatformInitiatedChange = "setVariantAvailability"
+)
 
 /**
 *	Values for the Source enumeration.
@@ -412,15 +425,4 @@ const (
 	UpdateTypeUpdateItemShippingAddress          UpdateType = "updateItemShippingAddress"
 	UpdateTypeUpdateSyncInfo                     UpdateType = "updateSyncInfo"
 	UpdateTypeVerifyEmail                        UpdateType = "verifyEmail"
-)
-
-type PlatformInitiatedChange string
-
-const (
-	PlatformInitiatedChangeExcludeAll                   PlatformInitiatedChange = "excludeAll"
-	PlatformInitiatedChangeChangeLineItemName           PlatformInitiatedChange = "changeLineItemName"
-	PlatformInitiatedChangeChangeReviewRatingStatistics PlatformInitiatedChange = "changeReviewRatingStatistics"
-	PlatformInitiatedChangeSetApplicationVersion        PlatformInitiatedChange = "setApplicationVersion"
-	PlatformInitiatedChangeSetIsValid                   PlatformInitiatedChange = "setIsValid"
-	PlatformInitiatedChangeSetVariantAvailability       PlatformInitiatedChange = "setVariantAvailability"
 )

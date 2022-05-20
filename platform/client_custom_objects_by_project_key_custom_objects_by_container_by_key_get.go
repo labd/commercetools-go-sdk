@@ -53,10 +53,6 @@ func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodGet) WithHeaders
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Get CustomObject by container and key
- */
 func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodGet) Execute(ctx context.Context) (result *CustomObject, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

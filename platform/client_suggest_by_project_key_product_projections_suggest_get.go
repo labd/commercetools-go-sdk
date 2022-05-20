@@ -140,7 +140,7 @@ func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) WithHeaders(hea
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Execute(ctx context.Context) (result *interface{}, err error) {
+func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Execute(ctx context.Context) (result *SuggestionResult, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

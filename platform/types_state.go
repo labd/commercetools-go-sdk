@@ -9,7 +9,7 @@ import (
 )
 
 type State struct {
-	// Unique ID of the State.
+	// Platform-generated unique identifier of the State.
 	ID string `json:"id"`
 	// Current version of the State.
 	Version int `json:"version"`
@@ -21,7 +21,7 @@ type State struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier for the State.
+	// User-defined unique identifier of the State.
 	Key string `json:"key"`
 	// Indicates to which resource or object types the State is assigned to.
 	Type StateTypeEnum `json:"type"`
@@ -121,10 +121,9 @@ func (obj StateDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type StatePagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -139,13 +138,13 @@ type StatePagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+*	[Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 *
  */
 type StateReference struct {
-	// Unique ID of the referenced [State](ctp:api:type:State).
+	// Platform-generated unique identifier of the referenced [State](ctp:api:type:State).
 	ID string `json:"id"`
-	// Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for State.
+	// Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for States.
 	Obj *State `json:"obj,omitempty"`
 }
 
@@ -160,13 +159,13 @@ func (obj StateReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 *
  */
 type StateResourceIdentifier struct {
-	// Unique ID of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 

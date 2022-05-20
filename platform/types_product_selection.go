@@ -9,12 +9,12 @@ import (
 )
 
 type AssignedProductReference struct {
-	// Reference to a Product that is assigned to the Product Selection.
+	// Reference to a Product that is assigned to the ProductSelection.
 	Product ProductReference `json:"product"`
 }
 
 type AssignedProductSelection struct {
-	// Reference to the Product Selection that this assignment is part of.
+	// Reference to the ProductSelection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
 }
 
@@ -23,10 +23,9 @@ type AssignedProductSelection struct {
 *
  */
 type AssignedProductSelectionPagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -36,53 +35,51 @@ type AssignedProductSelectionPagedQueryResponse struct {
 	// To get `total`, pass the query parameter `withTotal` set to `true`.
 	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// References to Product Selection that are assigned to the Product.
+	// References to ProductSelection that are assigned to the Product.
 	Results []AssignedProductSelection `json:"results"`
 }
 
 type ProductSelection struct {
-	// Unique ID of the Product Selection.
+	// Platform-generated unique identifier of the ProductSelection.
 	ID string `json:"id"`
-	// Current version of the Product Selection.
+	// Current version of the ProductSelection.
 	Version int `json:"version"`
-	// Date and time (UTC) the Product Selection was initially created.
+	// Date and time (UTC) the ProductSelection was initially created.
 	CreatedAt time.Time `json:"createdAt"`
-	// Date and time (UTC) the Product Selection was last updated.
+	// Date and time (UTC) the ProductSelection was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1/02/2019 except for events not
-	// tracked.
+	// Present on resources updated after 1/02/2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1/02/2019 except for events not
-	// tracked.
+	// Present on resources created after 1/02/2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier for the Product Selection.
+	// User-defined unique identifier of the ProductSelection.
 	Key *string `json:"key,omitempty"`
-	// Name of the Product Selection.
+	// Name of the ProductSelection.
 	Name LocalizedString `json:"name"`
-	// Number of Products that are currently assigned to this Product Selection.
+	// Number of Products that are currently assigned to this ProductSelection.
 	ProductCount int `json:"productCount"`
-	// Specifies in which way the Products are assigned to the Product Selection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
+	// Specifies in which way the Products are assigned to the ProductSelection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
 	Type ProductSelectionTypeEnum `json:"type"`
-	// Custom Fields of this Product Selection.
+	// Custom Fields of this ProductSelection.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 /**
-*	Specifies which Product is assigned to which Product Selection.
+*	Specifies which Product is assigned to which ProductSelection.
  */
 type ProductSelectionAssignment struct {
-	// Reference to a Product that is assigned to the Product Selection.
+	// Reference to a Product that is assigned to the ProductSelection.
 	Product ProductReference `json:"product"`
-	// Reference to the Product Selection that this assignment is part of.
+	// Reference to the ProductSelection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
 }
 
 type ProductSelectionDraft struct {
-	// User-defined unique identifier for the Product Selection. You can use `key` besides `ID` to reference the Product Selection.
+	// User-defined unique identifier for the ProductSelection.
 	Key *string `json:"key,omitempty"`
-	// Name of the Product Selection. Not checked for uniqueness, but distinct names are recommended.
+	// Name of the ProductSelection. Not checked for uniqueness, but distinct names are recommended.
 	Name LocalizedString `json:"name"`
-	// Custom Fields of this Product Selection.
+	// Custom Fields of this ProductSelection.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -91,10 +88,9 @@ type ProductSelectionDraft struct {
 *
  */
 type ProductSelectionPagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -104,7 +100,7 @@ type ProductSelectionPagedQueryResponse struct {
 	// To get `total`, pass the query parameter `withTotal` set to `true`.
 	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// The Product Selections matching the query.
+	// [ProductSelections](ctp:api:type:ProductSelection) matching the query.
 	Results []ProductSelection `json:"results"`
 }
 
@@ -113,10 +109,9 @@ type ProductSelectionPagedQueryResponse struct {
 *
  */
 type ProductSelectionProductPagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -126,14 +121,18 @@ type ProductSelectionProductPagedQueryResponse struct {
 	// To get `total`, pass the query parameter `withTotal` set to `true`.
 	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// References to Products that are assigned to the Product Selection.
+	// References to Products that are assigned to the ProductSelection.
 	Results []AssignedProductReference `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [ProductSelection](ctp:api:type:ProductSelection).
+*
+ */
 type ProductSelectionReference struct {
-	// Unique ID of the Product Selection.
+	// Platform-generated unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Product Selection. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Product Selection.
+	// Contains the representation of the expanded ProductSelection. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductSelections.
 	Obj *ProductSelection `json:"obj,omitempty"`
 }
 
@@ -147,10 +146,14 @@ func (obj ProductSelectionReference) MarshalJSON() ([]byte, error) {
 	}{Action: "product-selection", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection).
+*
+ */
 type ProductSelectionResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -189,7 +192,7 @@ func mapDiscriminatorProductSelectionType(input interface{}) (ProductSelectionTy
 }
 
 type IndividualProductSelectionType struct {
-	// The name of the Product Selection which is recommended to be unique.
+	// The name of the ProductSelection which is recommended to be unique.
 	Name LocalizedString `json:"name"`
 }
 
@@ -294,10 +297,9 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 *
  */
 type ProductsInStorePagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -307,7 +309,7 @@ type ProductsInStorePagedQueryResponse struct {
 	// To get `total`, pass the query parameter `withTotal` set to `true`.
 	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// Product Selection Assignments.
+	// ProductSelectionAssignments matching the query.
 	Results []ProductSelectionAssignment `json:"results"`
 }
 
@@ -327,7 +329,7 @@ func (obj ProductSelectionAddProductAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionChangeNameAction struct {
-	// The new name to be set for the Product Selection.
+	// The new name to be set for the ProductSelection.
 	Name LocalizedString `json:"name"`
 }
 

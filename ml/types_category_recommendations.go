@@ -21,8 +21,9 @@ type ProjectCategoryRecommendationMeta struct {
 }
 
 type ProjectCategoryRecommendationPagedQueryResponse struct {
-	Count   int                               `json:"count"`
-	Total   int                               `json:"total"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int                               `json:"offset"`
 	Results []ProjectCategoryRecommendation   `json:"results"`
 	Meta    ProjectCategoryRecommendationMeta `json:"meta"`

@@ -9,13 +9,13 @@ import (
 )
 
 type Cart struct {
-	// The unique ID of the cart.
+	// Platform-generated unique identifier of the Cart.
 	ID string `json:"id"`
 	// The current version of the cart.
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// User-specific unique identifier of the cart.
+	// User-defined unique identifier of the Cart.
 	Key *string `json:"key,omitempty"`
 	// Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
@@ -130,7 +130,7 @@ func (obj Cart) MarshalJSON() ([]byte, error) {
 type CartDraft struct {
 	// A three-digit currency code as per [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	Currency string `json:"currency"`
-	// User-specific unique identifier of the cart.
+	// User-defined unique identifier for the Cart.
 	Key *string `json:"key,omitempty"`
 	// Id of an existing Customer.
 	CustomerId    *string `json:"customerId,omitempty"`
@@ -246,17 +246,24 @@ const (
 )
 
 type CartPagedQueryResponse struct {
-	Limit   int    `json:"limit"`
-	Count   int    `json:"count"`
-	Total   *int   `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int    `json:"offset"`
 	Results []Cart `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [Cart](ctp:api:type:Cart).
+*
+ */
 type CartReference struct {
-	// Unique ID of the referenced resource.
-	ID  string `json:"id"`
-	Obj *Cart  `json:"obj,omitempty"`
+	// Platform-generated unique identifier of the referenced [Cart](ctp:api:type:Cart).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Cart. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Carts.
+	Obj *Cart `json:"obj,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -269,10 +276,14 @@ func (obj CartReference) MarshalJSON() ([]byte, error) {
 	}{Action: "cart", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart).
+*
+ */
 type CartResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -708,7 +719,7 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 }
 
 type CustomLineItem struct {
-	// The unique ID of this CustomLineItem.
+	// Platform-generated unique identifier of the CustomLineItem.
 	ID string `json:"id"`
 	// The name of this CustomLineItem.
 	Name LocalizedString `json:"name"`
@@ -842,7 +853,7 @@ func (obj *DiscountedLineItemPrice) UnmarshalJSON(data []byte) error {
 }
 
 type DiscountedLineItemPriceForQuantity struct {
-	Quantity        float64                 `json:"quantity"`
+	Quantity        int                     `json:"quantity"`
 	DiscountedPrice DiscountedLineItemPrice `json:"discountedPrice"`
 }
 
@@ -931,14 +942,14 @@ type ItemShippingTarget struct {
 	// The quantity of items that should go to the address with the specified `addressKey`.
 	// Only positive values are allowed.
 	// Using `0` as quantity is also possible in a draft object, but the element will not be present in the resulting ItemShippingDetails.
-	Quantity float64 `json:"quantity"`
+	Quantity int `json:"quantity"`
 }
 
 type LineItem struct {
-	// The unique ID of this LineItem.
+	// Platform-generated unique identifier of the LineItem.
 	ID        string `json:"id"`
 	ProductId string `json:"productId"`
-	// User-defined unique identifier for the [Product](ctp:api:type:Product).
+	// User-defined unique identifier of the [Product](ctp:api:type:Product).
 	// Only present on Line Items in a [Cart](ctp:api:type:Cart) when the `key` is available on that specific Product at the time the Line Item is created or updated on the Cart. On [Order](/ctp:api:type:Order) resources this field is only present when the `key` is available on the specific Product at the time the Order is created from the Cart. This field is in general not present on Carts that had no updates until 3 December 2021 and on Orders created before this date.
 	ProductKey *string `json:"productKey,omitempty"`
 	// The product name.
@@ -952,8 +963,8 @@ type LineItem struct {
 	// The variant data is saved when the variant is added to the cart, and not updated automatically.
 	// It can manually be updated with the Recalculate update action.
 	Variant ProductVariant `json:"variant"`
-	// The price of a line item is selected from the prices array of the product variant.
-	// If the `variant` field hasn't been updated, the price may not correspond to a price in `variant.prices`.
+	// The price of a line item is selected from the product variant according to the Product's [priceMode](ctp:api:type:Product) value.
+	// If the `priceMode` is `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) and the `variant` field hasn't been updated, the price may not correspond to a price in `variant.prices`.
 	Price Price `json:"price"`
 	// Set once the `taxRate` is set.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
@@ -1166,7 +1177,8 @@ func mapDiscriminatorShippingRateInput(input interface{}) (ShippingRateInput, er
 }
 
 type ClassificationShippingRateInput struct {
-	Key   string          `json:"key"`
+	Key string `json:"key"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Label LocalizedString `json:"label"`
 }
 
@@ -1296,6 +1308,7 @@ type TaxPortionDraft struct {
 	Name *string `json:"name,omitempty"`
 	Rate float64 `json:"rate"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount Money `json:"amount"`
 }
@@ -1304,6 +1317,8 @@ type TaxedItemPrice struct {
 	TotalNet TypedMoney `json:"totalNet"`
 	// TaxedItemPrice fields can not be used in query predicates.
 	TotalGross TypedMoney `json:"totalGross"`
+	// Platform-calculated value as subtraction of `totalGross` - `totalNet`.
+	TotalTax TypedMoney `json:"totalTax,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1327,6 +1342,13 @@ func (obj *TaxedItemPrice) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	if obj.TotalTax != nil {
+		var err error
+		obj.TotalTax, err = mapDiscriminatorTypedMoney(obj.TotalTax)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -1335,6 +1357,8 @@ type TaxedPrice struct {
 	TotalGross TypedMoney `json:"totalGross"`
 	// TaxedPrice fields that can be used in query predicates: `totalNet`, `totalGross`.
 	TaxPortions []TaxPortion `json:"taxPortions"`
+	// Platform-calculated value as subtraction of `totalGross` - `totalNet`.
+	TotalTax TypedMoney `json:"totalTax,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1358,14 +1382,23 @@ func (obj *TaxedPrice) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	if obj.TotalTax != nil {
+		var err error
+		obj.TotalTax, err = mapDiscriminatorTypedMoney(obj.TotalTax)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
 type TaxedPriceDraft struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	TotalNet Money `json:"totalNet"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	TotalGross  Money             `json:"totalGross"`
 	TaxPortions []TaxPortionDraft `json:"taxPortions"`
@@ -1373,12 +1406,14 @@ type TaxedPriceDraft struct {
 
 type CartAddCustomLineItemAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	Money    Money           `json:"money"`
+	Money Money `json:"money"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name     LocalizedString `json:"name"`
 	Quantity int             `json:"quantity"`
 	Slug     string          `json:"slug"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
@@ -1426,16 +1461,17 @@ func (obj CartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 type CartAddLineItemAction struct {
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	ExternalTaxRate     *ExternalTaxRateDraft      `json:"externalTaxRate,omitempty"`
 	ProductId           *string                    `json:"productId,omitempty"`
 	VariantId           *int                       `json:"variantId,omitempty"`
 	Sku                 *string                    `json:"sku,omitempty"`
 	Quantity            *int                       `json:"quantity,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1467,10 +1503,11 @@ func (obj CartAddPaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartAddShoppingListAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList).
 	ShoppingList ShoppingListResourceIdentifier `json:"shoppingList"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -1517,6 +1554,7 @@ func (obj CartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() ([
 type CartChangeCustomLineItemMoneyAction struct {
 	CustomLineItemId string `json:"customLineItemId"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Money Money `json:"money"`
 }
@@ -1550,6 +1588,7 @@ type CartChangeLineItemQuantityAction struct {
 	LineItemId string `json:"lineItemId"`
 	Quantity   int    `json:"quantity"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1609,9 +1648,8 @@ func (obj CartChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) {
 
 type CartRecalculateAction struct {
 	// If set to `true`, the line item product data (`name`, `variant` and `productType`) will also be updated.
-	// If set to `false`,
-	// only the prices and tax rates of the line item will be updated.
-	// The updated price of a line item may not correspond to a price in `variant.prices` anymore.
+	// If set to `false`, only the prices and tax rates of the line item will be updated.
+	// Notice that if the Product's [priceMode](ctp:api:type:Product) value is `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum), the updated price of a line item may not correspond to a price in `variant.prices` anymore.
 	UpdateProductData *bool `json:"updateProductData,omitempty"`
 }
 
@@ -1640,6 +1678,7 @@ func (obj CartRemoveCustomLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartRemoveDiscountCodeAction struct {
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -1671,6 +1710,7 @@ type CartRemoveLineItemAction struct {
 	LineItemId string `json:"lineItemId"`
 	Quantity   *int   `json:"quantity,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice           *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice      *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1798,7 +1838,7 @@ func (obj CartSetCartTotalTaxAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetCountryAction struct {
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
 }
 
@@ -1918,7 +1958,7 @@ func (obj CartSetCustomLineItemTaxRateAction) MarshalJSON() ([]byte, error) {
 type CartSetCustomShippingMethodAction struct {
 	ShippingMethodName string            `json:"shippingMethodName"`
 	ShippingRate       ShippingRateDraft `json:"shippingRate"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
 	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
 }
@@ -1966,7 +2006,7 @@ func (obj CartSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetCustomerGroupAction struct {
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 }
 
@@ -2142,7 +2182,7 @@ func (obj CartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 type CartSetLineItemDistributionChannelAction struct {
 	LineItemId string `json:"lineItemId"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -2159,6 +2199,7 @@ func (obj CartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, error
 type CartSetLineItemPriceAction struct {
 	LineItemId string `json:"lineItemId"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 }
@@ -2190,7 +2231,7 @@ func (obj CartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) {
 
 type CartSetLineItemSupplyChannelAction struct {
 	LineItemId string `json:"lineItemId"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
@@ -2315,6 +2356,7 @@ func (obj CartSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 }
 
 type CartSetShippingMethodAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
 	ShippingMethod  *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft             `json:"externalTaxRate,omitempty"`
 }

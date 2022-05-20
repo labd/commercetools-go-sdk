@@ -69,7 +69,9 @@ type SimilarityMeasures struct {
 }
 
 type SimilarProductSearchRequest struct {
-	Limit  *int `json:"limit,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit *int `json:"limit,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset *int `json:"offset,omitempty"`
 	// language tag used to prioritize language for text comparisons.
 	Language *string `json:"language,omitempty"`
@@ -144,8 +146,9 @@ type SimilarProductSearchRequestMeta struct {
 }
 
 type SimilarProductsPagedQueryResult struct {
-	Count   int                             `json:"count"`
-	Total   int                             `json:"total"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int                             `json:"offset"`
 	Results []SimilarProductPair            `json:"results"`
 	Meta    SimilarProductSearchRequestMeta `json:"meta"`

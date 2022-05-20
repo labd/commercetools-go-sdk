@@ -47,7 +47,7 @@ func (obj TaxRate) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The data representation for a Price to be imported that is persisted as a [Price](/../api/projects/products#price) in the Project.
+*	The data representation for a price to be imported that is persisted as an [EmbeddedPrice](/../api/projects/products#embeddedprice) in the Project.
 *
  */
 type PriceImport struct {
@@ -60,26 +60,26 @@ type PriceImport struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Maps to `Price.validUntil`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the Price is associated.
+	// The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
 	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
-	// The Reference to the [Channel](/../api/projects/channels#channel) with which the Price is associated.
+	// The Reference to the [Channel](/../api/projects/channels#channel) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
 	// If referenced Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Channel is created.
 	Channel *ChannelKeyReference `json:"channel,omitempty"`
 	// Sets a discounted price from an external service.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// Only the Price updates will be published to `staged` and `current` projection.
+	// Only the [EmbeddedPrice](/../api/projects/products#embeddedprice) updates will be published to `staged` and `current` projection.
 	Publish *bool `json:"publish,omitempty"`
 	// The tiered prices for this price.
 	Tiers []PriceTier `json:"tiers"`
 	// The custom fields for this price.
 	Custom *Custom `json:"custom,omitempty"`
-	// The ProductVariant in which this Price is contained.
-	// The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the Price is associated.
+	// The ProductVariant in which this [EmbeddedPrice](/../api/projects/products#embeddedprice) is contained.
+	// The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
 	// If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
 	ProductVariant ProductVariantKeyReference `json:"productVariant"`
-	// The Product in which the Product Variant containing this Price is contained. Maps to `ProductVariant.product`.
-	// The Reference to the [Product](/../api/projects/products#product) with which the Price is associated.
+	// The Product in which the Product Variant containing this [EmbeddedPrice](/../api/projects/products#embeddedprice) is contained. Maps to `ProductVariant.product`.
+	// The Reference to the [Product](/../api/projects/products#product) with which the [EmbeddedPrice](/../api/projects/products#embeddedprice) is associated.
 	// If referenced Product does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Product is created.
 	Product ProductKeyReference `json:"product"`
 }

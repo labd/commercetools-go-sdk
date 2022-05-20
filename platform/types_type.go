@@ -371,7 +371,7 @@ func (obj CustomFieldReferenceType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Values of a SetType Custom Field are sets of values of the specified `elementType`.
+*	Values of a SetType Custom Field are sets of values of the specified `elementType` (without duplicate elements).
 *
  */
 type CustomFieldSetType struct {
@@ -461,6 +461,8 @@ const (
 	ResourceTypeIdOrder                       ResourceTypeId = "order"
 	ResourceTypeIdOrderEdit                   ResourceTypeId = "order-edit"
 	ResourceTypeIdOrderDelivery               ResourceTypeId = "order-delivery"
+	ResourceTypeIdOrderParcel                 ResourceTypeId = "order-parcel"
+	ResourceTypeIdOrderReturnItem             ResourceTypeId = "order-return-item"
 	ResourceTypeIdPayment                     ResourceTypeId = "payment"
 	ResourceTypeIdPaymentInterfaceInteraction ResourceTypeId = "payment-interface-interaction"
 	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
@@ -474,7 +476,7 @@ const (
 )
 
 type Type struct {
-	// Unique ID of the Type.
+	// Platform-generated unique identifier of the Type.
 	ID string `json:"id"`
 	// Current version of the Type.
 	Version int `json:"version"`
@@ -486,7 +488,7 @@ type Type struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier for the Type.
+	// User-defined unique identifier of the Type.
 	Key string `json:"key"`
 	// Name of the Type.
 	Name LocalizedString `json:"name"`
@@ -539,9 +541,9 @@ func (obj TypeDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type TypePagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or server default. It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -556,11 +558,11 @@ type TypePagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [Type](ctp:api:type:Type).
+*	[Reference](ctp:api:type:Reference) to a [Type](ctp:api:type:Type).
 *
  */
 type TypeReference struct {
-	// Unique ID of the referenced [Type](ctp:api:type:Type).
+	// Platform-generated unique identifier of the referenced [Type](ctp:api:type:Type).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Type.
 	// Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Types.
@@ -578,13 +580,13 @@ func (obj TypeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) of a [Type](ctp:api:type:Type).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type).
 *
  */
 type TypeResourceIdentifier struct {
-	// Unique ID of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -611,7 +613,7 @@ const (
 
 type TypeUpdate struct {
 	// Expected version of the type on which the changes should be applied.
-	// If the expected version does not match the actual version, a 409 Conflict will be returned.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Type.
 	Actions []TypeUpdateAction `json:"actions"`
@@ -918,8 +920,9 @@ func (obj TypeChangeKeyAction) MarshalJSON() ([]byte, error) {
 
 type TypeChangeLabelAction struct {
 	// Name of the [Field Definition](ctp:api:type:FieldDefinition) to update.
-	FieldName string          `json:"fieldName"`
-	Label     LocalizedString `json:"label"`
+	FieldName string `json:"fieldName"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Label LocalizedString `json:"label"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -709,6 +709,7 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 }
 
 type CategoryCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -716,8 +717,9 @@ type CategoryCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -752,6 +754,7 @@ func (obj CategoryCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySlugChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -759,13 +762,16 @@ type CategorySlugChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Slug                            LocalizedString          `json:"slug"`
-	OldSlug                         *LocalizedString         `json:"oldSlug,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Slug LocalizedString `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -796,6 +802,7 @@ func (obj CategorySlugChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerAddressAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -803,8 +810,9 @@ type CustomerAddressAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -839,6 +847,7 @@ func (obj CustomerAddressAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerAddressChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -846,8 +855,9 @@ type CustomerAddressChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -882,6 +892,7 @@ func (obj CustomerAddressChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerAddressRemovedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -889,8 +900,9 @@ type CustomerAddressRemovedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -925,6 +937,7 @@ func (obj CustomerAddressRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerCompanyNameSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -932,8 +945,9 @@ type CustomerCompanyNameSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -968,6 +982,7 @@ func (obj CustomerCompanyNameSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -975,8 +990,9 @@ type CustomerCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1011,6 +1027,7 @@ func (obj CustomerCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerDateOfBirthSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1018,8 +1035,9 @@ type CustomerDateOfBirthSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1054,6 +1072,7 @@ func (obj CustomerDateOfBirthSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1061,8 +1080,9 @@ type CustomerDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1096,6 +1116,7 @@ func (obj CustomerDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerEmailChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1103,8 +1124,9 @@ type CustomerEmailChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1139,6 +1161,7 @@ func (obj CustomerEmailChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerEmailVerifiedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1146,8 +1169,9 @@ type CustomerEmailVerifiedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1181,6 +1205,7 @@ func (obj CustomerEmailVerifiedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerFirstNameSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1188,8 +1213,9 @@ type CustomerFirstNameSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1224,6 +1250,7 @@ func (obj CustomerFirstNameSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerGroupSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1231,12 +1258,13 @@ type CustomerGroupSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 }
 
@@ -1268,6 +1296,7 @@ func (obj CustomerGroupSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerLastNameSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1275,8 +1304,9 @@ type CustomerLastNameSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1311,6 +1341,7 @@ func (obj CustomerLastNameSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerPasswordUpdatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1318,8 +1349,9 @@ type CustomerPasswordUpdatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1355,6 +1387,7 @@ func (obj CustomerPasswordUpdatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerTitleSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1362,8 +1395,9 @@ type CustomerTitleSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1398,6 +1432,7 @@ func (obj CustomerTitleSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntryCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1405,8 +1440,9 @@ type InventoryEntryCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1441,6 +1477,7 @@ func (obj InventoryEntryCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntryDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1448,13 +1485,14 @@ type InventoryEntryDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	Sku                             string                   `json:"sku"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -1486,6 +1524,7 @@ func (obj InventoryEntryDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntryQuantitySetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -1493,8 +1532,9 @@ type InventoryEntryQuantitySetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -1502,7 +1542,7 @@ type InventoryEntryQuantitySetMessage struct {
 	NewQuantityOnStock              int                      `json:"newQuantityOnStock"`
 	OldAvailableQuantity            int                      `json:"oldAvailableQuantity"`
 	NewAvailableQuantity            int                      `json:"newAvailableQuantity"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -1534,9 +1574,11 @@ func (obj InventoryEntryQuantitySetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type MessagePagedQueryResponse struct {
-	Limit   int       `json:"limit"`
-	Count   int       `json:"count"`
-	Total   *int      `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int       `json:"offset"`
 	Results []Message `json:"results"`
 }
@@ -2114,6 +2156,7 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 }
 
 type CustomLineItemStateTransitionMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2121,17 +2164,18 @@ type CustomLineItemStateTransitionMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	CustomLineItemId                string                   `json:"customLineItemId"`
 	TransitionDate                  time.Time                `json:"transitionDate"`
 	Quantity                        int                      `json:"quantity"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	FromState StateReference `json:"fromState"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	ToState StateReference `json:"toState"`
 }
 
@@ -2163,6 +2207,7 @@ func (obj CustomLineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2170,8 +2215,9 @@ type DeliveryAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2206,6 +2252,7 @@ func (obj DeliveryAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryAddressSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2213,8 +2260,9 @@ type DeliveryAddressSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2251,6 +2299,7 @@ func (obj DeliveryAddressSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryItemsUpdatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2258,8 +2307,9 @@ type DeliveryItemsUpdatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2296,6 +2346,7 @@ func (obj DeliveryItemsUpdatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryRemovedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2303,8 +2354,9 @@ type DeliveryRemovedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2339,6 +2391,7 @@ func (obj DeliveryRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type LineItemStateTransitionMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2346,17 +2399,18 @@ type LineItemStateTransitionMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	LineItemId                      string                   `json:"lineItemId"`
 	TransitionDate                  time.Time                `json:"transitionDate"`
 	Quantity                        int                      `json:"quantity"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	FromState StateReference `json:"fromState"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	ToState StateReference `json:"toState"`
 }
 
@@ -2388,6 +2442,7 @@ func (obj LineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderBillingAddressSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2395,8 +2450,9 @@ type OrderBillingAddressSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2432,6 +2488,7 @@ func (obj OrderBillingAddressSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2439,8 +2496,9 @@ type OrderCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2475,6 +2533,7 @@ func (obj OrderCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCustomLineItemDiscountSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2482,8 +2541,9 @@ type OrderCustomLineItemDiscountSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy                           `json:"createdBy,omitempty"`
-	SequenceNumber                  int                                  `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                            `json:"resource"`
 	ResourceVersion                 int                                  `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2520,6 +2580,7 @@ func (obj OrderCustomLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCustomerEmailSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2527,8 +2588,9 @@ type OrderCustomerEmailSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2564,6 +2626,7 @@ func (obj OrderCustomerEmailSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCustomerGroupSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2571,14 +2634,15 @@ type OrderCustomerGroupSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -2610,6 +2674,7 @@ func (obj OrderCustomerGroupSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCustomerSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2617,16 +2682,19 @@ type OrderCustomerSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Customer                        *CustomerReference       `json:"customer,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	Customer *CustomerReference `json:"customer,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	OldCustomer   *CustomerReference      `json:"oldCustomer,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	OldCustomer *CustomerReference `json:"oldCustomer,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -2658,6 +2726,7 @@ func (obj OrderCustomerSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2665,8 +2734,9 @@ type OrderDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2701,6 +2771,7 @@ func (obj OrderDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderDiscountCodeAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2708,12 +2779,14 @@ type OrderDiscountCodeAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DiscountCode                    DiscountCodeReference    `json:"discountCode"`
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2744,6 +2817,7 @@ func (obj OrderDiscountCodeAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderDiscountCodeRemovedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2751,12 +2825,14 @@ type OrderDiscountCodeRemovedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DiscountCode                    DiscountCodeReference    `json:"discountCode"`
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2787,6 +2863,7 @@ func (obj OrderDiscountCodeRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderDiscountCodeStateSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2794,14 +2871,16 @@ type OrderDiscountCodeStateSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DiscountCode                    DiscountCodeReference    `json:"discountCode"`
-	State                           DiscountCodeState        `json:"state"`
-	OldState                        *DiscountCodeState       `json:"oldState,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	DiscountCode DiscountCodeReference `json:"discountCode"`
+	State        DiscountCodeState     `json:"state"`
+	OldState     *DiscountCodeState    `json:"oldState,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2832,6 +2911,7 @@ func (obj OrderDiscountCodeStateSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderEditAppliedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2839,13 +2919,15 @@ type OrderEditAppliedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Edit                            OrderEditReference       `json:"edit"`
-	Result                          OrderEditApplied         `json:"result"`
+	// [Reference](ctp:api:type:Reference) to a [OrderEdit](ctp:api:type:OrderEdit).
+	Edit   OrderEditReference `json:"edit"`
+	Result OrderEditApplied   `json:"result"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2876,6 +2958,7 @@ func (obj OrderEditAppliedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderImportedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2883,8 +2966,9 @@ type OrderImportedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2919,6 +3003,7 @@ func (obj OrderImportedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderLineItemAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2926,8 +3011,9 @@ type OrderLineItemAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -2963,6 +3049,7 @@ func (obj OrderLineItemAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderLineItemDiscountSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -2970,14 +3057,16 @@ type OrderLineItemDiscountSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy                           `json:"createdBy,omitempty"`
-	SequenceNumber                  int                                  `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                            `json:"resource"`
 	ResourceVersion                 int                                  `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
 	LineItemId                      string                               `json:"lineItemId"`
 	DiscountedPricePerQuantity      []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	TotalPrice Money           `json:"totalPrice"`
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
@@ -3011,6 +3100,7 @@ func (obj OrderLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderLineItemDistributionChannelSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3018,13 +3108,14 @@ type OrderLineItemDistributionChannelSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	LineItemId                      string                   `json:"lineItemId"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
@@ -3056,6 +3147,7 @@ func (obj OrderLineItemDistributionChannelSetMessage) MarshalJSON() ([]byte, err
 }
 
 type OrderLineItemRemovedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3063,8 +3155,9 @@ type OrderLineItemRemovedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3114,6 +3207,7 @@ func (obj OrderLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderPaymentAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3121,12 +3215,14 @@ type OrderPaymentAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Payment                         PaymentReference         `json:"payment"`
+	// [Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
+	Payment PaymentReference `json:"payment"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3157,6 +3253,7 @@ func (obj OrderPaymentAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderPaymentStateChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3164,8 +3261,9 @@ type OrderPaymentStateChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3201,6 +3299,7 @@ func (obj OrderPaymentStateChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderReturnInfoAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3208,8 +3307,9 @@ type OrderReturnInfoAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3244,6 +3344,7 @@ func (obj OrderReturnInfoAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderReturnInfoSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3251,8 +3352,9 @@ type OrderReturnInfoSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3301,6 +3403,7 @@ func (obj OrderReturnInfoSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderReturnShipmentStateChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3308,8 +3411,9 @@ type OrderReturnShipmentStateChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3345,6 +3449,7 @@ func (obj OrderReturnShipmentStateChangedMessage) MarshalJSON() ([]byte, error) 
 }
 
 type OrderShipmentStateChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3352,8 +3457,9 @@ type OrderShipmentStateChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3389,6 +3495,7 @@ func (obj OrderShipmentStateChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderShippingAddressSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3396,8 +3503,9 @@ type OrderShippingAddressSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3433,6 +3541,7 @@ func (obj OrderShippingAddressSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderShippingInfoSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3440,8 +3549,9 @@ type OrderShippingInfoSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3477,6 +3587,7 @@ func (obj OrderShippingInfoSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderShippingRateInputSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3484,8 +3595,9 @@ type OrderShippingRateInputSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3535,6 +3647,7 @@ func (obj OrderShippingRateInputSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderStateChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3542,8 +3655,9 @@ type OrderStateChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3579,6 +3693,7 @@ func (obj OrderStateChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderStateTransitionMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3586,14 +3701,15 @@ type OrderStateTransitionMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	OldState *StateReference `json:"oldState,omitempty"`
 	Force    bool            `json:"force"`
 }
@@ -3626,6 +3742,7 @@ func (obj OrderStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 type OrderStoreSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3633,8 +3750,9 @@ type OrderStoreSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3669,6 +3787,7 @@ func (obj OrderStoreSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelAddedToDeliveryMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3676,8 +3795,9 @@ type ParcelAddedToDeliveryMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3713,6 +3833,7 @@ func (obj ParcelAddedToDeliveryMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelItemsUpdatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3720,8 +3841,9 @@ type ParcelItemsUpdatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3759,6 +3881,7 @@ func (obj ParcelItemsUpdatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelMeasurementsUpdatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3766,8 +3889,9 @@ type ParcelMeasurementsUpdatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3804,6 +3928,7 @@ func (obj ParcelMeasurementsUpdatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelRemovedFromDeliveryMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3811,8 +3936,9 @@ type ParcelRemovedFromDeliveryMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3848,6 +3974,7 @@ func (obj ParcelRemovedFromDeliveryMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelTrackingDataUpdatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3855,8 +3982,9 @@ type ParcelTrackingDataUpdatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3893,6 +4021,7 @@ func (obj ParcelTrackingDataUpdatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3900,8 +4029,9 @@ type PaymentCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3936,6 +4066,7 @@ func (obj PaymentCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentInteractionAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3943,8 +4074,9 @@ type PaymentInteractionAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -3980,6 +4112,7 @@ func (obj PaymentInteractionAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentStatusInterfaceCodeSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -3987,8 +4120,9 @@ type PaymentStatusInterfaceCodeSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4024,6 +4158,7 @@ func (obj PaymentStatusInterfaceCodeSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentStatusStateTransitionMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4031,12 +4166,13 @@ type PaymentStatusStateTransitionMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
 	Force bool           `json:"force"`
 }
@@ -4069,6 +4205,7 @@ func (obj PaymentStatusStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentTransactionAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4076,8 +4213,9 @@ type PaymentTransactionAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4112,6 +4250,7 @@ func (obj PaymentTransactionAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentTransactionStateChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4119,8 +4258,9 @@ type PaymentTransactionStateChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4156,6 +4296,7 @@ func (obj PaymentTransactionStateChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductAddedToCategoryMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4163,13 +4304,15 @@ type ProductAddedToCategoryMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Category                        CategoryReference        `json:"category"`
-	Staged                          bool                     `json:"staged"`
+	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+	Category CategoryReference `json:"category"`
+	Staged   bool              `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4200,6 +4343,7 @@ func (obj ProductAddedToCategoryMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4207,8 +4351,9 @@ type ProductCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4243,6 +4388,7 @@ func (obj ProductCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4250,8 +4396,9 @@ type ProductDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4287,6 +4434,7 @@ func (obj ProductDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductImageAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4294,8 +4442,9 @@ type ProductImageAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4332,6 +4481,7 @@ func (obj ProductImageAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductPriceDiscountsSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4339,8 +4489,9 @@ type ProductPriceDiscountsSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy                             `json:"createdBy,omitempty"`
-	SequenceNumber                  int                                    `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                              `json:"resource"`
 	ResourceVersion                 int                                    `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers               `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4384,6 +4535,7 @@ type ProductPriceDiscountsSetUpdatedPrice struct {
 }
 
 type ProductPriceExternalDiscountSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4391,8 +4543,9 @@ type ProductPriceExternalDiscountSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4432,6 +4585,7 @@ func (obj ProductPriceExternalDiscountSetMessage) MarshalJSON() ([]byte, error) 
 }
 
 type ProductPublishedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4439,8 +4593,9 @@ type ProductPublishedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4477,6 +4632,7 @@ func (obj ProductPublishedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductRemovedFromCategoryMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4484,13 +4640,15 @@ type ProductRemovedFromCategoryMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Category                        CategoryReference        `json:"category"`
-	Staged                          bool                     `json:"staged"`
+	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+	Category CategoryReference `json:"category"`
+	Staged   bool              `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4521,6 +4679,7 @@ func (obj ProductRemovedFromCategoryMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductRevertedStagedChangesMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4528,8 +4687,9 @@ type ProductRevertedStagedChangesMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4564,6 +4724,7 @@ func (obj ProductRevertedStagedChangesMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4571,8 +4732,9 @@ type ProductSelectionCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4614,6 +4776,7 @@ func (obj ProductSelectionCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4621,12 +4784,14 @@ type ProductSelectionDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Name                            LocalizedString          `json:"name"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name LocalizedString `json:"name"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4657,6 +4822,7 @@ func (obj ProductSelectionDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionProductAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4664,12 +4830,14 @@ type ProductSelectionProductAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Product                         ProductReference         `json:"product"`
+	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	Product ProductReference `json:"product"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4700,6 +4868,7 @@ func (obj ProductSelectionProductAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionProductRemovedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4707,12 +4876,14 @@ type ProductSelectionProductRemovedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Product                         ProductReference         `json:"product"`
+	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	Product ProductReference `json:"product"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4743,6 +4914,7 @@ func (obj ProductSelectionProductRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSlugChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4750,13 +4922,16 @@ type ProductSlugChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Slug                            LocalizedString          `json:"slug"`
-	OldSlug                         *LocalizedString         `json:"oldSlug,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Slug LocalizedString `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4787,6 +4962,7 @@ func (obj ProductSlugChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductStateTransitionMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4794,12 +4970,13 @@ type ProductStateTransitionMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
 	Force bool           `json:"force"`
 }
@@ -4832,6 +5009,7 @@ func (obj ProductStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductUnpublishedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4839,8 +5017,9 @@ type ProductUnpublishedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4874,6 +5053,7 @@ func (obj ProductUnpublishedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductVariantAddedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4881,8 +5061,9 @@ type ProductVariantAddedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4918,6 +5099,7 @@ func (obj ProductVariantAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ProductVariantDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4925,8 +5107,9 @@ type ProductVariantDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -4962,6 +5145,7 @@ func (obj ProductVariantDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -4969,8 +5153,9 @@ type ReviewCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -5005,6 +5190,7 @@ func (obj ReviewCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewRatingSetMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -5012,15 +5198,17 @@ type ReviewRatingSetMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	OldRating                       *float64                 `json:"oldRating,omitempty"`
 	NewRating                       *float64                 `json:"newRating,omitempty"`
 	IncludedInStatistics            bool                     `json:"includedInStatistics"`
-	Target                          Reference                `json:"target,omitempty"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Target Reference `json:"target,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5058,6 +5246,7 @@ func (obj ReviewRatingSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewStateTransitionMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -5065,19 +5254,21 @@ type ReviewStateTransitionMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	OldState StateReference `json:"oldState"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	NewState                StateReference `json:"newState"`
 	OldIncludedInStatistics bool           `json:"oldIncludedInStatistics"`
 	NewIncludedInStatistics bool           `json:"newIncludedInStatistics"`
-	Target                  Reference      `json:"target"`
-	Force                   bool           `json:"force"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Target Reference `json:"target"`
+	Force  bool      `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5115,6 +5306,7 @@ func (obj ReviewStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 type StoreCreatedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -5122,16 +5314,18 @@ type StoreCreatedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy                `json:"createdBy,omitempty"`
-	SequenceNumber                  int                       `json:"sequenceNumber"`
-	Resource                        Reference                 `json:"resource"`
-	ResourceVersion                 int                       `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers  `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Name                            *LocalizedString          `json:"name,omitempty"`
-	Languages                       []string                  `json:"languages"`
-	DistributionChannels            []ChannelReference        `json:"distributionChannels"`
-	SupplyChannels                  []ChannelReference        `json:"supplyChannels"`
-	ProductSelections               []ProductSelectionSetting `json:"productSelections"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name                 *LocalizedString          `json:"name,omitempty"`
+	Languages            []string                  `json:"languages"`
+	DistributionChannels []ChannelReference        `json:"distributionChannels"`
+	SupplyChannels       []ChannelReference        `json:"supplyChannels"`
+	ProductSelections    []ProductSelectionSetting `json:"productSelections"`
 	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
 	Custom *CustomFields `json:"custom,omitempty"`
 }
@@ -5164,6 +5358,7 @@ func (obj StoreCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type StoreDeletedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -5171,8 +5366,9 @@ type StoreDeletedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy               `json:"createdBy,omitempty"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -5206,6 +5402,7 @@ func (obj StoreDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type StoreProductSelectionsChangedMessage struct {
+	// Platform-generated unique identifier of the Message.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -5213,8 +5410,9 @@ type StoreProductSelectionsChangedMessage struct {
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy                       *CreatedBy                `json:"createdBy,omitempty"`
-	SequenceNumber                  int                       `json:"sequenceNumber"`
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                 `json:"resource"`
 	ResourceVersion                 int                       `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers  `json:"resourceUserProvidedIdentifiers,omitempty"`
@@ -5273,12 +5471,14 @@ func (obj StoreProductSelectionsChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 type UserProvidedIdentifiers struct {
-	Key            *string          `json:"key,omitempty"`
-	ExternalId     *string          `json:"externalId,omitempty"`
-	OrderNumber    *string          `json:"orderNumber,omitempty"`
-	CustomerNumber *string          `json:"customerNumber,omitempty"`
-	Sku            *string          `json:"sku,omitempty"`
-	Slug           *LocalizedString `json:"slug,omitempty"`
+	// User-provided unique identifier of the resource.
+	Key            *string `json:"key,omitempty"`
+	ExternalId     *string `json:"externalId,omitempty"`
+	OrderNumber    *string `json:"orderNumber,omitempty"`
+	CustomerNumber *string `json:"customerNumber,omitempty"`
+	Sku            *string `json:"sku,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Slug *LocalizedString `json:"slug,omitempty"`
 	// Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
 	ContainerAndKey *ContainerAndKey `json:"containerAndKey,omitempty"`
 }
@@ -5643,7 +5843,9 @@ func (obj CategoryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySlugChangedMessagePayload struct {
-	Slug    LocalizedString  `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Slug LocalizedString `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
@@ -5796,7 +5998,7 @@ func (obj CustomerFirstNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerGroupSetMessagePayload struct {
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 }
 
@@ -5869,7 +6071,7 @@ func (obj InventoryEntryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 type InventoryEntryDeletedMessagePayload struct {
 	Sku string `json:"sku"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -5888,7 +6090,7 @@ type InventoryEntryQuantitySetMessagePayload struct {
 	NewQuantityOnStock   int `json:"newQuantityOnStock"`
 	OldAvailableQuantity int `json:"oldAvailableQuantity"`
 	NewAvailableQuantity int `json:"newAvailableQuantity"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -6173,9 +6375,9 @@ type CustomLineItemStateTransitionMessagePayload struct {
 	CustomLineItemId string    `json:"customLineItemId"`
 	TransitionDate   time.Time `json:"transitionDate"`
 	Quantity         int       `json:"quantity"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	FromState StateReference `json:"fromState"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	ToState StateReference `json:"toState"`
 }
 
@@ -6253,9 +6455,9 @@ type LineItemStateTransitionMessagePayload struct {
 	LineItemId     string    `json:"lineItemId"`
 	TransitionDate time.Time `json:"transitionDate"`
 	Quantity       int       `json:"quantity"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	FromState StateReference `json:"fromState"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	ToState StateReference `json:"toState"`
 }
 
@@ -6330,9 +6532,9 @@ func (obj OrderCustomerEmailSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCustomerGroupSetMessagePayload struct {
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -6347,11 +6549,13 @@ func (obj OrderCustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderCustomerSetMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	OldCustomer   *CustomerReference      `json:"oldCustomer,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	OldCustomer *CustomerReference `json:"oldCustomer,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -6380,6 +6584,7 @@ func (obj OrderDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderDiscountCodeAddedMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -6394,6 +6599,7 @@ func (obj OrderDiscountCodeAddedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderDiscountCodeRemovedMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -6408,6 +6614,7 @@ func (obj OrderDiscountCodeRemovedMessagePayload) MarshalJSON() ([]byte, error) 
 }
 
 type OrderDiscountCodeStateSetMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 	State        DiscountCodeState     `json:"state"`
 	OldState     *DiscountCodeState    `json:"oldState,omitempty"`
@@ -6424,6 +6631,7 @@ func (obj OrderDiscountCodeStateSetMessagePayload) MarshalJSON() ([]byte, error)
 }
 
 type OrderEditAppliedMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [OrderEdit](ctp:api:type:OrderEdit).
 	Edit   OrderEditReference `json:"edit"`
 	Result OrderEditApplied   `json:"result"`
 }
@@ -6471,6 +6679,7 @@ type OrderLineItemDiscountSetMessagePayload struct {
 	LineItemId                 string                               `json:"lineItemId"`
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	TotalPrice Money           `json:"totalPrice"`
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
@@ -6488,7 +6697,7 @@ func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) 
 
 type OrderLineItemDistributionChannelSetMessagePayload struct {
 	LineItemId string `json:"lineItemId"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
@@ -6542,6 +6751,7 @@ func (obj OrderLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderPaymentAddedMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
 	Payment PaymentReference `json:"payment"`
 }
 
@@ -6727,9 +6937,9 @@ func (obj OrderStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderStateTransitionMessagePayload struct {
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	OldState *StateReference `json:"oldState,omitempty"`
 	Force    bool            `json:"force"`
 }
@@ -6882,7 +7092,7 @@ func (obj PaymentStatusInterfaceCodeSetMessagePayload) MarshalJSON() ([]byte, er
 }
 
 type PaymentStatusStateTransitionMessagePayload struct {
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
 	Force bool           `json:"force"`
 }
@@ -6927,6 +7137,7 @@ func (obj PaymentTransactionStateChangedMessagePayload) MarshalJSON() ([]byte, e
 }
 
 type ProductAddedToCategoryMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
 	Category CategoryReference `json:"category"`
 	Staged   bool              `json:"staged"`
 }
@@ -7036,6 +7247,7 @@ func (obj ProductPublishedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductRemovedFromCategoryMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
 	Category CategoryReference `json:"category"`
 	Staged   bool              `json:"staged"`
 }
@@ -7096,6 +7308,7 @@ func (obj ProductSelectionCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionDeletedMessagePayload struct {
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name LocalizedString `json:"name"`
 }
 
@@ -7110,6 +7323,7 @@ func (obj ProductSelectionDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionProductAddedMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
 	Product ProductReference `json:"product"`
 }
 
@@ -7124,6 +7338,7 @@ func (obj ProductSelectionProductAddedMessagePayload) MarshalJSON() ([]byte, err
 }
 
 type ProductSelectionProductRemovedMessagePayload struct {
+	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
 	Product ProductReference `json:"product"`
 }
 
@@ -7138,7 +7353,9 @@ func (obj ProductSelectionProductRemovedMessagePayload) MarshalJSON() ([]byte, e
 }
 
 type ProductSlugChangedMessagePayload struct {
-	Slug    LocalizedString  `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Slug LocalizedString `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
@@ -7153,7 +7370,7 @@ func (obj ProductSlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductStateTransitionMessagePayload struct {
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateReference `json:"state"`
 	Force bool           `json:"force"`
 }
@@ -7226,10 +7443,11 @@ func (obj ReviewCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewRatingSetMessagePayload struct {
-	OldRating            *float64  `json:"oldRating,omitempty"`
-	NewRating            *float64  `json:"newRating,omitempty"`
-	IncludedInStatistics bool      `json:"includedInStatistics"`
-	Target               Reference `json:"target,omitempty"`
+	OldRating            *float64 `json:"oldRating,omitempty"`
+	NewRating            *float64 `json:"newRating,omitempty"`
+	IncludedInStatistics bool     `json:"includedInStatistics"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Target Reference `json:"target,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -7260,14 +7478,15 @@ func (obj ReviewRatingSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewStateTransitionMessagePayload struct {
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	OldState StateReference `json:"oldState"`
-	// [Reference](/../api/types#reference) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	NewState                StateReference `json:"newState"`
 	OldIncludedInStatistics bool           `json:"oldIncludedInStatistics"`
 	NewIncludedInStatistics bool           `json:"newIncludedInStatistics"`
-	Target                  Reference      `json:"target"`
-	Force                   bool           `json:"force"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Target Reference `json:"target"`
+	Force  bool      `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -7312,6 +7531,7 @@ func (obj ShoppingListStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type StoreCreatedMessagePayload struct {
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name                 *LocalizedString          `json:"name,omitempty"`
 	Languages            []string                  `json:"languages"`
 	DistributionChannels []ChannelReference        `json:"distributionChannels"`

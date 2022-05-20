@@ -19,7 +19,7 @@ type Location struct {
 }
 
 type Zone struct {
-	// Unique ID of the Zone.
+	// Platform-generated unique identifier of the Zone.
 	ID string `json:"id"`
 	// Current version of the Zone.
 	Version int `json:"version"`
@@ -31,7 +31,7 @@ type Zone struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier for the Zone.
+	// User-defined unique identifier of the Zone.
 	Key *string `json:"key,omitempty"`
 	// Name of the Zone.
 	Name string `json:"name"`
@@ -80,10 +80,9 @@ func (obj ZoneDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type ZonePagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or the server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -98,11 +97,11 @@ type ZonePagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/types#reference) to a [Zone](ctp:api:type:Zone).
+*	[Reference](ctp:api:type:Reference) to a [Zone](ctp:api:type:Zone).
 *
  */
 type ZoneReference struct {
-	// Unique ID of the referenced [Zone](ctp:api:type:Zone).
+	// Platform-generated unique identifier of the referenced [Zone](ctp:api:type:Zone).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Zone. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Zones.
 	Obj *Zone `json:"obj,omitempty"`
@@ -119,13 +118,13 @@ func (obj ZoneReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Zone](ctp:api:type:Zone).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Zone](ctp:api:type:Zone).
 *
  */
 type ZoneResourceIdentifier struct {
-	// Unique ID of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 

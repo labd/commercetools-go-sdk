@@ -54,10 +54,6 @@ func (rb *ByProjectKeyExtensionsRequestMethodPost) WithHeaders(headers http.Head
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Currently, a maximum of 25 extensions can be created per project.
- */
 func (rb *ByProjectKeyExtensionsRequestMethodPost) Execute(ctx context.Context) (result *Extension, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

@@ -32,9 +32,6 @@ func (rb *ByProjectKeyExtensionsRequestBuilder) Get() *ByProjectKeyExtensionsReq
 	}
 }
 
-/**
-*	Currently, a maximum of 25 extensions can be created per project.
- */
 func (rb *ByProjectKeyExtensionsRequestBuilder) Post(body ExtensionDraft) *ByProjectKeyExtensionsRequestMethodPost {
 	return &ByProjectKeyExtensionsRequestMethodPost{
 		body:   body,

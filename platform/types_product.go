@@ -95,7 +95,7 @@ func (obj FilteredFacetResult) MarshalJSON() ([]byte, error) {
 }
 
 type Product struct {
-	// The unique ID of the product.
+	// Platform-generated unique identifier of the Product.
 	ID string `json:"id"`
 	// The current version of the product.
 	Version        int       `json:"version"`
@@ -105,8 +105,8 @@ type Product struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-specific unique identifier for the product.
-	// *Product keys are different from product variant keys.*
+	// User-defined unique identifier of the Product.
+	// *Product keys are different from ProductVariant keys.*
 	Key         *string              `json:"key,omitempty"`
 	ProductType ProductTypeReference `json:"productType"`
 	// The product data in the master catalog.
@@ -115,6 +115,8 @@ type Product struct {
 	State       *StateReference       `json:"state,omitempty"`
 	// Statistics about the review ratings taken into account for this product.
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
+	// Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
 type ProductCatalogData struct {
@@ -125,17 +127,23 @@ type ProductCatalogData struct {
 }
 
 type ProductData struct {
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name               LocalizedString     `json:"name"`
 	Categories         []CategoryReference `json:"categories"`
 	CategoryOrderHints *CategoryOrderHints `json:"categoryOrderHints,omitempty"`
-	Description        *LocalizedString    `json:"description,omitempty"`
-	Slug               LocalizedString     `json:"slug"`
-	MetaTitle          *LocalizedString    `json:"metaTitle,omitempty"`
-	MetaDescription    *LocalizedString    `json:"metaDescription,omitempty"`
-	MetaKeywords       *LocalizedString    `json:"metaKeywords,omitempty"`
-	MasterVariant      ProductVariant      `json:"masterVariant"`
-	Variants           []ProductVariant    `json:"variants"`
-	SearchKeywords     SearchKeywords      `json:"searchKeywords"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Description *LocalizedString `json:"description,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Slug LocalizedString `json:"slug"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	MetaKeywords   *LocalizedString `json:"metaKeywords,omitempty"`
+	MasterVariant  ProductVariant   `json:"masterVariant"`
+	Variants       []ProductVariant `json:"variants"`
+	SearchKeywords SearchKeywords   `json:"searchKeywords"`
 }
 
 type ProductDraft struct {
@@ -148,7 +156,7 @@ type ProductDraft struct {
 	// Slugs have a maximum size of 256.
 	// Valid characters are: alphabetic characters (`A-Z, a-z`), numeric characters (`0-9`), underscores (`_`) and hyphens (`-`).
 	Slug LocalizedString `json:"slug"`
-	// User-specific unique identifier for the product.
+	// User-defined unique identifier for the Product.
 	Key         *string          `json:"key,omitempty"`
 	Description *LocalizedString `json:"description,omitempty"`
 	// Categories assigned to the product.
@@ -167,6 +175,8 @@ type ProductDraft struct {
 	State          *StateResourceIdentifier       `json:"state,omitempty"`
 	// If `true`, the product is published immediately.
 	Publish *bool `json:"publish,omitempty"`
+	// Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -197,12 +207,26 @@ func (obj ProductDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ProductPagedQueryResponse struct {
-	Limit   int       `json:"limit"`
-	Count   int       `json:"count"`
-	Total   *int      `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int       `json:"offset"`
 	Results []Product `json:"results"`
 }
+
+/**
+*
+*	This mode specifies which type of prices should be used when looking up the price of a product.
+*
+ */
+type ProductPriceModeEnum string
+
+const (
+	ProductPriceModeEnumEmbedded   ProductPriceModeEnum = "Embedded"
+	ProductPriceModeEnumStandalone ProductPriceModeEnum = "Standalone"
+)
 
 type ProductProjection struct {
 	// The unique ID of the Product.
@@ -235,25 +259,34 @@ type ProductProjection struct {
 }
 
 type ProductProjectionPagedQueryResponse struct {
-	Limit   int                 `json:"limit"`
-	Count   int                 `json:"count"`
-	Total   *int                `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int                 `json:"offset"`
 	Results []ProductProjection `json:"results"`
 }
 
 type ProductProjectionPagedSearchResponse struct {
-	Limit   int                 `json:"limit"`
-	Count   int                 `json:"count"`
-	Total   *int                `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int                 `json:"offset"`
 	Results []ProductProjection `json:"results"`
 	Facets  FacetResults        `json:"facets"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+*
+ */
 type ProductReference struct {
-	// Unique ID of the referenced resource.
-	ID  string   `json:"id"`
+	// Platform-generated unique identifier of the referenced [Product](ctp:api:type:Product).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Product. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Products.
 	Obj *Product `json:"obj,omitempty"`
 }
 
@@ -267,10 +300,14 @@ func (obj ProductReference) MarshalJSON() ([]byte, error) {
 	}{Action: "product", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product).
+*
+ */
 type ProductResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -542,6 +579,12 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setPriceMode":
+		obj := ProductSetPriceModeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setPrices":
 		obj := ProductSetPricesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -601,8 +644,11 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 }
 
 type ProductVariant struct {
-	ID                    int                         `json:"id"`
-	Sku                   *string                     `json:"sku,omitempty"`
+	// Platform-generated sequential and unique identifier of the ProductVariant within the Product.
+	ID  int     `json:"id"`
+	Sku *string `json:"sku,omitempty"`
+	// User-defined unique identifier of the ProductVariant.
+	// *ProductVariant keys are different from Product keys.*
 	Key                   *string                     `json:"key,omitempty"`
 	Prices                []Price                     `json:"prices"`
 	Attributes            []Attribute                 `json:"attributes"`
@@ -665,7 +711,9 @@ type ProductVariantChannelAvailability struct {
 
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
 type ProductVariantDraft struct {
-	Sku        *string      `json:"sku,omitempty"`
+	Sku *string `json:"sku,omitempty"`
+	// User-defined unique identifier for the ProductVariant.
+	// *ProductVariant keys are different from Product keys.*
 	Key        *string      `json:"key,omitempty"`
 	Prices     []PriceDraft `json:"prices"`
 	Attributes []Attribute  `json:"attributes"`
@@ -1020,7 +1068,7 @@ func (obj ProductChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductChangePriceAction struct {
-	// ID of the [Price](#price)
+	// ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
 	PriceId string     `json:"priceId"`
 	Price   PriceDraft `json:"price"`
 	Staged  *bool      `json:"staged,omitempty"`
@@ -1154,7 +1202,7 @@ func (obj ProductRemoveImageAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductRemovePriceAction struct {
-	// ID of the [Price](#price)
+	// ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
 	PriceId string `json:"priceId"`
 	Staged  *bool  `json:"staged,omitempty"`
 }
@@ -1515,6 +1563,21 @@ func (obj ProductSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMetaTitle", Alias: (*Alias)(&obj)})
+}
+
+type ProductSetPriceModeAction struct {
+	// Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSetPriceModeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSetPriceModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setPriceMode", Alias: (*Alias)(&obj)})
 }
 
 type ProductSetPricesAction struct {

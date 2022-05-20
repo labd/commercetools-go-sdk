@@ -9,7 +9,7 @@ import (
 )
 
 type Category struct {
-	// The unique ID of the category.
+	// Platform-generated unique identifier of the Category.
 	ID string `json:"id"`
 	// The current version of the category.
 	Version        int       `json:"version"`
@@ -37,7 +37,7 @@ type Category struct {
 	Custom          *CustomFields    `json:"custom,omitempty"`
 	// Can be used to store images, icons or movies related to this category.
 	Assets []Asset `json:"assets"`
-	// User-specific unique identifier for the category.
+	// User-defined unique identifier of the Category.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -85,8 +85,7 @@ type CategoryDraft struct {
 	// The custom fields.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	Assets []AssetDraft       `json:"assets"`
-	// User-defined unique identifier for the category.
-	// Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
+	// User-defined unique identifier for the Category.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -114,16 +113,23 @@ func (obj CategoryDraft) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryPagedQueryResponse struct {
-	Limit   int        `json:"limit"`
-	Count   int        `json:"count"`
-	Total   *int       `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int        `json:"offset"`
 	Results []Category `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+*
+ */
 type CategoryReference struct {
-	// Unique ID of the referenced resource.
-	ID  string    `json:"id"`
+	// Platform-generated unique identifier of the referenced [Category](ctp:api:type:Category).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Category. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Categories.
 	Obj *Category `json:"obj,omitempty"`
 }
 
@@ -137,10 +143,14 @@ func (obj CategoryReference) MarshalJSON() ([]byte, error) {
 	}{Action: "category", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category).
+*
+ */
 type CategoryResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Category](ctp:api:type:Channel). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Category](ctp:api:type:Category). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 

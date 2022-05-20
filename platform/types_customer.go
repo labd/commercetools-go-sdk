@@ -15,8 +15,15 @@ const (
 	AnonymousCartSignInModeUseAsNewActiveCustomerCart    AnonymousCartSignInMode = "UseAsNewActiveCustomerCart"
 )
 
+type AuthenticationMode string
+
+const (
+	AuthenticationModePassword     AuthenticationMode = "Password"
+	AuthenticationModeExternalAuth AuthenticationMode = "ExternalAuth"
+)
+
 type Customer struct {
-	// The unique ID of the customer.
+	// Platform-generated unique identifier of the Customer.
 	ID string `json:"id"`
 	// The current version of the customer.
 	Version        int       `json:"version"`
@@ -33,8 +40,9 @@ type Customer struct {
 	// The customer's email address and the main identifier of uniqueness for a customer account.
 	// Email addresses are either unique to the store they're specified for, _or_ for the entire project.
 	// For more information, see Email uniquenes.
-	Email       string  `json:"email"`
-	Password    string  `json:"password"`
+	Email string `json:"email"`
+	// Only present with the default `authenticationMode`, `Password`.
+	Password    *string `json:"password,omitempty"`
 	FirstName   *string `json:"firstName,omitempty"`
 	LastName    *string `json:"lastName,omitempty"`
 	MiddleName  *string `json:"middleName,omitempty"`
@@ -58,14 +66,14 @@ type Customer struct {
 	Custom            *CustomFields           `json:"custom,omitempty"`
 	Locale            *string                 `json:"locale,omitempty"`
 	Salutation        *string                 `json:"salutation,omitempty"`
-	// User-specific unique identifier for a customer.
-	// Must be unique across a project.
-	// The field can be reset using the Set Key UpdateAction
+	// User-defined unique identifier of the Customer.
 	Key *string `json:"key,omitempty"`
 	// References to the stores the customer account is associated with.
 	// If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
 	// If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
 	Stores []StoreKeyReference `json:"stores"`
+	// Defines whether a Customer has a password.
+	AuthenticationMode *AuthenticationMode `json:"authenticationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -100,6 +108,7 @@ func (obj Customer) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerChangePassword struct {
+	// Platform-generated unique identifier of the Customer.
 	ID              string `json:"id"`
 	Version         int    `json:"version"`
 	CurrentPassword string `json:"currentPassword"`
@@ -107,6 +116,7 @@ type CustomerChangePassword struct {
 }
 
 type CustomerCreateEmailToken struct {
+	// Platform-generated unique identifier of the email token.
 	ID         string `json:"id"`
 	Version    *int   `json:"version,omitempty"`
 	TtlMinutes int    `json:"ttlMinutes"`
@@ -126,8 +136,9 @@ type CustomerDraft struct {
 	// The customer's email address and the main identifier of uniqueness for a customer account.
 	// Email addresses are either unique to the store they're specified for, _or_ for the entire project, and are case insensitive.
 	// For more information, see Email uniquenes.
-	Email      string  `json:"email"`
-	Password   string  `json:"password"`
+	Email string `json:"email"`
+	// Only optional with `authenticationMode` set to `ExternalAuth`.
+	Password   *string `json:"password,omitempty"`
 	FirstName  *string `json:"firstName,omitempty"`
 	LastName   *string `json:"lastName,omitempty"`
 	MiddleName *string `json:"middleName,omitempty"`
@@ -163,14 +174,14 @@ type CustomerDraft struct {
 	// Must be one of the languages supported for this project
 	Locale     *string `json:"locale,omitempty"`
 	Salutation *string `json:"salutation,omitempty"`
-	// User-specific unique identifier for a customer.
-	// Must be unique across a project.
-	// The field can be reset using the Set Key UpdateAction
+	// User-defined unique identifier for the Customer.
 	Key *string `json:"key,omitempty"`
 	// References to the stores the customer account is associated with.
 	// If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
 	// If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
 	Stores []StoreResourceIdentifier `json:"stores"`
+	// Defines whether a password is required for the Customer that is used for platform-internal authentication.
+	AuthenticationMode *AuthenticationMode `json:"authenticationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -214,16 +225,23 @@ type CustomerEmailVerify struct {
 }
 
 type CustomerPagedQueryResponse struct {
-	Limit   int        `json:"limit"`
-	Count   int        `json:"count"`
-	Total   *int       `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int        `json:"offset"`
 	Results []Customer `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+*
+ */
 type CustomerReference struct {
-	// Unique ID of the referenced resource.
-	ID  string    `json:"id"`
+	// Platform-generated unique identifier of the referenced [Customer](ctp:api:type:Customer).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Customers.
 	Obj *Customer `json:"obj,omitempty"`
 }
 
@@ -243,10 +261,14 @@ type CustomerResetPassword struct {
 	Version     *int   `json:"version,omitempty"`
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer).
+*
+ */
 type CustomerResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Customer](ctp:api:type:Customer). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Customer](ctp:api:type:Customer). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -268,9 +290,10 @@ type CustomerSignInResult struct {
 }
 
 type CustomerSignin struct {
-	Email                   string                   `json:"email"`
-	Password                string                   `json:"password"`
-	AnonymousCartId         *string                  `json:"anonymousCartId,omitempty"`
+	Email           string  `json:"email"`
+	Password        string  `json:"password"`
+	AnonymousCartId *string `json:"anonymousCartId,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart).
 	AnonymousCart           *CartResourceIdentifier  `json:"anonymousCart,omitempty"`
 	AnonymousCartSignInMode *AnonymousCartSignInMode `json:"anonymousCartSignInMode,omitempty"`
 	AnonymousId             *string                  `json:"anonymousId,omitempty"`
@@ -278,6 +301,7 @@ type CustomerSignin struct {
 }
 
 type CustomerToken struct {
+	// Platform-generated unique identifier of the CustomerToken.
 	ID             string     `json:"id"`
 	CreatedAt      time.Time  `json:"createdAt"`
 	LastModifiedAt *time.Time `json:"lastModifiedAt,omitempty"`
@@ -390,6 +414,12 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 		return obj, nil
 	case "setAddressCustomType":
 		obj := CustomerSetAddressCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAuthenticationMode":
+		obj := CustomerSetAuthenticationModeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -515,6 +545,13 @@ type MyCustomerChangePassword struct {
 type MyCustomerResetPassword struct {
 	TokenValue  string `json:"tokenValue"`
 	NewPassword string `json:"newPassword"`
+}
+
+type MyCustomerSignin struct {
+	Email                string                   `json:"email"`
+	Password             string                   `json:"password"`
+	ActiveCartSignInMode *AnonymousCartSignInMode `json:"activeCartSignInMode,omitempty"`
+	UpdateProductData    *bool                    `json:"updateProductData,omitempty"`
 }
 
 type CustomerAddAddressAction struct {
@@ -701,6 +738,22 @@ func (obj CustomerSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type CustomerSetAuthenticationModeAction struct {
+	AuthMode AuthenticationMode `json:"authMode"`
+	// Required when `authMode` is `Password`
+	Password *string `json:"password,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerSetAuthenticationModeAction) MarshalJSON() ([]byte, error) {
+	type Alias CustomerSetAuthenticationModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAuthenticationMode", Alias: (*Alias)(&obj)})
 }
 
 type CustomerSetCompanyNameAction struct {

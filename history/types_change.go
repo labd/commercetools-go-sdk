@@ -3803,10 +3803,10 @@ func (obj SetAssetTagsChange) MarshalJSON() ([]byte, error) {
 
 type SetAttributeChange struct {
 	// Update action for `setAttribute`
-	Change        string      `json:"change"`
-	CatalogData   string      `json:"catalogData"`
-	PreviousValue interface{} `json:"previousValue"`
-	NextValue     interface{} `json:"nextValue"`
+	Change        string         `json:"change"`
+	CatalogData   string         `json:"catalogData"`
+	PreviousValue AttributeValue `json:"previousValue"`
+	NextValue     AttributeValue `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -3925,9 +3925,9 @@ func (obj SetCompanyNameChange) MarshalJSON() ([]byte, error) {
 type SetCountryChange struct {
 	// Update action for `setCountry`
 	Change string `json:"change"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	PreviousValue string `json:"previousValue"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	NextValue string `json:"nextValue"`
 }
 
@@ -5450,10 +5450,10 @@ func (obj SetShippingMethodChange) MarshalJSON() ([]byte, error) {
 
 type SetShippingMethodTaxAmountChange struct {
 	// Update action for `setShippingMethodTaxAmount`
-	Change        string      `json:"change"`
-	TaxMode       TaxMode     `json:"taxMode"`
-	NextValue     interface{} `json:"nextValue"`
-	PreviousValue interface{} `json:"previousValue"`
+	Change        string                             `json:"change"`
+	TaxMode       TaxMode                            `json:"taxMode"`
+	NextValue     ShippingMethodTaxAmountChangeValue `json:"nextValue"`
+	PreviousValue ShippingMethodTaxAmountChangeValue `json:"previousValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

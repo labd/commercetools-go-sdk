@@ -28,6 +28,12 @@ func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) WithHeaders(hea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	This endpoint can be used to simulate which Product Discounts would be applied if a specified Product Variant had a specified Price.
+*	Given Product and Product Variant IDs and a Price, this endpoint will return the [ProductDiscount](ctp:api:type:ProductDiscount) that would have been applied to that Price.
+*
+ */
 func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) Execute(ctx context.Context) (result *ProductDiscount, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
@@ -54,6 +60,13 @@ func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) Execute(ctx con
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
+	case 404:
+		errorObj := NoMatchingProductDiscountFoundError{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	case 400, 401, 403, 500, 502, 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -61,12 +74,6 @@ func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) Execute(ctx con
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		result := GenericRequestError{
-			StatusCode: resp.StatusCode,
-			Content:    content,
-		}
-		return nil, result
 	default:
 		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}

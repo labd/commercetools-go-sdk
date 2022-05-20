@@ -9,7 +9,7 @@ import (
 )
 
 type Review struct {
-	// The unique ID of the review.
+	// Platform-generated unique identifier of the Review.
 	ID string `json:"id"`
 	// The current version of the review.
 	Version        int       `json:"version"`
@@ -19,7 +19,7 @@ type Review struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-specific unique identifier for the review.
+	// User-defined unique identifier of the Review.
 	Key             *string `json:"key,omitempty"`
 	UniquenessValue *string `json:"uniquenessValue,omitempty"`
 	Locale          *string `json:"locale,omitempty"`
@@ -42,7 +42,7 @@ type Review struct {
 }
 
 type ReviewDraft struct {
-	// User-specific unique identifier for the review.
+	// User-defined unique identifier for the Review.
 	Key *string `json:"key,omitempty"`
 	// If set, this value must be unique among reviews.
 	// For example, if you want to have only one review per customer and per product, you can set the value to `customer's id` and `product's id`.
@@ -66,9 +66,11 @@ type ReviewDraft struct {
 }
 
 type ReviewPagedQueryResponse struct {
-	Limit   int      `json:"limit"`
-	Count   int      `json:"count"`
-	Total   *int     `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int      `json:"offset"`
 	Results []Review `json:"results"`
 }
@@ -89,9 +91,14 @@ type ReviewRatingStatistics struct {
 	RatingsDistribution interface{} `json:"ratingsDistribution"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [Review](ctp:api:type:Review).
+*
+ */
 type ReviewReference struct {
-	// Unique ID of the referenced resource.
-	ID  string  `json:"id"`
+	// Platform-generated unique identifier of the referenced [Review](ctp:api:type:Review).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Reviews.
 	Obj *Review `json:"obj,omitempty"`
 }
 
@@ -105,10 +112,14 @@ func (obj ReviewReference) MarshalJSON() ([]byte, error) {
 	}{Action: "review", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review).
+*
+ */
 type ReviewResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 

@@ -9,7 +9,7 @@ import (
 )
 
 type OrderEdit struct {
-	// The unique ID of the OrderEdit.
+	// Platform-generated unique identifier of the OrderEdit.
 	ID string `json:"id"`
 	// The current version of the OrderEdit.
 	Version        int       `json:"version"`
@@ -19,7 +19,7 @@ type OrderEdit struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Unique identifier for this edit.
+	// User-defined unique identifier of the OrderEdit.
 	Key *string `json:"key,omitempty"`
 	// The order to be updated with this edit.
 	Resource OrderReference `json:"resource"`
@@ -64,7 +64,7 @@ type OrderEditApply struct {
 }
 
 type OrderEditDraft struct {
-	// Unique identifier for this edit.
+	// User-defined unique identifier for the OrderEdit.
 	Key *string `json:"key,omitempty"`
 	// The order to be updated with this edit.
 	Resource OrderReference `json:"resource"`
@@ -119,16 +119,23 @@ func (obj OrderEditDraft) MarshalJSON() ([]byte, error) {
 }
 
 type OrderEditPagedQueryResponse struct {
-	Limit   int         `json:"limit"`
-	Count   int         `json:"count"`
-	Total   *int        `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int         `json:"offset"`
 	Results []OrderEdit `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [OrderEdit](ctp:api:type:OrderEdit).
+*
+ */
 type OrderEditReference struct {
-	// Unique ID of the referenced resource.
-	ID  string     `json:"id"`
+	// Platform-generated unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit).
+	ID string `json:"id"`
+	// Contains the representation of the expanded OrderEdit. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for OrderEdits.
 	Obj *OrderEdit `json:"obj,omitempty"`
 }
 
@@ -142,10 +149,14 @@ func (obj OrderEditReference) MarshalJSON() ([]byte, error) {
 	}{Action: "order-edit", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [OrderEdit](ctp:api:type:OrderEdit).
+*
+ */
 type OrderEditResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -422,7 +433,7 @@ func (obj *OrderExcerpt) UnmarshalJSON(data []byte) error {
 }
 
 type StagedOrder struct {
-	// The unique ID of the order.
+	// Platform-generated unique identifier of the Order.
 	ID string `json:"id"`
 	// The current version of the order.
 	Version        int       `json:"version"`
@@ -678,12 +689,14 @@ func (obj OrderEditSetStagedActionsAction) MarshalJSON() ([]byte, error) {
 
 type StagedOrderAddCustomLineItemAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	Money    Money           `json:"money"`
+	Money Money `json:"money"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name     LocalizedString `json:"name"`
-	Quantity *float64        `json:"quantity,omitempty"`
+	Quantity *int            `json:"quantity,omitempty"`
 	Slug     string          `json:"slug"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
@@ -705,7 +718,7 @@ type StagedOrderAddDeliveryAction struct {
 	Address *BaseAddress   `json:"address,omitempty"`
 	Parcels []ParcelDraft  `json:"parcels"`
 	// Custom Fields for the Transaction.
-	Custom *CustomFields `json:"custom,omitempty"`
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -767,17 +780,18 @@ func (obj StagedOrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error)
 type StagedOrderAddLineItemAction struct {
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	ExternalTaxRate     *ExternalTaxRateDraft      `json:"externalTaxRate,omitempty"`
 	ProductId           *string                    `json:"productId,omitempty"`
 	VariantId           *int                       `json:"variantId,omitempty"`
 	Sku                 *string                    `json:"sku,omitempty"`
-	Quantity            *float64                   `json:"quantity,omitempty"`
+	Quantity            *int                       `json:"quantity,omitempty"`
 	AddedAt             *time.Time                 `json:"addedAt,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -826,6 +840,7 @@ func (obj StagedOrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderAddPaymentAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -856,10 +871,11 @@ func (obj StagedOrderAddReturnInfoAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderAddShoppingListAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList).
 	ShoppingList ShoppingListResourceIdentifier `json:"shoppingList"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -876,6 +892,7 @@ func (obj StagedOrderAddShoppingListAction) MarshalJSON() ([]byte, error) {
 type StagedOrderChangeCustomLineItemMoneyAction struct {
 	CustomLineItemId string `json:"customLineItemId"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Money Money `json:"money"`
 }
@@ -891,8 +908,8 @@ func (obj StagedOrderChangeCustomLineItemMoneyAction) MarshalJSON() ([]byte, err
 }
 
 type StagedOrderChangeCustomLineItemQuantityAction struct {
-	CustomLineItemId string  `json:"customLineItemId"`
-	Quantity         float64 `json:"quantity"`
+	CustomLineItemId string `json:"customLineItemId"`
+	Quantity         int    `json:"quantity"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -906,9 +923,10 @@ func (obj StagedOrderChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, 
 }
 
 type StagedOrderChangeLineItemQuantityAction struct {
-	LineItemId string  `json:"lineItemId"`
-	Quantity   float64 `json:"quantity"`
+	LineItemId string `json:"lineItemId"`
+	Quantity   int    `json:"quantity"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1067,6 +1085,7 @@ func (obj StagedOrderRemoveDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderRemoveDiscountCodeAction struct {
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -1095,9 +1114,10 @@ func (obj StagedOrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, err
 }
 
 type StagedOrderRemoveLineItemAction struct {
-	LineItemId string   `json:"lineItemId"`
-	Quantity   *float64 `json:"quantity,omitempty"`
+	LineItemId string `json:"lineItemId"`
+	Quantity   *int   `json:"quantity,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice           *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice      *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1129,6 +1149,7 @@ func (obj StagedOrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, erro
 }
 
 type StagedOrderRemovePaymentAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -1313,7 +1334,7 @@ func (obj StagedOrderSetCustomLineItemTaxRateAction) MarshalJSON() ([]byte, erro
 type StagedOrderSetCustomShippingMethodAction struct {
 	ShippingMethodName string            `json:"shippingMethodName"`
 	ShippingRate       ShippingRateDraft `json:"shippingRate"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
 	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
 }
@@ -1361,7 +1382,7 @@ func (obj StagedOrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetCustomerGroupAction struct {
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 }
 
@@ -1577,7 +1598,7 @@ func (obj StagedOrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 
 type StagedOrderSetLineItemDistributionChannelAction struct {
 	LineItemId string `json:"lineItemId"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -1594,6 +1615,7 @@ func (obj StagedOrderSetLineItemDistributionChannelAction) MarshalJSON() ([]byte
 type StagedOrderSetLineItemPriceAction struct {
 	LineItemId string `json:"lineItemId"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 }
@@ -1698,6 +1720,7 @@ func (obj StagedOrderSetOrderNumberAction) MarshalJSON() ([]byte, error) {
 
 type StagedOrderSetOrderTotalTaxAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalTotalGross  Money             `json:"externalTotalGross"`
 	ExternalTaxPortions []TaxPortionDraft `json:"externalTaxPortions"`
@@ -1926,7 +1949,7 @@ type StagedOrderSetShippingAddressAndCustomShippingMethodAction struct {
 	Address            BaseAddress       `json:"address"`
 	ShippingMethodName string            `json:"shippingMethodName"`
 	ShippingRate       ShippingRateDraft `json:"shippingRate"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory).
 	TaxCategory     *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
 }
@@ -1942,7 +1965,8 @@ func (obj StagedOrderSetShippingAddressAndCustomShippingMethodAction) MarshalJSO
 }
 
 type StagedOrderSetShippingAddressAndShippingMethodAction struct {
-	Address         BaseAddress                       `json:"address"`
+	Address BaseAddress `json:"address"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
 	ShippingMethod  *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft             `json:"externalTaxRate,omitempty"`
 }
@@ -1995,6 +2019,7 @@ func (obj StagedOrderSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, 
 }
 
 type StagedOrderSetShippingMethodAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
 	ShippingMethod  *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft             `json:"externalTaxRate,omitempty"`
 }
@@ -2071,9 +2096,9 @@ func (obj StagedOrderSetShippingRateInputAction) MarshalJSON() ([]byte, error) {
 type StagedOrderTransitionCustomLineItemStateAction struct {
 	CustomLineItemId string `json:"customLineItemId"`
 	Quantity         int    `json:"quantity"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	FromState StateResourceIdentifier `json:"fromState"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	ToState              StateResourceIdentifier `json:"toState"`
 	ActualTransitionDate *time.Time              `json:"actualTransitionDate,omitempty"`
 }
@@ -2091,9 +2116,9 @@ func (obj StagedOrderTransitionCustomLineItemStateAction) MarshalJSON() ([]byte,
 type StagedOrderTransitionLineItemStateAction struct {
 	LineItemId string `json:"lineItemId"`
 	Quantity   int    `json:"quantity"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	FromState StateResourceIdentifier `json:"fromState"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	ToState              StateResourceIdentifier `json:"toState"`
 	ActualTransitionDate *time.Time              `json:"actualTransitionDate,omitempty"`
 }
@@ -2109,7 +2134,7 @@ func (obj StagedOrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error
 }
 
 type StagedOrderTransitionStateAction struct {
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	State StateResourceIdentifier `json:"state"`
 	Force *bool                   `json:"force,omitempty"`
 }
@@ -2139,7 +2164,7 @@ func (obj StagedOrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, err
 }
 
 type StagedOrderUpdateSyncInfoAction struct {
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	Channel    ChannelResourceIdentifier `json:"channel"`
 	ExternalId *string                   `json:"externalId,omitempty"`
 	SyncedAt   *time.Time                `json:"syncedAt,omitempty"`

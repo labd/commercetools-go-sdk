@@ -4,6 +4,7 @@ package history
 
 type LocalizedString map[string]string
 type Address struct {
+	// Unique ID of the Address.
 	ID                   string `json:"id"`
 	Key                  string `json:"key"`
 	Title                string `json:"title"`
@@ -17,7 +18,7 @@ type Address struct {
 	City                 string `json:"city"`
 	Region               string `json:"region"`
 	State                string `json:"state"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country               string `json:"country"`
 	Company               string `json:"company"`
 	Department            string `json:"department"`
@@ -62,7 +63,7 @@ const (
 )
 
 type AttributeDefinition struct {
-	Type interface{} `json:"type"`
+	Type AttributeType `json:"type"`
 	// The unique name of the attribute used in the API. The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`). When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types, otherwise an AttributeDefinitionAlreadyExists error code will be returned. An exception to this are the values of an `enum` or `lenum` type and sets thereof.
 	Name  string          `json:"name"`
 	Label LocalizedString `json:"label"`
@@ -73,6 +74,10 @@ type AttributeDefinition struct {
 	InputHint           TextInputHint           `json:"inputHint"`
 	// Whether the attribute's values should generally be enabled in product search. This determines whether the value is stored in products for matching terms in the context of full-text search queries  and can be used in facets & filters as part of product search queries. The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there. The max size of a searchable field is **restricted to 10922 characters**. This constraint is enforced at both product creation and product update. If the length of the input exceeds the maximum size an InvalidField error is returned.
 	IsSearchable bool `json:"isSearchable"`
+}
+
+type AttributeType struct {
+	Name string `json:"name"`
 }
 
 type CategoryOrderHints map[string]string
@@ -152,12 +157,15 @@ type DiscountedLineItemPriceForQuantity struct {
 }
 
 type FieldDefinition struct {
-	// Describes the type of the field.
-	Type interface{} `json:"type"`
+	Type FieldType `json:"type"`
 	// The name of the field. The name must be between two and 36 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`). The name must be unique for a given resource type ID. In case there is a field with the same name in another type it has to have the same FieldType also.
 	Name      string          `json:"name"`
 	Label     LocalizedString `json:"label"`
 	InputHint TextInputHint   `json:"inputHint"`
+}
+
+type FieldType struct {
+	Name string `json:"name"`
 }
 
 type GeoLocation struct {
@@ -194,6 +202,11 @@ type ItemState struct {
 	State    Reference `json:"state"`
 }
 
+type KeyReference struct {
+	Key    string          `json:"key"`
+	TypeId ReferenceTypeId `json:"typeId"`
+}
+
 type LineItem struct {
 	AddedAt     string          `json:"addedAt"`
 	Custom      CustomFields    `json:"custom"`
@@ -211,13 +224,13 @@ type LineItem struct {
 *	Shape of the value for `addLocation` and `removeLocation` actions
  */
 type Location struct {
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country string `json:"country"`
 	State   string `json:"state"`
 }
 
 type Money struct {
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode   string    `json:"currencyCode"`
 	CentAmount     int       `json:"centAmount"`
 	FractionDigits int       `json:"fractionDigits"`
@@ -499,7 +512,7 @@ type TaxRate struct {
 	// Percentage in the range of [0..1]. The sum of the amounts of all `subRates`, if there are any.
 	Amount          int  `json:"amount"`
 	IncludedInPrice bool `json:"includedInPrice"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country string `json:"country"`
 	// The state in the country
 	State    string    `json:"state"`

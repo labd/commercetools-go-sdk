@@ -135,6 +135,7 @@ func (obj StoreDraft) MarshalJSON() ([]byte, error) {
 }
 
 type StoreKeyReference struct {
+	// User-defined unique and immutable key of the referenced resource.
 	Key string `json:"key"`
 }
 
@@ -149,9 +150,11 @@ func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 type StorePagedQueryResponse struct {
-	Limit   int     `json:"limit"`
-	Count   int     `json:"count"`
-	Total   *int    `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int     `json:"offset"`
 	Results []Store `json:"results"`
 }
@@ -173,9 +176,9 @@ func (obj StoreReference) MarshalJSON() ([]byte, error) {
 }
 
 type StoreResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced resource. Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -342,8 +345,10 @@ func (obj StoreAddDistributionChannelAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreAddProductSelectionAction struct {
-	// A Product Selection to be added to the current Product Selections of this Store.
-	ProductSelection ProductSelectionSettingDraft `json:"productSelection"`
+	// Resource Identifier of a Product Selection
+	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
+	// If `true` all Products assigned to this Product Selection become part of the Store's assortment.
+	Active *bool `json:"active,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -9,7 +9,7 @@ import (
 )
 
 type InventoryEntry struct {
-	// The unique ID of the inventory entry.
+	// Platform-generated unique identifier of the InventoryEntry.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -18,7 +18,9 @@ type InventoryEntry struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	Sku       string     `json:"sku"`
+	// User-defined unique identifier of the InventoryEntry.
+	Key *string `json:"key,omitempty"`
+	Sku string  `json:"sku"`
 	// Connection to a particular supplier.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 	// Overall amount of stock.
@@ -35,7 +37,9 @@ type InventoryEntry struct {
 }
 
 type InventoryEntryDraft struct {
-	Sku               string                     `json:"sku"`
+	Sku string `json:"sku"`
+	// User-defined unique identifier for the InventoryEntry.
+	Key               *string                    `json:"key,omitempty"`
 	SupplyChannel     *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	QuantityOnStock   int                        `json:"quantityOnStock"`
 	RestockableInDays *int                       `json:"restockableInDays,omitempty"`
@@ -44,9 +48,14 @@ type InventoryEntryDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [InventoryEntry](ctp:api:type:InventoryEntry).
+*
+ */
 type InventoryEntryReference struct {
-	// Unique ID of the referenced resource.
-	ID  string          `json:"id"`
+	// Platform-generated unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry).
+	ID string `json:"id"`
+	// Contains the representation of the expanded InventoryEntry. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for InventoryEntries.
 	Obj *InventoryEntry `json:"obj,omitempty"`
 }
 
@@ -60,10 +69,14 @@ func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 	}{Action: "inventory-entry", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [InventoryEntry](ctp:api:type:InventoryEntry).
+*
+ */
 type InventoryEntryResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -149,6 +162,12 @@ func mapDiscriminatorInventoryEntryUpdateAction(input interface{}) (InventoryEnt
 			return nil, err
 		}
 		return obj, nil
+	case "setKey":
+		obj := InventoryEntrySetKeyAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setRestockableInDays":
 		obj := InventoryEntrySetRestockableInDaysAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -166,9 +185,11 @@ func mapDiscriminatorInventoryEntryUpdateAction(input interface{}) (InventoryEnt
 }
 
 type InventoryPagedQueryResponse struct {
-	Limit   int              `json:"limit"`
-	Count   int              `json:"count"`
-	Total   *int             `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int              `json:"offset"`
 	Results []InventoryEntry `json:"results"`
 }
@@ -264,6 +285,21 @@ func (obj InventoryEntrySetExpectedDeliveryAction) MarshalJSON() ([]byte, error)
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setExpectedDelivery", Alias: (*Alias)(&obj)})
+}
+
+type InventoryEntrySetKeyAction struct {
+	// Value to set. If empty, any existing value will be removed.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntrySetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
 type InventoryEntrySetRestockableInDaysAction struct {

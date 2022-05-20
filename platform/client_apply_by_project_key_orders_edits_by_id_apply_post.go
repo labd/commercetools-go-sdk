@@ -28,10 +28,10 @@ func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) WithHeaders(headers
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context.Context) error {
+func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context.Context) (result *OrderEdit, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	queryParams := url.Values{}
 	resp, err := rb.client.post(
@@ -43,29 +43,32 @@ func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context
 	)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
+	case 200:
+		err = json.Unmarshal(content, &result)
+		return result, nil
 	case 400, 401, 403, 500, 502, 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return errorObj
+		return nil, errorObj
 	case 404:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
 		}
-		return result
+		return nil, result
 	default:
-		return fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
+		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

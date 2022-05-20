@@ -9,10 +9,18 @@ import (
 )
 
 type PagedQueryResponse struct {
-	Limit   int            `json:"limit"`
-	Count   int            `json:"count"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int `json:"limit"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total   *int           `json:"total,omitempty"`
-	Offset  int            `json:"offset"`
 	Results []BaseResource `json:"results"`
 	Meta    *interface{}   `json:"meta,omitempty"`
 }
@@ -27,14 +35,19 @@ type UpdateAction struct {
 }
 
 type Asset struct {
-	ID          string           `json:"id"`
-	Sources     []AssetSource    `json:"sources"`
-	Name        LocalizedString  `json:"name"`
+	// Platform-generated unique identifier of the Asset.
+	ID      string        `json:"id"`
+	Sources []AssetSource `json:"sources"`
+	// Name of the Asset.
+	Name LocalizedString `json:"name"`
+	// Description of the Asset.
 	Description *LocalizedString `json:"description,omitempty"`
-	Tags        []string         `json:"tags"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// Keywords for categorizing and organizing Assets.
+	Tags []string `json:"tags"`
+	// Custom Fields defined for the Asset.
 	Custom *CustomFields `json:"custom,omitempty"`
-	Key    *string       `json:"key,omitempty"`
+	// User-defined unique identifier of the Asset.
+	Key *string `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -60,19 +73,29 @@ func (obj Asset) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	Dimensions of the Asset source specified by the number of pixels.
+*
+ */
 type AssetDimensions struct {
+	// Width of the Asset source.
 	W int `json:"w"`
+	// Height of the Asset source.
 	H int `json:"h"`
 }
 
 type AssetDraft struct {
-	Sources     []AssetSource    `json:"sources"`
-	Name        LocalizedString  `json:"name"`
+	Sources []AssetSource `json:"sources"`
+	// Name of the Asset.
+	Name LocalizedString `json:"name"`
+	// Description of the Asset.
 	Description *LocalizedString `json:"description,omitempty"`
-	Tags        []string         `json:"tags"`
-	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	// Keywords for categorizing and organizing Assets.
+	Tags []string `json:"tags"`
+	// Custom Fields defined for the Asset.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	Key    *string            `json:"key,omitempty"`
+	// User-defined unique identifier for the Asset.
+	Key *string `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -98,100 +121,182 @@ func (obj AssetDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	Representation of an [Asset](#asset) in a specific format, for example a video in a certain encoding, or an image in a certain resolution.
+*
+ */
 type AssetSource struct {
-	Uri         string           `json:"uri"`
-	Key         *string          `json:"key,omitempty"`
-	Dimensions  *AssetDimensions `json:"dimensions,omitempty"`
-	ContentType *string          `json:"contentType,omitempty"`
+	// URI of the AssetSource.
+	Uri string `json:"uri"`
+	// User-defined unique identifier of the AssetSource.
+	Key *string `json:"key,omitempty"`
+	// Width and height of the AssetSource.
+	Dimensions *AssetDimensions `json:"dimensions,omitempty"`
+	// Indicates the type of content, for example `application/pdf`.
+	ContentType *string `json:"contentType,omitempty"`
 }
 
 type BaseAddress struct {
-	ID                   *string `json:"id,omitempty"`
-	Key                  *string `json:"key,omitempty"`
-	Title                *string `json:"title,omitempty"`
-	Salutation           *string `json:"salutation,omitempty"`
-	FirstName            *string `json:"firstName,omitempty"`
-	LastName             *string `json:"lastName,omitempty"`
-	StreetName           *string `json:"streetName,omitempty"`
-	StreetNumber         *string `json:"streetNumber,omitempty"`
+	// Platform-generated unique identifier of the Address.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the Address.
+	Key *string `json:"key,omitempty"`
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	Country string `json:"country"`
+	// Title of the contact, for example 'Dr.'
+	Title *string `json:"title,omitempty"`
+	// Salutation of the contact, for example 'Mr.' or 'Ms.'
+	Salutation *string `json:"salutation,omitempty"`
+	// Given name (first name) of the contact.
+	FirstName *string `json:"firstName,omitempty"`
+	// Family name (last name) of the contact.
+	LastName *string `json:"lastName,omitempty"`
+	// Name of the street.
+	StreetName *string `json:"streetName,omitempty"`
+	// Street number.
+	StreetNumber *string `json:"streetNumber,omitempty"`
+	// Further information on the street address.
 	AdditionalStreetInfo *string `json:"additionalStreetInfo,omitempty"`
-	PostalCode           *string `json:"postalCode,omitempty"`
-	City                 *string `json:"city,omitempty"`
-	Region               *string `json:"region,omitempty"`
-	State                *string `json:"state,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	Country               string  `json:"country"`
-	Company               *string `json:"company,omitempty"`
-	Department            *string `json:"department,omitempty"`
-	Building              *string `json:"building,omitempty"`
-	Apartment             *string `json:"apartment,omitempty"`
-	POBox                 *string `json:"pOBox,omitempty"`
-	Phone                 *string `json:"phone,omitempty"`
-	Mobile                *string `json:"mobile,omitempty"`
-	Email                 *string `json:"email,omitempty"`
-	Fax                   *string `json:"fax,omitempty"`
+	// Postal code.
+	PostalCode *string `json:"postalCode,omitempty"`
+	// Name of the city.
+	City *string `json:"city,omitempty"`
+	// Name of the region.
+	Region *string `json:"region,omitempty"`
+	// Name of the state, for example, Colorado.
+	State *string `json:"state,omitempty"`
+	// Name of the company.
+	Company *string `json:"company,omitempty"`
+	// Name of the department.
+	Department *string `json:"department,omitempty"`
+	// Number or name of the building.
+	Building *string `json:"building,omitempty"`
+	// Number or name of the apartment.
+	Apartment *string `json:"apartment,omitempty"`
+	// Post office box number.
+	POBox *string `json:"pOBox,omitempty"`
+	// Phone number of the contact.
+	Phone *string `json:"phone,omitempty"`
+	// Mobile phone number of the contact.
+	Mobile *string `json:"mobile,omitempty"`
+	// Email address of the contact.
+	Email *string `json:"email,omitempty"`
+	// Fax number of the contact.
+	Fax *string `json:"fax,omitempty"`
+	// Further information on the Address.
 	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
-	ExternalId            *string `json:"externalId,omitempty"`
+	// ID for the contact used in an external system.
+	ExternalId *string `json:"externalId,omitempty"`
 }
 
 type Address struct {
-	ID                   *string `json:"id,omitempty"`
-	Key                  *string `json:"key,omitempty"`
-	Title                *string `json:"title,omitempty"`
-	Salutation           *string `json:"salutation,omitempty"`
-	FirstName            *string `json:"firstName,omitempty"`
-	LastName             *string `json:"lastName,omitempty"`
-	StreetName           *string `json:"streetName,omitempty"`
-	StreetNumber         *string `json:"streetNumber,omitempty"`
+	// Platform-generated unique identifier of the Address.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the Address.
+	Key *string `json:"key,omitempty"`
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	Country string `json:"country"`
+	// Title of the contact, for example 'Dr.'
+	Title *string `json:"title,omitempty"`
+	// Salutation of the contact, for example 'Mr.' or 'Ms.'
+	Salutation *string `json:"salutation,omitempty"`
+	// Given name (first name) of the contact.
+	FirstName *string `json:"firstName,omitempty"`
+	// Family name (last name) of the contact.
+	LastName *string `json:"lastName,omitempty"`
+	// Name of the street.
+	StreetName *string `json:"streetName,omitempty"`
+	// Street number.
+	StreetNumber *string `json:"streetNumber,omitempty"`
+	// Further information on the street address.
 	AdditionalStreetInfo *string `json:"additionalStreetInfo,omitempty"`
-	PostalCode           *string `json:"postalCode,omitempty"`
-	City                 *string `json:"city,omitempty"`
-	Region               *string `json:"region,omitempty"`
-	State                *string `json:"state,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	Country               string        `json:"country"`
-	Company               *string       `json:"company,omitempty"`
-	Department            *string       `json:"department,omitempty"`
-	Building              *string       `json:"building,omitempty"`
-	Apartment             *string       `json:"apartment,omitempty"`
-	POBox                 *string       `json:"pOBox,omitempty"`
-	Phone                 *string       `json:"phone,omitempty"`
-	Mobile                *string       `json:"mobile,omitempty"`
-	Email                 *string       `json:"email,omitempty"`
-	Fax                   *string       `json:"fax,omitempty"`
-	AdditionalAddressInfo *string       `json:"additionalAddressInfo,omitempty"`
-	ExternalId            *string       `json:"externalId,omitempty"`
-	Custom                *CustomFields `json:"custom,omitempty"`
+	// Postal code.
+	PostalCode *string `json:"postalCode,omitempty"`
+	// Name of the city.
+	City *string `json:"city,omitempty"`
+	// Name of the region.
+	Region *string `json:"region,omitempty"`
+	// Name of the state, for example, Colorado.
+	State *string `json:"state,omitempty"`
+	// Name of the company.
+	Company *string `json:"company,omitempty"`
+	// Name of the department.
+	Department *string `json:"department,omitempty"`
+	// Number or name of the building.
+	Building *string `json:"building,omitempty"`
+	// Number or name of the apartment.
+	Apartment *string `json:"apartment,omitempty"`
+	// Post office box number.
+	POBox *string `json:"pOBox,omitempty"`
+	// Phone number of the contact.
+	Phone *string `json:"phone,omitempty"`
+	// Mobile phone number of the contact.
+	Mobile *string `json:"mobile,omitempty"`
+	// Email address of the contact.
+	Email *string `json:"email,omitempty"`
+	// Fax number of the contact.
+	Fax *string `json:"fax,omitempty"`
+	// Further information on the Address.
+	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
+	// ID for the contact used in an external system.
+	ExternalId *string `json:"externalId,omitempty"`
+	// Custom Fields defined for the Address.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type AddressDraft struct {
-	ID                   *string `json:"id,omitempty"`
-	Key                  *string `json:"key,omitempty"`
-	Title                *string `json:"title,omitempty"`
-	Salutation           *string `json:"salutation,omitempty"`
-	FirstName            *string `json:"firstName,omitempty"`
-	LastName             *string `json:"lastName,omitempty"`
-	StreetName           *string `json:"streetName,omitempty"`
-	StreetNumber         *string `json:"streetNumber,omitempty"`
+	// Unique identifier for the Address. Not recommended to set it manually since the Platform overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer). Use `key` instead and omit this field to let the Platform generate the ID for the Address.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier for the Address.
+	Key *string `json:"key,omitempty"`
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	Country string `json:"country"`
+	// Title of the contact, for example 'Dr.'
+	Title *string `json:"title,omitempty"`
+	// Salutation of the contact, for example 'Mr.' or 'Ms.'
+	Salutation *string `json:"salutation,omitempty"`
+	// Given name (first name) of the contact.
+	FirstName *string `json:"firstName,omitempty"`
+	// Family name (last name) of the contact.
+	LastName *string `json:"lastName,omitempty"`
+	// Name of the street.
+	StreetName *string `json:"streetName,omitempty"`
+	// Street number.
+	StreetNumber *string `json:"streetNumber,omitempty"`
+	// Further information on the street address.
 	AdditionalStreetInfo *string `json:"additionalStreetInfo,omitempty"`
-	PostalCode           *string `json:"postalCode,omitempty"`
-	City                 *string `json:"city,omitempty"`
-	Region               *string `json:"region,omitempty"`
-	State                *string `json:"state,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	Country               string             `json:"country"`
-	Company               *string            `json:"company,omitempty"`
-	Department            *string            `json:"department,omitempty"`
-	Building              *string            `json:"building,omitempty"`
-	Apartment             *string            `json:"apartment,omitempty"`
-	POBox                 *string            `json:"pOBox,omitempty"`
-	Phone                 *string            `json:"phone,omitempty"`
-	Mobile                *string            `json:"mobile,omitempty"`
-	Email                 *string            `json:"email,omitempty"`
-	Fax                   *string            `json:"fax,omitempty"`
-	AdditionalAddressInfo *string            `json:"additionalAddressInfo,omitempty"`
-	ExternalId            *string            `json:"externalId,omitempty"`
-	Custom                *CustomFieldsDraft `json:"custom,omitempty"`
+	// Postal code.
+	PostalCode *string `json:"postalCode,omitempty"`
+	// Name of the city.
+	City *string `json:"city,omitempty"`
+	// Name of the region.
+	Region *string `json:"region,omitempty"`
+	// Name of the state, for example, Colorado.
+	State *string `json:"state,omitempty"`
+	// Name of the company.
+	Company *string `json:"company,omitempty"`
+	// Name of the department.
+	Department *string `json:"department,omitempty"`
+	// Number or name of the building.
+	Building *string `json:"building,omitempty"`
+	// Number or name of the apartment.
+	Apartment *string `json:"apartment,omitempty"`
+	// Post office box number.
+	POBox *string `json:"pOBox,omitempty"`
+	// Phone number of the contact.
+	Phone *string `json:"phone,omitempty"`
+	// Mobile phone number of the contact.
+	Mobile *string `json:"mobile,omitempty"`
+	// Email address of the contact.
+	Email *string `json:"email,omitempty"`
+	// Fax number of the contact.
+	Fax *string `json:"fax,omitempty"`
+	// Further information on the Address.
+	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
+	// ID for the contact used in an external system.
+	ExternalId *string `json:"externalId,omitempty"`
+	// Custom Fields defined for the Address.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 type BaseResource struct {
@@ -201,23 +306,39 @@ type BaseResource struct {
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 }
 
+/**
+*	These objects represent information about which [API Client](/../api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/client-logging).
+*
+ */
 type ClientLogging struct {
-	ClientId       *string            `json:"clientId,omitempty"`
-	ExternalUserId *string            `json:"externalUserId,omitempty"`
-	Customer       *CustomerReference `json:"customer,omitempty"`
-	AnonymousId    *string            `json:"anonymousId,omitempty"`
+	// `id` of the [APIClient](ctp:api:type:ApiClient) which created the resource.
+	ClientId *string `json:"clientId,omitempty"`
+	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	ExternalUserId *string `json:"externalUserId,omitempty"`
+	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
+	Customer *CustomerReference `json:"customer,omitempty"`
+	// Indicates that the resource was modified during an [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) with the logged ID.
+	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
+/**
+*	Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+ */
 type CreatedBy struct {
-	ClientId       *string            `json:"clientId,omitempty"`
-	ExternalUserId *string            `json:"externalUserId,omitempty"`
-	Customer       *CustomerReference `json:"customer,omitempty"`
-	AnonymousId    *string            `json:"anonymousId,omitempty"`
+	// `id` of the [APIClient](ctp:api:type:ApiClient) which created the resource.
+	ClientId *string `json:"clientId,omitempty"`
+	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	ExternalUserId *string `json:"externalUserId,omitempty"`
+	// Indicates the [Customer](ctp:api:type:Customer) who created the resource using a token from the [password flow](/authorization#password-flow).
+	Customer *CustomerReference `json:"customer,omitempty"`
+	// Indicates the [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) during which the resource was created.
+	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
 type DiscountedPrice struct {
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
-	Value    TypedMoney               `json:"value"`
+	// Money value of the discounted price.
+	Value TypedMoney `json:"value"`
+	// [ProductDiscount](ctp:api:type:ProductDiscount) related to the discounted price.
 	Discount ProductDiscountReference `json:"discount"`
 }
 
@@ -239,12 +360,16 @@ func (obj *DiscountedPrice) UnmarshalJSON(data []byte) error {
 }
 
 type DiscountedPriceDraft struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	Value    Money                    `json:"value"`
+	// Sets the money value for the discounted price.
+	Value Money `json:"value"`
+	// Relates the referenced [ProductDiscount](ctp:api:type:ProductDiscount) to the discounted price.
 	Discount ProductDiscountReference `json:"discount"`
 }
 
+/**
+*	GeoJSON Geometry represents a [Geometry Object](https://datatracker.ietf.org/doc/html/rfc7946#section-3.1) as defined in the GeoJSON standard.
+*
+ */
 type GeoJson interface{}
 
 func mapDiscriminatorGeoJson(input interface{}) (GeoJson, error) {
@@ -270,6 +395,7 @@ func mapDiscriminatorGeoJson(input interface{}) (GeoJson, error) {
 }
 
 type GeoJsonPoint struct {
+	// Longitude (stored on index `[0]`) and latitude (stored on index `[1]`) of the [Point](https://datatracker.ietf.org/doc/html/rfc7946#section-3.1.2).
 	Coordinates []float64 `json:"coordinates"`
 }
 
@@ -294,6 +420,10 @@ type ImageDimensions struct {
 	H int `json:"h"`
 }
 
+/**
+*	A KeyReference represents a loose reference to another resource in the same commercetools Project identified by the resource's `key` field. If available, the `key` is immutable and mandatory. KeyReferences do not support [Reference Expansion](/general-concepts#reference-expansion).
+*
+ */
 type KeyReference interface{}
 
 func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
@@ -318,32 +448,45 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 	return nil, nil
 }
 
+/**
+*	Present on resources modified after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+ */
 type LastModifiedBy struct {
-	ClientId       *string            `json:"clientId,omitempty"`
-	ExternalUserId *string            `json:"externalUserId,omitempty"`
-	Customer       *CustomerReference `json:"customer,omitempty"`
-	AnonymousId    *string            `json:"anonymousId,omitempty"`
+	// `id` of the [APIClient](ctp:api:type:ApiClient) which modified the resource.
+	ClientId *string `json:"clientId,omitempty"`
+	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	ExternalUserId *string `json:"externalUserId,omitempty"`
+	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
+	Customer *CustomerReference `json:"customer,omitempty"`
+	// Indicates the [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) during which the resource was modified.
+	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
+/**
+*	JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+*
+ */
 type LocalizedString map[string]string
 
 /**
 *	Draft type that stores amounts in cent precision for the specified currency.
+*
 *	For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 *
  */
 type Money struct {
-	// amount in the smallest indivisible unit of a currency, such as
+	// Amount in the smallest indivisible unit of a currency, such as:
 	//
-	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	CentAmount int `json:"centAmount"`
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
 }
 
 /**
-*	The platform supports two different types of Money, one for amounts in cent precision and another one for sub-cent amounts up to 12 fraction digits.
+*	The commercetools Platform supports two different types of Money: one for amounts in cent precision and another one for sub-cent amounts up to 20 fraction digits.
+*
  */
 type MoneyType string
 
@@ -353,21 +496,28 @@ const (
 )
 
 type Price struct {
+	// Platform-generated unique identifier of this Price.
 	ID string `json:"id"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	// Money value of this Price.
 	Value TypedMoney `json:"value"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Country for which this Price is valid.
 	Country *string `json:"country,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which this Price is valid.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
-	Channel    *ChannelReference `json:"channel,omitempty"`
-	ValidFrom  *time.Time        `json:"validFrom,omitempty"`
-	ValidUntil *time.Time        `json:"validUntil,omitempty"`
-	Discounted *DiscountedPrice  `json:"discounted,omitempty"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// `ProductDistribution` [Channel](ctp:api:type:Channel) for which this Price is valid.
+	Channel *ChannelReference `json:"channel,omitempty"`
+	// Date and time from which this Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time until this Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
+	// If set, the commercetools Platform uses the DiscountedPrice value for the [LineItem Price selection](/projects/carts#lineitem-price-selection).
+	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
+	Tiers []PriceTier `json:"tiers"`
+	// Custom Fields defined for the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
-	Tiers  []PriceTier   `json:"tiers"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -411,21 +561,31 @@ func (obj Price) MarshalJSON() ([]byte, error) {
 }
 
 type PriceDraft struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Money value of this Price.
 	Value Money `json:"value"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Set this field if this Price is only valid for the specified country.
 	Country *string `json:"country,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// Set this field if this Price is only valid for the referenced [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
-	Channel    *ChannelResourceIdentifier `json:"channel,omitempty"`
-	ValidFrom  *time.Time                 `json:"validFrom,omitempty"`
-	ValidUntil *time.Time                 `json:"validUntil,omitempty"`
-	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
-	Custom     *CustomFieldsDraft    `json:"custom,omitempty"`
-	Tiers      []PriceTierDraft      `json:"tiers"`
+	// Set this field if this Price is only valid for the referenced `ProductDistribution` [Channel](ctp:api:type:Channel).
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Set this field if this Price is valid only valid from the specified date and time.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Set this field if this Price is valid only valid until the specified date and time.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Set this field to add a DiscountedPrice from an external service.
+	//
+	// The commercetools Platform sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
+	// The DiscountedPrice must reference a ProductDiscount with:
+	//
+	// * The `isActive` flag set to `true`.
+	// * A [ProductDiscountValue](ctp:api:type:ProductDiscountValueExternal) of type `external`.
+	// * A `predicate` that matches the [ProductVariant](ctp:api:type:ProductVariant) the Price is referenced from.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
+	// Set this field to specify different Prices for certain [LineItem](ctp:api:type:LineItem) quantities.
+	Tiers []PriceTierDraft `json:"tiers"`
+	// Custom Fields for the Price.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -451,9 +611,22 @@ func (obj PriceDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	A Price tier is selected instead of the default Price when a certain quantity of the [ProductVariant](ctp:api:type:ProductVariant) is [added to a Cart](/projects/carts#add-lineitem) and ordered.
+*	_For example: the Price can be lower if more than 10 items are ordered._
+*	If no Price tier is found for the Order quantity, the base Price is used.
+*	A Price tier is applied for the entire quantity of a Product Variant put as [LineItem](/projects/carts#lineitem) in a Cart as soon as the minimum quantity for the Price tier is reached.
+*	The Price tier is applied per Line Item of the Product Variant. If, for example, the same Product Variant appears in the same Cart as several Line Items, (what can be achieved by different values of a Custom Field on the Line Items) for each Line Item the minimum quantity must be reached to get the Price tier.
+*
+ */
 type PriceTier struct {
+	// Minimum quantity this Price tier is valid for.
+	//
+	// The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
 	MinimumQuantity int `json:"minimumQuantity"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	// Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
+	//
+	// The `currencyCode` of a Price tier is always the same as the `currencyCode` in the `value` of the related Price.
 	Value TypedMoney `json:"value"`
 }
 
@@ -474,30 +647,42 @@ func (obj *PriceTier) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	Specifies a Price tier that applies when the minimum quantity for the [LineItem](ctp:api:type:LineItem) of a ProductVariant with the related Price is reached in a Cart.
+*
+ */
 type PriceTierDraft struct {
+	// Minimum quantity this Price tier is valid for.
+	//
+	// The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
 	MinimumQuantity int `json:"minimumQuantity"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
+	//
+	// The `currencyCode` of a Price tier must be the same as the `currencyCode` in the `value` of the related Price.
 	Value Money `json:"value"`
 }
 
 type QueryPrice struct {
-	ID string `json:"id"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Platform-generated unique identifier of the given Price.
+	ID *string `json:"id,omitempty"`
+	// Money value of the given Price.
 	Value Money `json:"value"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Country for which the given Price is valid.
 	Country *string `json:"country,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the given Price is valid.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
-	Channel    *ChannelReference     `json:"channel,omitempty"`
-	ValidFrom  *time.Time            `json:"validFrom,omitempty"`
-	ValidUntil *time.Time            `json:"validUntil,omitempty"`
+	// `ProductDistribution` [Channel](ctp:api:type:Channel) for which the given Price is valid.
+	Channel *ChannelReference `json:"channel,omitempty"`
+	// Date from which the given Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date until which the given Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// [DiscountedPrice](ctp:api:type:DiscountedPrice) you specify for the given Price.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
-	Custom *CustomFields    `json:"custom,omitempty"`
-	Tiers  []PriceTierDraft `json:"tiers"`
+	// Custom Fields for the Price.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// Price tier applied when the minimum quantity for the [LineItem](ctp:api:type:LineItem) of a ProductVariant with the related Price is reached in a Cart.
+	Tiers []PriceTierDraft `json:"tiers"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -523,6 +708,10 @@ func (obj QueryPrice) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+*
+ */
 type Reference interface{}
 
 func mapDiscriminatorReference(input interface{}) (Reference, error) {
@@ -651,6 +840,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "standalone-price":
+		obj := StandalonePriceReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "state":
 		obj := StateReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -685,39 +880,48 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 	return nil, nil
 }
 
+/**
+*	supported resource type identifiers:
+*
+ */
 type ReferenceTypeId string
 
 const (
-	ReferenceTypeIdCart                  ReferenceTypeId = "cart"
-	ReferenceTypeIdCartDiscount          ReferenceTypeId = "cart-discount"
-	ReferenceTypeIdCategory              ReferenceTypeId = "category"
-	ReferenceTypeIdChannel               ReferenceTypeId = "channel"
-	ReferenceTypeIdCustomer              ReferenceTypeId = "customer"
-	ReferenceTypeIdCustomerEmailToken    ReferenceTypeId = "customer-email-token"
-	ReferenceTypeIdCustomerGroup         ReferenceTypeId = "customer-group"
-	ReferenceTypeIdCustomerPasswordToken ReferenceTypeId = "customer-password-token"
-	ReferenceTypeIdDiscountCode          ReferenceTypeId = "discount-code"
-	ReferenceTypeIdExtension             ReferenceTypeId = "extension"
-	ReferenceTypeIdInventoryEntry        ReferenceTypeId = "inventory-entry"
-	ReferenceTypeIdKeyValueDocument      ReferenceTypeId = "key-value-document"
-	ReferenceTypeIdOrder                 ReferenceTypeId = "order"
-	ReferenceTypeIdOrderEdit             ReferenceTypeId = "order-edit"
-	ReferenceTypeIdPayment               ReferenceTypeId = "payment"
-	ReferenceTypeIdProduct               ReferenceTypeId = "product"
-	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
-	ReferenceTypeIdProductSelection      ReferenceTypeId = "product-selection"
-	ReferenceTypeIdProductType           ReferenceTypeId = "product-type"
-	ReferenceTypeIdReview                ReferenceTypeId = "review"
-	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
-	ReferenceTypeIdShoppingList          ReferenceTypeId = "shopping-list"
-	ReferenceTypeIdState                 ReferenceTypeId = "state"
-	ReferenceTypeIdStore                 ReferenceTypeId = "store"
-	ReferenceTypeIdSubscription          ReferenceTypeId = "subscription"
-	ReferenceTypeIdTaxCategory           ReferenceTypeId = "tax-category"
-	ReferenceTypeIdType                  ReferenceTypeId = "type"
-	ReferenceTypeIdZone                  ReferenceTypeId = "zone"
+	ReferenceTypeIdCart             ReferenceTypeId = "cart"
+	ReferenceTypeIdCartDiscount     ReferenceTypeId = "cart-discount"
+	ReferenceTypeIdCategory         ReferenceTypeId = "category"
+	ReferenceTypeIdChannel          ReferenceTypeId = "channel"
+	ReferenceTypeIdCustomer         ReferenceTypeId = "customer"
+	ReferenceTypeIdCustomerGroup    ReferenceTypeId = "customer-group"
+	ReferenceTypeIdDiscountCode     ReferenceTypeId = "discount-code"
+	ReferenceTypeIdExtension        ReferenceTypeId = "extension"
+	ReferenceTypeIdInventoryEntry   ReferenceTypeId = "inventory-entry"
+	ReferenceTypeIdKeyValueDocument ReferenceTypeId = "key-value-document"
+	ReferenceTypeIdOrder            ReferenceTypeId = "order"
+	ReferenceTypeIdOrderEdit        ReferenceTypeId = "order-edit"
+	ReferenceTypeIdPayment          ReferenceTypeId = "payment"
+	ReferenceTypeIdProduct          ReferenceTypeId = "product"
+	ReferenceTypeIdProductDiscount  ReferenceTypeId = "product-discount"
+	ReferenceTypeIdProductPrice     ReferenceTypeId = "product-price"
+	ReferenceTypeIdProductSelection ReferenceTypeId = "product-selection"
+	ReferenceTypeIdProductType      ReferenceTypeId = "product-type"
+	ReferenceTypeIdReview           ReferenceTypeId = "review"
+	ReferenceTypeIdShippingMethod   ReferenceTypeId = "shipping-method"
+	ReferenceTypeIdShoppingList     ReferenceTypeId = "shopping-list"
+	ReferenceTypeIdState            ReferenceTypeId = "state"
+	ReferenceTypeIdStore            ReferenceTypeId = "store"
+	ReferenceTypeIdSubscription     ReferenceTypeId = "subscription"
+	ReferenceTypeIdTaxCategory      ReferenceTypeId = "tax-category"
+	ReferenceTypeIdType             ReferenceTypeId = "type"
+	ReferenceTypeIdZone             ReferenceTypeId = "zone"
 )
 
+/**
+*	Draft type to create a [Reference](ctp:api:type:Reference) or a [KeyReference](ctp:api:type:KeyReference) to a resource. Provide either the `id` or (wherever supported) the `key` of the resource to reference, but depending on the API endpoint the response returns either a Reference or a KeyReference. For example, the field `parent` of a [CategoryDraft](ctp:api:type:CategoryDraft) takes a ResourceIdentifier for its value while the value of the corresponding field of a [Category](ctp:api:type:Category) is a Reference.
+*
+*	Each resource type has its corresponding ResourceIdentifier, like [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier).
+*
+ */
 type ResourceIdentifier interface{}
 
 func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, error) {
@@ -840,6 +1044,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 			return nil, err
 		}
 		return obj, nil
+	case "standalone-price":
+		obj := StandalonePriceResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "state":
 		obj := StateResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -880,11 +1090,11 @@ type ScopedPrice struct {
 	Value TypedMoney `json:"value"`
 	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
 	CurrentValue TypedMoney `json:"currentValue"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	Channel    *ChannelReference `json:"channel,omitempty"`
 	ValidFrom  *time.Time        `json:"validFrom,omitempty"`
 	ValidUntil *time.Time        `json:"validUntil,omitempty"`
@@ -951,18 +1161,19 @@ func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
 	return nil, nil
 }
 
+/**
+*	Object that stores cent amounts in a specific currency.
+*
+ */
 type CentPrecisionMoney struct {
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-	CurrencyCode string `json:"currencyCode"`
-	// amount in the smallest indivisible unit of a currency, such as
+	// Amount in the smallest indivisible unit of a currency, such as:
 	//
-	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	CentAmount int `json:"centAmount"`
-	// number of digits after the decimal separator
-	//
-	// * equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
-	// * greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	CurrencyCode string `json:"currencyCode"`
+	// The number of default fraction digits for the given currency, like `2` for EUR or `0` for JPY.
 	FractionDigits int `json:"fractionDigits"`
 }
 
@@ -980,19 +1191,16 @@ func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 *	Money object that stores an amount of a fraction of the smallest indivisible unit of the specified currency.
  */
 type HighPrecisionMoney struct {
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
-	CurrencyCode string `json:"currencyCode"`
-	// amount in the smallest indivisible unit of a currency, such as
+	// Amount in the smallest indivisible unit of a currency, such as:
 	//
-	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	CentAmount int `json:"centAmount"`
-	// number of digits after the decimal separator
-	//
-	// * equal to the default number of fraction digits for a currency in [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney).
-	// * greater than the default number of fraction digits for a currency in [HighPrecisionMoney](ctp:api:type:HighPrecisionMoney).
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	CurrencyCode string `json:"currencyCode"`
+	// Number of digits after the decimal separator, greater than the default number of fraction digits for a currency.
 	FractionDigits int `json:"fractionDigits"`
-	// amount in 1 / (10 ^ `fractionDigits`) of a currency.
+	// Amount in 1 / (10 ^ `fractionDigits`) of a currency.
 	PreciseAmount int `json:"preciseAmount"`
 }
 
@@ -1037,14 +1245,14 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 }
 
 type CentPrecisionMoneyDraft struct {
-	// amount in the smallest indivisible unit of a currency, such as
+	// Amount in the smallest indivisible unit of a currency, such as:
 	//
-	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
+	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	CentAmount int `json:"centAmount"`
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
-	// Must be equal to the default number of fraction digits for the specified currency.
+	// This field is optional for cent precision. If provided, it must be equal to the default number of fraction digits for the specified currency.
 	FractionDigits *int `json:"fractionDigits,omitempty"`
 }
 
@@ -1062,16 +1270,17 @@ func (obj CentPrecisionMoneyDraft) MarshalJSON() ([]byte, error) {
 *	Money draft object to store an amount of a fraction of the smallest indivisible unit of the specified currency.
  */
 type HighPrecisionMoneyDraft struct {
-	// amount in the smallest indivisible unit of a currency, such as
+	// Amount in the smallest indivisible unit of a currency. This field is optional for high precision. If provided, it is checked for validity. Example:
 	//
-	// * cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as 500).
-	// * the value in the major unit for currencies without minor units, like JPY (5 JPY is specified as 5).
-	CentAmount int `json:"centAmount"`
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A Price of 1.015 USD can be rounded either to 1.01 USD or 1.02 USD. If it lies outside of this range, an error message stating that centAmount must be rounded correctly will be returned.
+	//
+	// If `centAmount` is not provided, the commercetools Platform calculates the value automatically using the default rounding mode half even.
+	CentAmount *int `json:"centAmount,omitempty"`
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
-	// Must be equal to the default number of fraction digits for the specified currency.
-	FractionDigits *int `json:"fractionDigits,omitempty"`
-	// amount in 1 / (10 ^ `fractionDigits`) of a currency.
+	// Number of fraction digits for a specified high precision money. It must be greater than the default number of fraction digits for the specified currency.
+	FractionDigits int `json:"fractionDigits"`
+	// Amount in 1 / (10 ^ `fractionDigits`) of a currency.
 	PreciseAmount int `json:"preciseAmount"`
 }
 

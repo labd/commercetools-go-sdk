@@ -12,9 +12,6 @@ type ByProjectKeyExtensionsByIDRequestBuilder struct {
 	client     *Client
 }
 
-/**
-*	Retrieves the representation of an extension by its id.
- */
 func (rb *ByProjectKeyExtensionsByIDRequestBuilder) Get() *ByProjectKeyExtensionsByIDRequestMethodGet {
 	return &ByProjectKeyExtensionsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/extensions/%s", rb.projectKey, rb.id),

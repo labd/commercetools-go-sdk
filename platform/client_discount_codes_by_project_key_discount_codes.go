@@ -18,6 +18,10 @@ func (rb *ByProjectKeyDiscountCodesRequestBuilder) WithId(id string) *ByProjectK
 		client:     rb.client,
 	}
 }
+
+/**
+*	Deprecated scope: `view_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesRequestBuilder) Get() *ByProjectKeyDiscountCodesRequestMethodGet {
 	return &ByProjectKeyDiscountCodesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/discount-codes", rb.projectKey),
@@ -25,6 +29,9 @@ func (rb *ByProjectKeyDiscountCodesRequestBuilder) Get() *ByProjectKeyDiscountCo
 	}
 }
 
+/**
+*	Deprecated scope: `manage_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesRequestBuilder) Post(body DiscountCodeDraft) *ByProjectKeyDiscountCodesRequestMethodPost {
 	return &ByProjectKeyDiscountCodesRequestMethodPost{
 		body:   body,

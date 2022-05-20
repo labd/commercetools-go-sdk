@@ -238,10 +238,10 @@ const (
 type SearchIndexingConfigurationValues struct {
 	// Current status of resource indexing. Present on Projects from 1 February 2019.
 	Status *SearchIndexingConfigurationStatus `json:"status,omitempty"`
-	// Date and time (UTC) the Project was last updated.
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Date and time (UTC) the Project was last updated. Only present on Projects last modified after 1 February 2019.
+	LastModifiedAt *time.Time `json:"lastModifiedAt,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
-	LastModifiedBy *string `json:"lastModifiedBy,omitempty"`
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 }
 
 type ShippingRateInputType interface{}

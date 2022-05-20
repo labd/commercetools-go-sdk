@@ -9,7 +9,7 @@ import (
 )
 
 type Channel struct {
-	// Unique ID of the Channel.
+	// Platform-generated unique identifier of the Channel.
 	ID string `json:"id"`
 	// Current version of the Channel.
 	Version int `json:"version"`
@@ -21,7 +21,7 @@ type Channel struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier for the Channel.
+	// User-defined unique identifier of the Channel.
 	Key string `json:"key"`
 	// Roles of the Channel.
 	Roles []ChannelRoleEnum `json:"roles"`
@@ -72,7 +72,7 @@ type ChannelDraft struct {
 	// Custom fields defined for the Channel.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// GeoJSON geometry object encoding the geo location of the Channel.
-	// Currently, only the [Point](/../api/types#point) type is supported.
+	// Currently, only the [Point](ctp:api:type:GeoJsonPoint) type is supported.
 	GeoLocation GeoJson `json:"geoLocation,omitempty"`
 }
 
@@ -121,10 +121,9 @@ func (obj ChannelDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type ChannelPagedQueryResponse struct {
-	// Number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Offset supplied by the client or server default.
-	// It is the number of elements skipped, not a page number.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -139,11 +138,11 @@ type ChannelPagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+*	[Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 *
  */
 type ChannelReference struct {
-	// Unique ID of the referenced [Channel](ctp:api:type:Channel).
+	// Platform-generated unique identifier of the referenced [Channel](ctp:api:type:Channel).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Channel.
 	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Channels.
@@ -161,13 +160,13 @@ func (obj ChannelReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 *
  */
 type ChannelResourceIdentifier struct {
-	// Unique ID of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 

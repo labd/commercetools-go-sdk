@@ -80,6 +80,10 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestMethodDelete) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deprecated scope: `manage_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesByIDRequestMethodDelete) Execute(ctx context.Context) (result *DiscountCode, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

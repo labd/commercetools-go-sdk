@@ -36,6 +36,7 @@ type ByProjectKeyByResourceTypeByIDRequestMethodGetInput struct {
 	ClientId                        *string
 	Source                          *string
 	Changes                         []string
+	Stores                          []string
 	CustomerId                      *string
 	ExcludePlatformInitiatedChanges []PlatformInitiatedChange
 	Expand                          *bool
@@ -69,6 +70,9 @@ func (input *ByProjectKeyByResourceTypeByIDRequestMethodGetInput) Values() url.V
 	}
 	for _, v := range input.Changes {
 		values.Add("changes", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.Stores {
+		values.Add("stores", fmt.Sprintf("%v", v))
 	}
 	if input.CustomerId != nil {
 		values.Add("customerId", fmt.Sprintf("%v", *input.CustomerId))
@@ -155,6 +159,14 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Changes(v []string) *B
 		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
 	}
 	rb.params.Changes = v
+	return rb
+}
+
+func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Stores(v []string) *ByProjectKeyByResourceTypeByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
+	}
+	rb.params.Stores = v
 	return rb
 }
 

@@ -266,7 +266,8 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 }
 
 type MessageDeliveryPayload struct {
-	ProjectKey                      string                   `json:"projectKey"`
+	ProjectKey string `json:"projectKey"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	ID                              string                   `json:"id"`
@@ -352,7 +353,8 @@ func (obj PlatformFormat) MarshalJSON() ([]byte, error) {
 }
 
 type ResourceCreatedDeliveryPayload struct {
-	ProjectKey                      string                   `json:"projectKey"`
+	ProjectKey string `json:"projectKey"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	Version                         int                      `json:"version"`
@@ -387,7 +389,8 @@ func (obj ResourceCreatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 }
 
 type ResourceDeletedDeliveryPayload struct {
-	ProjectKey                      string                   `json:"projectKey"`
+	ProjectKey string `json:"projectKey"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	Version                         int                      `json:"version"`
@@ -423,7 +426,8 @@ func (obj ResourceDeletedDeliveryPayload) MarshalJSON() ([]byte, error) {
 }
 
 type ResourceUpdatedDeliveryPayload struct {
-	ProjectKey                      string                   `json:"projectKey"`
+	ProjectKey string `json:"projectKey"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	Resource                        Reference                `json:"resource"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	Version                         int                      `json:"version"`
@@ -492,6 +496,7 @@ func (obj SqsDestination) MarshalJSON() ([]byte, error) {
 }
 
 type Subscription struct {
+	// Platform-generated unique identifier of the Subscription.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -499,13 +504,14 @@ type Subscription struct {
 	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy   *CreatedBy               `json:"createdBy,omitempty"`
-	Changes     []ChangeSubscription     `json:"changes"`
-	Destination Destination              `json:"destination"`
-	Key         *string                  `json:"key,omitempty"`
-	Messages    []MessageSubscription    `json:"messages"`
-	Format      DeliveryFormat           `json:"format"`
-	Status      SubscriptionHealthStatus `json:"status"`
+	CreatedBy   *CreatedBy           `json:"createdBy,omitempty"`
+	Changes     []ChangeSubscription `json:"changes"`
+	Destination Destination          `json:"destination"`
+	// User-defined unique identifier of the Subscription.
+	Key      *string                  `json:"key,omitempty"`
+	Messages []MessageSubscription    `json:"messages"`
+	Format   DeliveryFormat           `json:"format"`
+	Status   SubscriptionHealthStatus `json:"status"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -533,11 +539,12 @@ func (obj *Subscription) UnmarshalJSON(data []byte) error {
 }
 
 type SubscriptionDraft struct {
-	Changes     []ChangeSubscription  `json:"changes"`
-	Destination Destination           `json:"destination"`
-	Key         *string               `json:"key,omitempty"`
-	Messages    []MessageSubscription `json:"messages"`
-	Format      DeliveryFormat        `json:"format,omitempty"`
+	Changes     []ChangeSubscription `json:"changes"`
+	Destination Destination          `json:"destination"`
+	// User-defined unique identifier for the Subscription.
+	Key      *string               `json:"key,omitempty"`
+	Messages []MessageSubscription `json:"messages"`
+	Format   DeliveryFormat        `json:"format,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -601,9 +608,11 @@ const (
 )
 
 type SubscriptionPagedQueryResponse struct {
-	Limit   int            `json:"limit"`
-	Count   int            `json:"count"`
-	Total   *int           `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int            `json:"offset"`
 	Results []Subscription `json:"results"`
 }

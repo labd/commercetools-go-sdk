@@ -56,10 +56,9 @@ type ImportSinkUpdateDraft struct {
 *
  */
 type ImportSinkPagedResponse struct {
-	// The number of results requested in the query request.
+	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// The number of elements skipped, not a page number.
-	// Supplied by the client or the server default.
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// The actual number of results returned.
 	Count int `json:"count"`

@@ -9,13 +9,13 @@ import (
 )
 
 type PriceFunction struct {
-	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
 	Function     string `json:"function"`
 }
 
 type ShippingMethod struct {
-	// The unique ID of the shipping method.
+	// Platform-generated unique identifier of the ShippingMethod.
 	ID string `json:"id"`
 	// The current version of the shipping method.
 	Version        int       `json:"version"`
@@ -25,7 +25,7 @@ type ShippingMethod struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-specific unique identifier for the shipping method.
+	// User-defined unique identifier of the ShippingMethod.
 	Key                  *string              `json:"key,omitempty"`
 	Name                 string               `json:"name"`
 	LocalizedName        *LocalizedString     `json:"localizedName,omitempty"`
@@ -41,6 +41,7 @@ type ShippingMethod struct {
 }
 
 type ShippingMethodDraft struct {
+	// User-defined unique identifier for the ShippingMethod.
 	Key                  *string                       `json:"key,omitempty"`
 	Name                 string                        `json:"name"`
 	LocalizedName        *LocalizedString              `json:"localizedName,omitempty"`
@@ -56,16 +57,23 @@ type ShippingMethodDraft struct {
 }
 
 type ShippingMethodPagedQueryResponse struct {
-	Limit   *int             `json:"limit,omitempty"`
-	Count   int              `json:"count"`
-	Total   *int             `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit *int `json:"limit,omitempty"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  *int             `json:"offset,omitempty"`
 	Results []ShippingMethod `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [ShippingMethod](ctp:api:type:ShippingMethod).
+*
+ */
 type ShippingMethodReference struct {
-	// Unique ID of the referenced resource.
-	ID  string          `json:"id"`
+	// Platform-generated unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShippingMethods.
 	Obj *ShippingMethod `json:"obj,omitempty"`
 }
 
@@ -79,10 +87,14 @@ func (obj ShippingMethodReference) MarshalJSON() ([]byte, error) {
 	}{Action: "shipping-method", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
+*
+ */
 type ShippingMethodResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -352,6 +364,7 @@ func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePrice
 type CartClassificationTier struct {
 	Value string `json:"value"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Price      Money `json:"price"`
 	IsMatching *bool `json:"isMatching,omitempty"`
@@ -370,6 +383,7 @@ func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 type CartScoreTier struct {
 	Score float64 `json:"score"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Price         *Money         `json:"price,omitempty"`
 	PriceFunction *PriceFunction `json:"priceFunction,omitempty"`
@@ -389,6 +403,7 @@ func (obj CartScoreTier) MarshalJSON() ([]byte, error) {
 type CartValueTier struct {
 	MinimumCentAmount int `json:"minimumCentAmount"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Price      Money `json:"price"`
 	IsMatching *bool `json:"isMatching,omitempty"`

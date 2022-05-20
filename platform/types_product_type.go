@@ -111,7 +111,8 @@ func (obj *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 }
 
 type AttributeLocalizedEnumValue struct {
-	Key   string          `json:"key"`
+	Key string `json:"key"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Label LocalizedString `json:"label"`
 }
 
@@ -317,6 +318,7 @@ func (obj AttributeMoneyType) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeNestedType struct {
+	// [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
 	TypeReference ProductTypeReference `json:"typeReference"`
 }
 
@@ -344,6 +346,7 @@ func (obj AttributeNumberType) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeReferenceType struct {
+	// supported resource type identifiers:
 	ReferenceTypeId ReferenceTypeId `json:"referenceTypeId"`
 }
 
@@ -415,7 +418,7 @@ func (obj AttributeTimeType) MarshalJSON() ([]byte, error) {
 }
 
 type ProductType struct {
-	// The unique ID of the product type.
+	// Platform-generated unique identifier for the ProductType.
 	ID string `json:"id"`
 	// The current version of the product type.
 	Version        int       `json:"version"`
@@ -425,8 +428,7 @@ type ProductType struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-specific unique identifier for the product type (max.
-	// 256 characters).
+	// User-defined unique identifier of the ProductType.
 	Key         *string               `json:"key,omitempty"`
 	Name        string                `json:"name"`
 	Description string                `json:"description"`
@@ -457,9 +459,7 @@ func (obj ProductType) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeDraft struct {
-	// User-specific unique identifier for the product type (min.
-	// 2 and max.
-	// 256 characters).
+	// User-defined unique identifier for the ProductType.
 	Key         *string                    `json:"key,omitempty"`
 	Name        string                     `json:"name"`
 	Description string                     `json:"description"`
@@ -490,16 +490,23 @@ func (obj ProductTypeDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypePagedQueryResponse struct {
-	Limit   int           `json:"limit"`
-	Count   int           `json:"count"`
-	Total   *int          `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int           `json:"offset"`
 	Results []ProductType `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
+*
+ */
 type ProductTypeReference struct {
-	// Unique ID of the referenced resource.
-	ID  string       `json:"id"`
+	// Platform-generated unique identifier of the referenced [ProductType](ctp:api:type:ProductType).
+	ID string `json:"id"`
+	// Contains the representation of the expanded ProductType. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductTypes.
 	Obj *ProductType `json:"obj,omitempty"`
 }
 
@@ -513,10 +520,14 @@ func (obj ProductTypeReference) MarshalJSON() ([]byte, error) {
 	}{Action: "product-type", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType).
+*
+ */
 type ProductTypeResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -866,8 +877,9 @@ func (obj ProductTypeChangeIsSearchableAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeChangeLabelAction struct {
-	AttributeName string          `json:"attributeName"`
-	Label         LocalizedString `json:"label"`
+	AttributeName string `json:"attributeName"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Label LocalizedString `json:"label"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -985,8 +997,9 @@ func (obj ProductTypeRemoveEnumValuesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeSetInputTipAction struct {
-	AttributeName string           `json:"attributeName"`
-	InputTip      *LocalizedString `json:"inputTip,omitempty"`
+	AttributeName string `json:"attributeName"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	InputTip *LocalizedString `json:"inputTip,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

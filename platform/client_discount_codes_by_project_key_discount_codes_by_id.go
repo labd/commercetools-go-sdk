@@ -12,6 +12,9 @@ type ByProjectKeyDiscountCodesByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Deprecated scope: `view_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Get() *ByProjectKeyDiscountCodesByIDRequestMethodGet {
 	return &ByProjectKeyDiscountCodesByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/discount-codes/%s", rb.projectKey, rb.id),
@@ -19,6 +22,9 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Get() *ByProjectKeyDiscou
 	}
 }
 
+/**
+*	Deprecated scope: `manage_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Post(body DiscountCodeUpdate) *ByProjectKeyDiscountCodesByIDRequestMethodPost {
 	return &ByProjectKeyDiscountCodesByIDRequestMethodPost{
 		body:   body,
@@ -27,6 +33,9 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Post(body DiscountCodeUpd
 	}
 }
 
+/**
+*	Deprecated scope: `manage_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Delete() *ByProjectKeyDiscountCodesByIDRequestMethodDelete {
 	return &ByProjectKeyDiscountCodesByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/discount-codes/%s", rb.projectKey, rb.id),

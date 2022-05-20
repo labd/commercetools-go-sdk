@@ -9,7 +9,9 @@ import (
 )
 
 type ErrorByExtension struct {
-	ID  string  `json:"id"`
+	// Platform-generated unique identifier of the Extension.
+	ID string `json:"id"`
+	// User-defined unique identifier of the Extension.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -121,6 +123,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "DuplicatePriceScope":
 		obj := DuplicatePriceScopeError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateStandalonePriceScope":
+		obj := DuplicateStandalonePriceScopeError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -319,6 +327,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "OverCapacity":
 		obj := OverCapacityError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OverlappingStandalonePriceValidity":
+		obj := OverlappingStandalonePriceValidityError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -686,9 +700,10 @@ func (obj DuplicateEnumValuesError) Error() string {
 type DuplicateFieldError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
-	Field               *string     `json:"field,omitempty"`
-	DuplicateValue      interface{} `json:"duplicateValue,omitempty"`
-	ConflictingResource Reference   `json:"conflictingResource,omitempty"`
+	Field          *string     `json:"field,omitempty"`
+	DuplicateValue interface{} `json:"duplicateValue,omitempty"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	ConflictingResource Reference `json:"conflictingResource,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -727,9 +742,10 @@ func (obj DuplicateFieldError) Error() string {
 type DuplicateFieldWithConflictingResourceError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
-	Field               string      `json:"field"`
-	DuplicateValue      interface{} `json:"duplicateValue"`
-	ConflictingResource Reference   `json:"conflictingResource"`
+	Field          string      `json:"field"`
+	DuplicateValue interface{} `json:"duplicateValue"`
+	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	ConflictingResource Reference `json:"conflictingResource"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -785,6 +801,38 @@ func (obj DuplicatePriceScopeError) Error() string {
 		return obj.Message
 	}
 	return "unknown DuplicatePriceScopeError: failed to parse error response"
+}
+
+type DuplicateStandalonePriceScopeError struct {
+	Message string `json:"message"`
+	// interface{} `json:"//"`
+	// [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
+	Sku                        string                   `json:"sku"`
+	Currency                   string                   `json:"currency"`
+	Country                    *string                  `json:"country,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+	Channel    *ChannelResourceIdentifier `json:"channel,omitempty"`
+	ValidFrom  *time.Time                 `json:"validFrom,omitempty"`
+	ValidUntil *time.Time                 `json:"validUntil,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DuplicateStandalonePriceScopeError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicateStandalonePriceScopeError
+	return json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateStandalonePriceScope", Alias: (*Alias)(&obj)})
+}
+func (obj DuplicateStandalonePriceScopeError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicateStandalonePriceScopeError: failed to parse error response"
 }
 
 type DuplicateVariantValuesError struct {
@@ -976,6 +1024,7 @@ func (obj ErrorResponse) Error() string {
 type ExtensionBadResponseError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
@@ -1023,6 +1072,7 @@ func (obj ExtensionNoResponseError) Error() string {
 type ExtensionUpdateActionsFailedError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
@@ -1385,9 +1435,9 @@ type MatchingPriceNotFoundError struct {
 	VariantId int     `json:"variantId"`
 	Currency  *string `json:"currency,omitempty"`
 	Country   *string `json:"country,omitempty"`
-	// [Reference](/types#reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](/../api/types#reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	Channel *ChannelReference `json:"channel,omitempty"`
 }
 
@@ -1410,6 +1460,7 @@ func (obj MatchingPriceNotFoundError) Error() string {
 type MaxResourceLimitExceededError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
+	// supported resource type identifiers:
 	ExceededResource ReferenceTypeId `json:"exceededResource"`
 }
 
@@ -1432,7 +1483,7 @@ func (obj MaxResourceLimitExceededError) Error() string {
 type MissingRoleOnChannelError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
 	// Describes the purpose and type of the Channel. A Channel can have one or more roles.
 	MissingRole ChannelRoleEnum `json:"missingRole"`
@@ -1585,6 +1636,40 @@ func (obj OverCapacityError) Error() string {
 	return "unknown OverCapacityError: failed to parse error response"
 }
 
+type OverlappingStandalonePriceValidityError struct {
+	Message string `json:"message"`
+	// interface{} `json:"//"`
+	// [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
+	Sku                        string                   `json:"sku"`
+	Currency                   string                   `json:"currency"`
+	Country                    *string                  `json:"country,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+	Channel               *ChannelResourceIdentifier `json:"channel,omitempty"`
+	ValidFrom             *time.Time                 `json:"validFrom,omitempty"`
+	ValidUntil            *time.Time                 `json:"validUntil,omitempty"`
+	ConflictingValidFrom  *time.Time                 `json:"conflictingValidFrom,omitempty"`
+	ConflictingValidUntil *time.Time                 `json:"conflictingValidUntil,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OverlappingStandalonePriceValidityError) MarshalJSON() ([]byte, error) {
+	type Alias OverlappingStandalonePriceValidityError
+	return json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "OverlappingStandalonePriceValidity", Alias: (*Alias)(&obj)})
+}
+func (obj OverlappingStandalonePriceValidityError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown OverlappingStandalonePriceValidityError: failed to parse error response"
+}
+
 type PendingOperationError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
@@ -1710,6 +1795,7 @@ func (obj QueryTimedOutError) Error() string {
 type ReferenceExistsError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
+	// supported resource type identifiers:
 	ReferencedBy *ReferenceTypeId `json:"referencedBy,omitempty"`
 }
 
@@ -1732,6 +1818,7 @@ func (obj ReferenceExistsError) Error() string {
 type ReferencedResourceNotFoundError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
+	// supported resource type identifiers:
 	TypeId ReferenceTypeId `json:"typeId"`
 	ID     *string         `json:"id,omitempty"`
 	Key    *string         `json:"key,omitempty"`

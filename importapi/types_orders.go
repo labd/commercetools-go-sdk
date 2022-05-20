@@ -633,6 +633,8 @@ type TaxedPrice struct {
 	TotalGross Money `json:"totalGross"`
 	// Maps to `TaxedPrice.taxPortions`.
 	TaxPortions []TaxPortion `json:"taxPortions"`
+	// Maps to `TaxedPrice.totalTax`.
+	TotalTax *Money `json:"totalTax,omitempty"`
 }
 
 /**

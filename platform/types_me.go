@@ -287,7 +287,7 @@ type MyCustomerDraft struct {
 	// The `defaultBillingAddressId` of the customer will be set to the ID of that address.
 	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
 	// The custom fields.
-	Custom *CustomFields             `json:"custom,omitempty"`
+	Custom *CustomFieldsDraft        `json:"custom,omitempty"`
 	Locale *string                   `json:"locale,omitempty"`
 	Stores []StoreResourceIdentifier `json:"stores"`
 }
@@ -507,12 +507,13 @@ type MyLineItemDraft struct {
 }
 
 type MyOrderFromCartDraft struct {
-	// The unique ID of the cart from which an order is created.
+	// Platform-generated unique identifier of the Cart from which the Platform creates an Order.
 	ID      string `json:"id"`
 	Version int    `json:"version"`
 }
 
 type MyPayment struct {
+	// Platform-generated unique identifier of the MyPayment.
 	ID      string `json:"id"`
 	Version int    `json:"version"`
 	// A reference to the customer this payment belongs to.
@@ -558,9 +559,11 @@ type MyPaymentDraft struct {
 }
 
 type MyPaymentPagedQueryResponse struct {
-	Limit   int         `json:"limit"`
-	Count   int         `json:"count"`
-	Total   *int        `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int         `json:"offset"`
 	Results []MyPayment `json:"results"`
 }
@@ -854,7 +857,11 @@ type MyTransactionDraft struct {
 	// The `state` is set to the `Initial` TransactionState.
 	InteractionId *string `json:"interactionId,omitempty"`
 	// Custom Fields for the Transaction.
-	Custom *CustomFields `json:"custom,omitempty"`
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+type ReplicaMyCartDraft struct {
+	Reference interface{} `json:"reference"`
 }
 
 type MyCartAddDiscountCodeAction struct {
@@ -888,16 +895,17 @@ func (obj MyCartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 type MyCartAddLineItemAction struct {
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	ExternalTaxRate     *ExternalTaxRateDraft      `json:"externalTaxRate,omitempty"`
 	ProductId           *string                    `json:"productId,omitempty"`
 	VariantId           *int                       `json:"variantId,omitempty"`
 	Sku                 *string                    `json:"sku,omitempty"`
 	Quantity            *int                       `json:"quantity,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -916,6 +924,7 @@ func (obj MyCartAddLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartAddPaymentAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -948,6 +957,7 @@ type MyCartChangeLineItemQuantityAction struct {
 	LineItemId string `json:"lineItemId"`
 	Quantity   int    `json:"quantity"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice      *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -992,6 +1002,7 @@ func (obj MyCartRecalculateAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartRemoveDiscountCodeAction struct {
+	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -1023,6 +1034,7 @@ type MyCartRemoveLineItemAction struct {
 	LineItemId string `json:"lineItemId"`
 	Quantity   *int   `json:"quantity,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	ExternalPrice           *Money                      `json:"externalPrice,omitempty"`
 	ExternalTotalPrice      *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1040,6 +1052,7 @@ func (obj MyCartRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartRemovePaymentAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -1068,7 +1081,7 @@ func (obj MyCartSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetCountryAction struct {
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Country *string `json:"country,omitempty"`
 }
 
@@ -1188,7 +1201,7 @@ func (obj MyCartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 type MyCartSetLineItemDistributionChannelAction struct {
 	LineItemId string `json:"lineItemId"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -1219,7 +1232,7 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 
 type MyCartSetLineItemSupplyChannelAction struct {
 	LineItemId string `json:"lineItemId"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 
@@ -1262,6 +1275,7 @@ func (obj MyCartSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetShippingMethodAction struct {
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
 	ShippingMethod  *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft             `json:"externalTaxRate,omitempty"`
 }
@@ -1618,6 +1632,7 @@ func (obj MyPaymentAddTransactionAction) MarshalJSON() ([]byte, error) {
 
 type MyPaymentChangeAmountPlannedAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount Money `json:"amount"`
 }
@@ -1680,6 +1695,7 @@ func (obj MyPaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyPaymentSetMethodInfoNameAction struct {
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -1733,7 +1749,9 @@ func (obj MyShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListAddTextLineItemAction struct {
-	Name        LocalizedString  `json:"name"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name LocalizedString `json:"name"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Description *LocalizedString `json:"description,omitempty"`
 	Quantity    *int             `json:"quantity,omitempty"`
 	AddedAt     *time.Time       `json:"addedAt,omitempty"`
@@ -1781,6 +1799,7 @@ func (obj MyShoppingListChangeLineItemsOrderAction) MarshalJSON() ([]byte, error
 }
 
 type MyShoppingListChangeNameAction struct {
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Name LocalizedString `json:"name"`
 }
 
@@ -1795,8 +1814,9 @@ func (obj MyShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListChangeTextLineItemNameAction struct {
-	TextLineItemId string          `json:"textLineItemId"`
-	Name           LocalizedString `json:"name"`
+	TextLineItemId string `json:"textLineItemId"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Name LocalizedString `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1920,6 +1940,7 @@ func (obj MyShoppingListSetDeleteDaysAfterLastModificationAction) MarshalJSON() 
 }
 
 type MyShoppingListSetDescriptionAction struct {
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -2012,8 +2033,9 @@ func (obj MyShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, 
 }
 
 type MyShoppingListSetTextLineItemDescriptionAction struct {
-	TextLineItemId string           `json:"textLineItemId"`
-	Description    *LocalizedString `json:"description,omitempty"`
+	TextLineItemId string `json:"textLineItemId"`
+	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	Description *LocalizedString `json:"description,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

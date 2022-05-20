@@ -2,7 +2,9 @@ package platform
 
 // Generated file, please do not change!!!
 
-import ()
+import (
+	"fmt"
+)
 
 type ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder struct {
 	projectKey string
@@ -48,5 +50,60 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) ShoppingLists() *ByP
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) EmailConfirm() *ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Password() *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Signup() *ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Login() *ByProjectKeyInStoreKeyByStoreKeyMeLoginRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeLoginRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodGet {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodGet{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/me", rb.projectKey, rb.storeKey),
+		client: rb.client,
+	}
+}
+
+/**
+*	Update my customer in a store
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost{
+		body:   body,
+		url:    fmt.Sprintf("/%s/in-store/key=%s/me", rb.projectKey, rb.storeKey),
+		client: rb.client,
+	}
+}
+
+/**
+*	Delete my Customer in a store
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/me", rb.projectKey, rb.storeKey),
+		client: rb.client,
 	}
 }

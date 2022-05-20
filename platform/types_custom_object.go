@@ -8,40 +8,70 @@ import (
 )
 
 type CustomObject struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Platform-generated unique identifier of the CustomObject.
+	ID string `json:"id"`
+	// Current version of the CustomObject.
+	Version int `json:"version"`
+	// Date and time (UTC) the CustomObject was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the CustomObject was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// A namespace to group custom objects.
-	Container string      `json:"container"`
-	Key       string      `json:"key"`
-	Value     interface{} `json:"value"`
+	// Namespace to group CustomObjects.
+	Container string `json:"container"`
+	// User-defined unique identifier of the CustomObject within the defined `container`.
+	Key string `json:"key"`
+	// JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
+	// For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
+	// If the referenced object is deleted, the platform does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
+	Value interface{} `json:"value"`
 }
 
 type CustomObjectDraft struct {
-	// A namespace to group custom objects.
+	// Namespace to group CustomObjects.
 	Container string `json:"container"`
-	// A user-defined key that is unique within the given container.
-	Key     string      `json:"key"`
-	Value   interface{} `json:"value"`
-	Version *int        `json:"version,omitempty"`
+	// User-defined unique identifier of the CustomObject within the defined `container`.
+	Key string `json:"key"`
+	// JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
+	// For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
+	// If the referenced object is deleted, the platform does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
+	Value interface{} `json:"value"`
+	// Current version of the CustomObject.
+	Version *int `json:"version,omitempty"`
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [CustomObject](ctp:api:type:CustomObject).
+*
+ */
 type CustomObjectPagedQueryResponse struct {
-	Limit   int            `json:"limit"`
-	Count   int            `json:"count"`
-	Total   *int           `json:"total,omitempty"`
-	Offset  int            `json:"offset"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int `json:"limit"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// The total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [CustomObjects](ctp:api:type:CustomObject) matching the query.
 	Results []CustomObject `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [CustomObject](ctp:api:type:CustomObject).
+*
+ */
 type CustomObjectReference struct {
-	// Unique ID of the referenced resource.
-	ID  string        `json:"id"`
+	// Platform-generated unique identifier of the referenced [CustomObject](ctp:api:type:CustomObject).
+	ID string `json:"id"`
+	// Contains the representation of the expanded CustomObject. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CustomObjects.
 	Obj *CustomObject `json:"obj,omitempty"`
 }
 

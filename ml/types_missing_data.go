@@ -99,7 +99,9 @@ func (obj MissingAttributesMeta) MarshalJSON() ([]byte, error) {
 }
 
 type MissingAttributesSearchRequest struct {
-	Limit  *int `json:"limit,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit *int `json:"limit,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset *int `json:"offset,omitempty"`
 	// If true, searches data from staged products in addition to published products.
 	Staged *bool `json:"staged,omitempty"`
@@ -155,8 +157,9 @@ func (obj MissingAttributesSearchRequest) MarshalJSON() ([]byte, error) {
 }
 
 type MissingAttributesPagedQueryResult struct {
-	Count   int                   `json:"count"`
-	Total   int                   `json:"total"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int                   `json:"offset"`
 	Results []MissingAttributes   `json:"results"`
 	Meta    MissingAttributesMeta `json:"meta"`
@@ -209,7 +212,9 @@ type MissingImagesMeta struct {
 }
 
 type MissingImagesSearchRequest struct {
-	Limit  *int `json:"limit,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit *int `json:"limit,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset *int `json:"offset,omitempty"`
 	// If true, searches data from staged products in addition to published products.
 	Staged *bool `json:"staged,omitempty"`
@@ -255,8 +260,9 @@ func (obj MissingImagesSearchRequest) MarshalJSON() ([]byte, error) {
 }
 
 type MissingImagesPagedQueryResult struct {
-	Count   int               `json:"count"`
-	Total   int               `json:"total"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int               `json:"offset"`
 	Results []MissingImages   `json:"results"`
 	Meta    MissingImagesMeta `json:"meta"`
@@ -304,7 +310,9 @@ type MissingPricesMeta struct {
 }
 
 type MissingPricesSearchRequest struct {
-	Limit  *int `json:"limit,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit *int `json:"limit,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset *int `json:"offset,omitempty"`
 	// If true, searches data from staged products in addition to published products.
 	Staged *bool `json:"staged,omitempty"`
@@ -354,8 +362,9 @@ func (obj MissingPricesSearchRequest) MarshalJSON() ([]byte, error) {
 }
 
 type MissingPricesPagedQueryResult struct {
-	Count   int               `json:"count"`
-	Total   int               `json:"total"`
+	Count int `json:"count"`
+	Total int `json:"total"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int               `json:"offset"`
 	Results []MissingPrices   `json:"results"`
 	Meta    MissingPricesMeta `json:"meta"`

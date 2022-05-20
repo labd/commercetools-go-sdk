@@ -53,6 +53,10 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestMethodGet) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deprecated scope: `view_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesByIDRequestMethodGet) Execute(ctx context.Context) (result *DiscountCode, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

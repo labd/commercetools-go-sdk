@@ -54,6 +54,10 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestMethodPost) WithHeaders(headers ht
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deprecated scope: `manage_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyDiscountCodesByIDRequestMethodPost) Execute(ctx context.Context) (result *DiscountCode, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

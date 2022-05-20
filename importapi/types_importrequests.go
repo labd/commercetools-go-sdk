@@ -194,7 +194,7 @@ func (obj ProductVariantImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Prices](#import-prices). Contains data for [Prices](/../api/projects/products#price) to be created or updated in a commercetools Project.
+*	The request body to [import Prices](#import-prices). Contains data for [EmbeddedPrices](/../api/projects/products#embeddedprice) to be created or updated in a commercetools Project.
 *
  */
 type PriceImportRequest struct {

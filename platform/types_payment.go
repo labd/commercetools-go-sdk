@@ -9,6 +9,7 @@ import (
 )
 
 type Payment struct {
+	// Platform-generated unique identifier of the Payment.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -46,8 +47,7 @@ type Payment struct {
 	// Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
 	InterfaceInteractions []CustomFields `json:"interfaceInteractions"`
 	Custom                *CustomFields  `json:"custom,omitempty"`
-	// User-specific unique identifier for the payment (max.
-	// 256 characters).
+	// User-defined unique identifier of the Payment.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -103,13 +103,16 @@ type PaymentDraft struct {
 	// The value usually matches the cart or order gross total.
 	AmountPlanned Money `json:"amountPlanned"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	AmountAuthorized *Money  `json:"amountAuthorized,omitempty"`
 	AuthorizedUntil  *string `json:"authorizedUntil,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	AmountPaid *Money `json:"amountPaid,omitempty"`
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	AmountRefunded    *Money              `json:"amountRefunded,omitempty"`
 	PaymentMethodInfo *PaymentMethodInfo  `json:"paymentMethodInfo,omitempty"`
@@ -122,8 +125,7 @@ type PaymentDraft struct {
 	// Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
 	InterfaceInteractions []CustomFieldsDraft `json:"interfaceInteractions"`
 	Custom                *CustomFieldsDraft  `json:"custom,omitempty"`
-	// User-specific unique identifier for the payment (max.
-	// 256 characters).
+	// User-defined unique identifier for the Payment.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -169,16 +171,23 @@ type PaymentMethodInfo struct {
 }
 
 type PaymentPagedQueryResponse struct {
-	Limit   int       `json:"limit"`
-	Count   int       `json:"count"`
-	Total   *int      `json:"total,omitempty"`
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int  `json:"limit"`
+	Count int  `json:"count"`
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset  int       `json:"offset"`
 	Results []Payment `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
+*
+ */
 type PaymentReference struct {
-	// Unique ID of the referenced resource.
-	ID  string   `json:"id"`
+	// Platform-generated unique identifier of the referenced [Payment](ctp:api:type:Payment).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Payment. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Payments.
 	Obj *Payment `json:"obj,omitempty"`
 }
 
@@ -192,10 +201,14 @@ func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 	}{Action: "payment", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+*
+ */
 type PaymentResourceIdentifier struct {
-	// Unique ID of the referenced resource. Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced resource. Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -220,7 +233,7 @@ type PaymentStatus struct {
 type PaymentStatusDraft struct {
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
 	InterfaceText *string `json:"interfaceText,omitempty"`
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	State *StateResourceIdentifier `json:"state,omitempty"`
 }
 
@@ -409,7 +422,7 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 }
 
 type Transaction struct {
-	// The unique ID of this object.
+	// Platform-generated unique identifier of the Transaction.
 	ID string `json:"id"`
 	// The time at which the transaction took place.
 	Timestamp *time.Time `json:"timestamp,omitempty"`
@@ -567,6 +580,7 @@ func (obj PaymentChangeTransactionTimestampAction) MarshalJSON() ([]byte, error)
 
 type PaymentSetAmountPaidAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount *Money `json:"amount,omitempty"`
 }
@@ -583,6 +597,7 @@ func (obj PaymentSetAmountPaidAction) MarshalJSON() ([]byte, error) {
 
 type PaymentSetAmountRefundedAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount *Money `json:"amount,omitempty"`
 }
@@ -615,6 +630,7 @@ func (obj PaymentSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 
 type PaymentSetAuthorizationAction struct {
 	// Draft type that stores amounts in cent precision for the specified currency.
+	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Amount *Money     `json:"amount,omitempty"`
 	Until  *time.Time `json:"until,omitempty"`

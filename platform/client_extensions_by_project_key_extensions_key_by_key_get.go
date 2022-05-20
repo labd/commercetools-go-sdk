@@ -53,10 +53,6 @@ func (rb *ByProjectKeyExtensionsKeyByKeyRequestMethodGet) WithHeaders(headers ht
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Retrieves the representation of an extension by its key.
- */
 func (rb *ByProjectKeyExtensionsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *Extension, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

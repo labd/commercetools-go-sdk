@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type ByProjectKeyCustomObjectsByContainerRequestMethodGet struct {
@@ -26,25 +27,53 @@ func (r *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Dump() map[string
 }
 
 type ByProjectKeyCustomObjectsByContainerRequestMethodGetInput struct {
+	Sort         []string
 	Where        []string
-	PredicateVar map[string][]string
 	Expand       []string
+	PredicateVar map[string][]string
+	Limit        *int
+	Offset       *int
+	WithTotal    *bool
 }
 
 func (input *ByProjectKeyCustomObjectsByContainerRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.Sort {
+		values.Add("sort", fmt.Sprintf("%v", v))
+	}
 	for _, v := range input.Where {
 		values.Add("where", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	for k, v := range input.PredicateVar {
 		for _, x := range v {
 			values.Set(k, x)
 		}
 	}
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
+	if input.Limit != nil {
+		values.Add("limit", strconv.Itoa(*input.Limit))
+	}
+	if input.Offset != nil {
+		values.Add("offset", strconv.Itoa(*input.Offset))
+	}
+	if input.WithTotal != nil {
+		if *input.WithTotal {
+			values.Add("withTotal", "true")
+		} else {
+			values.Add("withTotal", "false")
+		}
 	}
 	return values
+}
+
+func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Sort(v []string) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyCustomObjectsByContainerRequestMethodGetInput{}
+	}
+	rb.params.Sort = v
+	return rb
 }
 
 func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Where(v []string) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
@@ -52,6 +81,14 @@ func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Where(v []string
 		rb.params = &ByProjectKeyCustomObjectsByContainerRequestMethodGetInput{}
 	}
 	rb.params.Where = v
+	return rb
+}
+
+func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Expand(v []string) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyCustomObjectsByContainerRequestMethodGetInput{}
+	}
+	rb.params.Expand = v
 	return rb
 }
 
@@ -63,11 +100,27 @@ func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) PredicateVar(v m
 	return rb
 }
 
-func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Expand(v []string) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
+func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Limit(v int) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyCustomObjectsByContainerRequestMethodGetInput{}
 	}
-	rb.params.Expand = v
+	rb.params.Limit = &v
+	return rb
+}
+
+func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) Offset(v int) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyCustomObjectsByContainerRequestMethodGetInput{}
+	}
+	rb.params.Offset = &v
+	return rb
+}
+
+func (rb *ByProjectKeyCustomObjectsByContainerRequestMethodGet) WithTotal(v bool) *ByProjectKeyCustomObjectsByContainerRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyCustomObjectsByContainerRequestMethodGetInput{}
+	}
+	rb.params.WithTotal = &v
 	return rb
 }
 

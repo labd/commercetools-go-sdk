@@ -134,9 +134,7 @@ func (rb *ByProjectKeyCustomObjectsRequestMethodGet) WithHeaders(headers http.He
 }
 
 /**
-*	The query endpoint allows to retrieve custom objects in a specific container or all custom objects.
-*	For performance reasons, it is highly advisable to query only for custom objects in a container by using
-*	the container field in the where predicate.
+*	For performance reasons, it is highly advisable to query for Custom Objects in a container by using the `container` field in the `where` predicate.
 *
  */
 func (rb *ByProjectKeyCustomObjectsRequestMethodGet) Execute(ctx context.Context) (result *CustomObjectPagedQueryResponse, err error) {

@@ -13,9 +13,6 @@ type ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder struct {
 	client     *Client
 }
 
-/**
-*	Get CustomObject by container and key
- */
 func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder) Get() *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodGet {
 	return &ByProjectKeyCustomObjectsByContainerByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/custom-objects/%s/%s", rb.projectKey, rb.container, rb.key),
@@ -23,9 +20,6 @@ func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder) Get() *ByProj
 	}
 }
 
-/**
-*	Delete CustomObject by container and key
- */
 func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestBuilder) Delete() *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete {
 	return &ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/custom-objects/%s/%s", rb.projectKey, rb.container, rb.key),
