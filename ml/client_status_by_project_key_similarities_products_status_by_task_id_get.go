@@ -48,6 +48,12 @@ func (rb *ByProjectKeySimilaritiesProductsStatusByTaskIdRequestMethodGet) Execut
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
+	case 400:
+		result := GenericRequestError{
+			StatusCode: resp.StatusCode,
+			Content:    content,
+		}
+		return nil, result
 	default:
 		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}

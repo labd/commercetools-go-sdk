@@ -60,6 +60,12 @@ func (rb *ByProjectKeyPricesImportSinkKeyByImportSinkKeyImportOperationsByIdRequ
 			return nil, err
 		}
 		return nil, errorObj
+	case 400:
+		result := GenericRequestError{
+			StatusCode: resp.StatusCode,
+			Content:    content,
+		}
+		return nil, result
 	default:
 		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
