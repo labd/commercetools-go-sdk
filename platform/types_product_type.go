@@ -112,7 +112,7 @@ func (obj *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 
 type AttributeLocalizedEnumValue struct {
 	Key string `json:"key"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Label LocalizedString `json:"label"`
 }
 
@@ -418,7 +418,7 @@ func (obj AttributeTimeType) MarshalJSON() ([]byte, error) {
 }
 
 type ProductType struct {
-	// Platform-generated unique identifier for the ProductType.
+	// Unique identifier for the ProductType.
 	ID string `json:"id"`
 	// The current version of the product type.
 	Version        int       `json:"version"`
@@ -504,7 +504,7 @@ type ProductTypePagedQueryResponse struct {
 *
  */
 type ProductTypeReference struct {
-	// Platform-generated unique identifier of the referenced [ProductType](ctp:api:type:ProductType).
+	// Unique identifier of the referenced [ProductType](ctp:api:type:ProductType).
 	ID string `json:"id"`
 	// Contains the representation of the expanded ProductType. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductTypes.
 	Obj *ProductType `json:"obj,omitempty"`
@@ -525,7 +525,7 @@ func (obj ProductTypeReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductTypeResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -878,7 +878,7 @@ func (obj ProductTypeChangeIsSearchableAction) MarshalJSON() ([]byte, error) {
 
 type ProductTypeChangeLabelAction struct {
 	AttributeName string `json:"attributeName"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Label LocalizedString `json:"label"`
 }
 
@@ -998,7 +998,7 @@ func (obj ProductTypeRemoveEnumValuesAction) MarshalJSON() ([]byte, error) {
 
 type ProductTypeSetInputTipAction struct {
 	AttributeName string `json:"attributeName"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 }
 

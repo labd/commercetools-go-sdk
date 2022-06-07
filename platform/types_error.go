@@ -9,7 +9,7 @@ import (
 )
 
 type ErrorByExtension struct {
-	// Platform-generated unique identifier of the Extension.
+	// Unique identifier of the Extension.
 	ID string `json:"id"`
 	// User-defined unique identifier of the Extension.
 	Key *string `json:"key,omitempty"`
@@ -702,7 +702,7 @@ type DuplicateFieldError struct {
 	// interface{} `json:"//"`
 	Field          *string     `json:"field,omitempty"`
 	DuplicateValue interface{} `json:"duplicateValue,omitempty"`
-	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	ConflictingResource Reference `json:"conflictingResource,omitempty"`
 }
 
@@ -744,7 +744,7 @@ type DuplicateFieldWithConflictingResourceError struct {
 	// interface{} `json:"//"`
 	Field          string      `json:"field"`
 	DuplicateValue interface{} `json:"duplicateValue"`
-	// A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	ConflictingResource Reference `json:"conflictingResource"`
 }
 
@@ -1024,7 +1024,7 @@ func (obj ErrorResponse) Error() string {
 type ExtensionBadResponseError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
@@ -1072,7 +1072,7 @@ func (obj ExtensionNoResponseError) Error() string {
 type ExtensionUpdateActionsFailedError struct {
 	Message string `json:"message"`
 	// interface{} `json:"//"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`

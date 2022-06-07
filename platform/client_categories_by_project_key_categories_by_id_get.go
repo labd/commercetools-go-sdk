@@ -53,6 +53,11 @@ func (rb *ByProjectKeyCategoriesByIDRequestMethodGet) WithHeaders(headers http.H
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
+*
+ */
 func (rb *ByProjectKeyCategoriesByIDRequestMethodGet) Execute(ctx context.Context) (result *Category, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -507,13 +507,13 @@ type MyLineItemDraft struct {
 }
 
 type MyOrderFromCartDraft struct {
-	// Platform-generated unique identifier of the Cart from which the Platform creates an Order.
+	// Unique identifier of the Cart that initiates an Order creation.
 	ID      string `json:"id"`
 	Version int    `json:"version"`
 }
 
 type MyPayment struct {
-	// Platform-generated unique identifier of the MyPayment.
+	// Unique identifier of the MyPayment.
 	ID      string `json:"id"`
 	Version int    `json:"version"`
 	// A reference to the customer this payment belongs to.
@@ -1695,7 +1695,7 @@ func (obj MyPaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyPaymentSetMethodInfoNameAction struct {
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -1749,9 +1749,9 @@ func (obj MyShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListAddTextLineItemAction struct {
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name LocalizedString `json:"name"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Description *LocalizedString `json:"description,omitempty"`
 	Quantity    *int             `json:"quantity,omitempty"`
 	AddedAt     *time.Time       `json:"addedAt,omitempty"`
@@ -1799,7 +1799,7 @@ func (obj MyShoppingListChangeLineItemsOrderAction) MarshalJSON() ([]byte, error
 }
 
 type MyShoppingListChangeNameAction struct {
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name LocalizedString `json:"name"`
 }
 
@@ -1815,7 +1815,7 @@ func (obj MyShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 
 type MyShoppingListChangeTextLineItemNameAction struct {
 	TextLineItemId string `json:"textLineItemId"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name LocalizedString `json:"name"`
 }
 
@@ -1940,7 +1940,7 @@ func (obj MyShoppingListSetDeleteDaysAfterLastModificationAction) MarshalJSON() 
 }
 
 type MyShoppingListSetDescriptionAction struct {
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -2034,7 +2034,7 @@ func (obj MyShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, 
 
 type MyShoppingListSetTextLineItemDescriptionAction struct {
 	TextLineItemId string `json:"textLineItemId"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

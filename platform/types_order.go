@@ -544,7 +544,7 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 }
 
 type Hit struct {
-	// Platform-generated unique identifier of the Order.
+	// Unique identifier of the Order.
 	ID string `json:"id"`
 	// Current version of the Order.
 	Version int `json:"version"`
@@ -564,7 +564,7 @@ type OrderPagedSearchResponse struct {
 }
 
 type Delivery struct {
-	// Platform-generated unique identifier of the Delivery.
+	// Unique identifier of the Delivery.
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
 	// Items which are shipped in this delivery regardless their distribution over several parcels.
@@ -577,7 +577,7 @@ type Delivery struct {
 }
 
 type DeliveryItem struct {
-	// Platform-generated unique identifier of the DeliveryItem.
+	// Unique identifier of the DeliveryItem.
 	ID       string `json:"id"`
 	Quantity int    `json:"quantity"`
 }
@@ -644,7 +644,7 @@ func (obj LineItemImportDraft) MarshalJSON() ([]byte, error) {
 }
 
 type Order struct {
-	// Platform-generated unique identifier of the Order.
+	// Unique identifier of the Order.
 	ID string `json:"id"`
 	// The current version of the order.
 	Version        int       `json:"version"`
@@ -770,7 +770,7 @@ func (obj Order) MarshalJSON() ([]byte, error) {
 }
 
 type OrderFromCartDraft struct {
-	// Platform-generated unique identifier of the Cart from which you can create an Order.
+	// Unique identifier of the Cart from which you can create an Order.
 	ID *string `json:"id,omitempty"`
 	// ResourceIdentifier to the Cart from which this order is created.
 	Cart    *CartResourceIdentifier `json:"cart,omitempty"`
@@ -898,7 +898,7 @@ func (obj OrderReference) MarshalJSON() ([]byte, error) {
 }
 
 type OrderResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced resource. Required if `key` is absent.
+	// Unique identifier of the referenced resource. Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
@@ -1312,7 +1312,7 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 }
 
 type Parcel struct {
-	// Platform-generated unique identifier of the Parcel.
+	// Unique identifier of the Parcel.
 	ID           string              `json:"id"`
 	CreatedAt    time.Time           `json:"createdAt"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
@@ -1511,7 +1511,7 @@ func mapDiscriminatorReturnItem(input interface{}) (ReturnItem, error) {
 }
 
 type CustomLineItemReturnItem struct {
-	// Platform-generated unique identifier of the ReturnItem.
+	// Unique identifier of the ReturnItem.
 	ID            string              `json:"id"`
 	Quantity      int                 `json:"quantity"`
 	Comment       *string             `json:"comment,omitempty"`
@@ -1535,7 +1535,7 @@ func (obj CustomLineItemReturnItem) MarshalJSON() ([]byte, error) {
 }
 
 type LineItemReturnItem struct {
-	// Platform-generated unique identifier of the ReturnItem.
+	// Unique identifier of the ReturnItem.
 	ID            string              `json:"id"`
 	Quantity      int                 `json:"quantity"`
 	Comment       *string             `json:"comment,omitempty"`

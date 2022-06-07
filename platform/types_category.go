@@ -9,33 +9,44 @@ import (
 )
 
 type Category struct {
-	// Platform-generated unique identifier of the Category.
+	// Unique identifier of the Category.
 	ID string `json:"id"`
-	// The current version of the category.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the Category.
+	Version int `json:"version"`
+	// Date and time (UTC) the Category was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Category was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy *CreatedBy      `json:"createdBy,omitempty"`
-	Name      LocalizedString `json:"name"`
-	// human-readable identifiers usually used as deep-link URL to the related category.
-	// Each slug is unique across a project, but a category can have the same slug for different languages.
-	Slug        LocalizedString  `json:"slug"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Name of the Category.
+	Name LocalizedString `json:"name"`
+	// User-defined identifier used as a deep-link URL to the related Category per [Locale](ctp:api:type:Locale).
+	// A Category can have the same slug for different Locales, but they are unique across the [Project](ctp:api:type:Project).
+	// Valid slugs match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
+	// For [good performance](/../api/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set in a Project.
+	Slug LocalizedString `json:"slug"`
+	// Description of the Category.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Contains the parent path towards the root category.
+	// Contains the parent path towards the root Category.
 	Ancestors []CategoryReference `json:"ancestors"`
-	// A category that is the parent of this category in the category tree.
+	// Parent Category of this Category.
 	Parent *CategoryReference `json:"parent,omitempty"`
-	// An attribute as base for a custom category order in one level.
-	OrderHint       string           `json:"orderHint"`
-	ExternalId      *string          `json:"externalId,omitempty"`
-	MetaTitle       *LocalizedString `json:"metaTitle,omitempty"`
+	// Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+	OrderHint string `json:"orderHint"`
+	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	ExternalId *string `json:"externalId,omitempty"`
+	// Name of the Category used by external search engines for improved search engine performance.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// Description of the Category used by external search engines for improved search engine performance.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	MetaKeywords    *LocalizedString `json:"metaKeywords,omitempty"`
-	Custom          *CustomFields    `json:"custom,omitempty"`
-	// Can be used to store images, icons or movies related to this category.
+	// Keywords related to the Category for improved search engine performance.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// Custom Fields for the Category.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// Media related to the Category.
 	Assets []Asset `json:"assets"`
 	// User-defined unique identifier of the Category.
 	Key *string `json:"key,omitempty"`
@@ -65,26 +76,32 @@ func (obj Category) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryDraft struct {
+	// Name of the Category.
 	Name LocalizedString `json:"name"`
-	// human-readable identifier usually used as deep-link URL to the related category.
-	// Allowed are alphabetic, numeric, underscore (`_`) and hyphen (`-`) characters.
-	// Maximum size is 256.
-	// **Must be unique across a project!** The same category can have the same slug for different languages.
-	Slug        LocalizedString  `json:"slug"`
+	// User-defined identifier used as a deep-link URL to the related Category.
+	// A Category can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project).
+	// Valid slugs must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
+	Slug LocalizedString `json:"slug"`
+	// Description of the Category.
 	Description *LocalizedString `json:"description,omitempty"`
-	// A category that is the parent of this category in the category tree.
-	// The parent can be set by its ID or by its key.
+	// Parent Category of the Category.
+	// The parent can be set by its `id` or `key`.
 	Parent *CategoryResourceIdentifier `json:"parent,omitempty"`
-	// An attribute as base for a custom category order in one level.
-	// A random value will be assigned by API if not set.
-	OrderHint       *string          `json:"orderHint,omitempty"`
-	ExternalId      *string          `json:"externalId,omitempty"`
-	MetaTitle       *LocalizedString `json:"metaTitle,omitempty"`
+	// Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+	// If not set, a random value will be assigned.
+	OrderHint *string `json:"orderHint,omitempty"`
+	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	ExternalId *string `json:"externalId,omitempty"`
+	// Name of the Category used by external search engines for improved search engine performance.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// Description of the Category used by external search engines for improved search engine performance.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	MetaKeywords    *LocalizedString `json:"metaKeywords,omitempty"`
-	// The custom fields.
+	// Keywords related to the Category for improved search engine performance.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// Custom Fields for the Category.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	Assets []AssetDraft       `json:"assets"`
+	// Media related to the Category.
+	Assets []AssetDraft `json:"assets"`
 	// User-defined unique identifier for the Category.
 	Key *string `json:"key,omitempty"`
 }
@@ -112,13 +129,24 @@ func (obj CategoryDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Category](ctp:api:type:Category).
+*
+ */
 type CategoryPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int        `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Category](ctp:api:type:Category) matching the query.
 	Results []Category `json:"results"`
 }
 
@@ -127,7 +155,7 @@ type CategoryPagedQueryResponse struct {
 *
  */
 type CategoryReference struct {
-	// Platform-generated unique identifier of the referenced [Category](ctp:api:type:Category).
+	// Unique identifier of the referenced [Category](ctp:api:type:Category).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Category. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Categories.
 	Obj *Category `json:"obj,omitempty"`
@@ -148,7 +176,7 @@ func (obj CategoryReference) MarshalJSON() ([]byte, error) {
 *
  */
 type CategoryResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Category](ctp:api:type:Channel). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Category](ctp:api:type:Channel). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Category](ctp:api:type:Category). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -165,7 +193,10 @@ func (obj CategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryUpdate struct {
-	Version int                    `json:"version"`
+	// Expected version of the Category on which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Category.
 	Actions []CategoryUpdateAction `json:"actions"`
 }
 
@@ -337,8 +368,9 @@ func mapDiscriminatorCategoryUpdateAction(input interface{}) (CategoryUpdateActi
 }
 
 type CategoryAddAssetAction struct {
+	// Value to append.
 	Asset AssetDraft `json:"asset"`
-	// When specified, the value might be `0` and should be lower than the total of the assets list.
+	// Position in the array at which the Asset should be put. When specified, the value must be between `0` and the total number of Assets minus `1`.
 	Position *int `json:"position,omitempty"`
 }
 
@@ -353,9 +385,12 @@ func (obj CategoryAddAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryChangeAssetNameAction struct {
-	AssetId  *string         `json:"assetId,omitempty"`
-	AssetKey *string         `json:"assetKey,omitempty"`
-	Name     LocalizedString `json:"name"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// New value to set. Must not be empty.
+	Name LocalizedString `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -368,7 +403,12 @@ func (obj CategoryChangeAssetNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeAssetName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action changes the order of the `assets` array. The new order is defined by listing the `id`s of the Assets.
+*
+ */
 type CategoryChangeAssetOrderAction struct {
+	// New value to set. Must contain all Asset `id`s.
 	AssetOrder []string `json:"assetOrder"`
 }
 
@@ -383,6 +423,7 @@ func (obj CategoryChangeAssetOrderAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryChangeNameAction struct {
+	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
 
@@ -397,6 +438,7 @@ func (obj CategoryChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryChangeOrderHintAction struct {
+	// New value to set. Must be a decimal value between 0 and 1.
 	OrderHint string `json:"orderHint"`
 }
 
@@ -411,6 +453,7 @@ func (obj CategoryChangeOrderHintAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryChangeParentAction struct {
+	// New value to set as parent.
 	Parent CategoryResourceIdentifier `json:"parent"`
 }
 
@@ -424,9 +467,14 @@ func (obj CategoryChangeParentAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeParent", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changing the slug produces the [CategorySlugChangedMessage](ctp:api:type:CategorySlugChangedMessage).
+*
+ */
 type CategoryChangeSlugAction struct {
-	// Allowed are alphabetic, numeric, underscore (&#95;) and hyphen (&#45;) characters.
-	// Maximum size is {{ site.data.api-limits.slugLength }}.
+	// New value to set. Must not be empty.
+	// A Category can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project).
+	// Valid slugs must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
 	Slug LocalizedString `json:"slug"`
 }
 
@@ -441,7 +489,9 @@ func (obj CategoryChangeSlugAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryRemoveAssetAction struct {
-	AssetId  *string `json:"assetId,omitempty"`
+	// Value to remove. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// Value to remove. Either `assetId` or `assetKey` is required.
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
@@ -456,7 +506,9 @@ func (obj CategoryRemoveAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetAssetCustomFieldAction struct {
-	AssetId  *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
 	AssetKey *string `json:"assetKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -477,13 +529,15 @@ func (obj CategorySetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetAssetCustomTypeAction struct {
-	AssetId  *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
 	AssetKey *string `json:"assetKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Asset.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
 	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
-	Fields *interface{} `json:"fields,omitempty"`
+	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -497,8 +551,11 @@ func (obj CategorySetAssetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetAssetDescriptionAction struct {
-	AssetId     *string          `json:"assetId,omitempty"`
-	AssetKey    *string          `json:"assetKey,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -512,10 +569,14 @@ func (obj CategorySetAssetDescriptionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAssetDescription", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Set or remove the `key` of an [Asset](ctp:api:type:Asset).
+*
+ */
 type CategorySetAssetKeyAction struct {
+	// Value to set.
 	AssetId string `json:"assetId"`
-	// User-defined identifier for the asset.
-	// If left blank or set to `null`, the asset key is unset/removed.
+	// Value to set. If empty, any existing value will be removed.
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
@@ -530,9 +591,12 @@ func (obj CategorySetAssetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetAssetSourcesAction struct {
-	AssetId  *string       `json:"assetId,omitempty"`
-	AssetKey *string       `json:"assetKey,omitempty"`
-	Sources  []AssetSource `json:"sources"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Must not be empty. At least one entry is required.
+	Sources []AssetSource `json:"sources"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -546,9 +610,12 @@ func (obj CategorySetAssetSourcesAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetAssetTagsAction struct {
-	AssetId  *string  `json:"assetId,omitempty"`
-	AssetKey *string  `json:"assetKey,omitempty"`
-	Tags     []string `json:"tags"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetId *string `json:"assetId,omitempty"`
+	// New value to set. Either `assetId` or `assetKey` is required.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Keywords for categorizing and organizing Assets.
+	Tags []string `json:"tags"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -613,6 +680,7 @@ func (obj CategorySetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -626,8 +694,12 @@ func (obj CategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action sets a new ID that can be used as an additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+*
+ */
 type CategorySetExternalIdAction struct {
-	// If not defined, the external ID is unset.
+	// Value to set. If empty, any existing value will be removed.
 	ExternalId *string `json:"externalId,omitempty"`
 }
 
@@ -642,9 +714,7 @@ func (obj CategorySetExternalIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetKeyAction struct {
-	// User-defined unique identifier for the category.
-	// Keys can only contain alphanumeric characters (`a-Z, 0-9`), underscores and hyphens (`-, _`) and be between 2 and 256 characters.
-	// If `key` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -659,6 +729,7 @@ func (obj CategorySetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetMetaDescriptionAction struct {
+	// Value to set.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 }
 
@@ -673,6 +744,7 @@ func (obj CategorySetMetaDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetMetaKeywordsAction struct {
+	// Value to set.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 }
 
@@ -687,6 +759,7 @@ func (obj CategorySetMetaKeywordsAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetMetaTitleAction struct {
+	// Value to set.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
 }
 

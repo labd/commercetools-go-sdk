@@ -8,7 +8,7 @@ import (
 )
 
 type CustomObject struct {
-	// Platform-generated unique identifier of the CustomObject.
+	// Unique identifier of the CustomObject.
 	ID string `json:"id"`
 	// Current version of the CustomObject.
 	Version int `json:"version"`
@@ -26,7 +26,7 @@ type CustomObject struct {
 	Key string `json:"key"`
 	// JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
 	// For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
-	// If the referenced object is deleted, the platform does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
+	// If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
 	Value interface{} `json:"value"`
 }
 
@@ -37,7 +37,7 @@ type CustomObjectDraft struct {
 	Key string `json:"key"`
 	// JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
 	// For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
-	// If the referenced object is deleted, the platform does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
+	// If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
 	Value interface{} `json:"value"`
 	// Current version of the CustomObject.
 	Version *int `json:"version,omitempty"`
@@ -69,7 +69,7 @@ type CustomObjectPagedQueryResponse struct {
 *
  */
 type CustomObjectReference struct {
-	// Platform-generated unique identifier of the referenced [CustomObject](ctp:api:type:CustomObject).
+	// Unique identifier of the referenced [CustomObject](ctp:api:type:CustomObject).
 	ID string `json:"id"`
 	// Contains the representation of the expanded CustomObject. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CustomObjects.
 	Obj *CustomObject `json:"obj,omitempty"`

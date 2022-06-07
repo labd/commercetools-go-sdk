@@ -35,7 +35,7 @@ type UpdateAction struct {
 }
 
 type Asset struct {
-	// Platform-generated unique identifier of the Asset.
+	// Unique identifier of the Asset.
 	ID      string        `json:"id"`
 	Sources []AssetSource `json:"sources"`
 	// Name of the Asset.
@@ -137,7 +137,7 @@ type AssetSource struct {
 }
 
 type BaseAddress struct {
-	// Platform-generated unique identifier of the Address.
+	// Unique identifier of the Address.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the Address.
 	Key *string `json:"key,omitempty"`
@@ -190,7 +190,7 @@ type BaseAddress struct {
 }
 
 type Address struct {
-	// Platform-generated unique identifier of the Address.
+	// Unique identifier of the Address.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the Address.
 	Key *string `json:"key,omitempty"`
@@ -245,7 +245,7 @@ type Address struct {
 }
 
 type AddressDraft struct {
-	// Unique identifier for the Address. Not recommended to set it manually since the Platform overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer). Use `key` instead and omit this field to let the Platform generate the ID for the Address.
+	// Unique identifier for the Address. Not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer). Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier for the Address.
 	Key *string `json:"key,omitempty"`
@@ -421,7 +421,7 @@ type ImageDimensions struct {
 }
 
 /**
-*	A KeyReference represents a loose reference to another resource in the same commercetools Project identified by the resource's `key` field. If available, the `key` is immutable and mandatory. KeyReferences do not support [Reference Expansion](/general-concepts#reference-expansion).
+*	A KeyReference represents a loose reference to another resource in the same Project identified by the resource's `key` field. If available, the `key` is immutable and mandatory. KeyReferences do not support [Reference Expansion](/general-concepts#reference-expansion).
 *
  */
 type KeyReference interface{}
@@ -463,7 +463,7 @@ type LastModifiedBy struct {
 }
 
 /**
-*	JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+*	JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 *
  */
 type LocalizedString map[string]string
@@ -485,8 +485,7 @@ type Money struct {
 }
 
 /**
-*	The commercetools Platform supports two different types of Money: one for amounts in cent precision and another one for sub-cent amounts up to 20 fraction digits.
-*
+*	MoneyType supports two different values, one for amounts in cent precision and another one for sub-cent amounts up to 20 fraction digits.
  */
 type MoneyType string
 
@@ -496,7 +495,7 @@ const (
 )
 
 type Price struct {
-	// Platform-generated unique identifier of this Price.
+	// Unique identifier of this Price.
 	ID string `json:"id"`
 	// Money value of this Price.
 	Value TypedMoney `json:"value"`
@@ -511,7 +510,7 @@ type Price struct {
 	// Date and time until this Price is valid.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
-	// If set, the commercetools Platform uses the DiscountedPrice value for the [LineItem Price selection](/projects/carts#lineitem-price-selection).
+	// If set, the API uses the DiscountedPrice value for the [LineItem Price selection](/projects/carts#lineitem-price-selection).
 	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
@@ -575,7 +574,7 @@ type PriceDraft struct {
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Set this field to add a DiscountedPrice from an external service.
 	//
-	// The commercetools Platform sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
+	// The API sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
 	// The DiscountedPrice must reference a ProductDiscount with:
 	//
 	// * The `isActive` flag set to `true`.
@@ -663,7 +662,7 @@ type PriceTierDraft struct {
 }
 
 type QueryPrice struct {
-	// Platform-generated unique identifier of the given Price.
+	// Unique identifier of the given Price.
 	ID *string `json:"id,omitempty"`
 	// Money value of the given Price.
 	Value Money `json:"value"`
@@ -709,7 +708,7 @@ func (obj QueryPrice) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	A Reference represents a loose reference to another resource in the same commercetools Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+*	A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 *
  */
 type Reference interface{}
@@ -1274,7 +1273,7 @@ type HighPrecisionMoneyDraft struct {
 	//
 	// A Price of 1.015 USD can be rounded either to 1.01 USD or 1.02 USD. If it lies outside of this range, an error message stating that centAmount must be rounded correctly will be returned.
 	//
-	// If `centAmount` is not provided, the commercetools Platform calculates the value automatically using the default rounding mode half even.
+	// If `centAmount` is not provided, the API calculates the value automatically using the default rounding mode half even.
 	CentAmount *int `json:"centAmount,omitempty"`
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`

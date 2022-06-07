@@ -19,7 +19,7 @@ type Location struct {
 }
 
 type Zone struct {
-	// Platform-generated unique identifier of the Zone.
+	// Unique identifier of the Zone.
 	ID string `json:"id"`
 	// Current version of the Zone.
 	Version int `json:"version"`
@@ -101,7 +101,7 @@ type ZonePagedQueryResponse struct {
 *
  */
 type ZoneReference struct {
-	// Platform-generated unique identifier of the referenced [Zone](ctp:api:type:Zone).
+	// Unique identifier of the referenced [Zone](ctp:api:type:Zone).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Zone. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Zones.
 	Obj *Zone `json:"obj,omitempty"`
@@ -122,7 +122,7 @@ func (obj ZoneReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ZoneResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Zone](ctp:api:type:Zone). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

@@ -57,7 +57,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodPost) WithHe
 
 /**
 *	Updates a customer in the store specified by {storeKey}.
-*	If the customer exists in the commercetools project but the stores field references a different store,
+*	If the customer exists in the project but the stores field references a different store,
 *	this method returns a ResourceNotFound error.
 *
  */

@@ -40,7 +40,7 @@ type AssignedProductSelectionPagedQueryResponse struct {
 }
 
 type ProductSelection struct {
-	// Platform-generated unique identifier of the ProductSelection.
+	// Unique identifier of the ProductSelection.
 	ID string `json:"id"`
 	// Current version of the ProductSelection.
 	Version int `json:"version"`
@@ -130,7 +130,7 @@ type ProductSelectionProductPagedQueryResponse struct {
 *
  */
 type ProductSelectionReference struct {
-	// Platform-generated unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection).
+	// Unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection).
 	ID string `json:"id"`
 	// Contains the representation of the expanded ProductSelection. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductSelections.
 	Obj *ProductSelection `json:"obj,omitempty"`
@@ -151,7 +151,7 @@ func (obj ProductSelectionReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductSelectionResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

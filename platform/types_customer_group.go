@@ -9,7 +9,7 @@ import (
 )
 
 type CustomerGroup struct {
-	// Platform-generated unique identifier of the CustomerGroup.
+	// Unique identifier of the CustomerGroup.
 	ID string `json:"id"`
 	// Current version of the CustomerGroup.
 	Version int `json:"version"`
@@ -65,7 +65,7 @@ type CustomerGroupPagedQueryResponse struct {
 *
  */
 type CustomerGroupReference struct {
-	// Platform-generated unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup).
+	// Unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup).
 	ID string `json:"id"`
 	// Contains the representation of the expanded CustomerGroup. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CustomerGroups.
 	Obj *CustomerGroup `json:"obj,omitempty"`
@@ -86,7 +86,7 @@ func (obj CustomerGroupReference) MarshalJSON() ([]byte, error) {
 *
  */
 type CustomerGroupResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required.
+	// Unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

@@ -9,7 +9,7 @@ import (
 )
 
 type Review struct {
-	// Platform-generated unique identifier of the Review.
+	// Unique identifier of the Review.
 	ID string `json:"id"`
 	// The current version of the review.
 	Version        int       `json:"version"`
@@ -96,7 +96,7 @@ type ReviewRatingStatistics struct {
 *
  */
 type ReviewReference struct {
-	// Platform-generated unique identifier of the referenced [Review](ctp:api:type:Review).
+	// Unique identifier of the referenced [Review](ctp:api:type:Review).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Reviews.
 	Obj *Review `json:"obj,omitempty"`
@@ -117,7 +117,7 @@ func (obj ReviewReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ReviewResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

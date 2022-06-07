@@ -32,6 +32,9 @@ func (rb *ByProjectKeyInventoryRequestBuilder) Get() *ByProjectKeyInventoryReque
 	}
 }
 
+/**
+*	Produces the [InventoryEntryCreatedMessage](ctp:api:type:InventoryEntryCreatedMessage).
+ */
 func (rb *ByProjectKeyInventoryRequestBuilder) Post(body InventoryEntryDraft) *ByProjectKeyInventoryRequestMethodPost {
 	return &ByProjectKeyInventoryRequestMethodPost{
 		body:   body,

@@ -15,7 +15,7 @@ type PriceFunction struct {
 }
 
 type ShippingMethod struct {
-	// Platform-generated unique identifier of the ShippingMethod.
+	// Unique identifier of the ShippingMethod.
 	ID string `json:"id"`
 	// The current version of the shipping method.
 	Version        int       `json:"version"`
@@ -71,7 +71,7 @@ type ShippingMethodPagedQueryResponse struct {
 *
  */
 type ShippingMethodReference struct {
-	// Platform-generated unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod).
+	// Unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShippingMethods.
 	Obj *ShippingMethod `json:"obj,omitempty"`
@@ -92,7 +92,7 @@ func (obj ShippingMethodReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ShippingMethodResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

@@ -23,7 +23,7 @@ const (
 )
 
 type Customer struct {
-	// Platform-generated unique identifier of the Customer.
+	// Unique identifier of the Customer.
 	ID string `json:"id"`
 	// The current version of the customer.
 	Version        int       `json:"version"`
@@ -108,7 +108,7 @@ func (obj Customer) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerChangePassword struct {
-	// Platform-generated unique identifier of the Customer.
+	// Unique identifier of the Customer.
 	ID              string `json:"id"`
 	Version         int    `json:"version"`
 	CurrentPassword string `json:"currentPassword"`
@@ -116,7 +116,7 @@ type CustomerChangePassword struct {
 }
 
 type CustomerCreateEmailToken struct {
-	// Platform-generated unique identifier of the email token.
+	// Unique identifier of the email token.
 	ID         string `json:"id"`
 	Version    *int   `json:"version,omitempty"`
 	TtlMinutes int    `json:"ttlMinutes"`
@@ -180,7 +180,7 @@ type CustomerDraft struct {
 	// If no stores are specified, the customer is a global customer, and can log in using the Password Flow for global Customers.
 	// If one or more stores are specified, the customer can only log in using the Password Flow for Customers in a Store for those specific stores.
 	Stores []StoreResourceIdentifier `json:"stores"`
-	// Defines whether a password is required for the Customer that is used for platform-internal authentication.
+	// Defines whether a password field is a required field for the Customer.
 	AuthenticationMode *AuthenticationMode `json:"authenticationMode,omitempty"`
 }
 
@@ -239,7 +239,7 @@ type CustomerPagedQueryResponse struct {
 *
  */
 type CustomerReference struct {
-	// Platform-generated unique identifier of the referenced [Customer](ctp:api:type:Customer).
+	// Unique identifier of the referenced [Customer](ctp:api:type:Customer).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Customers.
 	Obj *Customer `json:"obj,omitempty"`
@@ -266,7 +266,7 @@ type CustomerResetPassword struct {
 *
  */
 type CustomerResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Customer](ctp:api:type:Customer). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Customer](ctp:api:type:Customer). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Customer](ctp:api:type:Customer). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -301,7 +301,7 @@ type CustomerSignin struct {
 }
 
 type CustomerToken struct {
-	// Platform-generated unique identifier of the CustomerToken.
+	// Unique identifier of the CustomerToken.
 	ID             string     `json:"id"`
 	CreatedAt      time.Time  `json:"createdAt"`
 	LastModifiedAt *time.Time `json:"lastModifiedAt,omitempty"`

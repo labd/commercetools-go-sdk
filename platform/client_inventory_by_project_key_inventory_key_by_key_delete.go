@@ -64,6 +64,10 @@ func (rb *ByProjectKeyInventoryKeyByKeyRequestMethodDelete) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Produces the [InventoryEntryDeletedMessage](ctp:api:type:InventoryEntryDeletedMessage).
+ */
 func (rb *ByProjectKeyInventoryKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *InventoryEntry, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

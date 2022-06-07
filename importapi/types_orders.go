@@ -160,7 +160,7 @@ func (obj LineItemProductVariantImportDraft) MarshalJSON() ([]byte, error) {
 *	Represents an individual Line Item in an Order. A line item is a snapshot of a product at the time it was added to the order.
 *
 *	You cannot create an Order that includes line item operations that do not exist in the Project or have been deleted.
-*	Products and Product Variants referenced by a line item must already exist in the commercetools Project.
+*	Products and Product Variants referenced by a line item must already exist in the Project.
 *
  */
 type LineItemImportDraft struct {

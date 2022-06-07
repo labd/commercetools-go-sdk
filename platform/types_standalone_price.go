@@ -9,7 +9,7 @@ import (
 )
 
 type StandalonePrice struct {
-	// Platform-generated unique identifier of the StandalonePrice.
+	// Unique identifier of the StandalonePrice.
 	ID string `json:"id"`
 	// Current version of the StandalonePrice.
 	Version int `json:"version"`
@@ -39,7 +39,7 @@ type StandalonePrice struct {
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Price tiers if any are defined.
 	Tiers []PriceTier `json:"tiers"`
-	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the Platform uses the `discounted` value for the [LineItem Price selection](/../api/projects/carts#lineitem-price-selection).
+	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](/../api/projects/carts#lineitem-price-selection).
 	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
@@ -93,7 +93,7 @@ func (obj StandalonePrice) MarshalJSON() ([]byte, error) {
 type StandalonePriceDraft struct {
 	// User-defined unique identifier for the StandalonePrice.
 	Key *string `json:"key,omitempty"`
-	// Specifies to which [ProductVariant](ctp:api:type:ProductVariant) the Platform associates this Price.
+	// Specifies to which [ProductVariant](ctp:api:type:ProductVariant) the API associates this Price.
 	// It is not validated to exist in product variants.
 	Sku string `json:"sku"`
 	// Sets the money value of this Price.
@@ -182,7 +182,7 @@ func (obj StandalonePriceReference) MarshalJSON() ([]byte, error) {
 *
  */
 type StandalonePriceResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced resource. Required if `key` is absent.
+	// Unique identifier of the referenced resource. Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
 	Key *string `json:"key,omitempty"`

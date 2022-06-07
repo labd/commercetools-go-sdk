@@ -9,7 +9,7 @@ import (
 )
 
 type Channel struct {
-	// Platform-generated unique identifier of the Channel.
+	// Unique identifier of the Channel.
 	ID string `json:"id"`
 	// Current version of the Channel.
 	Version int `json:"version"`
@@ -142,7 +142,7 @@ type ChannelPagedQueryResponse struct {
 *
  */
 type ChannelReference struct {
-	// Platform-generated unique identifier of the referenced [Channel](ctp:api:type:Channel).
+	// Unique identifier of the referenced [Channel](ctp:api:type:Channel).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Channel.
 	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Channels.
@@ -164,7 +164,7 @@ func (obj ChannelReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ChannelResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Channel](ctp:api:type:Channel). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

@@ -476,7 +476,7 @@ const (
 )
 
 type Type struct {
-	// Platform-generated unique identifier of the Type.
+	// Unique identifier of the Type.
 	ID string `json:"id"`
 	// Current version of the Type.
 	Version int `json:"version"`
@@ -562,7 +562,7 @@ type TypePagedQueryResponse struct {
 *
  */
 type TypeReference struct {
-	// Platform-generated unique identifier of the referenced [Type](ctp:api:type:Type).
+	// Unique identifier of the referenced [Type](ctp:api:type:Type).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Type.
 	// Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Types.
@@ -584,7 +584,7 @@ func (obj TypeReference) MarshalJSON() ([]byte, error) {
 *
  */
 type TypeResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -921,7 +921,7 @@ func (obj TypeChangeKeyAction) MarshalJSON() ([]byte, error) {
 type TypeChangeLabelAction struct {
 	// Name of the [Field Definition](ctp:api:type:FieldDefinition) to update.
 	FieldName string `json:"fieldName"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Label LocalizedString `json:"label"`
 }
 

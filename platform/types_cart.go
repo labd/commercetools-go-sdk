@@ -9,7 +9,7 @@ import (
 )
 
 type Cart struct {
-	// Platform-generated unique identifier of the Cart.
+	// Unique identifier of the Cart.
 	ID string `json:"id"`
 	// The current version of the cart.
 	Version        int       `json:"version"`
@@ -260,7 +260,7 @@ type CartPagedQueryResponse struct {
 *
  */
 type CartReference struct {
-	// Platform-generated unique identifier of the referenced [Cart](ctp:api:type:Cart).
+	// Unique identifier of the referenced [Cart](ctp:api:type:Cart).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Cart. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Carts.
 	Obj *Cart `json:"obj,omitempty"`
@@ -281,7 +281,7 @@ func (obj CartReference) MarshalJSON() ([]byte, error) {
 *
  */
 type CartResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -719,7 +719,7 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 }
 
 type CustomLineItem struct {
-	// Platform-generated unique identifier of the CustomLineItem.
+	// Unique identifier of the CustomLineItem.
 	ID string `json:"id"`
 	// The name of this CustomLineItem.
 	Name LocalizedString `json:"name"`
@@ -946,7 +946,7 @@ type ItemShippingTarget struct {
 }
 
 type LineItem struct {
-	// Platform-generated unique identifier of the LineItem.
+	// Unique identifier of the LineItem.
 	ID        string `json:"id"`
 	ProductId string `json:"productId"`
 	// User-defined unique identifier of the [Product](ctp:api:type:Product).
@@ -1178,7 +1178,7 @@ func mapDiscriminatorShippingRateInput(input interface{}) (ShippingRateInput, er
 
 type ClassificationShippingRateInput struct {
 	Key string `json:"key"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Label LocalizedString `json:"label"`
 }
 
@@ -1317,7 +1317,7 @@ type TaxedItemPrice struct {
 	TotalNet TypedMoney `json:"totalNet"`
 	// TaxedItemPrice fields can not be used in query predicates.
 	TotalGross TypedMoney `json:"totalGross"`
-	// Platform-calculated value as subtraction of `totalGross` - `totalNet`.
+	// Calculated automatically as the subtraction of `totalGross` - `totalNet`.
 	TotalTax TypedMoney `json:"totalTax,omitempty"`
 }
 
@@ -1357,7 +1357,7 @@ type TaxedPrice struct {
 	TotalGross TypedMoney `json:"totalGross"`
 	// TaxedPrice fields that can be used in query predicates: `totalNet`, `totalGross`.
 	TaxPortions []TaxPortion `json:"taxPortions"`
-	// Platform-calculated value as subtraction of `totalGross` - `totalNet`.
+	// Calculated automatically as the subtraction of `totalGross` - `totalNet`.
 	TotalTax TypedMoney `json:"totalTax,omitempty"`
 }
 
@@ -1409,7 +1409,7 @@ type CartAddCustomLineItemAction struct {
 	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Money Money `json:"money"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name     LocalizedString `json:"name"`
 	Quantity int             `json:"quantity"`
 	Slug     string          `json:"slug"`

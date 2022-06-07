@@ -9,7 +9,7 @@ import (
 )
 
 type OrderEdit struct {
-	// Platform-generated unique identifier of the OrderEdit.
+	// Unique identifier of the OrderEdit.
 	ID string `json:"id"`
 	// The current version of the OrderEdit.
 	Version        int       `json:"version"`
@@ -133,7 +133,7 @@ type OrderEditPagedQueryResponse struct {
 *
  */
 type OrderEditReference struct {
-	// Platform-generated unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit).
+	// Unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit).
 	ID string `json:"id"`
 	// Contains the representation of the expanded OrderEdit. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for OrderEdits.
 	Obj *OrderEdit `json:"obj,omitempty"`
@@ -154,7 +154,7 @@ func (obj OrderEditReference) MarshalJSON() ([]byte, error) {
 *
  */
 type OrderEditResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit). Either `id` or `key` is required.
+	// Unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [OrderEdit](ctp:api:type:OrderEdit). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -433,7 +433,7 @@ func (obj *OrderExcerpt) UnmarshalJSON(data []byte) error {
 }
 
 type StagedOrder struct {
-	// Platform-generated unique identifier of the Order.
+	// Unique identifier of the Order.
 	ID string `json:"id"`
 	// The current version of the order.
 	Version        int       `json:"version"`
@@ -692,7 +692,7 @@ type StagedOrderAddCustomLineItemAction struct {
 	//
 	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
 	Money Money `json:"money"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name     LocalizedString `json:"name"`
 	Quantity *int            `json:"quantity,omitempty"`
 	Slug     string          `json:"slug"`

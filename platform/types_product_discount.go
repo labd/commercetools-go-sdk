@@ -9,7 +9,7 @@ import (
 )
 
 type ProductDiscount struct {
-	// Platform-generated unique identifier of the ProductDiscount.
+	// Unique identifier of the ProductDiscount.
 	ID string `json:"id"`
 	// Current version of the ProductDiscount.
 	Version int `json:"version"`
@@ -149,7 +149,7 @@ type ProductDiscountPagedQueryResponse struct {
 *
  */
 type ProductDiscountReference struct {
-	// Platform-generated unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount).
+	// Unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount).
 	ID string `json:"id"`
 	// Contains the representation of the expanded ProductDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductDiscounts.
 	Obj *ProductDiscount `json:"obj,omitempty"`
@@ -170,7 +170,7 @@ func (obj ProductDiscountReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductDiscountResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [ProductDiscount](ctp:api:type:ProductDiscount). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

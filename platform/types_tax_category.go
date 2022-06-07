@@ -18,7 +18,7 @@ type SubRate struct {
 }
 
 type TaxCategory struct {
-	// Platform-generated unique identifier of the TaxCategory.
+	// Unique identifier of the TaxCategory.
 	ID string `json:"id"`
 	// Current version of the TaxCategory.
 	Version int `json:"version"`
@@ -34,7 +34,7 @@ type TaxCategory struct {
 	Name string `json:"name"`
 	// Description of the TaxCategory.
 	Description *string `json:"description,omitempty"`
-	// Tax rates and subrates of states and countries. Each TaxRate in the array has a unique ID assigned by the platform.
+	// Tax rates and subrates of states and countries. Each TaxRate in the array has a unique ID.
 	Rates []TaxRate `json:"rates"`
 	// User-defined unique identifier of the TaxCategory.
 	Key *string `json:"key,omitempty"`
@@ -100,7 +100,7 @@ type TaxCategoryPagedQueryResponse struct {
 *
  */
 type TaxCategoryReference struct {
-	// Platform-generated unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory).
+	// Unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory).
 	ID string `json:"id"`
 	// Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategories.
 	Obj *TaxCategory `json:"obj,omitempty"`
@@ -121,7 +121,7 @@ func (obj TaxCategoryReference) MarshalJSON() ([]byte, error) {
 *
  */
 type TaxCategoryResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
+	// Unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -223,7 +223,7 @@ type TaxRate struct {
 	Name string `json:"name"`
 	// Tax rate. If subrates are used, the amount must be the sum of all subrates.
 	Amount float64 `json:"amount"`
-	// If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the platform calculates the `totalNet` price based on the TaxRate.
+	// If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
 	Country string `json:"country"`
@@ -263,7 +263,7 @@ type TaxRateDraft struct {
 	// Must be supplied if no `subRates` are specified.
 	// If `subRates` are specified, this field can be omitted or it must be the sum of amounts of all `subRates`.
 	Amount *float64 `json:"amount,omitempty"`
-	// Set to `true`, if tax should be included in [Prices](ctp:api:type:Price) and the `taxedPrice` should be present on [Line Items](ctp:api:type:LineItem). In this case, the platform calculates the `totalNet` price based on the TaxRate.
+	// If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
 	Country string `json:"country"`

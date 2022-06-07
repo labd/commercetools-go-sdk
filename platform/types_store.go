@@ -176,7 +176,7 @@ func (obj StoreReference) MarshalJSON() ([]byte, error) {
 }
 
 type StoreResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced resource. Required if `key` is absent.
+	// Unique identifier of the referenced resource. Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
 	Key *string `json:"key,omitempty"`

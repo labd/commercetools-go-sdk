@@ -99,7 +99,7 @@ type ImportResponse struct {
 }
 
 /**
-*	The request body to [import Categories](#import-categories). Contains data for [Categories](/../api/projects/categories#category) to be created or updated in a commercetools Project.
+*	The request body to [import Categories](#import-categories). Contains data for [Categories](/../api/projects/categories#category) to be created or updated in a Project.
 *
  */
 type CategoryImportRequest struct {
@@ -118,7 +118,7 @@ func (obj CategoryImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Products](#import-products). Contains data for [Products](/../api/projects/products#product) to be created or updated in a commercetools Project.
+*	The request body to [import Products](#import-products). Contains data for [Products](/../api/projects/products#product) to be created or updated in a Project.
 *
  */
 type ProductImportRequest struct {
@@ -137,7 +137,7 @@ func (obj ProductImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](/../api/projects/products#productdraft) to be created or updated in a commercetools Project.
+*	The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](/../api/projects/products#productdraft) to be created or updated in a Project.
 *
  */
 type ProductDraftImportRequest struct {
@@ -156,7 +156,7 @@ func (obj ProductDraftImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](/../api/projects/productTypes#producttype) to be created or updated in a commercetools Project.
+*	The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](/../api/projects/productTypes#producttype) to be created or updated in a Project.
 *
  */
 type ProductTypeImportRequest struct {
@@ -175,7 +175,7 @@ func (obj ProductTypeImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](/../api/projects/products#productvariant) to be created or updated in a commercetools Project.
+*	The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](/../api/projects/products#productvariant) to be created or updated in a Project.
 *
  */
 type ProductVariantImportRequest struct {
@@ -194,7 +194,7 @@ func (obj ProductVariantImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Prices](#import-prices). Contains data for [EmbeddedPrices](/../api/projects/products#embeddedprice) to be created or updated in a commercetools Project.
+*	The request body to [import Prices](#import-prices). Contains data for [EmbeddedPrices](/../api/projects/products#embeddedprice) to be created or updated in a Project.
 *
  */
 type PriceImportRequest struct {
@@ -213,7 +213,7 @@ func (obj PriceImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a commercetools Project.
+*	The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a Project.
 *
  */
 type OrderImportRequest struct {
@@ -270,7 +270,7 @@ func (obj ProductVariantPatchRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Customers](#import-customers). Contains data for [Customers](/../api/projects/customers#customer) to be created or updated in a commercetools Project.
+*	The request body to [import Customers](#import-customers). Contains data for [Customers](/../api/projects/customers#customer) to be created or updated in a Project.
 *
  */
 type CustomerImportRequest struct {

@@ -9,7 +9,7 @@ import (
 )
 
 type Payment struct {
-	// Platform-generated unique identifier of the Payment.
+	// Unique identifier of the Payment.
 	ID             string    `json:"id"`
 	Version        int       `json:"version"`
 	CreatedAt      time.Time `json:"createdAt"`
@@ -185,7 +185,7 @@ type PaymentPagedQueryResponse struct {
 *
  */
 type PaymentReference struct {
-	// Platform-generated unique identifier of the referenced [Payment](ctp:api:type:Payment).
+	// Unique identifier of the referenced [Payment](ctp:api:type:Payment).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Payment. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Payments.
 	Obj *Payment `json:"obj,omitempty"`
@@ -206,7 +206,7 @@ func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -422,7 +422,7 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 }
 
 type Transaction struct {
-	// Platform-generated unique identifier of the Transaction.
+	// Unique identifier of the Transaction.
 	ID string `json:"id"`
 	// The time at which the transaction took place.
 	Timestamp *time.Time `json:"timestamp,omitempty"`

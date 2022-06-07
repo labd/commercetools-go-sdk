@@ -9,7 +9,7 @@ import (
 )
 
 type State struct {
-	// Platform-generated unique identifier of the State.
+	// Unique identifier of the State.
 	ID string `json:"id"`
 	// Current version of the State.
 	Version int `json:"version"`
@@ -142,7 +142,7 @@ type StatePagedQueryResponse struct {
 *
  */
 type StateReference struct {
-	// Platform-generated unique identifier of the referenced [State](ctp:api:type:State).
+	// Unique identifier of the referenced [State](ctp:api:type:State).
 	ID string `json:"id"`
 	// Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for States.
 	Obj *State `json:"obj,omitempty"`
@@ -163,7 +163,7 @@ func (obj StateReference) MarshalJSON() ([]byte, error) {
 *
  */
 type StateResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
+	// Unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`

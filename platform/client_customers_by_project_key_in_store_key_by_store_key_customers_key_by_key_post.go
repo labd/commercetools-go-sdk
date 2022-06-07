@@ -56,7 +56,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodPost) Wi
 }
 
 /**
-*	If the customer exists in the commercetools project but the stores field references a different store,
+*	If the customer exists in the project but the stores field references a different store,
 *	this method returns a ResourceNotFound error.
 *
  */

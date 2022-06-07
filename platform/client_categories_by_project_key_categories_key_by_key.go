@@ -12,6 +12,10 @@ type ByProjectKeyCategoriesKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
+*
+ */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Get() *ByProjectKeyCategoriesKeyByKeyRequestMethodGet {
 	return &ByProjectKeyCategoriesKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/categories/key=%s", rb.projectKey, rb.key),
@@ -19,6 +23,10 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Get() *ByProjectKeyCateg
 	}
 }
 
+/**
+*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*
+ */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Post(body CategoryUpdate) *ByProjectKeyCategoriesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyCategoriesKeyByKeyRequestMethodPost{
 		body:   body,
@@ -27,6 +35,10 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Post(body CategoryUpdate
 	}
 }
 
+/**
+*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*
+ */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Delete() *ByProjectKeyCategoriesKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyCategoriesKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/categories/key=%s", rb.projectKey, rb.key),

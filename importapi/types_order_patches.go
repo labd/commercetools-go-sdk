@@ -206,12 +206,12 @@ func (obj OrderField) MarshalJSON() ([]byte, error) {
 
 /**
 *	Representation for an update of an [Order](/../api/projects/orders#order). Use this type to import updates for existing
-*	[Orders](/../api/projects/orders#order) in a commercetools Project.
+*	[Orders](/../api/projects/orders#order) in a Project.
 *
  */
 type OrderPatchImport struct {
 	// Maps to `Order.orderNumber`, String that uniquely identifies an order, unique across a project.
 	OrderNumber string `json:"orderNumber"`
-	// Each field referenced must be defined in an already existing order in the commercetools project or the import operation state is set to `validationFailed`.
+	// Each field referenced must be defined in an already existing order in the project or the import operation state is set to `validationFailed`.
 	Fields OrderField `json:"fields"`
 }

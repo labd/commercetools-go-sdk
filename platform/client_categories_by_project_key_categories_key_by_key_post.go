@@ -54,6 +54,11 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodPost) WithHeaders(headers h
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*
+ */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Category, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

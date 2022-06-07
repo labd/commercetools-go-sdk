@@ -9,10 +9,13 @@ import (
 )
 
 type InventoryEntry struct {
-	// Platform-generated unique identifier of the InventoryEntry.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the InventoryEntry.
+	ID string `json:"id"`
+	// Current version of the InventoryEntry.
+	Version int `json:"version"`
+	// Date and time (UTC) the InventoryEntry was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the InventoryEntry was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
@@ -20,31 +23,36 @@ type InventoryEntry struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the InventoryEntry.
 	Key *string `json:"key,omitempty"`
-	Sku string  `json:"sku"`
-	// Connection to a particular supplier.
+	// [ProductVariant](ctp:api:type:ProductVariant) `sku` of the InventoryEntry.
+	Sku string `json:"sku"`
+	// [Channel](ctp:api:type:Channel) that supplies this InventoryEntry.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-	// Overall amount of stock.
-	// (available + reserved)
+	// Overall amount of stock (`availableQuantity` + reserved).
 	QuantityOnStock int `json:"quantityOnStock"`
-	// Available amount of stock.
-	// (available means: `quantityOnStock` - reserved quantity)
+	// Available amount of stock (`quantityOnStock` - reserved).
 	AvailableQuantity int `json:"availableQuantity"`
-	// The time period in days, that tells how often this inventory entry is restocked.
+	// How often the InventoryEntry is restocked (in days).
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
-	// The date and time of the next restock.
-	ExpectedDelivery *time.Time    `json:"expectedDelivery,omitempty"`
-	Custom           *CustomFields `json:"custom,omitempty"`
+	// Date and time of the next restock.
+	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
+	// Custom Fields of the InventoryEntry.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type InventoryEntryDraft struct {
+	// [ProductVariant](ctp:api:type:ProductVariant) `sku` of the InventoryEntry.
 	Sku string `json:"sku"`
 	// User-defined unique identifier for the InventoryEntry.
-	Key               *string                    `json:"key,omitempty"`
-	SupplyChannel     *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	QuantityOnStock   int                        `json:"quantityOnStock"`
-	RestockableInDays *int                       `json:"restockableInDays,omitempty"`
-	ExpectedDelivery  *time.Time                 `json:"expectedDelivery,omitempty"`
-	// The custom fields.
+	Key *string `json:"key,omitempty"`
+	// [Channel](ctp:api:type:Channel) that supplies this InventoryEntry.
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	// Overall amount of stock.
+	QuantityOnStock int `json:"quantityOnStock"`
+	// How often the InventoryEntry is restocked (in days).
+	RestockableInDays *int `json:"restockableInDays,omitempty"`
+	// Date and time of the next restock.
+	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
+	// Custom Fields of the InventoryEntry.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -53,7 +61,7 @@ type InventoryEntryDraft struct {
 *
  */
 type InventoryEntryReference struct {
-	// Platform-generated unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry).
+	// Unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry).
 	ID string `json:"id"`
 	// Contains the representation of the expanded InventoryEntry. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for InventoryEntries.
 	Obj *InventoryEntry `json:"obj,omitempty"`
@@ -74,7 +82,7 @@ func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 *
  */
 type InventoryEntryResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
+	// Unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -91,7 +99,9 @@ func (obj InventoryEntryResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntryUpdate struct {
-	Version int                          `json:"version"`
+	// Expected version of the InventoryEntry on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the InventoryEntry.
 	Actions []InventoryEntryUpdateAction `json:"actions"`
 }
 
@@ -186,15 +196,26 @@ func mapDiscriminatorInventoryEntryUpdateAction(input interface{}) (InventoryEnt
 
 type InventoryPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int              `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Inventory entries](ctp:api:type:InventoryEntry) matching the query.
 	Results []InventoryEntry `json:"results"`
 }
 
+/**
+*	Updates `availableQuantity` based on the new `quantityOnStock` and amount of active reservations.
+ */
 type InventoryEntryAddQuantityAction struct {
+	// Value to add to `quantityOnStock`.
 	Quantity int `json:"quantity"`
 }
 
@@ -208,7 +229,11 @@ func (obj InventoryEntryAddQuantityAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addQuantity", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates `availableQuantity` based on the new `quantityOnStock` and amount of active reservations.
+ */
 type InventoryEntryChangeQuantityAction struct {
+	// Value to set for `quantityOnStock`.
 	Quantity int `json:"quantity"`
 }
 
@@ -222,7 +247,11 @@ func (obj InventoryEntryChangeQuantityAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeQuantity", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates `availableQuantity` based on the new `quantityOnStock` and amount of active reservations.
+ */
 type InventoryEntryRemoveQuantityAction struct {
+	// Value to remove from `quantityOnStock`.
 	Quantity int `json:"quantity"`
 }
 
@@ -274,6 +303,7 @@ func (obj InventoryEntrySetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntrySetExpectedDeliveryAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
 }
 
@@ -303,6 +333,7 @@ func (obj InventoryEntrySetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntrySetRestockableInDaysAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 }
 
@@ -316,9 +347,11 @@ func (obj InventoryEntrySetRestockableInDaysAction) MarshalJSON() ([]byte, error
 	}{Action: "setRestockableInDays", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If an entry with the same `sku` and `supplyChannel` already exists, this action will fail and a [400 Bad Request](/../api/errors#400-bad-request-1) `DuplicateField` error will be returned.
+ */
 type InventoryEntrySetSupplyChannelAction struct {
-	// If absent, the supply channel is removed.
-	// This action will fail if an entry with the combination of sku and supplyChannel already exists.
+	// Value to set. If empty, any existing value will be removed.
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 }
 

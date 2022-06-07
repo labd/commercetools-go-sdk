@@ -64,6 +64,11 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodDelete) WithHeaders(headers
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*
+ */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *Category, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

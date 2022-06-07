@@ -9,43 +9,50 @@ import (
 )
 
 type CartDiscount struct {
-	// Platform-generated unique identifier of the CartDiscount.
+	// Unique identifier of the CartDiscount.
 	ID string `json:"id"`
-	// The current version of the cart discount.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the CartDiscount.
+	Version int `json:"version"`
+	// Date and time (UTC) for the CartDiscount was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) for the CartDiscount was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy *CreatedBy      `json:"createdBy,omitempty"`
-	Name      LocalizedString `json:"name"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Name of the CartDiscount.
+	Name LocalizedString `json:"name"`
 	// User-defined unique identifier of the CartDiscount.
-	Key         *string           `json:"key,omitempty"`
-	Description *LocalizedString  `json:"description,omitempty"`
-	Value       CartDiscountValue `json:"value"`
-	// A valid Cart predicate.
+	Key *string `json:"key,omitempty"`
+	// Description of the CartDiscount.
+	Description *LocalizedString `json:"description,omitempty"`
+	// Effect of the CartDiscount.
+	Value CartDiscountValue `json:"value"`
+	// Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
 	CartPredicate string `json:"cartPredicate"`
-	// Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
+	// Sets a [CartDiscountTarget](ctp:api:type:CartDiscountTarget). Empty if `value` has type `giftLineItem`.
 	Target CartDiscountTarget `json:"target,omitempty"`
-	// The string must contain a number between 0 and 1.
-	// All matching cart discounts are applied to a cart in the order defined by this field.
-	// A discount with greater sort order is prioritized higher than a discount with lower sort order.
-	// The sort order is unambiguous among all cart discounts.
+	// Value between `0` and `1`.
+	// All matching CartDiscounts are applied to a Cart in the order defined by this field.
+	// A Discount with a higher sortOrder is prioritized.
+	// The sort order is unambiguous among all CartDiscounts.
 	SortOrder string `json:"sortOrder"`
-	// Only active discount can be applied to the cart.
-	IsActive   bool       `json:"isActive"`
-	ValidFrom  *time.Time `json:"validFrom,omitempty"`
+	// Indicates if the CartDiscount is active and can be applied to the Cart.
+	IsActive bool `json:"isActive"`
+	// Date and time (UTC) from which the Discount is effective.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Discount is effective.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// States whether the discount can only be used in a connection with a DiscountCode.
+	// Indicates if the Discount can be used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
 	RequiresDiscountCode bool `json:"requiresDiscountCode"`
-	// The platform will generate this array from the predicate.
-	// It contains the references of all the resources that are addressed in the predicate.
+	// References of all resources that are addressed in the predicate.
+	// The API generates this array from the predicate.
 	References []Reference `json:"references"`
-	// Specifies whether the application of this discount causes the following discounts to be ignored.
-	// Defaults to Stacking.
-	StackingMode StackingMode  `json:"stackingMode"`
-	Custom       *CustomFields `json:"custom,omitempty"`
+	// Indicates whether the application of the CartDiscount causes other discounts to be ignored.
+	StackingMode StackingMode `json:"stackingMode"`
+	// Custom Fields of the CartDiscount.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -80,31 +87,35 @@ func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
 }
 
 type CartDiscountDraft struct {
+	// Name of the CartDiscount.
 	Name LocalizedString `json:"name"`
 	// User-defined unique identifier for the CartDiscount.
-	Key         *string                `json:"key,omitempty"`
-	Description *LocalizedString       `json:"description,omitempty"`
-	Value       CartDiscountValueDraft `json:"value"`
-	// A valid Cart predicate.
+	Key *string `json:"key,omitempty"`
+	// Description of the CartDiscount.
+	Description *LocalizedString `json:"description,omitempty"`
+	// Effect of the CartDiscount.
+	// For a target, relative or absolute discount values, or a fixed item price value can be specified. If no target is specified, a gift line item can be added to the cart.
+	Value CartDiscountValueDraft `json:"value"`
+	// Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
 	CartPredicate string `json:"cartPredicate"`
-	// Must not be set when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget must be set.
+	// Must not be set when the `value` has type `giftLineItem`, otherwise a [CartDiscountTarget](ctp:api:type:CartDiscountTarget) must be set.
 	Target CartDiscountTarget `json:"target,omitempty"`
-	// The string must contain a number between 0 and 1.
-	// A discount with greater sort order is prioritized higher than a discount with lower sort order.
-	// The sort order must be unambiguous among all cart discounts.
+	// Value between `0` and `1`.
+	// A Discount with a higher sortOrder is prioritized.
+	// The sort order must be unambiguous among all CartDiscounts.
 	SortOrder string `json:"sortOrder"`
-	// Only active discount can be applied to the cart.
-	// Defaults to `true`.
-	IsActive   *bool      `json:"isActive,omitempty"`
-	ValidFrom  *time.Time `json:"validFrom,omitempty"`
+	// Only active Discounts can be applied to the Cart.
+	IsActive *bool `json:"isActive,omitempty"`
+	// Date and time (UTC) from which the Discount is effective.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Discount is effective.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// States whether the discount can only be used in a connection with a DiscountCode.
-	// Defaults to `false`.
+	// States whether the Discount can only be used in a connection with a [DiscountCode](ctp:api:type:DiscountCode).
 	RequiresDiscountCode *bool `json:"requiresDiscountCode,omitempty"`
 	// Specifies whether the application of this discount causes the following discounts to be ignored.
-	// Defaults to Stacking.
-	StackingMode *StackingMode      `json:"stackingMode,omitempty"`
-	Custom       *CustomFieldsDraft `json:"custom,omitempty"`
+	StackingMode *StackingMode `json:"stackingMode,omitempty"`
+	// Custom Fields of the CartDiscount.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -131,13 +142,24 @@ func (obj *CartDiscountDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [CartDiscount](ctp:api:type:CartDiscount).
+*
+ */
 type CartDiscountPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int            `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [CartDiscounts](ctp:api:type:CartDiscount) matching the query.
 	Results []CartDiscount `json:"results"`
 }
 
@@ -146,7 +168,7 @@ type CartDiscountPagedQueryResponse struct {
 *
  */
 type CartDiscountReference struct {
-	// Platform-generated unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount).
+	// Unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount).
 	ID string `json:"id"`
 	// Contains the representation of the expanded CartDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CartDiscounts.
 	Obj *CartDiscount `json:"obj,omitempty"`
@@ -167,7 +189,7 @@ func (obj CartDiscountReference) MarshalJSON() ([]byte, error) {
 *
  */
 type CartDiscountResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required.
+	// Unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -231,7 +253,12 @@ func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, 
 	return nil, nil
 }
 
+/**
+*	Discount is applied to [CustomLineItems](ctp:api:type:CustomLineItem) matching the `predicate`.
+*
+ */
 type CartDiscountCustomLineItemsTarget struct {
+	// Valid [CustomLineItem target predicate](/../api/projects/predicates#customlineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 }
 
@@ -245,7 +272,12 @@ func (obj CartDiscountCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 	}{Action: "customLineItems", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discount is applied to [LineItems](ctp:api:type:LineItem) matching the `predicate`.
+*
+ */
 type CartDiscountLineItemsTarget struct {
+	// Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 }
 
@@ -259,6 +291,10 @@ func (obj CartDiscountLineItemsTarget) MarshalJSON() ([]byte, error) {
 	}{Action: "lineItems", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discount is applied to the shipping costs of the [Cart](ctp:api:type:Cart).
+*
+ */
 type CartDiscountShippingCostTarget struct {
 }
 
@@ -273,7 +309,9 @@ func (obj CartDiscountShippingCostTarget) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountUpdate struct {
-	Version int                        `json:"version"`
+	// Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the CartDiscount.
 	Actions []CartDiscountUpdateAction `json:"actions"`
 }
 
@@ -472,6 +510,10 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 	return nil, nil
 }
 
+/**
+*	Discounts the [CartDiscountTarget](ctp:api:type:CartDiscountTarget) by an absolute amount (not allowed for [MultiBuyLineItemsTarget](ctp:api:type:MultiBuyLineItemsTarget) and [MultiBuyCustomLineItemsTarget](ctp:api:type:MultiBuyCustomLineItemsTarget)).
+*
+ */
 type CartDiscountValueAbsolute struct {
 	Money []TypedMoney `json:"money"`
 }
@@ -546,6 +588,8 @@ func mapDiscriminatorCartDiscountValueDraft(input interface{}) (CartDiscountValu
 }
 
 type CartDiscountValueAbsoluteDraft struct {
+	// Money values in different currencies.
+	// An absolute Cart Discount will only match a price if this array contains a value with the same currency. If it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15$.
 	Money []Money `json:"money"`
 }
 
@@ -559,6 +603,10 @@ func (obj CartDiscountValueAbsoluteDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "absolute", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the [DiscountedLineItemPrice](ctp:api:type:DiscountedLineItemPrice) of the [CartDiscountLineItemsTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget) to the value specified in the `money` field, if it is lower than the current Line Item price for the same currency. If the Line Item price is already discounted to a price equal to or lower than the respective price in the `money` field, this Discount is not applied.
+*
+ */
 type CartDiscountValueFixed struct {
 	Money []TypedMoney `json:"money"`
 }
@@ -590,7 +638,13 @@ func (obj CartDiscountValueFixed) MarshalJSON() ([]byte, error) {
 	}{Action: "fixed", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the [DiscountedLineItemPrice](ctp:api:type:DiscountedLineItemPrice) of the [CartDiscountLineItemsTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget) to the value specified in the `money` field, if it is lower than the current Line Item price for the same currency. If the Line Item price is already discounted to a price equal to or lower than the respective price in the `money` field, this Discount is not applied.
+*
+ */
 type CartDiscountValueFixedDraft struct {
+	// Money values in different currencies.
+	// A fixed Cart Discount will only match a price if this array contains a value with the same currency. If it contains 10€ and 15$, the matching € price will be discounted by 10€ and the matching $ price will be discounted to 15$.
 	Money []Money `json:"money"`
 }
 
@@ -605,12 +659,13 @@ func (obj CartDiscountValueFixedDraft) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountValueGiftLineItem struct {
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
-	Product   ProductReference `json:"product"`
-	VariantId int              `json:"variantId"`
-	// The channel must have the role `InventorySupply`
+	// Reference to a Product.
+	Product ProductReference `json:"product"`
+	// [ProductVariant](ctp:api:type:ProductVariant) of the Product.
+	VariantId int `json:"variantId"`
+	// Channel must have the [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) `InventorySupply`.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-	// The channel must have the role `ProductDistribution`
+	// Channel must have the [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) `ProductDistribution`.
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
@@ -625,12 +680,13 @@ func (obj CartDiscountValueGiftLineItem) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountValueGiftLineItemDraft struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product).
-	Product   ProductResourceIdentifier `json:"product"`
-	VariantId int                       `json:"variantId"`
-	// The channel must have the role `InventorySupply`
+	// ResourceIdentifier of a Product.
+	Product ProductResourceIdentifier `json:"product"`
+	// [ProductVariant](ctp:api:type:ProductVariant) of the Product.
+	VariantId int `json:"variantId"`
+	// Channel must have the role `InventorySupply`.
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	// The channel must have the role `ProductDistribution`
+	// Channel must have the role `ProductDistribution`.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 }
 
@@ -644,7 +700,12 @@ func (obj CartDiscountValueGiftLineItemDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "giftLineItem", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Discounts the [CartDiscountTarget](ctp:api:type:CartDiscountTarget) relative to its price.
+*
+ */
 type CartDiscountValueRelative struct {
+	// Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
 	Permyriad int `json:"permyriad"`
 }
 
@@ -659,6 +720,7 @@ func (obj CartDiscountValueRelative) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountValueRelativeDraft struct {
+	// Fraction (per ten thousand) the price is reduced by. For example, `1000` will result in a 10% price reduction.
 	Permyriad int `json:"permyriad"`
 }
 
@@ -672,16 +734,20 @@ func (obj CartDiscountValueRelativeDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "relative", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This Discount target is similar to `MultiBuyLineItems`, but is applied on Custom Line Items instead of Line Items.
+*
+ */
 type MultiBuyCustomLineItemsTarget struct {
-	// A valid custom line item target predicate. The discount will be applied to custom line items that are
-	// matched by the predicate.
+	// Valid [CustomLineItems target predicate](/../api/projects/predicates#customlineitem-field-identifiers). The Discount will be applied to Custom Line Items that are matched by the predicate.
 	Predicate string `json:"predicate"`
-	// Quantity of line items that need to be present in order to trigger an application of this discount.
+	// Number of Custom Line Items to be present in order to trigger an application of this Discount.
 	TriggerQuantity int `json:"triggerQuantity"`
-	// Quantity of line items that are discounted per application of this discount.
+	// Number of Custom Line Items that are discounted per application of this Discount.
 	DiscountedQuantity int `json:"discountedQuantity"`
-	// Maximum number of applications of this discount.
-	MaxOccurrence *int          `json:"maxOccurrence,omitempty"`
+	// Maximum number of times this Discount can be applied.
+	MaxOccurrence *int `json:"maxOccurrence,omitempty"`
+	// Discounts particular Line Items only according to the SelectionMode.
 	SelectionMode SelectionMode `json:"selectionMode"`
 }
 
@@ -696,14 +762,15 @@ func (obj MultiBuyCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 }
 
 type MultiBuyLineItemsTarget struct {
-	// A valid line item target predicate. The discount will be applied to line items that are matched by the predicate.
+	// Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers). The Discount will be applied to Line Items that are matched by the predicate.
 	Predicate string `json:"predicate"`
-	// Quantity of line items that need to be present in order to trigger an application of this discount.
+	// Number of Line Items to be present in order to trigger an application of this Discount.
 	TriggerQuantity int `json:"triggerQuantity"`
-	// Quantity of line items that are discounted per application of this discount.
+	// Number of Line Items that are discounted per application of this Discount.
 	DiscountedQuantity int `json:"discountedQuantity"`
-	// Maximum number of applications of this discount.
-	MaxOccurrence *int          `json:"maxOccurrence,omitempty"`
+	// Maximum number of times this Discount can be applied.
+	MaxOccurrence *int `json:"maxOccurrence,omitempty"`
+	// Discounts particular Line Items only according to the SelectionMode.
 	SelectionMode SelectionMode `json:"selectionMode"`
 }
 
@@ -717,6 +784,10 @@ func (obj MultiBuyLineItemsTarget) MarshalJSON() ([]byte, error) {
 	}{Action: "multiBuyLineItems", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Defines which matching items are to be discounted.
+*
+ */
 type SelectionMode string
 
 const (
@@ -724,6 +795,10 @@ const (
 	SelectionModeMostExpensive SelectionMode = "MostExpensive"
 )
 
+/**
+*	Describes how the Cart Discount interacts with other Discounts.
+*
+ */
 type StackingMode string
 
 const (
@@ -732,7 +807,7 @@ const (
 )
 
 type CartDiscountChangeCartPredicateAction struct {
-	// A valid Cart predicate.
+	// New value to set.
 	CartPredicate string `json:"cartPredicate"`
 }
 
@@ -747,6 +822,8 @@ func (obj CartDiscountChangeCartPredicateAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeIsActiveAction struct {
+	// New value to set.
+	// If set to `true`, the Discount will be applied to the Cart.
 	IsActive bool `json:"isActive"`
 }
 
@@ -761,6 +838,7 @@ func (obj CartDiscountChangeIsActiveAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeNameAction struct {
+	// New value to set.
 	Name LocalizedString `json:"name"`
 }
 
@@ -775,6 +853,8 @@ func (obj CartDiscountChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeRequiresDiscountCodeAction struct {
+	// New value to set.
+	// If set to `true`, the Discount can only be used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
 	RequiresDiscountCode bool `json:"requiresDiscountCode"`
 }
 
@@ -789,8 +869,8 @@ func (obj CartDiscountChangeRequiresDiscountCodeAction) MarshalJSON() ([]byte, e
 }
 
 type CartDiscountChangeSortOrderAction struct {
-	// The string must contain a number between 0 and 1.
-	// A discount with greater sortOrder is prioritized higher than a discount with lower sortOrder.
+	// New value to set (between `0` and `1`).
+	// A Discount with a higher sortOrder is prioritized.
 	SortOrder string `json:"sortOrder"`
 }
 
@@ -805,6 +885,7 @@ func (obj CartDiscountChangeSortOrderAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeStackingModeAction struct {
+	// New value to set.
 	StackingMode StackingMode `json:"stackingMode"`
 }
 
@@ -819,6 +900,7 @@ func (obj CartDiscountChangeStackingModeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeTargetAction struct {
+	// New value to set.
 	Target CartDiscountTarget `json:"target"`
 }
 
@@ -850,6 +932,7 @@ func (obj CartDiscountChangeTargetAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeValueAction struct {
+	// New value to set.
 	Value CartDiscountValueDraft `json:"value"`
 }
 
@@ -918,7 +1001,7 @@ func (obj CartDiscountSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetDescriptionAction struct {
-	// If the `description` parameter is not included, the field will be emptied.
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -933,7 +1016,7 @@ func (obj CartDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetKeyAction struct {
-	// If `key` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -948,7 +1031,8 @@ func (obj CartDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetValidFromAction struct {
-	// If absent, the field with the value is removed in case a value was set before.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
@@ -963,9 +1047,11 @@ func (obj CartDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetValidFromAndUntilAction struct {
-	// If absent, the field with the value is removed in case a value was set before.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// If absent, the field with the value is removed in case a value was set before.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
@@ -980,7 +1066,8 @@ func (obj CartDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) 
 }
 
 type CartDiscountSetValidUntilAction struct {
-	// If absent, the field with the value is removed in case a value was set before.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 

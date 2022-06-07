@@ -9,7 +9,7 @@ import (
 )
 
 type ShoppingList struct {
-	// Platform-generated unique identifier of the ShoppingList.
+	// Unique identifier of the ShoppingList.
 	ID string `json:"id"`
 	// The current version of the shopping list.
 	Version        int       `json:"version"`
@@ -118,12 +118,12 @@ type ShoppingListLineItem struct {
 	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
 	Custom        *CustomFields `json:"custom,omitempty"`
 	DeactivatedAt *time.Time    `json:"deactivatedAt,omitempty"`
-	// Platform-generated unique identifier of the ShoppingListLineItem.
+	// Unique identifier of the ShoppingListLineItem.
 	ID string `json:"id"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name      LocalizedString `json:"name"`
 	ProductId string          `json:"productId"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	ProductSlug *LocalizedString `json:"productSlug,omitempty"`
 	// [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
 	ProductType ProductTypeReference `json:"productType"`
@@ -157,7 +157,7 @@ type ShoppingListPagedQueryResponse struct {
 *
  */
 type ShoppingListReference struct {
-	// Platform-generated unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList).
+	// Unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList).
 	ID string `json:"id"`
 	// Contains the representation of the expanded ShoppingList. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShoppingLists.
 	Obj *ShoppingList `json:"obj,omitempty"`
@@ -178,7 +178,7 @@ func (obj ShoppingListReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ShoppingListResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -383,7 +383,7 @@ type TextLineItem struct {
 	AddedAt     time.Time        `json:"addedAt"`
 	Custom      *CustomFields    `json:"custom,omitempty"`
 	Description *LocalizedString `json:"description,omitempty"`
-	// Platform-generated unique identifier of the TextLineItem.
+	// Unique identifier of the TextLineItem.
 	ID       string          `json:"id"`
 	Name     LocalizedString `json:"name"`
 	Quantity int             `json:"quantity"`
@@ -421,9 +421,9 @@ func (obj ShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListAddTextLineItemAction struct {
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name LocalizedString `json:"name"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Description *LocalizedString `json:"description,omitempty"`
 	Quantity    *int             `json:"quantity,omitempty"`
 	AddedAt     *time.Time       `json:"addedAt,omitempty"`
@@ -486,7 +486,7 @@ func (obj ShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 
 type ShoppingListChangeTextLineItemNameAction struct {
 	TextLineItemId string `json:"textLineItemId"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name LocalizedString `json:"name"`
 }
 
@@ -777,7 +777,7 @@ func (obj ShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, er
 
 type ShoppingListSetTextLineItemDescriptionAction struct {
 	TextLineItemId string `json:"textLineItemId"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

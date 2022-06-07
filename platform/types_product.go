@@ -95,7 +95,7 @@ func (obj FilteredFacetResult) MarshalJSON() ([]byte, error) {
 }
 
 type Product struct {
-	// Platform-generated unique identifier of the Product.
+	// Unique identifier of the Product.
 	ID string `json:"id"`
 	// The current version of the product.
 	Version        int       `json:"version"`
@@ -127,19 +127,19 @@ type ProductCatalogData struct {
 }
 
 type ProductData struct {
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Name               LocalizedString     `json:"name"`
 	Categories         []CategoryReference `json:"categories"`
 	CategoryOrderHints *CategoryOrderHints `json:"categoryOrderHints,omitempty"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Description *LocalizedString `json:"description,omitempty"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	Slug LocalizedString `json:"slug"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values are the corresponding strings used for that language.
+	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	MetaKeywords   *LocalizedString `json:"metaKeywords,omitempty"`
 	MasterVariant  ProductVariant   `json:"masterVariant"`
 	Variants       []ProductVariant `json:"variants"`
@@ -284,7 +284,7 @@ type ProductProjectionPagedSearchResponse struct {
 *
  */
 type ProductReference struct {
-	// Platform-generated unique identifier of the referenced [Product](ctp:api:type:Product).
+	// Unique identifier of the referenced [Product](ctp:api:type:Product).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Product. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Products.
 	Obj *Product `json:"obj,omitempty"`
@@ -305,7 +305,7 @@ func (obj ProductReference) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
@@ -644,7 +644,7 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 }
 
 type ProductVariant struct {
-	// Platform-generated sequential and unique identifier of the ProductVariant within the Product.
+	// A unique, sequential identifier of the ProductVariant within the Product.
 	ID  int     `json:"id"`
 	Sku *string `json:"sku,omitempty"`
 	// User-defined unique identifier of the ProductVariant.

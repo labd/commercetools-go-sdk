@@ -56,7 +56,10 @@ func (rb *ByProjectKeyCategoriesRequestMethodPost) WithHeaders(headers http.Head
 }
 
 /**
-*	Creating a category produces the CategoryCreated message.
+*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*
+*	Creating a Category produces the [CategoryCreatedMessage](/../api/message-types#categorycreatedmessage).
+*
  */
 func (rb *ByProjectKeyCategoriesRequestMethodPost) Execute(ctx context.Context) (result *Category, err error) {
 	data, err := serializeInput(rb.body)

@@ -766,7 +766,7 @@ type ProductVariantImport struct {
 	// Maps to `ProductVariant.isMasterVariant`.
 	IsMasterVariant bool `json:"isMasterVariant"`
 	// Maps to `ProductVariant.attributes`.
-	// The referenced attribute must be defined in an already existing ProductType in the commercetools project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
+	// The referenced attribute must be defined in an already existing ProductType in the project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
 	Attributes []Attribute `json:"attributes"`
 	// Maps to `ProductVariant.images`.
 	Images []Image `json:"images"`
@@ -774,7 +774,7 @@ type ProductVariantImport struct {
 	Assets []Asset `json:"assets"`
 	// If `publish` is set to either `true` or `false`, both staged and current projections are set to the same value provided by the import data.
 	// If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
-	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product in the platform, the import induces no change in the existing Product whether `publish` is set or not.
+	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product, the import induces no change in the existing Product whether `publish` is set or not.
 	Publish *bool `json:"publish,omitempty"`
 	// The [Product](/../api/projects/products#productvariant) to which this Product Variant belongs. Maps to `ProductVariant.product`.
 	// The Reference to the [Product](/../api/projects/products#product) with which the ProductVariant is associated.
@@ -832,7 +832,7 @@ func (obj ProductVariantImport) MarshalJSON() ([]byte, error) {
 
 /**
 *	Representation for an update of a [ProductVariant](/../api/projects/products#productvariant). Use this type to import updates for existing
-*	[ProductVariants](/../api/projects/products#productvariant) in a commercetools Project.
+*	[ProductVariants](/../api/projects/products#productvariant) in a Project.
 *
  */
 type ProductVariantPatch struct {
@@ -841,7 +841,7 @@ type ProductVariantPatch struct {
 	// If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
 	ProductVariant ProductVariantKeyReference `json:"productVariant"`
 	// Maps to `ProductVariant.attributes`.
-	// The referenced attribute must be defined in an already existing [ProductType](/../api/projects/productTypes#producttype) in the commercetools Project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
+	// The referenced attribute must be defined in an already existing [ProductType](/../api/projects/productTypes#producttype) in the Project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
 	Attributes *Attributes `json:"attributes,omitempty"`
 	// If `false`, the attribute changes are applied to both [current and staged projected representations](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product).
 	Staged *bool `json:"staged,omitempty"`
