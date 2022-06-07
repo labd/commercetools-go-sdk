@@ -473,25 +473,11 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		for i := range obj.Money {
-			var err error
-			obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "fixed":
 		obj := CartDiscountValueFixed{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
-		}
-		for i := range obj.Money {
-			var err error
-			obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
-			if err != nil {
-				return nil, err
-			}
 		}
 		return obj, nil
 	case "giftLineItem":
@@ -515,24 +501,8 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 *
  */
 type CartDiscountValueAbsolute struct {
-	Money []TypedMoney `json:"money"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *CartDiscountValueAbsolute) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscountValueAbsolute
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Money {
-		var err error
-		obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	// Cent precision money values in different currencies.
+	Money []CentPrecisionMoney `json:"money"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -608,24 +578,8 @@ func (obj CartDiscountValueAbsoluteDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type CartDiscountValueFixed struct {
-	Money []TypedMoney `json:"money"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *CartDiscountValueFixed) UnmarshalJSON(data []byte) error {
-	type Alias CartDiscountValueFixed
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Money {
-		var err error
-		obj.Money[i], err = mapDiscriminatorTypedMoney(obj.Money[i])
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	// Cent precision money values in different currencies.
+	Money []CentPrecisionMoney `json:"money"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
