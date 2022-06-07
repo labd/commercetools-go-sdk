@@ -693,9 +693,8 @@ type Order struct {
 	SyncInfo      []SyncInfo         `json:"syncInfo"`
 	ReturnInfo    []ReturnInfo       `json:"returnInfo"`
 	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
-	// The sequence number of the last order message produced by changes to this order.
-	// `0` means, that no messages were created yet.
-	LastMessageSequenceNumber int `json:"lastMessageSequenceNumber"`
+	// Internal-only field.
+	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
 	// Set when this order was created from a cart.
 	// The cart will have the state `Ordered`.
 	Cart          *CartReference `json:"cart,omitempty"`
