@@ -32,6 +32,10 @@ func (rb *ByProjectKeyStandalonePricesRequestBuilder) Get() *ByProjectKeyStandal
 	}
 }
 
+/**
+*	Produces the [StandalonePriceCreatedMessage](ctp:api:type:StandalonePriceCreatedMessage).
+*
+ */
 func (rb *ByProjectKeyStandalonePricesRequestBuilder) Post(body StandalonePriceDraft) *ByProjectKeyStandalonePricesRequestMethodPost {
 	return &ByProjectKeyStandalonePricesRequestMethodPost{
 		body:   body,

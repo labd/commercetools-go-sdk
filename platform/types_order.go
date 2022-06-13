@@ -2538,6 +2538,7 @@ func (obj OrderSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error)
 }
 
 type OrderSetStoreAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
 }
 

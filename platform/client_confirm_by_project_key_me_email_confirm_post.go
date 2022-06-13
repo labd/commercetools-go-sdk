@@ -11,6 +11,7 @@ import (
 )
 
 type ByProjectKeyMeEmailConfirmRequestMethodPost struct {
+	body    CustomerEmailVerify
 	url     string
 	client  *Client
 	headers http.Header
@@ -26,32 +27,39 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Context) error {
+func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
+	data, err := serializeInput(rb.body)
+	if err != nil {
+		return nil, err
+	}
 	queryParams := url.Values{}
 	resp, err := rb.client.post(
 		ctx,
 		rb.url,
 		queryParams,
 		rb.headers,
-		nil,
+		data,
 	)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
+	case 200:
+		err = json.Unmarshal(content, &result)
+		return result, nil
 	case 400, 401, 403, 500, 502, 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return errorObj
+		return nil, errorObj
 
 	default:
 		result := GenericRequestError{
@@ -59,7 +67,7 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Conte
 			Content:    content,
 			Response:   resp,
 		}
-		return result
+		return nil, result
 	}
 
 }

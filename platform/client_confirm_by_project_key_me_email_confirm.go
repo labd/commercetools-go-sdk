@@ -11,8 +11,9 @@ type ByProjectKeyMeEmailConfirmRequestBuilder struct {
 	client     *Client
 }
 
-func (rb *ByProjectKeyMeEmailConfirmRequestBuilder) Post() *ByProjectKeyMeEmailConfirmRequestMethodPost {
+func (rb *ByProjectKeyMeEmailConfirmRequestBuilder) Post(body CustomerEmailVerify) *ByProjectKeyMeEmailConfirmRequestMethodPost {
 	return &ByProjectKeyMeEmailConfirmRequestMethodPost{
+		body:   body,
 		url:    fmt.Sprintf("/%s/me/email/confirm", rb.projectKey),
 		client: rb.client,
 	}

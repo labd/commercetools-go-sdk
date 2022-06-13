@@ -27,6 +27,10 @@ func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Post(body StandalonePr
 	}
 }
 
+/**
+*	Produces the [StandalonePriceDeletedMessage](ctp:api:type:StandalonePriceDeletedMessage).
+*
+ */
 func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Delete() *ByProjectKeyStandalonePricesByIDRequestMethodDelete {
 	return &ByProjectKeyStandalonePricesByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/standalone-prices/%s", rb.projectKey, rb.id),

@@ -665,6 +665,58 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StandalonePriceCreated":
+		obj := StandalonePriceCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StandalonePriceDeleted":
+		obj := StandalonePriceDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StandalonePriceDiscountSet":
+		obj := StandalonePriceDiscountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StandalonePriceValueChanged":
+		obj := StandalonePriceValueChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "StoreCreated":
 		obj := StoreCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -2925,7 +2977,7 @@ type OrderEditAppliedMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [OrderEdit](ctp:api:type:OrderEdit).
+	// [Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
 	Edit   OrderEditReference `json:"edit"`
 	Result OrderEditApplied   `json:"result"`
 }
@@ -3756,7 +3808,8 @@ type OrderStoreSetMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Store                           StoreKeyReference        `json:"store"`
+	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
+	Store StoreKeyReference `json:"store"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5305,6 +5358,204 @@ func (obj ReviewStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
+type StandalonePriceCreatedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Standalone Price as it was created.
+	StandalonePrice StandalonePrice `json:"standalonePrice"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete StandalonePrice](/../api/projects/standalone-prices#delete-standaloneprice) request.
+*
+ */
+type StandalonePriceDeletedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Emitted when the affected StandalonePrice is updated based on a [Product Discount](ctp:api:type:ProductDiscount) being applied.
+*
+ */
+type StandalonePriceDiscountSetMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The new `discounted` value of the updated StandalonePrice.
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceDiscountSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceDiscountSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceDiscountSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceDiscountSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action.
+*
+ */
+type StandalonePriceValueChangedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The new value of the updated StandalonePrice.
+	Value Money `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceValueChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceValueChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceValueChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceValueChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceValueChanged", Alias: (*Alias)(&obj)})
+}
+
 type StoreCreatedMessage struct {
 	// Unique identifier of the Message.
 	ID             string    `json:"id"`
@@ -5802,6 +6053,30 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "ShoppingListStoreSet":
 		obj := ShoppingListStoreSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StandalonePriceCreated":
+		obj := StandalonePriceCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StandalonePriceDeleted":
+		obj := StandalonePriceDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StandalonePriceDiscountSet":
+		obj := StandalonePriceDiscountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StandalonePriceValueChanged":
+		obj := StandalonePriceValueChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -6631,7 +6906,7 @@ func (obj OrderDiscountCodeStateSetMessagePayload) MarshalJSON() ([]byte, error)
 }
 
 type OrderEditAppliedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [OrderEdit](ctp:api:type:OrderEdit).
+	// [Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
 	Edit   OrderEditReference `json:"edit"`
 	Result OrderEditApplied   `json:"result"`
 }
@@ -6955,6 +7230,7 @@ func (obj OrderStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type OrderStoreSetMessagePayload struct {
+	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
 	Store StoreKeyReference `json:"store"`
 }
 
@@ -7517,6 +7793,7 @@ func (obj ReviewStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListStoreSetMessagePayload struct {
+	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
 	Store StoreKeyReference `json:"store"`
 }
 
@@ -7528,6 +7805,80 @@ func (obj ShoppingListStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ShoppingListStoreSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
+type StandalonePriceCreatedMessagePayload struct {
+	// The Standalone Price as it was created.
+	StandalonePrice StandalonePrice `json:"standalonePrice"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete StandalonePrice](/../api/projects/standalone-prices#delete-standaloneprice) request.
+*
+ */
+type StandalonePriceDeletedMessagePayload struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Emitted when the affected StandalonePrice is updated based on a [Product Discount](ctp:api:type:ProductDiscount) being applied.
+*
+ */
+type StandalonePriceDiscountSetMessagePayload struct {
+	// The new `discounted` value of the updated StandalonePrice.
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceDiscountSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceDiscountSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action.
+*
+ */
+type StandalonePriceValueChangedMessagePayload struct {
+	// The new value of the updated StandalonePrice.
+	Value Money `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceValueChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceValueChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceValueChanged", Alias: (*Alias)(&obj)})
 }
 
 type StoreCreatedMessagePayload struct {

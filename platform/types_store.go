@@ -9,94 +9,70 @@ import (
 )
 
 type ProductSelectionSetting struct {
-	// Reference to a Product Selection
+	// Reference to a ProductSelection.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
-	// If `true` all Products assigned to this Product Selection are part of the Store's assortment.
+	// If `true`, all Products assigned to this Product Selection are part of the Store's assortment.
 	Active bool `json:"active"`
 }
 
 type ProductSelectionSettingDraft struct {
-	// Resource Identifier of a Product Selection
+	// Resource Identifier of a ProductSelection.
 	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
-	// If `true` all Products assigned to this Product Selection become part of the Store's assortment.
+	// Set to `true` if all Products assigned to the Product Selection should become part of the Store's assortment.
 	Active *bool `json:"active,omitempty"`
 }
 
 type Store struct {
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique ID of the Store.
+	ID string `json:"id"`
+	// Current version of the Store.
+	Version int `json:"version"`
+	// Date and time (UTC) the Store was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Store was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-specific unique identifier for the store.
-	// The `key` is mandatory and immutable.
-	// It is used to reference the store.
+	// User-defined unique and immutable identifier for the Store.
 	Key string `json:"key"`
-	// The name of the store
-	Name      *LocalizedString `json:"name,omitempty"`
-	Languages []string         `json:"languages"`
-	// Set of References to a Channel with `ProductDistribution` role
+	// Name of the Store.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Languages configured for the Store.
+	Languages []string `json:"languages"`
+	// Product Distribution Channels allowed for the Store.
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
-	// Set of ResourceIdentifiers of Channels with `InventorySupply` role
+	// Inventory Supply Channels allowed for the Store.
 	SupplyChannels []ChannelReference `json:"supplyChannels"`
-	// Set of References to Product Selections along with settings.
-	// If `productSelections` is empty all products in the project are available in this Store.
-	// If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+	// Controls availability of Products for this Store via active Product Selections.
+	//
+	// - If empty all Products in the [Project](ctp:api:type:Project) are available in this Store.
+	// - If provided, Products from `active` Product Selections are available in this Store.
 	ProductSelections []ProductSelectionSetting `json:"productSelections"`
-	Custom            *CustomFields             `json:"custom,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj Store) MarshalJSON() ([]byte, error) {
-	type Alias Store
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
-		return nil, err
-	}
-
-	if target["languages"] == nil {
-		delete(target, "languages")
-	}
-
-	if target["supplyChannels"] == nil {
-		delete(target, "supplyChannels")
-	}
-
-	if target["productSelections"] == nil {
-		delete(target, "productSelections")
-	}
-
-	return json.Marshal(target)
+	// Custom fields for the Store.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type StoreDraft struct {
-	// User-specific unique identifier for the store.
-	// The `key` is mandatory and immutable.
-	// It is used to reference the store.
+	// User-defined unique and immutable identifier for the Store.
+	// Keys can only contain alphanumeric characters, underscores, and hyphens.
 	Key string `json:"key"`
-	// The name of the store
-	Name      *LocalizedString `json:"name,omitempty"`
-	Languages []string         `json:"languages"`
-	// Set of ResourceIdentifiers to a Channel with `ProductDistribution` role
+	// Name of the Store.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
+	Languages []string `json:"languages"`
+	// ResourceIdentifier to a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
-	// Set of ResourceIdentifiers of Channels with `InventorySupply` role
+	// ResourceIdentifier to a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
-	// Set of ResourceIdentifiers of Product Selections along with settings.
-	// If `productSelections` is empty all products in the project are available in this Store.
-	// If `productSelections` is not empty but there exists no `active` Product Selection then no Product is available in this Store.
+	// Controls availability of Products for this Store via active Product Selections.
+	//
+	// - Leave empty if all Products in the [Project](ctp:api:type:Project) should be available in this Store.
+	// - If provided, Products from `active` Product Selections are available in this Store.
 	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
-	Custom            *CustomFieldsDraft             `json:"custom,omitempty"`
+	// Custom fields for the Store.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -134,8 +110,12 @@ func (obj StoreDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(target)
 }
 
+/**
+*	[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
+*
+ */
 type StoreKeyReference struct {
-	// User-defined unique and immutable key of the referenced resource.
+	// Unique and immutable key of the referenced [Store](ctp:api:type:Store).
 	Key string `json:"key"`
 }
 
@@ -149,19 +129,35 @@ func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 	}{Action: "store", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Store](ctp:api:type:Store).
+*
+ */
 type StorePagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int     `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Stores](ctp:api:type:Store) matching the query.
 	Results []Store `json:"results"`
 }
 
+/**
+*	[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store).
+*
+ */
 type StoreReference struct {
-	// Unique ID of the referenced resource.
-	ID  string `json:"id"`
+	// Unique ID of the referenced [Store](ctp:api:type:Store).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Store. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Stores.
 	Obj *Store `json:"obj,omitempty"`
 }
 
@@ -175,10 +171,14 @@ func (obj StoreReference) MarshalJSON() ([]byte, error) {
 	}{Action: "store", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
+*
+ */
 type StoreResourceIdentifier struct {
-	// Unique identifier of the referenced resource. Required if `key` is absent.
+	// Unique ID of the referenced [Store](ctp:api:type:Store). Either `id` or `key` is required.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
+	// Unique key of the referenced [Store](ctp:api:type:Store). Either `id` or `key` is required.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -193,7 +193,9 @@ func (obj StoreResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type StoreUpdate struct {
-	Version int                 `json:"version"`
+	// Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Store.
 	Actions []StoreUpdateAction `json:"actions"`
 }
 
@@ -251,13 +253,6 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		if obj.ProductSelection != nil {
-			var err error
-			obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "removeDistributionChannel":
 		obj := StoreRemoveDistributionChannelAction{}
@@ -269,13 +264,6 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 		obj := StoreRemoveProductSelectionAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
-		}
-		if obj.ProductSelection != nil {
-			var err error
-			obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
-			if err != nil {
-				return nil, err
-			}
 		}
 		return obj, nil
 	case "removeSupplyChannel":
@@ -330,7 +318,11 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 	return nil, nil
 }
 
+/**
+*	This action has no effect if a given distribution channel is already present in a Store.
+ */
 type StoreAddDistributionChannelAction struct {
+	// Value to append. Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannelError](ctp:api:type:MissingRoleOnChannelError) error.
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
 }
 
@@ -344,10 +336,14 @@ func (obj StoreAddDistributionChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To make all included Products available to your customers of a given Store, add the [Product Selections](/../api/projects/product-selections) to the respective Store. This action has no effect if the given Product Selection is already present in the Store and has the same `active` flag.
+*
+ */
 type StoreAddProductSelectionAction struct {
-	// Resource Identifier of a Product Selection
+	// Product Selection to add to the Store either activated or deactivated.
 	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
-	// If `true` all Products assigned to this Product Selection become part of the Store's assortment.
+	// Set to `true` to make all Products assigned to the referenced Product Selection available in the Store.
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -361,8 +357,12 @@ func (obj StoreAddProductSelectionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addProductSelection", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action has no effect if a given supply channel is already present in a Store.
+ */
 type StoreAddSupplyChannelAction struct {
-	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	// Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+	SupplyChannel ChannelResourceIdentifier `json:"supplyChannel"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -375,28 +375,15 @@ func (obj StoreAddSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addSupplyChannel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[ProductSelection](ctp:api:type:ProductSelection) in a Store can be activated or deactivated using this update action.
+*
+ */
 type StoreChangeProductSelectionAction struct {
-	// A current Product Selection of this Store that is to be activated or deactivated.
-	ProductSelection ResourceIdentifier `json:"productSelection"`
-	// If `true` all Products assigned to the Product Selection become part of the Store's assortment.
+	// Current Product Selection of the Store to be activated or deactivated.
+	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
+	// Set to `true` if all Products assigned to the Product Selection should become part of the Store's assortment.
 	Active *bool `json:"active,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *StoreChangeProductSelectionAction) UnmarshalJSON(data []byte) error {
-	type Alias StoreChangeProductSelectionAction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.ProductSelection != nil {
-		var err error
-		obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -410,6 +397,7 @@ func (obj StoreChangeProductSelectionAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreRemoveDistributionChannelAction struct {
+	// Value to remove. ResourceIdentifier of a Channel with the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
 }
 
@@ -423,26 +411,13 @@ func (obj StoreRemoveDistributionChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action has no effect if the given Product Selection is not in the Store.
+*
+ */
 type StoreRemoveProductSelectionAction struct {
-	// A Product Selection to be removed from the current Product Selections of this Store.
-	ProductSelection ResourceIdentifier `json:"productSelection"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *StoreRemoveProductSelectionAction) UnmarshalJSON(data []byte) error {
-	type Alias StoreRemoveProductSelectionAction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.ProductSelection != nil {
-		var err error
-		obj.ProductSelection, err = mapDiscriminatorResourceIdentifier(obj.ProductSelection)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	// Value to remove. The removed Product Selection is made offline.
+	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -456,7 +431,8 @@ func (obj StoreRemoveProductSelectionAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreRemoveSupplyChannelAction struct {
-	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	// Value to remove. ResourceIdentifier of a Channel with the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	SupplyChannel ChannelResourceIdentifier `json:"supplyChannel"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -507,6 +483,9 @@ func (obj StoreSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetDistributionChannelsAction struct {
+	// Value to set.
+	// If not defined, the Store's `distributionChannels` are unset.
+	// Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 }
 
@@ -535,6 +514,8 @@ func (obj StoreSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetLanguagesAction struct {
+	// Value to set.
+	// Any attempt to use languages other than the ones defined in the [Project](ctp:api:type:Project) will fail with a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
 	Languages []string `json:"languages"`
 }
 
@@ -563,7 +544,7 @@ func (obj StoreSetLanguagesAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetNameAction struct {
-	// The updated name of the store
+	// Value to set.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -577,8 +558,15 @@ func (obj StoreSetNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Instead of adding or removing [Product Selections](/../api/projects/product-selections) individually, you can also change all the Store's Product Selections in one go using this update action. The Store will only contain the Product Selections specified in the request.
+*
+ */
 type StoreSetProductSelectionsAction struct {
-	// The total of Product Selections to be set for this Store.
+	// Value to set.
+	//
+	// - If provided, Product Selections for which `active` is set to `true` are available in the Store.
+	// - If not provided or provided as empty array, the action removes all Product Selections from this Store, meaning all Products in the [Project](ctp:api:type:Project) are available in this Store.
 	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
 }
 
@@ -586,13 +574,30 @@ type StoreSetProductSelectionsAction struct {
 // optional nil slices
 func (obj StoreSetProductSelectionsAction) MarshalJSON() ([]byte, error) {
 	type Alias StoreSetProductSelectionsAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setProductSelections", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	target := make(map[string]interface{})
+	if err := json.Unmarshal(data, &target); err != nil {
+		return nil, err
+	}
+
+	if target["productSelections"] == nil {
+		delete(target, "productSelections")
+	}
+
+	return json.Marshal(target)
 }
 
 type StoreSetSupplyChannelsAction struct {
+	// Value to set.
+	// If not defined, the Store's `supplyChannels` are unset.
+	// Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
 }
 

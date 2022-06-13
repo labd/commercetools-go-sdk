@@ -54,6 +54,11 @@ func (rb *ByProjectKeyStandalonePricesRequestMethodPost) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Produces the [StandalonePriceCreatedMessage](ctp:api:type:StandalonePriceCreatedMessage).
+*
+ */
 func (rb *ByProjectKeyStandalonePricesRequestMethodPost) Execute(ctx context.Context) (result *StandalonePrice, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

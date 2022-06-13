@@ -57,7 +57,7 @@ type InventoryEntryDraft struct {
 }
 
 /**
-*	[Reference](ctp:api:type:Reference) to a [InventoryEntry](ctp:api:type:InventoryEntry).
+*	[Reference](ctp:api:type:Reference) to an [InventoryEntry](ctp:api:type:InventoryEntry).
 *
  */
 type InventoryEntryReference struct {
@@ -78,7 +78,7 @@ func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [InventoryEntry](ctp:api:type:InventoryEntry).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [InventoryEntry](ctp:api:type:InventoryEntry).
 *
  */
 type InventoryEntryResourceIdentifier struct {

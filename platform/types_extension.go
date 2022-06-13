@@ -220,6 +220,8 @@ type ExtensionTrigger struct {
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
 	// `Create` and `Update` requests are supported.
 	Actions []ExtensionAction `json:"actions"`
+	// Valid [predicate](/../api/predicates/query) that controls the conditions under which the API Extension is called. The Extension is not triggered when the specified condition is not fulfilled.
+	Condition *string `json:"condition,omitempty"`
 }
 
 type ExtensionUpdate struct {

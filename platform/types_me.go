@@ -30,9 +30,10 @@ type MyCartDraft struct {
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Contains addresses for orders with multiple shipping addresses.
 	// Each address must contain a key which is unique in this cart.
-	ItemShippingAddresses []BaseAddress      `json:"itemShippingAddresses"`
-	Store                 *StoreKeyReference `json:"store,omitempty"`
-	DiscountCodes         []DiscountCodeInfo `json:"discountCodes"`
+	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
+	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
+	Store         *StoreKeyReference `json:"store,omitempty"`
+	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

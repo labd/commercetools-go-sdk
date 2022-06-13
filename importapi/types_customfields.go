@@ -256,7 +256,7 @@ func (obj LocalizedStringField) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	A field with a enum value.
+*	A field with an enum value.
  */
 type EnumField struct {
 	Value string `json:"value"`
@@ -478,7 +478,7 @@ func (obj LocalizedStringSetField) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	A field with a enum set value.
+*	A field with an enum set value.
  */
 type EnumSetField struct {
 	Value []string `json:"value"`

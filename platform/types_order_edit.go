@@ -129,7 +129,7 @@ type OrderEditPagedQueryResponse struct {
 }
 
 /**
-*	[Reference](ctp:api:type:Reference) to a [OrderEdit](ctp:api:type:OrderEdit).
+*	[Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
 *
  */
 type OrderEditReference struct {
@@ -150,7 +150,7 @@ func (obj OrderEditReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [OrderEdit](ctp:api:type:OrderEdit).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [OrderEdit](ctp:api:type:OrderEdit).
 *
  */
 type OrderEditResourceIdentifier struct {

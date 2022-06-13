@@ -599,6 +599,7 @@ func (obj CustomerAddShippingAddressIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerAddStoreAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
 	Store StoreResourceIdentifier `json:"store"`
 }
 
@@ -688,6 +689,7 @@ func (obj CustomerRemoveShippingAddressIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerRemoveStoreAction struct {
+	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
 	Store StoreResourceIdentifier `json:"store"`
 }
 

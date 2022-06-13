@@ -258,6 +258,10 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 	return nil, nil
 }
 
+/**
+*	Produces the [StandalonePriceValueChangedMessage](ctp:api:type:StandalonePriceValueChangedMessage).
+*
+ */
 type StandalonePriceChangeValueAction struct {
 	// New value to set. Must not be empty.
 	Value Money `json:"value"`

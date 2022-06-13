@@ -64,6 +64,11 @@ func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestMethodDelete) WithHeaders(h
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Produces the [StandalonePriceDeletedMessage](ctp:api:type:StandalonePriceDeletedMessage).
+*
+ */
 func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *StandalonePrice, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
