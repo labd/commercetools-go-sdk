@@ -5,7 +5,6 @@ package ml
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -54,14 +53,13 @@ func (rb *ByProjectKeySimilaritiesProductsRequestMethodPost) Execute(ctx context
 	case 202:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 400:
+	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
+			Response:   resp,
 		}
 		return nil, result
-	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

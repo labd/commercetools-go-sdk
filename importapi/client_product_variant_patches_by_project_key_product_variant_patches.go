@@ -2,8 +2,6 @@ package importapi
 
 // Generated file, please do not change!!!
 
-import ()
-
 type ByProjectKeyProductVariantPatchesRequestBuilder struct {
 	projectKey string
 	client     *Client

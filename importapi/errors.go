@@ -4,11 +4,13 @@ package importapi
 
 import (
 	"fmt"
+	"net/http"
 )
 
 type GenericRequestError struct {
 	Content    []byte
 	StatusCode int
+	Response   *http.Response
 }
 
 func (e GenericRequestError) Error() string {

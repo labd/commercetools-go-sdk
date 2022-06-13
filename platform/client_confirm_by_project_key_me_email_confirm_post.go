@@ -5,7 +5,6 @@ package platform
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -53,14 +52,14 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Conte
 			return err
 		}
 		return errorObj
-	case 404:
+
+	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
+			Response:   resp,
 		}
 		return result
-	default:
-		return fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

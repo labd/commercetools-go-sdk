@@ -5,12 +5,13 @@ package platform
 import (
 	"context"
 	"fmt"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/clientcredentials"
 	"io"
 	"net/http"
 	"net/url"
 	"runtime"
+
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/clientcredentials"
 )
 
 // Version identifies the current library version. Should match the git tag

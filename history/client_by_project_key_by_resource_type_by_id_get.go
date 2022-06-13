@@ -236,7 +236,12 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Execute(ctx context.Co
 		}
 		return nil, errorObj
 	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
+		result := GenericRequestError{
+			StatusCode: resp.StatusCode,
+			Content:    content,
+			Response:   resp,
+		}
+		return nil, result
 	}
 
 }

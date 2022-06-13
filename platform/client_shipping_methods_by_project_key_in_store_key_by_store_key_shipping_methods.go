@@ -2,8 +2,6 @@ package platform
 
 // Generated file, please do not change!!!
 
-import ()
-
 type ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder struct {
 	projectKey string
 	storeKey   string

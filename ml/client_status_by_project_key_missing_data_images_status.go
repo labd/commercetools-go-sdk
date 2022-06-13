@@ -2,8 +2,6 @@ package ml
 
 // Generated file, please do not change!!!
 
-import ()
-
 type ByProjectKeyMissingDataImagesStatusRequestBuilder struct {
 	projectKey string
 	client     *Client

@@ -2,8 +2,6 @@ package ml
 
 // Generated file, please do not change!!!
 
-import ()
-
 type ByProjectKeyRecommendationsProjectCategoriesRequestBuilder struct {
 	projectKey string
 	client     *Client

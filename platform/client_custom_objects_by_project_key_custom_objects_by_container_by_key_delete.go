@@ -116,14 +116,14 @@ func (rb *ByProjectKeyCustomObjectsByContainerByKeyRequestMethodDelete) Execute(
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
+
+	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
+			Response:   resp,
 		}
 		return nil, result
-	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

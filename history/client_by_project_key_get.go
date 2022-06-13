@@ -260,7 +260,12 @@ func (rb *ByProjectKeyRequestMethodGet) Execute(ctx context.Context) (result *Re
 		}
 		return nil, errorObj
 	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
+		result := GenericRequestError{
+			StatusCode: resp.StatusCode,
+			Content:    content,
+			Response:   resp,
+		}
+		return nil, result
 	}
 
 }

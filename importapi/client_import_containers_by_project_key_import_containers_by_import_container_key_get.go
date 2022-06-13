@@ -5,7 +5,6 @@ package importapi
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -59,14 +58,13 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodGet) Exec
 			return nil, err
 		}
 		return nil, errorObj
-	case 400:
+	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
+			Response:   resp,
 		}
 		return nil, result
-	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

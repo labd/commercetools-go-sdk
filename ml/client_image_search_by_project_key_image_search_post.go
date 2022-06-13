@@ -5,7 +5,6 @@ package ml
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -101,14 +100,13 @@ func (rb *ByProjectKeyImageSearchRequestMethodPost) Execute(ctx context.Context)
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 400:
+	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
+			Response:   resp,
 		}
 		return nil, result
-	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
 	}
 
 }

@@ -5,7 +5,6 @@ package platform
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -51,12 +50,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) Execute(ctx context.Con
 	switch resp.StatusCode {
 	case 200:
 		return nil
-	case 404:
-		result := GenericRequestError{
-			StatusCode: resp.StatusCode,
-			Content:    content,
-		}
-		return result
+
 	case 400, 401, 403, 500, 502, 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -65,7 +59,12 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) Execute(ctx context.Con
 		}
 		return errorObj
 	default:
-		return fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
+		result := GenericRequestError{
+			StatusCode: resp.StatusCode,
+			Content:    content,
+			Response:   resp,
+		}
+		return result
 	}
 
 }

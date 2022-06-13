@@ -5,7 +5,6 @@ package platform
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -75,7 +74,12 @@ func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) Execute(ctx con
 		}
 		return nil, errorObj
 	default:
-		return nil, fmt.Errorf("unhandled StatusCode: %d", resp.StatusCode)
+		result := GenericRequestError{
+			StatusCode: resp.StatusCode,
+			Content:    content,
+			Response:   resp,
+		}
+		return nil, result
 	}
 
 }
