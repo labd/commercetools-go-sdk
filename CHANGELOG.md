@@ -1,12 +1,12 @@
-1.0.0 (unreleased)
+1.0.0 (2022-06-13)
 ==================
-Rewrite of the complete SDK. The SDK is now generated using the commercetools rmf-codegen 
-project instead of our own solution. This should make it easier to keep the SDK in-sync 
-with the other commercetools SDK's and offer support for new API's like the importapi 
+Rewrite of the complete SDK. The SDK is now generated using the commercetools rmf-codegen
+project instead of our own solution. This should make it easier to keep the SDK in-sync
+with the other commercetools SDK's and offer support for new API's like the importapi
 and the history api.
 
 The biggest change is that the client is now using method chaining for executing requests.
-For example `Client.CartCreate()` is now `Client.Carts().Post().Execute()`, it is a bit 
+For example `Client.CartCreate()` is now `Client.Carts().Post().Execute()`, it is a bit
 more verbose and less explicit but it does allow us to generate an SDK which supports all
 the endpoints as defined by the commercetools api specs.
 
