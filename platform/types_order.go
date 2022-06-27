@@ -631,16 +631,17 @@ func (obj LineItemImportDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["state"] == nil {
-		delete(target, "state")
+	if raw["state"] == nil {
+		delete(raw, "state")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type Order struct {
@@ -734,6 +735,7 @@ func (obj *Order) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -748,24 +750,25 @@ func (obj Order) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["returnInfo"] == nil {
-		delete(target, "returnInfo")
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
 	}
 
-	if target["discountCodes"] == nil {
-		delete(target, "discountCodes")
+	if raw["discountCodes"] == nil {
+		delete(raw, "discountCodes")
 	}
 
-	if target["itemShippingAddresses"] == nil {
-		delete(target, "itemShippingAddresses")
+	if raw["itemShippingAddresses"] == nil {
+		delete(raw, "itemShippingAddresses")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderFromCartDraft struct {
@@ -850,24 +853,25 @@ func (obj OrderImportDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["lineItems"] == nil {
-		delete(target, "lineItems")
+	if raw["lineItems"] == nil {
+		delete(raw, "lineItems")
 	}
 
-	if target["customLineItems"] == nil {
-		delete(target, "customLineItems")
+	if raw["customLineItems"] == nil {
+		delete(raw, "customLineItems")
 	}
 
-	if target["itemShippingAddresses"] == nil {
-		delete(target, "itemShippingAddresses")
+	if raw["itemShippingAddresses"] == nil {
+		delete(raw, "itemShippingAddresses")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderPagedQueryResponse struct {
@@ -953,6 +957,7 @@ func (obj *OrderUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1333,16 +1338,17 @@ func (obj Parcel) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ParcelDraft struct {
@@ -1365,16 +1371,17 @@ func (obj ParcelDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ParcelMeasurements struct {
@@ -1428,24 +1435,25 @@ func (obj ProductVariantImportDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["prices"] == nil {
-		delete(target, "prices")
+	if raw["prices"] == nil {
+		delete(raw, "prices")
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	if target["images"] == nil {
-		delete(target, "images")
+	if raw["images"] == nil {
+		delete(raw, "images")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ReturnInfo struct {
@@ -1469,6 +1477,7 @@ func (obj *ReturnInfo) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1623,16 +1632,17 @@ func (obj ShippingInfoImportDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["deliveries"] == nil {
-		delete(target, "deliveries")
+	if raw["deliveries"] == nil {
+		delete(raw, "deliveries")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type SyncInfo struct {
@@ -1685,20 +1695,21 @@ func (obj OrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	if target["parcels"] == nil {
-		delete(target, "parcels")
+	if raw["parcels"] == nil {
+		delete(raw, "parcels")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderAddItemShippingAddressAction struct {
@@ -1734,16 +1745,17 @@ func (obj OrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderAddPaymentAction struct {
@@ -2405,16 +2417,17 @@ func (obj OrderSetReturnInfoAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderSetReturnItemCustomFieldAction struct {

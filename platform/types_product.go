@@ -190,20 +190,21 @@ func (obj ProductDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["categories"] == nil {
-		delete(target, "categories")
+	if raw["categories"] == nil {
+		delete(raw, "categories")
 	}
 
-	if target["variants"] == nil {
-		delete(target, "variants")
+	if raw["variants"] == nil {
+		delete(raw, "variants")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ProductPagedQueryResponse struct {
@@ -340,6 +341,7 @@ func (obj *ProductUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -672,28 +674,29 @@ func (obj ProductVariant) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["prices"] == nil {
-		delete(target, "prices")
+	if raw["prices"] == nil {
+		delete(raw, "prices")
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	if target["images"] == nil {
-		delete(target, "images")
+	if raw["images"] == nil {
+		delete(raw, "images")
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ProductVariantAvailability struct {
@@ -732,28 +735,29 @@ func (obj ProductVariantDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["prices"] == nil {
-		delete(target, "prices")
+	if raw["prices"] == nil {
+		delete(raw, "prices")
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	if target["images"] == nil {
-		delete(target, "images")
+	if raw["images"] == nil {
+		delete(raw, "images")
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type RangeFacetResult struct {
@@ -789,6 +793,7 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -976,28 +981,29 @@ func (obj ProductAddVariantAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["prices"] == nil {
-		delete(target, "prices")
+	if raw["prices"] == nil {
+		delete(raw, "prices")
 	}
 
-	if target["images"] == nil {
-		delete(target, "images")
+	if raw["images"] == nil {
+		delete(raw, "images")
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ProductChangeAssetNameAction struct {
@@ -1386,16 +1392,17 @@ func (obj ProductSetAssetTagsAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["tags"] == nil {
-		delete(target, "tags")
+	if raw["tags"] == nil {
+		delete(raw, "tags")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ProductSetAttributeAction struct {

@@ -67,6 +67,7 @@ func (obj *ProductDiscount) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -108,6 +109,7 @@ func (obj *ProductDiscountDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -207,6 +209,7 @@ func (obj *ProductDiscountUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -560,6 +563,7 @@ func (obj *ProductDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

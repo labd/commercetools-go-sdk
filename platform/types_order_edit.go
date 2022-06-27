@@ -55,6 +55,7 @@ func (obj *OrderEdit) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -92,6 +93,7 @@ func (obj *OrderEditDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -106,16 +108,17 @@ func (obj OrderEditDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["stagedActions"] == nil {
-		delete(target, "stagedActions")
+	if raw["stagedActions"] == nil {
+		delete(raw, "stagedActions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderEditPagedQueryResponse struct {
@@ -273,6 +276,7 @@ func (obj *OrderEditPreviewFailure) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -305,6 +309,7 @@ func (obj *OrderEditPreviewSuccess) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -338,6 +343,7 @@ func (obj *OrderEditUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -429,6 +435,7 @@ func (obj *OrderExcerpt) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -523,6 +530,7 @@ func (obj *StagedOrder) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -537,24 +545,25 @@ func (obj StagedOrder) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["returnInfo"] == nil {
-		delete(target, "returnInfo")
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
 	}
 
-	if target["discountCodes"] == nil {
-		delete(target, "discountCodes")
+	if raw["discountCodes"] == nil {
+		delete(raw, "discountCodes")
 	}
 
-	if target["itemShippingAddresses"] == nil {
-		delete(target, "itemShippingAddresses")
+	if raw["itemShippingAddresses"] == nil {
+		delete(raw, "itemShippingAddresses")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderEditAddStagedActionAction struct {
@@ -575,6 +584,7 @@ func (obj *OrderEditAddStagedActionAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -673,6 +683,7 @@ func (obj *OrderEditSetStagedActionsAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -732,20 +743,21 @@ func (obj StagedOrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	if target["parcels"] == nil {
-		delete(target, "parcels")
+	if raw["parcels"] == nil {
+		delete(raw, "parcels")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type StagedOrderAddDiscountCodeAction struct {
@@ -826,16 +838,17 @@ func (obj StagedOrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type StagedOrderAddPaymentAction struct {
@@ -1737,16 +1750,17 @@ func (obj StagedOrderSetOrderTotalTaxAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["externalTaxPortions"] == nil {
-		delete(target, "externalTaxPortions")
+	if raw["externalTaxPortions"] == nil {
+		delete(raw, "externalTaxPortions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type StagedOrderSetParcelCustomFieldAction struct {
@@ -1849,16 +1863,17 @@ func (obj StagedOrderSetReturnInfoAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type StagedOrderSetReturnItemCustomFieldAction struct {
@@ -2079,6 +2094,7 @@ func (obj *StagedOrderSetShippingRateInputAction) UnmarshalJSON(data []byte) err
 			return err
 		}
 	}
+
 	return nil
 }
 

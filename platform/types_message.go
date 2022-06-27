@@ -792,6 +792,7 @@ func (obj *CategoryCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -840,6 +841,7 @@ func (obj *CategorySlugChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -885,6 +887,7 @@ func (obj *CustomerAddressAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -930,6 +933,7 @@ func (obj *CustomerAddressChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -975,6 +979,7 @@ func (obj *CustomerAddressRemovedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1020,6 +1025,7 @@ func (obj *CustomerCompanyNameSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1065,6 +1071,7 @@ func (obj *CustomerCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1110,6 +1117,7 @@ func (obj *CustomerDateOfBirthSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1154,6 +1162,7 @@ func (obj *CustomerDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1199,6 +1208,7 @@ func (obj *CustomerEmailChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1243,6 +1253,7 @@ func (obj *CustomerEmailVerifiedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1288,6 +1299,7 @@ func (obj *CustomerFirstNameSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1334,6 +1346,7 @@ func (obj *CustomerGroupSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1379,6 +1392,7 @@ func (obj *CustomerLastNameSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1425,6 +1439,7 @@ func (obj *CustomerPasswordUpdatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1470,6 +1485,7 @@ func (obj *CustomerTitleSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1515,6 +1531,7 @@ func (obj *InventoryEntryCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1562,6 +1579,7 @@ func (obj *InventoryEntryDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1612,6 +1630,7 @@ func (obj *InventoryEntryQuantitySetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1649,6 +1668,7 @@ func (obj *MessagePagedQueryResponse) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2245,6 +2265,7 @@ func (obj *CustomLineItemStateTransitionMessage) UnmarshalJSON(data []byte) erro
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2290,6 +2311,7 @@ func (obj *DeliveryAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2337,6 +2359,7 @@ func (obj *DeliveryAddressSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2384,6 +2407,7 @@ func (obj *DeliveryItemsUpdatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2429,6 +2453,7 @@ func (obj *DeliveryRemovedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2480,6 +2505,7 @@ func (obj *LineItemStateTransitionMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2526,6 +2552,7 @@ func (obj *OrderBillingAddressSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2571,6 +2598,7 @@ func (obj *OrderCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2618,6 +2646,7 @@ func (obj *OrderCustomLineItemDiscountSetMessage) UnmarshalJSON(data []byte) err
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2664,6 +2693,7 @@ func (obj *OrderCustomerEmailSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2712,6 +2742,7 @@ func (obj *OrderCustomerGroupSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2764,6 +2795,7 @@ func (obj *OrderCustomerSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2809,6 +2841,7 @@ func (obj *OrderDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2855,6 +2888,7 @@ func (obj *OrderDiscountCodeAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2901,6 +2935,7 @@ func (obj *OrderDiscountCodeRemovedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2949,6 +2984,7 @@ func (obj *OrderDiscountCodeStateSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -2996,6 +3032,7 @@ func (obj *OrderEditAppliedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3041,6 +3078,7 @@ func (obj *OrderImportedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3087,6 +3125,7 @@ func (obj *OrderLineItemAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3138,6 +3177,7 @@ func (obj *OrderLineItemDiscountSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3185,6 +3225,7 @@ func (obj *OrderLineItemDistributionChannelSetMessage) UnmarshalJSON(data []byte
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3245,6 +3286,7 @@ func (obj *OrderLineItemRemovedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3291,6 +3333,7 @@ func (obj *OrderPaymentAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3337,6 +3380,7 @@ func (obj *OrderPaymentStateChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3382,6 +3426,7 @@ func (obj *OrderReturnInfoAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3427,6 +3472,7 @@ func (obj *OrderReturnInfoSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3442,16 +3488,17 @@ func (obj OrderReturnInfoSetMessage) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["returnInfo"] == nil {
-		delete(target, "returnInfo")
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderReturnShipmentStateChangedMessage struct {
@@ -3487,6 +3534,7 @@ func (obj *OrderReturnShipmentStateChangedMessage) UnmarshalJSON(data []byte) er
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3533,6 +3581,7 @@ func (obj *OrderShipmentStateChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3579,6 +3628,7 @@ func (obj *OrderShippingAddressSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3625,6 +3675,7 @@ func (obj *OrderShippingInfoSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3685,6 +3736,7 @@ func (obj *OrderShippingRateInputSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3731,6 +3783,7 @@ func (obj *OrderStateChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3780,6 +3833,7 @@ func (obj *OrderStateTransitionMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3826,6 +3880,7 @@ func (obj *OrderStoreSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3872,6 +3927,7 @@ func (obj *ParcelAddedToDeliveryMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3920,6 +3976,7 @@ func (obj *ParcelItemsUpdatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3967,6 +4024,7 @@ func (obj *ParcelMeasurementsUpdatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4013,6 +4071,7 @@ func (obj *ParcelRemovedFromDeliveryMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4060,6 +4119,7 @@ func (obj *ParcelTrackingDataUpdatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4105,6 +4165,7 @@ func (obj *PaymentCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4151,6 +4212,7 @@ func (obj *PaymentInteractionAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4197,6 +4259,7 @@ func (obj *PaymentStatusInterfaceCodeSetMessage) UnmarshalJSON(data []byte) erro
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4244,6 +4307,7 @@ func (obj *PaymentStatusStateTransitionMessage) UnmarshalJSON(data []byte) error
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4289,6 +4353,7 @@ func (obj *PaymentTransactionAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4335,6 +4400,7 @@ func (obj *PaymentTransactionStateChangedMessage) UnmarshalJSON(data []byte) err
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4382,6 +4448,7 @@ func (obj *ProductAddedToCategoryMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4427,6 +4494,7 @@ func (obj *ProductCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4473,6 +4541,7 @@ func (obj *ProductDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4520,6 +4589,7 @@ func (obj *ProductImageAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4565,6 +4635,7 @@ func (obj *ProductPriceDiscountsSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4624,6 +4695,7 @@ func (obj *ProductPriceExternalDiscountSetMessage) UnmarshalJSON(data []byte) er
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4671,6 +4743,7 @@ func (obj *ProductPublishedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4718,6 +4791,7 @@ func (obj *ProductRemovedFromCategoryMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4763,6 +4837,7 @@ func (obj *ProductRevertedStagedChangesMessage) UnmarshalJSON(data []byte) error
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4815,6 +4890,7 @@ func (obj *ProductSelectionCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4861,6 +4937,7 @@ func (obj *ProductSelectionDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4907,6 +4984,7 @@ func (obj *ProductSelectionProductAddedMessage) UnmarshalJSON(data []byte) error
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -4953,6 +5031,7 @@ func (obj *ProductSelectionProductRemovedMessage) UnmarshalJSON(data []byte) err
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5001,6 +5080,7 @@ func (obj *ProductSlugChangedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5048,6 +5128,7 @@ func (obj *ProductStateTransitionMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5092,6 +5173,7 @@ func (obj *ProductUnpublishedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5138,6 +5220,7 @@ func (obj *ProductVariantAddedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5184,6 +5267,7 @@ func (obj *ProductVariantDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5229,6 +5313,7 @@ func (obj *ReviewCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5285,6 +5370,7 @@ func (obj *ReviewRatingSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5345,6 +5431,7 @@ func (obj *ReviewStateTransitionMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5395,6 +5482,7 @@ func (obj *StandalonePriceCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5443,6 +5531,7 @@ func (obj *StandalonePriceDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5493,6 +5582,7 @@ func (obj *StandalonePriceDiscountSetMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5543,6 +5633,7 @@ func (obj *StandalonePriceValueChangedMessage) UnmarshalJSON(data []byte) error 
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5595,6 +5686,7 @@ func (obj *StoreCreatedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5639,6 +5731,7 @@ func (obj *StoreDeletedMessage) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5686,6 +5779,7 @@ func (obj *StoreProductSelectionsChangedMessage) UnmarshalJSON(data []byte) erro
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -5701,24 +5795,25 @@ func (obj StoreProductSelectionsChangedMessage) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["addedProductSelections"] == nil {
-		delete(target, "addedProductSelections")
+	if raw["addedProductSelections"] == nil {
+		delete(raw, "addedProductSelections")
 	}
 
-	if target["removedProductSelections"] == nil {
-		delete(target, "removedProductSelections")
+	if raw["removedProductSelections"] == nil {
+		delete(raw, "removedProductSelections")
 	}
 
-	if target["updatedProductSelections"] == nil {
-		delete(target, "updatedProductSelections")
+	if raw["updatedProductSelections"] == nil {
+		delete(raw, "updatedProductSelections")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type UserProvidedIdentifiers struct {
@@ -7012,6 +7107,7 @@ func (obj *OrderLineItemRemovedMessagePayload) UnmarshalJSON(data []byte) error 
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -7085,16 +7181,17 @@ func (obj OrderReturnInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["returnInfo"] == nil {
-		delete(target, "returnInfo")
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type OrderReturnShipmentStateChangedMessagePayload struct {
@@ -7183,6 +7280,7 @@ func (obj *OrderShippingRateInputSetMessagePayload) UnmarshalJSON(data []byte) e
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -7570,6 +7668,7 @@ func (obj *ProductSelectionCreatedMessagePayload) UnmarshalJSON(data []byte) err
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -7740,6 +7839,7 @@ func (obj *ReviewRatingSetMessagePayload) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -7779,6 +7879,7 @@ func (obj *ReviewStateTransitionMessagePayload) UnmarshalJSON(data []byte) error
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -7933,22 +8034,23 @@ func (obj StoreProductSelectionsChangedMessagePayload) MarshalJSON() ([]byte, er
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["addedProductSelections"] == nil {
-		delete(target, "addedProductSelections")
+	if raw["addedProductSelections"] == nil {
+		delete(raw, "addedProductSelections")
 	}
 
-	if target["removedProductSelections"] == nil {
-		delete(target, "removedProductSelections")
+	if raw["removedProductSelections"] == nil {
+		delete(raw, "removedProductSelections")
 	}
 
-	if target["updatedProductSelections"] == nil {
-		delete(target, "updatedProductSelections")
+	if raw["updatedProductSelections"] == nil {
+		delete(raw, "updatedProductSelections")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

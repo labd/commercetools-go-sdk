@@ -36,20 +36,21 @@ func (obj ProductSetSelector) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["productIds"] == nil {
-		delete(target, "productIds")
+	if raw["productIds"] == nil {
+		delete(raw, "productIds")
 	}
 
-	if target["productTypeIds"] == nil {
-		delete(target, "productTypeIds")
+	if raw["productTypeIds"] == nil {
+		delete(raw, "productTypeIds")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -96,16 +97,17 @@ func (obj SimilarProductSearchRequest) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["productSetSelectors"] == nil {
-		delete(target, "productSetSelectors")
+	if raw["productSetSelectors"] == nil {
+		delete(raw, "productSetSelectors")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**

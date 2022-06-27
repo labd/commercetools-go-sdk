@@ -111,6 +111,7 @@ func (obj *FieldDefinition) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -393,6 +394,7 @@ func (obj *CustomFieldSetType) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -524,16 +526,17 @@ func (obj TypeDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["fieldDefinitions"] == nil {
-		delete(target, "fieldDefinitions")
+	if raw["fieldDefinitions"] == nil {
+		delete(raw, "fieldDefinitions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -633,6 +636,7 @@ func (obj *TypeUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

@@ -492,6 +492,7 @@ func (obj *MoneyAttribute) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -531,6 +532,7 @@ func (obj *MoneySetAttribute) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -615,6 +617,7 @@ func (obj *ReferenceAttribute) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -654,6 +657,7 @@ func (obj *ReferenceSetAttribute) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -796,6 +800,7 @@ func (obj *ProductVariantImport) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -810,24 +815,25 @@ func (obj ProductVariantImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	if target["images"] == nil {
-		delete(target, "images")
+	if raw["images"] == nil {
+		delete(raw, "images")
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**

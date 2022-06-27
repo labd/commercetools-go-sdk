@@ -327,6 +327,7 @@ func (obj *MoneyField) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -413,6 +414,7 @@ func (obj *ReferenceField) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -617,6 +619,7 @@ func (obj *ReferenceSetField) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

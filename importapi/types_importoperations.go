@@ -50,6 +50,7 @@ func (obj *ImportOperation) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -64,20 +65,21 @@ func (obj ImportOperation) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["errors"] == nil {
-		delete(target, "errors")
+	if raw["errors"] == nil {
+		delete(raw, "errors")
 	}
 
-	if target["unresolvedReferences"] == nil {
-		delete(target, "unresolvedReferences")
+	if raw["unresolvedReferences"] == nil {
+		delete(raw, "unresolvedReferences")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -132,6 +134,7 @@ func (obj *ImportOperationStatus) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -146,14 +149,15 @@ func (obj ImportOperationStatus) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["errors"] == nil {
-		delete(target, "errors")
+	if raw["errors"] == nil {
+		delete(raw, "errors")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

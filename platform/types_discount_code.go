@@ -69,6 +69,7 @@ func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -111,16 +112,17 @@ func (obj DiscountCodeDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["groups"] == nil {
-		delete(target, "groups")
+	if raw["groups"] == nil {
+		delete(raw, "groups")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -208,6 +210,7 @@ func (obj *DiscountCodeUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

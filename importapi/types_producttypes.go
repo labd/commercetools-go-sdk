@@ -46,6 +46,7 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -323,6 +324,7 @@ func (obj *AttributeSetType) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -403,14 +405,15 @@ func (obj ProductTypeImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

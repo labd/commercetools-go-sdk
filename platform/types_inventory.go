@@ -119,6 +119,7 @@ func (obj *InventoryEntryUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

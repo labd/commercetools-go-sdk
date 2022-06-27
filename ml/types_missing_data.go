@@ -56,16 +56,17 @@ func (obj MissingAttributes) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["missingAttributeNames"] == nil {
-		delete(target, "missingAttributeNames")
+	if raw["missingAttributeNames"] == nil {
+		delete(raw, "missingAttributeNames")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type MissingAttributesMeta struct {
@@ -86,16 +87,17 @@ func (obj MissingAttributesMeta) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["productTypeIds"] == nil {
-		delete(target, "productTypeIds")
+	if raw["productTypeIds"] == nil {
+		delete(raw, "productTypeIds")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type MissingAttributesSearchRequest struct {
@@ -140,20 +142,21 @@ func (obj MissingAttributesSearchRequest) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["productIds"] == nil {
-		delete(target, "productIds")
+	if raw["productIds"] == nil {
+		delete(raw, "productIds")
 	}
 
-	if target["productTypeIds"] == nil {
-		delete(target, "productTypeIds")
+	if raw["productTypeIds"] == nil {
+		delete(raw, "productTypeIds")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type MissingAttributesPagedQueryResult struct {
@@ -243,20 +246,21 @@ func (obj MissingImagesSearchRequest) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["productIds"] == nil {
-		delete(target, "productIds")
+	if raw["productIds"] == nil {
+		delete(raw, "productIds")
 	}
 
-	if target["productTypeIds"] == nil {
-		delete(target, "productTypeIds")
+	if raw["productTypeIds"] == nil {
+		delete(raw, "productTypeIds")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type MissingImagesPagedQueryResult struct {
@@ -345,20 +349,21 @@ func (obj MissingPricesSearchRequest) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["productIds"] == nil {
-		delete(target, "productIds")
+	if raw["productIds"] == nil {
+		delete(raw, "productIds")
 	}
 
-	if target["productTypeIds"] == nil {
-		delete(target, "productTypeIds")
+	if raw["productTypeIds"] == nil {
+		delete(raw, "productTypeIds")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type MissingPricesPagedQueryResult struct {

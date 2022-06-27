@@ -98,20 +98,21 @@ func (obj ProductDraftImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["categories"] == nil {
-		delete(target, "categories")
+	if raw["categories"] == nil {
+		delete(raw, "categories")
 	}
 
-	if target["variants"] == nil {
-		delete(target, "variants")
+	if raw["variants"] == nil {
+		delete(raw, "variants")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -141,6 +142,7 @@ func (obj *ProductVariantDraftImport) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -155,28 +157,29 @@ func (obj ProductVariantDraftImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["prices"] == nil {
-		delete(target, "prices")
+	if raw["prices"] == nil {
+		delete(raw, "prices")
 	}
 
-	if target["attributes"] == nil {
-		delete(target, "attributes")
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
-	if target["images"] == nil {
-		delete(target, "images")
+	if raw["images"] == nil {
+		delete(raw, "images")
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -216,6 +219,7 @@ func (obj *PriceDraftImport) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -230,14 +234,15 @@ func (obj PriceDraftImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["tiers"] == nil {
-		delete(target, "tiers")
+	if raw["tiers"] == nil {
+		delete(raw, "tiers")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

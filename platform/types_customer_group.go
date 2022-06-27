@@ -124,6 +124,7 @@ func (obj *CustomerGroupUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

@@ -54,16 +54,17 @@ func (obj DeliveryParcel) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type DeliveryParcelDraft struct {
@@ -83,16 +84,17 @@ func (obj DeliveryParcelDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type DeliveryDraft struct {
@@ -132,16 +134,17 @@ func (obj ParcelItems) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["items"] == nil {
-		delete(target, "items")
+	if raw["items"] == nil {
+		delete(raw, "items")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type RemoveDeliveryDraft struct {
@@ -188,20 +191,21 @@ func (obj OrderField) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["addDeliveries"] == nil {
-		delete(target, "addDeliveries")
+	if raw["addDeliveries"] == nil {
+		delete(raw, "addDeliveries")
 	}
 
-	if target["setParcelItems"] == nil {
-		delete(target, "setParcelItems")
+	if raw["setParcelItems"] == nil {
+		delete(raw, "setParcelItems")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**

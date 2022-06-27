@@ -62,16 +62,17 @@ func (obj TaxCategoryDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["rates"] == nil {
-		delete(target, "rates")
+	if raw["rates"] == nil {
+		delete(raw, "rates")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -158,6 +159,7 @@ func (obj *TaxCategoryUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -244,16 +246,17 @@ func (obj TaxRate) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["subRates"] == nil {
-		delete(target, "subRates")
+	if raw["subRates"] == nil {
+		delete(raw, "subRates")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type TaxRateDraft struct {
@@ -284,16 +287,17 @@ func (obj TaxRateDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["subRates"] == nil {
-		delete(target, "subRates")
+	if raw["subRates"] == nil {
+		delete(raw, "subRates")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type TaxCategoryAddTaxRateAction struct {

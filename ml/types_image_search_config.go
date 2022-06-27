@@ -72,6 +72,7 @@ func (obj *ImageSearchConfigRequest) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

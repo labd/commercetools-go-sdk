@@ -86,6 +86,7 @@ func (obj *Payment) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -140,20 +141,21 @@ func (obj PaymentDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["transactions"] == nil {
-		delete(target, "transactions")
+	if raw["transactions"] == nil {
+		delete(raw, "transactions")
 	}
 
-	if target["interfaceInteractions"] == nil {
-		delete(target, "interfaceInteractions")
+	if raw["interfaceInteractions"] == nil {
+		delete(raw, "interfaceInteractions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type PaymentMethodInfo struct {
@@ -256,6 +258,7 @@ func (obj *PaymentUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -452,6 +455,7 @@ func (obj *Transaction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

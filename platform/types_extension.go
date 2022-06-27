@@ -47,6 +47,7 @@ func (obj *Extension) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -154,6 +155,7 @@ func (obj *ExtensionDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -178,6 +180,7 @@ func (obj *ExtensionInput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -245,6 +248,7 @@ func (obj *ExtensionUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -322,6 +326,7 @@ func (obj *HttpDestination) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -427,6 +432,7 @@ func (obj *ExtensionChangeDestinationAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

@@ -60,6 +60,7 @@ func (obj *StandalonePrice) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -74,16 +75,17 @@ func (obj StandalonePrice) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["tiers"] == nil {
-		delete(target, "tiers")
+	if raw["tiers"] == nil {
+		delete(raw, "tiers")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -127,16 +129,17 @@ func (obj StandalonePriceDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["tiers"] == nil {
-		delete(target, "tiers")
+	if raw["tiers"] == nil {
+		delete(raw, "tiers")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type StandalonePricePagedQueryResponse struct {
@@ -219,6 +222,7 @@ func (obj *StandalonePriceUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

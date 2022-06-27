@@ -2953,6 +2953,7 @@ func (obj *ChangeTargetChange) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -3150,6 +3151,7 @@ func (obj *ChangeValueChange) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

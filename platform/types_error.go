@@ -450,19 +450,65 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 }
 
 type AccessDeniedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AccessDeniedError) UnmarshalJSON(data []byte) error {
+	type Alias AccessDeniedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
 	type Alias AccessDeniedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "access_denied", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *AccessDeniedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj AccessDeniedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -471,19 +517,65 @@ func (obj AccessDeniedError) Error() string {
 }
 
 type AnonymousIdAlreadyInUseError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AnonymousIdAlreadyInUseError) UnmarshalJSON(data []byte) error {
+	type Alias AnonymousIdAlreadyInUseError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj AnonymousIdAlreadyInUseError) MarshalJSON() ([]byte, error) {
 	type Alias AnonymousIdAlreadyInUseError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "AnonymousIdAlreadyInUse", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *AnonymousIdAlreadyInUseError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj AnonymousIdAlreadyInUseError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -492,22 +584,71 @@ func (obj AnonymousIdAlreadyInUseError) Error() string {
 }
 
 type AttributeDefinitionAlreadyExistsError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ConflictingProductTypeId   string `json:"conflictingProductTypeId"`
-	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
-	ConflictingAttributeName   string `json:"conflictingAttributeName"`
+	Message                    string                 `json:"message"`
+	ExtraValues                map[string]interface{} `json:"-"`
+	ConflictingProductTypeId   string                 `json:"conflictingProductTypeId"`
+	ConflictingProductTypeName string                 `json:"conflictingProductTypeName"`
+	ConflictingAttributeName   string                 `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AttributeDefinitionAlreadyExistsError) UnmarshalJSON(data []byte) error {
+	type Alias AttributeDefinitionAlreadyExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingProductTypeId")
+	delete(obj.ExtraValues, "conflictingProductTypeName")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj AttributeDefinitionAlreadyExistsError) MarshalJSON() ([]byte, error) {
 	type Alias AttributeDefinitionAlreadyExistsError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "AttributeDefinitionAlreadyExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *AttributeDefinitionAlreadyExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj AttributeDefinitionAlreadyExistsError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -516,22 +657,71 @@ func (obj AttributeDefinitionAlreadyExistsError) Error() string {
 }
 
 type AttributeDefinitionTypeConflictError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ConflictingProductTypeId   string `json:"conflictingProductTypeId"`
-	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
-	ConflictingAttributeName   string `json:"conflictingAttributeName"`
+	Message                    string                 `json:"message"`
+	ExtraValues                map[string]interface{} `json:"-"`
+	ConflictingProductTypeId   string                 `json:"conflictingProductTypeId"`
+	ConflictingProductTypeName string                 `json:"conflictingProductTypeName"`
+	ConflictingAttributeName   string                 `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AttributeDefinitionTypeConflictError) UnmarshalJSON(data []byte) error {
+	type Alias AttributeDefinitionTypeConflictError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingProductTypeId")
+	delete(obj.ExtraValues, "conflictingProductTypeName")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj AttributeDefinitionTypeConflictError) MarshalJSON() ([]byte, error) {
 	type Alias AttributeDefinitionTypeConflictError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "AttributeDefinitionTypeConflict", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *AttributeDefinitionTypeConflictError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj AttributeDefinitionTypeConflictError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -540,20 +730,67 @@ func (obj AttributeDefinitionTypeConflictError) Error() string {
 }
 
 type AttributeNameDoesNotExistError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	InvalidAttributeName string `json:"invalidAttributeName"`
+	Message              string                 `json:"message"`
+	ExtraValues          map[string]interface{} `json:"-"`
+	InvalidAttributeName string                 `json:"invalidAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AttributeNameDoesNotExistError) UnmarshalJSON(data []byte) error {
+	type Alias AttributeNameDoesNotExistError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "invalidAttributeName")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj AttributeNameDoesNotExistError) MarshalJSON() ([]byte, error) {
 	type Alias AttributeNameDoesNotExistError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "AttributeNameDoesNotExist", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *AttributeNameDoesNotExistError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj AttributeNameDoesNotExistError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -562,19 +799,65 @@ func (obj AttributeNameDoesNotExistError) Error() string {
 }
 
 type BadGatewayError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BadGatewayError) UnmarshalJSON(data []byte) error {
+	type Alias BadGatewayError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj BadGatewayError) MarshalJSON() ([]byte, error) {
 	type Alias BadGatewayError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "BadGateway", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *BadGatewayError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj BadGatewayError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -583,20 +866,67 @@ func (obj BadGatewayError) Error() string {
 }
 
 type ConcurrentModificationError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	CurrentVersion *int `json:"currentVersion,omitempty"`
+	Message        string                 `json:"message"`
+	ExtraValues    map[string]interface{} `json:"-"`
+	CurrentVersion *int                   `json:"currentVersion,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ConcurrentModificationError) UnmarshalJSON(data []byte) error {
+	type Alias ConcurrentModificationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "currentVersion")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ConcurrentModificationError) MarshalJSON() ([]byte, error) {
 	type Alias ConcurrentModificationError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ConcurrentModification", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ConcurrentModificationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ConcurrentModificationError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -605,25 +935,77 @@ func (obj ConcurrentModificationError) Error() string {
 }
 
 type DiscountCodeNonApplicableError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	DiscountCode      *string    `json:"discountCode,omitempty"`
-	Reason            *string    `json:"reason,omitempty"`
-	DicountCodeId     *string    `json:"dicountCodeId,omitempty"`
-	ValidFrom         *time.Time `json:"validFrom,omitempty"`
-	ValidUntil        *time.Time `json:"validUntil,omitempty"`
-	ValidityCheckTime *time.Time `json:"validityCheckTime,omitempty"`
+	Message           string                 `json:"message"`
+	ExtraValues       map[string]interface{} `json:"-"`
+	DiscountCode      *string                `json:"discountCode,omitempty"`
+	Reason            *string                `json:"reason,omitempty"`
+	DicountCodeId     *string                `json:"dicountCodeId,omitempty"`
+	ValidFrom         *time.Time             `json:"validFrom,omitempty"`
+	ValidUntil        *time.Time             `json:"validUntil,omitempty"`
+	ValidityCheckTime *time.Time             `json:"validityCheckTime,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountCodeNonApplicableError) UnmarshalJSON(data []byte) error {
+	type Alias DiscountCodeNonApplicableError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "discountCode")
+	delete(obj.ExtraValues, "reason")
+	delete(obj.ExtraValues, "dicountCodeId")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "validityCheckTime")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DiscountCodeNonApplicableError) MarshalJSON() ([]byte, error) {
 	type Alias DiscountCodeNonApplicableError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DiscountCodeNonApplicable", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DiscountCodeNonApplicableError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DiscountCodeNonApplicableError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -632,20 +1014,67 @@ func (obj DiscountCodeNonApplicableError) Error() string {
 }
 
 type DuplicateAttributeValueError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Attribute Attribute `json:"attribute"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	Attribute   Attribute              `json:"attribute"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicateAttributeValueError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicateAttributeValueError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "attribute")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateAttributeValueError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateAttributeValue", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateAttributeValueError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateAttributeValueError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -654,20 +1083,67 @@ func (obj DuplicateAttributeValueError) Error() string {
 }
 
 type DuplicateAttributeValuesError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Attributes []Attribute `json:"attributes"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	Attributes  []Attribute            `json:"attributes"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicateAttributeValuesError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicateAttributeValuesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "attributes")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateAttributeValuesError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateAttributeValues", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateAttributeValuesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateAttributeValuesError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -676,20 +1152,67 @@ func (obj DuplicateAttributeValuesError) Error() string {
 }
 
 type DuplicateEnumValuesError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Duplicates []string `json:"duplicates"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	Duplicates  []string               `json:"duplicates"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicateEnumValuesError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicateEnumValuesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "duplicates")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DuplicateEnumValuesError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateEnumValuesError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateEnumValues", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateEnumValuesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateEnumValuesError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -698,10 +1221,10 @@ func (obj DuplicateEnumValuesError) Error() string {
 }
 
 type DuplicateFieldError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Field          *string     `json:"field,omitempty"`
-	DuplicateValue interface{} `json:"duplicateValue,omitempty"`
+	Message        string                 `json:"message"`
+	ExtraValues    map[string]interface{} `json:"-"`
+	Field          *string                `json:"field,omitempty"`
+	DuplicateValue interface{}            `json:"duplicateValue,omitempty"`
 	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	ConflictingResource Reference `json:"conflictingResource,omitempty"`
 }
@@ -720,6 +1243,16 @@ func (obj *DuplicateFieldError) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "duplicateValue")
+	delete(obj.ExtraValues, "conflictingResource")
+
 	return nil
 }
 
@@ -727,11 +1260,40 @@ func (obj *DuplicateFieldError) UnmarshalJSON(data []byte) error {
 // optional nil slices
 func (obj DuplicateFieldError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateFieldError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateFieldError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -740,10 +1302,10 @@ func (obj DuplicateFieldError) Error() string {
 }
 
 type DuplicateFieldWithConflictingResourceError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Field          string      `json:"field"`
-	DuplicateValue interface{} `json:"duplicateValue"`
+	Message        string                 `json:"message"`
+	ExtraValues    map[string]interface{} `json:"-"`
+	Field          string                 `json:"field"`
+	DuplicateValue interface{}            `json:"duplicateValue"`
 	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
 	ConflictingResource Reference `json:"conflictingResource"`
 }
@@ -762,6 +1324,16 @@ func (obj *DuplicateFieldWithConflictingResourceError) UnmarshalJSON(data []byte
 			return err
 		}
 	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "duplicateValue")
+	delete(obj.ExtraValues, "conflictingResource")
+
 	return nil
 }
 
@@ -769,11 +1341,40 @@ func (obj *DuplicateFieldWithConflictingResourceError) UnmarshalJSON(data []byte
 // optional nil slices
 func (obj DuplicateFieldWithConflictingResourceError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateFieldWithConflictingResourceError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateFieldWithConflictingResource", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateFieldWithConflictingResourceError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateFieldWithConflictingResourceError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -782,20 +1383,67 @@ func (obj DuplicateFieldWithConflictingResourceError) Error() string {
 }
 
 type DuplicatePriceScopeError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ConflictingPrices []Price `json:"conflictingPrices"`
+	Message           string                 `json:"message"`
+	ExtraValues       map[string]interface{} `json:"-"`
+	ConflictingPrices []Price                `json:"conflictingPrices"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicatePriceScopeError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicatePriceScopeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingPrices")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DuplicatePriceScopeError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicatePriceScopeError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicatePriceScope", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicatePriceScopeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicatePriceScopeError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -804,8 +1452,8 @@ func (obj DuplicatePriceScopeError) Error() string {
 }
 
 type DuplicateStandalonePriceScopeError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
 	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
 	Sku                        string                   `json:"sku"`
@@ -819,15 +1467,69 @@ type DuplicateStandalonePriceScopeError struct {
 	ValidUntil *time.Time                 `json:"validUntil,omitempty"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicateStandalonePriceScopeError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicateStandalonePriceScopeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingStandalonePrice")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DuplicateStandalonePriceScopeError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateStandalonePriceScopeError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateStandalonePriceScope", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateStandalonePriceScopeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateStandalonePriceScopeError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -836,20 +1538,67 @@ func (obj DuplicateStandalonePriceScopeError) Error() string {
 }
 
 type DuplicateVariantValuesError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	VariantValues VariantValues `json:"variantValues"`
+	Message       string                 `json:"message"`
+	ExtraValues   map[string]interface{} `json:"-"`
+	VariantValues VariantValues          `json:"variantValues"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicateVariantValuesError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicateVariantValuesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "variantValues")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj DuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
 	type Alias DuplicateVariantValuesError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "DuplicateVariantValues", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *DuplicateVariantValuesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj DuplicateVariantValuesError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -858,20 +1607,67 @@ func (obj DuplicateVariantValuesError) Error() string {
 }
 
 type EditPreviewFailedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Result OrderEditPreviewFailure `json:"result"`
+	Message     string                  `json:"message"`
+	ExtraValues map[string]interface{}  `json:"-"`
+	Result      OrderEditPreviewFailure `json:"result"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *EditPreviewFailedError) UnmarshalJSON(data []byte) error {
+	type Alias EditPreviewFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "result")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj EditPreviewFailedError) MarshalJSON() ([]byte, error) {
 	type Alias EditPreviewFailedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "EditPreviewFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *EditPreviewFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj EditPreviewFailedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -880,21 +1676,69 @@ func (obj EditPreviewFailedError) Error() string {
 }
 
 type EnumKeyAlreadyExistsError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ConflictingEnumKey       string `json:"conflictingEnumKey"`
-	ConflictingAttributeName string `json:"conflictingAttributeName"`
+	Message                  string                 `json:"message"`
+	ExtraValues              map[string]interface{} `json:"-"`
+	ConflictingEnumKey       string                 `json:"conflictingEnumKey"`
+	ConflictingAttributeName string                 `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *EnumKeyAlreadyExistsError) UnmarshalJSON(data []byte) error {
+	type Alias EnumKeyAlreadyExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingEnumKey")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj EnumKeyAlreadyExistsError) MarshalJSON() ([]byte, error) {
 	type Alias EnumKeyAlreadyExistsError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "EnumKeyAlreadyExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *EnumKeyAlreadyExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj EnumKeyAlreadyExistsError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -903,21 +1747,69 @@ func (obj EnumKeyAlreadyExistsError) Error() string {
 }
 
 type EnumKeyDoesNotExistError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ConflictingEnumKey       string `json:"conflictingEnumKey"`
-	ConflictingAttributeName string `json:"conflictingAttributeName"`
+	Message                  string                 `json:"message"`
+	ExtraValues              map[string]interface{} `json:"-"`
+	ConflictingEnumKey       string                 `json:"conflictingEnumKey"`
+	ConflictingAttributeName string                 `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *EnumKeyDoesNotExistError) UnmarshalJSON(data []byte) error {
+	type Alias EnumKeyDoesNotExistError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingEnumKey")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj EnumKeyDoesNotExistError) MarshalJSON() ([]byte, error) {
 	type Alias EnumKeyDoesNotExistError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "EnumKeyDoesNotExist", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *EnumKeyDoesNotExistError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj EnumKeyDoesNotExistError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -926,19 +1818,65 @@ func (obj EnumKeyDoesNotExistError) Error() string {
 }
 
 type EnumValueIsUsedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *EnumValueIsUsedError) UnmarshalJSON(data []byte) error {
+	type Alias EnumValueIsUsedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj EnumValueIsUsedError) MarshalJSON() ([]byte, error) {
 	type Alias EnumValueIsUsedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "EnumValueIsUsed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *EnumValueIsUsedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj EnumValueIsUsedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -947,19 +1885,65 @@ func (obj EnumValueIsUsedError) Error() string {
 }
 
 type EnumValuesMustMatchError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *EnumValuesMustMatchError) UnmarshalJSON(data []byte) error {
+	type Alias EnumValuesMustMatchError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj EnumValuesMustMatchError) MarshalJSON() ([]byte, error) {
 	type Alias EnumValuesMustMatchError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "EnumValuesMustMatch", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *EnumValuesMustMatchError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj EnumValuesMustMatchError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -989,6 +1973,7 @@ func (obj *ErrorResponse) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1003,17 +1988,19 @@ func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["errors"] == nil {
-		delete(target, "errors")
+	if raw["errors"] == nil {
+		delete(raw, "errors")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
+
 func (obj ErrorResponse) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1022,23 +2009,72 @@ func (obj ErrorResponse) Error() string {
 }
 
 type ExtensionBadResponseError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionBadResponseError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionBadResponseError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "localizedMessage")
+	delete(obj.ExtraValues, "extensionExtraInfo")
+	delete(obj.ExtraValues, "errorByExtension")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ExtensionBadResponseError) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionBadResponseError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ExtensionBadResponse", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ExtensionBadResponseError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ExtensionBadResponseError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1047,21 +2083,69 @@ func (obj ExtensionBadResponseError) Error() string {
 }
 
 type ExtensionNoResponseError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ExtensionId  string  `json:"extensionId"`
-	ExtensionKey *string `json:"extensionKey,omitempty"`
+	Message      string                 `json:"message"`
+	ExtraValues  map[string]interface{} `json:"-"`
+	ExtensionId  string                 `json:"extensionId"`
+	ExtensionKey *string                `json:"extensionKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionNoResponseError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionNoResponseError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "extensionId")
+	delete(obj.ExtraValues, "extensionKey")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ExtensionNoResponseError) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionNoResponseError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ExtensionNoResponse", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ExtensionNoResponseError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ExtensionNoResponseError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1070,23 +2154,72 @@ func (obj ExtensionNoResponseError) Error() string {
 }
 
 type ExtensionUpdateActionsFailedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
 	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
 	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
 	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionUpdateActionsFailedError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionUpdateActionsFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "localizedMessage")
+	delete(obj.ExtraValues, "extensionExtraInfo")
+	delete(obj.ExtraValues, "errorByExtension")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ExtensionUpdateActionsFailedError) MarshalJSON() ([]byte, error) {
 	type Alias ExtensionUpdateActionsFailedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ExtensionUpdateActionsFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ExtensionUpdateActionsFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ExtensionUpdateActionsFailedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1095,19 +2228,65 @@ func (obj ExtensionUpdateActionsFailedError) Error() string {
 }
 
 type ExternalOAuthFailedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExternalOAuthFailedError) UnmarshalJSON(data []byte) error {
+	type Alias ExternalOAuthFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ExternalOAuthFailedError) MarshalJSON() ([]byte, error) {
 	type Alias ExternalOAuthFailedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ExternalOAuthFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ExternalOAuthFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ExternalOAuthFailedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1116,19 +2295,65 @@ func (obj ExternalOAuthFailedError) Error() string {
 }
 
 type FeatureRemovedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *FeatureRemovedError) UnmarshalJSON(data []byte) error {
+	type Alias FeatureRemovedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj FeatureRemovedError) MarshalJSON() ([]byte, error) {
 	type Alias FeatureRemovedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "FeatureRemoved", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *FeatureRemovedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj FeatureRemovedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1137,19 +2362,65 @@ func (obj FeatureRemovedError) Error() string {
 }
 
 type GeneralError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GeneralError) UnmarshalJSON(data []byte) error {
+	type Alias GeneralError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj GeneralError) MarshalJSON() ([]byte, error) {
 	type Alias GeneralError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "General", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *GeneralError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj GeneralError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1158,19 +2429,65 @@ func (obj GeneralError) Error() string {
 }
 
 type InsufficientScopeError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InsufficientScopeError) UnmarshalJSON(data []byte) error {
+	type Alias InsufficientScopeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 	type Alias InsufficientScopeError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "insufficient_scope", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InsufficientScopeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InsufficientScopeError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1179,19 +2496,65 @@ func (obj InsufficientScopeError) Error() string {
 }
 
 type InternalConstraintViolatedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InternalConstraintViolatedError) UnmarshalJSON(data []byte) error {
+	type Alias InternalConstraintViolatedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InternalConstraintViolatedError) MarshalJSON() ([]byte, error) {
 	type Alias InternalConstraintViolatedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InternalConstraintViolated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InternalConstraintViolatedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InternalConstraintViolatedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1200,19 +2563,65 @@ func (obj InternalConstraintViolatedError) Error() string {
 }
 
 type InvalidCredentialsError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidCredentialsError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidCredentialsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidCredentialsError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidCredentialsError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidCredentials", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidCredentialsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidCredentialsError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1221,19 +2630,65 @@ func (obj InvalidCredentialsError) Error() string {
 }
 
 type InvalidCurrentPasswordError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidCurrentPasswordError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidCurrentPasswordError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidCurrentPasswordError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidCurrentPasswordError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidCurrentPassword", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidCurrentPasswordError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidCurrentPasswordError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1242,11 +2697,31 @@ func (obj InvalidCurrentPasswordError) Error() string {
 }
 
 type InvalidFieldError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Field         string        `json:"field"`
-	InvalidValue  interface{}   `json:"invalidValue"`
-	AllowedValues []interface{} `json:"allowedValues"`
+	Message       string                 `json:"message"`
+	ExtraValues   map[string]interface{} `json:"-"`
+	Field         string                 `json:"field"`
+	InvalidValue  interface{}            `json:"invalidValue"`
+	AllowedValues []interface{}          `json:"allowedValues"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidFieldError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "invalidValue")
+	delete(obj.ExtraValues, "allowedValues")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1261,17 +2736,36 @@ func (obj InvalidFieldError) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["allowedValues"] == nil {
-		delete(target, "allowedValues")
+	if raw["allowedValues"] == nil {
+		delete(raw, "allowedValues")
 	}
 
-	return json.Marshal(target)
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidFieldError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1280,19 +2774,65 @@ func (obj InvalidFieldError) Error() string {
 }
 
 type InvalidInputError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidInputError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidInputError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidInputError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidInputError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidInput", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidInputError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidInputError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1301,21 +2841,69 @@ func (obj InvalidInputError) Error() string {
 }
 
 type InvalidItemShippingDetailsError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Subject string `json:"subject"`
-	ItemId  string `json:"itemId"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	Subject     string                 `json:"subject"`
+	ItemId      string                 `json:"itemId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidItemShippingDetailsError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidItemShippingDetailsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "subject")
+	delete(obj.ExtraValues, "itemId")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidItemShippingDetailsError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidItemShippingDetailsError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidItemShippingDetails", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidItemShippingDetailsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidItemShippingDetailsError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1324,19 +2912,65 @@ func (obj InvalidItemShippingDetailsError) Error() string {
 }
 
 type InvalidJsonInputError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidJsonInputError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidJsonInputError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidJsonInputError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidJsonInputError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidJsonInput", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidJsonInputError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidJsonInputError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1345,19 +2979,65 @@ func (obj InvalidJsonInputError) Error() string {
 }
 
 type InvalidOperationError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidOperationError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidOperationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidOperationError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidOperationError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidOperation", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidOperationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidOperationError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1366,19 +3046,65 @@ func (obj InvalidOperationError) Error() string {
 }
 
 type InvalidSubjectError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidSubjectError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidSubjectError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidSubjectError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidSubjectError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "InvalidSubject", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidSubjectError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidSubjectError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1387,19 +3113,65 @@ func (obj InvalidSubjectError) Error() string {
 }
 
 type InvalidTokenError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InvalidTokenError) UnmarshalJSON(data []byte) error {
+	type Alias InvalidTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 	type Alias InvalidTokenError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "invalid_token", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *InvalidTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj InvalidTokenError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1408,19 +3180,65 @@ func (obj InvalidTokenError) Error() string {
 }
 
 type LanguageUsedInStoresError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *LanguageUsedInStoresError) UnmarshalJSON(data []byte) error {
+	type Alias LanguageUsedInStoresError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj LanguageUsedInStoresError) MarshalJSON() ([]byte, error) {
 	type Alias LanguageUsedInStoresError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "LanguageUsedInStores", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *LanguageUsedInStoresError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj LanguageUsedInStoresError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1429,27 +3247,79 @@ func (obj LanguageUsedInStoresError) Error() string {
 }
 
 type MatchingPriceNotFoundError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	ProductId string  `json:"productId"`
-	VariantId int     `json:"variantId"`
-	Currency  *string `json:"currency,omitempty"`
-	Country   *string `json:"country,omitempty"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	ProductId   string                 `json:"productId"`
+	VariantId   int                    `json:"variantId"`
+	Currency    *string                `json:"currency,omitempty"`
+	Country     *string                `json:"country,omitempty"`
 	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
 	Channel *ChannelReference `json:"channel,omitempty"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MatchingPriceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias MatchingPriceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "productId")
+	delete(obj.ExtraValues, "variantId")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj MatchingPriceNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias MatchingPriceNotFoundError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "MatchingPriceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *MatchingPriceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj MatchingPriceNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1458,21 +3328,68 @@ func (obj MatchingPriceNotFoundError) Error() string {
 }
 
 type MaxResourceLimitExceededError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// supported resource type identifiers:
 	ExceededResource ReferenceTypeId `json:"exceededResource"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MaxResourceLimitExceededError) UnmarshalJSON(data []byte) error {
+	type Alias MaxResourceLimitExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "exceededResource")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj MaxResourceLimitExceededError) MarshalJSON() ([]byte, error) {
 	type Alias MaxResourceLimitExceededError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "MaxResourceLimitExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *MaxResourceLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj MaxResourceLimitExceededError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1481,23 +3398,71 @@ func (obj MaxResourceLimitExceededError) Error() string {
 }
 
 type MissingRoleOnChannelError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
 	// Describes the purpose and type of the Channel. A Channel can have one or more roles.
 	MissingRole ChannelRoleEnum `json:"missingRole"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MissingRoleOnChannelError) UnmarshalJSON(data []byte) error {
+	type Alias MissingRoleOnChannelError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "missingRole")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj MissingRoleOnChannelError) MarshalJSON() ([]byte, error) {
 	type Alias MissingRoleOnChannelError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "MissingRoleOnChannel", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *MissingRoleOnChannelError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj MissingRoleOnChannelError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1506,22 +3471,71 @@ func (obj MissingRoleOnChannelError) Error() string {
 }
 
 type MissingTaxRateForCountryError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	TaxCategoryId string  `json:"taxCategoryId"`
-	Country       *string `json:"country,omitempty"`
-	State         *string `json:"state,omitempty"`
+	Message       string                 `json:"message"`
+	ExtraValues   map[string]interface{} `json:"-"`
+	TaxCategoryId string                 `json:"taxCategoryId"`
+	Country       *string                `json:"country,omitempty"`
+	State         *string                `json:"state,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MissingTaxRateForCountryError) UnmarshalJSON(data []byte) error {
+	type Alias MissingTaxRateForCountryError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "taxCategoryId")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "state")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj MissingTaxRateForCountryError) MarshalJSON() ([]byte, error) {
 	type Alias MissingTaxRateForCountryError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "MissingTaxRateForCountry", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *MissingTaxRateForCountryError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj MissingTaxRateForCountryError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1530,19 +3544,65 @@ func (obj MissingTaxRateForCountryError) Error() string {
 }
 
 type NoMatchingProductDiscountFoundError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *NoMatchingProductDiscountFoundError) UnmarshalJSON(data []byte) error {
+	type Alias NoMatchingProductDiscountFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj NoMatchingProductDiscountFoundError) MarshalJSON() ([]byte, error) {
 	type Alias NoMatchingProductDiscountFoundError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "NoMatchingProductDiscountFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *NoMatchingProductDiscountFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj NoMatchingProductDiscountFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1551,19 +3611,65 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 }
 
 type NotEnabledError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *NotEnabledError) UnmarshalJSON(data []byte) error {
+	type Alias NotEnabledError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj NotEnabledError) MarshalJSON() ([]byte, error) {
 	type Alias NotEnabledError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "NotEnabled", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *NotEnabledError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj NotEnabledError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1572,19 +3678,65 @@ func (obj NotEnabledError) Error() string {
 }
 
 type ObjectNotFoundError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ObjectNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias ObjectNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ObjectNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias ObjectNotFoundError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ObjectNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ObjectNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ObjectNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1593,21 +3745,69 @@ func (obj ObjectNotFoundError) Error() string {
 }
 
 type OutOfStockError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	LineItems []string `json:"lineItems"`
-	Skus      []string `json:"skus"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	LineItems   []string               `json:"lineItems"`
+	Skus        []string               `json:"skus"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OutOfStockError) UnmarshalJSON(data []byte) error {
+	type Alias OutOfStockError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "lineItems")
+	delete(obj.ExtraValues, "skus")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj OutOfStockError) MarshalJSON() ([]byte, error) {
 	type Alias OutOfStockError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "OutOfStock", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *OutOfStockError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj OutOfStockError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1616,19 +3816,65 @@ func (obj OutOfStockError) Error() string {
 }
 
 type OverCapacityError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OverCapacityError) UnmarshalJSON(data []byte) error {
+	type Alias OverCapacityError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj OverCapacityError) MarshalJSON() ([]byte, error) {
 	type Alias OverCapacityError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "OverCapacity", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *OverCapacityError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj OverCapacityError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1637,8 +3883,8 @@ func (obj OverCapacityError) Error() string {
 }
 
 type OverlappingStandalonePriceValidityError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
 	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
 	Sku                        string                   `json:"sku"`
@@ -1654,15 +3900,71 @@ type OverlappingStandalonePriceValidityError struct {
 	ConflictingValidUntil *time.Time                 `json:"conflictingValidUntil,omitempty"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OverlappingStandalonePriceValidityError) UnmarshalJSON(data []byte) error {
+	type Alias OverlappingStandalonePriceValidityError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingStandalonePrice")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "conflictingValidFrom")
+	delete(obj.ExtraValues, "conflictingValidUntil")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj OverlappingStandalonePriceValidityError) MarshalJSON() ([]byte, error) {
 	type Alias OverlappingStandalonePriceValidityError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "OverlappingStandalonePriceValidity", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *OverlappingStandalonePriceValidityError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj OverlappingStandalonePriceValidityError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1671,19 +3973,65 @@ func (obj OverlappingStandalonePriceValidityError) Error() string {
 }
 
 type PendingOperationError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PendingOperationError) UnmarshalJSON(data []byte) error {
+	type Alias PendingOperationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj PendingOperationError) MarshalJSON() ([]byte, error) {
 	type Alias PendingOperationError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "PendingOperation", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *PendingOperationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj PendingOperationError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1692,21 +4040,69 @@ func (obj PendingOperationError) Error() string {
 }
 
 type PriceChangedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	LineItems []string `json:"lineItems"`
-	Shipping  bool     `json:"shipping"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	LineItems   []string               `json:"lineItems"`
+	Shipping    bool                   `json:"shipping"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PriceChangedError) UnmarshalJSON(data []byte) error {
+	type Alias PriceChangedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "lineItems")
+	delete(obj.ExtraValues, "shipping")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj PriceChangedError) MarshalJSON() ([]byte, error) {
 	type Alias PriceChangedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "PriceChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *PriceChangedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj PriceChangedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1715,9 +4111,27 @@ func (obj PriceChangedError) Error() string {
 }
 
 type ProjectNotConfiguredForLanguagesError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Languages []string `json:"languages"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	Languages   []string               `json:"languages"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProjectNotConfiguredForLanguagesError) UnmarshalJSON(data []byte) error {
+	type Alias ProjectNotConfiguredForLanguagesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "languages")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1732,17 +4146,36 @@ func (obj ProjectNotConfiguredForLanguagesError) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["languages"] == nil {
-		delete(target, "languages")
+	if raw["languages"] == nil {
+		delete(raw, "languages")
 	}
 
-	return json.Marshal(target)
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ProjectNotConfiguredForLanguagesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ProjectNotConfiguredForLanguagesError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1751,19 +4184,65 @@ func (obj ProjectNotConfiguredForLanguagesError) Error() string {
 }
 
 type QueryComplexityLimitExceededError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *QueryComplexityLimitExceededError) UnmarshalJSON(data []byte) error {
+	type Alias QueryComplexityLimitExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj QueryComplexityLimitExceededError) MarshalJSON() ([]byte, error) {
 	type Alias QueryComplexityLimitExceededError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "QueryComplexityLimitExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *QueryComplexityLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj QueryComplexityLimitExceededError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1772,19 +4251,65 @@ func (obj QueryComplexityLimitExceededError) Error() string {
 }
 
 type QueryTimedOutError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *QueryTimedOutError) UnmarshalJSON(data []byte) error {
+	type Alias QueryTimedOutError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj QueryTimedOutError) MarshalJSON() ([]byte, error) {
 	type Alias QueryTimedOutError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "QueryTimedOut", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *QueryTimedOutError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj QueryTimedOutError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1793,21 +4318,68 @@ func (obj QueryTimedOutError) Error() string {
 }
 
 type ReferenceExistsError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// supported resource type identifiers:
 	ReferencedBy *ReferenceTypeId `json:"referencedBy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ReferenceExistsError) UnmarshalJSON(data []byte) error {
+	type Alias ReferenceExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "referencedBy")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ReferenceExistsError) MarshalJSON() ([]byte, error) {
 	type Alias ReferenceExistsError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ReferenceExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ReferenceExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ReferenceExistsError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1816,23 +4388,72 @@ func (obj ReferenceExistsError) Error() string {
 }
 
 type ReferencedResourceNotFoundError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
 	// supported resource type identifiers:
 	TypeId ReferenceTypeId `json:"typeId"`
 	ID     *string         `json:"id,omitempty"`
 	Key    *string         `json:"key,omitempty"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ReferencedResourceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias ReferencedResourceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "typeId")
+	delete(obj.ExtraValues, "id")
+	delete(obj.ExtraValues, "key")
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ReferencedResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias ReferencedResourceNotFoundError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ReferencedResourceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ReferencedResourceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ReferencedResourceNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1841,20 +4462,67 @@ func (obj ReferencedResourceNotFoundError) Error() string {
 }
 
 type RequiredFieldError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
-	Field string `json:"field"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+	Field       string                 `json:"field"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RequiredFieldError) UnmarshalJSON(data []byte) error {
+	type Alias RequiredFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "field")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj RequiredFieldError) MarshalJSON() ([]byte, error) {
 	type Alias RequiredFieldError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "RequiredField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *RequiredFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj RequiredFieldError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1863,19 +4531,65 @@ func (obj RequiredFieldError) Error() string {
 }
 
 type ResourceNotFoundError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ResourceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias ResourceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ResourceNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceNotFoundError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ResourceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ResourceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ResourceNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1884,19 +4598,65 @@ func (obj ResourceNotFoundError) Error() string {
 }
 
 type ResourceSizeLimitExceededError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ResourceSizeLimitExceededError) UnmarshalJSON(data []byte) error {
+	type Alias ResourceSizeLimitExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ResourceSizeLimitExceededError) MarshalJSON() ([]byte, error) {
 	type Alias ResourceSizeLimitExceededError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ResourceSizeLimitExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ResourceSizeLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ResourceSizeLimitExceededError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1905,19 +4665,65 @@ func (obj ResourceSizeLimitExceededError) Error() string {
 }
 
 type SearchDeactivatedError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SearchDeactivatedError) UnmarshalJSON(data []byte) error {
+	type Alias SearchDeactivatedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj SearchDeactivatedError) MarshalJSON() ([]byte, error) {
 	type Alias SearchDeactivatedError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "SearchDeactivated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *SearchDeactivatedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj SearchDeactivatedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1926,19 +4732,65 @@ func (obj SearchDeactivatedError) Error() string {
 }
 
 type SearchExecutionFailureError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SearchExecutionFailureError) UnmarshalJSON(data []byte) error {
+	type Alias SearchExecutionFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj SearchExecutionFailureError) MarshalJSON() ([]byte, error) {
 	type Alias SearchExecutionFailureError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "SearchExecutionFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *SearchExecutionFailureError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj SearchExecutionFailureError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1947,19 +4799,65 @@ func (obj SearchExecutionFailureError) Error() string {
 }
 
 type SearchFacetPathNotFoundError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SearchFacetPathNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias SearchFacetPathNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj SearchFacetPathNotFoundError) MarshalJSON() ([]byte, error) {
 	type Alias SearchFacetPathNotFoundError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "SearchFacetPathNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *SearchFacetPathNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj SearchFacetPathNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1968,19 +4866,65 @@ func (obj SearchFacetPathNotFoundError) Error() string {
 }
 
 type SearchIndexingInProgressError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SearchIndexingInProgressError) UnmarshalJSON(data []byte) error {
+	type Alias SearchIndexingInProgressError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj SearchIndexingInProgressError) MarshalJSON() ([]byte, error) {
 	type Alias SearchIndexingInProgressError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "SearchIndexingInProgress", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *SearchIndexingInProgressError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj SearchIndexingInProgressError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -1989,19 +4933,65 @@ func (obj SearchIndexingInProgressError) Error() string {
 }
 
 type SemanticErrorError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SemanticErrorError) UnmarshalJSON(data []byte) error {
+	type Alias SemanticErrorError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj SemanticErrorError) MarshalJSON() ([]byte, error) {
 	type Alias SemanticErrorError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "SemanticError", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *SemanticErrorError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj SemanticErrorError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -2010,19 +5000,65 @@ func (obj SemanticErrorError) Error() string {
 }
 
 type ShippingMethodDoesNotMatchCartError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ShippingMethodDoesNotMatchCartError) UnmarshalJSON(data []byte) error {
+	type Alias ShippingMethodDoesNotMatchCartError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj ShippingMethodDoesNotMatchCartError) MarshalJSON() ([]byte, error) {
 	type Alias ShippingMethodDoesNotMatchCartError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ShippingMethodDoesNotMatchCart", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *ShippingMethodDoesNotMatchCartError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -2031,19 +5067,65 @@ func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 }
 
 type SyntaxErrorError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SyntaxErrorError) UnmarshalJSON(data []byte) error {
+	type Alias SyntaxErrorError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj SyntaxErrorError) MarshalJSON() ([]byte, error) {
 	type Alias SyntaxErrorError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "SyntaxError", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *SyntaxErrorError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj SyntaxErrorError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -2058,19 +5140,65 @@ type VariantValues struct {
 }
 
 type WeakPasswordError struct {
-	Message string `json:"message"`
-	// interface{} `json:"//"`
+	Message     string                 `json:"message"`
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *WeakPasswordError) UnmarshalJSON(data []byte) error {
+	type Alias WeakPasswordError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj WeakPasswordError) MarshalJSON() ([]byte, error) {
 	type Alias WeakPasswordError
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "WeakPassword", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
 }
+
+func (obj *WeakPasswordError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
 func (obj WeakPasswordError) Error() string {
 	if obj.Message != "" {
 		return obj.Message

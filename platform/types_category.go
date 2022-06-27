@@ -63,16 +63,17 @@ func (obj Category) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type CategoryDraft struct {
@@ -117,16 +118,17 @@ func (obj CategoryDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["assets"] == nil {
-		delete(target, "assets")
+	if raw["assets"] == nil {
+		delete(raw, "assets")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -214,6 +216,7 @@ func (obj *CategoryUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -630,16 +633,17 @@ func (obj CategorySetAssetTagsAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["tags"] == nil {
-		delete(target, "tags")
+	if raw["tags"] == nil {
+		delete(raw, "tags")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type CategorySetCustomFieldAction struct {

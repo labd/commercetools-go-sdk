@@ -46,8 +46,9 @@ func toTimeHookFunc() mapstructure.DecodeHookFunc {
 }
 
 func decodeStruct(input interface{}, result interface{}) error {
+	meta := &mapstructure.Metadata{}
 	decoder, err := mapstructure.NewDecoder(&mapstructure.DecoderConfig{
-		Metadata: nil,
+		Metadata: meta,
 		DecodeHook: mapstructure.ComposeDecodeHookFunc(
 			toTimeHookFunc()),
 		Result: result,
@@ -59,5 +60,20 @@ func decodeStruct(input interface{}, result interface{}) error {
 	if err := decoder.Decode(input); err != nil {
 		return err
 	}
+
+	if val, ok := result.(DecodeStruct); ok {
+		if raw, ok := input.(map[string]interface{}); ok {
+			unused := make(map[string]interface{})
+			for _, key := range meta.Unused {
+				unused[key] = raw[key]
+			}
+			val.DecodeStruct(unused)
+		}
+	}
+
 	return err
+}
+
+type DecodeStruct interface {
+	DecodeStruct(map[string]interface{}) error
 }

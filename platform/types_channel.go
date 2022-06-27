@@ -53,6 +53,7 @@ func (obj *Channel) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -90,6 +91,7 @@ func (obj *ChannelDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -104,16 +106,17 @@ func (obj ChannelDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["roles"] == nil {
-		delete(target, "roles")
+	if raw["roles"] == nil {
+		delete(raw, "roles")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -215,6 +218,7 @@ func (obj *ChannelUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -497,6 +501,7 @@ func (obj *ChannelSetGeoLocationAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

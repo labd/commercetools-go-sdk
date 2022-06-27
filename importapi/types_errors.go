@@ -41,6 +41,7 @@ func (obj *ErrorResponse) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -55,17 +56,19 @@ func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["errors"] == nil {
-		delete(target, "errors")
+	if raw["errors"] == nil {
+		delete(raw, "errors")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
+
 func (obj ErrorResponse) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -253,6 +256,7 @@ func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "access_denied", Alias: (*Alias)(&obj)})
 }
+
 func (obj AccessDeniedError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -277,6 +281,7 @@ func (obj InvalidScopeError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "invalid_scope", Alias: (*Alias)(&obj)})
 }
+
 func (obj InvalidScopeError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -326,6 +331,7 @@ func (obj *DuplicateAttributeValueError) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -338,6 +344,7 @@ func (obj DuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "DuplicateAttributeValue", Alias: (*Alias)(&obj)})
 }
+
 func (obj DuplicateAttributeValueError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -367,6 +374,7 @@ func (obj *DuplicateAttributeValuesError) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -379,6 +387,7 @@ func (obj DuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "DuplicateAttributeValues", Alias: (*Alias)(&obj)})
 }
+
 func (obj DuplicateAttributeValuesError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -406,6 +415,7 @@ func (obj DuplicateFieldError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "DuplicateField", Alias: (*Alias)(&obj)})
 }
+
 func (obj DuplicateFieldError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -433,6 +443,7 @@ func (obj DuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "DuplicateVariantValues", Alias: (*Alias)(&obj)})
 }
+
 func (obj DuplicateVariantValuesError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -460,6 +471,7 @@ func (obj *VariantValues) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -476,6 +488,7 @@ func (obj InsufficientScopeError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "insufficient_scope", Alias: (*Alias)(&obj)})
 }
+
 func (obj InsufficientScopeError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -496,6 +509,7 @@ func (obj InvalidCredentialsError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "InvalidCredentials", Alias: (*Alias)(&obj)})
 }
+
 func (obj InvalidCredentialsError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -516,6 +530,7 @@ func (obj InvalidTokenError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "invalid_token", Alias: (*Alias)(&obj)})
 }
+
 func (obj InvalidTokenError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -551,17 +566,19 @@ func (obj InvalidFieldError) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["allowedValues"] == nil {
-		delete(target, "allowedValues")
+	if raw["allowedValues"] == nil {
+		delete(raw, "allowedValues")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
+
 func (obj InvalidFieldError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -622,6 +639,7 @@ func (obj ResourceNotFoundError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "ResourceNotFound", Alias: (*Alias)(&obj)})
 }
+
 func (obj ResourceNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -643,6 +661,7 @@ func (obj ResourceCreationError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "ResourceCreation", Alias: (*Alias)(&obj)})
 }
+
 func (obj ResourceCreationError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -664,6 +683,7 @@ func (obj ResourceUpdateError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "ResourceUpdate", Alias: (*Alias)(&obj)})
 }
+
 func (obj ResourceUpdateError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -685,6 +705,7 @@ func (obj ResourceDeletionError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "ResourceDeletion", Alias: (*Alias)(&obj)})
 }
+
 func (obj ResourceDeletionError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -710,6 +731,7 @@ func (obj RequiredFieldError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "RequiredField", Alias: (*Alias)(&obj)})
 }
+
 func (obj RequiredFieldError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -734,6 +756,7 @@ func (obj InvalidStateTransitionError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "InvalidTransition", Alias: (*Alias)(&obj)})
 }
+
 func (obj InvalidStateTransitionError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -766,6 +789,7 @@ func (obj ConcurrentModificationError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "ConcurrentModification", Alias: (*Alias)(&obj)})
 }
+
 func (obj ConcurrentModificationError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -786,6 +810,7 @@ func (obj ContentionError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "Contention", Alias: (*Alias)(&obj)})
 }
+
 func (obj ContentionError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
@@ -806,6 +831,7 @@ func (obj GenericError) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "Generic", Alias: (*Alias)(&obj)})
 }
+
 func (obj GenericError) Error() string {
 	if obj.Message != "" {
 		return obj.Message

@@ -83,6 +83,7 @@ func (obj *Project) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -107,6 +108,7 @@ func (obj *ProjectUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -531,6 +533,7 @@ func (obj *ProjectSetShippingRateInputTypeAction) UnmarshalJSON(data []byte) err
 			return err
 		}
 	}
+
 	return nil
 }
 

@@ -127,6 +127,7 @@ func (obj *ShippingMethodUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -272,6 +273,7 @@ func (obj *ShippingRate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -299,6 +301,7 @@ func (obj *ShippingRateDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -313,16 +316,17 @@ func (obj ShippingRateDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["tiers"] == nil {
-		delete(target, "tiers")
+	if raw["tiers"] == nil {
+		delete(raw, "tiers")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type ShippingRatePriceTier interface{}

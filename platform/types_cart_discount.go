@@ -83,6 +83,7 @@ func (obj *CartDiscount) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -139,6 +140,7 @@ func (obj *CartDiscountDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -329,6 +331,7 @@ func (obj *CartDiscountUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -872,6 +875,7 @@ func (obj *CartDiscountChangeTargetAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -904,6 +908,7 @@ func (obj *CartDiscountChangeValueAction) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

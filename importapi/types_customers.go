@@ -104,22 +104,23 @@ func (obj CustomerImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["stores"] == nil {
-		delete(target, "stores")
+	if raw["stores"] == nil {
+		delete(raw, "stores")
 	}
 
-	if target["billingAddresses"] == nil {
-		delete(target, "billingAddresses")
+	if raw["billingAddresses"] == nil {
+		delete(raw, "billingAddresses")
 	}
 
-	if target["shippingAddresses"] == nil {
-		delete(target, "shippingAddresses")
+	if raw["shippingAddresses"] == nil {
+		delete(raw, "shippingAddresses")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

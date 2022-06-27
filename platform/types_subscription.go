@@ -293,6 +293,7 @@ func (obj *MessageDeliveryPayload) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -322,16 +323,17 @@ func (obj MessageSubscription) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["types"] == nil {
-		delete(target, "types")
+	if raw["types"] == nil {
+		delete(raw, "types")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type PayloadNotIncluded struct {
@@ -375,6 +377,7 @@ func (obj *ResourceCreatedDeliveryPayload) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -412,6 +415,7 @@ func (obj *ResourceDeletedDeliveryPayload) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -449,6 +453,7 @@ func (obj *ResourceUpdatedDeliveryPayload) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -535,6 +540,7 @@ func (obj *Subscription) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -568,6 +574,7 @@ func (obj *SubscriptionDraft) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -582,20 +589,21 @@ func (obj SubscriptionDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["changes"] == nil {
-		delete(target, "changes")
+	if raw["changes"] == nil {
+		delete(raw, "changes")
 	}
 
-	if target["messages"] == nil {
-		delete(target, "messages")
+	if raw["messages"] == nil {
+		delete(raw, "messages")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type SubscriptionHealthStatus string
@@ -636,6 +644,7 @@ func (obj *SubscriptionUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -706,6 +715,7 @@ func (obj *SubscriptionChangeDestinationAction) UnmarshalJSON(data []byte) error
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -735,16 +745,17 @@ func (obj SubscriptionSetChangesAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["changes"] == nil {
-		delete(target, "changes")
+	if raw["changes"] == nil {
+		delete(raw, "changes")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type SubscriptionSetKeyAction struct {
@@ -778,14 +789,15 @@ func (obj SubscriptionSetMessagesAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["messages"] == nil {
-		delete(target, "messages")
+	if raw["messages"] == nil {
+		delete(raw, "messages")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

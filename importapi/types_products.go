@@ -49,6 +49,7 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -203,14 +204,15 @@ func (obj ProductImport) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["categories"] == nil {
-		delete(target, "categories")
+	if raw["categories"] == nil {
+		delete(raw, "categories")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }

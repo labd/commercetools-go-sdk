@@ -87,24 +87,25 @@ func (obj Customer) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["shippingAddressIds"] == nil {
-		delete(target, "shippingAddressIds")
+	if raw["shippingAddressIds"] == nil {
+		delete(raw, "shippingAddressIds")
 	}
 
-	if target["billingAddressIds"] == nil {
-		delete(target, "billingAddressIds")
+	if raw["billingAddressIds"] == nil {
+		delete(raw, "billingAddressIds")
 	}
 
-	if target["stores"] == nil {
-		delete(target, "stores")
+	if raw["stores"] == nil {
+		delete(raw, "stores")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type CustomerChangePassword struct {
@@ -195,28 +196,29 @@ func (obj CustomerDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["addresses"] == nil {
-		delete(target, "addresses")
+	if raw["addresses"] == nil {
+		delete(raw, "addresses")
 	}
 
-	if target["shippingAddresses"] == nil {
-		delete(target, "shippingAddresses")
+	if raw["shippingAddresses"] == nil {
+		delete(raw, "shippingAddresses")
 	}
 
-	if target["billingAddresses"] == nil {
-		delete(target, "billingAddresses")
+	if raw["billingAddresses"] == nil {
+		delete(raw, "billingAddresses")
 	}
 
-	if target["stores"] == nil {
-		delete(target, "stores")
+	if raw["stores"] == nil {
+		delete(raw, "stores")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type CustomerEmailVerify struct {
@@ -329,6 +331,7 @@ func (obj *CustomerUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -1004,16 +1007,17 @@ func (obj CustomerSetStoresAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["stores"] == nil {
-		delete(target, "stores")
+	if raw["stores"] == nil {
+		delete(raw, "stores")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type CustomerSetTitleAction struct {

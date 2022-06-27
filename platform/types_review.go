@@ -152,6 +152,7 @@ func (obj *ReviewUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

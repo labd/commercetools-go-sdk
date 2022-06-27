@@ -235,6 +235,7 @@ func (obj *ProductSelectionUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 

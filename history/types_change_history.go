@@ -66,6 +66,7 @@ func (obj *Record) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -157,17 +158,19 @@ func (obj ErrorResponse) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["errors"] == nil {
-		delete(target, "errors")
+	if raw["errors"] == nil {
+		delete(raw, "errors")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
+
 func (obj ErrorResponse) Error() string {
 	if obj.Message != "" {
 		return obj.Message

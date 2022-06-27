@@ -52,20 +52,21 @@ func (obj State) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["roles"] == nil {
-		delete(target, "roles")
+	if raw["roles"] == nil {
+		delete(raw, "roles")
 	}
 
-	if target["transitions"] == nil {
-		delete(target, "transitions")
+	if raw["transitions"] == nil {
+		delete(raw, "transitions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 type StateDraft struct {
@@ -100,20 +101,21 @@ func (obj StateDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["roles"] == nil {
-		delete(target, "roles")
+	if raw["roles"] == nil {
+		delete(raw, "roles")
 	}
 
-	if target["transitions"] == nil {
-		delete(target, "transitions")
+	if raw["transitions"] == nil {
+		delete(raw, "transitions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -225,6 +227,7 @@ func (obj *StateUpdate) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+
 	return nil
 }
 
@@ -451,14 +454,15 @@ func (obj StateSetTransitionsAction) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	target := make(map[string]interface{})
-	if err := json.Unmarshal(data, &target); err != nil {
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
 	}
 
-	if target["transitions"] == nil {
-		delete(target, "transitions")
+	if raw["transitions"] == nil {
+		delete(raw, "transitions")
 	}
 
-	return json.Marshal(target)
+	return json.Marshal(raw)
+
 }
