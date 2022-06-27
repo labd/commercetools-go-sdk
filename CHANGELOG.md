@@ -1,3 +1,15 @@
+1.1.0 (2022-06-27)
+==================
+Correctly implement pattern properties handling by adding those values in a 
+specific field (`ExtraValues`)
+
+
+1.0.1 (2022-06-13)
+==================
+Improve how the user-agent is set on requests. Previously it was not set on
+OAuth requests but only on API requests. 
+
+
 1.0.0 (2022-06-13)
 ==================
 Rewrite of the complete SDK. The SDK is now generated using the commercetools rmf-codegen
