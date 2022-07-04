@@ -698,12 +698,14 @@ type Order struct {
 	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
 	// Set when this order was created from a cart.
 	// The cart will have the state `Ordered`.
-	Cart          *CartReference `json:"cart,omitempty"`
-	Custom        *CustomFields  `json:"custom,omitempty"`
-	PaymentInfo   *PaymentInfo   `json:"paymentInfo,omitempty"`
-	Locale        *string        `json:"locale,omitempty"`
-	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
-	Origin        CartOrigin     `json:"origin"`
+	Cart *CartReference `json:"cart,omitempty"`
+	// Set when this order was created from a quote.
+	Quote         *QuoteReference `json:"quote,omitempty"`
+	Custom        *CustomFields   `json:"custom,omitempty"`
+	PaymentInfo   *PaymentInfo    `json:"paymentInfo,omitempty"`
+	Locale        *string         `json:"locale,omitempty"`
+	InventoryMode *InventoryMode  `json:"inventoryMode,omitempty"`
+	Origin        CartOrigin      `json:"origin"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with LineItemLevel (horizontally) or UnitPriceLevel (vertically) calculation mode.
 	TaxCalculationMode *TaxCalculationMode `json:"taxCalculationMode,omitempty"`
 	// The shippingRateInput is used as an input to select a ShippingRatePriceTier.
@@ -792,6 +794,23 @@ type OrderFromCartDraft struct {
 	// If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) and added to the Order.
 	// If empty, the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) are added to the Order automatically.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+type OrderFromQuoteDraft struct {
+	// ResourceIdentifier to the Quote from which this order is created. If the quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
+	Quote   QuoteResourceIdentifier `json:"quote"`
+	Version int                     `json:"version"`
+	// String that uniquely identifies an order.
+	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
+	// It should be unique across a project.
+	// Once it's set it cannot be changed.
+	// For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
+	OrderNumber   *string        `json:"orderNumber,omitempty"`
+	PaymentState  *PaymentState  `json:"paymentState,omitempty"`
+	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
+	// Order will be created with `Open` status by default.
+	OrderState *OrderState              `json:"orderState,omitempty"`
+	State      *StateResourceIdentifier `json:"state,omitempty"`
 }
 
 type OrderImportDraft struct {

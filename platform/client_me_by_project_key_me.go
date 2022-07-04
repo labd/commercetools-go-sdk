@@ -73,6 +73,16 @@ func (rb *ByProjectKeyMeRequestBuilder) Payments() *ByProjectKeyMePaymentsReques
 }
 
 /**
+*	The My Quote Requests endpoint creates and provides access to quote requests scoped to a specific user.
+ */
+func (rb *ByProjectKeyMeRequestBuilder) QuoteRequests() *ByProjectKeyMeQuoteRequestsRequestBuilder {
+	return &ByProjectKeyMeQuoteRequestsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	The My Shopping Lists endpoint creates and provides access to shopping lists scoped to a specific user.
  */
 func (rb *ByProjectKeyMeRequestBuilder) ShoppingLists() *ByProjectKeyMeShoppingListsRequestBuilder {

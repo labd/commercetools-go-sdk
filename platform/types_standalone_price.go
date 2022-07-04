@@ -258,6 +258,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 			return nil, err
 		}
 		return obj, nil
+	case "setDiscountedPrice":
+		obj := StandalonePriceSetDiscountedPriceAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -316,4 +322,23 @@ func (obj StandalonePriceSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Discounts a Standalone Price. The referenced [ProductDiscount](ctp:api:type:ProductDiscount) in the discounted field must be of type external, active, and its predicate must match the referenced Price. Produces the [StandalonePriceExternalDiscountSet](ctp:api:type:StandalonePriceExternalDiscountSetMessage) Message.
+*
+ */
+type StandalonePriceSetDiscountedPriceAction struct {
+	// Value to set. If empty, any existing value will be removed.
+	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceSetDiscountedPriceAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceSetDiscountedPriceAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDiscountedPrice", Alias: (*Alias)(&obj)})
 }

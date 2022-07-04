@@ -282,6 +282,12 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 	return nil, nil
 }
 
+/**
+*	Used when the ShippingRate maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
+*	Only keys defined in the `values` array can be used to create a tier or to set a value of the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
+*	Keys must be unique.
+*
+ */
 type CartClassificationType struct {
 	// The classification items that can be used for specifiying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
 	Values []CustomFieldLocalizedEnumValue `json:"values"`
@@ -297,6 +303,10 @@ func (obj CartClassificationType) MarshalJSON() ([]byte, error) {
 	}{Action: "CartClassification", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges).
+*
+ */
 type CartScoreType struct {
 }
 
@@ -310,6 +320,12 @@ func (obj CartScoreType) MarshalJSON() ([]byte, error) {
 	}{Action: "CartScore", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Used when the ShippingRate maps to the sum of [LineItem](ctp:api:type:LineItem) Prices.
+*	The value of the Cart is used to select a tier.
+*	If chosen, it is not possible to set a value for the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
+*
+ */
 type CartValueType struct {
 }
 

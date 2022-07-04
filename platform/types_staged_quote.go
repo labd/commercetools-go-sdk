@@ -1,0 +1,283 @@
+package platform
+
+// Generated file, please do not change!!!
+
+import (
+	"encoding/json"
+	"errors"
+	"time"
+)
+
+type StagedQuote struct {
+	// The unique ID of the StagedQuote.
+	ID string `json:"id"`
+	// Current version of the StagedQuote.
+	Version int `json:"version"`
+	// Date and time (UTC) the StagedQuote was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the StagedQuote was last updated.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// User-specific unique identifier of the staged quote.
+	Key *string `json:"key,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Predefined states tracking the status of the Staged Quote.
+	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
+	// The [Buyer](/../api/quotes-overview#buyer) who requested the quote.
+	Customer *CustomerReference `json:"customer,omitempty"`
+	// The Quote Request related to this Staged Quote.
+	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
+	// The [Cart](ctp:api:type:Cart) containing the offered items.
+	QuotationCart CartReference `json:"quotationCart"`
+	// Expiration date for the quote.
+	ValidTo *time.Time `json:"validTo,omitempty"`
+	// The text message included in the offer from the [Seller](/../api/quotes-overview#seller).
+	SellerComment *string `json:"sellerComment,omitempty"`
+	// Custom Fields of this Staged Quote.
+	Custom *CustomFields `json:"custom,omitempty"`
+}
+
+type StagedQuoteDraft struct {
+	// The QuoteRequest from which this StagedQuote is created.
+	QuoteRequest QuoteRequestResourceIdentifier `json:"quoteRequest"`
+	// Current version of the QuoteRequest.
+	QuoteRequestVersion int `json:"quoteRequestVersion"`
+	// User-defined unique identifier for the StagedQuote.
+	Key *string `json:"key,omitempty"`
+	// [Custom Fields](/../api/projects/custom-fields) to be added to the StagedQuote.
+	//
+	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) and added to the StagedQuote.
+	// - If empty, the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) are added to the StagedQuote automatically.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [StagedQuote](ctp:api:type:StagedQuote).
+*
+ */
+type StagedQuotePagedQueryResponse struct {
+	// Number of [results requested](/../api/general-concepts#limit).
+	Limit int `json:"limit"`
+	// Number of [elements skipped](/../api/general-concepts#offset).
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// Staged Quotes matching the query.
+	Results []StagedQuote `json:"results"`
+}
+
+/**
+*	[Reference](ctp:api:type:Reference) to a [StagedQuote](ctp:api:type:StagedQuote).
+*
+ */
+type StagedQuoteReference struct {
+	// Unique ID of the referenced resource.
+	ID string `json:"id"`
+	// Contains the representation of the expanded StagedQuote.
+	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for StagedQuote.
+	Obj *StagedQuote `json:"obj,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteReference) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "staged-quote", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [StagedQuote](ctp:api:type:StagedQuote).
+*
+ */
+type StagedQuoteResourceIdentifier struct {
+	// Unique identifier of the referenced resource. Required if `key` is absent.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteResourceIdentifier
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "staged-quote", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Predefined states tracking the status of the Staged Quote.
+*
+ */
+type StagedQuoteState string
+
+const (
+	StagedQuoteStateInProgress StagedQuoteState = "InProgress"
+	StagedQuoteStateSent       StagedQuoteState = "Sent"
+	StagedQuoteStateClosed     StagedQuoteState = "Closed"
+)
+
+type StagedQuoteUpdate struct {
+	Version int                       `json:"version"`
+	Actions []StagedQuoteUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StagedQuoteUpdate) UnmarshalJSON(data []byte) error {
+	type Alias StagedQuoteUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorStagedQuoteUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type StagedQuoteUpdateAction interface{}
+
+func mapDiscriminatorStagedQuoteUpdateAction(input interface{}) (StagedQuoteUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "changeStagedQuoteState":
+		obj := StagedQuoteChangeStagedQuoteStateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomField":
+		obj := StagedQuoteSetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomType":
+		obj := StagedQuoteSetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setSellerComment":
+		obj := StagedQuoteSetSellerCommentAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setValidTo":
+		obj := StagedQuoteSetValidToAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type StagedQuoteChangeStagedQuoteStateAction struct {
+	// The new quote staged state to be set for the Quote Staged.
+	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteChangeStagedQuoteStateAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteChangeStagedQuoteStateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeStagedQuoteState", Alias: (*Alias)(&obj)})
+}
+
+type StagedQuoteSetCustomFieldAction struct {
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+type StagedQuoteSetCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the StagedQuote with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the StagedQuote.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the StagedQuote.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+type StagedQuoteSetSellerCommentAction struct {
+	// If `sellerComment` is absent or `null`, this field will be removed if it exists.
+	SellerComment *string `json:"sellerComment,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteSetSellerCommentAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteSetSellerCommentAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setSellerComment", Alias: (*Alias)(&obj)})
+}
+
+type StagedQuoteSetValidToAction struct {
+	// If `validTo` is absent or `null`, this field will be removed if it exists.
+	ValidTo *time.Time `json:"validTo,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteSetValidToAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteSetValidToAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidTo", Alias: (*Alias)(&obj)})
+}

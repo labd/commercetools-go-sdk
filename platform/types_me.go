@@ -657,6 +657,62 @@ func mapDiscriminatorMyPaymentUpdateAction(input interface{}) (MyPaymentUpdateAc
 	return nil, nil
 }
 
+type MyQuoteRequestDraft struct {
+	// ResourceIdentifier to the Cart from which this quote request is created.
+	Cart CartResourceIdentifier `json:"cart"`
+	// Current version of the Cart.
+	Version int `json:"version"`
+	// Text message included in the request.
+	Comment string `json:"comment"`
+}
+
+type MyQuoteRequestUpdate struct {
+	Version int                          `json:"version"`
+	Actions []MyQuoteRequestUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MyQuoteRequestUpdate) UnmarshalJSON(data []byte) error {
+	type Alias MyQuoteRequestUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorMyQuoteRequestUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type MyQuoteRequestUpdateAction interface{}
+
+func mapDiscriminatorMyQuoteRequestUpdateAction(input interface{}) (MyQuoteRequestUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "cancelQuoteRequest":
+		obj := MyQuoteRequestCancelAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
 type MyShoppingListDraft struct {
 	Name          LocalizedString             `json:"name"`
 	Description   *LocalizedString            `json:"description,omitempty"`
@@ -1735,6 +1791,23 @@ func (obj MyPaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setTransactionCustomField", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Transitions the `quoteRequestState` of the Quote Request to `Cancelled`. Can only be used when the Quote Request is in state `Submitted`.
+*
+ */
+type MyQuoteRequestCancelAction struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyQuoteRequestCancelAction) MarshalJSON() ([]byte, error) {
+	type Alias MyQuoteRequestCancelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "cancelQuoteRequest", Alias: (*Alias)(&obj)})
 }
 
 type MyShoppingListAddLineItemAction struct {

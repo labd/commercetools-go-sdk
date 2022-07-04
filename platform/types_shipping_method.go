@@ -11,58 +11,88 @@ import (
 type PriceFunction struct {
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
-	Function     string `json:"function"`
+	// To calculate a Price based on the score, use `+`, `-`, `*` and parentheses. The score is inserted with `x`. The function returns the cent amount.
+	//
+	// For example, to charge $1.99 for a score of `1`, $3.99 for a score of `2`, \$5.99 for a score of `3` and onwards, the function is: `(200 * x) - 1)`. To charge $4.50, $6.00, and \$7.50 for express shipping, the function is: `(150 * x) + 300`.
+	Function string `json:"function"`
 }
 
 type ShippingMethod struct {
 	// Unique identifier of the ShippingMethod.
 	ID string `json:"id"`
-	// The current version of the shipping method.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the ShippingMethod.
+	Version int `json:"version"`
+	// Date and time (UTC) the ShippingMethod was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the ShippingMethod was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ShippingMethod.
-	Key                  *string              `json:"key,omitempty"`
-	Name                 string               `json:"name"`
-	LocalizedName        *LocalizedString     `json:"localizedName,omitempty"`
-	Description          *string              `json:"description,omitempty"`
-	LocalizedDescription *LocalizedString     `json:"localizedDescription,omitempty"`
-	TaxCategory          TaxCategoryReference `json:"taxCategory"`
-	ZoneRates            []ZoneRate           `json:"zoneRates"`
-	// One shipping method in a project can be default.
+	Key *string `json:"key,omitempty"`
+	// Name of the ShippingMethod.
+	Name string `json:"name"`
+	// Localized name of the ShippingMethod.
+	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
+	// Description of the ShippingMethod.
+	Description *string `json:"description,omitempty"`
+	// Localized description of the ShippingMethod.
+	LocalizedDescription *LocalizedString `json:"localizedDescription,omitempty"`
+	// [TaxCategory](ctp:api:type:TaxCategory) of all ZoneRates of the ShippingMethod.
+	TaxCategory TaxCategoryReference `json:"taxCategory"`
+	// Defines [ShippingRates](ctp:api:type:ShippingRate) (prices) for specific Zones.
+	ZoneRates []ZoneRate `json:"zoneRates"`
+	// If `true` this ShippingMethod is the [Project](ctp:api:type:Project)'s default ShippingMethod.
 	IsDefault bool `json:"isDefault"`
-	// A Cart predicate which can be used to more precisely select a shipping method for a cart.
-	Predicate *string       `json:"predicate,omitempty"`
-	Custom    *CustomFields `json:"custom,omitempty"`
+	// Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
+	Predicate *string `json:"predicate,omitempty"`
+	// Custom Fields of the ShippingMethod.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type ShippingMethodDraft struct {
 	// User-defined unique identifier for the ShippingMethod.
-	Key                  *string                       `json:"key,omitempty"`
-	Name                 string                        `json:"name"`
-	LocalizedName        *LocalizedString              `json:"localizedName,omitempty"`
-	Description          *string                       `json:"description,omitempty"`
-	LocalizedDescription *LocalizedString              `json:"localizedDescription,omitempty"`
-	TaxCategory          TaxCategoryResourceIdentifier `json:"taxCategory"`
-	ZoneRates            []ZoneRateDraft               `json:"zoneRates"`
-	// If `true` the shipping method will be the default one in a project.
+	Key *string `json:"key,omitempty"`
+	// Name of the ShippingMethod.
+	Name string `json:"name"`
+	// Localized name of the ShippingMethod.
+	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
+	// Description of the ShippingMethod.
+	Description *string `json:"description,omitempty"`
+	// Localized description of the ShippingMethod.
+	LocalizedDescription *LocalizedString `json:"localizedDescription,omitempty"`
+	// [TaxCategory](ctp:api:type:TaxCategory) for all ZoneRates of the ShippingMethod.
+	TaxCategory TaxCategoryResourceIdentifier `json:"taxCategory"`
+	// Defines [ShippingRates](ctp:api:type:ShippingRate) (prices) for specific zones.
+	ZoneRates []ZoneRateDraft `json:"zoneRates"`
+	// If `true` the ShippingMethod will be the [Project](ctp:api:type:Project)'s default ShippingMethod.
 	IsDefault bool `json:"isDefault"`
-	// A Cart predicate which can be used to more precisely select a shipping method for a cart.
-	Predicate *string            `json:"predicate,omitempty"`
-	Custom    *CustomFieldsDraft `json:"custom,omitempty"`
+	// Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
+	Predicate *string `json:"predicate,omitempty"`
+	// Custom Fields for the ShippingMethod.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
+/**
+*	[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [ShippingMethod](ctp:api:type:ShippingMethod).
+*
+ */
 type ShippingMethodPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
 	Limit *int `json:"limit,omitempty"`
-	Count int  `json:"count"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  *int             `json:"offset,omitempty"`
+	Offset *int `json:"offset,omitempty"`
+	// [Shipping Methods](ctp:api:type:ShippingMethod) matching the query.
 	Results []ShippingMethod `json:"results"`
 }
 
@@ -73,7 +103,7 @@ type ShippingMethodPagedQueryResponse struct {
 type ShippingMethodReference struct {
 	// Unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShippingMethods.
+	// Contains the representation of the expanded ShippingMethod. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShippingMethods.
 	Obj *ShippingMethod `json:"obj,omitempty"`
 }
 
@@ -109,7 +139,9 @@ func (obj ShippingMethodResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodUpdate struct {
-	Version int                          `json:"version"`
+	// Expected version of the ShippingMethod on which the changes should be applied. If the expected version does not match the actual version, a 409 Conflict will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the [ShippingMethod](/projects/shippingMethods#shippingmethod).
 	Actions []ShippingMethodUpdateAction `json:"actions"`
 }
 
@@ -234,14 +266,15 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 }
 
 type ShippingRate struct {
+	// Currency amount of the ShippingRate.
 	Price TypedMoney `json:"price"`
-	// The shipping is free if the order total (the sum of line item prices) exceeds the `freeAbove` value.
-	// Note: `freeAbove` applies before any Cart or Product discounts, and can cause discounts to apply in invalid scenarios.
-	// Use a Cart Discount to set the shipping price to 0 to avoid providing free shipping in invalid discount scenarios.
+	// Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
 	FreeAbove TypedMoney `json:"freeAbove,omitempty"`
-	// Only appears in response to requests for shipping methods by cart or location to mark this shipping rate as one that matches the cart or location.
+	// `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
+	// Only appears in response to requests for [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) or
+	// [Get ShippingMethods for a Location](#get-shippingmethods-for-a-location).
 	IsMatching *bool `json:"isMatching,omitempty"`
-	// A list of shipping rate price tiers.
+	// Price tiers for the ShippingRate.
 	Tiers []ShippingRatePriceTier `json:"tiers"`
 }
 
@@ -278,12 +311,11 @@ func (obj *ShippingRate) UnmarshalJSON(data []byte) error {
 }
 
 type ShippingRateDraft struct {
+	// Money value of the ShippingRate.
 	Price Money `json:"price"`
-	// The shipping is free if the order total (the sum of line item prices) exceeds the freeAbove value.
-	// Note: `freeAbove` applies before any Cart or Product discounts, and can cause discounts to apply in invalid scenarios.
-	// Use a Cart Discount to set the shipping price to 0 to avoid providing free shipping in invalid discount scenarios.
+	// Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
 	FreeAbove *Money `json:"freeAbove,omitempty"`
-	// A list of shipping rate price tiers.
+	// Price tiers for the ShippingRate.
 	Tiers []ShippingRatePriceTier `json:"tiers"`
 }
 
@@ -365,12 +397,16 @@ func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePrice
 	return nil, nil
 }
 
+/**
+*	Used when the ShippingRate maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
+*
+ */
 type CartClassificationTier struct {
+	// `key` selected from the `values` of the [CartClassificationType](/projects/project#cartclassificationtype) configured in the Project.
 	Value string `json:"value"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	Price      Money `json:"price"`
+	// Fixed shipping rate for the selected classification.
+	Price Money `json:"price"`
+	// Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
 	IsMatching *bool `json:"isMatching,omitempty"`
 }
 
@@ -384,14 +420,20 @@ func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 	}{Action: "CartClassification", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges).
+*	Either `price` or `priceFunction` is required.
+*
+ */
 type CartScoreTier struct {
-	Score float64 `json:"score"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	Price         *Money         `json:"price,omitempty"`
+	// Abstract value for categorizing a Cart. The range starts at `0`. The default price covers `0`, tiers start at `1`. See [Using Tiered Shipping Rates](/../tutorials/shipping-rate) for details and examples.
+	Score int `json:"score"`
+	// Defines a fixed price for the `score`.
+	Price *Money `json:"price,omitempty"`
+	// Dynamically calculates a Price for a range of scores.
 	PriceFunction *PriceFunction `json:"priceFunction,omitempty"`
-	IsMatching    *bool          `json:"isMatching,omitempty"`
+	// Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+	IsMatching *bool `json:"isMatching,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -404,12 +446,19 @@ func (obj CartScoreTier) MarshalJSON() ([]byte, error) {
 	}{Action: "CartScore", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Used when the ShippingRate maps to the sum of [LineItem](ctp:api:type:LineItem) Prices.
+*	The value of the Cart is used to select a tier.
+*	If chosen, it is not possible to set a value for the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
+*	Tiers contain the `centAmount` (a value of `100` in the currency `USD` corresponds to `$ 1.00`), and start at `1`.'
+*
+ */
 type CartValueTier struct {
+	// Minimum total price of a Cart for which a shipping rate applies.
 	MinimumCentAmount int `json:"minimumCentAmount"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	Price      Money `json:"price"`
+	// Fixed shipping rate Price for a CartValue.
+	Price Money `json:"price"`
+	// Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
 	IsMatching *bool `json:"isMatching,omitempty"`
 }
 
@@ -423,9 +472,6 @@ func (obj CartValueTier) MarshalJSON() ([]byte, error) {
 	}{Action: "CartValue", Alias: (*Alias)(&obj)})
 }
 
-/**
-*	Can be one of the following or absent.
- */
 type ShippingRateTierType string
 
 const (
@@ -434,21 +480,29 @@ const (
 	ShippingRateTierTypeCartScore          ShippingRateTierType = "CartScore"
 )
 
+/**
+*	Defines shipping rates in different currencies for a specific [Zone](ctp:api:type:Zone).
+*
+ */
 type ZoneRate struct {
+	// [Zone](ctp:api:type:Zone) for which the shipping rates are valid.
 	Zone ZoneReference `json:"zone"`
-	// The array does not contain two shipping rates with the same currency.
+	// Shipping rates defined per currency.
 	ShippingRates []ShippingRate `json:"shippingRates"`
 }
 
 type ZoneRateDraft struct {
+	// Sets the [Zone](ctp:api:type:Zone) for which the shippng rates are valid.
 	Zone ZoneResourceIdentifier `json:"zone"`
-	// The array must not contain two shipping rates with the same currency.
+	// Shipping rates for the `currencies` configured in the [Project](ctp:api:type:Project). The array must not contain two ShippingRates with the same [CurrencyCode](ctp:api:type:CurrencyCode).
 	ShippingRates []ShippingRateDraft `json:"shippingRates"`
 }
 
 type ShippingMethodAddShippingRateAction struct {
-	Zone         ZoneResourceIdentifier `json:"zone"`
-	ShippingRate ShippingRateDraft      `json:"shippingRate"`
+	// [Zone](ctp:api:type:Zone) to which the ShippingRate should be added.
+	Zone ZoneResourceIdentifier `json:"zone"`
+	// Value to add to `shippingRates`.
+	ShippingRate ShippingRateDraft `json:"shippingRate"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -462,6 +516,7 @@ func (obj ShippingMethodAddShippingRateAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodAddZoneAction struct {
+	// Value to add to `zoneRates`.
 	Zone ZoneResourceIdentifier `json:"zone"`
 }
 
@@ -476,7 +531,7 @@ func (obj ShippingMethodAddZoneAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodChangeIsDefaultAction struct {
-	// Only one ShippingMethod in a project can be default.
+	// Value to set. Only one ShippingMethod can be default in a [Project](ctp:api:type:Project).
 	IsDefault bool `json:"isDefault"`
 }
 
@@ -491,6 +546,7 @@ func (obj ShippingMethodChangeIsDefaultAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodChangeNameAction struct {
+	// Value to set. Must not be empty.
 	Name string `json:"name"`
 }
 
@@ -505,6 +561,7 @@ func (obj ShippingMethodChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodChangeTaxCategoryAction struct {
+	// Value to set.
 	TaxCategory TaxCategoryResourceIdentifier `json:"taxCategory"`
 }
 
@@ -519,8 +576,10 @@ func (obj ShippingMethodChangeTaxCategoryAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodRemoveShippingRateAction struct {
-	Zone         ZoneResourceIdentifier `json:"zone"`
-	ShippingRate ShippingRateDraft      `json:"shippingRate"`
+	// [Zone](ctp:api:type:Zone) from which the ShippingRate should be removed.
+	Zone ZoneResourceIdentifier `json:"zone"`
+	// Value to remove from `shippingRates`.
+	ShippingRate ShippingRateDraft `json:"shippingRate"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -534,6 +593,7 @@ func (obj ShippingMethodRemoveShippingRateAction) MarshalJSON() ([]byte, error) 
 }
 
 type ShippingMethodRemoveZoneAction struct {
+	// Value to remove from `zoneRates`.
 	Zone ZoneResourceIdentifier `json:"zone"`
 }
 
@@ -547,6 +607,10 @@ func (obj ShippingMethodRemoveZoneAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeZone", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action sets, overwrites, or removes any existing [Custom Field](/projects/custom-fields) for an existing ShippingMethod.
+*
+ */
 type ShippingMethodSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -585,6 +649,7 @@ func (obj ShippingMethodSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodSetDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	Description *string `json:"description,omitempty"`
 }
 
@@ -599,7 +664,7 @@ func (obj ShippingMethodSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodSetKeyAction struct {
-	// If `key` is absent or `null`, it is removed if it exists.
+	// If `key` is absent or `null`, the existing key, if any, will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -614,6 +679,7 @@ func (obj ShippingMethodSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodSetLocalizedDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	LocalizedDescription *LocalizedString `json:"localizedDescription,omitempty"`
 }
 
@@ -628,6 +694,7 @@ func (obj ShippingMethodSetLocalizedDescriptionAction) MarshalJSON() ([]byte, er
 }
 
 type ShippingMethodSetLocalizedNameAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
 }
 
@@ -642,8 +709,7 @@ func (obj ShippingMethodSetLocalizedNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodSetPredicateAction struct {
-	// A valid Cart predicate.
-	// If `predicate` is absent or `null`, it is removed if it exists.
+	// A valid [Cart predicate](/projects/predicates#cart-predicates). If `predicate` is absent or `null`, it is removed if it exists.
 	Predicate *string `json:"predicate,omitempty"`
 }
 

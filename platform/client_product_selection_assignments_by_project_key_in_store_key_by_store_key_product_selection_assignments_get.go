@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet struct {
@@ -26,15 +27,55 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMetho
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput struct {
-	Expand []string
+	Limit     *int
+	Offset    *int
+	WithTotal *bool
+	Expand    []string
 }
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	if input.Limit != nil {
+		values.Add("limit", strconv.Itoa(*input.Limit))
+	}
+	if input.Offset != nil {
+		values.Add("offset", strconv.Itoa(*input.Offset))
+	}
+	if input.WithTotal != nil {
+		if *input.WithTotal {
+			values.Add("withTotal", "true")
+		} else {
+			values.Add("withTotal", "false")
+		}
+	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Limit(v int) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput{}
+	}
+	rb.params.Limit = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Offset(v int) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput{}
+	}
+	rb.params.Offset = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) WithTotal(v bool) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput{}
+	}
+	rb.params.WithTotal = &v
+	return rb
 }
 
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
@@ -56,6 +97,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMeth
 
 /**
 *	Queries Product Selection assignments in a specific Store.
+*
+*	The response will include duplicate Products whenever more than one active Product Selection of the Store
+*	includes a Product. To make clear through which Product Selection a Product is available in the Store
+*	the response contains assignments including both the Product and the Product Selection.
+*	Only Products of Product Selections that are activated in Store will be returned.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Execute(ctx context.Context) (result *ProductsInStorePagedQueryResponse, err error) {
 	var queryParams url.Values

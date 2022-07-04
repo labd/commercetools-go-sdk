@@ -53,11 +53,12 @@ type Cart struct {
 	// Used for product variant price selection.
 	Country *string `json:"country,omitempty"`
 	// Set automatically once the ShippingMethod is set.
-	ShippingInfo  *ShippingInfo      `json:"shippingInfo,omitempty"`
-	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
-	Custom        *CustomFields      `json:"custom,omitempty"`
-	PaymentInfo   *PaymentInfo       `json:"paymentInfo,omitempty"`
-	Locale        *string            `json:"locale,omitempty"`
+	ShippingInfo    *ShippingInfo      `json:"shippingInfo,omitempty"`
+	DiscountCodes   []DiscountCodeInfo `json:"discountCodes"`
+	DirectDiscounts []DirectDiscount   `json:"directDiscounts"`
+	Custom          *CustomFields      `json:"custom,omitempty"`
+	PaymentInfo     *PaymentInfo       `json:"paymentInfo,omitempty"`
+	Locale          *string            `json:"locale,omitempty"`
 	// The cart will be deleted automatically if it hasn't been modified for the specified amount of days and it is in the `Active` CartState.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Automatically filled when a line item with LineItemMode `GiftLineItem` is removed from the cart.
@@ -119,6 +120,10 @@ func (obj Cart) MarshalJSON() ([]byte, error) {
 
 	if raw["discountCodes"] == nil {
 		delete(raw, "discountCodes")
+	}
+
+	if raw["directDiscounts"] == nil {
+		delete(raw, "directDiscounts")
 	}
 
 	if raw["itemShippingAddresses"] == nil {
@@ -247,6 +252,7 @@ type CartOrigin string
 const (
 	CartOriginCustomer CartOrigin = "Customer"
 	CartOriginMerchant CartOrigin = "Merchant"
+	CartOriginQuote    CartOrigin = "Quote"
 )
 
 type CartPagedQueryResponse struct {
@@ -586,6 +592,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "setDirectDiscounts":
+		obj := CartSetDirectDiscountsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setItemShippingAddressCustomField":
 		obj := CartSetItemShippingAddressCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -796,6 +808,70 @@ type CustomLineItemDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Container for custom line item specific address(es).
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+}
+
+type DirectDiscount struct {
+	// The unique ID of the cart discount.
+	ID    string            `json:"id"`
+	Value CartDiscountValue `json:"value"`
+	// Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
+	Target CartDiscountTarget `json:"target,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DirectDiscount) UnmarshalJSON(data []byte) error {
+	type Alias DirectDiscount
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorCartDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.Target != nil {
+		var err error
+		obj.Target, err = mapDiscriminatorCartDiscountTarget(obj.Target)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type DirectDiscountDraft struct {
+	Value CartDiscountValue `json:"value"`
+	// Empty when the `value` has type `giftLineItem`, otherwise a CartDiscountTarget is set.
+	Target CartDiscountTarget `json:"target,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DirectDiscountDraft) UnmarshalJSON(data []byte) error {
+	type Alias DirectDiscountDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorCartDiscountValue(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.Target != nil {
+		var err error
+		obj.Target, err = mapDiscriminatorCartDiscountTarget(obj.Target)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 type DiscountCodeInfo struct {
@@ -2102,6 +2178,20 @@ func (obj CartSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDeliveryAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type CartSetDirectDiscountsAction struct {
+	Discounts []DirectDiscountDraft `json:"discounts"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartSetDirectDiscountsAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetDirectDiscountsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDirectDiscounts", Alias: (*Alias)(&obj)})
 }
 
 type CartSetItemShippingAddressCustomFieldAction struct {

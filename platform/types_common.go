@@ -829,6 +829,18 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "quote-request":
+		obj := QuoteRequestReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "quote":
+		obj := QuoteReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "review":
 		obj := ReviewReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -843,6 +855,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return obj, nil
 	case "shopping-list":
 		obj := ShoppingListReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "staged-quote":
+		obj := StagedQuoteReference{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -888,7 +906,7 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 }
 
 /**
-*	supported resource type identifiers:
+*	Type of resource the value should reference. Supported resource type identifiers are:
 *
  */
 type ReferenceTypeId string
@@ -912,9 +930,12 @@ const (
 	ReferenceTypeIdProductPrice     ReferenceTypeId = "product-price"
 	ReferenceTypeIdProductSelection ReferenceTypeId = "product-selection"
 	ReferenceTypeIdProductType      ReferenceTypeId = "product-type"
+	ReferenceTypeIdQuote            ReferenceTypeId = "quote"
+	ReferenceTypeIdQuoteRequest     ReferenceTypeId = "quote-request"
 	ReferenceTypeIdReview           ReferenceTypeId = "review"
 	ReferenceTypeIdShippingMethod   ReferenceTypeId = "shipping-method"
 	ReferenceTypeIdShoppingList     ReferenceTypeId = "shopping-list"
+	ReferenceTypeIdStagedQuote      ReferenceTypeId = "staged-quote"
 	ReferenceTypeIdState            ReferenceTypeId = "state"
 	ReferenceTypeIdStore            ReferenceTypeId = "store"
 	ReferenceTypeIdSubscription     ReferenceTypeId = "subscription"
@@ -1033,6 +1054,18 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 			return nil, err
 		}
 		return obj, nil
+	case "quote-request":
+		obj := QuoteRequestResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "quote":
+		obj := QuoteResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "review":
 		obj := ReviewResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1047,6 +1080,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 		return obj, nil
 	case "shopping-list":
 		obj := ShoppingListResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "staged-quote":
+		obj := StagedQuoteResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}

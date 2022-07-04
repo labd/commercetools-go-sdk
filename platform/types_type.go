@@ -469,6 +469,7 @@ const (
 	ResourceTypeIdPaymentInterfaceInteraction ResourceTypeId = "payment-interface-interaction"
 	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
 	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
+	ResourceTypeIdQuote                       ResourceTypeId = "quote"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
 	ResourceTypeIdShippingMethod              ResourceTypeId = "shipping-method"
 	ResourceTypeIdShoppingList                ResourceTypeId = "shopping-list"
@@ -940,7 +941,7 @@ func (obj TypeChangeLabelAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changes the `label` of a [LocalizedEnumValue](ctp:api:type:CustomFieldLocalizedEnumValue) of an [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition.
+*	Changes the `label` of a [LocalizedEnumValue](ctp:api:type:CustomFieldLocalizedEnumValue) of a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition.
 *
  */
 type TypeChangeLocalizedEnumValueLabelAction struct {

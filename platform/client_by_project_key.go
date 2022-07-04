@@ -215,6 +215,36 @@ func (rb *ByProjectKeyRequestBuilder) ProductTypes() *ByProjectKeyProductTypesRe
 }
 
 /**
+*	A quote holds the negotiated offer.
+ */
+func (rb *ByProjectKeyRequestBuilder) Quotes() *ByProjectKeyQuotesRequestBuilder {
+	return &ByProjectKeyQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A request for a quote holds product variants and can be ordered.
+ */
+func (rb *ByProjectKeyRequestBuilder) QuoteRequests() *ByProjectKeyQuoteRequestsRequestBuilder {
+	return &ByProjectKeyQuoteRequestsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A staged quote holds the negotiation between the [Buyer](/../api/quotes-overview#buyer) and the [Seller](/../api/quotes-overview#seller).
+ */
+func (rb *ByProjectKeyRequestBuilder) StagedQuotes() *ByProjectKeyStagedQuotesRequestBuilder {
+	return &ByProjectKeyStagedQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	Reviews are used to evaluate products and channels.
  */
 func (rb *ByProjectKeyRequestBuilder) Reviews() *ByProjectKeyReviewsRequestBuilder {
@@ -225,7 +255,7 @@ func (rb *ByProjectKeyRequestBuilder) Reviews() *ByProjectKeyReviewsRequestBuild
 }
 
 /**
-*	Shipping Methods define where orders can be shipped and what the costs are.
+*	ShippingMethods define where orders can be shipped and what the costs are.
  */
 func (rb *ByProjectKeyRequestBuilder) ShippingMethods() *ByProjectKeyShippingMethodsRequestBuilder {
 	return &ByProjectKeyShippingMethodsRequestBuilder{

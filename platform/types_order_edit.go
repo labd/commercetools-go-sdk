@@ -493,12 +493,14 @@ type StagedOrder struct {
 	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
 	// Set when this order was created from a cart.
 	// The cart will have the state `Ordered`.
-	Cart          *CartReference `json:"cart,omitempty"`
-	Custom        *CustomFields  `json:"custom,omitempty"`
-	PaymentInfo   *PaymentInfo   `json:"paymentInfo,omitempty"`
-	Locale        *string        `json:"locale,omitempty"`
-	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
-	Origin        CartOrigin     `json:"origin"`
+	Cart *CartReference `json:"cart,omitempty"`
+	// Set when this order was created from a quote.
+	Quote         *QuoteReference `json:"quote,omitempty"`
+	Custom        *CustomFields   `json:"custom,omitempty"`
+	PaymentInfo   *PaymentInfo    `json:"paymentInfo,omitempty"`
+	Locale        *string         `json:"locale,omitempty"`
+	InventoryMode *InventoryMode  `json:"inventoryMode,omitempty"`
+	Origin        CartOrigin      `json:"origin"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with LineItemLevel (horizontally) or UnitPriceLevel (vertically) calculation mode.
 	TaxCalculationMode *TaxCalculationMode `json:"taxCalculationMode,omitempty"`
 	// The shippingRateInput is used as an input to select a ShippingRatePriceTier.

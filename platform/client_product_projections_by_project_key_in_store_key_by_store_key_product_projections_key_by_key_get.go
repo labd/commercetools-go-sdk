@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMetho
 }
 
 /**
-*	Gets the current or staged representation of a product by its ID from a specific Store.
+*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key from the specified Store.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *ProductProjection, err error) {
 	var queryParams url.Values

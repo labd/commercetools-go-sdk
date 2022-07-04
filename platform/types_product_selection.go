@@ -9,13 +9,54 @@ import (
 )
 
 type AssignedProductReference struct {
-	// Reference to a Product that is assigned to the ProductSelection.
+	// Reference to a Product that is assigned to the Product Selection.
 	Product ProductReference `json:"product"`
+	// The Variants of the Product that are included, or excluded, from the Product Selection.
+	// In absence of this field, all Variants are deemed to be included.
+	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AssignedProductReference) UnmarshalJSON(data []byte) error {
+	type Alias AssignedProductReference
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.VariantSelection != nil {
+		var err error
+		obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 type AssignedProductSelection struct {
-	// Reference to the ProductSelection that this assignment is part of.
+	// Reference to the Product Selection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
+	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AssignedProductSelection) UnmarshalJSON(data []byte) error {
+	type Alias AssignedProductSelection
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.VariantSelection != nil {
+		var err error
+		obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 /**
@@ -70,8 +111,28 @@ type ProductSelection struct {
 type ProductSelectionAssignment struct {
 	// Reference to a Product that is assigned to the ProductSelection.
 	Product ProductReference `json:"product"`
-	// Reference to the ProductSelection that this assignment is part of.
+	// Reference to the Product Selection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
+	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionAssignment) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionAssignment
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.VariantSelection != nil {
+		var err error
+		obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 type ProductSelectionDraft struct {
@@ -258,6 +319,13 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.VariantSelection != nil {
+			var err error
+			obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "changeName":
 		obj := ProductSelectionChangeNameAction{}
@@ -289,9 +357,101 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 			return nil, err
 		}
 		return obj, nil
+	case "setVariantSelection":
+		obj := ProductSelectionSetVariantSelectionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.VariantSelection != nil {
+			var err error
+			obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
+
+/**
+*	Polymorphic base type for Product Variant Selections. The actual type is determined by the `type` field.
+*
+ */
+type ProductVariantSelection interface{}
+
+func mapDiscriminatorProductVariantSelection(input interface{}) (ProductVariantSelection, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "exclusion":
+		obj := ProductVariantSelectionExclusion{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "inclusion":
+		obj := ProductVariantSelectionInclusion{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	All Product Variants except the explicitly stated SKUs are part of the Product Selection.
+*
+ */
+type ProductVariantSelectionExclusion struct {
+	// Non-empty array of SKUs representing Product Variants to be excluded from the Product Selection.
+	Skus []string `json:"skus"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantSelectionExclusion) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantSelectionExclusion
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "exclusion", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Only Product Variants with explicitly stated SKUs are part of the Product Selection.
+*
+ */
+type ProductVariantSelectionInclusion struct {
+	// Non-empty array of SKUs representing Product Variants to be included into the Product Selection.
+	Skus []string `json:"skus"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantSelectionInclusion) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantSelectionInclusion
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "inclusion", Alias: (*Alias)(&obj)})
+}
+
+type ProductVariantSelectionTypeEnum string
+
+const (
+	ProductVariantSelectionTypeEnumInclusion ProductVariantSelectionTypeEnum = "inclusion"
+	ProductVariantSelectionTypeEnumExclusion ProductVariantSelectionTypeEnum = "exclusion"
+)
 
 /**
 *	[PagedQueryResult](/general-concepts#pagedqueryresult) containing an array of [ProductSelectionAssignment](ctp:api:type:ProductSelectionAssignment).
@@ -314,9 +474,36 @@ type ProductsInStorePagedQueryResponse struct {
 	Results []ProductSelectionAssignment `json:"results"`
 }
 
+/**
+*	Adds a Product to the Product Selection.
+*	If the given Product is already assigned to the Product Selection with the same Variant Selection nothing happens
+*	but if the existing Assignment has a different Variant Selection [ProductPresentWithDifferentVariantSelection](/errors#product-selections) is raised.'
+*
+ */
 type ProductSelectionAddProductAction struct {
 	// ResourceIdentifier to Product
 	Product ProductResourceIdentifier `json:"product"`
+	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	// If not supplied all Variants are deemed to be included.
+	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionAddProductAction) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionAddProductAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.VariantSelection != nil {
+		var err error
+		obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -409,4 +596,45 @@ func (obj ProductSelectionSetKeyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updates the Product Variant Selection of an existing [Product Selection Assignment](ctp:api:type:ProductSelectionAssignment).
+*	If the given Product is not assigned to the Product Selection [ProductAssignmentMissing](/errors#product-selections) error is raised.
+*
+ */
+type ProductSelectionSetVariantSelectionAction struct {
+	// ResourceIdentifier to Product
+	Product ProductResourceIdentifier `json:"product"`
+	// Determines which Variants of the previously added Product are to be included in, or excluded from, the Product Selection.
+	// Leave it empty to unset an existing Variant Selection.
+	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductSelectionSetVariantSelectionAction) UnmarshalJSON(data []byte) error {
+	type Alias ProductSelectionSetVariantSelectionAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.VariantSelection != nil {
+		var err error
+		obj.VariantSelection, err = mapDiscriminatorProductVariantSelection(obj.VariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionSetVariantSelectionAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionSetVariantSelectionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setVariantSelection", Alias: (*Alias)(&obj)})
 }

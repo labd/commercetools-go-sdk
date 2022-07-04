@@ -73,6 +73,12 @@ func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodGet) WithHead
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all the ShippingMethods that can ship to the given [Location](/projects/zones#location) for an [OrderEdit](/projects/order-edits).
+*	In case the OrderEdit preview cannot be created an [EditPreviewFailed](ctp:api:type:EditPreviewFailedError) error is raised.
+*
+ */
 func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodGet) Execute(ctx context.Context) (result *ShippingMethodPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

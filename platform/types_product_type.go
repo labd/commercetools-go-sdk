@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+/**
+*	Specifies how an Attribute (or a set of Attributes) should be validated across all variants of a Product:
+*
+ */
 type AttributeConstraintEnum string
 
 const (
@@ -23,32 +27,31 @@ const (
 	AttributeConstraintEnumDraftNone AttributeConstraintEnumDraft = "None"
 )
 
+/**
+*	Describes a Product Attribute and allows you to define meta-information associated with the Attribute (like whether it should be searchable, or its constraints).
+*
+ */
 type AttributeDefinition struct {
-	// Describes the type of the attribute.
+	// Describes the Type of the Attribute.
 	Type AttributeType `json:"type"`
-	// The unique name of the attribute used in the API.
-	// The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
-	// When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types, otherwise an AttributeDefinitionAlreadyExists error code will be returned.
-	// An exception to this are the values of an `enum` or `lenum` type and sets thereof.
+	// User-defined name of the Attribute that is unique within the [Project](ctp:api:type:Project).
 	Name string `json:"name"`
-	// A human-readable label for the attribute.
+	// Human-readable label for the Attribute.
 	Label LocalizedString `json:"label"`
-	// Whether the attribute is required to have a value.
+	// If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
-	// Describes how an attribute or a set of attributes should be validated across all variants of a product.
+	// Specifies how Attributes are validated across all variants of a Product.
 	AttributeConstraint AttributeConstraintEnum `json:"attributeConstraint"`
-	// Additional information about the attribute that aids content managers when setting product details.
+	// Provides additional Attribute information to aid content managers configure Product details.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
-	// Provides a visual representation type for this attribute.
-	// only relevant for text-based attribute types
-	// like TextType and LocalizableTextType.
+	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint TextInputHint `json:"inputHint"`
-	// Whether the attribute's values should generally be enabled in product search.
-	// This determines whether the value is stored in products for matching terms in the context of full-text search queries  and can be used in facets & filters as part of product search queries.
-	// The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
-	// The max size of a searchable field is **restricted to 10922 characters**.
-	// This constraint is enforced at both product creation and product update.
-	// If the length of the input exceeds the maximum size an InvalidField error is returned.
+	// If `true`, the Attribute's values are available for the [Product Projections Search API](/../api/projects/products-search) for use in full-text search queries, filters, and facets.
+	//
+	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
+	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
+	// This constraint is enforced at both [Product creation](/../api/projects/products#create-a-product) and [Product update](/../api/projects/products#update-product).
+	// If the length of the input exceeds the maximum size, an [InvalidFieldError](ctp:api:type:InvalidFieldError) is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
 
@@ -70,27 +73,32 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	Specify the Attribute to be created with the [ProductTypeDraft](ctp:api:type:ProductTypeDraft).
+*
+ */
 type AttributeDefinitionDraft struct {
-	// Describes the type of the attribute.
+	// Describes the Type of the Attribute.
 	Type AttributeType `json:"type"`
-	// The unique name of the attribute used in the API.
-	// The name must be between two and 256 characters long and can contain the ASCII letters A to Z in lowercase or uppercase, digits, underscores (`_`) and the hyphen-minus (`-`).
-	// When using the same `name` for an attribute in two or more product types all fields of the AttributeDefinition of this attribute need to be the same across the product types.
+	// User-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
+	// When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. Otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+	// An exception to this are the values of an `enum` or `lenum` Type and sets thereof.
 	Name string `json:"name"`
-	// A human-readable label for the attribute.
+	// Human-readable label for the Attribute.
 	Label LocalizedString `json:"label"`
-	// Whether the attribute is required to have a value.
+	// Set to `true` if the Attribute is required to have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
-	// Describes how an attribute or a set of attributes should be validated across all variants of a product.
+	// Specifies how an Attribute or a combination of Attributes should be validated across all variants of a Product.
 	AttributeConstraint *AttributeConstraintEnum `json:"attributeConstraint,omitempty"`
-	// Additional information about the attribute that aids content managers when setting product details.
+	// Provides additional information about the Attribute that aids content managers when setting Product details.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
-	// Provides a visual representation type for this attribute.
-	// only relevant for text-based attribute types like TextType and LocalizableTextType.
+	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint *TextInputHint `json:"inputHint,omitempty"`
-	// Whether the attribute's values should generally be enabled in product search.
-	// This determines whether the value is stored in products for matching terms in the context of full-text search queries and can be used in facets & filters as part of product search queries.
-	// The exact features that are enabled/disabled with this flag depend on the concrete attribute type and are described there.
+	// Set to `true` if the Attribute's values should be available in the [Product Projections Search API](/../api/projects/products-search) and can be used in full-text search queries, filters, and facets.
+	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
+	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
+	// This constraint is enforced at both Product creation and Product update.
+	// If the length of the input exceeds the maximum size, an InvalidField error is returned.
 	IsSearchable *bool `json:"isSearchable,omitempty"`
 }
 
@@ -112,17 +120,52 @@ func (obj *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	Attribute type for localized enum values. Useful for predefined language-specific values selectable in drop-down menus if only one value can be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumValue instead if multiple values can be selected.
+*
+ */
 type AttributeLocalizedEnumValue struct {
+	// Key of the value used as a programmatic identifier, for example in facets & filters.
 	Key string `json:"key"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Descriptive, localized label of the value.
 	Label LocalizedString `json:"label"`
 }
 
+/**
+*	A plain enum value must be unique within the enum, otherwise a [DuplicateEnumValues](/errors#product-types-400-duplicate-enum-values) error will be returned.
+*
+ */
 type AttributePlainEnumValue struct {
-	Key   string `json:"key"`
+	// Key of the value used as a programmatic identifier, for example in facets & filters.
+	Key string `json:"key"`
+	// Descriptive label of the value.
 	Label string `json:"label"`
 }
 
+/**
+*	Name of the resource type that the value should reference. Supported resource type identifiers:
+*
+ */
+type AttributeReferenceTypeId string
+
+const (
+	AttributeReferenceTypeIdCart             AttributeReferenceTypeId = "cart"
+	AttributeReferenceTypeIdCategory         AttributeReferenceTypeId = "category"
+	AttributeReferenceTypeIdChannel          AttributeReferenceTypeId = "channel"
+	AttributeReferenceTypeIdCustomer         AttributeReferenceTypeId = "customer"
+	AttributeReferenceTypeIdKeyValueDocument AttributeReferenceTypeId = "key-value-document"
+	AttributeReferenceTypeIdOrder            AttributeReferenceTypeId = "order"
+	AttributeReferenceTypeIdProduct          AttributeReferenceTypeId = "product"
+	AttributeReferenceTypeIdProductType      AttributeReferenceTypeId = "product-type"
+	AttributeReferenceTypeIdReview           AttributeReferenceTypeId = "review"
+	AttributeReferenceTypeIdShippingMethod   AttributeReferenceTypeId = "shipping-method"
+	AttributeReferenceTypeIdState            AttributeReferenceTypeId = "state"
+	AttributeReferenceTypeIdZone             AttributeReferenceTypeId = "zone"
+)
+
+/**
+*	Umbrellla type for specific attribute types discriminated by property `name`.
+ */
 type AttributeType interface{}
 
 func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
@@ -226,6 +269,10 @@ func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
 	return nil, nil
 }
 
+/**
+*	Attribute type for Boolean values. Valid values for the Attribute are `true` and `false` (JSON Boolean).
+*
+ */
 type AttributeBooleanType struct {
 }
 
@@ -265,7 +312,12 @@ func (obj AttributeDateType) MarshalJSON() ([]byte, error) {
 	}{Action: "date", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for plain enum values. Useful for predefined language-agnostic values selectable in drop downs when only one value should be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType instead if multiple values can be selected from the list.
+*
+ */
 type AttributeEnumType struct {
+	// Available values that can be assigned to Products.
 	Values []AttributePlainEnumValue `json:"values"`
 }
 
@@ -279,6 +331,10 @@ func (obj AttributeEnumType) MarshalJSON() ([]byte, error) {
 	}{Action: "enum", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for [LocalizedString](ctp:api:type:LocalizedString) values.
+*
+ */
 type AttributeLocalizableTextType struct {
 }
 
@@ -293,6 +349,7 @@ func (obj AttributeLocalizableTextType) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeLocalizedEnumType struct {
+	// Available values that can be assigned to Products.
 	Values []AttributeLocalizedEnumValue `json:"values"`
 }
 
@@ -319,8 +376,12 @@ func (obj AttributeMoneyType) MarshalJSON() ([]byte, error) {
 	}{Action: "money", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for nesting Attributes based on some existing ProductType. It does not support `isSearchable` and is not supported in queries. The only supported AttributeConstraint is `None`.
+*
+ */
 type AttributeNestedType struct {
-	// [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
+	// Attributes that can be stored as nested Attributes of the current Attribute.
 	TypeReference ProductTypeReference `json:"typeReference"`
 }
 
@@ -348,8 +409,8 @@ func (obj AttributeNumberType) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeReferenceType struct {
-	// supported resource type identifiers:
-	ReferenceTypeId ReferenceTypeId `json:"referenceTypeId"`
+	// Name of the resource type that the value should reference.
+	ReferenceTypeId AttributeReferenceTypeId `json:"referenceTypeId"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -362,7 +423,12 @@ func (obj AttributeReferenceType) MarshalJSON() ([]byte, error) {
 	}{Action: "reference", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	AttributeType that defines a set (without duplicate elements) with values of the given `elementType`. It does not support `isRequired`. Since this type itself is an AttributeType, it is possible to construct an AttributeSetType of an AttributeSetType of any AttributeType, and to continue with this iteration until terminating with any non-AttributeSetType. In case the AttributeSetType iteration terminates with an [AttributeNestedType](ctp:api:type:AttributeNestedType), the iteration can have 5 steps at maximum.
+*
+ */
 type AttributeSetType struct {
+	// Attribute type of the elements in the set.
 	ElementType AttributeType `json:"elementType"`
 }
 
@@ -394,6 +460,10 @@ func (obj AttributeSetType) MarshalJSON() ([]byte, error) {
 	}{Action: "set", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for plain text values.
+*
+ */
 type AttributeTextType struct {
 }
 
@@ -421,21 +491,26 @@ func (obj AttributeTimeType) MarshalJSON() ([]byte, error) {
 }
 
 type ProductType struct {
-	// Unique identifier for the ProductType.
+	// Unique identifier of the ProductType.
 	ID string `json:"id"`
-	// The current version of the product type.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the ProductType.
+	Version int `json:"version"`
+	// Date and time (UTC) the ProductType was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Channel was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ProductType.
-	Key         *string               `json:"key,omitempty"`
-	Name        string                `json:"name"`
-	Description string                `json:"description"`
-	Attributes  []AttributeDefinition `json:"attributes"`
+	Key *string `json:"key,omitempty"`
+	// Name of the ProductType.
+	Name string `json:"name"`
+	// Description of the ProductType.
+	Description string `json:"description"`
+	// Attributes specified for the ProductType.
+	Attributes []AttributeDefinition `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -464,10 +539,13 @@ func (obj ProductType) MarshalJSON() ([]byte, error) {
 
 type ProductTypeDraft struct {
 	// User-defined unique identifier for the ProductType.
-	Key         *string                    `json:"key,omitempty"`
-	Name        string                     `json:"name"`
-	Description string                     `json:"description"`
-	Attributes  []AttributeDefinitionDraft `json:"attributes"`
+	Key *string `json:"key,omitempty"`
+	// Name of the ProductType.
+	Name string `json:"name"`
+	// Description of the ProductType.
+	Description string `json:"description"`
+	// Attributes to specify for the ProductType. Products of this ProductType have these Attributes available on their [ProductVariants](ctp:api:type:ProductVariant).
+	Attributes []AttributeDefinitionDraft `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -494,13 +572,24 @@ func (obj ProductTypeDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ProductType](ctp:api:type:ProductType).
+*
+ */
 type ProductTypePagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int           `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [ProductTypes](ctp:api:type:ProductType) matching the query.
 	Results []ProductType `json:"results"`
 }
 
@@ -547,7 +636,9 @@ func (obj ProductTypeResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeUpdate struct {
-	Version int                       `json:"version"`
+	// Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the ProductType.
 	Actions []ProductTypeUpdateAction `json:"actions"`
 }
 
@@ -713,6 +804,10 @@ func mapDiscriminatorProductTypeUpdateAction(input interface{}) (ProductTypeUpda
 	return nil, nil
 }
 
+/**
+*	A text input hint is a string with one of the following values:
+*
+ */
 type TextInputHint string
 
 const (
@@ -721,6 +816,7 @@ const (
 )
 
 type ProductTypeAddAttributeDefinitionAction struct {
+	// Value to append to `attributes`.
 	Attribute AttributeDefinitionDraft `json:"attribute"`
 }
 
@@ -734,9 +830,15 @@ func (obj ProductTypeAddAttributeDefinitionAction) MarshalJSON() ([]byte, error)
 	}{Action: "addAttributeDefinition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds a localizable enum to the values of [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType). It can update an AttributeLocalizedEnumType AttributeDefinition or an [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumType AttributeDefinition.
+*
+ */
 type ProductTypeAddLocalizedEnumValueAction struct {
-	AttributeName string                      `json:"attributeName"`
-	Value         AttributeLocalizedEnumValue `json:"value"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// Value to append to the array.
+	Value AttributeLocalizedEnumValue `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -749,9 +851,15 @@ func (obj ProductTypeAddLocalizedEnumValueAction) MarshalJSON() ([]byte, error) 
 	}{Action: "addLocalizedEnumValue", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds an enum to the values of [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, or [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition.
+*
+ */
 type ProductTypeAddPlainEnumValueAction struct {
-	AttributeName string                  `json:"attributeName"`
-	Value         AttributePlainEnumValue `json:"value"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// Value to append to the array.
+	Value AttributePlainEnumValue `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -764,9 +872,15 @@ func (obj ProductTypeAddPlainEnumValueAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addPlainEnumValue", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the `attributeConstraint` of an [AttributeDefinition](ctp:api:type:AttributeDefinition). For now only following changes are supported: `SameForAll` to `None` and `Unique` to `None`.
+*
+ */
 type ProductTypeChangeAttributeConstraintAction struct {
-	AttributeName string                       `json:"attributeName"`
-	NewValue      AttributeConstraintEnumDraft `json:"newValue"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// `None`
+	NewValue AttributeConstraintEnumDraft `json:"newValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -779,8 +893,16 @@ func (obj ProductTypeChangeAttributeConstraintAction) MarshalJSON() ([]byte, err
 	}{Action: "changeAttributeConstraint", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Renames an AttributeDefinition and also renames all corresponding Attributes on all [Products](/projects/products) with this ProductType. The renaming of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
+*
+ */
 type ProductTypeChangeAttributeNameAction struct {
-	AttributeName    string `json:"attributeName"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// New user-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
+	// When using the same `name` for an Attribute in two or more ProductTypes all fields of the AttributeDefinition of this Attribute need to be the same across the ProductTypes, otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+	// An exception to this are the values of an `enum` or `lenum` type and sets thereof.
 	NewAttributeName string `json:"newAttributeName"`
 }
 
@@ -809,6 +931,7 @@ func (obj ProductTypeChangeAttributeOrderAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeChangeAttributeOrderByNameAction struct {
+	// Names of Attributes to reorder. This array must include all Attributes currently present on a ProductType in a different order.
 	AttributeNames []string `json:"attributeNames"`
 }
 
@@ -823,6 +946,7 @@ func (obj ProductTypeChangeAttributeOrderByNameAction) MarshalJSON() ([]byte, er
 }
 
 type ProductTypeChangeDescriptionAction struct {
+	// New value to set.
 	Description string `json:"description"`
 }
 
@@ -836,10 +960,19 @@ func (obj ProductTypeChangeDescriptionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeDescription", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the key of a single enum `value` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition, [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition, or AttributeSetType of AttributeLocalizedEnumType AttributeDefinition.
+*
+*	All Products will be updated to the new key in an [eventually consistent](/general-concepts#eventual-consistency) way.
+*
+ */
 type ProductTypeChangeEnumKeyAction struct {
+	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	Key           string `json:"key"`
-	NewKey        string `json:"newKey"`
+	// Existing key to be changed.
+	Key string `json:"key"`
+	// New key to be set.
+	NewKey string `json:"newKey"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -852,9 +985,15 @@ func (obj ProductTypeChangeEnumKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeEnumKey", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the `inputHint` of an [AttributeDefinition](ctp:api:type:AttributeDefinition).
+*
+ */
 type ProductTypeChangeInputHintAction struct {
-	AttributeName string        `json:"attributeName"`
-	NewValue      TextInputHint `json:"newValue"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// `SingleLine` or `MultiLine`
+	NewValue TextInputHint `json:"newValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -867,9 +1006,15 @@ func (obj ProductTypeChangeInputHintAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeInputHint", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Following this update the Products are reindexed asynchronously to reflect this change on the search endpoint. When enabling search on an existing Attribute type definition, the constraint regarding the maximum size of a searchable Attribute will not be enforced. Instead, Product AttributeDefinitions exceeding this limit will be treated as not searchable and will not be available for full-text search.
+*
+ */
 type ProductTypeChangeIsSearchableAction struct {
+	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	IsSearchable  bool   `json:"isSearchable"`
+	// Determines whether the Attribute's values can be used in full-text search queries, filters, and facets. See [AttributeDefinition](ctp:api:type:AttributeDefinition) for details.
+	IsSearchable bool `json:"isSearchable"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -883,8 +1028,9 @@ func (obj ProductTypeChangeIsSearchableAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeChangeLabelAction struct {
+	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// New value to set. Must not be empty.
 	Label LocalizedString `json:"label"`
 }
 
@@ -898,9 +1044,17 @@ func (obj ProductTypeChangeLabelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeLabel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the label of a single enum `value` in an [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition, or [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumType AttributeDefinition.
+*
+*	All Products will be updated to the new label in an [eventually consistent](/general-concepts#eventual-consistency) way.
+*
+ */
 type ProductTypeChangeLocalizedEnumValueLabelAction struct {
-	AttributeName string                      `json:"attributeName"`
-	NewValue      AttributeLocalizedEnumValue `json:"newValue"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// New value to set. Must be different from the existing value.
+	NewValue AttributeLocalizedEnumValue `json:"newValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -913,9 +1067,15 @@ func (obj ProductTypeChangeLocalizedEnumValueLabelAction) MarshalJSON() ([]byte,
 	}{Action: "changeLocalizedEnumValueLabel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the order of localized enum `values` in an [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition. It can update an AttributeLocalizedEnumType AttributeDefinition or an [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumType AttributeDefinition.
+*
+ */
 type ProductTypeChangeLocalizedEnumValueOrderAction struct {
-	AttributeName string                        `json:"attributeName"`
-	Values        []AttributeLocalizedEnumValue `json:"values"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
+	Values []AttributeLocalizedEnumValue `json:"values"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -929,6 +1089,7 @@ func (obj ProductTypeChangeLocalizedEnumValueOrderAction) MarshalJSON() ([]byte,
 }
 
 type ProductTypeChangeNameAction struct {
+	// New value to set.
 	Name string `json:"name"`
 }
 
@@ -942,9 +1103,17 @@ func (obj ProductTypeChangeNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the label of a single enum `value` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, or [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition.
+*
+*	All Products will be updated to the new label in an [eventually consistent](/general-concepts#eventual-consistency) way.
+*
+ */
 type ProductTypeChangePlainEnumValueLabelAction struct {
-	AttributeName string                  `json:"attributeName"`
-	NewValue      AttributePlainEnumValue `json:"newValue"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// New value to set. Must be different from the existing value.
+	NewValue AttributePlainEnumValue `json:"newValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -957,9 +1126,15 @@ func (obj ProductTypeChangePlainEnumValueLabelAction) MarshalJSON() ([]byte, err
 	}{Action: "changePlainEnumValueLabel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the order of enum `values` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition. It can update an AttributeEnumType AttributeDefinition or an [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition.
+*
+ */
 type ProductTypeChangePlainEnumValueOrderAction struct {
-	AttributeName string                    `json:"attributeName"`
-	Values        []AttributePlainEnumValue `json:"values"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
+	Values []AttributePlainEnumValue `json:"values"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -972,8 +1147,14 @@ func (obj ProductTypeChangePlainEnumValueOrderAction) MarshalJSON() ([]byte, err
 	}{Action: "changePlainEnumValueOrder", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes an AttributeDefinition and also deletes all corresponding Attributes on all [Products](/projects/products) with this ProductType. The removal of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
+*
+*	The `CombinationUnique` constraint is not checked when an Attribute is removed, and uniqueness violations may occur when you remove an Attribute with a `CombinationUnique` constraint.
+*
+ */
 type ProductTypeRemoveAttributeDefinitionAction struct {
-	// The name of the attribute to remove.
+	// Name of the Attribute to remove.
 	Name string `json:"name"`
 }
 
@@ -987,9 +1168,17 @@ func (obj ProductTypeRemoveAttributeDefinitionAction) MarshalJSON() ([]byte, err
 	}{Action: "removeAttributeDefinition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes enum values from an AttributeDefinition of [AttributeEnumType](ctp:api:type:AttributeEnumType), [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType), [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType, or AttributeSetType of AttributeLocalizedEnumType.
+*
+*	If the Attribute is **not** required, the Attributes of all Products using those enum keys will also be removed in an [eventually consistent](/general-concepts#eventual-consistency) way. If the Attribute is required, the operation will fail with the [EnumValueIsUsed](/errors#product-types-400-enum-value-is-used) error code.
+*
+ */
 type ProductTypeRemoveEnumValuesAction struct {
-	AttributeName string   `json:"attributeName"`
-	Keys          []string `json:"keys"`
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// Keys of [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) to remove.
+	Keys []string `json:"keys"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1003,8 +1192,9 @@ func (obj ProductTypeRemoveEnumValuesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeSetInputTipAction struct {
+	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Value to set. If empty, any existing value will be removed.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 }
 
@@ -1019,7 +1209,7 @@ func (obj ProductTypeSetInputTipAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeSetKeyAction struct {
-	// If `key` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 

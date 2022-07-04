@@ -3330,7 +3330,7 @@ func (obj MatchingPriceNotFoundError) Error() string {
 type MaxResourceLimitExceededError struct {
 	Message     string                 `json:"message"`
 	ExtraValues map[string]interface{} `json:"-"`
-	// supported resource type identifiers:
+	// Type of resource the value should reference. Supported resource type identifiers are:
 	ExceededResource ReferenceTypeId `json:"exceededResource"`
 }
 
@@ -4320,7 +4320,7 @@ func (obj QueryTimedOutError) Error() string {
 type ReferenceExistsError struct {
 	Message     string                 `json:"message"`
 	ExtraValues map[string]interface{} `json:"-"`
-	// supported resource type identifiers:
+	// Type of resource the value should reference. Supported resource type identifiers are:
 	ReferencedBy *ReferenceTypeId `json:"referencedBy,omitempty"`
 }
 
@@ -4390,7 +4390,7 @@ func (obj ReferenceExistsError) Error() string {
 type ReferencedResourceNotFoundError struct {
 	Message     string                 `json:"message"`
 	ExtraValues map[string]interface{} `json:"-"`
-	// supported resource type identifiers:
+	// Type of resource the value should reference. Supported resource type identifiers are:
 	TypeId ReferenceTypeId `json:"typeId"`
 	ID     *string         `json:"id,omitempty"`
 	Key    *string         `json:"key,omitempty"`

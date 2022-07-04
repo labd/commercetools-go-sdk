@@ -14,7 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestBuilder st
 }
 
 /**
-*	Gets the current or staged representation of a product by its ID from a specific Store.
+*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key from the specified Store.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet{
