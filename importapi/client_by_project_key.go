@@ -7,18 +7,6 @@ type ByProjectKeyRequestBuilder struct {
 	client     *Client
 }
 
-func (rb *ByProjectKeyRequestBuilder) ImportSinks() *ByProjectKeyImportSinksRequestBuilder {
-	return &ByProjectKeyImportSinksRequestBuilder{
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyRequestBuilder) ImportSummaries() *ByProjectKeyImportSummariesRequestBuilder {
-	return &ByProjectKeyImportSummariesRequestBuilder{
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}
 func (rb *ByProjectKeyRequestBuilder) ImportContainers() *ByProjectKeyImportContainersRequestBuilder {
 	return &ByProjectKeyImportContainersRequestBuilder{
 		projectKey: rb.projectKey,
@@ -87,6 +75,12 @@ func (rb *ByProjectKeyRequestBuilder) OrderPatches() *ByProjectKeyOrderPatchesRe
 }
 func (rb *ByProjectKeyRequestBuilder) Customers() *ByProjectKeyCustomersRequestBuilder {
 	return &ByProjectKeyCustomersRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyRequestBuilder) Inventories() *ByProjectKeyInventoriesRequestBuilder {
+	return &ByProjectKeyInventoriesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}

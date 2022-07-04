@@ -309,7 +309,7 @@ func (obj InvalidOperation) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The `Unique` [Attribute Constraint](/../api/projects/productTypes#attributeconstraint-enum) was violated.
+*	The `Unique` [AttributeConstraintEnum](/../api/projects/productTypes#attributeconstraintenum) was violated.
  */
 type DuplicateAttributeValueError struct {
 	Message string `json:"message"`
@@ -353,7 +353,7 @@ func (obj DuplicateAttributeValueError) Error() string {
 }
 
 /**
-*	The `CombinationUnique` [Attribute Constraint](/../api/projects/productTypes#attributeconstraint-enum) was violated.
+*	The `CombinationUnique` [AttributeConstraintEnum](/../api/projects/productTypes#attributeconstraintenum) was violated.
  */
 type DuplicateAttributeValuesError struct {
 	Message    string      `json:"message"`

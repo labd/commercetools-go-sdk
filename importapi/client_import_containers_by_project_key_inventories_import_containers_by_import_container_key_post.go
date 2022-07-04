@@ -10,28 +10,28 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestMethodPost struct {
-	body    PriceImportRequest
+type ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost struct {
+	body    InventoryImportRequest
 	url     string
 	client  *Client
 	headers http.Header
 }
 
-func (r *ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestMethodPost) Dump() map[string]interface{} {
+func (r *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url": r.url,
 	}
 }
 
-func (rb *ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestMethodPost {
+func (rb *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost {
 	rb.headers = headers
 	return rb
 }
 
 /**
-*	Creates import request for creating new prices or updating existing ones.
+*	Creates a request for creating new Inventories or updating existing ones.
  */
-func (rb *ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
+func (rb *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
 		return nil, err
@@ -57,6 +57,13 @@ func (rb *ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestMethodPost) Execu
 	case 201:
 		err = json.Unmarshal(content, &result)
 		return result, nil
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

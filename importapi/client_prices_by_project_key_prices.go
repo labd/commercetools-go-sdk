@@ -13,10 +13,3 @@ func (rb *ByProjectKeyPricesRequestBuilder) ImportContainers() *ByProjectKeyPric
 		client:     rb.client,
 	}
 }
-func (rb *ByProjectKeyPricesRequestBuilder) ImportSinkKeyWithImportSinkKeyValue(importSinkKey string) *ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestBuilder {
-	return &ByProjectKeyPricesImportSinkKeyByImportSinkKeyRequestBuilder{
-		importSinkKey: importSinkKey,
-		projectKey:    rb.projectKey,
-		client:        rb.client,
-	}
-}
