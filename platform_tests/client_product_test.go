@@ -59,7 +59,7 @@ func TestProductUpdate(t *testing.T) {
 		Actions: []platform.ProductUpdateAction{
 			platform.ProductAddPriceAction{
 				VariantId: ctutils.IntRef(1),
-				Price:     platform.PriceDraft{Value: platform.Money{CentAmount: 1000}},
+				Price:     platform.EmbeddedPriceDraft{Value: platform.Money{CentAmount: 1000}},
 			},
 		},
 	}
