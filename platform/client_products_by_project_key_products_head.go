@@ -5,6 +5,7 @@ package platform
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -14,24 +15,55 @@ type ByProjectKeyProductsRequestMethodHead struct {
 	url     string
 	client  *Client
 	headers http.Header
+	params  *ByProjectKeyProductsRequestMethodHeadInput
 }
 
 func (r *ByProjectKeyProductsRequestMethodHead) Dump() map[string]interface{} {
 	return map[string]interface{}{
-		"url": r.url,
+		"url":    r.url,
+		"params": r.params,
 	}
 }
 
+type ByProjectKeyProductsRequestMethodHeadInput struct {
+	Where []string
+}
+
+func (input *ByProjectKeyProductsRequestMethodHeadInput) Values() url.Values {
+	values := url.Values{}
+	for _, v := range input.Where {
+		values.Add("where", fmt.Sprintf("%v", v))
+	}
+	return values
+}
+
+func (rb *ByProjectKeyProductsRequestMethodHead) Where(v []string) *ByProjectKeyProductsRequestMethodHead {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsRequestMethodHeadInput{}
+	}
+	rb.params.Where = v
+	return rb
+}
+
+func (rb *ByProjectKeyProductsRequestMethodHead) WithQueryParams(input ByProjectKeyProductsRequestMethodHeadInput) *ByProjectKeyProductsRequestMethodHead {
+	rb.params = &input
+	return rb
+}
 func (rb *ByProjectKeyProductsRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyProductsRequestMethodHead {
 	rb.headers = headers
 	return rb
 }
 
 /**
-*	Checks if products exist.
+*	Check if Products exist. Responds with a `200 OK` status if any Products match the Query Predicate, or `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductsRequestMethodHead) Execute(ctx context.Context) error {
-	queryParams := url.Values{}
+	var queryParams url.Values
+	if rb.params != nil {
+		queryParams = rb.params.Values()
+	} else {
+		queryParams = url.Values{}
+	}
 	resp, err := rb.client.head(
 		ctx,
 		rb.url,

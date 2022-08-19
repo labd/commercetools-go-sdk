@@ -154,8 +154,7 @@ func (rb *ByProjectKeyRequestBuilder) Payments() *ByProjectKeyPaymentsRequestBui
 }
 
 /**
-*	Products are the sellable goods in an e-commerce project on CTP. This document explains some design concepts
-*	of products on CTP and describes the available HTTP APIs for working with them.
+*	Products themselves are not sellable. Instead, they act as a parent structure for sellable Product Variants.
 *
  */
 func (rb *ByProjectKeyRequestBuilder) Products() *ByProjectKeyProductsRequestBuilder {

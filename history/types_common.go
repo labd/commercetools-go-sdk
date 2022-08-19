@@ -80,6 +80,13 @@ type AttributeType struct {
 	Name string `json:"name"`
 }
 
+type AuthenticationMode string
+
+const (
+	AuthenticationModePassword     AuthenticationMode = "Password"
+	AuthenticationModeExternalAuth AuthenticationMode = "ExternalAuth"
+)
+
 type CategoryOrderHints map[string]string
 type ChannelRole string
 
@@ -287,6 +294,11 @@ type Price struct {
 	Value Money  `json:"value"`
 }
 
+type ProductSelectionSetting struct {
+	ProductSelection Reference `json:"productSelection"`
+	Active           bool      `json:"active"`
+}
+
 type ProductVariantAvailability struct {
 	IsOnStock         bool                                 `json:"isOnStock"`
 	RestockableInDays int                                  `json:"restockableInDays"`
@@ -301,6 +313,26 @@ type ProductVariantChannelAvailability struct {
 }
 
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
+type QuoteRequestState string
+
+const (
+	QuoteRequestStateSubmitted QuoteRequestState = "Submitted"
+	QuoteRequestStateAccepted  QuoteRequestState = "Accepted"
+	QuoteRequestStateClosed    QuoteRequestState = "Closed"
+	QuoteRequestStateRejected  QuoteRequestState = "Rejected"
+	QuoteRequestStateCancelled QuoteRequestState = "Cancelled"
+)
+
+type QuoteState string
+
+const (
+	QuoteStatePending   QuoteState = "Pending"
+	QuoteStateDeclined  QuoteState = "Declined"
+	QuoteStateAccepted  QuoteState = "Accepted"
+	QuoteStateFailed    QuoteState = "Failed"
+	QuoteStateWithdrawn QuoteState = "Withdrawn"
+)
+
 type Reference struct {
 	ID     string          `json:"id"`
 	TypeId ReferenceTypeId `json:"typeId"`
@@ -326,10 +358,14 @@ const (
 	ReferenceTypeIdPayment               ReferenceTypeId = "payment"
 	ReferenceTypeIdProduct               ReferenceTypeId = "product"
 	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
+	ReferenceTypeIdProductSelection      ReferenceTypeId = "product-selection"
 	ReferenceTypeIdProductType           ReferenceTypeId = "product-type"
+	ReferenceTypeIdQuote                 ReferenceTypeId = "quote"
+	ReferenceTypeIdQuoteRequest          ReferenceTypeId = "quote-request"
 	ReferenceTypeIdReview                ReferenceTypeId = "review"
 	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
 	ReferenceTypeIdShoppingList          ReferenceTypeId = "shopping-list"
+	ReferenceTypeIdStagedQuote           ReferenceTypeId = "staged-quote"
 	ReferenceTypeIdState                 ReferenceTypeId = "state"
 	ReferenceTypeIdStore                 ReferenceTypeId = "store"
 	ReferenceTypeIdSubscription          ReferenceTypeId = "subscription"
@@ -429,7 +465,7 @@ const (
 type ShippingRate struct {
 	Price     Money `json:"price"`
 	FreeAbove Money `json:"freeAbove"`
-	// Only appears in response to requests for shipping methods by cart or location to mark this shipping rate as one that matches the cart or location.
+	// Only appears in response to requests for ShippingMethods by Cart or location to mark this shipping rate as one that matches the Cart or location.
 	IsMatching bool                    `json:"isMatching"`
 	Tiers      []ShippingRatePriceTier `json:"tiers"`
 }
@@ -451,6 +487,14 @@ type StackingMode string
 const (
 	StackingModeStacking              StackingMode = "Stacking"
 	StackingModeStopAfterThisDiscount StackingMode = "StopAfterThisDiscount"
+)
+
+type StagedQuoteState string
+
+const (
+	StagedQuoteStateInProgress StagedQuoteState = "InProgress"
+	StagedQuoteStateSent       StagedQuoteState = "Sent"
+	StagedQuoteStateClosed     StagedQuoteState = "Closed"
 )
 
 type StateRole string

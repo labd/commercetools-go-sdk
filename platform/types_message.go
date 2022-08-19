@@ -711,8 +711,34 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "QuoteRequestStateTransition":
+		obj := QuoteRequestStateTransitionMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "QuoteStateChanged":
 		obj := QuoteStateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "QuoteStateTransition":
+		obj := QuoteStateTransitionMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -829,6 +855,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StagedQuoteStateTransition":
+		obj := StagedQuoteStateTransitionMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "StagedQuoteValidToSet":
 		obj := StagedQuoteValidToSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -894,6 +933,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StandalonePriceStagedChangesApplied":
+		obj := StandalonePriceStagedChangesAppliedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "StandalonePriceValueChanged":
 		obj := StandalonePriceValueChangedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -922,6 +974,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return obj, nil
 	case "StoreDeleted":
 		obj := StoreDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StoreDistributionChannelsChanged":
+		obj := StoreDistributionChannelsChangedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2002,8 +2067,47 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 			}
 		}
 		return obj, nil
+	case "OrderCustomLineItemAdded":
+		obj := OrderCustomLineItemAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "OrderCustomLineItemDiscountSet":
 		obj := OrderCustomLineItemDiscountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCustomLineItemQuantityChanged":
+		obj := OrderCustomLineItemQuantityChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCustomLineItemRemoved":
+		obj := OrderCustomLineItemRemovedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2802,6 +2906,52 @@ func (obj OrderCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCreated", Alias: (*Alias)(&obj)})
 }
 
+type OrderCustomLineItemAddedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	CustomLineItem                  CustomLineItem           `json:"customLineItem"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderCustomLineItemAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderCustomLineItemAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCustomLineItemAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderCustomLineItemAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCustomLineItemAdded", Alias: (*Alias)(&obj)})
+}
+
 type OrderCustomLineItemDiscountSetMessage struct {
 	// Unique identifier of the Message.
 	ID             string    `json:"id"`
@@ -2848,6 +2998,101 @@ func (obj OrderCustomLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "OrderCustomLineItemDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+type OrderCustomLineItemQuantityChangedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	CustomLineItemId                string                   `json:"customLineItemId"`
+	Quantity                        int                      `json:"quantity"`
+	OldQuantity                     int                      `json:"oldQuantity"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderCustomLineItemQuantityChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderCustomLineItemQuantityChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCustomLineItemQuantityChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderCustomLineItemQuantityChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCustomLineItemQuantityChanged", Alias: (*Alias)(&obj)})
+}
+
+type OrderCustomLineItemRemovedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	CustomLineItemId                string                   `json:"customLineItemId"`
+	CustomLineItem                  CustomLineItem           `json:"customLineItem"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderCustomLineItemRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderCustomLineItemRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCustomLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderCustomLineItemRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCustomLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
 type OrderCustomerEmailSetMessage struct {
@@ -4916,7 +5161,8 @@ type ProductPublishedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	RemovedImageUrls                []string                 `json:"removedImageUrls"`
 	ProductProjection               ProductProjection        `json:"productProjection"`
-	Scope                           ProductPublishScope      `json:"scope"`
+	// The scope controls which part of the product information is published.
+	Scope ProductPublishScope `json:"scope"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5466,8 +5712,9 @@ type ProductVariantAddedMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Variant                         ProductVariant           `json:"variant"`
-	Staged                          bool                     `json:"staged"`
+	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
+	Variant ProductVariant `json:"variant"`
+	Staged  bool           `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5513,8 +5760,9 @@ type ProductVariantDeletedMessage struct {
 	Resource                        Reference                `json:"resource"`
 	ResourceVersion                 int                      `json:"resourceVersion"`
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Variant                         ProductVariant           `json:"variant"`
-	RemovedImageUrls                []string                 `json:"removedImageUrls"`
+	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
+	Variant          ProductVariant `json:"variant"`
+	RemovedImageUrls []string       `json:"removedImageUrls"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5774,6 +6022,61 @@ func (obj QuoteRequestStateChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteRequestStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+*
+ */
+type QuoteRequestStateTransitionMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *QuoteRequestStateTransitionMessage) UnmarshalJSON(data []byte) error {
+	type Alias QuoteRequestStateTransitionMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteRequestStateTransitionMessage) MarshalJSON() ([]byte, error) {
+	type Alias QuoteRequestStateTransitionMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "QuoteRequestStateTransition", Alias: (*Alias)(&obj)})
+}
+
 type QuoteStateChangedMessage struct {
 	// Unique identifier of the Message.
 	ID             string    `json:"id"`
@@ -5821,6 +6124,61 @@ func (obj QuoteStateChangedMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "QuoteStateChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+*
+ */
+type QuoteStateTransitionMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *QuoteStateTransitionMessage) UnmarshalJSON(data []byte) error {
+	type Alias QuoteStateTransitionMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteStateTransitionMessage) MarshalJSON() ([]byte, error) {
+	type Alias QuoteStateTransitionMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "QuoteStateTransition", Alias: (*Alias)(&obj)})
 }
 
 type ReviewCreatedMessage struct {
@@ -6172,6 +6530,61 @@ func (obj StagedQuoteStateChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+*
+ */
+type StagedQuoteStateTransitionMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StagedQuoteStateTransitionMessage) UnmarshalJSON(data []byte) error {
+	type Alias StagedQuoteStateTransitionMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteStateTransitionMessage) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteStateTransitionMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StagedQuoteStateTransition", Alias: (*Alias)(&obj)})
+}
+
 type StagedQuoteValidToSetMessage struct {
 	// Unique identifier of the Message.
 	ID             string    `json:"id"`
@@ -6421,6 +6834,57 @@ func (obj StandalonePriceExternalDiscountSetMessage) MarshalJSON() ([]byte, erro
 }
 
 /**
+*	Generated after a successful [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
+*
+ */
+type StandalonePriceStagedChangesAppliedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
+	StagedChanges StagedStandalonePrice `json:"stagedChanges"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceStagedChangesAppliedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceStagedChangesAppliedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceStagedChangesAppliedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceStagedChangesAppliedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceStagedChangesApplied", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action.
 *
  */
@@ -6441,6 +6905,8 @@ type StandalonePriceValueChangedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// The new value of the updated StandalonePrice.
 	Value Money `json:"value"`
+	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6567,6 +7033,61 @@ func (obj StoreDeletedMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction),
+*	[Remove Distribution Channel](ctp:api:type:StoreRemoveDistributionChannelAction), or
+*	[Set Distribution Channels](ctp:api:type:StoreSetDistributionChannelsAction) update action.
+*
+ */
+type StoreDistributionChannelsChangedMessage struct {
+	// Unique identifier of the Message.
+	ID             string    `json:"id"`
+	Version        int       `json:"version"`
+	CreatedAt      time.Time `json:"createdAt"`
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
+	SequenceNumber int        `json:"sequenceNumber"`
+	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	Resource                        Reference                `json:"resource"`
+	ResourceVersion                 int                      `json:"resourceVersion"`
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The product distribution channels that have been added.
+	AddedDistributionChannels []ChannelReference `json:"addedDistributionChannels"`
+	// The product distribution channels that have been removed.
+	RemovedDistributionChannels []ChannelReference `json:"removedDistributionChannels"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreDistributionChannelsChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StoreDistributionChannelsChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreDistributionChannelsChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StoreDistributionChannelsChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreDistributionChannelsChanged", Alias: (*Alias)(&obj)})
 }
 
 type StoreProductSelectionsChangedMessage struct {
@@ -6995,8 +7516,20 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "QuoteRequestStateTransition":
+		obj := QuoteRequestStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "QuoteStateChanged":
 		obj := QuoteStateChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "QuoteStateTransition":
+		obj := QuoteStateTransitionMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7063,6 +7596,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "StagedQuoteStateTransition":
+		obj := StagedQuoteStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "StagedQuoteValidToSet":
 		obj := StagedQuoteValidToSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7093,6 +7632,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "StandalonePriceStagedChangesApplied":
+		obj := StandalonePriceStagedChangesAppliedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "StandalonePriceValueChanged":
 		obj := StandalonePriceValueChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7107,6 +7652,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "StoreDeleted":
 		obj := StoreDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreDistributionChannelsChanged":
+		obj := StoreDistributionChannelsChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7459,8 +8010,26 @@ func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload
 			return nil, err
 		}
 		return obj, nil
+	case "OrderCustomLineItemAdded":
+		obj := OrderCustomLineItemAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "OrderCustomLineItemDiscountSet":
 		obj := OrderCustomLineItemDiscountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OrderCustomLineItemQuantityChanged":
+		obj := OrderCustomLineItemQuantityChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OrderCustomLineItemRemoved":
+		obj := OrderCustomLineItemRemovedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7793,6 +8362,20 @@ func (obj OrderCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCreated", Alias: (*Alias)(&obj)})
 }
 
+type OrderCustomLineItemAddedMessagePayload struct {
+	CustomLineItem CustomLineItem `json:"customLineItem"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCustomLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderCustomLineItemAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCustomLineItemAdded", Alias: (*Alias)(&obj)})
+}
+
 type OrderCustomLineItemDiscountSetMessagePayload struct {
 	CustomLineItemId           string                               `json:"customLineItemId"`
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
@@ -7807,6 +8390,37 @@ func (obj OrderCustomLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, e
 		Action string `json:"type"`
 		*Alias
 	}{Action: "OrderCustomLineItemDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+type OrderCustomLineItemQuantityChangedMessagePayload struct {
+	CustomLineItemId string `json:"customLineItemId"`
+	Quantity         int    `json:"quantity"`
+	OldQuantity      int    `json:"oldQuantity"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCustomLineItemQuantityChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderCustomLineItemQuantityChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCustomLineItemQuantityChanged", Alias: (*Alias)(&obj)})
+}
+
+type OrderCustomLineItemRemovedMessagePayload struct {
+	CustomLineItemId string         `json:"customLineItemId"`
+	CustomLineItem   CustomLineItem `json:"customLineItem"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCustomLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderCustomLineItemRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCustomLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
 type OrderCustomerEmailSetMessagePayload struct {
@@ -8528,9 +9142,10 @@ func (obj ProductPriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byte, 
 }
 
 type ProductPublishedMessagePayload struct {
-	RemovedImageUrls  []string            `json:"removedImageUrls"`
-	ProductProjection ProductProjection   `json:"productProjection"`
-	Scope             ProductPublishScope `json:"scope"`
+	RemovedImageUrls  []string          `json:"removedImageUrls"`
+	ProductProjection ProductProjection `json:"productProjection"`
+	// The scope controls which part of the product information is published.
+	Scope ProductPublishScope `json:"scope"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8761,6 +9376,7 @@ func (obj ProductUnpublishedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductVariantAddedMessagePayload struct {
+	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
 	Variant ProductVariant `json:"variant"`
 	Staged  bool           `json:"staged"`
 }
@@ -8776,6 +9392,7 @@ func (obj ProductVariantAddedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ProductVariantDeletedMessagePayload struct {
+	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
 	Variant          ProductVariant `json:"variant"`
 	RemovedImageUrls []string       `json:"removedImageUrls"`
 }
@@ -8859,6 +9476,29 @@ func (obj QuoteRequestStateChangedMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Action: "QuoteRequestStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+*
+ */
+type QuoteRequestStateTransitionMessagePayload struct {
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteRequestStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias QuoteRequestStateTransitionMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "QuoteRequestStateTransition", Alias: (*Alias)(&obj)})
+}
+
 type QuoteStateChangedMessagePayload struct {
 	// Predefined states tracking the status of the Quote.
 	QuoteState QuoteState `json:"quoteState"`
@@ -8874,6 +9514,29 @@ func (obj QuoteStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "QuoteStateChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+*
+ */
+type QuoteStateTransitionMessagePayload struct {
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias QuoteStateTransitionMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "QuoteStateTransition", Alias: (*Alias)(&obj)})
 }
 
 type ReviewCreatedMessagePayload struct {
@@ -9038,6 +9701,29 @@ func (obj StagedQuoteStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+*
+ */
+type StagedQuoteStateTransitionMessagePayload struct {
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteStateTransitionMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StagedQuoteStateTransition", Alias: (*Alias)(&obj)})
+}
+
 type StagedQuoteValidToSetMessagePayload struct {
 	ValidTo time.Time `json:"validTo"`
 }
@@ -9127,12 +9813,33 @@ func (obj StandalonePriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byt
 }
 
 /**
+*	Generated after a successful [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
+*
+ */
+type StandalonePriceStagedChangesAppliedMessagePayload struct {
+	// Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
+	StagedChanges StagedStandalonePrice `json:"stagedChanges"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceStagedChangesAppliedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceStagedChangesAppliedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceStagedChangesApplied", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action.
 *
  */
 type StandalonePriceValueChangedMessagePayload struct {
 	// The new value of the updated StandalonePrice.
 	Value Money `json:"value"`
+	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9177,6 +9884,29 @@ func (obj StoreDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction),
+*	[Remove Distribution Channel](ctp:api:type:StoreRemoveDistributionChannelAction), or
+*	[Set Distribution Channels](ctp:api:type:StoreSetDistributionChannelsAction) update action.
+*
+ */
+type StoreDistributionChannelsChangedMessagePayload struct {
+	// The product distribution channels that have been added.
+	AddedDistributionChannels []ChannelReference `json:"addedDistributionChannels"`
+	// The product distribution channels that have been removed.
+	RemovedDistributionChannels []ChannelReference `json:"removedDistributionChannels"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreDistributionChannelsChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StoreDistributionChannelsChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreDistributionChannelsChanged", Alias: (*Alias)(&obj)})
 }
 
 type StoreProductSelectionsChangedMessagePayload struct {

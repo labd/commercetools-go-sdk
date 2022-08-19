@@ -30,8 +30,6 @@ type ByProjectKeyProductsKeyByKeyRequestMethodGetInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   *string
-	StoreProjection    *string
 	Expand             []string
 }
 
@@ -48,12 +46,6 @@ func (input *ByProjectKeyProductsKeyByKeyRequestMethodGetInput) Values() url.Val
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	if input.LocaleProjection != nil {
-		values.Add("localeProjection", fmt.Sprintf("%v", *input.LocaleProjection))
-	}
-	if input.StoreProjection != nil {
-		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -93,22 +85,6 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodGet) PriceChannel(v string) *
 	return rb
 }
 
-func (rb *ByProjectKeyProductsKeyByKeyRequestMethodGet) LocaleProjection(v string) *ByProjectKeyProductsKeyByKeyRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodGetInput{}
-	}
-	rb.params.LocaleProjection = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsKeyByKeyRequestMethodGet) StoreProjection(v string) *ByProjectKeyProductsKeyByKeyRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodGetInput{}
-	}
-	rb.params.StoreProjection = &v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodGet) Expand(v []string) *ByProjectKeyProductsKeyByKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodGetInput{}
@@ -127,7 +103,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodGet) WithHeaders(headers http
 }
 
 /**
-*	Gets the full representation of a product by Key.
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *Product, err error) {
 	var queryParams url.Values

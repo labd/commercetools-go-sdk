@@ -406,6 +406,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "changeCustomLineItemPriceMode":
+		obj := CartChangeCustomLineItemPriceModeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeCustomLineItemQuantity":
 		obj := CartChangeCustomLineItemQuantityAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -766,6 +772,9 @@ type CustomLineItem struct {
 	// CustomLineItem fields that can be used in query predicates: `slug`, `name`, `quantity`,
 	// `money`, `state`, `discountedPricePerQuantity`.
 	ShippingDetails *ItemShippingDetails `json:"shippingDetails,omitempty"`
+	// Specifies whether Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+	// are applied to the Custom Line Item.
+	PriceMode CustomLineItemPriceMode `json:"priceMode"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -808,7 +817,18 @@ type CustomLineItemDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Container for custom line item specific address(es).
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+	// are applied to the Custom Line Item.
+	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
+	PriceMode CustomLineItemPriceMode `json:"priceMode"`
 }
+
+type CustomLineItemPriceMode string
+
+const (
+	CustomLineItemPriceModeStandard CustomLineItemPriceMode = "Standard"
+	CustomLineItemPriceModeExternal CustomLineItemPriceMode = "External"
+)
 
 type DirectDiscount struct {
 	// The unique ID of the cart discount.
@@ -1079,6 +1099,9 @@ type LineItem struct {
 	PriceMode                  LineItemPriceMode                    `json:"priceMode"`
 	LineItemMode               LineItemMode                         `json:"lineItemMode"`
 	Custom                     *CustomFields                        `json:"custom,omitempty"`
+	// Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
+	// Only present if inventory mode is different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
+	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
 	// Container for line item specific address(es).
 	ShippingDetails *ItemShippingDetails `json:"shippingDetails,omitempty"`
 	// The date when the LineItem was last modified by one of the following actions
@@ -1131,6 +1154,9 @@ type LineItemDraft struct {
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the line item `price` and `totalPrice` to the given values and sets the line item `priceMode` to `ExternalTotal` LineItemPriceMode.
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
+	// Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
+	// Set only if inventory mode should be different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
+	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
 	// Container for line item specific address(es).
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
@@ -1281,7 +1307,7 @@ func (obj ClassificationShippingRateInput) MarshalJSON() ([]byte, error) {
 }
 
 type ScoreShippingRateInput struct {
-	Score float64 `json:"score"`
+	Score int `json:"score"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1339,7 +1365,7 @@ func (obj ClassificationShippingRateInputDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ScoreShippingRateInputDraft struct {
-	Score float64 `json:"score"`
+	Score int `json:"score"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1509,6 +1535,10 @@ type CartAddCustomLineItemAction struct {
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+	// are applied to the Custom Line Item.
+	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
+	PriceMode *CustomLineItemPriceMode `json:"priceMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1658,6 +1688,23 @@ func (obj CartChangeCustomLineItemMoneyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeCustomLineItemMoney", Alias: (*Alias)(&obj)})
+}
+
+type CartChangeCustomLineItemPriceModeAction struct {
+	// ID of the Custom Line Item to be updated.
+	CustomLineItemId string `json:"customLineItemId"`
+	// New value to set.
+	Mode CustomLineItemPriceMode `json:"mode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartChangeCustomLineItemPriceModeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartChangeCustomLineItemPriceModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCustomLineItemPriceMode", Alias: (*Alias)(&obj)})
 }
 
 type CartChangeCustomLineItemQuantityAction struct {
@@ -2569,6 +2616,10 @@ type CustomLineItemImportDraft struct {
 	// The custom fields.
 	Custom          *CustomFieldsDraft        `json:"custom,omitempty"`
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+	// are applied to the Custom Line Item.
+	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
+	PriceMode CustomLineItemPriceMode `json:"priceMode"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2595,6 +2646,9 @@ func (obj CustomLineItemImportDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	The scope controls which part of the product information is published.
+ */
 type ProductPublishScope string
 
 const (

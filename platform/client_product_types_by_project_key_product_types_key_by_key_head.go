@@ -10,27 +10,27 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyProductsByIDRequestMethodHead struct {
+type ByProjectKeyProductTypesKeyByKeyRequestMethodHead struct {
 	url     string
 	client  *Client
 	headers http.Header
 }
 
-func (r *ByProjectKeyProductsByIDRequestMethodHead) Dump() map[string]interface{} {
+func (r *ByProjectKeyProductTypesKeyByKeyRequestMethodHead) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url": r.url,
 	}
 }
 
-func (rb *ByProjectKeyProductsByIDRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyProductsByIDRequestMethodHead {
+func (rb *ByProjectKeyProductTypesKeyByKeyRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyProductTypesKeyByKeyRequestMethodHead {
 	rb.headers = headers
 	return rb
 }
 
 /**
-*	Check if a Product exists with a specified `id`. Responds with a `200 OK` status if the Product exists or `404 Not Found` otherwise.
+*	Checks if a Product Type with given `key` exists. Responds with a `200 OK` status if the `Product Type` exists or `404 Not Found` otherwise.
  */
-func (rb *ByProjectKeyProductsByIDRequestMethodHead) Execute(ctx context.Context) error {
+func (rb *ByProjectKeyProductTypesKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}
 	resp, err := rb.client.head(
 		ctx,

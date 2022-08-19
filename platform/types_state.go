@@ -199,11 +199,14 @@ const (
 type StateTypeEnum string
 
 const (
-	StateTypeEnumOrderState    StateTypeEnum = "OrderState"
-	StateTypeEnumLineItemState StateTypeEnum = "LineItemState"
-	StateTypeEnumProductState  StateTypeEnum = "ProductState"
-	StateTypeEnumReviewState   StateTypeEnum = "ReviewState"
-	StateTypeEnumPaymentState  StateTypeEnum = "PaymentState"
+	StateTypeEnumOrderState        StateTypeEnum = "OrderState"
+	StateTypeEnumLineItemState     StateTypeEnum = "LineItemState"
+	StateTypeEnumProductState      StateTypeEnum = "ProductState"
+	StateTypeEnumReviewState       StateTypeEnum = "ReviewState"
+	StateTypeEnumPaymentState      StateTypeEnum = "PaymentState"
+	StateTypeEnumQuoteRequestState StateTypeEnum = "QuoteRequestState"
+	StateTypeEnumStagedQuoteState  StateTypeEnum = "StagedQuoteState"
+	StateTypeEnumQuoteState        StateTypeEnum = "QuoteState"
 )
 
 type StateUpdate struct {

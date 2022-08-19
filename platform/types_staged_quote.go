@@ -37,6 +37,9 @@ type StagedQuote struct {
 	SellerComment *string `json:"sellerComment,omitempty"`
 	// Custom Fields of this Staged Quote.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// [State](ctp:api:type:State) of this Staged Quote.
+	// This reference can point to a State in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
 }
 
 type StagedQuoteDraft struct {
@@ -51,6 +54,9 @@ type StagedQuoteDraft struct {
 	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) and added to the StagedQuote.
 	// - If empty, the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) are added to the StagedQuote automatically.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// [State](ctp:api:type:State) of this Staged Quote.
+	// This reference can point to a State in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
 }
 
 /**
@@ -196,6 +202,12 @@ func mapDiscriminatorStagedQuoteUpdateAction(input interface{}) (StagedQuoteUpda
 			return nil, err
 		}
 		return obj, nil
+	case "transitionState":
+		obj := StagedQuoteTransitionStateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -280,4 +292,26 @@ func (obj StagedQuoteSetValidToAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setValidTo", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. This update action produces the [Staged Quote State Transition](ctp:api:type:StagedQuoteStateTransitionMessage) Message.
+*
+ */
+type StagedQuoteTransitionStateAction struct {
+	// Value to set.
+	// If there is no State yet, the new State must be an initial State.
+	State StateResourceIdentifier `json:"state"`
+	// Switch validations on or off.
+	Force *bool `json:"force,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteTransitionStateAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteTransitionStateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }

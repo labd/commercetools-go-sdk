@@ -31,7 +31,7 @@ type ByProjectKeyProductProjectionsByIDRequestMethodGetInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   *string
+	LocaleProjection   []string
 	StoreProjection    *string
 	Expand             []string
 }
@@ -57,8 +57,8 @@ func (input *ByProjectKeyProductProjectionsByIDRequestMethodGetInput) Values() u
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
 	}
-	if input.LocaleProjection != nil {
-		values.Add("localeProjection", fmt.Sprintf("%v", *input.LocaleProjection))
+	for _, v := range input.LocaleProjection {
+		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	if input.StoreProjection != nil {
 		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
@@ -109,11 +109,11 @@ func (rb *ByProjectKeyProductProjectionsByIDRequestMethodGet) PriceChannel(v str
 	return rb
 }
 
-func (rb *ByProjectKeyProductProjectionsByIDRequestMethodGet) LocaleProjection(v string) *ByProjectKeyProductProjectionsByIDRequestMethodGet {
+func (rb *ByProjectKeyProductProjectionsByIDRequestMethodGet) LocaleProjection(v []string) *ByProjectKeyProductProjectionsByIDRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsByIDRequestMethodGetInput{}
 	}
-	rb.params.LocaleProjection = &v
+	rb.params.LocaleProjection = v
 	return rb
 }
 

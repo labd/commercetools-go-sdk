@@ -75,6 +75,9 @@ type QuoteRequest struct {
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
 	// Custom Fields of this Quote Request.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// [State](ctp:api:type:State) of this Quote Request.
+	// This reference can point to a State in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -141,6 +144,9 @@ type QuoteRequestDraft struct {
 	Comment string `json:"comment"`
 	// Custom Fields to be added to the Quote Request.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// [State](ctp:api:type:State) of this Quote Request.
+	// This reference can point to a State in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
 }
 
 /**
@@ -276,12 +282,19 @@ func mapDiscriminatorQuoteRequestUpdateAction(input interface{}) (QuoteRequestUp
 			return nil, err
 		}
 		return obj, nil
+	case "transitionState":
+		obj := QuoteRequestTransitionStateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
 
 /**
 *	Transitions the Quote Request to a different state.
+*	A Buyer is only allowed to cancel a Quote Request when it is in `Submitted` state.
 *
  */
 type QuoteRequestChangeQuoteRequestStateAction struct {
@@ -334,4 +347,26 @@ func (obj QuoteRequestSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. This update action produces the [Quote Request State Transition](ctp:api:type:QuoteRequestStateTransitionMessage) Message.
+*
+ */
+type QuoteRequestTransitionStateAction struct {
+	// Value to set.
+	// If there is no State yet, this must be an initial State.
+	State StateResourceIdentifier `json:"state"`
+	// Switch validations on or off.
+	Force *bool `json:"force,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteRequestTransitionStateAction) MarshalJSON() ([]byte, error) {
+	type Alias QuoteRequestTransitionStateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }

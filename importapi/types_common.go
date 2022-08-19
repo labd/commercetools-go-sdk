@@ -835,3 +835,10 @@ type Address struct {
 	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
 	ExternalId            *string `json:"externalId,omitempty"`
 }
+
+type ProductPriceModeEnum string
+
+const (
+	ProductPriceModeEnumEmbedded   ProductPriceModeEnum = "Embedded"
+	ProductPriceModeEnumStandalone ProductPriceModeEnum = "Standalone"
+)

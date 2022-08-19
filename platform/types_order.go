@@ -576,6 +576,44 @@ type Delivery struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
+type DeliveryDraft struct {
+	// Items which are shipped in this delivery regardless their distribution over several parcels.
+	// Can also be specified individually for each Parcel.
+	Items   []DeliveryItem `json:"items"`
+	Parcels []ParcelDraft  `json:"parcels"`
+	Address *AddressDraft  `json:"address,omitempty"`
+	// Custom Fields for the Transaction.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryDraft) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["items"] == nil {
+		delete(raw, "items")
+	}
+
+	if raw["parcels"] == nil {
+		delete(raw, "parcels")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type DeliveryItem struct {
 	// Unique identifier of the DeliveryItem.
 	ID       string `json:"id"`
@@ -616,7 +654,10 @@ type LineItemImportDraft struct {
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	TaxRate             *TaxRate                   `json:"taxRate,omitempty"`
 	// The custom fields.
-	Custom          *CustomFieldsDraft        `json:"custom,omitempty"`
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
+	// Set only if inventory mode should be different from the `inventoryMode` specified on the [OrderImportDraft](ctp:api:type:OrderImportDraft).
+	InventoryMode   *InventoryMode            `json:"inventoryMode,omitempty"`
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -798,8 +839,9 @@ type OrderFromCartDraft struct {
 
 type OrderFromQuoteDraft struct {
 	// ResourceIdentifier to the Quote from which this order is created. If the quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
-	Quote   QuoteResourceIdentifier `json:"quote"`
-	Version int                     `json:"version"`
+	Quote QuoteResourceIdentifier `json:"quote"`
+	// The `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
+	Version int `json:"version"`
 	// String that uniquely identifies an order.
 	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
 	// It should be unique across a project.
@@ -1432,7 +1474,7 @@ type ProductVariantImportDraft struct {
 	// The SKU of the existing variant.
 	Sku *string `json:"sku,omitempty"`
 	// The [EmbeddedPrices](ctp:api:type:EmbeddedPrice) of the variant.
-	// The prices should not contain two prices for the same price scope (same currency, country and customer group).
+	// The prices should not contain two prices for the same price scope (same currency, country, customer group, channel, valid from and valid until).
 	// If this property is defined, then it will override the `prices` property from the original product variant, otherwise `prices` property from the original product variant would be copied in the resulting order.
 	Prices []PriceDraft `json:"prices"`
 	// If this property is defined, then it will override the `attributes` property from the original
@@ -1634,7 +1676,7 @@ type ShippingInfoImportDraft struct {
 	// Not set if custom shipping method is used.
 	ShippingMethod *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
 	// Deliveries are compilations of information on how the articles are being delivered to the customers.
-	Deliveries      []Delivery                    `json:"deliveries"`
+	Deliveries      []DeliveryDraft               `json:"deliveries"`
 	DiscountedPrice *DiscountedLineItemPriceDraft `json:"discountedPrice,omitempty"`
 	// Indicates whether the ShippingMethod referenced is allowed for the cart or not.
 	ShippingMethodState *ShippingMethodState `json:"shippingMethodState,omitempty"`

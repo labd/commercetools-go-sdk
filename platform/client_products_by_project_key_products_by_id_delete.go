@@ -31,8 +31,6 @@ type ByProjectKeyProductsByIDRequestMethodDeleteInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   *string
-	StoreProjection    *string
 	Version            int
 	Expand             []string
 }
@@ -50,12 +48,6 @@ func (input *ByProjectKeyProductsByIDRequestMethodDeleteInput) Values() url.Valu
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	if input.LocaleProjection != nil {
-		values.Add("localeProjection", fmt.Sprintf("%v", *input.LocaleProjection))
-	}
-	if input.StoreProjection != nil {
-		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
 	}
 	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
@@ -96,22 +88,6 @@ func (rb *ByProjectKeyProductsByIDRequestMethodDelete) PriceChannel(v string) *B
 	return rb
 }
 
-func (rb *ByProjectKeyProductsByIDRequestMethodDelete) LocaleProjection(v string) *ByProjectKeyProductsByIDRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
-	}
-	rb.params.LocaleProjection = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsByIDRequestMethodDelete) StoreProjection(v string) *ByProjectKeyProductsByIDRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
-	}
-	rb.params.StoreProjection = &v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsByIDRequestMethodDelete) Version(v int) *ByProjectKeyProductsByIDRequestMethodDelete {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
@@ -136,6 +112,11 @@ func (rb *ByProjectKeyProductsByIDRequestMethodDelete) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	Produces the [ProductDeletedMessage](/message-types#productdeletedmessage).
+ */
 func (rb *ByProjectKeyProductsByIDRequestMethodDelete) Execute(ctx context.Context) (result *Product, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

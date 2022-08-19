@@ -10,61 +10,68 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyProductsByIDRequestMethodHead struct {
+type ByProjectKeyOrdersQuotesRequestMethodPost struct {
+	body    OrderFromQuoteDraft
 	url     string
 	client  *Client
 	headers http.Header
 }
 
-func (r *ByProjectKeyProductsByIDRequestMethodHead) Dump() map[string]interface{} {
+func (r *ByProjectKeyOrdersQuotesRequestMethodPost) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url": r.url,
 	}
 }
 
-func (rb *ByProjectKeyProductsByIDRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyProductsByIDRequestMethodHead {
+func (rb *ByProjectKeyOrdersQuotesRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyOrdersQuotesRequestMethodPost {
 	rb.headers = headers
 	return rb
 }
 
 /**
-*	Check if a Product exists with a specified `id`. Responds with a `200 OK` status if the Product exists or `404 Not Found` otherwise.
+*	Create an Order from a Quote
  */
-func (rb *ByProjectKeyProductsByIDRequestMethodHead) Execute(ctx context.Context) error {
+func (rb *ByProjectKeyOrdersQuotesRequestMethodPost) Execute(ctx context.Context) (result *Order, err error) {
+	data, err := serializeInput(rb.body)
+	if err != nil {
+		return nil, err
+	}
 	queryParams := url.Values{}
-	resp, err := rb.client.head(
+	resp, err := rb.client.post(
 		ctx,
 		rb.url,
 		queryParams,
 		rb.headers,
+		data,
 	)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 	content, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
-	case 200:
-		return nil
-
+	case 201:
+		err = json.Unmarshal(content, &result)
+		return result, nil
 	case 400, 401, 403, 500, 502, 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
-			return err
+			return nil, err
 		}
-		return errorObj
+		return nil, errorObj
+
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
 			Content:    content,
 			Response:   resp,
 		}
-		return result
+		return nil, result
 	}
 
 }

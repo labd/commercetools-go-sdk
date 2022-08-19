@@ -27,23 +27,24 @@ func (r *ByProjectKeyProductsRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ByProjectKeyProductsRequestMethodGetInput struct {
+	Where              []string
 	PriceCurrency      *string
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   *string
-	StoreProjection    *string
 	Expand             []string
 	Sort               []string
 	Limit              *int
 	Offset             *int
 	WithTotal          *bool
-	Where              []string
 	PredicateVar       map[string][]string
 }
 
 func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.Where {
+		values.Add("where", fmt.Sprintf("%v", v))
+	}
 	if input.PriceCurrency != nil {
 		values.Add("priceCurrency", fmt.Sprintf("%v", *input.PriceCurrency))
 	}
@@ -55,12 +56,6 @@ func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	if input.LocaleProjection != nil {
-		values.Add("localeProjection", fmt.Sprintf("%v", *input.LocaleProjection))
-	}
-	if input.StoreProjection != nil {
-		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -81,15 +76,20 @@ func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
 			values.Add("withTotal", "false")
 		}
 	}
-	for _, v := range input.Where {
-		values.Add("where", fmt.Sprintf("%v", v))
-	}
 	for k, v := range input.PredicateVar {
 		for _, x := range v {
 			values.Set(k, x)
 		}
 	}
 	return values
+}
+
+func (rb *ByProjectKeyProductsRequestMethodGet) Where(v []string) *ByProjectKeyProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
+	}
+	rb.params.Where = v
+	return rb
 }
 
 func (rb *ByProjectKeyProductsRequestMethodGet) PriceCurrency(v string) *ByProjectKeyProductsRequestMethodGet {
@@ -121,22 +121,6 @@ func (rb *ByProjectKeyProductsRequestMethodGet) PriceChannel(v string) *ByProjec
 		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
 	}
 	rb.params.PriceChannel = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsRequestMethodGet) LocaleProjection(v string) *ByProjectKeyProductsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
-	}
-	rb.params.LocaleProjection = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsRequestMethodGet) StoreProjection(v string) *ByProjectKeyProductsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
-	}
-	rb.params.StoreProjection = &v
 	return rb
 }
 
@@ -180,14 +164,6 @@ func (rb *ByProjectKeyProductsRequestMethodGet) WithTotal(v bool) *ByProjectKeyP
 	return rb
 }
 
-func (rb *ByProjectKeyProductsRequestMethodGet) Where(v []string) *ByProjectKeyProductsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
-	}
-	rb.params.Where = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsRequestMethodGet) PredicateVar(v map[string][]string) *ByProjectKeyProductsRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
@@ -206,10 +182,7 @@ func (rb *ByProjectKeyProductsRequestMethodGet) WithHeaders(headers http.Header)
 }
 
 /**
-*	You can use the query endpoint to get the full representations of products.
-*	REMARK: We suggest to use the performance optimized search endpoint which has a bunch functionalities,
-*	the query API lacks like sorting on custom attributes, etc.
-*
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsRequestMethodGet) Execute(ctx context.Context) (result *ProductPagedQueryResponse, err error) {
 	var queryParams url.Values

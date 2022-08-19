@@ -141,6 +141,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "AddProductChange":
+		obj := AddProductChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "AddPropertyChange":
 		obj := AddPropertyChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -429,6 +435,18 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ChangeQuoteRequestStateChange":
+		obj := ChangeQuoteRequestStateChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeQuoteStateChange":
+		obj := ChangeQuoteStateChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ChangeRequiresDiscountCodeChange":
 		obj := ChangeRequiresDiscountCodeChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -473,6 +491,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "ChangeStackingModeChange":
 		obj := ChangeStackingModeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeStagedQuoteStateChange":
+		obj := ChangeStagedQuoteStateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -703,6 +727,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "RemoveProductChange":
+		obj := RemoveProductChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "RemovePropertyChange":
 		obj := RemovePropertyChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -801,6 +831,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetAttributeChange":
 		obj := SetAttributeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetAuthenticationModeChange":
+		obj := SetAuthenticationModeChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1069,6 +1105,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetLineItemDeactivatedAtChange":
+		obj := SetLineItemDeactivatedAtChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetLineItemDiscountedPriceChange":
 		obj := SetLineItemDiscountedPriceChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1089,6 +1131,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetLineItemPriceChange":
 		obj := SetLineItemPriceChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetLineItemProductKeyChange":
+		obj := SetLineItemProductKeyChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1261,6 +1309,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetProductCountChange":
+		obj := SetProductCountChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetProductPriceCustomFieldChange":
 		obj := SetProductPriceCustomFieldChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1269,6 +1323,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetProductPriceCustomTypeChange":
 		obj := SetProductPriceCustomTypeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetProductSelectionsChange":
+		obj := SetProductSelectionsChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1323,6 +1383,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetSearchKeywordsChange":
 		obj := SetSearchKeywordsChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetSellerCommentChange":
+		obj := SetSellerCommentChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1497,6 +1563,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetValidFromChange":
 		obj := SetValidFromChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetValidToChange":
+		obj := SetValidToChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1914,6 +1986,22 @@ func (obj AddPriceChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "AddPriceChange", Alias: (*Alias)(&obj)})
+}
+
+type AddProductChange struct {
+	// Update action for when a product is assigned to a product selection
+	Change    string    `json:"change"`
+	NextValue Reference `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AddProductChange) MarshalJSON() ([]byte, error) {
+	type Alias AddProductChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AddProductChange", Alias: (*Alias)(&obj)})
 }
 
 type AddPropertyChange struct {
@@ -2773,6 +2861,44 @@ func (obj ChangeQuantityChange) MarshalJSON() ([]byte, error) {
 	}{Action: "ChangeQuantityChange", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Update action for `changeQuoteRequestState` on `quote-request`
+ */
+type ChangeQuoteRequestStateChange struct {
+	Change        string            `json:"change"`
+	NextValue     QuoteRequestState `json:"nextValue"`
+	PreviousValue QuoteRequestState `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeQuoteRequestStateChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeQuoteRequestStateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeQuoteRequestStateChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Update action for `changeQuoteState` on `quote`
+ */
+type ChangeQuoteStateChange struct {
+	Change        string     `json:"change"`
+	NextValue     QuoteState `json:"nextValue"`
+	PreviousValue QuoteState `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeQuoteStateChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeQuoteStateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeQuoteStateChange", Alias: (*Alias)(&obj)})
+}
+
 type ChangeRequiresDiscountCodeChange struct {
 	// Shape of the action for `changeRequiresDiscountCode`
 	Change        string `json:"change"`
@@ -2906,6 +3032,25 @@ func (obj ChangeStackingModeChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ChangeStackingModeChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Update action for `changeStagedQuoteState` on `staged-quote`
+ */
+type ChangeStagedQuoteStateChange struct {
+	Change        string           `json:"change"`
+	NextValue     StagedQuoteState `json:"nextValue"`
+	PreviousValue StagedQuoteState `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeStagedQuoteStateChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeStagedQuoteStateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeStagedQuoteStateChange", Alias: (*Alias)(&obj)})
 }
 
 type ChangeStateTypeChange struct {
@@ -3521,6 +3666,22 @@ func (obj RemovePriceChange) MarshalJSON() ([]byte, error) {
 	}{Action: "RemovePriceChange", Alias: (*Alias)(&obj)})
 }
 
+type RemoveProductChange struct {
+	// Update action for when a product is unassigned from a product selection
+	Change        string    `json:"change"`
+	PreviousValue Reference `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RemoveProductChange) MarshalJSON() ([]byte, error) {
+	type Alias RemoveProductChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RemoveProductChange", Alias: (*Alias)(&obj)})
+}
+
 type RemovePropertyChange struct {
 	// Update action for `removeProperty` on custom objects
 	Change string `json:"change"`
@@ -3819,6 +3980,23 @@ func (obj SetAttributeChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetAttributeChange", Alias: (*Alias)(&obj)})
+}
+
+type SetAuthenticationModeChange struct {
+	// Update action for `setAuthenticationMode`
+	Change        string             `json:"change"`
+	PreviousValue AuthenticationMode `json:"previousValue"`
+	NextValue     AuthenticationMode `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetAuthenticationModeChange) MarshalJSON() ([]byte, error) {
+	type Alias SetAuthenticationModeChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetAuthenticationModeChange", Alias: (*Alias)(&obj)})
 }
 
 type SetAuthorNameChange struct {
@@ -4607,6 +4785,24 @@ func (obj SetLastNameChange) MarshalJSON() ([]byte, error) {
 	}{Action: "SetLastNameChange", Alias: (*Alias)(&obj)})
 }
 
+type SetLineItemDeactivatedAtChange struct {
+	// Update action for `setLineItemDeactivatedAt`
+	Change        string                    `json:"change"`
+	LineItem      ShoppingListLineItemValue `json:"lineItem"`
+	PreviousValue string                    `json:"previousValue"`
+	NextValue     string                    `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetLineItemDeactivatedAtChange) MarshalJSON() ([]byte, error) {
+	type Alias SetLineItemDeactivatedAtChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetLineItemDeactivatedAtChange", Alias: (*Alias)(&obj)})
+}
+
 type SetLineItemDiscountedPriceChange struct {
 	// Update action for `setLineItemDiscountedPrice`
 	Change        string                  `json:"change"`
@@ -4680,6 +4876,26 @@ func (obj SetLineItemPriceChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetLineItemPriceChange", Alias: (*Alias)(&obj)})
+}
+
+type SetLineItemProductKeyChange struct {
+	// Update action for `setLineItemProductKey`
+	Change        string          `json:"change"`
+	LineItem      LocalizedString `json:"lineItem"`
+	LineItemId    string          `json:"lineItemId"`
+	Variant       string          `json:"variant"`
+	PreviousValue string          `json:"previousValue"`
+	NextValue     string          `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetLineItemProductKeyChange) MarshalJSON() ([]byte, error) {
+	type Alias SetLineItemProductKeyChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetLineItemProductKeyChange", Alias: (*Alias)(&obj)})
 }
 
 type SetLineItemProductSlugChange struct {
@@ -5189,6 +5405,23 @@ func (obj SetPricesChange) MarshalJSON() ([]byte, error) {
 	}{Action: "SetPricesChange", Alias: (*Alias)(&obj)})
 }
 
+type SetProductCountChange struct {
+	// Update action for `setProductCount`
+	Change        string `json:"change"`
+	PreviousValue int    `json:"previousValue"`
+	NextValue     int    `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetProductCountChange) MarshalJSON() ([]byte, error) {
+	type Alias SetProductCountChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetProductCountChange", Alias: (*Alias)(&obj)})
+}
+
 type SetProductPriceCustomFieldChange struct {
 	// Update action for `setProductPriceCustomField`
 	Change        string       `json:"change"`
@@ -5223,6 +5456,23 @@ func (obj SetProductPriceCustomTypeChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetProductPriceCustomTypeChange", Alias: (*Alias)(&obj)})
+}
+
+type SetProductSelectionsChange struct {
+	// Update action for `setProductSelections`
+	Change        string                    `json:"change"`
+	PreviousValue []ProductSelectionSetting `json:"previousValue"`
+	NextValue     []ProductSelectionSetting `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetProductSelectionsChange) MarshalJSON() ([]byte, error) {
+	type Alias SetProductSelectionsChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetProductSelectionsChange", Alias: (*Alias)(&obj)})
 }
 
 type SetProductVariantKeyChange struct {
@@ -5380,6 +5630,23 @@ func (obj SetSearchKeywordsChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetSearchKeywordsChange", Alias: (*Alias)(&obj)})
+}
+
+type SetSellerCommentChange struct {
+	// Shape of the action for `setSellerComment`
+	Change        string `json:"change"`
+	PreviousValue string `json:"previousValue"`
+	NextValue     string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetSellerCommentChange) MarshalJSON() ([]byte, error) {
+	type Alias SetSellerCommentChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetSellerCommentChange", Alias: (*Alias)(&obj)})
 }
 
 type SetShippingAddressChange struct {
@@ -5886,6 +6153,23 @@ func (obj SetValidFromChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetValidFromChange", Alias: (*Alias)(&obj)})
+}
+
+type SetValidToChange struct {
+	// Shape of the action for `setValidTo`
+	Change        string `json:"change"`
+	PreviousValue string `json:"previousValue"`
+	NextValue     string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetValidToChange) MarshalJSON() ([]byte, error) {
+	type Alias SetValidToChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetValidToChange", Alias: (*Alias)(&obj)})
 }
 
 type SetValidUntilChange struct {

@@ -713,6 +713,10 @@ type StagedOrderAddCustomLineItemAction struct {
 	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
 	Custom          *CustomFieldsDraft    `json:"custom,omitempty"`
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+	// are applied to the Custom Line Item.
+	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
+	PriceMode *CustomLineItemPriceMode `json:"priceMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

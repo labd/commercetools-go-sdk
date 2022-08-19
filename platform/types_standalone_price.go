@@ -8,6 +8,34 @@ import (
 	"time"
 )
 
+/**
+*	Staged changes on a Standalone Price. To update the `value` property of a Staged Standalone Price, use the corresponding [update action](ctp:api:type:StandalonePriceChangeValueAction). To apply all staged changes to the Standalone Price, use the `applyStagedChanges` update action.
+ */
+type StagedStandalonePrice struct {
+	// Money value of the StagedStandalonePrice.
+	Value TypedMoney `json:"value"`
+	// Discounted price for the StagedStandalonePrice.
+	Discounted DiscountedPrice `json:"discounted"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StagedStandalonePrice) UnmarshalJSON(data []byte) error {
+	type Alias StagedStandalonePrice
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 type StandalonePrice struct {
 	// Unique identifier of the StandalonePrice.
 	ID string `json:"id"`
@@ -44,6 +72,8 @@ type StandalonePrice struct {
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Staged changes of the StandalonePrice. Only present if the StandalonePrice has staged changes.
+	Staged *StagedStandalonePrice `json:"staged,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -240,6 +270,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 	}
 
 	switch discriminator {
+	case "applyStagedChanges":
+		obj := StandalonePriceApplyStagedChangesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeValue":
 		obj := StandalonePriceChangeValueAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -269,12 +305,31 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 }
 
 /**
-*	Produces the [StandalonePriceValueChangedMessage](ctp:api:type:StandalonePriceValueChangedMessage).
+*	Applies all staged changes to the StandalonePrice by overwriting all current values with the values in the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). After successfully applied, the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice) will be removed from the StandalonePrice. An `applyStagedChanges` update action on a StandalonePrice that does not contain any staged changes will return a `400 Bad Request` error. Applying staged changes successfully will produce the [StandalonePriceStagedChangesApplied](ctp:api:type:StandalonePriceStagedChangesAppliedMessage) Message.
+*
+ */
+type StandalonePriceApplyStagedChangesAction struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceApplyStagedChangesAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceApplyStagedChangesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "applyStagedChanges", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the value of a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [StandalonePriceValueChangedMessage](ctp:api:type:StandalonePriceValueChangedMessage).
 *
  */
 type StandalonePriceChangeValueAction struct {
 	// New value to set. Must not be empty.
 	Value Money `json:"value"`
+	// If set to `true` the update action applies to the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). If set to `false`, the update action applies to the current [StandalonePrice](ctp:api:type:StandalonePrice).
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

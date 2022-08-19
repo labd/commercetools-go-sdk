@@ -21,7 +21,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) ProductSelections() *ByPro
 }
 
 /**
-*	Gets the full representation of a product by Key.
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Get() *ByProjectKeyProductsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyProductsKeyByKeyRequestMethodGet{
@@ -31,7 +31,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Get() *ByProjectKeyProduct
 }
 
 /**
-*	Checks if product with given key exists.
+*	Check if a Product exists with a specified `key`. Responds with a `200 OK` status if the Product exists or `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Head() *ByProjectKeyProductsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyProductsKeyByKeyRequestMethodHead{
@@ -48,6 +48,10 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Post(body ProductUpdate) *
 	}
 }
 
+/**
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	Produces the [ProductDeletedMessage](/message-types#productdeletedmessage).
+ */
 func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Delete() *ByProjectKeyProductsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyProductsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/products/key=%s", rb.projectKey, rb.key),

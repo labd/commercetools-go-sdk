@@ -30,8 +30,6 @@ type ByProjectKeyProductsByIDRequestMethodGetInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   *string
-	StoreProjection    *string
 	Expand             []string
 }
 
@@ -48,12 +46,6 @@ func (input *ByProjectKeyProductsByIDRequestMethodGetInput) Values() url.Values 
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	if input.LocaleProjection != nil {
-		values.Add("localeProjection", fmt.Sprintf("%v", *input.LocaleProjection))
-	}
-	if input.StoreProjection != nil {
-		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -93,22 +85,6 @@ func (rb *ByProjectKeyProductsByIDRequestMethodGet) PriceChannel(v string) *ByPr
 	return rb
 }
 
-func (rb *ByProjectKeyProductsByIDRequestMethodGet) LocaleProjection(v string) *ByProjectKeyProductsByIDRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodGetInput{}
-	}
-	rb.params.LocaleProjection = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsByIDRequestMethodGet) StoreProjection(v string) *ByProjectKeyProductsByIDRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodGetInput{}
-	}
-	rb.params.StoreProjection = &v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsByIDRequestMethodGet) Expand(v []string) *ByProjectKeyProductsByIDRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsByIDRequestMethodGetInput{}
@@ -127,7 +103,7 @@ func (rb *ByProjectKeyProductsByIDRequestMethodGet) WithHeaders(headers http.Hea
 }
 
 /**
-*	Gets the full representation of a product by ID.
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsByIDRequestMethodGet) Execute(ctx context.Context) (result *Product, err error) {
 	var queryParams url.Values

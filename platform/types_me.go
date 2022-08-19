@@ -32,8 +32,9 @@ type MyCartDraft struct {
 	// Each address must contain a key which is unique in this cart.
 	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
 	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
-	Store         *StoreKeyReference `json:"store,omitempty"`
-	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
+	Store *StoreKeyReference `json:"store,omitempty"`
+	// The code of existing DiscountCodes.
+	DiscountCodes []string `json:"discountCodes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -17,6 +17,12 @@ func (rb *ByProjectKeyOrdersRequestBuilder) ImportOrder() *ByProjectKeyOrdersImp
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyOrdersRequestBuilder) OrderQuote() *ByProjectKeyOrdersQuotesRequestBuilder {
+	return &ByProjectKeyOrdersQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyOrdersRequestBuilder) WithOrderNumber(orderNumber string) *ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder {
 	return &ByProjectKeyOrdersOrderNumberByOrderNumberRequestBuilder{
 		orderNumber: orderNumber,

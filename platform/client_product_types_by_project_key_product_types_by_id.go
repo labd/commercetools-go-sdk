@@ -19,6 +19,16 @@ func (rb *ByProjectKeyProductTypesByIDRequestBuilder) Get() *ByProjectKeyProduct
 	}
 }
 
+/**
+*	Checks if a Product Type with given `id` exists. Responds with a `200 OK` status if the `Product Type` exists or `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductTypesByIDRequestBuilder) Head() *ByProjectKeyProductTypesByIDRequestMethodHead {
+	return &ByProjectKeyProductTypesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-types/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyProductTypesByIDRequestBuilder) Post(body ProductTypeUpdate) *ByProjectKeyProductTypesByIDRequestMethodPost {
 	return &ByProjectKeyProductTypesByIDRequestMethodPost{
 		body:   body,

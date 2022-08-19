@@ -60,8 +60,26 @@ func mapDiscriminatorLabel(input interface{}) (Label, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "QuoteLabel":
+		obj := QuoteLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "QuoteRequestLabel":
+		obj := QuoteRequestLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ReviewLabel":
 		obj := ReviewLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StagedQuoteLabel":
+		obj := StagedQuoteLabel{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -166,6 +184,38 @@ func (obj ProductLabel) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductLabel", Alias: (*Alias)(&obj)})
 }
 
+type QuoteLabel struct {
+	Key          string    `json:"key"`
+	Customer     Reference `json:"customer"`
+	StagedQuote  Reference `json:"stagedQuote"`
+	QuoteRequest Reference `json:"quoteRequest"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteLabel) MarshalJSON() ([]byte, error) {
+	type Alias QuoteLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "QuoteLabel", Alias: (*Alias)(&obj)})
+}
+
+type QuoteRequestLabel struct {
+	Key      string    `json:"key"`
+	Customer Reference `json:"customer"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteRequestLabel) MarshalJSON() ([]byte, error) {
+	type Alias QuoteRequestLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "QuoteRequestLabel", Alias: (*Alias)(&obj)})
+}
+
 type ReviewLabel struct {
 	Key   string `json:"key"`
 	Title string `json:"title"`
@@ -179,6 +229,22 @@ func (obj ReviewLabel) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ReviewLabel", Alias: (*Alias)(&obj)})
+}
+
+type StagedQuoteLabel struct {
+	Key          string    `json:"key"`
+	Customer     Reference `json:"customer"`
+	QuoteRequest Reference `json:"quoteRequest"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedQuoteLabel) MarshalJSON() ([]byte, error) {
+	type Alias StagedQuoteLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StagedQuoteLabel", Alias: (*Alias)(&obj)})
 }
 
 type StringLabel struct {

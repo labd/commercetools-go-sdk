@@ -321,7 +321,9 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 }
 
 /**
-*	This action has no effect if a given distribution channel is already present in a Store.
+*	This update action produces the [StoreDistributionChannelsChangedMessage](ctp:api:type:StoreDistributionChannelsChangedMessage).
+*	It has no effect if a given distribution channel is already present in a Store.
+*
  */
 type StoreAddDistributionChannelAction struct {
 	// Value to append. Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannelError](ctp:api:type:MissingRoleOnChannelError) error.
@@ -398,6 +400,10 @@ func (obj StoreChangeProductSelectionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeProductSelectionActive", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action produces the [StoreDistributionChannelsChangedMessage](ctp:api:type:StoreDistributionChannelsChangedMessage).
+*
+ */
 type StoreRemoveDistributionChannelAction struct {
 	// Value to remove. ResourceIdentifier of a Channel with the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
@@ -484,6 +490,10 @@ func (obj StoreSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action produces the [StoreDistributionChannelsChangedMessage](ctp:api:type:StoreDistributionChannelsChangedMessage).
+*
+ */
 type StoreSetDistributionChannelsAction struct {
 	// Value to set.
 	// If not defined, the Store's `distributionChannels` are unset.

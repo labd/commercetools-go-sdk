@@ -413,13 +413,18 @@ func (obj GeoJsonPoint) MarshalJSON() ([]byte, error) {
 }
 
 type Image struct {
-	Url        string          `json:"url"`
+	// URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant).
+	Url string `json:"url"`
+	// Dimensions of the original image.
 	Dimensions ImageDimensions `json:"dimensions"`
-	Label      *string         `json:"label,omitempty"`
+	// Custom label for the image.
+	Label *string `json:"label,omitempty"`
 }
 
 type ImageDimensions struct {
+	// Width of the image.
 	W int `json:"w"`
+	// Height of the image.
 	H int `json:"h"`
 }
 
@@ -1130,22 +1135,33 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 	return nil, nil
 }
 
+/**
+*	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
+*	[Search Product Projection](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when Price Selection is used.
+*
+ */
 type ScopedPrice struct {
+	// Platform-generated unique identifier of the Price.
 	ID string `json:"id"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	// Original value of the Price.
 	Value TypedMoney `json:"value"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	// If available, either the original price `value` or `discounted` value.
 	CurrentValue TypedMoney `json:"currentValue"`
-	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Country code of the geographic location.
 	Country *string `json:"country,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// Reference to a CustomerGroup.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
-	Channel    *ChannelReference `json:"channel,omitempty"`
-	ValidFrom  *time.Time        `json:"validFrom,omitempty"`
-	ValidUntil *time.Time        `json:"validUntil,omitempty"`
-	Discounted *DiscountedPrice  `json:"discounted,omitempty"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// Reference to a Channel.
+	Channel *ChannelReference `json:"channel,omitempty"`
+	// Date and time from which the Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time until which the Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Is set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItem).
+	//
+	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down) in favor of the Customer.
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+	// Custom Fields for the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 

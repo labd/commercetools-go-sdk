@@ -212,14 +212,17 @@ type ExtensionPagedQueryResponse struct {
 type ExtensionResourceTypeId string
 
 const (
-	ExtensionResourceTypeIdCart     ExtensionResourceTypeId = "cart"
-	ExtensionResourceTypeIdOrder    ExtensionResourceTypeId = "order"
-	ExtensionResourceTypeIdPayment  ExtensionResourceTypeId = "payment"
-	ExtensionResourceTypeIdCustomer ExtensionResourceTypeId = "customer"
+	ExtensionResourceTypeIdCart         ExtensionResourceTypeId = "cart"
+	ExtensionResourceTypeIdOrder        ExtensionResourceTypeId = "order"
+	ExtensionResourceTypeIdPayment      ExtensionResourceTypeId = "payment"
+	ExtensionResourceTypeIdCustomer     ExtensionResourceTypeId = "customer"
+	ExtensionResourceTypeIdQuoteRequest ExtensionResourceTypeId = "quote-request"
+	ExtensionResourceTypeIdStagedQuote  ExtensionResourceTypeId = "staged-quote"
+	ExtensionResourceTypeIdQuote        ExtensionResourceTypeId = "quote"
 )
 
 type ExtensionTrigger struct {
-	// `cart`, `order`, `payment`, and `customer` are supported.
+	// `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, and `quote` are supported.
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
 	// `Create` and `Update` requests are supported.
 	Actions []ExtensionAction `json:"actions"`

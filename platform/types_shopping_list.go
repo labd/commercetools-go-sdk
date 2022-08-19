@@ -130,8 +130,9 @@ type ShoppingListLineItem struct {
 	// [Reference](ctp:api:type:Reference) to a [ProductType](ctp:api:type:ProductType).
 	ProductType ProductTypeReference `json:"productType"`
 	Quantity    int                  `json:"quantity"`
-	Variant     *ProductVariant      `json:"variant,omitempty"`
-	VariantId   *int                 `json:"variantId,omitempty"`
+	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
+	Variant   *ProductVariant `json:"variant,omitempty"`
+	VariantId *int            `json:"variantId,omitempty"`
 }
 
 type ShoppingListLineItemDraft struct {

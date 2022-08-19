@@ -31,8 +31,6 @@ type ByProjectKeyProductsByIDRequestMethodPostInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   *string
-	StoreProjection    *string
 	Expand             []string
 }
 
@@ -49,12 +47,6 @@ func (input *ByProjectKeyProductsByIDRequestMethodPostInput) Values() url.Values
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	if input.LocaleProjection != nil {
-		values.Add("localeProjection", fmt.Sprintf("%v", *input.LocaleProjection))
-	}
-	if input.StoreProjection != nil {
-		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -94,22 +86,6 @@ func (rb *ByProjectKeyProductsByIDRequestMethodPost) PriceChannel(v string) *ByP
 	return rb
 }
 
-func (rb *ByProjectKeyProductsByIDRequestMethodPost) LocaleProjection(v string) *ByProjectKeyProductsByIDRequestMethodPost {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodPostInput{}
-	}
-	rb.params.LocaleProjection = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsByIDRequestMethodPost) StoreProjection(v string) *ByProjectKeyProductsByIDRequestMethodPost {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodPostInput{}
-	}
-	rb.params.StoreProjection = &v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsByIDRequestMethodPost) Expand(v []string) *ByProjectKeyProductsByIDRequestMethodPost {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsByIDRequestMethodPostInput{}
@@ -126,6 +102,10 @@ func (rb *ByProjectKeyProductsByIDRequestMethodPost) WithHeaders(headers http.He
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+ */
 func (rb *ByProjectKeyProductsByIDRequestMethodPost) Execute(ctx context.Context) (result *Product, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

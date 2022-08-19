@@ -85,6 +85,8 @@ type ProductDraftImport struct {
 	// If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
 	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product, the import induces no change in the existing Product whether `publish` is set or not.
 	Publish *bool `json:"publish,omitempty"`
+	// Determines the type of Prices the API uses. See [ProductPriceMode](/../api/projects/products#productpricemode) for more details. If not provided, the existing `Product.priceMode` is not changed.
+	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

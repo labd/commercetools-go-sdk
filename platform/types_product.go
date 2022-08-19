@@ -9,12 +9,153 @@ import (
 )
 
 type Attribute struct {
+	// Name of the Attribute.
 	Name string `json:"name"`
-	// A valid JSON value, based on an AttributeDefinition.
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+	//   or the complete objects as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
 	Value interface{} `json:"value"`
 }
 
-type CategoryOrderHints map[string]string
+/**
+*	JSON object where the key is a [Category](ctp:api:type:Category) `id` and the value is an order hint: a string representing a number between 0 and 1 that must start with `0.` and cannot end with `0`. Allows controlling the order of Products and how they appear in Categories. Products with no order hint have an order score below `0`. Order hints are non-unique. If a subset of Products have the same value for order hint in a specific category, the behavior is undetermined.
+*
+ */
+type CategoryOrderHints map[string]interface{}
+type EmbeddedPrice struct {
+	// Unique identifier of the EmbeddedPrice.
+	ID string `json:"id"`
+	// Money value of the EmbeddedPrice.
+	Value TypedMoney `json:"value"`
+	// Country for which the EmbeddedPrice is valid.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the EmbeddedPrice is valid.
+	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+	// Product distribution [Channel](ctp:api:type:Channel) for which the EmbeddedPrice is valid.
+	Channel *ChannelReference `json:"channel,omitempty"`
+	// Date from which the EmbeddedPrice is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date until the EmbeddedPrice is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Price tiers if any are defined.
+	Tiers []PriceTier `json:"tiers"`
+	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists.
+	// If set, the API uses the `discounted` value for the [LineItem Price selection](ctp:api:type:CartLineItemPriceSelection).
+	// When a [relative Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fraction part of the `discounted` price is 0.5,
+	// the discounted Price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
+	//
+	// The service will unset or replace the value
+	//
+	// - once a matching relative or absolute Product Discount with a higher `sortOrder` exists,
+	// - if the referenced external Product Discount is deactivated, or
+	// - if the Product changes and the external Product Discount predicate does not match the discounted Price any more.
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+	// Custom Fields for the EmbeddedPrice.
+	Custom *CustomFields `json:"custom,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *EmbeddedPrice) UnmarshalJSON(data []byte) error {
+	type Alias EmbeddedPrice
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj EmbeddedPrice) MarshalJSON() ([]byte, error) {
+	type Alias EmbeddedPrice
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["tiers"] == nil {
+		delete(raw, "tiers")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	The representation sent to the server when creating a new EmbeddedPrice.
+*
+ */
+type EmbeddedPriceDraft struct {
+	// Sets the money value of the EmbeddedPrice.
+	Value Money `json:"value"`
+	// Sets the country for which the EmbeddedPrice is valid. If not set, the Price is valid for any country.
+	Country *string `json:"country,omitempty"`
+	// Sets the [CustomerGroup](ctp:api:type:CustomerGroup) for which the EmbeddedPrice is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// Sets the product distribution [Channel](ctp:api:type:Channel) for which the EmbeddedPrice is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Sets a discounted Price from an **external service**. Absolute or relative [ProductDiscount](ctp:api:type:ProductDiscount) prices are automatically added to a Product's [EmbeddedPrice](#embeddedprice) when created. The DiscountedPrice must reference a ProductDiscount with:
+	//
+	// - The `isActive` flag set to `true`.
+	// - An `external` [ProductDiscountValue](ctp:api:type:ProductDiscountValueExternal).
+	// - A `predicate` which matches the [ProductVariant](ctp:api:type:ProductVariant) the [EmbeddedPrice](ctp:api:type:EmbeddedPrice) is referenced from.
+	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
+	// Sets the date from which the EmbeddedPrice is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Sets the date until the EmbeddedPrice is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Sets Price tiers.
+	Tiers []PriceTier `json:"tiers"`
+	// Custom Fields for the EmbeddedPrice.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj EmbeddedPriceDraft) MarshalJSON() ([]byte, error) {
+	type Alias EmbeddedPriceDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["tiers"] == nil {
+		delete(raw, "tiers")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type FacetRange struct {
 	From         float64 `json:"from"`
 	FromStr      string  `json:"fromStr"`
@@ -94,88 +235,126 @@ func (obj FilteredFacetResult) MarshalJSON() ([]byte, error) {
 	}{Action: "filter", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	An abstract sellable good with a set of Attributes defined by a Product Type.
+*	Products themselves are not sellable. Instead, they act as a parent structure for Product Variants.
+*	Each Product must have at least one Product Variant, which is called the Master Variant.
+*	A single Product representation contains the _current_ and the _staged_ representation of its product data.
+*
+ */
 type Product struct {
 	// Unique identifier of the Product.
 	ID string `json:"id"`
-	// The current version of the product.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the Product.
+	Version int `json:"version"`
+	// Date and time (UTC) the Product was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Product was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Product.
-	// *Product keys are different from ProductVariant keys.*
-	Key         *string              `json:"key,omitempty"`
+	//
+	// This is different from the `key` of a [ProductVariant](ctp:api:type:ProductVariant).
+	Key *string `json:"key,omitempty"`
+	// The Product Type defining the Attributes of the Product. Cannot be changed.
 	ProductType ProductTypeReference `json:"productType"`
-	// The product data in the master catalog.
-	MasterData  ProductCatalogData    `json:"masterData"`
+	// Contains the current and the staged representation of the product information.
+	MasterData ProductCatalogData `json:"masterData"`
+	// The [TaxCategory](ctp:api:type:TaxCategory) of the Product.
 	TaxCategory *TaxCategoryReference `json:"taxCategory,omitempty"`
-	State       *StateReference       `json:"state,omitempty"`
-	// Statistics about the review ratings taken into account for this product.
+	// [State](ctp:api:type:State) of the Product.
+	State *StateReference `json:"state,omitempty"`
+	// Review statistics of the Product.
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
-	// Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+	// Type of Price to be used when looking up a price for the Product.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
+/**
+*	Contains the `current` and `staged` [ProductData](ctp:api:type:ProductData).
+*
+ */
 type ProductCatalogData struct {
-	Published        bool        `json:"published"`
-	Current          ProductData `json:"current"`
-	Staged           ProductData `json:"staged"`
-	HasStagedChanges bool        `json:"hasStagedChanges"`
+	// `true` if the Product is published.
+	Published bool `json:"published"`
+	// Current (published) data of the Product.
+	Current ProductData `json:"current"`
+	// Staged (unpublished) data of the Product.
+	Staged ProductData `json:"staged"`
+	// `true` if the `staged` data is different from the `current` data.
+	HasStagedChanges bool `json:"hasStagedChanges"`
 }
 
+/**
+*	Contains all the data of a Product and its Product Variants.
+*
+ */
 type ProductData struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	Name               LocalizedString     `json:"name"`
-	Categories         []CategoryReference `json:"categories"`
+	// Name of the Product.
+	Name LocalizedString `json:"name"`
+	// [Categories](ctp:api:type:Category) assigned to the Product.
+	Categories []CategoryReference `json:"categories"`
+	// Numerical values to allow ordering of Products within a specified Category.
 	CategoryOrderHints *CategoryOrderHints `json:"categoryOrderHints,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// User-defined identifier used in a deep-link URL for the Product.
+	// Must be unique across a Project, but can be the same for Products in different [Locales](ctp:api:type:Locale).
+	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug LocalizedString `json:"slug"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Title of the Product displayed in search results.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Description of the Product displayed in search results below the meta title.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	MetaKeywords   *LocalizedString `json:"metaKeywords,omitempty"`
-	MasterVariant  ProductVariant   `json:"masterVariant"`
-	Variants       []ProductVariant `json:"variants"`
-	SearchKeywords SearchKeywords   `json:"searchKeywords"`
+	// Keywords that give additional information about the Product to search engines.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// The Master Variant of the Product.
+	MasterVariant ProductVariant `json:"masterVariant"`
+	// Additional Product Variants.
+	Variants []ProductVariant `json:"variants"`
+	// Used by [Product Suggestions](ctp:api:type:ProductSuggestions), but is also considered for a full text search.
+	SearchKeywords SearchKeywords `json:"searchKeywords"`
 }
 
 type ProductDraft struct {
-	// A predefined product type assigned to the product.
-	// All products must have a product type.
+	// The Product Type defining the Attributes for the Product. Cannot be changed later.
 	ProductType ProductTypeResourceIdentifier `json:"productType"`
-	Name        LocalizedString               `json:"name"`
-	// Human-readable identifiers usually used as deep-link URLs for the product.
-	// A slug must be unique across a project, but a product can have the same slug for different languages.
-	// Slugs have a maximum size of 256.
-	// Valid characters are: alphabetic characters (`A-Z, a-z`), numeric characters (`0-9`), underscores (`_`) and hyphens (`-`).
+	// Name of the Product.
+	Name LocalizedString `json:"name"`
+	// User-defined identifier used in a deep-link URL for the Product.
+	// It must be unique across a Project, but a Product can have the same slug in different [Locales](ctp:api:type:Locale).
+	// It must match the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug LocalizedString `json:"slug"`
 	// User-defined unique identifier for the Product.
-	Key         *string          `json:"key,omitempty"`
+	Key *string `json:"key,omitempty"`
+	// Description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Categories assigned to the product.
-	Categories         []CategoryResourceIdentifier `json:"categories"`
-	CategoryOrderHints *CategoryOrderHints          `json:"categoryOrderHints,omitempty"`
-	MetaTitle          *LocalizedString             `json:"metaTitle,omitempty"`
-	MetaDescription    *LocalizedString             `json:"metaDescription,omitempty"`
-	MetaKeywords       *LocalizedString             `json:"metaKeywords,omitempty"`
-	// The master product variant.
-	// Required if the `variants` array has product variants.
+	// Categories assigned to the Product.
+	Categories []CategoryResourceIdentifier `json:"categories"`
+	// Numerical values to allow ordering of Products within a specified Category.
+	CategoryOrderHints *CategoryOrderHints `json:"categoryOrderHints,omitempty"`
+	// Title of the Product displayed in search results.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// Description of the Product displayed in search results.
+	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
+	// Keywords that give additional information about the Product to search engines.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// The Product Variant to be the Master Variant for the Product. Required if `variants` are provided also.
 	MasterVariant *ProductVariantDraft `json:"masterVariant,omitempty"`
-	// An array of related product variants.
-	Variants       []ProductVariantDraft          `json:"variants"`
-	TaxCategory    *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	SearchKeywords *SearchKeywords                `json:"searchKeywords,omitempty"`
-	State          *StateResourceIdentifier       `json:"state,omitempty"`
-	// If `true`, the product is published immediately.
+	// The additional Product Variants for the Product.
+	Variants []ProductVariantDraft `json:"variants"`
+	// The Tax Category to be assigned to the Product.
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	// Used by [Product Suggestions](ctp:api:type:ProductSuggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
+	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
+	// State to be assigned to the Product.
+	State *StateResourceIdentifier `json:"state,omitempty"`
+	// If `true`, the Product is published immediately to the current projection.
 	Publish *bool `json:"publish,omitempty"`
-	// Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+	// Specifies the type of prices used when looking up a price for the Product.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
@@ -207,19 +386,29 @@ func (obj ProductDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Product](ctp:api:type:Product).
+*
+ */
 type ProductPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int       `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Products](ctp:api:type:Product) matching the query.
 	Results []Product `json:"results"`
 }
 
 /**
-*
-*	This mode specifies which type of prices should be used when looking up the price of a product.
+*	This mode determines the type of Prices used for [Product Price Selection](ctp:api:type:ProductPriceSelection) as well as for [LineItem Price selection](ctp:api:type:CartLineItemPriceSelection).
 *
  */
 type ProductPriceModeEnum string
@@ -302,13 +491,13 @@ func (obj ProductReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product). Either `id` or `key` is required.
 *
  */
 type ProductResourceIdentifier struct {
-	// Unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Product](ctp:api:type:Product).
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Product](ctp:api:type:Product). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Product](ctp:api:type:Product).
 	Key *string `json:"key,omitempty"`
 }
 
@@ -323,7 +512,9 @@ func (obj ProductResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductUpdate struct {
-	Version int                   `json:"version"`
+	// Expected version of the Product on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Product.
 	Actions []ProductUpdateAction `json:"actions"`
 }
 
@@ -645,22 +836,45 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 	return nil, nil
 }
 
+/**
+*	A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
+*
+ */
 type ProductVariant struct {
-	// A unique, sequential identifier of the ProductVariant within the Product.
-	ID  int     `json:"id"`
+	// A unique, sequential identifier of the Product Variant within the Product.
+	ID int `json:"id"`
+	// User-defined unique SKU of the Product Variant.
 	Sku *string `json:"sku,omitempty"`
 	// User-defined unique identifier of the ProductVariant.
-	// *ProductVariant keys are different from Product keys.*
-	Key                   *string                     `json:"key,omitempty"`
-	Prices                []Price                     `json:"prices"`
-	Attributes            []Attribute                 `json:"attributes"`
-	Price                 *Price                      `json:"price,omitempty"`
-	Images                []Image                     `json:"images"`
-	Assets                []Asset                     `json:"assets"`
-	Availability          *ProductVariantAvailability `json:"availability,omitempty"`
-	IsMatchingVariant     *bool                       `json:"isMatchingVariant,omitempty"`
-	ScopedPrice           *ScopedPrice                `json:"scopedPrice,omitempty"`
-	ScopedPriceDiscounted *bool                       `json:"scopedPriceDiscounted,omitempty"`
+	//
+	// This is different from [Product](ctp:api:type:Product) `key`.
+	Key *string `json:"key,omitempty"`
+	// The Embedded Prices of the Product Variant.
+	// Cannot contain two Prices of the same Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
+	Prices []EmbeddedPrice `json:"prices"`
+	// Attributes of the Product Variant.
+	Attributes []Attribute `json:"attributes"`
+	// Only available when [Price selection](#price-selection) is used.
+	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	Price *Price `json:"price,omitempty"`
+	// Images of the Product Variant.
+	Images []Image `json:"images"`
+	// Media assets of the Product Variant.
+	Assets []Asset `json:"assets"`
+	// Set if the Product Variant is tracked by [Inventory](ctp:api:type:InventoryEntry).
+	// Can be used as an optimization to reduce calls to the Inventory service.
+	// May not contain the latest Inventory State (it is [eventually consistent](/general-concepts#eventual-consistency)).
+	Availability *ProductVariantAvailability `json:"availability,omitempty"`
+	// `true` if the Product Variant matches the search query.
+	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request.
+	IsMatchingVariant *bool `json:"isMatchingVariant,omitempty"`
+	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request
+	// with [price selection](ctp:api:type:ProductPriceSelection).
+	// Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
+	ScopedPrice *ScopedPrice `json:"scopedPrice,omitempty"`
+	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
+	// with [price selection](ctp:api:type:ProductPriceSelection).
+	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -699,29 +913,58 @@ func (obj ProductVariant) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	The [InventoryEntry](ctp:api:type:InventoryEntry) information of the Product Variant. If there is a supply [Channel](ctp:api:type:Channel) for the InventoryEntry, then `channels` is returned. If not, then `isOnStock`, `restockableInDays`, and `quantityOnStock` are returned.
+*
+ */
 type ProductVariantAvailability struct {
-	IsOnStock         *bool                                 `json:"isOnStock,omitempty"`
-	RestockableInDays *int                                  `json:"restockableInDays,omitempty"`
-	AvailableQuantity *int                                  `json:"availableQuantity,omitempty"`
-	Channels          *ProductVariantChannelAvailabilityMap `json:"channels,omitempty"`
+	// For each [InventoryEntry](ctp:api:type:InventoryEntry) with a supply Channel, an entry is added to `channels`.
+	Channels *ProductVariantChannelAvailabilityMap `json:"channels,omitempty"`
+	// Indicates whether a Product Variant is in stock.
+	IsOnStock *bool `json:"isOnStock,omitempty"`
+	// Number of days to restock a Product Variant once it is out of stock.
+	RestockableInDays *int `json:"restockableInDays,omitempty"`
+	// Number of items of the Product Variant that are in stock.
+	AvailableQuantity *int `json:"availableQuantity,omitempty"`
 }
 
 type ProductVariantChannelAvailability struct {
-	IsOnStock         *bool `json:"isOnStock,omitempty"`
-	RestockableInDays *int  `json:"restockableInDays,omitempty"`
-	AvailableQuantity *int  `json:"availableQuantity,omitempty"`
+	// Indicates whether a Product Variant is in stock in a specified [Channel](ctp:api:type:Channel).
+	IsOnStock *bool `json:"isOnStock,omitempty"`
+	// Number of days to restock a Product Variant once it is out of stock in a specified [Channel](ctp:api:type:Channel).
+	RestockableInDays *int `json:"restockableInDays,omitempty"`
+	// Number of items of this Product Variant that are in stock in a specified [Channel](ctp:api:type:Channel).
+	AvailableQuantity *int `json:"availableQuantity,omitempty"`
+	// Unique identifier of the [InventoryEntry](ctp:api:type:InventoryEntry).
+	ID string `json:"id"`
+	// Current version of the [InventoryEntry](ctp:api:type:InventoryEntry).
+	Version int `json:"version"`
 }
 
-type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
+/**
+*	JSON object where the key is a supply [Channel](ctp:api:type:Channel) `id` and the value is the [ProductVariantChannelAvailability](ctp:api:type:ProductVariantChannelAvailability) of the [InventoryEntry](ctp:api:type:InventoryEntry).
+*
+ */
+type ProductVariantChannelAvailabilityMap map[string]interface{}
+
+/**
+*	Creates a Product Variant when included in the `masterVariant` and `variants` fields of the [ProductDraft](ctp:api:type:ProductDraft).
+*
+ */
 type ProductVariantDraft struct {
+	// User-defined unique SKU of the Product Variant.
 	Sku *string `json:"sku,omitempty"`
 	// User-defined unique identifier for the ProductVariant.
-	// *ProductVariant keys are different from Product keys.*
-	Key        *string      `json:"key,omitempty"`
-	Prices     []PriceDraft `json:"prices"`
-	Attributes []Attribute  `json:"attributes"`
-	Images     []Image      `json:"images"`
-	Assets     []AssetDraft `json:"assets"`
+	Key *string `json:"key,omitempty"`
+	// The Embedded Prices for the Product Variant.
+	// Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
+	Prices []EmbeddedPriceDraft `json:"prices"`
+	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	Attributes []Attribute `json:"attributes"`
+	// Images for the Product Variant.
+	Images []Image `json:"images"`
+	// Media assets for the Product Variant.
+	Assets []AssetDraft `json:"assets"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -775,7 +1018,9 @@ func (obj RangeFacetResult) MarshalJSON() ([]byte, error) {
 }
 
 type SearchKeyword struct {
-	Text             string           `json:"text"`
+	// Text to return in the result of a [suggest query](ctp:api:type:ProductSuggestionsSuggestQuery).
+	Text string `json:"text"`
+	// If no tokenizer is defined, the `text` is used as a single token.
 	SuggestTokenizer SuggestTokenizer `json:"suggestTokenizer,omitempty"`
 }
 
@@ -797,7 +1042,11 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-type SearchKeywords map[string][]SearchKeyword
+/**
+*	Search keywords are JSON objects primarily used by [Product Suggestions](ctp:api:type:ProductSuggestions), but are also considered for a full text search. The keys are of type [Locale](ctp:api:type:Locale), and the values are an array of [SearchKeyword](ctp:api:type:SearchKeyword).
+*
+ */
+type SearchKeywords map[string]interface{}
 type SuggestTokenizer interface{}
 
 func mapDiscriminatorSuggestTokenizer(input interface{}) (SuggestTokenizer, error) {
@@ -828,7 +1077,12 @@ func mapDiscriminatorSuggestTokenizer(input interface{}) (SuggestTokenizer, erro
 	return nil, nil
 }
 
+/**
+*	Define arbitrary tokens that are used to match the input.
+*
+ */
 type CustomTokenizer struct {
+	// Contains custom tokens.
 	Inputs []string `json:"inputs"`
 }
 
@@ -877,6 +1131,10 @@ const (
 	TermFacetResultTypeNumber   TermFacetResultType = "number"
 )
 
+/**
+*	Creates tokens by splitting the `text` field in [SearchKeyword](ctp:api:type:SearchKeyword) by whitespaces.
+*
+ */
 type WhitespaceTokenizer struct {
 }
 
@@ -890,12 +1148,20 @@ func (obj WhitespaceTokenizer) MarshalJSON() ([]byte, error) {
 	}{Action: "whitespace", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductAddAssetAction struct {
-	VariantId *int       `json:"variantId,omitempty"`
-	Sku       *string    `json:"sku,omitempty"`
-	Staged    *bool      `json:"staged,omitempty"`
-	Asset     AssetDraft `json:"asset"`
-	// Position of the new asset inside the existing list (from `0` to the size of the list)
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged `assets` are updated. If `false`, both the current and staged `assets` are updated.
+	Staged *bool `json:"staged,omitempty"`
+	// Value to append.
+	Asset AssetDraft `json:"asset"`
+	// Position in `assets` where the Asset should be put. When specified, the value must be between `0` and the total number of Assets minus `1`.
 	Position *int `json:"position,omitempty"`
 }
 
@@ -909,11 +1175,19 @@ func (obj ProductAddAssetAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addAsset", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. Produces the [ProductImageAddedMessage](ctp:api:type:ProductImageAddedMessage).
+*
+ */
 type ProductAddExternalImageAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Image     Image   `json:"image"`
-	Staged    *bool   `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// Value to add to `images`.
+	Image Image `json:"image"`
+	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -926,11 +1200,20 @@ func (obj ProductAddExternalImageAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addExternalImage", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds the given Price to the `prices` array of the [ProductVariant](ctp:api:type:ProductVariant).
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductAddPriceAction struct {
-	VariantId *int       `json:"variantId,omitempty"`
-	Sku       *string    `json:"sku,omitempty"`
-	Price     PriceDraft `json:"price"`
-	Staged    *bool      `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// EmbeddedPrice to add to the Product Variant.
+	Price EmbeddedPriceDraft `json:"price"`
+	// If `true`, only the staged `prices` is updated. If `false`, both the current and staged `prices` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -943,10 +1226,16 @@ func (obj ProductAddPriceAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addPrice", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ProductAddedToCategoryMessage](ctp:api:type:ProductAddedToCategoryMessage).
+ */
 type ProductAddToCategoryAction struct {
-	Category  CategoryResourceIdentifier `json:"category"`
-	OrderHint *string                    `json:"orderHint,omitempty"`
-	Staged    *bool                      `json:"staged,omitempty"`
+	// The Category to add.
+	Category CategoryResourceIdentifier `json:"category"`
+	// A string representing a number between 0 and 1. Must start with `0.` and cannot end with `0`. If empty, any existing value will be removed.
+	OrderHint *string `json:"orderHint,omitempty"`
+	// If `true`, only the staged `categories` and `categoryOrderHints` are updated. If `false`, both the current and staged `categories` and `categoryOrderHints` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -960,13 +1249,20 @@ func (obj ProductAddToCategoryAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductAddVariantAction struct {
-	Sku        *string      `json:"sku,omitempty"`
-	Key        *string      `json:"key,omitempty"`
-	Prices     []PriceDraft `json:"prices"`
-	Images     []Image      `json:"images"`
-	Attributes []Attribute  `json:"attributes"`
-	Staged     *bool        `json:"staged,omitempty"`
-	Assets     []Asset      `json:"assets"`
+	// Value to set. Must be unique.
+	Sku *string `json:"sku,omitempty"`
+	// Value to set. Must be unique.
+	Key *string `json:"key,omitempty"`
+	// EmbeddedPrices for the Product Variant.
+	Prices []EmbeddedPriceDraft `json:"prices"`
+	// Images for the Product Variant.
+	Images []Image `json:"images"`
+	// Attributes for the Product Variant.
+	Attributes []Attribute `json:"attributes"`
+	// If `true` the new Product Variant is only staged. If `false` the new Product Variant is both current and staged.
+	Staged *bool `json:"staged,omitempty"`
+	// Media assets for the Product Variant.
+	Assets []Asset `json:"assets"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1006,13 +1302,23 @@ func (obj ProductAddVariantAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Either `variantId` or `sku` is required. The Asset to update must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductChangeAssetNameAction struct {
-	VariantId *int            `json:"variantId,omitempty"`
-	Sku       *string         `json:"sku,omitempty"`
-	Staged    *bool           `json:"staged,omitempty"`
-	AssetId   *string         `json:"assetId,omitempty"`
-	AssetKey  *string         `json:"assetKey,omitempty"`
-	Name      LocalizedString `json:"name"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// New value to set. Must not be empty.
+	Name LocalizedString `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1025,10 +1331,18 @@ func (obj ProductChangeAssetNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeAssetName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductChangeAssetOrderAction struct {
-	VariantId  *int     `json:"variantId,omitempty"`
-	Sku        *string  `json:"sku,omitempty"`
-	Staged     *bool    `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged `assets` is updated. If `false`, both the current and staged `assets` are updated.
+	Staged *bool `json:"staged,omitempty"`
+	// All existing Asset `id`s of the ProductVariant in the desired new order.
 	AssetOrder []string `json:"assetOrder"`
 }
 
@@ -1042,10 +1356,18 @@ func (obj ProductChangeAssetOrderAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeAssetOrder", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Assigns the specified Product Variant to the `masterVariant` and removes the same from `variants` at the same time. The current Master Variant becomes part of the `variants` array.
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductChangeMasterVariantAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Staged    *bool   `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to become the Master Variant.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to become the Master Variant.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Master Variant is changed. If `false`, both the current and staged Master Variant are changed.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1059,8 +1381,10 @@ func (obj ProductChangeMasterVariantAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductChangeNameAction struct {
-	Name   LocalizedString `json:"name"`
-	Staged *bool           `json:"staged,omitempty"`
+	// Value to set. Must not be empty.
+	Name LocalizedString `json:"name"`
+	// If `true`, only the staged `name` is updated. If `false`, both the current and staged `name` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1074,10 +1398,12 @@ func (obj ProductChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductChangePriceAction struct {
-	// ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
-	PriceId string     `json:"priceId"`
-	Price   PriceDraft `json:"price"`
-	Staged  *bool      `json:"staged,omitempty"`
+	// The `id` of the EmbeddedPrice to update.
+	PriceId string `json:"priceId"`
+	// Value to set.
+	Price EmbeddedPriceDraft `json:"price"`
+	// If `true`, only the staged EmbeddedPrice is updated. If `false`, both the current and staged EmbeddedPrice are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1090,12 +1416,14 @@ func (obj ProductChangePriceAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changePrice", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ProductSlugChangedMessage](ctp:api:type:ProductSlugChangedMessage).
+ */
 type ProductChangeSlugAction struct {
-	// Every slug must be unique across a project, but a product can have the same slug for different languages.
-	// Allowed are alphabetic, numeric, underscore (`_`) and hyphen (`-`) characters.
-	// Maximum size is `256`.
-	Slug   LocalizedString `json:"slug"`
-	Staged *bool           `json:"staged,omitempty"`
+	// Value to set. Must not be empty. A Product can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project). Must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
+	Slug LocalizedString `json:"slug"`
+	// If `true`, only the staged `slug` is updated. If `false`, both the current and staged `slug` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1123,13 +1451,21 @@ func (obj ProductLegacySetSkuAction) MarshalJSON() ([]byte, error) {
 	}{Action: "legacySetSku", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductMoveImageToPositionAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	// The URL of the image
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The URL of the image to update.
 	ImageUrl string `json:"imageUrl"`
-	Position int    `json:"position"`
-	Staged   *bool  `json:"staged,omitempty"`
+	// Position in `images` where the image should be moved. Must be between `0` and the total number of images minus `1`.
+	Position int `json:"position"`
+	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1142,7 +1478,12 @@ func (obj ProductMoveImageToPositionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "moveImageToPosition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Publishes product data from the Product's staged projection to its current projection.
+*	Produces the [ProductPublishedMessage](ctp:api:type:ProductPublishedMessage).
+ */
 type ProductPublishAction struct {
+	// `All` or `Prices`
 	Scope *ProductPublishScope `json:"scope,omitempty"`
 }
 
@@ -1156,12 +1497,21 @@ func (obj ProductPublishAction) MarshalJSON() ([]byte, error) {
 	}{Action: "publish", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. The Asset to remove must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductRemoveAssetAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Staged    *bool   `json:"staged,omitempty"`
-	AssetId   *string `json:"assetId,omitempty"`
-	AssetKey  *string `json:"assetKey,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is removed. If `false`, both the current and staged Asset is removed.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to remove.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to remove.
+	AssetKey *string `json:"assetKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1174,9 +1524,14 @@ func (obj ProductRemoveAssetAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeAsset", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ProductRemovedFromCategoryMessage](ctp:api:type:ProductRemovedFromCategoryMessage).
+ */
 type ProductRemoveFromCategoryAction struct {
+	// The Category to remove.
 	Category CategoryResourceIdentifier `json:"category"`
-	Staged   *bool                      `json:"staged,omitempty"`
+	// If `true`, only the staged `categories` and `categoryOrderHints` are removed. If `false`, both the current and staged `categories` and `categoryOrderHints` are removed.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1189,12 +1544,19 @@ func (obj ProductRemoveFromCategoryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeFromCategory", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes a Product image and deletes it from the Content Delivery Network (external images are not deleted). Deletion from the CDN is not instant, which means the image file itself will stay available for some time after the deletion. Either `variantId` or `sku` is required.
+*
+ */
 type ProductRemoveImageAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	// The URL of the image.
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The URL of the image to remove.
 	ImageUrl string `json:"imageUrl"`
-	Staged   *bool  `json:"staged,omitempty"`
+	// If `true`, only the staged image is removed. If `false`, both the current and staged image is removed.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1208,9 +1570,10 @@ func (obj ProductRemoveImageAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductRemovePriceAction struct {
-	// ID of the [EmbeddedPrice](ctp:api:type:EmbeddedPrice)
+	// The `id` of the EmbeddedPrice to remove.
 	PriceId string `json:"priceId"`
-	Staged  *bool  `json:"staged,omitempty"`
+	// If `true`, only the staged EmbeddedPrice is removed. If `false`, both the current and staged EmbeddedPrice are removed.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1223,10 +1586,17 @@ func (obj ProductRemovePriceAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removePrice", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `id` or `sku` is required. Produces the [ProductVariantDeletedMessage](ctp:api:type:ProductVariantDeletedMessage).
+*
+ */
 type ProductRemoveVariantAction struct {
-	ID     *int    `json:"id,omitempty"`
-	Sku    *string `json:"sku,omitempty"`
-	Staged *bool   `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to remove.
+	ID *int `json:"id,omitempty"`
+	// The `sku` of the ProductVariant to remove.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged ProductVariant is removed. If `false`, both the current and staged ProductVariant is removed.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1239,6 +1609,10 @@ func (obj ProductRemoveVariantAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeVariant", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Reverts the staged version of a Product to the current version. Produces the [ProductRevertedStagedChangesMessage](ctp:api:type:ProductRevertedStagedChangesMessage).
+*
+ */
 type ProductRevertStagedChangesAction struct {
 }
 
@@ -1252,7 +1626,12 @@ func (obj ProductRevertStagedChangesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "revertStagedChanges", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Reverts the staged version of a ProductVariant to the current version.
+*
+ */
 type ProductRevertStagedVariantChangesAction struct {
+	// The `id` of the ProductVariant to revert.
 	VariantId int `json:"variantId"`
 }
 
@@ -1266,12 +1645,21 @@ func (obj ProductRevertStagedVariantChangesAction) MarshalJSON() ([]byte, error)
 	}{Action: "revertStagedVariantChanges", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductSetAssetCustomFieldAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Staged    *bool   `json:"staged,omitempty"`
-	AssetId   *string `json:"assetId,omitempty"`
-	AssetKey  *string `json:"assetKey,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -1290,12 +1678,21 @@ func (obj ProductSetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAssetCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductSetAssetCustomTypeAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Staged    *bool   `json:"staged,omitempty"`
-	AssetId   *string `json:"assetId,omitempty"`
-	AssetKey  *string `json:"assetKey,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Asset.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -1313,12 +1710,22 @@ func (obj ProductSetAssetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAssetCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductSetAssetDescriptionAction struct {
-	VariantId   *int             `json:"variantId,omitempty"`
-	Sku         *string          `json:"sku,omitempty"`
-	Staged      *bool            `json:"staged,omitempty"`
-	AssetId     *string          `json:"assetId,omitempty"`
-	AssetKey    *string          `json:"assetKey,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -1332,13 +1739,20 @@ func (obj ProductSetAssetDescriptionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAssetDescription", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductSetAssetKeyAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Staged    *bool   `json:"staged,omitempty"`
-	AssetId   string  `json:"assetId"`
-	// User-defined identifier for the asset.
-	// If left blank or set to `null`, the asset key is unset/removed.
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId string `json:"assetId"`
+	// Value to set. If empty, any existing value will be removed.
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
@@ -1352,13 +1766,23 @@ func (obj ProductSetAssetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAssetKey", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductSetAssetSourcesAction struct {
-	VariantId *int          `json:"variantId,omitempty"`
-	Sku       *string       `json:"sku,omitempty"`
-	Staged    *bool         `json:"staged,omitempty"`
-	AssetId   *string       `json:"assetId,omitempty"`
-	AssetKey  *string       `json:"assetKey,omitempty"`
-	Sources   []AssetSource `json:"sources"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false` both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Value to set.
+	Sources []AssetSource `json:"sources"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1371,13 +1795,23 @@ func (obj ProductSetAssetSourcesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAssetSources", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required. The Asset to update must be specified using either `assetId` or `assetKey`.
+*
+ */
 type ProductSetAssetTagsAction struct {
-	VariantId *int     `json:"variantId,omitempty"`
-	Sku       *string  `json:"sku,omitempty"`
-	Staged    *bool    `json:"staged,omitempty"`
-	AssetId   *string  `json:"assetId,omitempty"`
-	AssetKey  *string  `json:"assetKey,omitempty"`
-	Tags      []string `json:"tags"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Keywords for categorizing and organizing Assets.
+	Tags []string `json:"tags"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1405,15 +1839,32 @@ func (obj ProductSetAssetTagsAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductSetAttributeAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	Name      string  `json:"name"`
-	// If the attribute exists and the value is omitted or set to `null`, the attribute is removed.
-	// If the attribute exists and a value is provided, the new value is applied.
-	// If the attribute does not exist and a value is provided, it is added as a new attribute.
-	Value  interface{} `json:"value,omitempty"`
-	Staged *bool       `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The name of the Attribute to set.
+	Name string `json:"name"`
+	// Value to set for the Attribute. If empty, any existing value will be removed.
+	//
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+	//   or the complete objects as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	Value interface{} `json:"value,omitempty"`
+	// If `true`, only the staged Attribute is set. If `false`, both current and staged Attribute is set.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1426,11 +1877,28 @@ func (obj ProductSetAttributeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAttribute", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds, removes, or changes a Product Attribute in all Product Variants at the same time.
+*	This action is useful for setting values for Attributes with the [Constraint](ctp:api:type:AttributeConstraintEnum) `SameForAll`.
+ */
 type ProductSetAttributeInAllVariantsAction struct {
+	// The name of the Attribute to set.
 	Name string `json:"name"`
-	// The same update behavior as for Set Attribute applies.
-	Value  interface{} `json:"value,omitempty"`
-	Staged *bool       `json:"staged,omitempty"`
+	// Value to set for the Attributes. If empty, any existing value will be removed.
+	//
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+	//   or the complete objects as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	Value interface{} `json:"value,omitempty"`
+	// If `true`, only the staged Attributes are set. If `false`, both the current and staged Attributes are set.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1444,9 +1912,12 @@ func (obj ProductSetAttributeInAllVariantsAction) MarshalJSON() ([]byte, error) 
 }
 
 type ProductSetCategoryOrderHintAction struct {
-	CategoryId string  `json:"categoryId"`
-	OrderHint  *string `json:"orderHint,omitempty"`
-	Staged     *bool   `json:"staged,omitempty"`
+	// The `id` of the Category to add the `orderHint`.
+	CategoryId string `json:"categoryId"`
+	// A string representing a number between 0 and 1. Must start with `0.` and cannot end with `0`. If empty, any existing value will be removed.
+	OrderHint *string `json:"orderHint,omitempty"`
+	// If `true`, only the staged `categoryOrderHints` is updated. If `false`, both the current and staged `categoryOrderHints` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1460,8 +1931,10 @@ func (obj ProductSetCategoryOrderHintAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
-	Staged      *bool            `json:"staged,omitempty"`
+	// If `true`, only the staged `description` is updated. If `false`, both the current and staged `description` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1474,9 +1947,17 @@ func (obj ProductSetDescriptionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ProductPriceExternalDiscountSetMessage](ctp:api:type:ProductPriceExternalDiscountSetMessage).
+*
+ */
 type ProductSetDiscountedPriceAction struct {
-	PriceId    string                `json:"priceId"`
-	Staged     *bool                 `json:"staged,omitempty"`
+	// The `id` of the EmbeddedPrice to set the Discount.
+	PriceId string `json:"priceId"`
+	// If `true`, only the staged EmbeddedPrice is updated. If `false`, both the current and staged EmbeddedPrice are updated.
+	Staged *bool `json:"staged,omitempty"`
+	// Value to set. If empty, any existing value will be removed.
+	// The referenced [ProductDiscount](ctp:api:type:ProductDiscount) must have the Type `external`, be active, and its predicate must match the referenced Price.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
 }
 
@@ -1490,15 +1971,21 @@ func (obj ProductSetDiscountedPriceAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDiscountedPrice", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductSetImageLabelAction struct {
-	Sku       *string `json:"sku,omitempty"`
-	VariantId *int    `json:"variantId,omitempty"`
-	// The URL of the image.
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The URL of the image to set the label.
 	ImageUrl string `json:"imageUrl"`
-	// The new image label.
-	// If left blank or set to null, the label is removed.
-	Label  *string `json:"label,omitempty"`
-	Staged *bool   `json:"staged,omitempty"`
+	// Value to set. If empty, any existing value will be removed.
+	Label *string `json:"label,omitempty"`
+	// If `true`, only the staged image is updated. If `false`, both the current and staged image is updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1512,8 +1999,7 @@ func (obj ProductSetImageLabelAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetKeyAction struct {
-	// User-specific unique identifier for the product.
-	// If left blank or set to `null`, the product key is unset/removed.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -1528,8 +2014,10 @@ func (obj ProductSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetMetaDescriptionAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	Staged          *bool            `json:"staged,omitempty"`
+	// If `true`, only the staged `metaDescription` is updated. If `false`, both the current and staged `metaDescription` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1543,8 +2031,10 @@ func (obj ProductSetMetaDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetMetaKeywordsAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	Staged       *bool            `json:"staged,omitempty"`
+	// If `true`, only the staged `metaKeywords` is updated. If `false`, both the current and staged `metaKeywords` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1558,8 +2048,10 @@ func (obj ProductSetMetaKeywordsAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetMetaTitleAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	Staged    *bool            `json:"staged,omitempty"`
+	// If `true`, only the staged `metaTitle` is updated. If `false`, both the current and staged `metaTitle` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1572,8 +2064,12 @@ func (obj ProductSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setMetaTitle", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Controls whether the Prices of a Product Variant are embedded into the Product or standalone.
+*
+ */
 type ProductSetPriceModeAction struct {
-	// Specifies which type of prices should be used when looking up a price for this product. If not set, `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is used.
+	// Specifies which type of Prices should be used when looking up a price for the Product.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
@@ -1587,11 +2083,20 @@ func (obj ProductSetPriceModeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setPriceMode", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductSetPricesAction struct {
-	VariantId *int         `json:"variantId,omitempty"`
-	Sku       *string      `json:"sku,omitempty"`
-	Prices    []PriceDraft `json:"prices"`
-	Staged    *bool        `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The Embedded Prices to set.
+	// Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
+	Prices []EmbeddedPriceDraft `json:"prices"`
+	// If `true`, only the staged ProductVariant is updated. If `false`, both the current and staged ProductVariant are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1605,12 +2110,14 @@ func (obj ProductSetPricesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetProductPriceCustomFieldAction struct {
+	// The `id` of the Embedded Price to update.
 	PriceId string `json:"priceId"`
-	Staged  *bool  `json:"staged,omitempty"`
+	// If `true`, only the staged Embedded Price Custom Field is updated. If `false`, both the current and staged Embedded Price Custom Field are updated.
+	Staged *bool `json:"staged,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -1626,12 +2133,14 @@ func (obj ProductSetProductPriceCustomFieldAction) MarshalJSON() ([]byte, error)
 }
 
 type ProductSetProductPriceCustomTypeAction struct {
+	// The `id` of the Embedded Price to update.
 	PriceId string `json:"priceId"`
-	Staged  *bool  `json:"staged,omitempty"`
+	// If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price is updated.
+	Staged *bool `json:"staged,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Price with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the Price.
+	// If absent, any existing Type and Custom Fields are removed from the Embedded Price.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Price.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Embedded Price.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1645,12 +2154,19 @@ func (obj ProductSetProductPriceCustomTypeAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setProductPriceCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Either `variantId` or `sku` is required.
+*
+ */
 type ProductSetProductVariantKeyAction struct {
-	VariantId *int    `json:"variantId,omitempty"`
-	Sku       *string `json:"sku,omitempty"`
-	// If left blank or set to `null`, the key is unset/removed.
-	Key    *string `json:"key,omitempty"`
-	Staged *bool   `json:"staged,omitempty"`
+	// The `id` of the ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// Value to set. Must be unique. If empty, any existing value will be removed.
+	Key *string `json:"key,omitempty"`
+	// If `true`, only the staged `key` is set. If `false`, both the current and staged `key` are set.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1664,8 +2180,10 @@ func (obj ProductSetProductVariantKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSetSearchKeywordsAction struct {
+	// Value to set.
 	SearchKeywords SearchKeywords `json:"searchKeywords"`
-	Staged         *bool          `json:"staged,omitempty"`
+	// If `true`, only the staged `searchKeywords` is updated. If `false`, both the current and staged `searchKeywords` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1678,12 +2196,17 @@ func (obj ProductSetSearchKeywordsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setSearchKeywords", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	SKU cannot be changed or removed if it is associated with an [InventoryEntry](ctp:api:type:InventoryEntry).
+*
+ */
 type ProductSetSkuAction struct {
+	// The `id` of the ProductVariant to update.
 	VariantId int `json:"variantId"`
-	// SKU must be unique.
-	// If left blank or set to `null`, the sku is unset/removed.
-	Sku    *string `json:"sku,omitempty"`
-	Staged *bool   `json:"staged,omitempty"`
+	// Value to set. Must be unique. If empty, any existing value will be removed.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged `sku` is updated. If `false`, both the current and staged `sku` are updated.
+	Staged *bool `json:"staged,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1696,8 +2219,12 @@ func (obj ProductSetSkuAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setSku", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Cannot be staged. Published Products are immediately updated.
+*
+ */
 type ProductSetTaxCategoryAction struct {
-	// If left blank or set to `null`, the tax category is unset/removed.
+	// The Tax Category to set. If empty, any existing value will be removed.
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 }
 
@@ -1711,9 +2238,15 @@ func (obj ProductSetTaxCategoryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setTaxCategory", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. Produces the [ProductStateTransitionMessage](ctp:api:type:ProductStateTransitionMessage).
+*
+ */
 type ProductTransitionStateAction struct {
+	// The State to transition to. If there is no existing State, this must be an initial State.
 	State *StateResourceIdentifier `json:"state,omitempty"`
-	Force *bool                    `json:"force,omitempty"`
+	// If `true`, validations are disabled.
+	Force *bool `json:"force,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1726,6 +2259,10 @@ func (obj ProductTransitionStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes the current projection of the Product. The staged projection is unaffected. Unpublished Products only appear in query/search results with `staged=false`. Produces the [ProductUnpublishedMessage](ctp:api:type:ProductUnpublishedMessage).
+*
+ */
 type ProductUnpublishAction struct {
 }
 

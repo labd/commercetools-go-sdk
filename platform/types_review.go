@@ -11,67 +11,90 @@ import (
 type Review struct {
 	// Unique identifier of the Review.
 	ID string `json:"id"`
-	// The current version of the review.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the Review.
+	Version int `json:"version"`
+	// Date and time (UTC) the Review was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Review was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Review.
-	Key             *string `json:"key,omitempty"`
+	Key *string `json:"key,omitempty"`
+	// Must be unique among Reviews. For example, if this value is set to Customer `id` + Product `id`, only one Review per Customer and per Product is allowed.
 	UniquenessValue *string `json:"uniquenessValue,omitempty"`
-	Locale          *string `json:"locale,omitempty"`
-	AuthorName      *string `json:"authorName,omitempty"`
-	Title           *string `json:"title,omitempty"`
-	Text            *string `json:"text,omitempty"`
-	// Identifies the target of the review.
-	// Can be a Product or a Channel
+	// Language in which the content of the Review is written.
+	Locale *string `json:"locale,omitempty"`
+	// Name of the author.
+	AuthorName *string `json:"authorName,omitempty"`
+	// Title of the Review.
+	Title *string `json:"title,omitempty"`
+	// Content of the Review.
+	Text *string `json:"text,omitempty"`
+	// Identifies the target of the Review. Can be a [Product](ctp:api:type:Product) or a [Channel](ctp:api:type:Channel), specified as [ProductReference](ctp:api:type:ProductReference) or [ChannelReference](ctp:api:type:ChannelReference), respectively.
 	Target interface{} `json:"target,omitempty"`
-	// Indicates if this review is taken into account in the ratings statistics of the target.
-	// A review is per default used in the statistics, unless the review is in a state that does not have the role `ReviewIncludedInStatistics`.
-	// If the role of a State is modified after the calculation of this field, the calculation is not updated.
+	// Indicates if this Review is taken into account in the ratings statistics of the target.
+	// A Review is per default used in the statistics, unless the Review is in a state that does not have the [role](ctp:api:type:StateRoleEnum) `ReviewIncludedInStatistics`.
+	// If the role of a [State](ctp:api:type:State) is modified after the calculation of this field, the calculation is not updated.
 	IncludedInStatistics bool `json:"includedInStatistics"`
-	// Number between -100 and 100 included.
-	Rating *int            `json:"rating,omitempty"`
-	State  *StateReference `json:"state,omitempty"`
-	// The customer who created the review.
+	// Rating of the Product or Channel.
+	Rating *int `json:"rating,omitempty"`
+	// State of the Review. Used for approval processes, see [Review approval process](/../tutorials/review-ratings#review-approval-process) for details.
+	State *StateReference `json:"state,omitempty"`
+	// Customer who created the Review.
 	Customer *CustomerReference `json:"customer,omitempty"`
-	Custom   *CustomFields      `json:"custom,omitempty"`
+	// Custom Fields of the Review.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
+/**
+*	When creating a new Review, at least one of `title`, `text` or `rating` should be set.
+*
+ */
 type ReviewDraft struct {
 	// User-defined unique identifier for the Review.
 	Key *string `json:"key,omitempty"`
-	// If set, this value must be unique among reviews.
-	// For example, if you want to have only one review per customer and per product, you can set the value to `customer's id` and `product's id`.
+	// If set, this value must be unique among Reviews.
+	// For example, if you want to have only one Review per Customer and per Product, you can set the value to Customer `id` + Product `id`.
 	UniquenessValue *string `json:"uniquenessValue,omitempty"`
-	Locale          *string `json:"locale,omitempty"`
-	AuthorName      *string `json:"authorName,omitempty"`
-	Title           *string `json:"title,omitempty"`
-	Text            *string `json:"text,omitempty"`
-	// Identifies the target of the review.
-	// Can be a Product or a Channel
-	Target interface{}              `json:"target,omitempty"`
-	State  *StateResourceIdentifier `json:"state,omitempty"`
-	// Number between -100 and 100 included.
-	// Rating of the targeted object, like a product.
-	// This rating can represent the number of stars, or a percentage, or a like (+1)/dislike (-1)
-	// A rating is used in the ratings statistics of the targeted object, unless the review is in a state that does not have the role `ReviewIncludedInStatistics`.
+	// Language in which the content of the Review is written.
+	Locale *string `json:"locale,omitempty"`
+	// Name of the author.
+	AuthorName *string `json:"authorName,omitempty"`
+	// Title of the Review.
+	Title *string `json:"title,omitempty"`
+	// Content of the Review.
+	Text *string `json:"text,omitempty"`
+	// Identifies the target of the Review. Can be a [Product](ctp:api:type:Product) or a [Channel](ctp:api:type:Channel), specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively.
+	Target interface{} `json:"target,omitempty"`
+	// State of the Review. Used for approval processes, see [Review approval process](/../tutorials/review-ratings#review-approval-process) for details.
+	State *StateResourceIdentifier `json:"state,omitempty"`
+	// Rating of the targeted Product or Channel.
+	// This rating can represent the number of stars, a percentage, or a like (+1)/dislike (-1).
+	// A rating is used in the ratings statistics of the targeted object, unless the Review is in a State that does not have the role `ReviewIncludedInStatistics`.
 	Rating *int `json:"rating,omitempty"`
-	// The customer who created the review.
+	// Customer who created the Review.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
-	Custom   *CustomFieldsDraft          `json:"custom,omitempty"`
+	// Custom Fields for the Review.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 type ReviewPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
+	Limit int `json:"limit"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int      `json:"offset"`
+	Offset int `json:"offset"`
+	// [Reviews](ctp:api:type:Review) matching the query.
 	Results []Review `json:"results"`
 }
 
@@ -85,7 +108,7 @@ type ReviewRatingStatistics struct {
 	LowestRating float64 `json:"lowestRating"`
 	// Number of ratings taken into account
 	Count int `json:"count"`
-	// The full distribution of the ratings.
+	// Full distribution of the ratings.
 	// The keys are the different ratings and the values are the count of reviews having this rating.
 	// Only the used ratings appear in this object.
 	RatingsDistribution interface{} `json:"ratingsDistribution"`
@@ -134,7 +157,9 @@ func (obj ReviewResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewUpdate struct {
-	Version int                  `json:"version"`
+	// The expected version of the review on which the changes should be applied. If the expected version does not match the actual version, a 409 Conflict will be returned.
+	Version int `json:"version"`
+	// The list of update actions to be performed on the review.
 	Actions []ReviewUpdateAction `json:"actions"`
 }
 
@@ -241,7 +266,7 @@ func mapDiscriminatorReviewUpdateAction(input interface{}) (ReviewUpdateAction, 
 }
 
 type ReviewSetAuthorNameAction struct {
-	// If `authorName` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	AuthorName *string `json:"authorName,omitempty"`
 }
 
@@ -293,8 +318,7 @@ func (obj ReviewSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetCustomerAction struct {
-	// The customer who created the review.
-	// If `customer` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
@@ -309,7 +333,7 @@ func (obj ReviewSetCustomerAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetKeyAction struct {
-	// If `key` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -324,7 +348,7 @@ func (obj ReviewSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetLocaleAction struct {
-	// If `locale` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Locale *string `json:"locale,omitempty"`
 }
 
@@ -338,9 +362,12 @@ func (obj ReviewSetLocaleAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setLocale", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action produces the [ReviewRatingSetMessage](ctp:api:type:ReviewRatingSetMessage).
+*
+ */
 type ReviewSetRatingAction struct {
-	// Number between -100 and 100 included.
-	// If `rating` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Rating *int `json:"rating,omitempty"`
 }
 
@@ -355,9 +382,7 @@ func (obj ReviewSetRatingAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetTargetAction struct {
-	// Identifies the target of the review.
-	// Can be a Product or a Channel.
-	// If `target` is absent or `null`, this field will be removed if it exists.
+	// Value to set, specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively. If empty, any existing value will be removed.
 	Target interface{} `json:"target"`
 }
 
@@ -372,7 +397,7 @@ func (obj ReviewSetTargetAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetTextAction struct {
-	// If `text` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Text *string `json:"text,omitempty"`
 }
 
@@ -387,7 +412,7 @@ func (obj ReviewSetTextAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetTitleAction struct {
-	// If `title` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Title *string `json:"title,omitempty"`
 }
 
@@ -401,9 +426,15 @@ func (obj ReviewSetTitleAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setTitle", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Transition to a new State. This update action produces the [ReviewStateTransitionMessage](/message-types#reviewstatetransitionmessage).
+*
+ */
 type ReviewTransitionStateAction struct {
+	// Value to set. If there is no State yet, the new State must be an initial State. If the existing State has `transitions` set, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. If the new State does not have the [role](ctp:api:type:StateRoleEnum) `ReviewIncludedInStatistics`, the Review is not taken into account in the ratings statistics of the target.
 	State StateResourceIdentifier `json:"state"`
-	Force *bool                   `json:"force,omitempty"`
+	// Switch validations on or off.
+	Force *bool `json:"force,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

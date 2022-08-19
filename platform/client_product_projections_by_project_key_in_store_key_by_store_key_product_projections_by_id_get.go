@@ -26,15 +26,75 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet)
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput struct {
-	Expand []string
+	PriceCurrency      *string
+	PriceCountry       *string
+	PriceCustomerGroup *string
+	PriceChannel       *string
+	LocaleProjection   []string
+	Expand             []string
 }
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	if input.PriceCurrency != nil {
+		values.Add("priceCurrency", fmt.Sprintf("%v", *input.PriceCurrency))
+	}
+	if input.PriceCountry != nil {
+		values.Add("priceCountry", fmt.Sprintf("%v", *input.PriceCountry))
+	}
+	if input.PriceCustomerGroup != nil {
+		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
+	}
+	if input.PriceChannel != nil {
+		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	for _, v := range input.LocaleProjection {
+		values.Add("localeProjection", fmt.Sprintf("%v", v))
+	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) PriceCurrency(v string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput{}
+	}
+	rb.params.PriceCurrency = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) PriceCountry(v string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput{}
+	}
+	rb.params.PriceCountry = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) PriceCustomerGroup(v string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput{}
+	}
+	rb.params.PriceCustomerGroup = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) PriceChannel(v string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput{}
+	}
+	rb.params.PriceChannel = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) LocaleProjection(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput{}
+	}
+	rb.params.LocaleProjection = v
+	return rb
 }
 
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {

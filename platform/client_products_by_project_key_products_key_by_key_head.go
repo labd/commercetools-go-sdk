@@ -28,7 +28,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if product with given key exists.
+*	Check if a Product exists with a specified `key`. Responds with a `200 OK` status if the Product exists or `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

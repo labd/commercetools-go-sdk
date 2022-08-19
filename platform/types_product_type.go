@@ -50,7 +50,7 @@ type AttributeDefinition struct {
 	//
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
-	// This constraint is enforced at both [Product creation](/../api/projects/products#create-a-product) and [Product update](/../api/projects/products#update-product).
+	// This constraint is enforced at both [Product creation](/../api/projects/products#create-product) and [Product update](/../api/projects/products#update-product).
 	// If the length of the input exceeds the maximum size, an [InvalidFieldError](ctp:api:type:InvalidFieldError) is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
@@ -497,7 +497,7 @@ type ProductType struct {
 	Version int `json:"version"`
 	// Date and time (UTC) the ProductType was initially created.
 	CreatedAt time.Time `json:"createdAt"`
-	// Date and time (UTC) the Channel was last updated.
+	// Date and time (UTC) the ProductType was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
