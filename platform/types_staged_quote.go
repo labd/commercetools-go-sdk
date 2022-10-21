@@ -25,28 +25,32 @@ type StagedQuote struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Predefined states tracking the status of the Staged Quote.
 	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
-	// The [Buyer](/../api/quotes-overview#buyer) who requested the quote.
+	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// The Quote Request related to this Staged Quote.
+	// Quote Request related to the Staged Quote.
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
-	// The [Cart](ctp:api:type:Cart) containing the offered items.
+	// [Cart](ctp:api:type:Cart) containing the offered items. May contain either [DirectDiscounts](ctp:api:type:DirectDiscount) or [CartDiscounts](ctp:api:type:CartDiscount).
 	QuotationCart CartReference `json:"quotationCart"`
-	// Expiration date for the quote.
+	// Expiration date for the Quote.
 	ValidTo *time.Time `json:"validTo,omitempty"`
-	// The text message included in the offer from the [Seller](/../api/quotes-overview#seller).
+	// Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
 	SellerComment *string `json:"sellerComment,omitempty"`
-	// Custom Fields of this Staged Quote.
+	// Custom Fields of the Staged Quote.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// [State](ctp:api:type:State) of this Staged Quote.
+	// [State](ctp:api:type:State) of the Staged Quote.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
 type StagedQuoteDraft struct {
-	// The QuoteRequest from which this StagedQuote is created.
+	// QuoteRequest from which the StagedQuote is created.
 	QuoteRequest QuoteRequestResourceIdentifier `json:"quoteRequest"`
 	// Current version of the QuoteRequest.
 	QuoteRequestVersion int `json:"quoteRequestVersion"`
+	// If `true`, the `quoteRequestState` of the referenced [QuoteRequest](ctp:api:type:QuoteRequest) will be set to `Accepted`.
+	QuoteRequestStateToAccepted *bool `json:"quoteRequestStateToAccepted,omitempty"`
 	// User-defined unique identifier for the StagedQuote.
 	Key *string `json:"key,omitempty"`
 	// [Custom Fields](/../api/projects/custom-fields) to be added to the StagedQuote.
@@ -54,7 +58,7 @@ type StagedQuoteDraft struct {
 	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) and added to the StagedQuote.
 	// - If empty, the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) are added to the StagedQuote automatically.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// [State](ctp:api:type:State) of this Staged Quote.
+	// [State](ctp:api:type:State) of the Staged Quote.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
 }
@@ -136,7 +140,10 @@ const (
 )
 
 type StagedQuoteUpdate struct {
-	Version int                       `json:"version"`
+	// Expected version of the [StagedQuote](ctp:api:type:StagedQuote) to which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the [StagedQuote](ctp:api:type:StagedQuote).
 	Actions []StagedQuoteUpdateAction `json:"actions"`
 }
 
@@ -213,7 +220,7 @@ func mapDiscriminatorStagedQuoteUpdateAction(input interface{}) (StagedQuoteUpda
 }
 
 type StagedQuoteChangeStagedQuoteStateAction struct {
-	// The new quote staged state to be set for the Quote Staged.
+	// New state to be set for the Staged Quote.
 	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
 }
 

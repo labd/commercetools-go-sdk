@@ -28,7 +28,7 @@ func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestBuilder) Post(body Standalo
 }
 
 /**
-*	Produces the [StandalonePriceDeletedMessage](ctp:api:type:StandalonePriceDeletedMessage).
+*	Produces the [StandalonePriceDeleted](ctp:api:type:StandalonePriceDeletedMessage) Message.
 *
  */
 func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestBuilder) Delete() *ByProjectKeyStandalonePricesKeyByKeyRequestMethodDelete {

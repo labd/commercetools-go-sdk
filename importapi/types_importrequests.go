@@ -61,6 +61,12 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "standalone-price":
+		obj := StandalonePriceImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "order":
 		obj := OrderImportRequest{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -200,7 +206,7 @@ func (obj ProductVariantImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Prices](#import-prices). Contains data for [EmbeddedPrices](/../api/projects/products#embeddedprice) to be created or updated in a Project.
+*	The request body to [import Embedded Prices](#import-embedded-prices). Contains data for [Embedded Prices](/../api/types#embedded-price) to be created or updated in a Project.
 *
  */
 type PriceImportRequest struct {
@@ -216,6 +222,25 @@ func (obj PriceImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "price", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Standalone Prices](#import-standalone-prices). Contains data for [Standalone Prices](/../api/projects/standalone-prices#standaloneprice) to be created or updated in a Project.
+*
+ */
+type StandalonePriceImportRequest struct {
+	// The Standalone Price import resources of this request.
+	Resources []StandalonePriceImport `json:"resources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "standalone-price", Alias: (*Alias)(&obj)})
 }
 
 /**

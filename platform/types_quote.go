@@ -23,26 +23,28 @@ type Quote struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// The Quote Request related to this Quote.
+	// Quote Request related to the Quote.
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
-	// The Staged Quote related to this Quote.
+	// Staged Quote related to the Quote.
 	StagedQuote StagedQuoteReference `json:"stagedQuote"`
-	// The [Buyer](/../api/quotes-overview#buyer) who requested this Quote.
+	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Set automatically when `customer` is set and the Customer is a member of a Customer Group.
 	// Used for Product Variant price selection.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// Expiration date for the Quote.
 	ValidTo *time.Time `json:"validTo,omitempty"`
-	// The text message included in the offer from the [Seller](/../api/quotes-overview#seller).
+	// Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
 	SellerComment *string `json:"sellerComment,omitempty"`
+	// Message from the [Buyer](/../api/quotes-overview#buyer) included in the [renegotiation request](ctp:api:type:QuoteRequestQuoteRenegotiationAction).
+	BuyerComment *string `json:"buyerComment,omitempty"`
 	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// The Line Items for which the Quote is requested.
 	LineItems []LineItem `json:"lineItems"`
 	// The Custom Line Items for which the Quote is requested.
 	CustomLineItems []CustomLineItem `json:"customLineItems"`
-	// The sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
+	// Sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
 	// `totalPrice` may or may not include the taxes: it depends on the taxRate.includedInPrice property of each price.
 	TotalPrice TypedMoney `json:"totalPrice"`
 	// Not set until the shipping address is set.
@@ -52,11 +54,11 @@ type Quote struct {
 	// Used to determine the eligible [ShippingMethods](ctp:api:type:ShippingMethod)
 	// and rates as well as the tax rate of the Line Items.
 	ShippingAddress *Address `json:"shippingAddress,omitempty"`
-	// The address used for invoicing.
+	// Address used for invoicing.
 	BillingAddress *Address `json:"billingAddress,omitempty"`
-	// The inventory mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
+	// Inventory mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
-	// The tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
+	// Tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
 	TaxMode TaxMode `json:"taxMode"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for rounding.
 	TaxRoundingMode RoundingMode `json:"taxRoundingMode"`
@@ -66,7 +68,7 @@ type Quote struct {
 	Country *string `json:"country,omitempty"`
 	// Set automatically once the [ShippingMethod](ctp:api:type:ShippingMethod) is set.
 	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
-	// Log of payment transactions related to this quote.
+	// Log of payment transactions related to the Quote.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
 	// Used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
 	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
@@ -75,13 +77,15 @@ type Quote struct {
 	// The addresses captured here are not used to determine eligible shipping methods or the applicable tax rate.
 	// Only the cart's `shippingAddress` is used for this.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
-	// Discounts only valid for this Quote, those cannot be associated to any other Cart or Order.
+	// Discounts that are only valid for the Quote and cannot be associated to any other Cart or Order.
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
-	// Custom Fields of this Quote.
+	// Custom Fields on the Quote.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// [State](ctp:api:type:State) of the Quote.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -138,10 +142,12 @@ func (obj Quote) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteDraft struct {
-	// The StagedQuote from which this Quote is created.
+	// StagedQuote from which the Quote is created.
 	StagedQuote StagedQuoteResourceIdentifier `json:"stagedQuote"`
 	// Current version of the StagedQuote.
 	StagedQuoteVersion int `json:"stagedQuoteVersion"`
+	// If `true`, the `stagedQuoteState` of the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) will be set to `Sent`.
+	StagedQuoteStateToSent *bool `json:"stagedQuoteStateToSent,omitempty"`
 	// User-defined unique identifier for the Quote.
 	Key *string `json:"key,omitempty"`
 	// [Custom Fields](/../api/projects/custom-fields) to be added to the Quote.
@@ -225,15 +231,19 @@ func (obj QuoteResourceIdentifier) MarshalJSON() ([]byte, error) {
 type QuoteState string
 
 const (
-	QuoteStatePending   QuoteState = "Pending"
-	QuoteStateDeclined  QuoteState = "Declined"
-	QuoteStateAccepted  QuoteState = "Accepted"
-	QuoteStateFailed    QuoteState = "Failed"
-	QuoteStateWithdrawn QuoteState = "Withdrawn"
+	QuoteStatePending                  QuoteState = "Pending"
+	QuoteStateDeclined                 QuoteState = "Declined"
+	QuoteStateDeclinedForRenegotiation QuoteState = "DeclinedForRenegotiation"
+	QuoteStateAccepted                 QuoteState = "Accepted"
+	QuoteStateFailed                   QuoteState = "Failed"
+	QuoteStateWithdrawn                QuoteState = "Withdrawn"
 )
 
 type QuoteUpdate struct {
-	Version int                 `json:"version"`
+	// Expected version of the [Quote](ctp:api:type:Quote) to which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the [Quote](ctp:api:type:Quote).
 	Actions []QuoteUpdateAction `json:"actions"`
 }
 
@@ -275,6 +285,12 @@ func mapDiscriminatorQuoteUpdateAction(input interface{}) (QuoteUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "requestQuoteRenegotiation":
+		obj := QuoteRequestQuoteRenegotiationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCustomField":
 		obj := QuoteSetCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -298,7 +314,7 @@ func mapDiscriminatorQuoteUpdateAction(input interface{}) (QuoteUpdateAction, er
 }
 
 type QuoteChangeQuoteStateAction struct {
-	// The new quote state to be set for the Quote.
+	// New state to be set for the Quote.
 	QuoteState QuoteState `json:"quoteState"`
 }
 
@@ -310,6 +326,25 @@ func (obj QuoteChangeQuoteStateAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeQuoteState", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Represents the Buyer requesting renegotiation for a Quote. Valid for Quotes in a `Pending` or `Failed` [state](ctp:api:type:QuoteState).
+*
+ */
+type QuoteRequestQuoteRenegotiationAction struct {
+	// Message from the [Buyer](/api/quotes-overview#buyer) regarding the Quote renegotiation request.
+	BuyerComment *string `json:"buyerComment,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteRequestQuoteRenegotiationAction) MarshalJSON() ([]byte, error) {
+	type Alias QuoteRequestQuoteRenegotiationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "requestQuoteRenegotiation", Alias: (*Alias)(&obj)})
 }
 
 type QuoteSetCustomFieldAction struct {

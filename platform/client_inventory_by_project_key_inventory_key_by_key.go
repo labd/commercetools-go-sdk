@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInventoryKeyByKeyRequestBuilder) Post(body InventoryEntryU
 }
 
 /**
-*	Produces the [InventoryEntryDeletedMessage](ctp:api:type:InventoryEntryDeletedMessage).
+*	Produces the [InventoryEntryDeleted](ctp:api:type:InventoryEntryDeletedMessage) Message.
  */
 func (rb *ByProjectKeyInventoryKeyByKeyRequestBuilder) Delete() *ByProjectKeyInventoryKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyInventoryKeyByKeyRequestMethodDelete{

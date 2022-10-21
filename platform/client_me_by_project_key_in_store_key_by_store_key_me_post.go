@@ -27,10 +27,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Update my customer in a store
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

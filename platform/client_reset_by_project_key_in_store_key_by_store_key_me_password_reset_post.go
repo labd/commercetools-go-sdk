@@ -27,6 +27,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestMethodPost) With
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	This is the last step in the [password reset process of the authenticated Customer](/../api/projects/customers#password-reset-of-customer-in-store).
+*
+*	Resetting a password produces the of the Customer [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

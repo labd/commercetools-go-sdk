@@ -31,6 +31,12 @@ func (rb *ByProjectKeyRequestBuilder) Prices() *ByProjectKeyPricesRequestBuilder
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) StandalonePrices() *ByProjectKeyStandalonePricesRequestBuilder {
+	return &ByProjectKeyStandalonePricesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) Products() *ByProjectKeyProductsRequestBuilder {
 	return &ByProjectKeyProductsRequestBuilder{
 		projectKey: rb.projectKey,

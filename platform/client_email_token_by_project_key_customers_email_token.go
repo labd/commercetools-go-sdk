@@ -11,9 +11,6 @@ type ByProjectKeyCustomersEmailTokenRequestBuilder struct {
 	client     *Client
 }
 
-/**
-*	Create a Token for verifying the Customer's Email
- */
 func (rb *ByProjectKeyCustomersEmailTokenRequestBuilder) Post(body CustomerCreateEmailToken) *ByProjectKeyCustomersEmailTokenRequestMethodPost {
 	return &ByProjectKeyCustomersEmailTokenRequestMethodPost{
 		body:   body,

@@ -11,7 +11,7 @@ import (
 )
 
 type ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPost struct {
-	body    MyCustomerResetPassword
+	body    CustomerResetPassword
 	url     string
 	client  *Client
 	headers http.Header
@@ -29,7 +29,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPos
 }
 
 /**
-*	Set a new password using a token.
+*	Resetting the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
+*
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordResetRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)

@@ -56,9 +56,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodPost) WithHe
 }
 
 /**
-*	Updates a customer in the store specified by {storeKey}.
-*	If the customer exists in the project but the stores field references a different store,
-*	this method returns a ResourceNotFound error.
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {

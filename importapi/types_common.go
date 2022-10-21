@@ -127,6 +127,7 @@ type LocalizedString map[string]string
 *
  */
 type ImportResource struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 }
 
@@ -761,6 +762,7 @@ const (
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
 	ImportResourceTypeCustomer            ImportResourceType = "customer"
 	ImportResourceTypeInventory           ImportResourceType = "inventory"
+	ImportResourceTypeStandalonePrice     ImportResourceType = "standalone-price"
 )
 
 /**

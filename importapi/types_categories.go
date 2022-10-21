@@ -11,6 +11,7 @@ import (
 *
  */
 type CategoryImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// Maps to `Category.name`.
 	Name LocalizedString `json:"name"`

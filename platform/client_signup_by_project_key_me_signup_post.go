@@ -27,6 +27,13 @@ func (rb *ByProjectKeyMeSignupRequestMethodPost) WithHeaders(headers http.Header
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If used with an [access token for an anonymous session](/../api/authorization#tokens-for-anonymous-sessions), all Orders and Carts that belong to the `anonymousId` are assigned to the newly created Customer.
+*
+*	Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyMeSignupRequestMethodPost) Execute(ctx context.Context) (result *CustomerSignInResult, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

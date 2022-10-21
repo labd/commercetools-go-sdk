@@ -549,7 +549,7 @@ type Hit struct {
 	// Current version of the Order.
 	Version int `json:"version"`
 	// The higher the value is, the more relevant the hit is for the search request.
-	Relevance float64 `json:"relevance"`
+	Relevance *float64 `json:"relevance,omitempty"`
 }
 
 type OrderPagedSearchResponse struct {
@@ -706,16 +706,30 @@ type Order struct {
 	CustomerId    *string `json:"customerId,omitempty"`
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
-	AnonymousId     *string            `json:"anonymousId,omitempty"`
-	Store           *StoreKeyReference `json:"store,omitempty"`
-	LineItems       []LineItem         `json:"lineItems"`
-	CustomLineItems []CustomLineItem   `json:"customLineItems"`
-	TotalPrice      TypedMoney         `json:"totalPrice"`
+	AnonymousId *string `json:"anonymousId,omitempty"`
+	// The Business Unit the Order belongs to.
+	BusinessUnit    *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	Store           *StoreKeyReference        `json:"store,omitempty"`
+	LineItems       []LineItem                `json:"lineItems"`
+	CustomLineItems []CustomLineItem          `json:"customLineItems"`
+	TotalPrice      TypedMoney                `json:"totalPrice"`
 	// The taxes are calculated based on the shipping address.
-	TaxedPrice      *TaxedPrice `json:"taxedPrice,omitempty"`
-	ShippingAddress *Address    `json:"shippingAddress,omitempty"`
-	BillingAddress  *Address    `json:"billingAddress,omitempty"`
-	TaxMode         *TaxMode    `json:"taxMode,omitempty"`
+	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
+	// Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+	// For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
+	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
+	// Holds all shipping-related information per Shipping Method.
+	//
+	// For `Multi` [ShippingMode](ctp:api:typeShippingMode), it is updated automatically after the Shipping Methods are added.
+	ShippingAddress *Address `json:"shippingAddress,omitempty"`
+	BillingAddress  *Address `json:"billingAddress,omitempty"`
+	// Indicates whether one or multiple Shipping Methods are added to the Cart.
+	ShippingMode ShippingMode `json:"shippingMode"`
+	// Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
+	//
+	// It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+	Shipping []Shipping `json:"shipping"`
+	TaxMode  *TaxMode   `json:"taxMode,omitempty"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for rouding.
 	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
 	// Set when the customer is set and the customer is a member of a customer group.
@@ -817,7 +831,7 @@ func (obj Order) MarshalJSON() ([]byte, error) {
 type OrderFromCartDraft struct {
 	// Unique identifier of the Cart from which you can create an Order.
 	ID *string `json:"id,omitempty"`
-	// ResourceIdentifier to the Cart from which this order is created.
+	// ResourceIdentifier of the Cart from which this order is created.
 	Cart    *CartResourceIdentifier `json:"cart,omitempty"`
 	Version int                     `json:"version"`
 	// String that uniquely identifies an order.
@@ -838,10 +852,12 @@ type OrderFromCartDraft struct {
 }
 
 type OrderFromQuoteDraft struct {
-	// ResourceIdentifier to the Quote from which this order is created. If the quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also if the `Quote` has expired (`validTo` check).
+	// ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also fail if the `Quote` has expired (`validTo` check).
 	Quote QuoteResourceIdentifier `json:"quote"`
-	// The `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
+	// `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
 	Version int `json:"version"`
+	// If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:quote) will be set to `Accepted`.
+	QuoteStateToAccepted *bool `json:"quoteStateToAccepted,omitempty"`
 	// String that uniquely identifies an order.
 	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
 	// It should be unique across a project.
@@ -897,8 +913,10 @@ type OrderImportDraft struct {
 	// If not given the tax rounding mode `HalfEven` will be assigned by default.
 	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
 	// Contains addresses for orders with multiple shipping addresses.
-	ItemShippingAddresses []BaseAddress            `json:"itemShippingAddresses"`
-	Store                 *StoreResourceIdentifier `json:"store,omitempty"`
+	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
+	// The Business Unit the Cart belongs to.
+	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
+	Store        *StoreResourceIdentifier        `json:"store,omitempty"`
 	// The default origin is `Customer`.
 	Origin *CartOrigin `json:"origin,omitempty"`
 }
@@ -983,13 +1001,38 @@ type OrderSearchRequest struct {
 	// The Order search query.
 	Query OrderSearchQuery `json:"query"`
 	// Controls how results to your query are sorted. If not provided, the results are sorted by relevance in descending order.
-	Sort *string `json:"sort,omitempty"`
+	Sort []OrderSearchSorting `json:"sort"`
 	// The maximum number of search results to be returned.
 	Limit *int `json:"limit,omitempty"`
 	// The number of search results to be skipped in the response for pagination.
 	Offset *int `json:"offset,omitempty"`
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderSearchRequest) MarshalJSON() ([]byte, error) {
+	type Alias OrderSearchRequest
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["sort"] == nil {
+		delete(raw, "sort")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+type OrderSearchSorting map[string]interface{}
 type OrderState string
 
 const (
@@ -1473,7 +1516,7 @@ type ProductVariantImportDraft struct {
 	ID *int `json:"id,omitempty"`
 	// The SKU of the existing variant.
 	Sku *string `json:"sku,omitempty"`
-	// The [EmbeddedPrices](ctp:api:type:EmbeddedPrice) of the variant.
+	// The [Embedded Prices](ctp:api:type:Price) of the variant.
 	// The prices should not contain two prices for the same price scope (same currency, country, customer group, channel, valid from and valid until).
 	// If this property is defined, then it will override the `prices` property from the original product variant, otherwise `prices` property from the original product variant would be copied in the resulting order.
 	Prices []PriceDraft `json:"prices"`
@@ -1659,6 +1702,7 @@ type ShipmentState string
 
 const (
 	ShipmentStateShipped   ShipmentState = "Shipped"
+	ShipmentStateDelivered ShipmentState = "Delivered"
 	ShipmentStateReady     ShipmentState = "Ready"
 	ShipmentStatePending   ShipmentState = "Pending"
 	ShipmentStateDelayed   ShipmentState = "Delayed"
@@ -1737,9 +1781,11 @@ type TrackingData struct {
 }
 
 type OrderAddDeliveryAction struct {
-	Items   []DeliveryItem `json:"items"`
-	Address *BaseAddress   `json:"address,omitempty"`
-	Parcels []ParcelDraft  `json:"parcels"`
+	Items []DeliveryItem `json:"items"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string       `json:"shippingKey,omitempty"`
+	Address     *BaseAddress  `json:"address,omitempty"`
+	Parcels     []ParcelDraft `json:"parcels"`
 	// Custom Fields for the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }

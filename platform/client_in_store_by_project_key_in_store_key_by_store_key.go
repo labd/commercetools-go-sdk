@@ -38,8 +38,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Me() *ByProjectKeyInSt
 }
 
 /**
-*	A customer is a person purchasing products. customers, Orders,
-*	Comments and Reviews can be associated to a customer.
+*	A Customer is a person purchasing products. Carts, Orders,
+*	Comments and Reviews can be associated to a Customer.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Customers() *ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder {

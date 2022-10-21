@@ -80,6 +80,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodDelete) With
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message.
+*
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -18,6 +18,10 @@ func (rb *ByProjectKeyMessagesRequestBuilder) WithId(id string) *ByProjectKeyMes
 		client:     rb.client,
 	}
 }
+
+/**
+*	Deprecated scope: `view_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyMessagesRequestBuilder) Get() *ByProjectKeyMessagesRequestMethodGet {
 	return &ByProjectKeyMessagesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/messages", rb.projectKey),

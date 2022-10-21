@@ -43,6 +43,16 @@ func (rb *ByProjectKeyMeRequestBuilder) ActiveCart() *ByProjectKeyMeActiveCartRe
 }
 
 /**
+*	MyBusinessUnit creates and provides access to Business Units scoped to a specific user.
+ */
+func (rb *ByProjectKeyMeRequestBuilder) BusinessUnits() *ByProjectKeyMeBusinessUnitsRequestBuilder {
+	return &ByProjectKeyMeBusinessUnitsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	A shopping cart holds product variants and can be ordered.
  */
 func (rb *ByProjectKeyMeRequestBuilder) Carts() *ByProjectKeyMeCartsRequestBuilder {
@@ -73,10 +83,20 @@ func (rb *ByProjectKeyMeRequestBuilder) Payments() *ByProjectKeyMePaymentsReques
 }
 
 /**
-*	The My Quote Requests endpoint creates and provides access to quote requests scoped to a specific user.
+*	The My Quote Requests endpoint creates and provides access to Quote Requests scoped to a specific user.
  */
 func (rb *ByProjectKeyMeRequestBuilder) QuoteRequests() *ByProjectKeyMeQuoteRequestsRequestBuilder {
 	return &ByProjectKeyMeQuoteRequestsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	The My Quote endpoint provides access to Quotes scoped to a specific user.
+ */
+func (rb *ByProjectKeyMeRequestBuilder) Quotes() *ByProjectKeyMeQuotesRequestBuilder {
+	return &ByProjectKeyMeQuotesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}
@@ -98,9 +118,6 @@ func (rb *ByProjectKeyMeRequestBuilder) Get() *ByProjectKeyMeRequestMethodGet {
 	}
 }
 
-/**
-*	Update my customer
- */
 func (rb *ByProjectKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKeyMeRequestMethodPost {
 	return &ByProjectKeyMeRequestMethodPost{
 		body:   body,
@@ -109,9 +126,6 @@ func (rb *ByProjectKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKe
 	}
 }
 
-/**
-*	Delete my Customer
- */
 func (rb *ByProjectKeyMeRequestBuilder) Delete() *ByProjectKeyMeRequestMethodDelete {
 	return &ByProjectKeyMeRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/me", rb.projectKey),

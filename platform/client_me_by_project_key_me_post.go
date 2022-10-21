@@ -27,10 +27,6 @@ func (rb *ByProjectKeyMeRequestMethodPost) WithHeaders(headers http.Header) *ByP
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Update my customer
- */
 func (rb *ByProjectKeyMeRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

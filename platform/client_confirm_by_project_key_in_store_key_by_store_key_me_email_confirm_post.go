@@ -11,7 +11,7 @@ import (
 )
 
 type ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestMethodPost struct {
-	body    CustomerEmailVerify
+	body    MyCustomerEmailVerify
 	url     string
 	client  *Client
 	headers http.Header
@@ -27,6 +27,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestMethodPost) WithH
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	This is the last step in the [email verification process of a Customer](/../api/projects/customers#email-verification-of-customer-in-store).
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

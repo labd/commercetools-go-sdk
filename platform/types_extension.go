@@ -219,10 +219,11 @@ const (
 	ExtensionResourceTypeIdQuoteRequest ExtensionResourceTypeId = "quote-request"
 	ExtensionResourceTypeIdStagedQuote  ExtensionResourceTypeId = "staged-quote"
 	ExtensionResourceTypeIdQuote        ExtensionResourceTypeId = "quote"
+	ExtensionResourceTypeIdBusinessUnit ExtensionResourceTypeId = "business-unit"
 )
 
 type ExtensionTrigger struct {
-	// `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, and `quote` are supported.
+	// `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, `quote`, and `business-unit` are supported.
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
 	// `Create` and `Update` requests are supported.
 	Actions []ExtensionAction `json:"actions"`

@@ -29,7 +29,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenRequestMethodPost) 
 }
 
 /**
-*	Create a Token for verifying the Customer's Email in store
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenRequestMethodPost) Execute(ctx context.Context) (result *CustomerToken, err error) {
 	data, err := serializeInput(rb.body)

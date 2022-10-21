@@ -764,6 +764,7 @@ func (obj TimeSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductVariantImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// Maps to `ProductVariant.sku`.
 	Sku *string `json:"sku,omitempty"`

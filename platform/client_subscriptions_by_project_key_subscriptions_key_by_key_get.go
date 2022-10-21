@@ -53,10 +53,6 @@ func (rb *ByProjectKeySubscriptionsKeyByKeyRequestMethodGet) WithHeaders(headers
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Retrieves the representation of a subscription by its key.
- */
 func (rb *ByProjectKeySubscriptionsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *Subscription, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

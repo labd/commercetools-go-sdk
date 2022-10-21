@@ -13,7 +13,8 @@ type ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestBuilder struct {
 }
 
 /**
-*	Change a customers password
+*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestBuilder) Post(body CustomerChangePassword) *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestMethodPost{

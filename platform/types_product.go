@@ -25,137 +25,11 @@ type Attribute struct {
 }
 
 /**
-*	JSON object where the key is a [Category](ctp:api:type:Category) `id` and the value is an order hint: a string representing a number between 0 and 1 that must start with `0.` and cannot end with `0`. Allows controlling the order of Products and how they appear in Categories. Products with no order hint have an order score below `0`. Order hints are non-unique. If a subset of Products have the same value for order hint in a specific category, the behavior is undetermined.
-*
+*	JSON object where the key is a [Category](ctp:api:type:Category) `id` and the value is an order hint.
+*	Allows controlling the order of Products and how they appear in Categories. Products with no order hint have an order score below `0`. Order hints are non-unique.
+*	If a subset of Products have the same value for order hint in a specific category, the behavior is undetermined.
  */
-type CategoryOrderHints map[string]interface{}
-type EmbeddedPrice struct {
-	// Unique identifier of the EmbeddedPrice.
-	ID string `json:"id"`
-	// Money value of the EmbeddedPrice.
-	Value TypedMoney `json:"value"`
-	// Country for which the EmbeddedPrice is valid.
-	Country *string `json:"country,omitempty"`
-	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the EmbeddedPrice is valid.
-	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// Product distribution [Channel](ctp:api:type:Channel) for which the EmbeddedPrice is valid.
-	Channel *ChannelReference `json:"channel,omitempty"`
-	// Date from which the EmbeddedPrice is valid.
-	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Date until the EmbeddedPrice is valid.
-	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Price tiers if any are defined.
-	Tiers []PriceTier `json:"tiers"`
-	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists.
-	// If set, the API uses the `discounted` value for the [LineItem Price selection](ctp:api:type:CartLineItemPriceSelection).
-	// When a [relative Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fraction part of the `discounted` price is 0.5,
-	// the discounted Price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
-	//
-	// The service will unset or replace the value
-	//
-	// - once a matching relative or absolute Product Discount with a higher `sortOrder` exists,
-	// - if the referenced external Product Discount is deactivated, or
-	// - if the Product changes and the external Product Discount predicate does not match the discounted Price any more.
-	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// Custom Fields for the EmbeddedPrice.
-	Custom *CustomFields `json:"custom,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *EmbeddedPrice) UnmarshalJSON(data []byte) error {
-	type Alias EmbeddedPrice
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Value != nil {
-		var err error
-		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj EmbeddedPrice) MarshalJSON() ([]byte, error) {
-	type Alias EmbeddedPrice
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["tiers"] == nil {
-		delete(raw, "tiers")
-	}
-
-	return json.Marshal(raw)
-
-}
-
-/**
-*	The representation sent to the server when creating a new EmbeddedPrice.
-*
- */
-type EmbeddedPriceDraft struct {
-	// Sets the money value of the EmbeddedPrice.
-	Value Money `json:"value"`
-	// Sets the country for which the EmbeddedPrice is valid. If not set, the Price is valid for any country.
-	Country *string `json:"country,omitempty"`
-	// Sets the [CustomerGroup](ctp:api:type:CustomerGroup) for which the EmbeddedPrice is valid.
-	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
-	// Sets the product distribution [Channel](ctp:api:type:Channel) for which the EmbeddedPrice is valid.
-	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
-	// Sets a discounted Price from an **external service**. Absolute or relative [ProductDiscount](ctp:api:type:ProductDiscount) prices are automatically added to a Product's [EmbeddedPrice](#embeddedprice) when created. The DiscountedPrice must reference a ProductDiscount with:
-	//
-	// - The `isActive` flag set to `true`.
-	// - An `external` [ProductDiscountValue](ctp:api:type:ProductDiscountValueExternal).
-	// - A `predicate` which matches the [ProductVariant](ctp:api:type:ProductVariant) the [EmbeddedPrice](ctp:api:type:EmbeddedPrice) is referenced from.
-	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
-	// Sets the date from which the EmbeddedPrice is valid.
-	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Sets the date until the EmbeddedPrice is valid.
-	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Sets Price tiers.
-	Tiers []PriceTier `json:"tiers"`
-	// Custom Fields for the EmbeddedPrice.
-	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj EmbeddedPriceDraft) MarshalJSON() ([]byte, error) {
-	type Alias EmbeddedPriceDraft
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["tiers"] == nil {
-		delete(raw, "tiers")
-	}
-
-	return json.Marshal(raw)
-
-}
-
+type CategoryOrderHints map[string]string
 type FacetRange struct {
 	From         float64 `json:"from"`
 	FromStr      string  `json:"fromStr"`
@@ -851,7 +725,7 @@ type ProductVariant struct {
 	Key *string `json:"key,omitempty"`
 	// The Embedded Prices of the Product Variant.
 	// Cannot contain two Prices of the same Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
-	Prices []EmbeddedPrice `json:"prices"`
+	Prices []Price `json:"prices"`
 	// Attributes of the Product Variant.
 	Attributes []Attribute `json:"attributes"`
 	// Only available when [Price selection](#price-selection) is used.
@@ -945,7 +819,7 @@ type ProductVariantChannelAvailability struct {
 *	JSON object where the key is a supply [Channel](ctp:api:type:Channel) `id` and the value is the [ProductVariantChannelAvailability](ctp:api:type:ProductVariantChannelAvailability) of the [InventoryEntry](ctp:api:type:InventoryEntry).
 *
  */
-type ProductVariantChannelAvailabilityMap map[string]interface{}
+type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
 
 /**
 *	Creates a Product Variant when included in the `masterVariant` and `variants` fields of the [ProductDraft](ctp:api:type:ProductDraft).
@@ -958,7 +832,7 @@ type ProductVariantDraft struct {
 	Key *string `json:"key,omitempty"`
 	// The Embedded Prices for the Product Variant.
 	// Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
-	Prices []EmbeddedPriceDraft `json:"prices"`
+	Prices []PriceDraft `json:"prices"`
 	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
 	// Images for the Product Variant.
@@ -1046,7 +920,7 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 *	Search keywords are JSON objects primarily used by [Product Suggestions](ctp:api:type:ProductSuggestions), but are also considered for a full text search. The keys are of type [Locale](ctp:api:type:Locale), and the values are an array of [SearchKeyword](ctp:api:type:SearchKeyword).
 *
  */
-type SearchKeywords map[string]interface{}
+type SearchKeywords map[string][]SearchKeyword
 type SuggestTokenizer interface{}
 
 func mapDiscriminatorSuggestTokenizer(input interface{}) (SuggestTokenizer, error) {
@@ -1176,7 +1050,7 @@ func (obj ProductAddAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required. Produces the [ProductImageAddedMessage](ctp:api:type:ProductImageAddedMessage).
+*	Either `variantId` or `sku` is required. Produces the [ProductImageAdded](/projects/messages#product-image-added) Message.
 *
  */
 type ProductAddExternalImageAction struct {
@@ -1210,8 +1084,8 @@ type ProductAddPriceAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// EmbeddedPrice to add to the Product Variant.
-	Price EmbeddedPriceDraft `json:"price"`
+	// Embedded Price to add to the Product Variant.
+	Price PriceDraft `json:"price"`
 	// If `true`, only the staged `prices` is updated. If `false`, both the current and staged `prices` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
@@ -1227,7 +1101,7 @@ func (obj ProductAddPriceAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Produces the [ProductAddedToCategoryMessage](ctp:api:type:ProductAddedToCategoryMessage).
+*	Produces the [ProductAddedToCategory](/projects/messages#product-added-to-category) Message.
  */
 type ProductAddToCategoryAction struct {
 	// The Category to add.
@@ -1253,8 +1127,8 @@ type ProductAddVariantAction struct {
 	Sku *string `json:"sku,omitempty"`
 	// Value to set. Must be unique.
 	Key *string `json:"key,omitempty"`
-	// EmbeddedPrices for the Product Variant.
-	Prices []EmbeddedPriceDraft `json:"prices"`
+	// Embedded Prices for the Product Variant.
+	Prices []PriceDraft `json:"prices"`
 	// Images for the Product Variant.
 	Images []Image `json:"images"`
 	// Attributes for the Product Variant.
@@ -1398,11 +1272,11 @@ func (obj ProductChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductChangePriceAction struct {
-	// The `id` of the EmbeddedPrice to update.
+	// The `id` of the Embedded Price to update.
 	PriceId string `json:"priceId"`
 	// Value to set.
-	Price EmbeddedPriceDraft `json:"price"`
-	// If `true`, only the staged EmbeddedPrice is updated. If `false`, both the current and staged EmbeddedPrice are updated.
+	Price PriceDraft `json:"price"`
+	// If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1417,7 +1291,7 @@ func (obj ProductChangePriceAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Produces the [ProductSlugChangedMessage](ctp:api:type:ProductSlugChangedMessage).
+*	Produces the [ProductSlugChanged](ctp:api:type:ProductSlugChangedMessage) Message.
  */
 type ProductChangeSlugAction struct {
 	// Value to set. Must not be empty. A Product can have the same slug for different [Locales](ctp:api:type:Locale), but it must be unique across the [Project](ctp:api:type:Project). Must match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
@@ -1480,7 +1354,7 @@ func (obj ProductMoveImageToPositionAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	Publishes product data from the Product's staged projection to its current projection.
-*	Produces the [ProductPublishedMessage](ctp:api:type:ProductPublishedMessage).
+*	Produces the [ProductPublished](ctp:api:type:ProductPublishedMessage) Message.
  */
 type ProductPublishAction struct {
 	// `All` or `Prices`
@@ -1525,7 +1399,7 @@ func (obj ProductRemoveAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Produces the [ProductRemovedFromCategoryMessage](ctp:api:type:ProductRemovedFromCategoryMessage).
+*	Produces the [ProductRemovedFromCategory](ctp:api:type:ProductRemovedFromCategoryMessage) Message.
  */
 type ProductRemoveFromCategoryAction struct {
 	// The Category to remove.
@@ -1570,9 +1444,9 @@ func (obj ProductRemoveImageAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductRemovePriceAction struct {
-	// The `id` of the EmbeddedPrice to remove.
+	// The `id` of the Embedded Price to remove.
 	PriceId string `json:"priceId"`
-	// If `true`, only the staged EmbeddedPrice is removed. If `false`, both the current and staged EmbeddedPrice are removed.
+	// If `true`, only the staged Embedded Price is removed. If `false`, both the current and staged Embedded Price are removed.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1587,7 +1461,7 @@ func (obj ProductRemovePriceAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `id` or `sku` is required. Produces the [ProductVariantDeletedMessage](ctp:api:type:ProductVariantDeletedMessage).
+*	Either `id` or `sku` is required. Produces the [ProductVariantDeleted](ctp:api:type:ProductVariantDeletedMessage) Message.
 *
  */
 type ProductRemoveVariantAction struct {
@@ -1610,7 +1484,7 @@ func (obj ProductRemoveVariantAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Reverts the staged version of a Product to the current version. Produces the [ProductRevertedStagedChangesMessage](ctp:api:type:ProductRevertedStagedChangesMessage).
+*	Reverts the staged version of a Product to the current version. Produces the [ProductRevertedStagedChanges](ctp:api:type:ProductRevertedStagedChangesMessage) Message.
 *
  */
 type ProductRevertStagedChangesAction struct {
@@ -1948,13 +1822,13 @@ func (obj ProductSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Produces the [ProductPriceExternalDiscountSetMessage](ctp:api:type:ProductPriceExternalDiscountSetMessage).
+*	Produces the [ProductPriceExternalDiscountSet](ctp:api:type:ProductPriceExternalDiscountSetMessage) Message.
 *
  */
 type ProductSetDiscountedPriceAction struct {
-	// The `id` of the EmbeddedPrice to set the Discount.
+	// The `id` of the [Embedded Price](ctp:api:type:Price) to set the Discount.
 	PriceId string `json:"priceId"`
-	// If `true`, only the staged EmbeddedPrice is updated. If `false`, both the current and staged EmbeddedPrice are updated.
+	// If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price are updated.
 	Staged *bool `json:"staged,omitempty"`
 	// Value to set. If empty, any existing value will be removed.
 	// The referenced [ProductDiscount](ctp:api:type:ProductDiscount) must have the Type `external`, be active, and its predicate must match the referenced Price.
@@ -2094,7 +1968,7 @@ type ProductSetPricesAction struct {
 	Sku *string `json:"sku,omitempty"`
 	// The Embedded Prices to set.
 	// Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
-	Prices []EmbeddedPriceDraft `json:"prices"`
+	Prices []PriceDraft `json:"prices"`
 	// If `true`, only the staged ProductVariant is updated. If `false`, both the current and staged ProductVariant are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
@@ -2239,7 +2113,7 @@ func (obj ProductSetTaxCategoryAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. Produces the [ProductStateTransitionMessage](ctp:api:type:ProductStateTransitionMessage).
+*	If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State. If `transitions` is not set, no validation is performed. Produces the [ProductStateTransition](ctp:api:type:ProductStateTransitionMessage) Message.
 *
  */
 type ProductTransitionStateAction struct {
@@ -2260,7 +2134,7 @@ func (obj ProductTransitionStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes the current projection of the Product. The staged projection is unaffected. Unpublished Products only appear in query/search results with `staged=false`. Produces the [ProductUnpublishedMessage](ctp:api:type:ProductUnpublishedMessage).
+*	Removes the current projection of the Product. The staged projection is unaffected. Unpublished Products only appear in query/search results with `staged=false`. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
 *
  */
 type ProductUnpublishAction struct {

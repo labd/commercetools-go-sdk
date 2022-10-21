@@ -17,6 +17,13 @@ func (rb *ByProjectKeyMePasswordRequestBuilder) Reset() *ByProjectKeyMePasswordR
 		client:     rb.client,
 	}
 }
+
+/**
+*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+*
+*	If the current password does not match, an [InvalidCurrentPassword](ctp:api:type:InvalidCurrentPasswordError) error is returned.
+*
+ */
 func (rb *ByProjectKeyMePasswordRequestBuilder) Post(body MyCustomerChangePassword) *ByProjectKeyMePasswordRequestMethodPost {
 	return &ByProjectKeyMePasswordRequestMethodPost{
 		body:   body,

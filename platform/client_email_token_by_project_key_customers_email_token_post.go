@@ -27,10 +27,6 @@ func (rb *ByProjectKeyCustomersEmailTokenRequestMethodPost) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Create a Token for verifying the Customer's Email
- */
 func (rb *ByProjectKeyCustomersEmailTokenRequestMethodPost) Execute(ctx context.Context) (result *CustomerToken, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

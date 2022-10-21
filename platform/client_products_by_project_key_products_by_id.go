@@ -60,7 +60,7 @@ func (rb *ByProjectKeyProductsByIDRequestBuilder) Post(body ProductUpdate) *ByPr
 
 /**
 *	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
-*	Produces the [ProductDeletedMessage](/message-types#productdeletedmessage).
+*	Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
  */
 func (rb *ByProjectKeyProductsByIDRequestBuilder) Delete() *ByProjectKeyProductsByIDRequestMethodDelete {
 	return &ByProjectKeyProductsByIDRequestMethodDelete{

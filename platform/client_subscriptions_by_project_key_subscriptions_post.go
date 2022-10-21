@@ -56,11 +56,7 @@ func (rb *ByProjectKeySubscriptionsRequestMethodPost) WithHeaders(headers http.H
 }
 
 /**
-*	The creation of a Subscription is eventually consistent, it may take up to a minute before it becomes fully active.
-*	In order to test that the destination is correctly configured, a test message will be put into the queue.
-*	If the message could not be delivered, the subscription will not be created.
-*	The payload of the test message is a notification of type ResourceCreated for the resourceTypeId subscription.
-*	Currently, a maximum of 25 subscriptions can be created per project.
+*	A test message is sent to ensure the correct configuration of the Destination. If the message cannot be delivered, the Subscription will not be created. The payload of the test message is a notification of type [ResourceCreated](/../api/projects/subscriptions#resourcecreateddeliverypayload) for the `resourceTypeId` `subscription`.
 *
  */
 func (rb *ByProjectKeySubscriptionsRequestMethodPost) Execute(ctx context.Context) (result *Subscription, err error) {

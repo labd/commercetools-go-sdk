@@ -8,6 +8,21 @@ import (
 	"time"
 )
 
+type BusinessUnitConfiguration struct {
+	// Status of Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+	MyBusinessUnitStatusOnCreation BusinessUnitConfigurationStatus `json:"myBusinessUnitStatusOnCreation"`
+}
+
+/**
+*	Default value for [Business Unit Status](ctp:api:type:BusinessUnitStatus) configured though [Project settings](/../api/projects/project#change-my-business-unit-status-on-creation).
+ */
+type BusinessUnitConfigurationStatus string
+
+const (
+	BusinessUnitConfigurationStatusActive   BusinessUnitConfigurationStatus = "Active"
+	BusinessUnitConfigurationStatusInactive BusinessUnitConfigurationStatus = "Inactive"
+)
+
 type CartsConfiguration struct {
 	// Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft). This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
@@ -67,6 +82,8 @@ type Project struct {
 	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
 	// Controls indexing of resources to be provided on high performance read-only search endpoints.
 	SearchIndexing *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
+	// Holds configuration specific to [Business Units](ctp:api:type:BusinessUnit).
+	BusinessUnits *BusinessUnitConfiguration `json:"businessUnits,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -126,6 +143,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 	}
 
 	switch discriminator {
+	case "changeMyBusinessUnitStatusOnCreation":
+		obj := ProjectChangeBusinessUnitStatusOnCreationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeCartsConfiguration":
 		obj := ProjectChangeCartsConfigurationAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -289,7 +312,7 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 *
  */
 type CartClassificationType struct {
-	// The classification items that can be used for specifiying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	// The classification items that can be used for specifying any [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
 	Values []CustomFieldLocalizedEnumValue `json:"values"`
 }
 
@@ -343,6 +366,21 @@ type ShoppingListsConfiguration struct {
 	// Default value for the `deleteDaysAfterLastModification` parameter of the [ShoppingListDraft](ctp:api:type:ShoppingListDraft).
 	// This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
+}
+
+type ProjectChangeBusinessUnitStatusOnCreationAction struct {
+	// Status for Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+	Status BusinessUnitConfigurationStatus `json:"status"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectChangeBusinessUnitStatusOnCreationAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeBusinessUnitStatusOnCreationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeMyBusinessUnitStatusOnCreation", Alias: (*Alias)(&obj)})
 }
 
 type ProjectChangeCartsConfigurationAction struct {

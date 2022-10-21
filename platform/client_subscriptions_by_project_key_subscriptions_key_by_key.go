@@ -12,9 +12,6 @@ type ByProjectKeySubscriptionsKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
-/**
-*	Retrieves the representation of a subscription by its key.
- */
 func (rb *ByProjectKeySubscriptionsKeyByKeyRequestBuilder) Get() *ByProjectKeySubscriptionsKeyByKeyRequestMethodGet {
 	return &ByProjectKeySubscriptionsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/subscriptions/key=%s", rb.projectKey, rb.key),

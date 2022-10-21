@@ -225,7 +225,7 @@ type TaxRate struct {
 	Name string `json:"name"`
 	// Tax rate. If subrates are used, the amount must be the sum of all subrates.
 	Amount float64 `json:"amount"`
-	// If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+	// If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
 	Country string `json:"country"`
@@ -266,7 +266,7 @@ type TaxRateDraft struct {
 	// Must be supplied if no `subRates` are specified.
 	// If `subRates` are specified, this field can be omitted or it must be the sum of amounts of all `subRates`.
 	Amount *float64 `json:"amount,omitempty"`
-	// If `true`, tax is included in [Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+	// If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
 	Country string `json:"country"`

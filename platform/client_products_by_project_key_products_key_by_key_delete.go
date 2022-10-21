@@ -115,7 +115,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) WithHeaders(headers h
 
 /**
 *	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
-*	Produces the [ProductDeletedMessage](/message-types#productdeletedmessage).
+*	Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *Product, err error) {
 	var queryParams url.Values

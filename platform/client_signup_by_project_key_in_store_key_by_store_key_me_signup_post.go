@@ -27,6 +27,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestMethodPost) WithHeaders
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If omitted in the request body, the [Customer](ctp:api:type:Customer) `stores` field is set to the Store specified in the path parameter.
+*
+*	Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeSignupRequestMethodPost) Execute(ctx context.Context) (result *CustomerSignInResult, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

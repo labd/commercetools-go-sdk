@@ -87,9 +87,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Get() *ByProjectKeyI
 	}
 }
 
-/**
-*	Update my customer in a store
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost{
 		body:   body,
@@ -98,9 +95,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Post(body MyCustomer
 	}
 }
 
-/**
-*	Delete my Customer in a store
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/me", rb.projectKey, rb.storeKey),

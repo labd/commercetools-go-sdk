@@ -22,7 +22,7 @@ type ImportOperation struct {
 	ID string `json:"id"`
 	// The import status of the resource. Set to `rejected` or `validationFailed` if the import of the resource was not successful.
 	State ProcessingState `json:"state"`
-	// The version of the impmorted resource when the import was successful.
+	// The version of the imported resource when the import was successful.
 	ResourceVersion *int `json:"resourceVersion,omitempty"`
 	// Contains an error if the import of the resource was not successful. See [Errors](/error).
 	Errors []ErrorObject `json:"errors"`

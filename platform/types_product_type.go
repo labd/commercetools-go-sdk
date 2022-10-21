@@ -164,7 +164,7 @@ const (
 )
 
 /**
-*	Umbrellla type for specific attribute types discriminated by property `name`.
+*	Umbrella type for specific attribute types discriminated by property `name`.
  */
 type AttributeType interface{}
 

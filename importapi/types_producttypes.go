@@ -385,6 +385,7 @@ const (
 *
  */
 type ProductTypeImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// Maps to `ProductType.name`.
 	Name string `json:"name"`

@@ -24,10 +24,12 @@ type Cart struct {
 	CustomerId    *string    `json:"customerId,omitempty"`
 	CustomerEmail *string    `json:"customerEmail,omitempty"`
 	// Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
-	AnonymousId     *string            `json:"anonymousId,omitempty"`
-	Store           *StoreKeyReference `json:"store,omitempty"`
-	LineItems       []LineItem         `json:"lineItems"`
-	CustomLineItems []CustomLineItem   `json:"customLineItems"`
+	AnonymousId *string `json:"anonymousId,omitempty"`
+	// The Business Unit the Cart belongs to.
+	BusinessUnit    *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	Store           *StoreKeyReference        `json:"store,omitempty"`
+	LineItems       []LineItem                `json:"lineItems"`
+	CustomLineItems []CustomLineItem          `json:"customLineItems"`
 	// The sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
 	// `totalPrice` may or may not include the taxes: it depends on the taxRate.includedInPrice property of each price.
 	TotalPrice TypedMoney `json:"totalPrice"`
@@ -35,12 +37,21 @@ type Cart struct {
 	// Will be set automatically in the `Platform` TaxMode.
 	// For the `External` tax mode it will be set  as soon as the external tax rates for all line items, custom line items, and shipping in the cart are set.
 	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
-	CartState  CartState   `json:"cartState"`
+	// Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+	// For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
+	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
+	CartState          CartState   `json:"cartState"`
 	// The shipping address is used to determine the eligible shipping methods and rates as well as the tax rate of the line items.
-	ShippingAddress *Address       `json:"shippingAddress,omitempty"`
-	BillingAddress  *Address       `json:"billingAddress,omitempty"`
-	InventoryMode   *InventoryMode `json:"inventoryMode,omitempty"`
-	TaxMode         TaxMode        `json:"taxMode"`
+	ShippingAddress *Address `json:"shippingAddress,omitempty"`
+	BillingAddress  *Address `json:"billingAddress,omitempty"`
+	// Indicates whether one or multiple Shipping Methods are added to the Cart.
+	ShippingMode ShippingMode `json:"shippingMode"`
+	// Holds all shipping-related information per Shipping Method of a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	//
+	// It is automatically updated after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+	Shipping      []Shipping     `json:"shipping"`
+	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
+	TaxMode       TaxMode        `json:"taxMode"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for rounding.
 	TaxRoundingMode RoundingMode `json:"taxRoundingMode"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with `LineItemLevel` (horizontally) or `UnitPriceLevel` (vertically) calculation mode.
@@ -52,6 +63,7 @@ type Cart struct {
 	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	// Used for product variant price selection.
 	Country *string `json:"country,omitempty"`
+	// Shipping-related information of a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode).
 	// Set automatically once the ShippingMethod is set.
 	ShippingInfo    *ShippingInfo      `json:"shippingInfo,omitempty"`
 	DiscountCodes   []DiscountCodeInfo `json:"discountCodes"`
@@ -147,6 +159,8 @@ type CartDraft struct {
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// Assigns the new cart to an anonymous session (the customer has not signed up/in yet).
 	AnonymousId *string `json:"anonymousId,omitempty"`
+	// The Business Unit the Cart belongs to.
+	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// Assigns the new cart to the store.
 	// The store assignment can not be modified.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -177,6 +191,13 @@ type CartDraft struct {
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// The default origin is `Customer`.
 	Origin *CartOrigin `json:"origin,omitempty"`
+	// - If `Single`, only a single Shipping Method can be added to the Cart.
+	// - If `Multiple`, multiple Shipping Methods can be added to the Cart.
+	ShippingMode *ShippingMode `json:"shippingMode,omitempty"`
+	// Custom Shipping Methods for a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	CustomShipping []CustomShippingDraft `json:"customShipping"`
+	// Shipping Methods for a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	Shipping []ShippingDraft `json:"shipping"`
 	// The shippingRateInput is used as an input to select a ShippingRatePriceTier.
 	// Based on the definition of ShippingRateInputType.
 	// If CartClassification is defined, it must be ClassificationShippingRateInput.
@@ -233,6 +254,14 @@ func (obj CartDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["customLineItems"] == nil {
 		delete(raw, "customLineItems")
+	}
+
+	if raw["customShipping"] == nil {
+		delete(raw, "customShipping")
+	}
+
+	if raw["shipping"] == nil {
+		delete(raw, "shipping")
 	}
 
 	if raw["itemShippingAddresses"] == nil {
@@ -358,6 +387,19 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "addCustomShippingMethod":
+		obj := CartAddCustomShippingMethodAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ShippingRateInput != nil {
+			var err error
+			obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "addDiscountCode":
 		obj := CartAddDiscountCodeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -380,6 +422,19 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		obj := CartAddPaymentAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		return obj, nil
+	case "addShippingMethod":
+		obj := CartAddShippingMethodAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ShippingRateInput != nil {
+			var err error
+			obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "addShoppingList":
@@ -474,6 +529,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		return obj, nil
 	case "removePayment":
 		obj := CartRemovePaymentAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeShippingMethod":
+		obj := CartRemoveShippingMethodAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -700,6 +761,18 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "setShippingCustomField":
+		obj := CartSetShippingCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setShippingCustomType":
+		obj := CartSetShippingCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setShippingMethod":
 		obj := CartSetShippingMethodAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -829,6 +902,51 @@ const (
 	CustomLineItemPriceModeStandard CustomLineItemPriceMode = "Standard"
 	CustomLineItemPriceModeExternal CustomLineItemPriceMode = "External"
 )
+
+type CustomShippingDraft struct {
+	// User-defined unique identifier of the custom Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	Key string `json:"key"`
+	// Name of the custom Shipping Method.
+	ShippingMethodName string `json:"shippingMethodName"`
+	// Determines the shipping rate and Tax Rate of the associated Line Items.
+	ShippingAddress *BaseAddress `json:"shippingAddress,omitempty"`
+	// Determines the shipping price.
+	ShippingRate ShippingRateDraft `json:"shippingRate"`
+	// Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	//
+	// - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+	// - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+	//
+	// The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+	ShippingRateInput ShippingRateInputDraft `json:"shippingRateInput,omitempty"`
+	// Tax Category used to determine a shipping Tax Rate if a Cart has the `Platform` [TaxMode](ctp:api:type:TaxMode).
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	// Tax Rate used to tax a shipping expense if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	ExternalTaxRate *string `json:"externalTaxRate,omitempty"`
+	// Deliveries tied to a Shipping Method in a multi-shipping method Cart.
+	// It holds information on how items are delivered to customers.
+	Deliveries []Delivery `json:"deliveries"`
+	// Custom Fields for the custom Shipping Method.
+	Custom *string `json:"custom,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CustomShippingDraft) UnmarshalJSON(data []byte) error {
+	type Alias CustomShippingDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ShippingRateInput != nil {
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 type DirectDiscount struct {
 	// The unique ID of the cart discount.
@@ -1048,6 +1166,10 @@ type ItemShippingTarget struct {
 	// Only positive values are allowed.
 	// Using `0` as quantity is also possible in a draft object, but the element will not be present in the resulting ItemShippingDetails.
 	Quantity int `json:"quantity"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	//
+	// It connects Line Item quantities with individual shipping addresses.
+	ShippingMethodKey *string `json:"shippingMethodKey,omitempty"`
 }
 
 type LineItem struct {
@@ -1073,6 +1195,8 @@ type LineItem struct {
 	Price Price `json:"price"`
 	// Set once the `taxRate` is set.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
+	// Taxed price of the Shipping Method that is set automatically after `perMethodTaxRate` is set.
+	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
 	// The total price of this line item.
 	// If the line item is discounted, then the `totalPrice` is the DiscountedLineItemPriceForQuantity multiplied by `quantity`.
 	// Otherwise the total price is the product price multiplied by the `quantity`.
@@ -1088,6 +1212,10 @@ type LineItem struct {
 	// Will be set automatically in the `Platform` TaxMode once the shipping address is set is set.
 	// For the `External` tax mode the tax rate has to be set explicitly with the ExternalTaxRateDraft.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Tax Rate per Shipping Method that is automatically set after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to a Cart with the `Platform` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	//
+	// For the `External` [TaxMode](ctp:api:type:TaxMode), the Tax Rate must be set with [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
+	PerMethodTaxRate []MethodTaxRate `json:"perMethodTaxRate"`
 	// The supply channel identifies the inventory entries that should be reserved.
 	// The channel has
 	// the role InventorySupply.
@@ -1176,6 +1304,20 @@ const (
 	LineItemPriceModeExternalPrice LineItemPriceMode = "ExternalPrice"
 )
 
+type MethodTaxRate struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingMethodKey string `json:"shippingMethodKey"`
+	// Tax Rate for the Shipping Method.
+	TaxRate *TaxRate `json:"taxRate,omitempty"`
+}
+
+type MethodTaxedPrice struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingMethodKey string `json:"shippingMethodKey"`
+	// Taxed price for the Shipping Method.
+	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
+}
+
 type ReplicaCartDraft struct {
 	Reference interface{} `json:"reference"`
 	// User-specific unique identifier of the cart.
@@ -1189,6 +1331,84 @@ const (
 	RoundingModeHalfUp   RoundingMode = "HalfUp"
 	RoundingModeHalfDown RoundingMode = "HalfDown"
 )
+
+type Shipping struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey string `json:"shippingKey"`
+	// Automatically set when the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+	ShippingInfo ShippingInfo `json:"shippingInfo"`
+	// Determines the shipping rates and Tax Rates of the associated Line Item quantities.
+	ShippingAddress Address `json:"shippingAddress"`
+	// Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	//
+	// - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+	// - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
+	// Custom Fields of Shipping.
+	ShippingCustomFields *CustomFields `json:"shippingCustomFields,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *Shipping) UnmarshalJSON(data []byte) error {
+	type Alias Shipping
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ShippingRateInput != nil {
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+*	Wraps all shipping-related information (such as address, rate, deliveries) per Shipping Method for Carts with multiple Shipping Methods.
+*
+ */
+type ShippingDraft struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	Key string `json:"key"`
+	// Shipping Methods added to the Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingMethod *ShippingMethodReference `json:"shippingMethod,omitempty"`
+	// Determines the shipping rate and Tax Rate of the associated Line Items.
+	ShippingAddress *BaseAddress `json:"shippingAddress,omitempty"`
+	// Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	//
+	// - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+	// - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+	//
+	// The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+	ShippingRateInput ShippingRateInputDraft `json:"shippingRateInput,omitempty"`
+	// Tax Rate used for taxing a shipping expense if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	ExternalTaxRate *string `json:"externalTaxRate,omitempty"`
+	// Holds information on how items are delivered to customers.
+	Deliveries []Delivery `json:"deliveries"`
+	// Custom Fields for Shipping.
+	Custom *string `json:"custom,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ShippingDraft) UnmarshalJSON(data []byte) error {
+	type Alias ShippingDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ShippingRateInput != nil {
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
 
 type ShippingInfo struct {
 	ShippingMethodName string `json:"shippingMethodName"`
@@ -1258,6 +1478,13 @@ type ShippingMethodState string
 const (
 	ShippingMethodStateDoesNotMatchCart ShippingMethodState = "DoesNotMatchCart"
 	ShippingMethodStateMatchesCart      ShippingMethodState = "MatchesCart"
+)
+
+type ShippingMode string
+
+const (
+	ShippingModeSingle   ShippingMode = "Single"
+	ShippingModeMultiple ShippingMode = "Multiple"
 )
 
 type ShippingRateInput interface{}
@@ -1551,6 +1778,61 @@ func (obj CartAddCustomLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addCustomLineItem", Alias: (*Alias)(&obj)})
 }
 
+type CartAddCustomShippingMethodAction struct {
+	// User-defined unique identifier of the custom Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey string `json:"shippingKey"`
+	// Name of the custom Shipping Method.
+	ShippingMethodName string `json:"shippingMethodName"`
+	// Determines the shipping rate and Tax Rate of the associated Line Items.
+	ShippingAddress BaseAddress `json:"shippingAddress"`
+	// Determines the shipping price.
+	ShippingRate ShippingRateDraft `json:"shippingRate"`
+	// Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	//
+	// - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+	// - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+	//
+	// The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+	ShippingRateInput ShippingRateInputDraft `json:"shippingRateInput,omitempty"`
+	// Tax Category used to determine a shipping Tax Rate if a Cart has the `Platform` [TaxMode](ctp:api:type:TaxMode).
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	// Tax Rate used to tax a shipping expense if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	ExternalTaxRate *string `json:"externalTaxRate,omitempty"`
+	// Deliveries tied to a Shipping Method in a multi-shipping method Cart.
+	// It holds information on how items are delivered to customers.
+	Deliveries []Delivery `json:"deliveries"`
+	// Custom Fields for the custom Shipping Method.
+	Custom *string `json:"custom,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartAddCustomShippingMethodAction) UnmarshalJSON(data []byte) error {
+	type Alias CartAddCustomShippingMethodAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ShippingRateInput != nil {
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartAddCustomShippingMethodAction) MarshalJSON() ([]byte, error) {
+	type Alias CartAddCustomShippingMethodAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addCustomShippingMethod", Alias: (*Alias)(&obj)})
+}
+
 type CartAddDiscountCodeAction struct {
 	Code string `json:"code"`
 }
@@ -1621,6 +1903,62 @@ func (obj CartAddPaymentAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "addPayment", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error if the referenced shipping method has a predicate that does not match the Cart.
+*
+ */
+type CartAddShippingMethodAction struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey string `json:"shippingKey"`
+	// Value to set.
+	// If empty, any existing value is removed.
+	ShippingMethod ShippingMethodReference `json:"shippingMethod"`
+	// Determines the shipping rate and Tax Rate of the Line Items.
+	ShippingAddress BaseAddress `json:"shippingAddress"`
+	// Used as an input to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	//
+	// - Must be [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartClassificationType](ctp:api:type:CartClassificationType).
+	// - Must be [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput) if [ShippingRateInputType](ctp:api:type:ShippingRateInputType) is [CartScoreType](ctp:api:type:CartScoreType).
+	//
+	// The `shippingRateInput` cannot be set on the Cart if [CartValueType](ctp:api:type:CartValueType) is defined.
+	ShippingRateInput ShippingRateInputDraft `json:"shippingRateInput,omitempty"`
+	// Tax Rate used to tax a shipping expense if a Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	ExternalTaxRate *string `json:"externalTaxRate,omitempty"`
+	// Deliveries tied to a Shipping Method in a multi-shipping method Cart.
+	// It holds information on how items are delivered to customers.
+	Deliveries []Delivery `json:"deliveries"`
+	// Custom Fields for the Shipping Method.
+	Custom *string `json:"custom,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartAddShippingMethodAction) UnmarshalJSON(data []byte) error {
+	type Alias CartAddShippingMethodAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ShippingRateInput != nil {
+		var err error
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInputDraft(obj.ShippingRateInput)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartAddShippingMethodAction) MarshalJSON() ([]byte, error) {
+	type Alias CartAddShippingMethodAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addShippingMethod", Alias: (*Alias)(&obj)})
 }
 
 type CartAddShoppingListAction struct {
@@ -1877,6 +2215,21 @@ func (obj CartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removePayment", Alias: (*Alias)(&obj)})
+}
+
+type CartRemoveShippingMethodAction struct {
+	// User-defined unique identifier of the Shipping Method to remove in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey string `json:"shippingKey"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartRemoveShippingMethodAction) MarshalJSON() ([]byte, error) {
+	type Alias CartRemoveShippingMethodAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeShippingMethod", Alias: (*Alias)(&obj)})
 }
 
 type CartSetAnonymousIdAction struct {
@@ -2506,6 +2859,47 @@ func (obj CartSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setShippingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type CartSetShippingCustomFieldAction struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartSetShippingCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetShippingCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingCustomField", Alias: (*Alias)(&obj)})
+}
+
+type CartSetShippingCustomTypeAction struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the `shippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the `shippingAddress`.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingAddress`.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartSetShippingCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetShippingCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingCustomType", Alias: (*Alias)(&obj)})
 }
 
 type CartSetShippingMethodAction struct {

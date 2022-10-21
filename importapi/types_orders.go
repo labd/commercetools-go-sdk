@@ -191,6 +191,8 @@ type LineItemImportDraft struct {
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
 	// Maps to LineItem.shippingDetails.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// Custom Fields for this Line Item.
+	Custom *Custom `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -649,8 +651,6 @@ type TaxedPrice struct {
 	TotalGross Money `json:"totalGross"`
 	// Maps to `TaxedPrice.taxPortions`.
 	TaxPortions []TaxPortion `json:"taxPortions"`
-	// Maps to `TaxedPrice.totalTax`.
-	TotalTax *Money `json:"totalTax,omitempty"`
 }
 
 /**
@@ -902,6 +902,8 @@ type OrderImport struct {
 	Origin *CartOrigin `json:"origin,omitempty"`
 	// Maps to `Order.itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
+	// Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Store exists.
+	Store *StoreKeyReference `json:"store,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
