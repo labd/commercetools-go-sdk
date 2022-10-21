@@ -12,7 +12,8 @@ type ByProjectKeyCustomersPasswordResetRequestBuilder struct {
 }
 
 /**
-*	Set a new password using a token.
+*	Resetting the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
+*
  */
 func (rb *ByProjectKeyCustomersPasswordResetRequestBuilder) Post(body CustomerResetPassword) *ByProjectKeyCustomersPasswordResetRequestMethodPost {
 	return &ByProjectKeyCustomersPasswordResetRequestMethodPost{

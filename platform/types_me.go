@@ -8,6 +8,195 @@ import (
 	"time"
 )
 
+type MyBusinessUnitAssociateDraft struct {
+	// Expected version of the BusinessUnit on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// [Customer](ctp:api:type:Customer) to create and assign to the Business Unit.
+	Customer MyCustomerDraft `json:"customer"`
+}
+
+type MyBusinessUnitDraft interface{}
+
+func mapDiscriminatorMyBusinessUnitDraft(input interface{}) (MyBusinessUnitDraft, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["unitType"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'unitType'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "Company":
+		obj := MyCompanyDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "Division":
+		obj := MyDivisionDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type MyBusinessUnitUpdate struct {
+	// Expected version of the BusinessUnit on which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the BusinessUnit.
+	Actions []BusinessUnitUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MyBusinessUnitUpdate) UnmarshalJSON(data []byte) error {
+	type Alias MyBusinessUnitUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorBusinessUnitUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type MyBusinessUnitUpdateAction interface{}
+
+func mapDiscriminatorMyBusinessUnitUpdateAction(input interface{}) (MyBusinessUnitUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "addAddress":
+		obj := MyBusinessUnitAddAddressAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "addBillingAddressId":
+		obj := MyBusinessUnitAddBillingAddressIdAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "addShippingAddressId":
+		obj := MyBusinessUnitAddShippingAddressIdAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeAddress":
+		obj := MyBusinessUnitChangeAddressAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeAssociate":
+		obj := MyBusinessUnitChangeAssociateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeName":
+		obj := MyBusinessUnitChangeNameAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeParentUnit":
+		obj := MyBusinessUnitChangeParentUnitAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeAddress":
+		obj := MyBusinessUnitRemoveAddressAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeAssociate":
+		obj := MyBusinessUnitRemoveAssociateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeBillingAddressId":
+		obj := MyBusinessUnitRemoveBillingAddressIdAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeShippingAddressId":
+		obj := MyBusinessUnitRemoveShippingAddressIdAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAddressCustomField":
+		obj := MyBusinessUnitSetAddressCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAddressCustomType":
+		obj := MyBusinessUnitSetAddressCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setContactEmail":
+		obj := MyBusinessUnitSetContactEmailAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomField":
+		obj := MyBusinessUnitSetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomType":
+		obj := MyBusinessUnitSetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setDefaultBillingAddress":
+		obj := MyBusinessUnitSetDefaultBillingAddressAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setDefaultShippingAddress":
+		obj := MyBusinessUnitSetDefaultShippingAddressAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
 type MyCartDraft struct {
 	// A three-digit currency code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
 	Currency      string  `json:"currency"`
@@ -31,6 +220,8 @@ type MyCartDraft struct {
 	// Contains addresses for orders with multiple shipping addresses.
 	// Each address must contain a key which is unique in this cart.
 	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
+	// The BusinessUnit the cart will belong to.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// The code of existing DiscountCodes.
@@ -272,27 +463,102 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 	return nil, nil
 }
 
-type MyCustomerDraft struct {
-	Email       string  `json:"email"`
-	Password    string  `json:"password"`
-	FirstName   *string `json:"firstName,omitempty"`
-	LastName    *string `json:"lastName,omitempty"`
-	MiddleName  *string `json:"middleName,omitempty"`
-	Title       *string `json:"title,omitempty"`
-	DateOfBirth *Date   `json:"dateOfBirth,omitempty"`
-	CompanyName *string `json:"companyName,omitempty"`
-	VatId       *string `json:"vatId,omitempty"`
-	// Sets the ID of each address to be unique in the addresses list.
+/**
+*	Draft type to represent the top level of a business.
+*	Contains the fields and values of the generic [MyBusinessUnitDraft](ctp:api:type:BusinessUnitDraft) that are used specifically for creating a [Company](ctp:api:type:Company).
+*
+ */
+type MyCompanyDraft struct {
+	// User-defined unique identifier for the BusinessUnit.
+	Key string `json:"key"`
+	// Name of the Business Unit.
+	Name string `json:"name"`
+	// Email address of the Business Unit.
+	ContactEmail *string `json:"contactEmail,omitempty"`
+	// Custom Fields for the Business Unit.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// Addresses used by the Business Unit.
 	Addresses []BaseAddress `json:"addresses"`
-	// The index of the address in the addresses array.
-	// The `defaultShippingAddressId` of the customer will be set to the ID of that address.
-	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
-	// The index of the address in the addresses array.
-	// The `defaultBillingAddressId` of the customer will be set to the ID of that address.
+	// Indexes of entries in `addresses` to set as shipping addresses.
+	// The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
+	ShippingAddresses []int `json:"shippingAddresses"`
+	// Index of the entry in `addresses` to set as the default shipping address.
+	DefaultShipingAddress *int `json:"defaultShipingAddress,omitempty"`
+	// Indexes of entries in `addresses` to set as billing addresses.
+	// The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
+	BillingAddresses []int `json:"billingAddresses"`
+	// Index of the entry in `addresses` to set as the default billing address.
 	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
-	// The custom fields.
-	Custom *CustomFieldsDraft        `json:"custom,omitempty"`
-	Locale *string                   `json:"locale,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyCompanyDraft) MarshalJSON() ([]byte, error) {
+	type Alias MyCompanyDraft
+	data, err := json.Marshal(struct {
+		Action string `json:"unitType"`
+		*Alias
+	}{Action: "Company", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addresses"] == nil {
+		delete(raw, "addresses")
+	}
+
+	if raw["shippingAddresses"] == nil {
+		delete(raw, "shippingAddresses")
+	}
+
+	if raw["billingAddresses"] == nil {
+		delete(raw, "billingAddresses")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+type MyCustomerDraft struct {
+	// Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or Store the Customer is assigned to.
+	// It is the mandatory unique identifier of a Customer.
+	Email string `json:"email"`
+	// Password of the Customer.
+	Password string `json:"password"`
+	// Given name (first name) of the Customer.
+	FirstName *string `json:"firstName,omitempty"`
+	// Family name (last name) of the Customer.
+	LastName *string `json:"lastName,omitempty"`
+	// Middle name of the Customer.
+	MiddleName *string `json:"middleName,omitempty"`
+	// Title of the Customer, for example, 'Dr.'.
+	Title *string `json:"title,omitempty"`
+	// Salutation of the Customer, for example, 'Mr.' or 'Mrs.'.
+	Salutation *string `json:"salutation,omitempty"`
+	// Date of birth of the Customer.
+	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
+	// Company name of the Customer.
+	CompanyName *string `json:"companyName,omitempty"`
+	// Unique VAT ID of the Customer.
+	VatId *string `json:"vatId,omitempty"`
+	// Addresses of the Customer.
+	Addresses []BaseAddress `json:"addresses"`
+	// Index of the address in the `addresses` array to use as the default shipping address.
+	// The `defaultShippingAddressId` of the Customer will be set to the `id` of that address.
+	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
+	// Index of the address in the `addresses` array to use as the default billing address.
+	// The `defaultBillingAddressId` of the Customer will be set to the `id` of that address.
+	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
+	// Custom Fields for the Customer.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Preferred language of the Customer. Must be one of the languages supported by the [Project](ctp:api:type:Project).
+	Locale *string `json:"locale,omitempty"`
+	// Sets the [Stores](ctp:api:type:Store) for the Customer.
 	Stores []StoreResourceIdentifier `json:"stores"`
 }
 
@@ -325,7 +591,9 @@ func (obj MyCustomerDraft) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerUpdate struct {
-	Version int                      `json:"version"`
+	// Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Customer.
 	Actions []MyCustomerUpdateAction `json:"actions"`
 }
 
@@ -489,6 +757,69 @@ func mapDiscriminatorMyCustomerUpdateAction(input interface{}) (MyCustomerUpdate
 		return obj, nil
 	}
 	return nil, nil
+}
+
+/**
+*	Draft type to model divisions that are part of the [Company](ctp:api:type:Company) or a higher order [Division](ctp:api:type:Division).
+*	Contains the fields and values of the generic [MyBusinessUnitDraft](ctp:api:type:MyBusinessUnitDraft) that are used specifically for creating a Division.
+*
+ */
+type MyDivisionDraft struct {
+	// User-defined unique identifier for the BusinessUnit.
+	Key string `json:"key"`
+	// Name of the Business Unit.
+	Name string `json:"name"`
+	// Email address of the Business Unit.
+	ContactEmail *string `json:"contactEmail,omitempty"`
+	// Custom Fields for the Business Unit.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// Addresses used by the Business Unit.
+	Addresses []BaseAddress `json:"addresses"`
+	// Indexes of entries in `addresses` to set as shipping addresses.
+	// The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
+	ShippingAddresses []int `json:"shippingAddresses"`
+	// Index of the entry in `addresses` to set as the default shipping address.
+	DefaultShipingAddress *int `json:"defaultShipingAddress,omitempty"`
+	// Indexes of entries in `addresses` to set as billing addresses.
+	// The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
+	BillingAddresses []int `json:"billingAddresses"`
+	// Index of the entry in `addresses` to set as the default billing address.
+	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
+	// The parent unit of this Division. Can be a Company or a Division.
+	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyDivisionDraft) MarshalJSON() ([]byte, error) {
+	type Alias MyDivisionDraft
+	data, err := json.Marshal(struct {
+		Action string `json:"unitType"`
+		*Alias
+	}{Action: "Division", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addresses"] == nil {
+		delete(raw, "addresses")
+	}
+
+	if raw["shippingAddresses"] == nil {
+		delete(raw, "shippingAddresses")
+	}
+
+	if raw["billingAddresses"] == nil {
+		delete(raw, "billingAddresses")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 type MyLineItemDraft struct {
@@ -659,11 +990,11 @@ func mapDiscriminatorMyPaymentUpdateAction(input interface{}) (MyPaymentUpdateAc
 }
 
 type MyQuoteRequestDraft struct {
-	// ResourceIdentifier to the Cart from which this quote request is created.
+	// ResourceIdentifier of the Cart from which the Quote Request is created.
 	Cart CartResourceIdentifier `json:"cart"`
 	// Current version of the Cart.
 	Version int `json:"version"`
-	// Text message included in the request.
+	// Message from the Buyer included in the Quote Request.
 	Comment string `json:"comment"`
 }
 
@@ -706,6 +1037,67 @@ func mapDiscriminatorMyQuoteRequestUpdateAction(input interface{}) (MyQuoteReque
 	switch discriminator {
 	case "cancelQuoteRequest":
 		obj := MyQuoteRequestCancelAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	[QuoteStates](ctp:api:type:QuoteState) that can be set using the [Change My Quote State](ctp:api:type:MyQuoteChangeMyQuoteStateAction) update action.
+*
+ */
+type MyQuoteState string
+
+const (
+	MyQuoteStateDeclined MyQuoteState = "Declined"
+	MyQuoteStateAccepted MyQuoteState = "Accepted"
+)
+
+type MyQuoteUpdate struct {
+	// Expected version of the [Quote](ctp:api:type:Quote) to which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the [Quote](ctp:api:type:Quote).
+	Actions []MyQuoteUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MyQuoteUpdate) UnmarshalJSON(data []byte) error {
+	type Alias MyQuoteUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorMyQuoteUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type MyQuoteUpdateAction interface{}
+
+func mapDiscriminatorMyQuoteUpdateAction(input interface{}) (MyQuoteUpdateAction, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["action"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'action'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "changeMyQuoteState":
+		obj := MyQuoteChangeMyQuoteStateAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -928,6 +1320,369 @@ type MyTransactionDraft struct {
 
 type ReplicaMyCartDraft struct {
 	Reference interface{} `json:"reference"`
+}
+
+/**
+*	Adding an address to a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitAddressAdded](ctp:api:type:BusinessUnitAddressAddedMessage) Message.
+*
+ */
+type MyBusinessUnitAddAddressAction struct {
+	// The address to add to `addresses`.
+	Address BaseAddress `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitAddAddressAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitAddAddressAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addAddress", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adding a billing address to a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitBillingAddressAdded](ctp:api:type:BusinessUnitBillingAddressAddedMessage) Message.
+*
+ */
+type MyBusinessUnitAddBillingAddressIdAction struct {
+	// ID of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitAddBillingAddressIdAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitAddBillingAddressIdAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addBillingAddressId", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adding a shipping address to a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitShippingAddressAdded](ctp:api:type:BusinessUnitShippingAddressAddedMessage) Message.
+*
+ */
+type MyBusinessUnitAddShippingAddressIdAction struct {
+	// ID of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitAddShippingAddressIdAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitAddShippingAddressIdAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addShippingAddressId", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Changing the address on a Business Unit generates the [BusinessUnitAddressChanged](ctp:api:type:BusinessUnitAddressChangedMessage) Message.
+*
+ */
+type MyBusinessUnitChangeAddressAction struct {
+	// ID of the address to change. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the address to change. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+	// New address to set.
+	Address BaseAddress `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitChangeAddressAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitChangeAddressAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeAddress", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the [Associate](ctp:api:type:Associate) on a [Business Unit](ctp:api:type:BusinessUnit) generates the [BusinessUnitAssociateChanged](ctp:api:type:BusinessUnitAssociateChangedMessage) Message.
+*
+ */
+type MyBusinessUnitChangeAssociateAction struct {
+	// The Associate to add.
+	Associate AssociateDraft `json:"associate"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitChangeAssociateAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitChangeAssociateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeAssociate", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the name on a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitNameChanged](ctp:api:type:BusinessUnitNameChangedMessage) Message.
+*
+ */
+type MyBusinessUnitChangeNameAction struct {
+	// New name to set.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitChangeNameAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitChangeNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeName", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message. The user must be an Associate with the `Admin` role in the new parent unit.
+*
+ */
+type MyBusinessUnitChangeParentUnitAction struct {
+	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitChangeParentUnitAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitChangeParentUnitAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeParentUnit", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Removing the address from a [Business Unit](ctp:api:type:BusinessUnit) generates the [BusinessUnitAddressRemoved](ctp:api:type:BusinessUnitAddressRemovedMessage) Message.
+*
+ */
+type MyBusinessUnitRemoveAddressAction struct {
+	// ID of the address to be removed. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the address to be removed. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitRemoveAddressAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitRemoveAddressAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeAddress", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Removing an [Associate](ctp:api:type:Associate) from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitAssociateRemoved](ctp:api:type:BusinessUnitAssociateRemovedMessage) Message.
+*
+ */
+type MyBusinessUnitRemoveAssociateAction struct {
+	// [Associate](ctp:api:type:Associate) to remove.
+	Customer CustomerResourceIdentifier `json:"customer"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitRemoveAssociateAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitRemoveAssociateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeAssociate", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Removing a billing address from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitBillingAddressRemoved](ctp:api:type:BusinessUnitBillingAddressRemovedMessage) Message.
+*
+ */
+type MyBusinessUnitRemoveBillingAddressIdAction struct {
+	// ID of the billing address to be removed. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the billing address to be removed. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitRemoveBillingAddressIdAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitRemoveBillingAddressIdAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeBillingAddressId", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Removing a shipping address from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitShippingAddressRemoved](ctp:api:type:BusinessUnitShippingAddressRemovedMessage) Message.
+*
+ */
+type MyBusinessUnitRemoveShippingAddressIdAction struct {
+	// ID of the shipping address to be removed. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the shipping address to be removed. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitRemoveShippingAddressIdAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitRemoveShippingAddressIdAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeShippingAddressId", Alias: (*Alias)(&obj)})
+}
+
+type MyBusinessUnitSetAddressCustomFieldAction struct {
+	// ID of the `address` to be extended.
+	AddressId string `json:"addressId"`
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetAddressCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
+}
+
+type MyBusinessUnitSetAddressCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the `address`.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
+	Fields *FieldContainer `json:"fields,omitempty"`
+	// ID of the `address` to be extended.
+	AddressId string `json:"addressId"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetAddressCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Setting the contact email on a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitContactEmailSet](ctp:api:type:BusinessUnitContactEmailSetMessage) Message.
+*
+ */
+type MyBusinessUnitSetContactEmailAction struct {
+	// Email to set.
+	// If `contactEmail` is absent or `null`, the existing contact email, if any, will be removed.
+	ContactEmail *string `json:"contactEmail,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetContactEmailAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetContactEmailAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setContactEmail", Alias: (*Alias)(&obj)})
+}
+
+type MyBusinessUnitSetCustomFieldAction struct {
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+type MyBusinessUnitSetCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) for the BusinessUnit.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Setting the default billing address on a [Business Unit](ctp:api:type:BusinessUnit) generates the [BusinessUnitDefaultBillingAddressSet](ctp:api:type:BusinessUnitDefaultBillingAddressSetMessage) Message.
+*
+ */
+type MyBusinessUnitSetDefaultBillingAddressAction struct {
+	// ID of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the address to add as a billing address. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetDefaultBillingAddressAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetDefaultBillingAddressAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDefaultBillingAddress", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Setting the default shipping address on a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitDefaultShippingAddressSet](ctp:api:type:BusinessUnitDefaultShippingAddressSetMessage) Message.
+*
+ */
+type MyBusinessUnitSetDefaultShippingAddressAction struct {
+	// ID of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+	AddressId *string `json:"addressId,omitempty"`
+	// Key of the address to add as a shipping address. Either `addressId` or `addressKey` is required.
+	AddressKey *string `json:"addressKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyBusinessUnitSetDefaultShippingAddressAction) MarshalJSON() ([]byte, error) {
+	type Alias MyBusinessUnitSetDefaultShippingAddressAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDefaultShippingAddress", Alias: (*Alias)(&obj)})
 }
 
 type MyCartAddDiscountCodeAction struct {
@@ -1370,7 +2125,12 @@ func (obj MyCartUpdateItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "updateItemShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding an address to the Customer produces the [CustomerAddressAdded](ctp:api:type:CustomerAddressAddedMessage) Message.
+*
+ */
 type MyCustomerAddAddressAction struct {
+	// Value to append to the `addresses` array.
 	Address BaseAddress `json:"address"`
 }
 
@@ -1384,8 +2144,14 @@ func (obj MyCustomerAddAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds an address from the `addresses` array to `billingAddressIds`. Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerAddBillingAddressIdAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to become a billing address.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to become a billing address.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1399,8 +2165,14 @@ func (obj MyCustomerAddBillingAddressIdAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addBillingAddressId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds an address from the `addresses` array to `shippingAddressIds`. Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerAddShippingAddressIdAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to become a shipping address.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to become a shipping address.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1414,10 +2186,19 @@ func (obj MyCustomerAddShippingAddressIdAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addShippingAddressId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changing an address of the Customer produces the [CustomerAddressChanged](ctp:api:type:CustomerAddressChangedMessage) Message.
+*
+*	Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerChangeAddressAction struct {
-	AddressId  *string     `json:"addressId,omitempty"`
-	AddressKey *string     `json:"addressKey,omitempty"`
-	Address    BaseAddress `json:"address"`
+	// `id` of the [Address](ctp:api:type:Address) to change.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to change.
+	AddressKey *string `json:"addressKey,omitempty"`
+	// Value to set.
+	Address BaseAddress `json:"address"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1430,7 +2211,12 @@ func (obj MyCustomerChangeAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changing the email of the Customer produces the [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message.
+*
+ */
 type MyCustomerChangeEmailAction struct {
+	// New value to set.
 	Email string `json:"email"`
 }
 
@@ -1444,8 +2230,16 @@ func (obj MyCustomerChangeEmailAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeEmail", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removing an address of the Customer produces the [CustomerAddressRemoved](ctp:api:type:CustomerAddressRemovedMessage) Message.
+*
+*	Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerRemoveAddressAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to remove.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to remove.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1459,8 +2253,15 @@ func (obj MyCustomerRemoveAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes an existing billing address from `billingAddressesIds`.
+*	If the billing address is the default billing address, the `defaultBillingAddressId` is unset. Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerRemoveBillingAddressIdAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1474,8 +2275,15 @@ func (obj MyCustomerRemoveBillingAddressIdAction) MarshalJSON() ([]byte, error) 
 	}{Action: "removeBillingAddressId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes an existing shipping address from `shippingAddressesIds`.
+*	If the shipping address is the default shipping address, the `defaultShippingAddressId` is unset. Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerRemoveShippingAddressIdAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1489,7 +2297,13 @@ func (obj MyCustomerRemoveShippingAddressIdAction) MarshalJSON() ([]byte, error)
 	}{Action: "removeShippingAddressId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the `companyName` field on the Customer produces the [CustomerCompanyNameSet](ctp:api:type:CustomerCompanyNameSetMessage) Message.
+*
+ */
 type MyCustomerSetCompanyNameAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	CompanyName *string `json:"companyName,omitempty"`
 }
 
@@ -1507,7 +2321,7 @@ type MyCustomerSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -1540,7 +2354,13 @@ func (obj MyCustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the date of birth of the Customer produces the [CustomerDateOfBirthSet](ctp:api:type:CustomerDateOfBirthSetMessage) Message.
+*
+ */
 type MyCustomerSetDateOfBirthAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
@@ -1554,8 +2374,15 @@ func (obj MyCustomerSetDateOfBirthAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDateOfBirth", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the default billing address from `addresses`.
+*	If the address is not currently a billing address, it is added to `billingAddressIds`. Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerSetDefaultBillingAddressAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to become the default billing address.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to become the default billing address.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1569,8 +2396,15 @@ func (obj MyCustomerSetDefaultBillingAddressAction) MarshalJSON() ([]byte, error
 	}{Action: "setDefaultBillingAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the default shipping address from `addresses`.
+*	If the address is not currently a shipping address, it is added to `shippingAddressIds`. Either `addressId` or `addressKey` is required.
+*
+ */
 type MyCustomerSetDefaultShippingAddressAction struct {
-	AddressId  *string `json:"addressId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) to become the default shipping address.
+	AddressId *string `json:"addressId,omitempty"`
+	// `key` of the [Address](ctp:api:type:Address) to become the default shipping address.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1584,7 +2418,13 @@ func (obj MyCustomerSetDefaultShippingAddressAction) MarshalJSON() ([]byte, erro
 	}{Action: "setDefaultShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the first name of the Customer produces the [CustomerFirstNameSetMessage](ctp:api:type:CustomerFirstNameSetMessage).
+*
+ */
 type MyCustomerSetFirstNameAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	FirstName *string `json:"firstName,omitempty"`
 }
 
@@ -1598,7 +2438,13 @@ func (obj MyCustomerSetFirstNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setFirstName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage).
+*
+ */
 type MyCustomerSetLastNameAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	LastName *string `json:"lastName,omitempty"`
 }
 
@@ -1613,6 +2459,8 @@ func (obj MyCustomerSetLastNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerSetLocaleAction struct {
+	// Value to set.
+	// Must be one of the languages supported by the [Project](ctp:api:type:Project).
 	Locale *string `json:"locale,omitempty"`
 }
 
@@ -1627,6 +2475,8 @@ func (obj MyCustomerSetLocaleAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerSetMiddleNameAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	MiddleName *string `json:"middleName,omitempty"`
 }
 
@@ -1641,6 +2491,8 @@ func (obj MyCustomerSetMiddleNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerSetSalutationAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	Salutation *string `json:"salutation,omitempty"`
 }
 
@@ -1654,7 +2506,13 @@ func (obj MyCustomerSetSalutationAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setSalutation", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the title of the Customer produces the [CustomerTitleSetMessage](ctp:api:type:CustomerTitleSetMessage).
+*
+ */
 type MyCustomerSetTitleAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	Title *string `json:"title,omitempty"`
 }
 
@@ -1669,6 +2527,8 @@ func (obj MyCustomerSetTitleAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerSetVatIdAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	VatId *string `json:"vatId,omitempty"`
 }
 
@@ -1792,6 +2652,21 @@ func (obj MyPaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setTransactionCustomField", Alias: (*Alias)(&obj)})
+}
+
+type MyQuoteChangeMyQuoteStateAction struct {
+	// New state to be set for the Quote.
+	QuoteState MyQuoteState `json:"quoteState"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyQuoteChangeMyQuoteStateAction) MarshalJSON() ([]byte, error) {
+	type Alias MyQuoteChangeMyQuoteStateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeMyQuoteState", Alias: (*Alias)(&obj)})
 }
 
 /**

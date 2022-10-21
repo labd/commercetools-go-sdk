@@ -446,6 +446,12 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 	}
 
 	switch discriminator {
+	case "business-unit":
+		obj := BusinessUnitKeyReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "store":
 		obj := StoreKeyReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -502,9 +508,15 @@ const (
 	MoneyTypeHighPrecision MoneyType = "highPrecision"
 )
 
+/**
+*	The representation for prices embedded in [LineItems](ctp:api:type:LineItem) and in [ProductVariants](ctp:api:type:ProductVariant) when the [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is `Embedded`.
+*	For the `Standalone` ProductPriceMode refer to [StandalonePrice](ctp:api:type:StandalonePrice).
+ */
 type Price struct {
 	// Unique identifier of this Price.
 	ID string `json:"id"`
+	// User-defined identifier of the Price. It is unique per [ProductVariant](ctp:api:type:ProductVariant).
+	Key *string `json:"key,omitempty"`
 	// Money value of this Price.
 	Value TypedMoney `json:"value"`
 	// Country for which this Price is valid.
@@ -569,7 +581,12 @@ func (obj Price) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	The draft representation for prices to be embedded into [ProductVariantDrafts](ctp:api:type:ProductVariantDraft) when the [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) is `Embedded`. For the `Standalone` ProductPriceMode use [StandalonePriceDraft](ctp:api:type:StandalonePriceDraft).
+ */
 type PriceDraft struct {
+	// User-defined identifier for the Price. It must be unique per [ProductVariant](ctp:api:type:ProductVariant).
+	Key *string `json:"key,omitempty"`
 	// Money value of this Price.
 	Value Money `json:"value"`
 	// Set this field if this Price is only valid for the specified country.
@@ -578,13 +595,13 @@ type PriceDraft struct {
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// Set this field if this Price is only valid for the referenced `ProductDistribution` [Channel](ctp:api:type:Channel).
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
-	// Set this field if this Price is valid only valid from the specified date and time.
+	// Set this field if this Price is only valid from the specified date and time. Must be at least 1 ms earlier than `validUntil`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Set this field if this Price is valid only valid until the specified date and time.
+	// Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Set this field to add a DiscountedPrice from an external service.
+	// Set this field to add a DiscountedPrice from an **external service**.
 	//
-	// The API sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
+	// Otherwise, Composable Commerce sets this field automatically if at least one [ProductDiscount](ctp:api:type:ProductDiscount) applies.
 	// The DiscountedPrice must reference a ProductDiscount with:
 	//
 	// * The `isActive` flag set to `true`.
@@ -738,6 +755,19 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 	}
 
 	switch discriminator {
+	case "business-unit":
+		obj := BusinessUnitReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Obj != nil {
+			var err error
+			obj.Obj, err = mapDiscriminatorBusinessUnit(obj.Obj)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "cart-discount":
 		obj := CartDiscountReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -917,6 +947,7 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 type ReferenceTypeId string
 
 const (
+	ReferenceTypeIdBusinessUnit     ReferenceTypeId = "business-unit"
 	ReferenceTypeIdCart             ReferenceTypeId = "cart"
 	ReferenceTypeIdCartDiscount     ReferenceTypeId = "cart-discount"
 	ReferenceTypeIdCategory         ReferenceTypeId = "category"
@@ -941,6 +972,7 @@ const (
 	ReferenceTypeIdShippingMethod   ReferenceTypeId = "shipping-method"
 	ReferenceTypeIdShoppingList     ReferenceTypeId = "shopping-list"
 	ReferenceTypeIdStagedQuote      ReferenceTypeId = "staged-quote"
+	ReferenceTypeIdStandalonePrice  ReferenceTypeId = "standalone-price"
 	ReferenceTypeIdState            ReferenceTypeId = "state"
 	ReferenceTypeIdStore            ReferenceTypeId = "store"
 	ReferenceTypeIdSubscription     ReferenceTypeId = "subscription"
@@ -969,6 +1001,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 	}
 
 	switch discriminator {
+	case "business-unit":
+		obj := BusinessUnitResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "cart-discount":
 		obj := CartDiscountResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {

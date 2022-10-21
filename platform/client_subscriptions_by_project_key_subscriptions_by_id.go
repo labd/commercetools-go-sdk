@@ -12,9 +12,13 @@ type ByProjectKeySubscriptionsByIDRequestBuilder struct {
 	client     *Client
 }
 
-/**
-*	Retrieves the representation of a subscription by its id.
- */
+func (rb *ByProjectKeySubscriptionsByIDRequestBuilder) WithIdHealth() *ByProjectKeySubscriptionsByIDHealthRequestBuilder {
+	return &ByProjectKeySubscriptionsByIDHealthRequestBuilder{
+		projectKey: rb.projectKey,
+		id:         rb.id,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeySubscriptionsByIDRequestBuilder) Get() *ByProjectKeySubscriptionsByIDRequestMethodGet {
 	return &ByProjectKeySubscriptionsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/subscriptions/%s", rb.projectKey, rb.id),

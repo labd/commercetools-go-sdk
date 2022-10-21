@@ -5,6 +5,7 @@ package platform
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -14,20 +15,51 @@ type ByProjectKeyMeActiveCartRequestMethodGet struct {
 	url     string
 	client  *Client
 	headers http.Header
+	params  *ByProjectKeyMeActiveCartRequestMethodGetInput
 }
 
 func (r *ByProjectKeyMeActiveCartRequestMethodGet) Dump() map[string]interface{} {
 	return map[string]interface{}{
-		"url": r.url,
+		"url":    r.url,
+		"params": r.params,
 	}
 }
 
+type ByProjectKeyMeActiveCartRequestMethodGetInput struct {
+	Expand []string
+}
+
+func (input *ByProjectKeyMeActiveCartRequestMethodGetInput) Values() url.Values {
+	values := url.Values{}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
+	}
+	return values
+}
+
+func (rb *ByProjectKeyMeActiveCartRequestMethodGet) Expand(v []string) *ByProjectKeyMeActiveCartRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyMeActiveCartRequestMethodGetInput{}
+	}
+	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyMeActiveCartRequestMethodGet) WithQueryParams(input ByProjectKeyMeActiveCartRequestMethodGetInput) *ByProjectKeyMeActiveCartRequestMethodGet {
+	rb.params = &input
+	return rb
+}
 func (rb *ByProjectKeyMeActiveCartRequestMethodGet) WithHeaders(headers http.Header) *ByProjectKeyMeActiveCartRequestMethodGet {
 	rb.headers = headers
 	return rb
 }
 func (rb *ByProjectKeyMeActiveCartRequestMethodGet) Execute(ctx context.Context) (result *Cart, err error) {
-	queryParams := url.Values{}
+	var queryParams url.Values
+	if rb.params != nil {
+		queryParams = rb.params.Values()
+	} else {
+		queryParams = url.Values{}
+	}
 	resp, err := rb.client.get(
 		ctx,
 		rb.url,

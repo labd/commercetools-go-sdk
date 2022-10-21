@@ -12,7 +12,8 @@ type ByProjectKeyCustomersEmailConfirmRequestBuilder struct {
 }
 
 /**
-*	Verifies customer's email using a token.
+*	Verifying the email of the Customer produces the [CustomerEmailVerified](ctp:api:type:CustomerEmailVerifiedMessage) Message.
+*
  */
 func (rb *ByProjectKeyCustomersEmailConfirmRequestBuilder) Post(body CustomerEmailVerify) *ByProjectKeyCustomersEmailConfirmRequestMethodPost {
 	return &ByProjectKeyCustomersEmailConfirmRequestMethodPost{

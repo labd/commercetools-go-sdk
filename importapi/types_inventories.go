@@ -11,6 +11,7 @@ import (
 *
  */
 type InventoryImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// Maps to `Inventory.sku`
 	Sku string `json:"sku"`

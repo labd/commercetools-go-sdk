@@ -38,6 +38,8 @@ type CustomerAddress struct {
 	Fax                   *string `json:"fax,omitempty"`
 	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
 	ExternalId            *string `json:"externalId,omitempty"`
+	// Custom Fields for the address.
+	Custom *Custom `json:"custom,omitempty"`
 }
 
 /**
@@ -45,6 +47,7 @@ type CustomerAddress struct {
 *
  */
 type CustomerImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// Maps to `Customer.customerNumber`.
 	CustomerNumber *string `json:"customerNumber,omitempty"`

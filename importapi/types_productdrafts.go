@@ -12,6 +12,7 @@ import (
 *
  */
 type ProductDraftImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// The `productType` of a [Product](/../api/projects/products#product).
 	// Maps to `Product.productType`.

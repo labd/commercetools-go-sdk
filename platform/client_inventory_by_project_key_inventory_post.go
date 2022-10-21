@@ -56,7 +56,7 @@ func (rb *ByProjectKeyInventoryRequestMethodPost) WithHeaders(headers http.Heade
 }
 
 /**
-*	Produces the [InventoryEntryCreatedMessage](ctp:api:type:InventoryEntryCreatedMessage).
+*	Produces the [InventoryEntryCreated](ctp:api:type:InventoryEntryCreatedMessage) Message.
  */
 func (rb *ByProjectKeyInventoryRequestMethodPost) Execute(ctx context.Context) (result *InventoryEntry, err error) {
 	data, err := serializeInput(rb.body)

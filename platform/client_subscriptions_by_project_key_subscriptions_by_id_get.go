@@ -53,10 +53,6 @@ func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Retrieves the representation of a subscription by its id.
- */
 func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) Execute(ctx context.Context) (result *Subscription, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -62,9 +62,9 @@ type StoreDraft struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
 	Languages []string `json:"languages"`
-	// ResourceIdentifier to a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// ResourceIdentifier of a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
-	// ResourceIdentifier to a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// ResourceIdentifier of a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
 	// Controls availability of Products for this Store via active Product Selections.
 	//
@@ -321,7 +321,7 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 }
 
 /**
-*	This update action produces the [StoreDistributionChannelsChangedMessage](ctp:api:type:StoreDistributionChannelsChangedMessage).
+*	This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
 *	It has no effect if a given distribution channel is already present in a Store.
 *
  */
@@ -362,7 +362,9 @@ func (obj StoreAddProductSelectionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This action has no effect if a given supply channel is already present in a Store.
+*	This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+*	It has no effect if a given supply channel is already present in a Store.
+*
  */
 type StoreAddSupplyChannelAction struct {
 	// Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
@@ -401,7 +403,7 @@ func (obj StoreChangeProductSelectionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action produces the [StoreDistributionChannelsChangedMessage](ctp:api:type:StoreDistributionChannelsChangedMessage).
+*	This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
 *
  */
 type StoreRemoveDistributionChannelAction struct {
@@ -438,6 +440,10 @@ func (obj StoreRemoveProductSelectionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeProductSelection", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+*
+ */
 type StoreRemoveSupplyChannelAction struct {
 	// Value to remove. ResourceIdentifier of a Channel with the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel ChannelResourceIdentifier `json:"supplyChannel"`
@@ -491,7 +497,7 @@ func (obj StoreSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action produces the [StoreDistributionChannelsChangedMessage](ctp:api:type:StoreDistributionChannelsChangedMessage).
+*	This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
 *
  */
 type StoreSetDistributionChannelsAction struct {
@@ -526,6 +532,10 @@ func (obj StoreSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	This update action produces the [StoreLanguagesChanged](ctp:api:type:StoreLanguagesChangedMessage) Message.
+*
+ */
 type StoreSetLanguagesAction struct {
 	// Value to set.
 	// Any attempt to use languages other than the ones defined in the [Project](ctp:api:type:Project) will fail with a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
@@ -557,6 +567,10 @@ func (obj StoreSetLanguagesAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	This update action produces the [StoreNameSet](ctp:api:type:StoreNameSetMessage) Message.
+*
+ */
 type StoreSetNameAction struct {
 	// Value to set.
 	Name *LocalizedString `json:"name,omitempty"`
@@ -609,6 +623,10 @@ func (obj StoreSetProductSelectionsAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+*
+ */
 type StoreSetSupplyChannelsAction struct {
 	// Value to set.
 	// If not defined, the Store's `supplyChannels` are unset.

@@ -363,7 +363,7 @@ func (obj ReviewSetLocaleAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action produces the [ReviewRatingSetMessage](ctp:api:type:ReviewRatingSetMessage).
+*	This update action produces the [ReviewRatingSet](ctp:api:type:ReviewRatingSetMessage) Message.
 *
  */
 type ReviewSetRatingAction struct {
@@ -427,7 +427,7 @@ func (obj ReviewSetTitleAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Transition to a new State. This update action produces the [ReviewStateTransitionMessage](/message-types#reviewstatetransitionmessage).
+*	Transition to a new State. This update action produces the [Review State Transition](ctp:api:type:ReviewStateTransitionMessage) Message.
 *
  */
 type ReviewTransitionStateAction struct {

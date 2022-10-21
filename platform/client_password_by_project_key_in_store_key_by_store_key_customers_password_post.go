@@ -29,7 +29,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestMethodPost) Wi
 }
 
 /**
-*	Change a customers password
+*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersPasswordRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)

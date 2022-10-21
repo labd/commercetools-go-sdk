@@ -481,7 +481,7 @@ type ProductsInStorePagedQueryResponse struct {
 *
  */
 type ProductSelectionAddProductAction struct {
-	// ResourceIdentifier to Product
+	// ResourceIdentifier of the Product
 	Product ProductResourceIdentifier `json:"product"`
 	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
 	// If not supplied all Variants are deemed to be included.
@@ -532,7 +532,7 @@ func (obj ProductSelectionChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionRemoveProductAction struct {
-	// ResourceIdentifier to Product
+	// ResourceIdentifier of the Product
 	Product ProductResourceIdentifier `json:"product"`
 }
 
@@ -604,7 +604,7 @@ func (obj ProductSelectionSetKeyAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductSelectionSetVariantSelectionAction struct {
-	// ResourceIdentifier to Product
+	// ResourceIdentifier of the Product
 	Product ProductResourceIdentifier `json:"product"`
 	// Determines which Variants of the previously added Product are to be included in, or excluded from, the Product Selection.
 	// Leave it empty to unset an existing Variant Selection.

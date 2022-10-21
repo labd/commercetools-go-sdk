@@ -80,6 +80,11 @@ func (rb *ByProjectKeyCustomersByIDRequestMethodDelete) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyCustomersByIDRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

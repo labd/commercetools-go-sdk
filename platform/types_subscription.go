@@ -8,8 +8,124 @@ import (
 	"time"
 )
 
+/**
+*	Defines the method of authentication for AWS SQS and SNS Destinations.
+ */
+type AwsAuthenticationMode string
+
+const (
+	AwsAuthenticationModeCredentials AwsAuthenticationMode = "Credentials"
+	AwsAuthenticationModeIAM         AwsAuthenticationMode = "IAM"
+)
+
+/**
+*	Notification about changes to a resource. The payload format differs for resource [creation](ctp:api:type:ResourceCreatedDeliveryPayload),
+*	[update](ctp:api:type:ResourceUpdatedDeliveryPayload),
+*	and [deletion](ctp:api:type:ResourceDeletedDeliveryPayload).
+*
+ */
 type ChangeSubscription struct {
-	ResourceTypeId string `json:"resourceTypeId"`
+	// Unique identifier for the type of resource, for example, `cart`.
+	ResourceTypeId ChangeSubscriptionResourceTypeId `json:"resourceTypeId"`
+}
+
+/**
+*	Resource types supported by [ChangeSubscriptions](ctp:api:type:ChangeSubscription):
+*
+ */
+type ChangeSubscriptionResourceTypeId string
+
+const (
+	ChangeSubscriptionResourceTypeIdBusinessUnit          ChangeSubscriptionResourceTypeId = "business-unit"
+	ChangeSubscriptionResourceTypeIdCart                  ChangeSubscriptionResourceTypeId = "cart"
+	ChangeSubscriptionResourceTypeIdCartDiscount          ChangeSubscriptionResourceTypeId = "cart-discount"
+	ChangeSubscriptionResourceTypeIdCategory              ChangeSubscriptionResourceTypeId = "category"
+	ChangeSubscriptionResourceTypeIdChannel               ChangeSubscriptionResourceTypeId = "channel"
+	ChangeSubscriptionResourceTypeIdCustomer              ChangeSubscriptionResourceTypeId = "customer"
+	ChangeSubscriptionResourceTypeIdCustomerEmailToken    ChangeSubscriptionResourceTypeId = "customer-email-token"
+	ChangeSubscriptionResourceTypeIdCustomerGroup         ChangeSubscriptionResourceTypeId = "customer-group"
+	ChangeSubscriptionResourceTypeIdCustomerPasswordToken ChangeSubscriptionResourceTypeId = "customer-password-token"
+	ChangeSubscriptionResourceTypeIdDiscountCode          ChangeSubscriptionResourceTypeId = "discount-code"
+	ChangeSubscriptionResourceTypeIdExtension             ChangeSubscriptionResourceTypeId = "extension"
+	ChangeSubscriptionResourceTypeIdInventoryEntry        ChangeSubscriptionResourceTypeId = "inventory-entry"
+	ChangeSubscriptionResourceTypeIdKeyValueDocument      ChangeSubscriptionResourceTypeId = "key-value-document"
+	ChangeSubscriptionResourceTypeIdOrder                 ChangeSubscriptionResourceTypeId = "order"
+	ChangeSubscriptionResourceTypeIdOrderEdit             ChangeSubscriptionResourceTypeId = "order-edit"
+	ChangeSubscriptionResourceTypeIdPayment               ChangeSubscriptionResourceTypeId = "payment"
+	ChangeSubscriptionResourceTypeIdProduct               ChangeSubscriptionResourceTypeId = "product"
+	ChangeSubscriptionResourceTypeIdProductDiscount       ChangeSubscriptionResourceTypeId = "product-discount"
+	ChangeSubscriptionResourceTypeIdProductPrice          ChangeSubscriptionResourceTypeId = "product-price"
+	ChangeSubscriptionResourceTypeIdProductSelection      ChangeSubscriptionResourceTypeId = "product-selection"
+	ChangeSubscriptionResourceTypeIdProductType           ChangeSubscriptionResourceTypeId = "product-type"
+	ChangeSubscriptionResourceTypeIdQuote                 ChangeSubscriptionResourceTypeId = "quote"
+	ChangeSubscriptionResourceTypeIdQuoteRequest          ChangeSubscriptionResourceTypeId = "quote-request"
+	ChangeSubscriptionResourceTypeIdReview                ChangeSubscriptionResourceTypeId = "review"
+	ChangeSubscriptionResourceTypeIdShippingMethod        ChangeSubscriptionResourceTypeId = "shipping-method"
+	ChangeSubscriptionResourceTypeIdShoppingList          ChangeSubscriptionResourceTypeId = "shopping-list"
+	ChangeSubscriptionResourceTypeIdStagedQuote           ChangeSubscriptionResourceTypeId = "staged-quote"
+	ChangeSubscriptionResourceTypeIdStandalonePrice       ChangeSubscriptionResourceTypeId = "standalone-price"
+	ChangeSubscriptionResourceTypeIdState                 ChangeSubscriptionResourceTypeId = "state"
+	ChangeSubscriptionResourceTypeIdStore                 ChangeSubscriptionResourceTypeId = "store"
+	ChangeSubscriptionResourceTypeIdSubscription          ChangeSubscriptionResourceTypeId = "subscription"
+	ChangeSubscriptionResourceTypeIdTaxCategory           ChangeSubscriptionResourceTypeId = "tax-category"
+	ChangeSubscriptionResourceTypeIdType                  ChangeSubscriptionResourceTypeId = "type"
+	ChangeSubscriptionResourceTypeIdZone                  ChangeSubscriptionResourceTypeId = "zone"
+)
+
+/**
+*	The [CloudEventsFormat](ctp:api:type:CloudEventsFormat) represents event data in a way that conforms to a common specification. The message payload can be found inside the `data` field.
+*
+ */
+type CloudEventsPayload struct {
+	// The version of the [CloudEvents](https://github.com/cloudevents/spec/blob/v1.0.2/cloudevents/spec.md) specification which the event uses.
+	Specversion string `json:"specversion"`
+	// Unique identifier of the event.
+	ID string `json:"id"`
+	// The `type` is namespaced with `com.commercetools`, followed by the [ReferenceTypeId](ctp:api:type:ReferenceTypeId), the type of Subscription (either `message` or `change`), and the message or change type.
+	// For example, `com.commercetools.product.message.ProductPublished` or `com.commercetools.order.change.ResourceCreated`.
+	Type string `json:"type"`
+	// The default REST URI of the [ReferenceTypeId](ctp:api:type:ReferenceTypeId) that triggered this event, including the project key.
+	Source string `json:"source"`
+	// Unique identifier of the resource that triggered the event.
+	Subject string `json:"subject"`
+	// Corresponds to the `lastModifiedAt` of the resource at the time the event was triggered.
+	Time time.Time `json:"time"`
+	// Corresponds to the `sequenceNumber` of a [MessageSubscription](ctp:api:type:MessageSubscription). Can be used to process messages in the correct order.
+	Sequence *string `json:"sequence,omitempty"`
+	// `"Integer"`
+	Sequencetype *string `json:"sequencetype,omitempty"`
+	// The URI from which the message can be retrieved if messages are [enabled](/../api/projects/messages#enable-querying-messages-via-the-api). Only set for [MessageSubscriptions](ctp:api:type:MessageSubscription).
+	Dataref *string `json:"dataref,omitempty"`
+	// [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload), [ResourceCreatedDeliveryPayload](ctp:api:type:ResourceCreatedDeliveryPayload), [ResourceUpdatedDeliveryPayload](ctp:api:type:ResourceUpdatedDeliveryPayload), or [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload).
+	Data DeliveryPayload `json:"data"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CloudEventsPayload) UnmarshalJSON(data []byte) error {
+	type Alias CloudEventsPayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Data != nil {
+		var err error
+		obj.Data, err = mapDiscriminatorDeliveryPayload(obj.Data)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CloudEventsPayload) MarshalJSON() ([]byte, error) {
+	type Alias CloudEventsPayload
+	return json.Marshal(struct {
+		Action string `json:"null"`
+		*Alias
+	}{Action: "CloudEvents", Alias: (*Alias)(&obj)})
 }
 
 type DeliveryFormat interface{}
@@ -42,7 +158,12 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 	return nil, nil
 }
 
+/**
+*	The CloudEventsFormat can be used with any [Destination](#destination), and the payload is delivered in the `JSON Event Format`. [AzureEventGridDestination](ctp:api:type:AzureEventGridDestination) offers native support to filter and route CloudEvents.
+*
+ */
 type CloudEventsFormat struct {
+	// Supported versions: "1.0".
 	CloudEventsVersion string `json:"cloudEventsVersion"`
 }
 
@@ -56,6 +177,10 @@ func (obj CloudEventsFormat) MarshalJSON() ([]byte, error) {
 	}{Action: "CloudEvents", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	All payloads for the [PlatformFormat](ctp:api:type:PlatformFormat) share these common fields.
+*
+ */
 type DeliveryPayload interface{}
 
 func mapDiscriminatorDeliveryPayload(input interface{}) (DeliveryPayload, error) {
@@ -186,8 +311,15 @@ func mapDiscriminatorDestination(input interface{}) (Destination, error) {
 	return nil, nil
 }
 
+/**
+*	[Azure Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) can be used to push messages to Azure Functions, HTTP endpoints (webhooks), and several other Azure tools. Event Grid can only be used with the [CloudEventsFormat](ctp:api:type:CloudEventsFormat).
+*	To set up a Subscription with Azure Event Grid, first create a topic in the [Azure Portal](https://azure.microsoft.com/en/features/azure-portal/). To allow Composable Commerce to push messages to your topic, provide an [access key](https://docs.microsoft.com/en-us/azure/event-grid/get-access-keys).
+*
+ */
 type AzureEventGridDestination struct {
-	Uri       string `json:"uri"`
+	// URI of the topic.
+	Uri string `json:"uri"`
+	// Partially hidden on retrieval for security reasons.
 	AccessKey string `json:"accessKey"`
 }
 
@@ -201,7 +333,13 @@ func (obj AzureEventGridDestination) MarshalJSON() ([]byte, error) {
 	}{Action: "EventGrid", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/) can be used as a pull-queue with [Queues](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#queues), or to fan-out messages with [Topics and Subscriptions](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#topics-and-subscriptions).
+*	To set up a Subscription with Azure Service Bus, first create a queue/topic in the [Azure Portal](https://azure.microsoft.com/en/features/azure-portal/) with a Shared Access Policy including the `Send` permission.
+*
+ */
 type AzureServiceBusDestination struct {
+	// SharedAccessKey is partially hidden on retrieval for security reasons.
 	ConnectionString string `json:"connectionString"`
 }
 
@@ -217,12 +355,13 @@ func (obj AzureServiceBusDestination) MarshalJSON() ([]byte, error) {
 
 /**
 *	[AWS EventBridge](https://aws.amazon.com/eventbridge/) can be used to push events and messages to a serverless event bus that can forward them to AWS SQS, SNS, Lambda, and other AWS services based on forwarding rules.
+*	Once the Subscription is created, an equivalent "partner event source" is created in AWS EventBridge. This event source must be associated with an event bus for the Subscription setup to be complete.
 *
  */
 type EventBridgeDestination struct {
-	// AWS region of the Subscriptions that receives the events.
+	// AWS region that receives the events.
 	Region string `json:"region"`
-	// ID of the AWS account that receives events.
+	// ID of the AWS account that receives the events.
 	AccountId string `json:"accountId"`
 }
 
@@ -236,9 +375,18 @@ func (obj EventBridgeDestination) MarshalJSON() ([]byte, error) {
 	}{Action: "EventBridge", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Destination for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/) that can be used
+*	for [Pull subscriptions](https://cloud.google.com/pubsub/docs/pull) as well as for [Push subscriptions](https://cloud.google.com/pubsub/docs/push).
+*	The `topic` must give the `pubsub.topics.publish` permission to the service account `subscriptions@commercetools-platform.iam.gserviceaccount.com`.
+*	If used with the [CloudEventsFormat](#cloudeventsformat), the message conforms to the [PubSub Protocol Binding](https://github.com/google/knative-gcp/blob/master/docs/spec/pubsub-protocol-binding.md) of the [Structured Content Mode](https://github.com/google/knative-gcp/blob/master/docs/spec/pubsub-protocol-binding.md#32-structured-content-mode).
+*
+ */
 type GoogleCloudPubSubDestination struct {
+	// ID of the Google Cloud project that contains the Pub/Sub topic.
 	ProjectId string `json:"projectId"`
-	Topic     string `json:"topic"`
+	// Name of the topic.
+	Topic string `json:"topic"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -265,18 +413,33 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 	}{Action: "IronMQ", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This payload is sent for a [MessageSubscription](ctp:api:type:MessageSubscription).
+*
+ */
 type MessageDeliveryPayload struct {
+	// `key` of the [Project](ctp:api:type:Project).
+	// Useful in message processing if the Destination receives events from multiple Projects.
 	ProjectKey string `json:"projectKey"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
+	// Reference to the resource that triggered the message.
+	Resource Reference `json:"resource"`
+	// User-defined unique identifiers of the resource.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ID                              string                   `json:"id"`
-	Version                         int                      `json:"version"`
-	CreatedAt                       time.Time                `json:"createdAt"`
-	LastModifiedAt                  time.Time                `json:"lastModifiedAt"`
-	SequenceNumber                  int                      `json:"sequenceNumber"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	PayloadNotIncluded              PayloadNotIncluded       `json:"payloadNotIncluded"`
+	// Unique ID of the message.
+	ID string `json:"id"`
+	// Last seen version of the resource.
+	Version int `json:"version"`
+	// Date and time (UTC) the resource was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the resource was last modified.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Used to ensure all messages of the resource are processed in correct order.
+	// The `sequenceNumber` of the next message of the resource is a successor of the `sequenceNumber` of the current message.
+	SequenceNumber int `json:"sequenceNumber"`
+	// Version of the resource on which the change was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// If the payload does not fit into the size limit or its format is not accepted by the messaging service, the `payloadNotIncluded` field is present.
+	PayloadNotIncluded *PayloadNotIncluded `json:"payloadNotIncluded,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -307,9 +470,18 @@ func (obj MessageDeliveryPayload) MarshalJSON() ([]byte, error) {
 	}{Action: "Message", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	For supported resources and message types, see [Message Types](/../api/projects/messages#message-types). Messages will be delivered even if the Messages Query HTTP API [is not enabled](/../api/projects/messages#enable-querying-messages-via-the-api).
+*
+*	For MessageSubscriptions, the format of the payload is [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload).
+*
+ */
 type MessageSubscription struct {
-	ResourceTypeId string   `json:"resourceTypeId"`
-	Types          []string `json:"types"`
+	// Unique identifier for the type of resource, for example, `order`.
+	ResourceTypeId MessageSubscriptionResourceTypeId `json:"resourceTypeId"`
+	// Must contain valid message types for the resource. For example, for resource type `product` the message type `ProductPublished` is valid.
+	// If no `types` of messages are given, the Subscription will receive all messages for this resource.
+	Types []string `json:"types"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -336,11 +508,40 @@ func (obj MessageSubscription) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Resource types supported by [MessageSubscriptions](ctp:api:type:MessageSubscription):
+*
+ */
+type MessageSubscriptionResourceTypeId string
+
+const (
+	MessageSubscriptionResourceTypeIdBusinessUnit     MessageSubscriptionResourceTypeId = "business-unit"
+	MessageSubscriptionResourceTypeIdCategory         MessageSubscriptionResourceTypeId = "category"
+	MessageSubscriptionResourceTypeIdCustomer         MessageSubscriptionResourceTypeId = "customer"
+	MessageSubscriptionResourceTypeIdInventoryEntry   MessageSubscriptionResourceTypeId = "inventory-entry"
+	MessageSubscriptionResourceTypeIdOrder            MessageSubscriptionResourceTypeId = "order"
+	MessageSubscriptionResourceTypeIdPayment          MessageSubscriptionResourceTypeId = "payment"
+	MessageSubscriptionResourceTypeIdProduct          MessageSubscriptionResourceTypeId = "product"
+	MessageSubscriptionResourceTypeIdProductSelection MessageSubscriptionResourceTypeId = "product-selection"
+	MessageSubscriptionResourceTypeIdQuote            MessageSubscriptionResourceTypeId = "quote"
+	MessageSubscriptionResourceTypeIdQuoteRequest     MessageSubscriptionResourceTypeId = "quote-request"
+	MessageSubscriptionResourceTypeIdReview           MessageSubscriptionResourceTypeId = "review"
+	MessageSubscriptionResourceTypeIdStagedQuote      MessageSubscriptionResourceTypeId = "staged-quote"
+	MessageSubscriptionResourceTypeIdStandalonePrice  MessageSubscriptionResourceTypeId = "standalone-price"
+	MessageSubscriptionResourceTypeIdStore            MessageSubscriptionResourceTypeId = "store"
+)
+
 type PayloadNotIncluded struct {
-	Reason      string `json:"reason"`
+	// Reason the payload is not included. For example, the payload is too large, or its content is not supported by the Subscription destination.
+	Reason string `json:"reason"`
+	// Value of the `type` field in the original payload.
 	PayloadType string `json:"payloadType"`
 }
 
+/**
+*	The PlatformFormat uses constructs that are similar to the ones used in the REST API, for example, on the [Messages Query HTTP API](/../api/projects/messages).
+*
+ */
 type PlatformFormat struct {
 }
 
@@ -354,13 +555,22 @@ func (obj PlatformFormat) MarshalJSON() ([]byte, error) {
 	}{Action: "Platform", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This payload is sent for a [ChangeSubscription](ctp:api:type:ChangeSubscription) when a resource is created.
+*
+ */
 type ResourceCreatedDeliveryPayload struct {
+	// `key` of the [Project](ctp:api:type:Project).
+	// Useful in message processing if the Destination receives events from multiple Projects.
 	ProjectKey string `json:"projectKey"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
+	// Reference to the resource that triggered the message.
+	Resource Reference `json:"resource"`
+	// User-defined unique identifiers of the resource.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Version                         int                      `json:"version"`
-	ModifiedAt                      time.Time                `json:"modifiedAt"`
+	// Last seen version of the resource.
+	Version int `json:"version"`
+	// Date and time (UTC) the resource was last modified.
+	ModifiedAt time.Time `json:"modifiedAt"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -391,14 +601,24 @@ func (obj ResourceCreatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ResourceCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This payload is sent for a [ChangeSubscription](ctp:api:type:ChangeSubscription) when a resource is deleted.
+*
+ */
 type ResourceDeletedDeliveryPayload struct {
+	// `key` of the [Project](ctp:api:type:Project).
+	// Useful in message processing if the Destination receives events from multiple Projects.
 	ProjectKey string `json:"projectKey"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
+	// Reference to the resource that triggered the message.
+	Resource Reference `json:"resource"`
+	// User-defined unique identifiers of the resource.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Version                         int                      `json:"version"`
-	ModifiedAt                      time.Time                `json:"modifiedAt"`
-	DataErasure                     *bool                    `json:"dataErasure,omitempty"`
+	// Last seen version of the resource.
+	Version int `json:"version"`
+	// Date and time (UTC) the resource was last deleted.
+	ModifiedAt time.Time `json:"modifiedAt"`
+	// `true` if the `dataErasure` [parameter](/../api/general-concepts#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
+	DataErasure *bool `json:"dataErasure,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -429,14 +649,24 @@ func (obj ResourceDeletedDeliveryPayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ResourceDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This payload is sent for a [ChangeSubscription](ctp:api:type:ChangeSubscription) when a resource is updated. This includes updates by a background process, like a change in product availability.
+*
+ */
 type ResourceUpdatedDeliveryPayload struct {
+	// `key` of the [Project](ctp:api:type:Project).
+	// Useful in message processing if the Destination receives events from multiple Projects.
 	ProjectKey string `json:"projectKey"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
+	// Reference to the resource that triggered the message.
+	Resource Reference `json:"resource"`
+	// User-defined unique identifiers of the resource.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Version                         int                      `json:"version"`
-	OldVersion                      int                      `json:"oldVersion"`
-	ModifiedAt                      time.Time                `json:"modifiedAt"`
+	// Last seen version of the resource.
+	Version int `json:"version"`
+	// Version of the resource before the update.
+	OldVersion int `json:"oldVersion"`
+	// Date and time (UTC) the resource was last updated.
+	ModifiedAt time.Time `json:"modifiedAt"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -467,10 +697,24 @@ func (obj ResourceUpdatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ResourceUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[AWS SNS](https://aws.amazon.com/sns/) can be used to push messages to AWS Lambda, HTTP endpoints (webhooks), or fan-out messages to SQS queues.
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication, give permissions to user `arn:aws:iam::362576667341:user/subscriptions` to publish to the topic before creating the Subscription. Otherwise, a test message will not be sent.
+*
+*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+*
+*	The IAM user should only have the `sns:Publish` permission on this topic.
+*
+ */
 type SnsDestination struct {
-	AccessKey    string `json:"accessKey"`
-	AccessSecret string `json:"accessSecret"`
-	TopicArn     string `json:"topicArn"`
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessSecret *string `json:"accessSecret,omitempty"`
+	// Amazon Resource Name (ARN) of the topic.
+	TopicArn string `json:"topicArn"`
+	// Defines the method of authentication for the SNS topic.
+	AuthenticationMode *AwsAuthenticationMode `json:"authenticationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -483,11 +727,27 @@ func (obj SnsDestination) MarshalJSON() ([]byte, error) {
 	}{Action: "SNS", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[AWS SQS](https://aws.amazon.com/sqs/) is a pull-queue on AWS.
+*	The queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type with a `MaximumMessageSize` of `256 KB`.
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication, give permissions to user `arn:aws:iam::362576667341:user/subscriptions` to send messages to the queue before creating the Subscription. Otherwise, a test message will not be sent.
+*
+*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+*
+*	The IAM user should only have the `sqs:SendMessage` permission on this queue.
+*
+ */
 type SqsDestination struct {
-	AccessKey    string `json:"accessKey"`
-	AccessSecret string `json:"accessSecret"`
-	QueueUrl     string `json:"queueUrl"`
-	Region       string `json:"region"`
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessSecret *string `json:"accessSecret,omitempty"`
+	// URL of the Amazon SQS queue.
+	QueueUrl string `json:"queueUrl"`
+	// [AWS Region](https://docs.aws.amazon.com/general/latest/gr/rande-manage.html) the message queue is located in.
+	Region string `json:"region"`
+	// Defines the method of authentication for the SQS queue.
+	AuthenticationMode *AwsAuthenticationMode `json:"authenticationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -502,21 +762,29 @@ func (obj SqsDestination) MarshalJSON() ([]byte, error) {
 
 type Subscription struct {
 	// Unique identifier of the Subscription.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	ID string `json:"id"`
+	// Current version of the Subscription.
+	Version int `json:"version"`
+	// Date and time (UTC) the Subscription was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Subscription was last modified.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 2019-02-01 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy   *CreatedBy           `json:"createdBy,omitempty"`
-	Changes     []ChangeSubscription `json:"changes"`
-	Destination Destination          `json:"destination"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Change notifications subscribed to.
+	Changes []ChangeSubscription `json:"changes"`
+	// Messaging service to which the messages are to be sent.
+	Destination Destination `json:"destination"`
 	// User-defined unique identifier of the Subscription.
-	Key      *string                  `json:"key,omitempty"`
-	Messages []MessageSubscription    `json:"messages"`
-	Format   DeliveryFormat           `json:"format"`
-	Status   SubscriptionHealthStatus `json:"status"`
+	Key *string `json:"key,omitempty"`
+	// Messages subscribed to.
+	Messages []MessageSubscription `json:"messages"`
+	// Format in which the payload is delivered.
+	Format DeliveryFormat `json:"format"`
+	// Status of the Subscription.
+	Status SubscriptionHealthStatus `json:"status"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -544,13 +812,21 @@ func (obj *Subscription) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+/**
+*	Either `messages` or `changes` must be set.
+*
+ */
 type SubscriptionDraft struct {
-	Changes     []ChangeSubscription `json:"changes"`
-	Destination Destination          `json:"destination"`
+	// Change notifications to be subscribed to.
+	Changes []ChangeSubscription `json:"changes"`
+	// Messaging service to which the messages are sent.
+	Destination Destination `json:"destination"`
 	// User-defined unique identifier for the Subscription.
-	Key      *string               `json:"key,omitempty"`
+	Key *string `json:"key,omitempty"`
+	// Messages to be subscribed to.
 	Messages []MessageSubscription `json:"messages"`
-	Format   DeliveryFormat        `json:"format,omitempty"`
+	// Format in which the payload is delivered. When not provided, the [PlatformFormat](ctp:api:type:PlatformFormat) is selected by default.
+	Format DeliveryFormat `json:"format,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -606,6 +882,10 @@ func (obj SubscriptionDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	The health status of the Subscription that indicates whether messages are being delivered to the Destination.
+*
+ */
 type SubscriptionHealthStatus string
 
 const (
@@ -615,18 +895,31 @@ const (
 	SubscriptionHealthStatusTemporaryError                    SubscriptionHealthStatus = "TemporaryError"
 )
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Subscription](ctp:api:type:Subscription).
+*
+ */
 type SubscriptionPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int            `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// Subscriptions matching the query.
 	Results []Subscription `json:"results"`
 }
 
 type SubscriptionUpdate struct {
-	Version int                        `json:"version"`
+	// Expected version of the Subscription on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Subscription.
 	Actions []SubscriptionUpdateAction `json:"actions"`
 }
 
@@ -697,7 +990,12 @@ func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUp
 	return nil, nil
 }
 
+/**
+*	A test message is sent to ensure the correct configuration of the Destination. If the message cannot be delivered, the update will fail. The payload of the test message is a notification of type [ResourceCreated](ctp:api:type:ResourceCreatedDeliveryPayload) for the `resourceTypeId` `subscription`. The `status` will change to [Healthy](ctp:api:type:SubscriptionHealthStatus), if it isn't already.
+*
+ */
 type SubscriptionChangeDestinationAction struct {
+	// New value to set. Must not be empty.
 	Destination Destination `json:"destination"`
 }
 
@@ -730,6 +1028,7 @@ func (obj SubscriptionChangeDestinationAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetChangesAction struct {
+	// Value to set. Can only be unset if `messages` is set.
 	Changes []ChangeSubscription `json:"changes"`
 }
 
@@ -759,7 +1058,7 @@ func (obj SubscriptionSetChangesAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetKeyAction struct {
-	// If `key` is absent or `null`, this field will be removed if it exists.
+	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -774,6 +1073,7 @@ func (obj SubscriptionSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetMessagesAction struct {
+	// Value to set. Can only be unset if `changes` is set.
 	Messages []MessageSubscription `json:"messages"`
 }
 

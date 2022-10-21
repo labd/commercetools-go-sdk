@@ -25,7 +25,7 @@ type QuoteRequest struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Indicates the current state of the Quote Request in the negotiation process.
 	QuoteRequestState QuoteRequestState `json:"quoteRequestState"`
-	// Text message included in the request.
+	// Message from the Buyer included in the Quote Request.
 	Comment *string `json:"comment,omitempty"`
 	// The [Buyer](/../api/quotes-overview#buyer) who raised the request.
 	Customer CustomerReference `json:"customer"`
@@ -34,11 +34,11 @@ type QuoteRequest struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
 	Store *StoreKeyReference `json:"store,omitempty"`
-	// The Line Items for which a quote is requested.
+	// The Line Items for which a Quote is requested.
 	LineItems []LineItem `json:"lineItems"`
-	// The Custom Line Items for which a quote is requested.
+	// The Custom Line Items for which a Quote is requested.
 	CustomLineItems []CustomLineItem `json:"customLineItems"`
-	// The sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
+	// Sum of all `totalPrice` fields of the `lineItems` and `customLineItems`, as well as the `price` field of `shippingInfo` (if it exists).
 	// `totalPrice` may or may not include the taxes: it depends on the taxRate.includedInPrice property of each price.
 	TotalPrice TypedMoney `json:"totalPrice"`
 	// Not set until the shipping address is set.
@@ -48,11 +48,11 @@ type QuoteRequest struct {
 	// Used to determine the eligible [ShippingMethods](ctp:api:type:ShippingMethod)
 	// and rates as well as the tax rate of the Line Items.
 	ShippingAddress *Address `json:"shippingAddress,omitempty"`
-	// The address used for invoicing.
+	// Address used for invoicing.
 	BillingAddress *Address `json:"billingAddress,omitempty"`
-	// The inventory mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
+	// Inventory mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
-	// The tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
+	// Tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
 	TaxMode TaxMode `json:"taxMode"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for rounding.
 	TaxRoundingMode RoundingMode `json:"taxRoundingMode"`
@@ -62,7 +62,7 @@ type QuoteRequest struct {
 	Country *string `json:"country,omitempty"`
 	// Set automatically once the [ShippingMethod](ctp:api:type:ShippingMethod) is set.
 	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
-	// Log of payment transactions related to this quote.
+	// Log of payment transactions related to the Quote.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
 	// Used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
 	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
@@ -71,13 +71,15 @@ type QuoteRequest struct {
 	// The addresses captured here are not used to determine eligible shipping methods or the applicable tax rate.
 	// Only the cart's `shippingAddress` is used for this.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
-	// Discounts only valid for this Quote, those cannot be associated to any other Cart or Order.
+	// Discounts that are only valid for the Quote and cannot be associated to any other Cart or Order.
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
-	// Custom Fields of this Quote Request.
+	// Custom Fields of the Quote Request.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// [State](ctp:api:type:State) of this Quote Request.
+	// [State](ctp:api:type:State) of the Quote Request.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -134,13 +136,14 @@ func (obj QuoteRequest) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteRequestDraft struct {
-	// Cart for which a Quote is requested. Anonymous Carts as well as Carts with [Discount Codes](/../api?projects/discount-codes) are not supported.
+	// Cart for which a Quote is requested.
+	// Anonymous Carts, Carts with [Discount Codes](ctp:api:type:DiscountCode), or Carts with a `Multiple` [ShippingMode](ctp:api:type:ShippingMode) are not supported.
 	Cart CartResourceIdentifier `json:"cart"`
 	// Current version of the referenced Cart.
 	CartVersion int `json:"cartVersion"`
 	// User-defined unique identifier for the QuoteRequest.
 	Key *string `json:"key,omitempty"`
-	// Text message included in the request.
+	// Message from the Buyer included in the Quote Request.
 	Comment string `json:"comment"`
 	// Custom Fields to be added to the Quote Request.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -228,7 +231,10 @@ const (
 )
 
 type QuoteRequestUpdate struct {
-	Version int                        `json:"version"`
+	// Expected version of the [QuoteRequest](ctp:api:type:QuoteRequest) to which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the [QuoteRequest](ctp:api:type:QuoteRequest).
 	Actions []QuoteRequestUpdateAction `json:"actions"`
 }
 
@@ -298,7 +304,7 @@ func mapDiscriminatorQuoteRequestUpdateAction(input interface{}) (QuoteRequestUp
 *
  */
 type QuoteRequestChangeQuoteRequestStateAction struct {
-	// The new state to be set for the Quote Request.
+	// New state to be set for the Quote Request.
 	QuoteRequestState QuoteRequestState `json:"quoteRequestState"`
 }
 

@@ -12,6 +12,12 @@ type ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	This is the last step in the [password reset process of the authenticated Customer](/../api/projects/customers#password-reset-of-customer-in-store).
+*
+*	Resetting a password produces the of the Customer [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestBuilder) Post(body MyCustomerResetPassword) *ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyMePasswordResetRequestMethodPost{
 		body:   body,

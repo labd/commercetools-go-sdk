@@ -51,10 +51,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete) WithHeaders(hea
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Delete my Customer in a store
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

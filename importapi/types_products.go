@@ -121,6 +121,7 @@ func (obj WhitespaceTokenizer) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductImport struct {
+	// User-defined unique identifier.
 	Key string `json:"key"`
 	// Maps to `Product.name`.
 	Name LocalizedString `json:"name"`

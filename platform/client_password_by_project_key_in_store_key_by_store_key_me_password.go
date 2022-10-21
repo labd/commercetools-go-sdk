@@ -19,6 +19,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder) Reset() *ByP
 		client:     rb.client,
 	}
 }
+
+/**
+*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestBuilder) Post(body MyCustomerChangePassword) *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestMethodPost{
 		body:   body,

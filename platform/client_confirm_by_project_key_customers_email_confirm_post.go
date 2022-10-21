@@ -29,7 +29,8 @@ func (rb *ByProjectKeyCustomersEmailConfirmRequestMethodPost) WithHeaders(header
 }
 
 /**
-*	Verifies customer's email using a token.
+*	Verifying the email of the Customer produces the [CustomerEmailVerified](ctp:api:type:CustomerEmailVerifiedMessage) Message.
+*
  */
 func (rb *ByProjectKeyCustomersEmailConfirmRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)

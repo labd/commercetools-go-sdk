@@ -9,16 +9,20 @@ import (
 )
 
 /**
-*	Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
+*	`ContainerAndKey` is specific to [Custom Objects](ctp:api:type:CustomObject). Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
 *
  */
 type ContainerAndKey struct {
 	// User-defined identifier that is unique within the given container.
 	Key string `json:"key"`
-	// Namespace to group Custom Objects.
+	// Namespace to group [Custom Objects](ctp:api:type:CustomObject).
 	Container string `json:"container"`
 }
 
+/**
+*	Base representation of a Message containing common fields to all [Message Types](/../api/projects/messages#message-types).
+*
+ */
 type Message interface{}
 
 func mapDiscriminatorMessage(input interface{}) (Message, error) {
@@ -33,6 +37,312 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 	}
 
 	switch discriminator {
+	case "BusinessUnitAddressAdded":
+		obj := BusinessUnitAddressAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitAddressChanged":
+		obj := BusinessUnitAddressChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitAddressRemoved":
+		obj := BusinessUnitAddressRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitAssociateAdded":
+		obj := BusinessUnitAssociateAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitAssociateChanged":
+		obj := BusinessUnitAssociateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitAssociateRemoved":
+		obj := BusinessUnitAssociateRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitAssociatesSet":
+		obj := BusinessUnitAssociatesSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitBillingAddressAdded":
+		obj := BusinessUnitBillingAddressAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitBillingAddressRemoved":
+		obj := BusinessUnitBillingAddressRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitContactEmailSet":
+		obj := BusinessUnitContactEmailSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitCreated":
+		obj := BusinessUnitCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.BusinessUnit != nil {
+			var err error
+			obj.BusinessUnit, err = mapDiscriminatorBusinessUnit(obj.BusinessUnit)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitDefaultBillingAddressSet":
+		obj := BusinessUnitDefaultBillingAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitDefaultShippingAddressSet":
+		obj := BusinessUnitDefaultShippingAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitDeleted":
+		obj := BusinessUnitDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitNameChanged":
+		obj := BusinessUnitNameChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitParentUnitChanged":
+		obj := BusinessUnitParentUnitChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitShippingAddressAdded":
+		obj := BusinessUnitShippingAddressAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitShippingAddressRemoved":
+		obj := BusinessUnitShippingAddressRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitStatusChanged":
+		obj := BusinessUnitStatusChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitStoreAdded":
+		obj := BusinessUnitStoreAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitStoreModeChanged":
+		obj := BusinessUnitStoreModeChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitStoreRemoved":
+		obj := BusinessUnitStoreRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitStoresSet":
+		obj := BusinessUnitStoresSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "CategoryCreated":
 		obj := CategoryCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -500,13 +810,6 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 				return nil, err
 			}
 		}
-		if obj.ProductSelection != nil {
-			var err error
-			obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "ProductSelectionDeleted":
 		obj := ProductSelectionDeletedMessage{}
@@ -881,6 +1184,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StandalonePriceActiveChanged":
+		obj := StandalonePriceActiveChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "StandalonePriceCreated":
 		obj := StandalonePriceCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -998,8 +1314,47 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StoreLanguagesChanged":
+		obj := StoreLanguagesChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StoreNameSet":
+		obj := StoreNameSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "StoreProductSelectionsChanged":
 		obj := StoreProductSelectionsChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StoreSupplyChannelsChanged":
+		obj := StoreSupplyChannelsChangedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1015,22 +1370,1377 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 	return nil, nil
 }
 
-type CategoryCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+/**
+*	Generated after a successful [Add Address](ctp:api:type:BusinessUnitAddAddressAction) update action.
+*
+ */
+type BusinessUnitAddressAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Category                        Category                 `json:"category"`
+	// The address that was added to the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAddressAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAddressAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddressAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddressAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Address](ctp:api:type:BusinessUnitChangeAddressAction) update action.
+*
+ */
+type BusinessUnitAddressChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Updated address of the Business Unit.
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAddressChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAddressChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddressChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddressChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAddressChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Address](ctp:api:type:BusinessUnitRemoveAddressAction) update action.
+*
+ */
+type BusinessUnitAddressRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was removed from the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAddressRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAddressRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddressRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddressRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action.
+*
+ */
+type BusinessUnitAssociateAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [Associate](ctp:api:type:Associate) that was added to the [Business Unit](ctp:api:type:BusinessUnit).
+	Associate Associate `json:"associate"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAssociateAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAssociateAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociateAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociateAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociateAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Associate](ctp:api:type:BusinessUnitChangeAssociateAction) update action.
+*
+ */
+type BusinessUnitAssociateChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [Associate](ctp:api:type:Associate) that was updated.
+	Associate Associate `json:"associate"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAssociateChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAssociateChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociateChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociateChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociateChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Associate](ctp:api:type:BusinessUnitRemoveAssociateAction) update action.
+*
+ */
+type BusinessUnitAssociateRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [Associate](ctp:api:type:Associate) that was removed from the [Business Unit](ctp:api:type:BusinessUnit).
+	Associate Associate `json:"associate"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAssociateRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAssociateRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociateRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociateRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociateRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Associates](ctp:api:type:BusinessUnitSetAssociatesAction) update action.
+*
+ */
+type BusinessUnitAssociatesSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The list of [Associates](ctp:api:type:Associate) that was updated on the [Business Unit](ctp:api:type:BusinessUnit).
+	Associates []Associate `json:"associates"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitAssociatesSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitAssociatesSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociatesSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociatesSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociatesSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Billing Address Identifier](ctp:api:type:BusinessUnitAddBillingAddressIdAction) update action.
+*
+ */
+type BusinessUnitBillingAddressAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was added to the [Business Unit](ctp:api:type:BusinessUnit) as billing address.
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitBillingAddressAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitBillingAddressAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitBillingAddressAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitBillingAddressAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitBillingAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Billing Address Identifier](ctp:api:type:BusinessUnitRemoveBillingAddressIdAction) update action.
+*
+ */
+type BusinessUnitBillingAddressRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was removed from the billing addresses of the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitBillingAddressRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitBillingAddressRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitBillingAddressRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitBillingAddressRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitBillingAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Contact Email](ctp:api:type:BusinessUnitSetContactEmailAction) update action.
+*
+ */
+type BusinessUnitContactEmailSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The contact email that was updated on the [Business Unit](ctp:api:type:BusinessUnit).
+	ContactEmail *string `json:"contactEmail,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitContactEmailSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitContactEmailSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitContactEmailSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitContactEmailSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitContactEmailSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create Business Unit](/projects/business-units#create-businessunit) request.
+*
+ */
+type BusinessUnitCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [Business Unit](ctp:api:type:BusinessUnit) that was created.
+	BusinessUnit BusinessUnit `json:"businessUnit"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.BusinessUnit != nil {
+		var err error
+		obj.BusinessUnit, err = mapDiscriminatorBusinessUnit(obj.BusinessUnit)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Default Billing Address](ctp:api:type:BusinessUnitSetDefaultBillingAddressAction) update action.
+*
+ */
+type BusinessUnitDefaultBillingAddressSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was set as the default billing address.
+	Address *Address `json:"address,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitDefaultBillingAddressSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitDefaultBillingAddressSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitDefaultBillingAddressSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitDefaultBillingAddressSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitDefaultBillingAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Default Shipping Address](ctp:api:type:BusinessUnitSetDefaultShippingAddressAction) update action.
+*
+ */
+type BusinessUnitDefaultShippingAddressSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was set as the default shipping address.
+	Address *Address `json:"address,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitDefaultShippingAddressSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitDefaultShippingAddressSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitDefaultShippingAddressSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitDefaultShippingAddressSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitDefaultShippingAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete Business Unit](/projects/business-units#delete-businessunit) request.
+*
+ */
+type BusinessUnitDeletedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Name](ctp:api:type:BusinessUnitChangeNameAction) update action.
+*
+ */
+type BusinessUnitNameChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Updated name of the [Business Unit](ctp:api:type:BusinessUnit).
+	Name string `json:"name"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitNameChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitNameChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitNameChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitNameChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitNameChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+*
+ */
+type BusinessUnitParentUnitChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) before the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	OldParentUnit *BusinessUnitKeyReference `json:"oldParentUnit,omitempty"`
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) after the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	NewParentUnit *BusinessUnitKeyReference `json:"newParentUnit,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitParentUnitChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitParentUnitChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitParentUnitChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitParentUnitChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitParentUnitChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Shipping Address Identifier](ctp:api:type:BusinessUnitAddShippingAddressIdAction) update action.
+*
+ */
+type BusinessUnitShippingAddressAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was added to the [Business Unit](ctp:api:type:BusinessUnit) as shipping address.
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitShippingAddressAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitShippingAddressAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitShippingAddressAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitShippingAddressAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitShippingAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Shipping Address Identifier](ctp:api:type:BusinessUnitRemoveShippingAddressIdAction) update action.
+*
+ */
+type BusinessUnitShippingAddressRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The address that was removed from shipping addresses of the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitShippingAddressRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitShippingAddressRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitShippingAddressRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitShippingAddressRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitShippingAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Status](ctp:api:type:BusinessUnitChangeStatusAction) update action.
+*
+ */
+type BusinessUnitStatusChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Updated status of the [Business Unit](ctp:api:type:BusinessUnit).
+	Active BusinessUnitStatus `json:"active"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitStatusChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitStatusChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStatusChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStatusChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStatusChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Store](ctp:api:type:BusinessUnitAddStoreAction) update action.
+*
+ */
+type BusinessUnitStoreAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [Store](ctp:api:type:Store) that was added to the [Business Unit](ctp:api:type:BusinessUnit).
+	Store StoreKeyReference `json:"store"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitStoreAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitStoreAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoreAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoreAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoreAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+*
+ */
+type BusinessUnitStoreModeChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Stores](ctp:api:type:Store) of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	Stores []StoreKeyReference `json:"stores"`
+	// [BusinessUnitStoreMode](ctp:api:type:BusinessUnitStoreMode) of the Business Unit after the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	StoreMode BusinessUnitStoreMode `json:"storeMode"`
+	// [Stores](ctp:api:type:Store) of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	OldStores []StoreKeyReference `json:"oldStores"`
+	// [BusinessUnitStoreMode](ctp:api:type:BusinessUnitStoreMode) of the Business Unit before the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	OldStoreMode BusinessUnitStoreMode `json:"oldStoreMode"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitStoreModeChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitStoreModeChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoreModeChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoreModeChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoreModeChanged", Alias: (*Alias)(&obj)})
+}
+
+type BusinessUnitStoreRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [Store](ctp:api:type:Store) that was removed from the [Business Unit](ctp:api:type:BusinessUnit).
+	Store StoreKeyReference `json:"store"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitStoreRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitStoreRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoreRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoreRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoreRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Stores](ctp:api:type:BusinessUnitSetStoresAction) update action.
+*
+ */
+type BusinessUnitStoresSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Stores](ctp:api:type:Store) of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Stores](ctp:api:type:BusinessUnitSetStoresAction) update action.
+	Stores []StoreKeyReference `json:"stores"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitStoresSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitStoresSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoresSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoresSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoresSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create Category](/../api/projects/categories#create-category) request.
+*
+ */
+type CategoryCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Category](ctp:api:type:Category) that was created.
+	Category Category `json:"category"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1061,24 +2771,35 @@ func (obj CategoryCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CategoryCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Slug](ctp:api:type:CategoryChangeSlugAction) update action.
+*
+ */
 type CategorySlugChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Category](ctp:api:type:Category) after the [Change Slug](ctp:api:type:CategoryChangeSlugAction) update action.
 	Slug LocalizedString `json:"slug"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Category](ctp:api:type:Category) before the [Change Slug](ctp:api:type:CategoryChangeSlugAction) update action.
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
@@ -1110,22 +2831,34 @@ func (obj CategorySlugChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CategorySlugChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Address](ctp:api:type:CustomerAddAddressAction) update action.
+*
+ */
 type CustomerAddressAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Address                         Address                  `json:"address"`
+	// [Address](ctp:api:type:Address) that was added during the [Add Address](ctp:api:type:CustomerAddAddressAction) update action.
+	Address Address `json:"address"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1156,22 +2889,34 @@ func (obj CustomerAddressAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerAddressAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Address](ctp:api:type:CustomerChangeAddressAction) update action.
+*
+ */
 type CustomerAddressChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Address                         Address                  `json:"address"`
+	// [Address](ctp:api:type:Address) that was set during the [Change Address](ctp:api:type:CustomerChangeAddressAction) update action.
+	Address Address `json:"address"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1202,22 +2947,34 @@ func (obj CustomerAddressChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerAddressChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Address](ctp:api:type:CustomerRemoveAddressAction) update action.
+*
+ */
 type CustomerAddressRemovedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Address                         Address                  `json:"address"`
+	// [Address](ctp:api:type:Address) that was removed during the [Remove Address](ctp:api:type:CustomerRemoveAddressAction) update action.
+	Address Address `json:"address"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1248,22 +3005,34 @@ func (obj CustomerAddressRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerAddressRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Company Name](ctp:api:type:CustomerSetCompanyNameAction) update action.
+*
+ */
 type CustomerCompanyNameSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CompanyName                     *string                  `json:"companyName,omitempty"`
+	// The `companyName` that was set during the [Set Company Name](ctp:api:type:CustomerSetCompanyNameAction) update action.
+	CompanyName *string `json:"companyName,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1294,22 +3063,34 @@ func (obj CustomerCompanyNameSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerCompanyNameSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Customer](/../api/projects/customers#create-sign-up-customer) request.
+*
+ */
 type CustomerCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Customer                        Customer                 `json:"customer"`
+	// [Customer](ctp:api:type:Customer) that was created.
+	Customer Customer `json:"customer"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1340,22 +3121,34 @@ func (obj CustomerCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Date of Birth](ctp:api:type:CustomerSetDateOfBirthAction) update action.
+*
+ */
 type CustomerDateOfBirthSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DateOfBirth                     *Date                    `json:"dateOfBirth,omitempty"`
+	// The `dateOfBirth` that was set during the [Set Date of Birth](ctp:api:type:CustomerSetDateOfBirthAction) update action.
+	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1386,20 +3179,31 @@ func (obj CustomerDateOfBirthSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerDateOfBirthSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Customer](/../api/projects/customers#delete-customer) request.
+*
+ */
 type CustomerDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -1431,22 +3235,34 @@ func (obj CustomerDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Email](ctp:api:type:CustomerChangeEmailAction) update action.
+*
+ */
 type CustomerEmailChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Email                           string                   `json:"email"`
+	// The `email` that was set during the [Change Email](ctp:api:type:CustomerChangeEmailAction) update action.
+	Email string `json:"email"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1477,20 +3293,31 @@ func (obj CustomerEmailChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerEmailChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Verify Customer's Email](/../api/projects/customers#verify-email-of-customer) request.
+*
+ */
 type CustomerEmailVerifiedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -1522,22 +3349,34 @@ func (obj CustomerEmailVerifiedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerEmailVerified", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set First Name](ctp:api:type:CustomerSetFirstNameAction) update action.
+*
+ */
 type CustomerFirstNameSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	FirstName                       *string                  `json:"firstName,omitempty"`
+	// The `firstName` that was set during the [Set First Name](ctp:api:type:CustomerSetFirstNameAction) update action.
+	FirstName *string `json:"firstName,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1568,22 +3407,33 @@ func (obj CustomerFirstNameSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerFirstNameSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Group](ctp:api:type:CustomerSetCustomerGroupAction) update action.
+*
+ */
 type CustomerGroupSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Customer Group](ctp:api:type:CustomerGroup) that was set during the [Set Customer Group](ctp:api:type:CustomerSetCustomerGroupAction) update action.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 }
 
@@ -1615,22 +3465,34 @@ func (obj CustomerGroupSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerGroupSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Last Name](ctp:api:type:CustomerSetLastNameAction) update action.
+*
+ */
 type CustomerLastNameSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	LastName                        *string                  `json:"lastName,omitempty"`
+	// The `lastName` that was set during the [Set Last Name](ctp:api:type:CustomerSetLastNameAction) update action.
+	LastName *string `json:"lastName,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1661,22 +3523,33 @@ func (obj CustomerLastNameSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerLastNameSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Reset Customer's Password](/../api/projects/customers#reset-password-of-customer), [Reset Customer's Password in a Store](/../api/projects/customers#reset-password-of-customer-in-store), [Change Customer's Password](/../api/projects/customers#change-password-of-customer), or [Change Customer's Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) request. This Message is also produced during equivalent requests to the [My Customer Profile](/../api/projects/me-profile) endpoint.
+*
+ */
 type CustomerPasswordUpdatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// true, if password has been updated during Customer's Password Reset workflow.
+	// Whether the Customer's password was updated during the [Reset password](/../api/projects/customers#password-reset-of-customer) or [Change password](/../api/projects/customers#change-password-of-customer) flow.
 	Reset bool `json:"reset"`
 }
 
@@ -1708,22 +3581,34 @@ func (obj CustomerPasswordUpdatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerPasswordUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Title](ctp:api:type:CustomerSetTitleAction) update action.
+*
+ */
 type CustomerTitleSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Title                           *string                  `json:"title,omitempty"`
+	// The `title` that was set during the [Set Title](ctp:api:type:CustomerSetTitleAction) update action.
+	Title *string `json:"title,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1754,22 +3639,34 @@ func (obj CustomerTitleSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerTitleSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create InventoryEntry](/../api/projects/inventory#create-inventoryentry) request.
+*
+ */
 type InventoryEntryCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	InventoryEntry                  InventoryEntry           `json:"inventoryEntry"`
+	// [InventoryEntry](ctp:api:type:InventoryEntry) that was created.
+	InventoryEntry InventoryEntry `json:"inventoryEntry"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1800,23 +3697,35 @@ func (obj InventoryEntryCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete InventoryEntry](/../api/projects/inventory#delete-inventoryentry) request.
+*
+ */
 type InventoryEntryDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Sku                             string                   `json:"sku"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) that was deleted.
+	Sku string `json:"sku"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) was deleted.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -1848,26 +3757,42 @@ func (obj InventoryEntryDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "InventoryEntryDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Quantity](ctp:api:type:InventoryEntryAddQuantityAction), [Remove Quantity](ctp:api:type:InventoryEntryRemoveQuantityAction) or [Change Quantity](ctp:api:type:InventoryEntryChangeQuantityAction) update action.
+*	Inventory changes as a result of [Order creation](/../api/projects/orders#create-order) do not trigger this message.
+*
+ */
 type InventoryEntryQuantitySetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	OldQuantityOnStock              int                      `json:"oldQuantityOnStock"`
-	NewQuantityOnStock              int                      `json:"newQuantityOnStock"`
-	OldAvailableQuantity            int                      `json:"oldAvailableQuantity"`
-	NewAvailableQuantity            int                      `json:"newAvailableQuantity"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// Quantity on stock for the [InventoryEntry](ctp:api:type:InventoryEntry) before the quantity was updated.
+	OldQuantityOnStock int `json:"oldQuantityOnStock"`
+	// Quantity on stock for the [InventoryEntry](ctp:api:type:InventoryEntry) after the quantity was updated.
+	NewQuantityOnStock int `json:"newQuantityOnStock"`
+	// Available quantity for the [InventoryEntry](ctp:api:type:InventoryEntry) before the quantity was updated.
+	OldAvailableQuantity int `json:"oldAvailableQuantity"`
+	// Available quantity for the [InventoryEntry](ctp:api:type:InventoryEntry) after the quantity was updated.
+	NewAvailableQuantity int `json:"newAvailableQuantity"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) quantity was set.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -1899,13 +3824,24 @@ func (obj InventoryEntryQuantitySetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Message](ctp:api:type:Message).
+*
+ */
 type MessagePagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
+	Limit int `json:"limit"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int       `json:"offset"`
+	Offset int `json:"offset"`
+	// [Messages](ctp:api:type:Message) matching the query.
 	Results []Message `json:"results"`
 }
 
@@ -2287,42 +4223,9 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 				return nil, err
 			}
 		}
-		if obj.NewTotalPrice != nil {
-			var err error
-			obj.NewTotalPrice, err = mapDiscriminatorTypedMoney(obj.NewTotalPrice)
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "OrderPaymentStateChanged":
 		obj := OrderPaymentStateChangedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ReturnInfoAdded":
-		obj := OrderReturnInfoAddedMessage{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ReturnInfoSet":
-		obj := OrderReturnInfoSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2517,31 +4420,71 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 			}
 		}
 		return obj, nil
+	case "ReturnInfoAdded":
+		obj := ReturnInfoAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ReturnInfoSet":
+		obj := ReturnInfoSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
 
+/**
+*	Generated after a successful [Transition Custom Line Item State](ctp:api:type:OrderTransitionCustomLineItemStateAction) update action.
+*
+ */
 type CustomLineItemStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CustomLineItemId                string                   `json:"customLineItemId"`
-	TransitionDate                  time.Time                `json:"transitionDate"`
-	Quantity                        int                      `json:"quantity"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// Unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// Date and time (UTC) when the transition of the [Custom Line Item](ctp:api:type:CustomLineItem) [State](ctp:api:type:State) was performed.
+	TransitionDate time.Time `json:"transitionDate"`
+	// Number of [Custom Line Items](ctp:api:type:CustomLineItem) for which the [State](ctp:api:type:State) was transitioned.
+	Quantity int `json:"quantity"`
+	// [State](ctp:api:type:State) the [Custom Line Item](ctp:api:type:CustomLineItem) was transitioned from.
 	FromState StateReference `json:"fromState"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [State](ctp:api:type:State) the [Custom Line Item](ctp:api:type:CustomLineItem) was transitioned to.
 	ToState StateReference `json:"toState"`
 }
 
@@ -2573,22 +4516,36 @@ func (obj CustomLineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomLineItemStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Delivery](ctp:api:type:OrderAddDeliveryAction) update action.
+*
+ */
 type DeliveryAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Delivery                        Delivery                 `json:"delivery"`
+	// [Delivery](ctp:api:type:Delivery) that was added to the [Order](ctp:api:type:Order). The [Delivery](ctp:api:type:Delivery) in the Message body does not contain [Parcels](ctp:api:type:Parcel) if those were part of the initial [Add Delivery](ctp:api:type:OrderAddDeliveryAction) update action. In that case, the update action produces an additional [ParcelAddedToDelivery](ctp:api:type:ParcelAddedToDeliveryMessage) Message containing information about the [Parcels](ctp:api:type:Parcel).
+	Delivery Delivery `json:"delivery"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2619,24 +4576,40 @@ func (obj DeliveryAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
+*
+ */
 type DeliveryAddressSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DeliveryId                      string                   `json:"deliveryId"`
-	Address                         *Address                 `json:"address,omitempty"`
-	OldAddress                      *Address                 `json:"oldAddress,omitempty"`
+	// Unique identifier of the [Parcel](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Address](ctp:api:type:Address) after the [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
+	Address *Address `json:"address,omitempty"`
+	// [Address](ctp:api:type:Address) before the [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
+	OldAddress *Address `json:"oldAddress,omitempty"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2667,24 +4640,40 @@ func (obj DeliveryAddressSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryAddressSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
+*
+ */
 type DeliveryItemsUpdatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DeliveryId                      string                   `json:"deliveryId"`
-	Items                           []DeliveryItem           `json:"items"`
-	OldItems                        []DeliveryItem           `json:"oldItems"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) after the [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
+	Items []DeliveryItem `json:"items"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) before the [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
+	OldItems []DeliveryItem `json:"oldItems"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2715,22 +4704,36 @@ func (obj DeliveryItemsUpdatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryItemsUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Delivery](ctp:api:type:OrderRemoveDeliveryAction) update action.
+*
+ */
 type DeliveryRemovedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Delivery                        Delivery                 `json:"delivery"`
+	// The [Delivery](ctp:api:type:Delivery) that was removed from the [Order](ctp:api:type:Order).
+	Delivery Delivery `json:"delivery"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2761,27 +4764,41 @@ func (obj DeliveryRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition Line Item State](ctp:api:type:OrderTransitionLineItemStateAction) update action.
+*
+ */
 type LineItemStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	LineItemId                      string                   `json:"lineItemId"`
-	TransitionDate                  time.Time                `json:"transitionDate"`
-	Quantity                        int                      `json:"quantity"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// Unique identifier of the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// Date and time (UTC) when the transition of the [Line Item](ctp:api:type:LineItem) [State](ctp:api:type:State) was performed.
+	TransitionDate time.Time `json:"transitionDate"`
+	// Number of [Line Items](ctp:api:type:LineItem) for which the [State](ctp:api:type:State) was transitioned.
+	Quantity int `json:"quantity"`
+	// [State](ctp:api:type:State) the [Line Item](ctp:api:type:LineItem) was transitioned from.
 	FromState StateReference `json:"fromState"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [State](ctp:api:type:State) the [Line Item](ctp:api:type:LineItem) was transitioned to.
 	ToState StateReference `json:"toState"`
 }
 
@@ -2813,23 +4830,36 @@ func (obj LineItemStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "LineItemStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Billing Address](ctp:api:type:OrderSetBillingAddressAction) update action.
+*
+ */
 type OrderBillingAddressSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Address                         *Address                 `json:"address,omitempty"`
-	OldAddress                      *Address                 `json:"oldAddress,omitempty"`
+	// Billing address on the Order after the [Set Billing Address](ctp:api:type:OrderSetBillingAddressAction) update action.
+	Address *Address `json:"address,omitempty"`
+	// Billing address on the Order before the [Set Billing Address](ctp:api:type:OrderSetBillingAddressAction) update action.
+	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2860,22 +4890,34 @@ func (obj OrderBillingAddressSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderBillingAddressSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Order](/../api/projects/orders#create-order) request.
+*
+ */
 type OrderCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Order                           Order                    `json:"order"`
+	// [Order](ctp:api:type:Order) that was created.
+	Order Order `json:"order"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2906,22 +4948,34 @@ func (obj OrderCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Custom Line Item](ctp:api:type:StagedOrderAddCustomLineItemAction) update action.
+*
+ */
 type OrderCustomLineItemAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CustomLineItem                  CustomLineItem           `json:"customLineItem"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) that was added to the [Order](ctp:api:type:Order).
+	CustomLineItem CustomLineItem `json:"customLineItem"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2952,24 +5006,38 @@ func (obj OrderCustomLineItemAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomLineItemAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful recalculation of a Discount on a [Custom Line Item](ctp:api:type:CustomLineItem).
+*
+ */
 type OrderCustomLineItemDiscountSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                            `json:"resource"`
-	ResourceVersion                 int                                  `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CustomLineItemId                string                               `json:"customLineItemId"`
-	DiscountedPricePerQuantity      []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	TaxedPrice                      *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier for the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// Array of [DiscountedLineItemPriceForQuantity](ctp:api:type:DiscountedLineItemPriceForQuantity) after the Discount recalculation.
+	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Custom Line Item](ctp:api:type:CustomLineItem) after the Discount recalculation.
+	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3000,24 +5068,38 @@ func (obj OrderCustomLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomLineItemDiscountSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Custom Line Item Quantity](ctp:api:type:StagedOrderChangeCustomLineItemQuantityAction) update action.
+*
+ */
 type OrderCustomLineItemQuantityChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CustomLineItemId                string                   `json:"customLineItemId"`
-	Quantity                        int                      `json:"quantity"`
-	OldQuantity                     int                      `json:"oldQuantity"`
+	// Unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) quantity after the [Change Custom Line Item Quantity](ctp:api:type:StagedOrderChangeCustomLineItemQuantityAction) update action.
+	Quantity int `json:"quantity"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) quantity before the [Change Custom Line Item Quantity](ctp:api:type:StagedOrderChangeCustomLineItemQuantityAction) update action.
+	OldQuantity int `json:"oldQuantity"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3048,23 +5130,36 @@ func (obj OrderCustomLineItemQuantityChangedMessage) MarshalJSON() ([]byte, erro
 	}{Action: "OrderCustomLineItemQuantityChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Custom Line Item](ctp:api:type:StagedOrderRemoveCustomLineItemAction) update action.
+*
+ */
 type OrderCustomLineItemRemovedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	CustomLineItemId                string                   `json:"customLineItemId"`
-	CustomLineItem                  CustomLineItem           `json:"customLineItem"`
+	// Unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) that was removed from the [Order](ctp:api:type:Order).
+	CustomLineItem CustomLineItem `json:"customLineItem"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3095,23 +5190,36 @@ func (obj OrderCustomLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Email](ctp:api:type:OrderSetCustomerEmailAction) update action.
+*
+ */
 type OrderCustomerEmailSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Email                           *string                  `json:"email,omitempty"`
-	OldEmail                        *string                  `json:"oldEmail,omitempty"`
+	// Email address on the [Order](ctp:api:type:Order) after the [Set Customer Email](ctp:api:type:OrderSetCustomerEmailAction) update action.
+	Email *string `json:"email,omitempty"`
+	// Email address on the [Order](ctp:api:type:Order) before the [Set Customer Email](ctp:api:type:OrderSetCustomerEmailAction) update action.
+	OldEmail *string `json:"oldEmail,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3142,24 +5250,35 @@ func (obj OrderCustomerEmailSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomerEmailSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Group](ctp:api:type:StagedOrderSetCustomerGroupAction) update action.
+*
+ */
 type OrderCustomerGroupSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) after the [Set Customer Group](ctp:api:type:StagedOrderSetCustomerGroupAction) update action.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) before the [Set Customer Group](ctp:api:type:StagedOrderSetCustomerGroupAction) update action.
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -3191,28 +5310,39 @@ func (obj OrderCustomerGroupSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomerGroupSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
+*
+ */
 type OrderCustomerSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	// [Customer](ctp:api:type:Customer) on the [Order](ctp:api:type:Order) after the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) after the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	// [Customer](ctp:api:type:Customer) on the [Order](ctp:api:type:Order) before the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	OldCustomer *CustomerReference `json:"oldCustomer,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) before the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -3244,22 +5374,34 @@ func (obj OrderCustomerSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomerSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Order](/../api/projects/orders#delete-order) request.
+*
+ */
 type OrderDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Order                           Order                    `json:"order"`
+	// [Order](ctp:api:type:Order) that has been deleted.
+	Order Order `json:"order"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3290,22 +5432,33 @@ func (obj OrderDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Discount Code](ctp:api:type:StagedOrderAddDiscountCodeAction) update action.
+*
+ */
 type OrderDiscountCodeAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	// [DiscountCode](ctp:api:type:DiscountCode) that was added.
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -3337,22 +5490,33 @@ func (obj OrderDiscountCodeAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderDiscountCodeAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Discount Code](ctp:api:type:StagedOrderRemoveDiscountCodeAction) update action.
+*
+ */
 type OrderDiscountCodeRemovedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	// [DiscountCode](ctp:api:type:DiscountCode) that was removed.
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -3384,25 +5548,38 @@ func (obj OrderDiscountCodeRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderDiscountCodeRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after the [DiscountCodeState](ctp:api:type:DiscountCodeState) changes due to a [recalculation](/../api/projects/carts#recalculate).
+*
+ */
 type OrderDiscountCodeStateSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	// [DiscountCode](ctp:api:type:DiscountCode) that changed due to the recalculation.
 	DiscountCode DiscountCodeReference `json:"discountCode"`
-	State        DiscountCodeState     `json:"state"`
-	OldState     *DiscountCodeState    `json:"oldState,omitempty"`
+	// [DiscountCodeState](ctp:api:type:DiscountCodeState) after the recalculation.
+	State DiscountCodeState `json:"state"`
+	// [DiscountCodeState](ctp:api:type:DiscountCodeState) before the recalculation.
+	OldState *DiscountCodeState `json:"oldState,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3433,24 +5610,36 @@ func (obj OrderDiscountCodeStateSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderDiscountCodeStateSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successfully applying an [OrderEdit](/../api/projects/order-edits#apply-an-orderedit).
+*
+ */
 type OrderEditAppliedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
-	Edit   OrderEditReference `json:"edit"`
-	Result OrderEditApplied   `json:"result"`
+	// [OrderEdit](ctp:api:type:OrderEdit) that was applied.
+	Edit OrderEdit `json:"edit"`
+	// Information about a successfully applied [OrderEdit](ctp:api:type:OrderEdit).
+	Result OrderEditApplied `json:"result"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3481,22 +5670,34 @@ func (obj OrderEditAppliedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderEditApplied", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Order Import](/../api/projects/orders-import#create-an-order-by-import).
+*
+ */
 type OrderImportedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Order                           Order                    `json:"order"`
+	// [Order](ctp:api:type:Order) that was imported.
+	Order Order `json:"order"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3527,23 +5728,36 @@ func (obj OrderImportedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderImported", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Line Item](ctp:api:type:StagedOrderAddLineItemAction) update action.
+*
+ */
 type OrderLineItemAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	LineItem                        LineItem                 `json:"lineItem"`
-	AddedQuantity                   int                      `json:"addedQuantity"`
+	// [Line Item](ctp:api:type:LineItem) that was added to the [Order](ctp:api:type:Order).
+	LineItem LineItem `json:"lineItem"`
+	// Quantity of [Line Items](ctp:api:type:LineItem) that were added to the [Order](ctp:api:type:Order).
+	AddedQuantity int `json:"addedQuantity"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3574,28 +5788,42 @@ func (obj OrderLineItemAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderLineItemAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful recalculation of a Discount on a [Line Item](ctp:api:type:LineItem).
+*
+ */
 type OrderLineItemDiscountSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                            `json:"resource"`
-	ResourceVersion                 int                                  `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers             `json:"resourceUserProvidedIdentifiers,omitempty"`
-	LineItemId                      string                               `json:"lineItemId"`
-	DiscountedPricePerQuantity      []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	TotalPrice Money           `json:"totalPrice"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier for the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// Array of [DiscountedLineItemPriceForQuantity](ctp:api:type:DiscountedLineItemPriceForQuantity) after the Discount recalculation.
+	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
+	// Total Price of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
+	TotalPrice Money `json:"totalPrice"`
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
+	// Taxed price of the Shipping Methods in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode)..
+	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3626,23 +5854,35 @@ func (obj OrderLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderLineItemDiscountSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Line Item Distribution Channel](/../api/projects/order-edits#set-lineitem-distributionchannel) update action.
+*
+ */
 type OrderLineItemDistributionChannelSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	LineItemId                      string                   `json:"lineItemId"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// Unique identifier of the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// [Distribution Channel](ctp:api:type:Channel) that was set.
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
@@ -3674,29 +5914,47 @@ func (obj OrderLineItemDistributionChannelSetMessage) MarshalJSON() ([]byte, err
 	}{Action: "OrderLineItemDistributionChannelSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+*
+ */
 type OrderLineItemRemovedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	LineItemId                      string                   `json:"lineItemId"`
-	RemovedQuantity                 int                      `json:"removedQuantity"`
-	NewQuantity                     int                      `json:"newQuantity"`
-	NewState                        []ItemState              `json:"newState"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
-	NewTotalPrice     TypedMoney           `json:"newTotalPrice"`
-	NewTaxedPrice     *TaxedItemPrice      `json:"newTaxedPrice,omitempty"`
-	NewPrice          *Price               `json:"newPrice,omitempty"`
+	// Unique identifier of the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// Quantity of [Line Items](ctp:api:type:LineItem) that were removed during the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	RemovedQuantity int `json:"removedQuantity"`
+	// [Line Item](ctp:api:type:LineItem) quantity after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewQuantity int `json:"newQuantity"`
+	// [ItemStates](ctp:api:type:ItemState) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewState []ItemState `json:"newState"`
+	// `totalPrice` of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewTotalPrice CentPrecisionMoney `json:"newTotalPrice"`
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewTaxedPrice *TaxedItemPrice `json:"newTaxedPrice,omitempty"`
+	// [Price](ctp:api:type:Price) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewPrice *Price `json:"newPrice,omitempty"`
+	// [Shipping Details](ctp:api:type:ItemShippingDetails) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewShippingDetail *ItemShippingDetails `json:"newShippingDetail,omitempty"`
 }
 
@@ -3710,13 +5968,6 @@ func (obj *OrderLineItemRemovedMessage) UnmarshalJSON(data []byte) error {
 	if obj.Resource != nil {
 		var err error
 		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	if obj.NewTotalPrice != nil {
-		var err error
-		obj.NewTotalPrice, err = mapDiscriminatorTypedMoney(obj.NewTotalPrice)
 		if err != nil {
 			return err
 		}
@@ -3735,22 +5986,33 @@ func (obj OrderLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Payment](ctp:api:type:OrderAddPaymentAction) update action or when a [Payment](ctp:api:type:Payment) is added via [Order Edits](ctp:api:type:StagedOrderAddPaymentAction).
+*
+ */
 type OrderPaymentAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
+	// [Payment](ctp:api:type:Payment) that was added to the [Order](ctp:api:type:Order).
 	Payment PaymentReference `json:"payment"`
 }
 
@@ -3782,23 +6044,36 @@ func (obj OrderPaymentAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderPaymentAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Payment State](ctp:api:type:OrderChangePaymentStateAction) update action.
+*
+ */
 type OrderPaymentStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	PaymentState                    PaymentState             `json:"paymentState"`
-	OldPaymentState                 *PaymentState            `json:"oldPaymentState,omitempty"`
+	// [PaymentState](ctp:api:type:PaymentState) after the [Change Payment State](ctp:api:type:OrderChangePaymentStateAction) update action.
+	PaymentState PaymentState `json:"paymentState"`
+	// [PaymentState](ctp:api:type:PaymentState) before the [Change Payment State](ctp:api:type:OrderChangePaymentStateAction) update action.
+	OldPaymentState *PaymentState `json:"oldPaymentState,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3829,130 +6104,36 @@ func (obj OrderPaymentStateChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderPaymentStateChanged", Alias: (*Alias)(&obj)})
 }
 
-type OrderReturnInfoAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ReturnInfo                      ReturnInfo               `json:"returnInfo"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *OrderReturnInfoAddedMessage) UnmarshalJSON(data []byte) error {
-	type Alias OrderReturnInfoAddedMessage
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj OrderReturnInfoAddedMessage) MarshalJSON() ([]byte, error) {
-	type Alias OrderReturnInfoAddedMessage
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "ReturnInfoAdded", Alias: (*Alias)(&obj)})
-}
-
-type OrderReturnInfoSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ReturnInfo                      []ReturnInfo             `json:"returnInfo"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *OrderReturnInfoSetMessage) UnmarshalJSON(data []byte) error {
-	type Alias OrderReturnInfoSetMessage
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj OrderReturnInfoSetMessage) MarshalJSON() ([]byte, error) {
-	type Alias OrderReturnInfoSetMessage
-	data, err := json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "ReturnInfoSet", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["returnInfo"] == nil {
-		delete(raw, "returnInfo")
-	}
-
-	return json.Marshal(raw)
-
-}
-
+/**
+*	Generated after a successful [Set Return Shipment State](ctp:api:type:OrderSetReturnShipmentStateAction) update action.
+*
+ */
 type OrderReturnShipmentStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ReturnItemId                    string                   `json:"returnItemId"`
-	ReturnShipmentState             ReturnShipmentState      `json:"returnShipmentState"`
+	// Unique identifier of the [ReturnItem](ctp:api:type:ReturnItem).
+	ReturnItemId string `json:"returnItemId"`
+	// State of the [ReturnItem](ctp:api:type:ReturnItem) after the [Set Return Shipment State](ctp:api:type:OrderSetReturnShipmentStateAction) update action.
+	ReturnShipmentState ReturnShipmentState `json:"returnShipmentState"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3983,23 +6164,36 @@ func (obj OrderReturnShipmentStateChangedMessage) MarshalJSON() ([]byte, error) 
 	}{Action: "OrderReturnShipmentStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Shipment State](ctp:api:type:OrderChangeShipmentStateAction) update action.
+*
+ */
 type OrderShipmentStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ShipmentState                   ShipmentState            `json:"shipmentState"`
-	OldShipmentState                *ShipmentState           `json:"oldShipmentState,omitempty"`
+	// [ShipmentState](ctp:api:type:ShipmentState) after the [Change Shipment State](ctp:api:type:OrderChangeShipmentStateAction) update action.
+	ShipmentState ShipmentState `json:"shipmentState"`
+	// [ShipmentState](ctp:api:type:ShipmentState) before the [Change Shipment State](ctp:api:type:OrderChangeShipmentStateAction) update action.
+	OldShipmentState ShipmentState `json:"oldShipmentState"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4030,23 +6224,36 @@ func (obj OrderShipmentStateChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderShipmentStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Shipping Address](ctp:api:type:OrderSetShippingAddressAction) update action.
+*
+ */
 type OrderShippingAddressSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Address                         *Address                 `json:"address,omitempty"`
-	OldAddress                      *Address                 `json:"oldAddress,omitempty"`
+	// Shipping address on the Order after the [Set Shipping Address](ctp:api:type:OrderSetShippingAddressAction) update action.
+	Address *Address `json:"address,omitempty"`
+	// Shipping address on the Order before the [Set Shipping Address](ctp:api:type:OrderSetShippingAddressAction) update action.
+	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4077,23 +6284,36 @@ func (obj OrderShippingAddressSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderShippingAddressSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Shipping Method](ctp:api:type:StagedOrderSetShippingMethodAction) and [Set Custom Shipping Method](ctp:api:type:StagedOrderSetCustomShippingMethodAction) update actions.
+*
+ */
 type OrderShippingInfoSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ShippingInfo                    *ShippingInfo            `json:"shippingInfo,omitempty"`
-	OldShippingInfo                 *ShippingInfo            `json:"oldShippingInfo,omitempty"`
+	// [ShippingInfo](ctp:api:type:ShippingInfo) after the [Set Shipping Method](ctp:api:type:StagedOrderSetShippingMethodAction) or [Set Custom Shipping Method](ctp:api:type:StagedOrderSetCustomShippingMethodAction) update action.
+	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
+	// [ShippingInfo](ctp:api:type:ShippingInfo) before the [Set Shipping Method](ctp:api:type:StagedOrderSetShippingMethodAction) or [Set Custom Shipping Method](ctp:api:type:StagedOrderSetCustomShippingMethodAction) update action.
+	OldShippingInfo *ShippingInfo `json:"oldShippingInfo,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4124,23 +6344,36 @@ func (obj OrderShippingInfoSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderShippingInfoSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set ShippingRateInput](ctp:api:type:StagedOrderSetShippingRateInputAction) update action.
+*
+ */
 type OrderShippingRateInputSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ShippingRateInput               ShippingRateInput        `json:"shippingRateInput,omitempty"`
-	OldShippingRateInput            ShippingRateInput        `json:"oldShippingRateInput,omitempty"`
+	// [ShippingRateInput](ctp:api:type:ShippingRateInput) after the [Set ShippingRateInput](ctp:api:type:StagedOrderSetShippingRateInputAction) update action.
+	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
+	// [ShippingRateInput](ctp:api:type:ShippingRateInput) before the [Set ShippingRateInput](ctp:api:type:StagedOrderSetShippingRateInputAction) update action.
+	OldShippingRateInput ShippingRateInput `json:"oldShippingRateInput,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4185,23 +6418,36 @@ func (obj OrderShippingRateInputSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderShippingRateInputSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Order State](ctp:api:type:OrderChangeOrderStateAction) update action.
+*
+ */
 type OrderStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	OrderState                      OrderState               `json:"orderState"`
-	OldOrderState                   OrderState               `json:"oldOrderState"`
+	// [OrderState](ctp:api:type:OrderState) after the [Change Order State](ctp:api:type:OrderChangeOrderStateAction) update action.
+	OrderState OrderState `json:"orderState"`
+	// [OrderState](ctp:api:type:OrderState) before the [Change Order State](ctp:api:type:OrderChangeOrderStateAction) update action.
+	OldOrderState OrderState `json:"oldOrderState"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4232,26 +6478,38 @@ func (obj OrderStateChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
+*
+ */
 type OrderStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [OrderState](ctp:api:type:OrderState) after the [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
 	State StateReference `json:"state"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [OrderState](ctp:api:type:OrderState) before the [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	Force    bool            `json:"force"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4282,23 +6540,34 @@ func (obj OrderStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Store](ctp:api:type:OrderSetStoreAction) update action.
+*
+ */
 type OrderStoreSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
-	Store StoreKeyReference `json:"store"`
+	// [Store](ctp:api:type:Store) that was set.
+	Store *StoreKeyReference `json:"store,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4329,23 +6598,38 @@ func (obj OrderStoreSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderStoreSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Parcel To Delivery](ctp:api:type:OrderAddParcelToDeliveryAction) update action.
+*
+ */
 type ParcelAddedToDeliveryMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Delivery                        Delivery                 `json:"delivery"`
-	Parcel                          Parcel                   `json:"parcel"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	Delivery Delivery `json:"delivery"`
+	// [Parcel](ctp:api:type:Parcel) that was added to the [Delivery](ctp:api:type:Delivery).
+	Parcel Parcel `json:"parcel"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4376,25 +6660,42 @@ func (obj ParcelAddedToDeliveryMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelAddedToDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Parcel Items](ctp:api:type:OrderSetParcelItemsAction) update action.
+*
+ */
 type ParcelItemsUpdatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ParcelId                        string                   `json:"parcelId"`
-	DeliveryId                      *string                  `json:"deliveryId,omitempty"`
-	Items                           []DeliveryItem           `json:"items"`
-	OldItems                        []DeliveryItem           `json:"oldItems"`
+	// Unique identifier of the [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) after the [Set Parcel Items](ctp:api:type:OrderSetParcelItemsAction) update action.
+	Items []DeliveryItem `json:"items"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) before the [Set Parcel Items](ctp:api:type:OrderSetParcelItemsAction) update action.
+	OldItems []DeliveryItem `json:"oldItems"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4425,24 +6726,40 @@ func (obj ParcelItemsUpdatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelItemsUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Parcel Measurements](ctp:api:type:OrderSetParcelMeasurementsAction) update action.
+*
+ */
 type ParcelMeasurementsUpdatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DeliveryId                      string                   `json:"deliveryId"`
-	ParcelId                        string                   `json:"parcelId"`
-	Measurements                    *ParcelMeasurements      `json:"measurements,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// Unique identifier of the [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// The [Parcel Measurements](ctp:api:type:ParcelMeasurements) that were set on the [Parcel](ctp:api:type:Parcel).
+	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4473,23 +6790,38 @@ func (obj ParcelMeasurementsUpdatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelMeasurementsUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Parcel From Delivery](ctp:api:type:OrderRemoveParcelFromDeliveryAction) update action.
+*
+ */
 type ParcelRemovedFromDeliveryMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DeliveryId                      string                   `json:"deliveryId"`
-	Parcel                          Parcel                   `json:"parcel"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Parcel](ctp:api:type:Parcel) that was removed from the [Delivery](ctp:api:type:Delivery).
+	Parcel Parcel `json:"parcel"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4520,24 +6852,40 @@ func (obj ParcelRemovedFromDeliveryMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelRemovedFromDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Parcel TrackingData](ctp:api:type:OrderSetParcelTrackingDataAction) update action.
+*
+ */
 type ParcelTrackingDataUpdatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	DeliveryId                      string                   `json:"deliveryId"`
-	ParcelId                        string                   `json:"parcelId"`
-	TrackingData                    *TrackingData            `json:"trackingData,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// Unique identifier of the [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// The [Tracking Data](ctp:api:type:TrackingData) that was added to the [Parcel](ctp:api:type:Parcel).
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4568,22 +6916,34 @@ func (obj ParcelTrackingDataUpdatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelTrackingDataUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Payment](/../api/projects/payments#create-a-payment) request.
+*
+ */
 type PaymentCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Payment                         Payment                  `json:"payment"`
+	// [Payment](ctp:api:type:Payment) that was created.
+	Payment Payment `json:"payment"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4614,22 +6974,33 @@ func (obj PaymentCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add InterfaceInteraction](ctp:api:type:PaymentAddInterfaceInteractionAction) update action.
+*
+ */
 type PaymentInteractionAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// The interface interaction that was added to the [Payment](ctp:api:type:Payment).
 	Interaction CustomFields `json:"interaction"`
 }
 
@@ -4661,23 +7032,36 @@ func (obj PaymentInteractionAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentInteractionAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action.
+*
+ */
 type PaymentStatusInterfaceCodeSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	PaymentId                       string                   `json:"paymentId"`
-	InterfaceCode                   string                   `json:"interfaceCode"`
+	// Unique identifier for the [Payment](ctp:api:type:Payment) for which the [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action was applied.
+	PaymentId string `json:"paymentId"`
+	// The `interfaceCode` that was set during the [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action.
+	InterfaceCode *string `json:"interfaceCode,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4708,24 +7092,36 @@ func (obj PaymentStatusInterfaceCodeSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentStatusInterfaceCodeSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:PaymentTransitionStateAction) update action.
+*
+ */
 type PaymentStatusStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [State](ctp:api:type:State) of the [Payment](ctp:api:type:Payment) after the [Transition State](ctp:api:type:PaymentTransitionStateAction) update action.
 	State StateReference `json:"state"`
-	Force bool           `json:"force"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Change Transaction State](ctp:api:type:PaymentChangeTransactionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4756,22 +7152,34 @@ func (obj PaymentStatusStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentStatusStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Transaction](ctp:api:type:PaymentAddTransactionAction) update action.
+*
+ */
 type PaymentTransactionAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Transaction                     Transaction              `json:"transaction"`
+	// [Transaction](ctp:api:type:Transaction) that was added to the [Payment](ctp:api:type:Payment).
+	Transaction Transaction `json:"transaction"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4802,23 +7210,36 @@ func (obj PaymentTransactionAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentTransactionAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Transaction State](ctp:api:type:PaymentChangeTransactionStateAction) update action.
+*
+ */
 type PaymentTransactionStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	TransactionId                   string                   `json:"transactionId"`
-	State                           TransactionState         `json:"state"`
+	// Unique identifier for the [Transaction](ctp:api:type:Transaction) for which the [Transaction State](ctp:api:type:TransactionState) changed.
+	TransactionId string `json:"transactionId"`
+	// [Transaction State](ctp:api:type:TransactionState) after the [Change Transaction State](ctp:api:type:PaymentChangeTransactionStateAction) update action.
+	State TransactionState `json:"state"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4849,24 +7270,36 @@ func (obj PaymentTransactionStateChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentTransactionStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add To Category](ctp:api:type:ProductAddToCategoryAction) update action.
+*
+ */
 type ProductAddedToCategoryMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+	// [Category](ctp:api:type:Category) the [Product](ctp:api:type:Product) was added to.
 	Category CategoryReference `json:"category"`
-	Staged   bool              `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4897,22 +7330,34 @@ func (obj ProductAddedToCategoryMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductAddedToCategory", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Product](/../api/projects/products#create-product) request.
+*
+ */
 type ProductCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ProductProjection               ProductProjection        `json:"productProjection"`
+	// The staged [Product Projection](ctp:api:type:ProductProjection) of the [Product](ctp:api:type:Product) at the time of creation.
+	ProductProjection ProductProjection `json:"productProjection"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4943,23 +7388,36 @@ func (obj ProductCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Product](/../api/projects/products#delete-product) request.
+*
+ */
 type ProductDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	RemovedImageUrls                []string                 `json:"removedImageUrls"`
-	CurrentProjection               ProductProjection        `json:"currentProjection"`
+	// List of image URLs that were removed during the [Delete Product](ctp:api:type:Product) request.
+	RemovedImageUrls []string `json:"removedImageUrls"`
+	// Current [Product Projection](ctp:api:type:ProductProjection) of the deleted [Product](ctp:api:type:Product).
+	CurrentProjection *ProductProjection `json:"currentProjection,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4990,24 +7448,38 @@ func (obj ProductDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add External Image](ctp:api:type:ProductAddExternalImageAction) update action or after the successful [upload of an image](/../api/projects/products#upload-product-image).
+*
+ */
 type ProductImageAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	VariantId                       int                      `json:"variantId"`
-	Image                           Image                    `json:"image"`
-	Staged                          bool                     `json:"staged"`
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) to which the [Image](ctp:api:type:Image) was added.
+	VariantId int `json:"variantId"`
+	// [Image](ctp:api:type:Image) that was added.
+	Image Image `json:"image"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5038,22 +7510,34 @@ func (obj ProductImageAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductImageAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a Price is updated due to a [Product Discount](ctp:api:type:ProductDiscount).
+*
+ */
 type ProductPriceDiscountsSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                              `json:"resource"`
-	ResourceVersion                 int                                    `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers               `json:"resourceUserProvidedIdentifiers,omitempty"`
-	UpdatedPrices                   []ProductPriceDiscountsSetUpdatedPrice `json:"updatedPrices"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Array containing details about the [Embedded Prices](ctp:api:type:Price) that were updated.
+	UpdatedPrices []ProductPriceDiscountsSetUpdatedPrice `json:"updatedPrices"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5084,36 +7568,63 @@ func (obj ProductPriceDiscountsSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductPriceDiscountsSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Details about a [Embedded Price](ctp:api:type:Price) that was updated due to a Discount. Specific to [ProductPriceDiscountsSet](ctp:api:type:ProductPriceDiscountsSetMessage) Message.
+*
+ */
 type ProductPriceDiscountsSetUpdatedPrice struct {
-	VariantId  int              `json:"variantId"`
-	VariantKey *string          `json:"variantKey,omitempty"`
-	Sku        *string          `json:"sku,omitempty"`
-	PriceId    string           `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Discount was set.
+	VariantId int `json:"variantId"`
+	// Key of the [ProductVariant](ctp:api:type:ProductVariant) for which Discount was set.
+	VariantKey *string `json:"variantKey,omitempty"`
+	// SKU of the [ProductVariant](ctp:api:type:ProductVariant) for which Discount was set.
+	Sku *string `json:"sku,omitempty"`
+	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	PriceId string `json:"priceId"`
+	// Discounted Price for the [ProductVariant](ctp:api:type:ProductVariant) for which Discount was set.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	Staged     bool             `json:"staged"`
+	// Whether the update was only applied to the staged [ProductProjection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
+/**
+*	Generated after a successful [Set Discounted Embedded Price](ctp:api:type:ProductSetDiscountedPriceAction) update action.
+*
+ */
 type ProductPriceExternalDiscountSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	VariantId                       int                      `json:"variantId"`
-	VariantKey                      *string                  `json:"variantKey,omitempty"`
-	Sku                             *string                  `json:"sku,omitempty"`
-	PriceId                         string                   `json:"priceId"`
-	Discounted                      *DiscountedPrice         `json:"discounted,omitempty"`
-	Staged                          bool                     `json:"staged"`
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) for which the Discount was set.
+	VariantId int `json:"variantId"`
+	// Key of the [Product Variant](ctp:api:type:ProductVariant) for which the Discount was set.
+	VariantKey *string `json:"variantKey,omitempty"`
+	// SKU of the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
+	Sku *string `json:"sku,omitempty"`
+	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	PriceId string `json:"priceId"`
+	// Discounted Price for the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5144,24 +7655,37 @@ func (obj ProductPriceExternalDiscountSetMessage) MarshalJSON() ([]byte, error) 
 	}{Action: "ProductPriceExternalDiscountSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Publish](ctp:api:type:ProductPublishAction) update action.
+*
+ */
 type ProductPublishedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	RemovedImageUrls                []string                 `json:"removedImageUrls"`
-	ProductProjection               ProductProjection        `json:"productProjection"`
-	// The scope controls which part of the product information is published.
+	// List of image URLs which were removed during the [Publish](ctp:api:type:ProductPublishAction) update action.
+	RemovedImageUrls []string `json:"removedImageUrls"`
+	// Current [Product Projection](ctp:api:type:ProductProjection) of the [Product](ctp:api:type:Product) at the time of creation.
+	ProductProjection ProductProjection `json:"productProjection"`
+	// [Publishing Scope](ctp:api:type:ProductPublishScope) that was used during the [Publish](ctp:api:type:ProductPublishAction) update action.
 	Scope ProductPublishScope `json:"scope"`
 }
 
@@ -5193,24 +7717,36 @@ func (obj ProductPublishedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductPublished", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove From Category](ctp:api:type:ProductRemoveFromCategoryAction) update action.
+*
+ */
 type ProductRemovedFromCategoryMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+	// [Category](ctp:api:type:Category) the [Product](ctp:api:type:Product) was removed from.
 	Category CategoryReference `json:"category"`
-	Staged   bool              `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5241,22 +7777,34 @@ func (obj ProductRemovedFromCategoryMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductRemovedFromCategory", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Revert Staged Changes](ctp:api:type:ProductRevertStagedChangesAction) update action.
+*
+ */
 type ProductRevertedStagedChangesMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	RemovedImageUrls                []string                 `json:"removedImageUrls"`
+	// List of image URLs that were removed during the [Revert Staged Changes](ctp:api:type:ProductRevertStagedChangesAction) update action.
+	RemovedImageUrls []string `json:"removedImageUrls"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5287,22 +7835,34 @@ func (obj ProductRevertedStagedChangesMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductRevertedStagedChanges", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Product Selection](/../api/projects/product-selections#create-product-selection) request.
+*
+ */
 type ProductSelectionCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ProductSelection                ProductSelectionType     `json:"productSelection"`
+	// The `type` and `name` of the individual Product Selection.
+	ProductSelection IndividualProductSelectionType `json:"productSelection"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5315,13 +7875,6 @@ func (obj *ProductSelectionCreatedMessage) UnmarshalJSON(data []byte) error {
 	if obj.Resource != nil {
 		var err error
 		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-	if obj.ProductSelection != nil {
-		var err error
-		obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
 		if err != nil {
 			return err
 		}
@@ -5340,23 +7893,32 @@ func (obj ProductSelectionCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSelectionCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Product Selection](/../api/projects/product-selections#create-product-selection) request.
+*
+ */
 type ProductSelectionDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	Name LocalizedString `json:"name"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5387,25 +7949,36 @@ func (obj ProductSelectionDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSelectionDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Product](ctp:api:type:ProductSelectionAddProductAction) update action.
+*
+ */
 type ProductSelectionProductAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	// [Product](ctp:api:type:Product) that was added to the [Product Selection](ctp:api:type:ProductSelection).
 	Product ProductReference `json:"product"`
-	// Polymorphic base type for Product Variant Selections. The actual type is determined by the `type` field.
-	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+	// Product Variant Selection after the [Add Product](ctp:api:type:ProductSelectionAddProductAction) update action.
+	VariantSelection ProductVariantSelection `json:"variantSelection"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5443,22 +8016,33 @@ func (obj ProductSelectionProductAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSelectionProductAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Product](ctp:api:type:ProductSelectionRemoveProductAction) update action.
+*
+ */
 type ProductSelectionProductRemovedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	// [Product](ctp:api:type:Product) that was removed from the Product Selection.
 	Product ProductReference `json:"product"`
 }
 
@@ -5490,27 +8074,38 @@ func (obj ProductSelectionProductRemovedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSelectionProductRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+*
+ */
 type ProductSelectionVariantSelectionChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	// [Product](ctp:api:type:Product) for which the Product Variant Selection changed.
 	Product ProductReference `json:"product"`
-	// The former Product Variant Selection if any.
-	OldVariantSelection ProductVariantSelection `json:"oldVariantSelection,omitempty"`
-	// The updated Product Variant Selection if any.
-	NewVariantSelection ProductVariantSelection `json:"newVariantSelection,omitempty"`
+	// Product Variant Selection before the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+	OldVariantSelection ProductVariantSelection `json:"oldVariantSelection"`
+	// Product Variant Selection after the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+	NewVariantSelection ProductVariantSelection `json:"newVariantSelection"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5555,24 +8150,35 @@ func (obj ProductSelectionVariantSelectionChangedMessage) MarshalJSON() ([]byte,
 	}{Action: "ProductSelectionVariantSelectionChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Slug](ctp:api:type:ProductChangeSlugAction) update action.
+*
+ */
 type ProductSlugChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Product](ctp:api:type:Product) after the [Change Slug](ctp:api:type:ProductChangeSlugAction) update action.
 	Slug LocalizedString `json:"slug"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Product](ctp:api:type:Product) before the [Change Slug](ctp:api:type:ProductChangeSlugAction) update action.
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
@@ -5604,24 +8210,36 @@ func (obj ProductSlugChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSlugChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:ProductTransitionStateAction) update action.
+*
+ */
 type ProductStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// Product [State](ctp:api:type:State) after the [Transition State](ctp:api:type:ProductTransitionStateAction) update action.
 	State StateReference `json:"state"`
-	Force bool           `json:"force"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:ProductTransitionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5652,20 +8270,31 @@ func (obj ProductStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Unpublish Product](ctp:api:type:ProductUnpublishAction) update action.
+*
+ */
 type ProductUnpublishedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -5697,24 +8326,36 @@ func (obj ProductUnpublishedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductUnpublished", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Product Variant](ctp:api:type:ProductAddVariantAction) update action.
+*
+ */
 type ProductVariantAddedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) that was added.
 	Variant ProductVariant `json:"variant"`
-	Staged  bool           `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5745,24 +8386,36 @@ func (obj ProductVariantAddedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductVariantAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Product Variant](ctp:api:type:ProductRemoveVariantAction) update action.
+*
+ */
 type ProductVariantDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
-	Variant          ProductVariant `json:"variant"`
-	RemovedImageUrls []string       `json:"removedImageUrls"`
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) that was added.
+	Variant *ProductVariant `json:"variant,omitempty"`
+	// List of image URLs that were removed with the [Remove Product Variant](ctp:api:type:ProductRemoveVariantAction) update action.
+	RemovedImageUrls []string `json:"removedImageUrls"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5793,21 +8446,34 @@ func (obj ProductVariantDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductVariantDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Quote](/../api/projects/quotes#create-quote) request.
+*
+ */
 type QuoteCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Quote](/../api/projects/quotes) that was created.
+	Quote Quote `json:"quote"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5838,20 +8504,31 @@ func (obj QuoteCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Quote](/../api/projects/quotes#delete-quote) request.
+*
+ */
 type QuoteDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -5883,21 +8560,34 @@ func (obj QuoteDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Quote Request](/../api/projects/quote-requests#create-quoterequest) request.
+*
+ */
 type QuoteRequestCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Quote Request](/../api/projects/quote-requests) that was created.
+	QuoteRequest QuoteRequest `json:"quoteRequest"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -5928,20 +8618,31 @@ func (obj QuoteRequestCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteRequestCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Quote Request](/../api/projects/quote-requests#delete-quoterequest) request.
+*
+ */
 type QuoteRequestDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -5973,24 +8674,35 @@ func (obj QuoteRequestDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteRequestDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Quote Request State](ctp:api:type:QuoteRequestChangeQuoteRequestStateAction) update action.
+*
+ */
 type QuoteRequestStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Predefined states tracking the status of the Quote Request in the negotiation process.
+	// State of the Quote Request after the [Change Quote Request State](ctp:api:type:QuoteRequestChangeQuoteRequestStateAction) update action.
 	QuoteRequestState QuoteRequestState `json:"quoteRequestState"`
-	// Predefined states tracking the status of the Quote Request in the negotiation process.
+	// State of the Quote Request before the [Change Quote Request State](ctp:api:type:QuoteRequestChangeQuoteRequestStateAction) update action.
 	OldQuoteRequestState QuoteRequestState `json:"oldQuoteRequestState"`
 }
 
@@ -6027,25 +8739,32 @@ func (obj QuoteRequestStateChangedMessage) MarshalJSON() ([]byte, error) {
 *
  */
 type QuoteRequestStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
 	State StateReference `json:"state"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
 	Force bool `json:"force"`
 }
 
@@ -6077,24 +8796,35 @@ func (obj QuoteRequestStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteRequestStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Quote State](ctp:api:type:QuoteChangeQuoteStateAction) update action.
+*
+ */
 type QuoteStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Predefined states tracking the status of the Quote.
+	// State of the Quote after the [Change Quote State](ctp:api:type:QuoteChangeQuoteStateAction) update action.
 	QuoteState QuoteState `json:"quoteState"`
-	// Predefined states tracking the status of the Quote.
+	// State of the Quote before the [Change Quote State](ctp:api:type:QuoteChangeQuoteStateAction) update action.
 	OldQuoteState QuoteState `json:"oldQuoteState"`
 }
 
@@ -6131,25 +8861,32 @@ func (obj QuoteStateChangedMessage) MarshalJSON() ([]byte, error) {
 *
  */
 type QuoteStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
 	State StateReference `json:"state"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
 	Force bool `json:"force"`
 }
 
@@ -6181,22 +8918,165 @@ func (obj QuoteStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteStateTransition", Alias: (*Alias)(&obj)})
 }
 
-type ReviewCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+/**
+*	Generated after a successful [Add Return Info](ctp:api:type:OrderAddReturnInfoAction) update action.
+*
+ */
+type ReturnInfoAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	Review                          Review                   `json:"review"`
+	// The [ReturnInfo](ctp:api:type:ReturnInfo) that was added to the [Order](ctp:api:type:Order).
+	ReturnInfo ReturnInfo `json:"returnInfo"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ReturnInfoAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ReturnInfoAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ReturnInfoAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ReturnInfoAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ReturnInfoAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Return Info](ctp:api:type:OrderSetReturnInfoAction) update action on [Orders](ctp:api:type:Order) and [Order Edits](ctp:api:type:OrderEdit).
+*
+ */
+type ReturnInfoSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [ReturnInfo](ctp:api:type:ReturnInfo) that was set on the [Order](ctp:api:type:Order) or [Order Edit](ctp:api:type:OrderEdit).
+	ReturnInfo []ReturnInfo `json:"returnInfo"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ReturnInfoSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ReturnInfoSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ReturnInfoSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ReturnInfoSetMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ReturnInfoSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated after a successful [Create Review](/../api/projects/reviews#create-a-review) request.
+*
+ */
+type ReviewCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Review](ctp:api:type:Review) that was created.
+	Review Review `json:"review"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6227,25 +9107,39 @@ func (obj ReviewCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Rating](ctp:api:type:ReviewSetRatingAction) update action.
+*
+ */
 type ReviewRatingSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	OldRating                       *float64                 `json:"oldRating,omitempty"`
-	NewRating                       *float64                 `json:"newRating,omitempty"`
-	IncludedInStatistics            bool                     `json:"includedInStatistics"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	// The `rating` of the [Review](ctp:api:type:Review) before the [Set Rating](ctp:api:type:ReviewSetRatingAction) update action.
+	OldRating *float64 `json:"oldRating,omitempty"`
+	// The `rating` of the [Review](ctp:api:type:Review) after the [Set Rating](ctp:api:type:ReviewSetRatingAction) update action.
+	NewRating *float64 `json:"newRating,omitempty"`
+	// Whether the [Review](ctp:api:type:Review) was taken into account in the ratings statistics of the target.
+	IncludedInStatistics bool `json:"includedInStatistics"`
+	// [Reference](ctp:api:type:Reference) to the resource that the [Review](ctp:api:type:Review) belongs to.
 	Target Reference `json:"target,omitempty"`
 }
 
@@ -6284,30 +9178,44 @@ func (obj ReviewRatingSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewRatingSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+*
+ */
 type ReviewStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
-	OldState StateReference `json:"oldState"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
-	NewState                StateReference `json:"newState"`
-	OldIncludedInStatistics bool           `json:"oldIncludedInStatistics"`
-	NewIncludedInStatistics bool           `json:"newIncludedInStatistics"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Target Reference `json:"target"`
-	Force  bool      `json:"force"`
+	// [State](ctp:api:type:State) of the [Review](ctp:api:type:Review) before the [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// [State](ctp:api:type:State) of the [Review](ctp:api:type:Review) after the [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+	NewState StateReference `json:"newState"`
+	// Whether the old [Review](ctp:api:type:Review) was taken into account in the rating statistics of the target before the state transition.
+	OldIncludedInStatistics bool `json:"oldIncludedInStatistics"`
+	// Whether the new [Review](ctp:api:type:Review) was taken into account in the rating statistics of the target after the state transition.
+	NewIncludedInStatistics bool `json:"newIncludedInStatistics"`
+	// [Reference](ctp:api:type:Reference) to the resource that the [Review](ctp:api:type:Review) belongs to.
+	Target Reference `json:"target,omitempty"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6345,21 +9253,34 @@ func (obj ReviewStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Staged Quote](/../api/projects/staged-quotes#create-stagedquote) request.
+*
+ */
 type StagedQuoteCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Staged Quote](/../api/projects/staged-quotes) that was created.
+	StagedQuote StagedQuote `json:"stagedQuote"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6390,20 +9311,31 @@ func (obj StagedQuoteCreatedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Staged Quote](/../api/projects/staged-quotes#delete-stagedquote) request.
+*
+ */
 type StagedQuoteDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -6435,22 +9367,34 @@ func (obj StagedQuoteDeletedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Seller Comment](ctp:api:type:StagedQuoteSetSellerCommentAction) update action.
+*
+ */
 type StagedQuoteSellerCommentSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	SellerComment                   string                   `json:"sellerComment"`
+	// `sellerComment` on the [StagedQuote](ctp:api:type:StagedQuote) after a successful [Set Seller Comment](ctp:api:type:StagedQuoteSetSellerCommentAction) update action.
+	SellerComment string `json:"sellerComment"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6481,24 +9425,35 @@ func (obj StagedQuoteSellerCommentSetMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteSellerCommentSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Staged Quote State](ctp:api:type:StagedQuoteChangeStagedQuoteStateAction) update action.
+*
+ */
 type StagedQuoteStateChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Predefined states tracking the status of the Staged Quote.
+	// State of the Staged Quote after the [Change Staged Quote State](ctp:api:type:StagedQuoteChangeStagedQuoteStateAction) update action.
 	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
-	// Predefined states tracking the status of the Staged Quote.
+	// State of the Staged Quote before the [Change Staged Quote State](ctp:api:type:StagedQuoteChangeStagedQuoteStateAction) update action.
 	OldStagedQuoteState StagedQuoteState `json:"oldStagedQuoteState"`
 }
 
@@ -6535,25 +9490,32 @@ func (obj StagedQuoteStateChangedMessage) MarshalJSON() ([]byte, error) {
 *
  */
 type StagedQuoteStateTransitionMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) after the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
 	State StateReference `json:"state"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
 	Force bool `json:"force"`
 }
 
@@ -6585,22 +9547,34 @@ func (obj StagedQuoteStateTransitionMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Valid To](ctp:api:type:StagedQuoteSetValidToAction) update action.
+*
+ */
 type StagedQuoteValidToSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	ValidTo                         time.Time                `json:"validTo"`
+	// Expiration date for the Staged Quote after the [Set Valid To](ctp:api:type:StagedQuoteSetValidToAction) update action.
+	ValidTo time.Time `json:"validTo"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6632,25 +9606,92 @@ func (obj StagedQuoteValidToSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+*
+ */
+type StandalonePriceActiveChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Value of the `active` field of the StandalonePrice after the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+	Active bool `json:"active"`
+	// Value of the `active` field of the StandalonePrice before the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+	OldActive bool `json:"oldActive"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceActiveChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceActiveChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceActiveChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceActiveChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceActiveChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
 *
  */
 type StandalonePriceCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// The Standalone Price as it was created.
+	// [Standalone Price](ctp:api:type:StandalonePrice) that was created.
 	StandalonePrice StandalonePrice `json:"standalonePrice"`
 }
 
@@ -6687,19 +9728,26 @@ func (obj StandalonePriceCreatedMessage) MarshalJSON() ([]byte, error) {
 *
  */
 type StandalonePriceDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -6732,25 +9780,32 @@ func (obj StandalonePriceDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Emitted when the affected StandalonePrice is updated based on a [Product Discount](ctp:api:type:ProductDiscount) being applied.
+*	Generated after a [Product Discount](ctp:api:type:ProductDiscount) is successfully applied to a StandalonePrice.
 *
  */
 type StandalonePriceDiscountSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// The new `discounted` value of the updated StandalonePrice.
+	// The new `discounted` value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 }
 
@@ -6783,25 +9838,32 @@ func (obj StandalonePriceDiscountSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This Message is the result of the Standalone Price [SetDiscountedPrice](/../api/projects/standalone-prices#set-discounted-price) update action.
+*	Generated after a successful [Set Discounted Price](ctp:api:type:StandalonePriceSetDiscountedPriceAction) update action.
 *
  */
 type StandalonePriceExternalDiscountSetMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// The new `discounted` value of the updated StandalonePrice.
+	// The `discounted` value of the [StandalonePrice](ctp:api:type:StandalonePrice) after the [Set Discounted Price](ctp:api:type:StandalonePriceSetDiscountedPriceAction) update action.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 }
 
@@ -6838,19 +9900,26 @@ func (obj StandalonePriceExternalDiscountSetMessage) MarshalJSON() ([]byte, erro
 *
  */
 type StandalonePriceStagedChangesAppliedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Applied changes of the [StandalonePrice](/../api/projects/standalone-prices) after the [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
 	StagedChanges StagedStandalonePrice `json:"stagedChanges"`
@@ -6885,25 +9954,32 @@ func (obj StandalonePriceStagedChangesAppliedMessage) MarshalJSON() ([]byte, err
 }
 
 /**
-*	Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action.
+*	Generated after a successful [Change Value](ctp:api:type:StandalonePriceChangeValueAction) update action.
 *
  */
 type StandalonePriceValueChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// The new value of the updated StandalonePrice.
+	// The new value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
 	Value Money `json:"value"`
 	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
 	Staged bool `json:"staged"`
@@ -6937,28 +10013,43 @@ func (obj StandalonePriceValueChangedMessage) MarshalJSON() ([]byte, error) {
 	}{Action: "StandalonePriceValueChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Store](/../api/projects/stores#create-store) request.
+*
+ */
 type StoreCreatedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	Name                 *LocalizedString          `json:"name,omitempty"`
-	Languages            []string                  `json:"languages"`
-	DistributionChannels []ChannelReference        `json:"distributionChannels"`
-	SupplyChannels       []ChannelReference        `json:"supplyChannels"`
-	ProductSelections    []ProductSelectionSetting `json:"productSelections"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// The `name` of the [Store](ctp:api:type:Store) that was created.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Languages of the [Store](ctp:api:type:Store) that was created. Languages are represented as [IETF language tags](https://en.wikipedia.org/wiki/IETF_language_tag).
+	Languages []string `json:"languages"`
+	// [Distribution Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
+	DistributionChannels []ChannelReference `json:"distributionChannels"`
+	// [Supply Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
+	SupplyChannels []ChannelReference `json:"supplyChannels"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) of the [Store](ctp:api:type:Store) that was created.
+	ProductSelections []ProductSelectionSetting `json:"productSelections"`
+	// [Custom Fields](ctp:api:type:CustomFields) on the [Store](ctp:api:type:Store) that was created.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
@@ -6984,26 +10075,52 @@ func (obj *StoreCreatedMessage) UnmarshalJSON(data []byte) error {
 // optional nil slices
 func (obj StoreCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias StoreCreatedMessage
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreCreated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["languages"] == nil {
+		delete(raw, "languages")
+	}
+
+	return json.Marshal(raw)
+
 }
 
+/**
+*	Generated after a successful [Delete Store](/../api/projects/quote-requests#delete-quoterequest) request.
+*
+ */
 type StoreDeletedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 }
 
@@ -7042,23 +10159,30 @@ func (obj StoreDeletedMessage) MarshalJSON() ([]byte, error) {
 *
  */
 type StoreDistributionChannelsChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                `json:"resource"`
-	ResourceVersion                 int                      `json:"resourceVersion"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// The product distribution channels that have been added.
+	// Product distribution Channels that have been added to the [Store](ctp:api:type:Store).
 	AddedDistributionChannels []ChannelReference `json:"addedDistributionChannels"`
-	// The product distribution channels that have been removed.
+	// Product distribution Channels that have been removed from the [Store](ctp:api:type:Store).
 	RemovedDistributionChannels []ChannelReference `json:"removedDistributionChannels"`
 }
 
@@ -7084,30 +10208,220 @@ func (obj *StoreDistributionChannelsChangedMessage) UnmarshalJSON(data []byte) e
 // optional nil slices
 func (obj StoreDistributionChannelsChangedMessage) MarshalJSON() ([]byte, error) {
 	type Alias StoreDistributionChannelsChangedMessage
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreDistributionChannelsChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedDistributionChannels"] == nil {
+		delete(raw, "addedDistributionChannels")
+	}
+
+	if raw["removedDistributionChannels"] == nil {
+		delete(raw, "removedDistributionChannels")
+	}
+
+	return json.Marshal(raw)
+
 }
 
-type StoreProductSelectionsChangedMessage struct {
-	// Unique identifier of the Message.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+/**
+*	Generated after a successful [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+*
+ */
+type StoreLanguagesChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Value of `createdBy`.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy      *CreatedBy `json:"createdBy,omitempty"`
-	SequenceNumber int        `json:"sequenceNumber"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Resource                        Reference                 `json:"resource"`
-	ResourceVersion                 int                       `json:"resourceVersion"`
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers  `json:"resourceUserProvidedIdentifiers,omitempty"`
-	AddedProductSelections          []ProductSelectionSetting `json:"addedProductSelections"`
-	RemovedProductSelections        []ProductSelectionSetting `json:"removedProductSelections"`
-	UpdatedProductSelections        []ProductSelectionSetting `json:"updatedProductSelections"`
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Locales](ctp:api:type:Locale) added to the [Store](ctp:api:type:Store) after the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+	AddedLanguages []string `json:"addedLanguages"`
+	// [Locales](ctp:api:type:Locale) removed from the [Store](ctp:api:type:Store) during the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+	RemovedLanguages []string `json:"removedLanguages"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreLanguagesChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StoreLanguagesChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreLanguagesChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StoreLanguagesChangedMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreLanguagesChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedLanguages"] == nil {
+		delete(raw, "addedLanguages")
+	}
+
+	if raw["removedLanguages"] == nil {
+		delete(raw, "removedLanguages")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated after a successful [Set Name](ctp:api:type:StoreSetNameAction) update action.
+*
+ */
+type StoreNameSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the [Store](ctp:api:type:Store) set during the [Set Name](ctp:api:type:StoreSetNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Names set for the [Store](ctp:api:type:Store) in different locales.
+	NameAllLocales []LocalizedString `json:"nameAllLocales"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreNameSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias StoreNameSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreNameSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias StoreNameSetMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreNameSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["nameAllLocales"] == nil {
+		delete(raw, "nameAllLocales")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated by a successful [Add Product Selection](ctp:api:type:StoreAddProductSelectionAction),
+*	[Remove Product Selection](ctp:api:type:StoreRemoveProductSelectionAction),
+*	[Set Product Selections](ctp:api:type:StoreSetProductSelectionsAction),
+*	or [Change Product Selections Active](ctp:api:type:StoreChangeProductSelectionAction) update action.
+*
+ */
+type StoreProductSelectionsChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) that were added to the [Store](ctp:api:type:Store).
+	AddedProductSelections []ProductSelectionSetting `json:"addedProductSelections"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) that were removed from the [Store](ctp:api:type:Store).
+	RemovedProductSelections []ProductSelectionSetting `json:"removedProductSelections"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) that were updated in the [Store](ctp:api:type:Store).
+	UpdatedProductSelections []ProductSelectionSetting `json:"updatedProductSelections"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -7161,16 +10475,105 @@ func (obj StoreProductSelectionsChangedMessage) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Generated after a successful [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction),
+*	[Remove Supply Channel](ctp:api:type:StoreRemoveSupplyChannelAction), or
+*	[Set Supply Channels](ctp:api:type:StoreSetSupplyChannelsAction) update action.
+*
+ */
+type StoreSupplyChannelsChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Inventory supply Channels that have been added to the [Store](ctp:api:type:Store).
+	AddedSupplyChannels []ChannelReference `json:"addedSupplyChannels"`
+	// Inventory supply Channels that have been removed from the [Store](ctp:api:type:Store).
+	RemovedSupplyChannels []ChannelReference `json:"removedSupplyChannels"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreSupplyChannelsChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StoreSupplyChannelsChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSupplyChannelsChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StoreSupplyChannelsChangedMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreSupplyChannelsChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedSupplyChannels"] == nil {
+		delete(raw, "addedSupplyChannels")
+	}
+
+	if raw["removedSupplyChannels"] == nil {
+		delete(raw, "removedSupplyChannels")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	User-provided identifiers present on the resource for which the Message is created. The value of the identifier stored in the Message corresponds to the one that was set on the resource at the version shown in `resourceVersion`.
+*
+ */
 type UserProvidedIdentifiers struct {
 	// User-provided unique identifier of the resource.
-	Key            *string `json:"key,omitempty"`
-	ExternalId     *string `json:"externalId,omitempty"`
-	OrderNumber    *string `json:"orderNumber,omitempty"`
+	Key *string `json:"key,omitempty"`
+	// User-provided unique identifier of the resource.
+	ExternalId *string `json:"externalId,omitempty"`
+	// User-provided unique identifier of an [Order](ctp:api:type:Order).
+	OrderNumber *string `json:"orderNumber,omitempty"`
+	// User-provided unique identifier of a [Customer](ctp:api:type:Customer).
 	CustomerNumber *string `json:"customerNumber,omitempty"`
-	Sku            *string `json:"sku,omitempty"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Unique SKU of a [Product Variant](ctp:api:type:ProductVariant).
+	Sku *string `json:"sku,omitempty"`
+	// Unique identifier usually used in deep-link URLs for a [Product](ctp:api:type:Product). The value corresponds to the slug in the `current` [Product Projection](ctp:api:type:ProductProjection).
 	Slug *LocalizedString `json:"slug,omitempty"`
-	// Custom Objects are grouped into containers, which can be used like namespaces. Within a given container, a user-defined key can be used to uniquely identify resources.
+	// Unique identifier of a [Custom Object](/../api/projects/custom-objects).
 	ContainerAndKey *ContainerAndKey `json:"containerAndKey,omitempty"`
 }
 
@@ -7188,6 +10591,151 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 	}
 
 	switch discriminator {
+	case "BusinessUnitAddressAdded":
+		obj := BusinessUnitAddressAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitAddressChanged":
+		obj := BusinessUnitAddressChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitAddressRemoved":
+		obj := BusinessUnitAddressRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitAssociateAdded":
+		obj := BusinessUnitAssociateAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitAssociateChanged":
+		obj := BusinessUnitAssociateChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitAssociateRemoved":
+		obj := BusinessUnitAssociateRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitAssociatesSet":
+		obj := BusinessUnitAssociatesSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitBillingAddressAdded":
+		obj := BusinessUnitBillingAddressAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitBillingAddressRemoved":
+		obj := BusinessUnitBillingAddressRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitContactEmailSet":
+		obj := BusinessUnitContactEmailSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitCreated":
+		obj := BusinessUnitCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.BusinessUnit != nil {
+			var err error
+			obj.BusinessUnit, err = mapDiscriminatorBusinessUnit(obj.BusinessUnit)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitDefaultBillingAddressSet":
+		obj := BusinessUnitDefaultBillingAddressSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitDefaultShippingAddressSet":
+		obj := BusinessUnitDefaultShippingAddressSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitDeleted":
+		obj := BusinessUnitDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitNameChanged":
+		obj := BusinessUnitNameChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitParentUnitChanged":
+		obj := BusinessUnitParentUnitChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitShippingAddressAdded":
+		obj := BusinessUnitShippingAddressAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitShippingAddressRemoved":
+		obj := BusinessUnitShippingAddressRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitStatusChanged":
+		obj := BusinessUnitStatusChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitStoreAdded":
+		obj := BusinessUnitStoreAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitStoreModeChanged":
+		obj := BusinessUnitStoreModeChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitStoreRemoved":
+		obj := BusinessUnitStoreRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitStoresSet":
+		obj := BusinessUnitStoresSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "CategoryCreated":
 		obj := CategoryCreatedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7403,13 +10951,6 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		if obj.ProductSelection != nil {
-			var err error
-			obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "ProductSelectionDeleted":
 		obj := ProductSelectionDeletedMessagePayload{}
@@ -7608,6 +11149,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "StandalonePriceActiveChanged":
+		obj := StandalonePriceActiveChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "StandalonePriceCreated":
 		obj := StandalonePriceCreatedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7662,8 +11209,26 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "StoreLanguagesChanged":
+		obj := StoreLanguagesChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreNameSet":
+		obj := StoreNameSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "StoreProductSelectionsChanged":
 		obj := StoreProductSelectionsChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreSupplyChannelsChanged":
+		obj := StoreSupplyChannelsChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7672,7 +11237,469 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 	return nil, nil
 }
 
+/**
+*	Generated after a successful [Add Address](ctp:api:type:BusinessUnitAddAddressAction) update action.
+*
+ */
+type BusinessUnitAddressAddedMessagePayload struct {
+	// The address that was added to the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddressAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Address](ctp:api:type:BusinessUnitChangeAddressAction) update action.
+*
+ */
+type BusinessUnitAddressChangedMessagePayload struct {
+	// Updated address of the Business Unit.
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddressChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddressChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAddressChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Address](ctp:api:type:BusinessUnitRemoveAddressAction) update action.
+*
+ */
+type BusinessUnitAddressRemovedMessagePayload struct {
+	// The address that was removed from the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddressRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action.
+*
+ */
+type BusinessUnitAssociateAddedMessagePayload struct {
+	// The [Associate](ctp:api:type:Associate) that was added to the [Business Unit](ctp:api:type:BusinessUnit).
+	Associate Associate `json:"associate"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociateAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociateAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociateAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Associate](ctp:api:type:BusinessUnitChangeAssociateAction) update action.
+*
+ */
+type BusinessUnitAssociateChangedMessagePayload struct {
+	// The [Associate](ctp:api:type:Associate) that was updated.
+	Associate Associate `json:"associate"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociateChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociateChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociateChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Associate](ctp:api:type:BusinessUnitRemoveAssociateAction) update action.
+*
+ */
+type BusinessUnitAssociateRemovedMessagePayload struct {
+	// The [Associate](ctp:api:type:Associate) that was removed from the [Business Unit](ctp:api:type:BusinessUnit).
+	Associate Associate `json:"associate"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociateRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociateRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociateRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Associates](ctp:api:type:BusinessUnitSetAssociatesAction) update action.
+*
+ */
+type BusinessUnitAssociatesSetMessagePayload struct {
+	// The list of [Associates](ctp:api:type:Associate) that was updated on the [Business Unit](ctp:api:type:BusinessUnit).
+	Associates []Associate `json:"associates"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAssociatesSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAssociatesSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitAssociatesSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Billing Address Identifier](ctp:api:type:BusinessUnitAddBillingAddressIdAction) update action.
+*
+ */
+type BusinessUnitBillingAddressAddedMessagePayload struct {
+	// The address that was added to the [Business Unit](ctp:api:type:BusinessUnit) as billing address.
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitBillingAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitBillingAddressAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitBillingAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Billing Address Identifier](ctp:api:type:BusinessUnitRemoveBillingAddressIdAction) update action.
+*
+ */
+type BusinessUnitBillingAddressRemovedMessagePayload struct {
+	// The address that was removed from the billing addresses of the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitBillingAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitBillingAddressRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitBillingAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Contact Email](ctp:api:type:BusinessUnitSetContactEmailAction) update action.
+*
+ */
+type BusinessUnitContactEmailSetMessagePayload struct {
+	// The contact email that was updated on the [Business Unit](ctp:api:type:BusinessUnit).
+	ContactEmail *string `json:"contactEmail,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitContactEmailSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitContactEmailSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitContactEmailSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create Business Unit](/projects/business-units#create-businessunit) request.
+*
+ */
+type BusinessUnitCreatedMessagePayload struct {
+	// The [Business Unit](ctp:api:type:BusinessUnit) that was created.
+	BusinessUnit BusinessUnit `json:"businessUnit"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitCreatedMessagePayload) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitCreatedMessagePayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.BusinessUnit != nil {
+		var err error
+		obj.BusinessUnit, err = mapDiscriminatorBusinessUnit(obj.BusinessUnit)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Default Billing Address](ctp:api:type:BusinessUnitSetDefaultBillingAddressAction) update action.
+*
+ */
+type BusinessUnitDefaultBillingAddressSetMessagePayload struct {
+	// The address that was set as the default billing address.
+	Address *Address `json:"address,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitDefaultBillingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitDefaultBillingAddressSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitDefaultBillingAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Default Shipping Address](ctp:api:type:BusinessUnitSetDefaultShippingAddressAction) update action.
+*
+ */
+type BusinessUnitDefaultShippingAddressSetMessagePayload struct {
+	// The address that was set as the default shipping address.
+	Address *Address `json:"address,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitDefaultShippingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitDefaultShippingAddressSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitDefaultShippingAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete Business Unit](/projects/business-units#delete-businessunit) request.
+*
+ */
+type BusinessUnitDeletedMessagePayload struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Name](ctp:api:type:BusinessUnitChangeNameAction) update action.
+*
+ */
+type BusinessUnitNameChangedMessagePayload struct {
+	// Updated name of the [Business Unit](ctp:api:type:BusinessUnit).
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitNameChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitNameChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitNameChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+*
+ */
+type BusinessUnitParentUnitChangedMessagePayload struct {
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) before the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	OldParentUnit *BusinessUnitKeyReference `json:"oldParentUnit,omitempty"`
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) after the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	NewParentUnit *BusinessUnitKeyReference `json:"newParentUnit,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitParentUnitChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitParentUnitChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitParentUnitChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Shipping Address Identifier](ctp:api:type:BusinessUnitAddShippingAddressIdAction) update action.
+*
+ */
+type BusinessUnitShippingAddressAddedMessagePayload struct {
+	// The address that was added to the [Business Unit](ctp:api:type:BusinessUnit) as shipping address.
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitShippingAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitShippingAddressAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitShippingAddressAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Shipping Address Identifier](ctp:api:type:BusinessUnitRemoveShippingAddressIdAction) update action.
+*
+ */
+type BusinessUnitShippingAddressRemovedMessagePayload struct {
+	// The address that was removed from shipping addresses of the [Business Unit](ctp:api:type:BusinessUnit).
+	Address Address `json:"address"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitShippingAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitShippingAddressRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitShippingAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Status](ctp:api:type:BusinessUnitChangeStatusAction) update action.
+*
+ */
+type BusinessUnitStatusChangedMessagePayload struct {
+	// Updated status of the [Business Unit](ctp:api:type:BusinessUnit).
+	Active BusinessUnitStatus `json:"active"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStatusChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStatusChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStatusChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add Store](ctp:api:type:BusinessUnitAddStoreAction) update action.
+*
+ */
+type BusinessUnitStoreAddedMessagePayload struct {
+	// The [Store](ctp:api:type:Store) that was added to the [Business Unit](ctp:api:type:BusinessUnit).
+	Store StoreKeyReference `json:"store"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoreAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoreAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoreAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+*
+ */
+type BusinessUnitStoreModeChangedMessagePayload struct {
+	// [Stores](ctp:api:type:Store) of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	Stores []StoreKeyReference `json:"stores"`
+	// [BusinessUnitStoreMode](ctp:api:type:BusinessUnitStoreMode) of the Business Unit after the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	StoreMode BusinessUnitStoreMode `json:"storeMode"`
+	// [Stores](ctp:api:type:Store) of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	OldStores []StoreKeyReference `json:"oldStores"`
+	// [BusinessUnitStoreMode](ctp:api:type:BusinessUnitStoreMode) of the Business Unit before the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+	OldStoreMode BusinessUnitStoreMode `json:"oldStoreMode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoreModeChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoreModeChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoreModeChanged", Alias: (*Alias)(&obj)})
+}
+
+type BusinessUnitStoreRemovedMessagePayload struct {
+	// The [Store](ctp:api:type:Store) that was removed from the [Business Unit](ctp:api:type:BusinessUnit).
+	Store StoreKeyReference `json:"store"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoreRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoreRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoreRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Stores](ctp:api:type:BusinessUnitSetStoresAction) update action.
+*
+ */
+type BusinessUnitStoresSetMessagePayload struct {
+	// [Stores](ctp:api:type:Store) of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Stores](ctp:api:type:BusinessUnitSetStoresAction) update action.
+	Stores []StoreKeyReference `json:"stores"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitStoresSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitStoresSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitStoresSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create Category](/../api/projects/categories#create-category) request.
+*
+ */
 type CategoryCreatedMessagePayload struct {
+	// [Category](ctp:api:type:Category) that was created.
 	Category Category `json:"category"`
 }
 
@@ -7686,10 +11713,14 @@ func (obj CategoryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CategoryCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Slug](ctp:api:type:CategoryChangeSlugAction) update action.
+*
+ */
 type CategorySlugChangedMessagePayload struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Category](ctp:api:type:Category) after the [Change Slug](ctp:api:type:CategoryChangeSlugAction) update action.
 	Slug LocalizedString `json:"slug"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Category](ctp:api:type:Category) before the [Change Slug](ctp:api:type:CategoryChangeSlugAction) update action.
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
@@ -7703,7 +11734,12 @@ func (obj CategorySlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CategorySlugChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Address](ctp:api:type:CustomerAddAddressAction) update action.
+*
+ */
 type CustomerAddressAddedMessagePayload struct {
+	// [Address](ctp:api:type:Address) that was added during the [Add Address](ctp:api:type:CustomerAddAddressAction) update action.
 	Address Address `json:"address"`
 }
 
@@ -7717,7 +11753,12 @@ func (obj CustomerAddressAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerAddressAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Address](ctp:api:type:CustomerChangeAddressAction) update action.
+*
+ */
 type CustomerAddressChangedMessagePayload struct {
+	// [Address](ctp:api:type:Address) that was set during the [Change Address](ctp:api:type:CustomerChangeAddressAction) update action.
 	Address Address `json:"address"`
 }
 
@@ -7731,7 +11772,12 @@ func (obj CustomerAddressChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerAddressChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Address](ctp:api:type:CustomerRemoveAddressAction) update action.
+*
+ */
 type CustomerAddressRemovedMessagePayload struct {
+	// [Address](ctp:api:type:Address) that was removed during the [Remove Address](ctp:api:type:CustomerRemoveAddressAction) update action.
 	Address Address `json:"address"`
 }
 
@@ -7745,7 +11791,12 @@ func (obj CustomerAddressRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerAddressRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Company Name](ctp:api:type:CustomerSetCompanyNameAction) update action.
+*
+ */
 type CustomerCompanyNameSetMessagePayload struct {
+	// The `companyName` that was set during the [Set Company Name](ctp:api:type:CustomerSetCompanyNameAction) update action.
 	CompanyName *string `json:"companyName,omitempty"`
 }
 
@@ -7759,7 +11810,12 @@ func (obj CustomerCompanyNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerCompanyNameSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Customer](/../api/projects/customers#create-sign-up-customer) request.
+*
+ */
 type CustomerCreatedMessagePayload struct {
+	// [Customer](ctp:api:type:Customer) that was created.
 	Customer Customer `json:"customer"`
 }
 
@@ -7773,7 +11829,12 @@ func (obj CustomerCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Date of Birth](ctp:api:type:CustomerSetDateOfBirthAction) update action.
+*
+ */
 type CustomerDateOfBirthSetMessagePayload struct {
+	// The `dateOfBirth` that was set during the [Set Date of Birth](ctp:api:type:CustomerSetDateOfBirthAction) update action.
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
@@ -7787,6 +11848,10 @@ func (obj CustomerDateOfBirthSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerDateOfBirthSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Customer](/../api/projects/customers#delete-customer) request.
+*
+ */
 type CustomerDeletedMessagePayload struct {
 }
 
@@ -7800,7 +11865,12 @@ func (obj CustomerDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Email](ctp:api:type:CustomerChangeEmailAction) update action.
+*
+ */
 type CustomerEmailChangedMessagePayload struct {
+	// The `email` that was set during the [Change Email](ctp:api:type:CustomerChangeEmailAction) update action.
 	Email string `json:"email"`
 }
 
@@ -7814,6 +11884,10 @@ func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerEmailChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Verify Customer's Email](/../api/projects/customers#verify-email-of-customer) request.
+*
+ */
 type CustomerEmailVerifiedMessagePayload struct {
 }
 
@@ -7827,7 +11901,12 @@ func (obj CustomerEmailVerifiedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerEmailVerified", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set First Name](ctp:api:type:CustomerSetFirstNameAction) update action.
+*
+ */
 type CustomerFirstNameSetMessagePayload struct {
+	// The `firstName` that was set during the [Set First Name](ctp:api:type:CustomerSetFirstNameAction) update action.
 	FirstName *string `json:"firstName,omitempty"`
 }
 
@@ -7841,8 +11920,12 @@ func (obj CustomerFirstNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerFirstNameSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Group](ctp:api:type:CustomerSetCustomerGroupAction) update action.
+*
+ */
 type CustomerGroupSetMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [Customer Group](ctp:api:type:CustomerGroup) that was set during the [Set Customer Group](ctp:api:type:CustomerSetCustomerGroupAction) update action.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 }
 
@@ -7856,7 +11939,12 @@ func (obj CustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerGroupSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Last Name](ctp:api:type:CustomerSetLastNameAction) update action.
+*
+ */
 type CustomerLastNameSetMessagePayload struct {
+	// The `lastName` that was set during the [Set Last Name](ctp:api:type:CustomerSetLastNameAction) update action.
 	LastName *string `json:"lastName,omitempty"`
 }
 
@@ -7870,8 +11958,12 @@ func (obj CustomerLastNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerLastNameSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Reset Customer's Password](/../api/projects/customers#reset-password-of-customer), [Reset Customer's Password in a Store](/../api/projects/customers#reset-password-of-customer-in-store), [Change Customer's Password](/../api/projects/customers#change-password-of-customer), or [Change Customer's Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) request. This Message is also produced during equivalent requests to the [My Customer Profile](/../api/projects/me-profile) endpoint.
+*
+ */
 type CustomerPasswordUpdatedMessagePayload struct {
-	// true, if password has been updated during Customer's Password Reset workflow.
+	// Whether the Customer's password was updated during the [Reset password](/../api/projects/customers#password-reset-of-customer) or [Change password](/../api/projects/customers#change-password-of-customer) flow.
 	Reset bool `json:"reset"`
 }
 
@@ -7885,7 +11977,12 @@ func (obj CustomerPasswordUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerPasswordUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Title](ctp:api:type:CustomerSetTitleAction) update action.
+*
+ */
 type CustomerTitleSetMessagePayload struct {
+	// The `title` that was set during the [Set Title](ctp:api:type:CustomerSetTitleAction) update action.
 	Title *string `json:"title,omitempty"`
 }
 
@@ -7899,7 +11996,12 @@ func (obj CustomerTitleSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "CustomerTitleSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create InventoryEntry](/../api/projects/inventory#create-inventoryentry) request.
+*
+ */
 type InventoryEntryCreatedMessagePayload struct {
+	// [InventoryEntry](ctp:api:type:InventoryEntry) that was created.
 	InventoryEntry InventoryEntry `json:"inventoryEntry"`
 }
 
@@ -7913,9 +12015,14 @@ func (obj InventoryEntryCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "InventoryEntryCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete InventoryEntry](/../api/projects/inventory#delete-inventoryentry) request.
+*
+ */
 type InventoryEntryDeletedMessagePayload struct {
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) that was deleted.
 	Sku string `json:"sku"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) was deleted.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -7929,12 +12036,21 @@ func (obj InventoryEntryDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "InventoryEntryDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Quantity](ctp:api:type:InventoryEntryAddQuantityAction), [Remove Quantity](ctp:api:type:InventoryEntryRemoveQuantityAction) or [Change Quantity](ctp:api:type:InventoryEntryChangeQuantityAction) update action.
+*	Inventory changes as a result of [Order creation](/../api/projects/orders#create-order) do not trigger this message.
+*
+ */
 type InventoryEntryQuantitySetMessagePayload struct {
-	OldQuantityOnStock   int `json:"oldQuantityOnStock"`
-	NewQuantityOnStock   int `json:"newQuantityOnStock"`
+	// Quantity on stock for the [InventoryEntry](ctp:api:type:InventoryEntry) before the quantity was updated.
+	OldQuantityOnStock int `json:"oldQuantityOnStock"`
+	// Quantity on stock for the [InventoryEntry](ctp:api:type:InventoryEntry) after the quantity was updated.
+	NewQuantityOnStock int `json:"newQuantityOnStock"`
+	// Available quantity for the [InventoryEntry](ctp:api:type:InventoryEntry) before the quantity was updated.
 	OldAvailableQuantity int `json:"oldAvailableQuantity"`
+	// Available quantity for the [InventoryEntry](ctp:api:type:InventoryEntry) after the quantity was updated.
 	NewAvailableQuantity int `json:"newAvailableQuantity"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) quantity was set.
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
 }
 
@@ -8111,28 +12227,9 @@ func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		if obj.NewTotalPrice != nil {
-			var err error
-			obj.NewTotalPrice, err = mapDiscriminatorTypedMoney(obj.NewTotalPrice)
-			if err != nil {
-				return nil, err
-			}
-		}
 		return obj, nil
 	case "OrderPaymentStateChanged":
 		obj := OrderPaymentStateChangedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ReturnInfoAdded":
-		obj := OrderReturnInfoAddedMessagePayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "ReturnInfoSet":
-		obj := OrderReturnInfoSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -8229,17 +12326,36 @@ func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload
 			return nil, err
 		}
 		return obj, nil
+	case "ReturnInfoAdded":
+		obj := ReturnInfoAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ReturnInfoSet":
+		obj := ReturnInfoSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
 
+/**
+*	Generated after a successful [Transition Custom Line Item State](ctp:api:type:OrderTransitionCustomLineItemStateAction) update action.
+*
+ */
 type CustomLineItemStateTransitionMessagePayload struct {
-	CustomLineItemId string    `json:"customLineItemId"`
-	TransitionDate   time.Time `json:"transitionDate"`
-	Quantity         int       `json:"quantity"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// Unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// Date and time (UTC) when the transition of the [Custom Line Item](ctp:api:type:CustomLineItem) [State](ctp:api:type:State) was performed.
+	TransitionDate time.Time `json:"transitionDate"`
+	// Number of [Custom Line Items](ctp:api:type:CustomLineItem) for which the [State](ctp:api:type:State) was transitioned.
+	Quantity int `json:"quantity"`
+	// [State](ctp:api:type:State) the [Custom Line Item](ctp:api:type:CustomLineItem) was transitioned from.
 	FromState StateReference `json:"fromState"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [State](ctp:api:type:State) the [Custom Line Item](ctp:api:type:CustomLineItem) was transitioned to.
 	ToState StateReference `json:"toState"`
 }
 
@@ -8253,8 +12369,15 @@ func (obj CustomLineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, er
 	}{Action: "CustomLineItemStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Delivery](ctp:api:type:OrderAddDeliveryAction) update action.
+*
+ */
 type DeliveryAddedMessagePayload struct {
+	// [Delivery](ctp:api:type:Delivery) that was added to the [Order](ctp:api:type:Order). The [Delivery](ctp:api:type:Delivery) in the Message body does not contain [Parcels](ctp:api:type:Parcel) if those were part of the initial [Add Delivery](ctp:api:type:OrderAddDeliveryAction) update action. In that case, the update action produces an additional [ParcelAddedToDelivery](ctp:api:type:ParcelAddedToDeliveryMessage) Message containing information about the [Parcels](ctp:api:type:Parcel).
 	Delivery Delivery `json:"delivery"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8267,10 +12390,19 @@ func (obj DeliveryAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
+*
+ */
 type DeliveryAddressSetMessagePayload struct {
-	DeliveryId string   `json:"deliveryId"`
-	Address    *Address `json:"address,omitempty"`
+	// Unique identifier of the [Parcel](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Address](ctp:api:type:Address) after the [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
+	Address *Address `json:"address,omitempty"`
+	// [Address](ctp:api:type:Address) before the [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
 	OldAddress *Address `json:"oldAddress,omitempty"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8283,10 +12415,19 @@ func (obj DeliveryAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryAddressSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
+*
+ */
 type DeliveryItemsUpdatedMessagePayload struct {
-	DeliveryId string         `json:"deliveryId"`
-	Items      []DeliveryItem `json:"items"`
-	OldItems   []DeliveryItem `json:"oldItems"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) after the [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
+	Items []DeliveryItem `json:"items"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) before the [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
+	OldItems []DeliveryItem `json:"oldItems"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8299,8 +12440,15 @@ func (obj DeliveryItemsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryItemsUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Delivery](ctp:api:type:OrderRemoveDeliveryAction) update action.
+*
+ */
 type DeliveryRemovedMessagePayload struct {
+	// The [Delivery](ctp:api:type:Delivery) that was removed from the [Order](ctp:api:type:Order).
 	Delivery Delivery `json:"delivery"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8313,13 +12461,20 @@ func (obj DeliveryRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "DeliveryRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition Line Item State](ctp:api:type:OrderTransitionLineItemStateAction) update action.
+*
+ */
 type LineItemStateTransitionMessagePayload struct {
-	LineItemId     string    `json:"lineItemId"`
+	// Unique identifier of the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// Date and time (UTC) when the transition of the [Line Item](ctp:api:type:LineItem) [State](ctp:api:type:State) was performed.
 	TransitionDate time.Time `json:"transitionDate"`
-	Quantity       int       `json:"quantity"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// Number of [Line Items](ctp:api:type:LineItem) for which the [State](ctp:api:type:State) was transitioned.
+	Quantity int `json:"quantity"`
+	// [State](ctp:api:type:State) the [Line Item](ctp:api:type:LineItem) was transitioned from.
 	FromState StateReference `json:"fromState"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [State](ctp:api:type:State) the [Line Item](ctp:api:type:LineItem) was transitioned to.
 	ToState StateReference `json:"toState"`
 }
 
@@ -8333,8 +12488,14 @@ func (obj LineItemStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "LineItemStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Billing Address](ctp:api:type:OrderSetBillingAddressAction) update action.
+*
+ */
 type OrderBillingAddressSetMessagePayload struct {
-	Address    *Address `json:"address,omitempty"`
+	// Billing address on the Order after the [Set Billing Address](ctp:api:type:OrderSetBillingAddressAction) update action.
+	Address *Address `json:"address,omitempty"`
+	// Billing address on the Order before the [Set Billing Address](ctp:api:type:OrderSetBillingAddressAction) update action.
 	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
@@ -8348,7 +12509,12 @@ func (obj OrderBillingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderBillingAddressSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Order](/../api/projects/orders#create-order) request.
+*
+ */
 type OrderCreatedMessagePayload struct {
+	// [Order](ctp:api:type:Order) that was created.
 	Order Order `json:"order"`
 }
 
@@ -8362,7 +12528,12 @@ func (obj OrderCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Custom Line Item](ctp:api:type:StagedOrderAddCustomLineItemAction) update action.
+*
+ */
 type OrderCustomLineItemAddedMessagePayload struct {
+	// [Custom Line Item](ctp:api:type:CustomLineItem) that was added to the [Order](ctp:api:type:Order).
 	CustomLineItem CustomLineItem `json:"customLineItem"`
 }
 
@@ -8376,10 +12547,17 @@ func (obj OrderCustomLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Action: "OrderCustomLineItemAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful recalculation of a Discount on a [Custom Line Item](ctp:api:type:CustomLineItem).
+*
+ */
 type OrderCustomLineItemDiscountSetMessagePayload struct {
-	CustomLineItemId           string                               `json:"customLineItemId"`
+	// Unique identifier for the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// Array of [DiscountedLineItemPriceForQuantity](ctp:api:type:DiscountedLineItemPriceForQuantity) after the Discount recalculation.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	TaxedPrice                 *TaxedItemPrice                      `json:"taxedPrice,omitempty"`
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Custom Line Item](ctp:api:type:CustomLineItem) after the Discount recalculation.
+	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8392,10 +12570,17 @@ func (obj OrderCustomLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, e
 	}{Action: "OrderCustomLineItemDiscountSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Custom Line Item Quantity](ctp:api:type:StagedOrderChangeCustomLineItemQuantityAction) update action.
+*
+ */
 type OrderCustomLineItemQuantityChangedMessagePayload struct {
+	// Unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
 	CustomLineItemId string `json:"customLineItemId"`
-	Quantity         int    `json:"quantity"`
-	OldQuantity      int    `json:"oldQuantity"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) quantity after the [Change Custom Line Item Quantity](ctp:api:type:StagedOrderChangeCustomLineItemQuantityAction) update action.
+	Quantity int `json:"quantity"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) quantity before the [Change Custom Line Item Quantity](ctp:api:type:StagedOrderChangeCustomLineItemQuantityAction) update action.
+	OldQuantity int `json:"oldQuantity"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8408,9 +12593,15 @@ func (obj OrderCustomLineItemQuantityChangedMessagePayload) MarshalJSON() ([]byt
 	}{Action: "OrderCustomLineItemQuantityChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Custom Line Item](ctp:api:type:StagedOrderRemoveCustomLineItemAction) update action.
+*
+ */
 type OrderCustomLineItemRemovedMessagePayload struct {
-	CustomLineItemId string         `json:"customLineItemId"`
-	CustomLineItem   CustomLineItem `json:"customLineItem"`
+	// Unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
+	// [Custom Line Item](ctp:api:type:CustomLineItem) that was removed from the [Order](ctp:api:type:Order).
+	CustomLineItem CustomLineItem `json:"customLineItem"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8423,8 +12614,14 @@ func (obj OrderCustomLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error
 	}{Action: "OrderCustomLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Email](ctp:api:type:OrderSetCustomerEmailAction) update action.
+*
+ */
 type OrderCustomerEmailSetMessagePayload struct {
-	Email    *string `json:"email,omitempty"`
+	// Email address on the [Order](ctp:api:type:Order) after the [Set Customer Email](ctp:api:type:OrderSetCustomerEmailAction) update action.
+	Email *string `json:"email,omitempty"`
+	// Email address on the [Order](ctp:api:type:Order) before the [Set Customer Email](ctp:api:type:OrderSetCustomerEmailAction) update action.
 	OldEmail *string `json:"oldEmail,omitempty"`
 }
 
@@ -8438,10 +12635,14 @@ func (obj OrderCustomerEmailSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomerEmailSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Group](ctp:api:type:StagedOrderSetCustomerGroupAction) update action.
+*
+ */
 type OrderCustomerGroupSetMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) after the [Set Customer Group](ctp:api:type:StagedOrderSetCustomerGroupAction) update action.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) before the [Set Customer Group](ctp:api:type:StagedOrderSetCustomerGroupAction) update action.
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -8455,14 +12656,18 @@ func (obj OrderCustomerGroupSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomerGroupSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
+*
+ */
 type OrderCustomerSetMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	// [Customer](ctp:api:type:Customer) on the [Order](ctp:api:type:Order) after the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) after the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Customer](ctp:api:type:Customer).
+	// [Customer](ctp:api:type:Customer) on the [Order](ctp:api:type:Order) before the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	OldCustomer *CustomerReference `json:"oldCustomer,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// [CustomerGroup](ctp:api:type:CustomerGroup) on the [Order](ctp:api:type:Order) before the [Set Customer Id](ctp:api:type:OrderSetCustomerIdAction) update action.
 	OldCustomerGroup *CustomerGroupReference `json:"oldCustomerGroup,omitempty"`
 }
 
@@ -8476,7 +12681,12 @@ func (obj OrderCustomerSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderCustomerSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Order](/../api/projects/orders#delete-order) request.
+*
+ */
 type OrderDeletedMessagePayload struct {
+	// [Order](ctp:api:type:Order) that has been deleted.
 	Order Order `json:"order"`
 }
 
@@ -8490,8 +12700,12 @@ func (obj OrderDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Discount Code](ctp:api:type:StagedOrderAddDiscountCodeAction) update action.
+*
+ */
 type OrderDiscountCodeAddedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	// [DiscountCode](ctp:api:type:DiscountCode) that was added.
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -8505,8 +12719,12 @@ func (obj OrderDiscountCodeAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderDiscountCodeAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Discount Code](ctp:api:type:StagedOrderRemoveDiscountCodeAction) update action.
+*
+ */
 type OrderDiscountCodeRemovedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	// [DiscountCode](ctp:api:type:DiscountCode) that was removed.
 	DiscountCode DiscountCodeReference `json:"discountCode"`
 }
 
@@ -8520,11 +12738,17 @@ func (obj OrderDiscountCodeRemovedMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Action: "OrderDiscountCodeRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after the [DiscountCodeState](ctp:api:type:DiscountCodeState) changes due to a [recalculation](/../api/projects/carts#recalculate).
+*
+ */
 type OrderDiscountCodeStateSetMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [DiscountCode](ctp:api:type:DiscountCode).
+	// [DiscountCode](ctp:api:type:DiscountCode) that changed due to the recalculation.
 	DiscountCode DiscountCodeReference `json:"discountCode"`
-	State        DiscountCodeState     `json:"state"`
-	OldState     *DiscountCodeState    `json:"oldState,omitempty"`
+	// [DiscountCodeState](ctp:api:type:DiscountCodeState) after the recalculation.
+	State DiscountCodeState `json:"state"`
+	// [DiscountCodeState](ctp:api:type:DiscountCodeState) before the recalculation.
+	OldState *DiscountCodeState `json:"oldState,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8537,10 +12761,15 @@ func (obj OrderDiscountCodeStateSetMessagePayload) MarshalJSON() ([]byte, error)
 	}{Action: "OrderDiscountCodeStateSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successfully applying an [OrderEdit](/../api/projects/order-edits#apply-an-orderedit).
+*
+ */
 type OrderEditAppliedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to an [OrderEdit](ctp:api:type:OrderEdit).
-	Edit   OrderEditReference `json:"edit"`
-	Result OrderEditApplied   `json:"result"`
+	// [OrderEdit](ctp:api:type:OrderEdit) that was applied.
+	Edit OrderEdit `json:"edit"`
+	// Information about a successfully applied [OrderEdit](ctp:api:type:OrderEdit).
+	Result OrderEditApplied `json:"result"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8553,7 +12782,12 @@ func (obj OrderEditAppliedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderEditApplied", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Order Import](/../api/projects/orders-import#create-an-order-by-import).
+*
+ */
 type OrderImportedMessagePayload struct {
+	// [Order](ctp:api:type:Order) that was imported.
 	Order Order `json:"order"`
 }
 
@@ -8567,9 +12801,15 @@ func (obj OrderImportedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderImported", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Line Item](ctp:api:type:StagedOrderAddLineItemAction) update action.
+*
+ */
 type OrderLineItemAddedMessagePayload struct {
-	LineItem      LineItem `json:"lineItem"`
-	AddedQuantity int      `json:"addedQuantity"`
+	// [Line Item](ctp:api:type:LineItem) that was added to the [Order](ctp:api:type:Order).
+	LineItem LineItem `json:"lineItem"`
+	// Quantity of [Line Items](ctp:api:type:LineItem) that were added to the [Order](ctp:api:type:Order).
+	AddedQuantity int `json:"addedQuantity"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8582,14 +12822,21 @@ func (obj OrderLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderLineItemAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful recalculation of a Discount on a [Line Item](ctp:api:type:LineItem).
+*
+ */
 type OrderLineItemDiscountSetMessagePayload struct {
-	LineItemId                 string                               `json:"lineItemId"`
+	// Unique identifier for the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// Array of [DiscountedLineItemPriceForQuantity](ctp:api:type:DiscountedLineItemPriceForQuantity) after the Discount recalculation.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	TotalPrice Money           `json:"totalPrice"`
+	// Total Price of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
+	TotalPrice Money `json:"totalPrice"`
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
+	// Taxed price of the Shipping Methods in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode)..
+	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8602,9 +12849,14 @@ func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Action: "OrderLineItemDiscountSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Line Item Distribution Channel](/../api/projects/order-edits#set-lineitem-distributionchannel) update action.
+*
+ */
 type OrderLineItemDistributionChannelSetMessagePayload struct {
+	// Unique identifier of the [Line Item](ctp:api:type:LineItem).
 	LineItemId string `json:"lineItemId"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// [Distribution Channel](ctp:api:type:Channel) that was set.
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 }
 
@@ -8618,34 +12870,27 @@ func (obj OrderLineItemDistributionChannelSetMessagePayload) MarshalJSON() ([]by
 	}{Action: "OrderLineItemDistributionChannelSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+*
+ */
 type OrderLineItemRemovedMessagePayload struct {
-	LineItemId      string      `json:"lineItemId"`
-	RemovedQuantity int         `json:"removedQuantity"`
-	NewQuantity     int         `json:"newQuantity"`
-	NewState        []ItemState `json:"newState"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
-	NewTotalPrice     TypedMoney           `json:"newTotalPrice"`
-	NewTaxedPrice     *TaxedItemPrice      `json:"newTaxedPrice,omitempty"`
-	NewPrice          *Price               `json:"newPrice,omitempty"`
+	// Unique identifier of the [Line Item](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
+	// Quantity of [Line Items](ctp:api:type:LineItem) that were removed during the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	RemovedQuantity int `json:"removedQuantity"`
+	// [Line Item](ctp:api:type:LineItem) quantity after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewQuantity int `json:"newQuantity"`
+	// [ItemStates](ctp:api:type:ItemState) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewState []ItemState `json:"newState"`
+	// `totalPrice` of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewTotalPrice CentPrecisionMoney `json:"newTotalPrice"`
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewTaxedPrice *TaxedItemPrice `json:"newTaxedPrice,omitempty"`
+	// [Price](ctp:api:type:Price) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	NewPrice *Price `json:"newPrice,omitempty"`
+	// [Shipping Details](ctp:api:type:ItemShippingDetails) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewShippingDetail *ItemShippingDetails `json:"newShippingDetail,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *OrderLineItemRemovedMessagePayload) UnmarshalJSON(data []byte) error {
-	type Alias OrderLineItemRemovedMessagePayload
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.NewTotalPrice != nil {
-		var err error
-		obj.NewTotalPrice, err = mapDiscriminatorTypedMoney(obj.NewTotalPrice)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8658,8 +12903,12 @@ func (obj OrderLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Payment](ctp:api:type:OrderAddPaymentAction) update action or when a [Payment](ctp:api:type:Payment) is added via [Order Edits](ctp:api:type:StagedOrderAddPaymentAction).
+*
+ */
 type OrderPaymentAddedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Payment](ctp:api:type:Payment).
+	// [Payment](ctp:api:type:Payment) that was added to the [Order](ctp:api:type:Order).
 	Payment PaymentReference `json:"payment"`
 }
 
@@ -8673,8 +12922,14 @@ func (obj OrderPaymentAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderPaymentAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Payment State](ctp:api:type:OrderChangePaymentStateAction) update action.
+*
+ */
 type OrderPaymentStateChangedMessagePayload struct {
-	PaymentState    PaymentState  `json:"paymentState"`
+	// [PaymentState](ctp:api:type:PaymentState) after the [Change Payment State](ctp:api:type:OrderChangePaymentStateAction) update action.
+	PaymentState PaymentState `json:"paymentState"`
+	// [PaymentState](ctp:api:type:PaymentState) before the [Change Payment State](ctp:api:type:OrderChangePaymentStateAction) update action.
 	OldPaymentState *PaymentState `json:"oldPaymentState,omitempty"`
 }
 
@@ -8688,51 +12943,14 @@ func (obj OrderPaymentStateChangedMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Action: "OrderPaymentStateChanged", Alias: (*Alias)(&obj)})
 }
 
-type OrderReturnInfoAddedMessagePayload struct {
-	ReturnInfo ReturnInfo `json:"returnInfo"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj OrderReturnInfoAddedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias OrderReturnInfoAddedMessagePayload
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "ReturnInfoAdded", Alias: (*Alias)(&obj)})
-}
-
-type OrderReturnInfoSetMessagePayload struct {
-	ReturnInfo []ReturnInfo `json:"returnInfo"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj OrderReturnInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias OrderReturnInfoSetMessagePayload
-	data, err := json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "ReturnInfoSet", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["returnInfo"] == nil {
-		delete(raw, "returnInfo")
-	}
-
-	return json.Marshal(raw)
-
-}
-
+/**
+*	Generated after a successful [Set Return Shipment State](ctp:api:type:OrderSetReturnShipmentStateAction) update action.
+*
+ */
 type OrderReturnShipmentStateChangedMessagePayload struct {
-	ReturnItemId        string              `json:"returnItemId"`
+	// Unique identifier of the [ReturnItem](ctp:api:type:ReturnItem).
+	ReturnItemId string `json:"returnItemId"`
+	// State of the [ReturnItem](ctp:api:type:ReturnItem) after the [Set Return Shipment State](ctp:api:type:OrderSetReturnShipmentStateAction) update action.
 	ReturnShipmentState ReturnShipmentState `json:"returnShipmentState"`
 }
 
@@ -8746,9 +12964,15 @@ func (obj OrderReturnShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, 
 	}{Action: "OrderReturnShipmentStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Shipment State](ctp:api:type:OrderChangeShipmentStateAction) update action.
+*
+ */
 type OrderShipmentStateChangedMessagePayload struct {
-	ShipmentState    ShipmentState  `json:"shipmentState"`
-	OldShipmentState *ShipmentState `json:"oldShipmentState,omitempty"`
+	// [ShipmentState](ctp:api:type:ShipmentState) after the [Change Shipment State](ctp:api:type:OrderChangeShipmentStateAction) update action.
+	ShipmentState ShipmentState `json:"shipmentState"`
+	// [ShipmentState](ctp:api:type:ShipmentState) before the [Change Shipment State](ctp:api:type:OrderChangeShipmentStateAction) update action.
+	OldShipmentState ShipmentState `json:"oldShipmentState"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8761,8 +12985,14 @@ func (obj OrderShipmentStateChangedMessagePayload) MarshalJSON() ([]byte, error)
 	}{Action: "OrderShipmentStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Shipping Address](ctp:api:type:OrderSetShippingAddressAction) update action.
+*
+ */
 type OrderShippingAddressSetMessagePayload struct {
-	Address    *Address `json:"address,omitempty"`
+	// Shipping address on the Order after the [Set Shipping Address](ctp:api:type:OrderSetShippingAddressAction) update action.
+	Address *Address `json:"address,omitempty"`
+	// Shipping address on the Order before the [Set Shipping Address](ctp:api:type:OrderSetShippingAddressAction) update action.
 	OldAddress *Address `json:"oldAddress,omitempty"`
 }
 
@@ -8776,8 +13006,14 @@ func (obj OrderShippingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderShippingAddressSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Shipping Method](ctp:api:type:StagedOrderSetShippingMethodAction) and [Set Custom Shipping Method](ctp:api:type:StagedOrderSetCustomShippingMethodAction) update actions.
+*
+ */
 type OrderShippingInfoSetMessagePayload struct {
-	ShippingInfo    *ShippingInfo `json:"shippingInfo,omitempty"`
+	// [ShippingInfo](ctp:api:type:ShippingInfo) after the [Set Shipping Method](ctp:api:type:StagedOrderSetShippingMethodAction) or [Set Custom Shipping Method](ctp:api:type:StagedOrderSetCustomShippingMethodAction) update action.
+	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
+	// [ShippingInfo](ctp:api:type:ShippingInfo) before the [Set Shipping Method](ctp:api:type:StagedOrderSetShippingMethodAction) or [Set Custom Shipping Method](ctp:api:type:StagedOrderSetCustomShippingMethodAction) update action.
 	OldShippingInfo *ShippingInfo `json:"oldShippingInfo,omitempty"`
 }
 
@@ -8791,8 +13027,14 @@ func (obj OrderShippingInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderShippingInfoSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set ShippingRateInput](ctp:api:type:StagedOrderSetShippingRateInputAction) update action.
+*
+ */
 type OrderShippingRateInputSetMessagePayload struct {
-	ShippingRateInput    ShippingRateInput `json:"shippingRateInput,omitempty"`
+	// [ShippingRateInput](ctp:api:type:ShippingRateInput) after the [Set ShippingRateInput](ctp:api:type:StagedOrderSetShippingRateInputAction) update action.
+	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
+	// [ShippingRateInput](ctp:api:type:ShippingRateInput) before the [Set ShippingRateInput](ctp:api:type:StagedOrderSetShippingRateInputAction) update action.
 	OldShippingRateInput ShippingRateInput `json:"oldShippingRateInput,omitempty"`
 }
 
@@ -8831,8 +13073,14 @@ func (obj OrderShippingRateInputSetMessagePayload) MarshalJSON() ([]byte, error)
 	}{Action: "OrderShippingRateInputSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Order State](ctp:api:type:OrderChangeOrderStateAction) update action.
+*
+ */
 type OrderStateChangedMessagePayload struct {
-	OrderState    OrderState `json:"orderState"`
+	// [OrderState](ctp:api:type:OrderState) after the [Change Order State](ctp:api:type:OrderChangeOrderStateAction) update action.
+	OrderState OrderState `json:"orderState"`
+	// [OrderState](ctp:api:type:OrderState) before the [Change Order State](ctp:api:type:OrderChangeOrderStateAction) update action.
 	OldOrderState OrderState `json:"oldOrderState"`
 }
 
@@ -8846,12 +13094,17 @@ func (obj OrderStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
+*
+ */
 type OrderStateTransitionMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [OrderState](ctp:api:type:OrderState) after the [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
 	State StateReference `json:"state"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [OrderState](ctp:api:type:OrderState) before the [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	Force    bool            `json:"force"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:OrderTransitionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8864,9 +13117,13 @@ func (obj OrderStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Store](ctp:api:type:OrderSetStoreAction) update action.
+*
+ */
 type OrderStoreSetMessagePayload struct {
-	// [Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
-	Store StoreKeyReference `json:"store"`
+	// [Store](ctp:api:type:Store) that was set.
+	Store *StoreKeyReference `json:"store,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8879,9 +13136,17 @@ func (obj OrderStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "OrderStoreSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Parcel To Delivery](ctp:api:type:OrderAddParcelToDeliveryAction) update action.
+*
+ */
 type ParcelAddedToDeliveryMessagePayload struct {
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
 	Delivery Delivery `json:"delivery"`
-	Parcel   Parcel   `json:"parcel"`
+	// [Parcel](ctp:api:type:Parcel) that was added to the [Delivery](ctp:api:type:Delivery).
+	Parcel Parcel `json:"parcel"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8894,11 +13159,21 @@ func (obj ParcelAddedToDeliveryMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelAddedToDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Parcel Items](ctp:api:type:OrderSetParcelItemsAction) update action.
+*
+ */
 type ParcelItemsUpdatedMessagePayload struct {
-	ParcelId   string         `json:"parcelId"`
-	DeliveryId *string        `json:"deliveryId,omitempty"`
-	Items      []DeliveryItem `json:"items"`
-	OldItems   []DeliveryItem `json:"oldItems"`
+	// Unique identifier of the [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) after the [Set Parcel Items](ctp:api:type:OrderSetParcelItemsAction) update action.
+	Items []DeliveryItem `json:"items"`
+	// [Delivery Items](ctp:api:type:DeliveryItem) before the [Set Parcel Items](ctp:api:type:OrderSetParcelItemsAction) update action.
+	OldItems []DeliveryItem `json:"oldItems"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8911,10 +13186,19 @@ func (obj ParcelItemsUpdatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ParcelItemsUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Parcel Measurements](ctp:api:type:OrderSetParcelMeasurementsAction) update action.
+*
+ */
 type ParcelMeasurementsUpdatedMessagePayload struct {
-	DeliveryId   string              `json:"deliveryId"`
-	ParcelId     string              `json:"parcelId"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// Unique identifier of the [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// The [Parcel Measurements](ctp:api:type:ParcelMeasurements) that were set on the [Parcel](ctp:api:type:Parcel).
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8927,9 +13211,17 @@ func (obj ParcelMeasurementsUpdatedMessagePayload) MarshalJSON() ([]byte, error)
 	}{Action: "ParcelMeasurementsUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Parcel From Delivery](ctp:api:type:OrderRemoveParcelFromDeliveryAction) update action.
+*
+ */
 type ParcelRemovedFromDeliveryMessagePayload struct {
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
 	DeliveryId string `json:"deliveryId"`
-	Parcel     Parcel `json:"parcel"`
+	// [Parcel](ctp:api:type:Parcel) that was removed from the [Delivery](ctp:api:type:Delivery).
+	Parcel Parcel `json:"parcel"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8942,10 +13234,19 @@ func (obj ParcelRemovedFromDeliveryMessagePayload) MarshalJSON() ([]byte, error)
 	}{Action: "ParcelRemovedFromDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Parcel TrackingData](ctp:api:type:OrderSetParcelTrackingDataAction) update action.
+*
+ */
 type ParcelTrackingDataUpdatedMessagePayload struct {
-	DeliveryId   string        `json:"deliveryId"`
-	ParcelId     string        `json:"parcelId"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+	// Unique identifier of the [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// The [Tracking Data](ctp:api:type:TrackingData) that was added to the [Parcel](ctp:api:type:Parcel).
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8958,7 +13259,12 @@ func (obj ParcelTrackingDataUpdatedMessagePayload) MarshalJSON() ([]byte, error)
 	}{Action: "ParcelTrackingDataUpdated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Payment](/../api/projects/payments#create-a-payment) request.
+*
+ */
 type PaymentCreatedMessagePayload struct {
+	// [Payment](ctp:api:type:Payment) that was created.
 	Payment Payment `json:"payment"`
 }
 
@@ -8972,8 +13278,12 @@ func (obj PaymentCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add InterfaceInteraction](ctp:api:type:PaymentAddInterfaceInteractionAction) update action.
+*
+ */
 type PaymentInteractionAddedMessagePayload struct {
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// The interface interaction that was added to the [Payment](ctp:api:type:Payment).
 	Interaction CustomFields `json:"interaction"`
 }
 
@@ -8987,9 +13297,15 @@ func (obj PaymentInteractionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentInteractionAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action.
+*
+ */
 type PaymentStatusInterfaceCodeSetMessagePayload struct {
-	PaymentId     string `json:"paymentId"`
-	InterfaceCode string `json:"interfaceCode"`
+	// Unique identifier for the [Payment](ctp:api:type:Payment) for which the [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action was applied.
+	PaymentId string `json:"paymentId"`
+	// The `interfaceCode` that was set during the [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action.
+	InterfaceCode *string `json:"interfaceCode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9002,10 +13318,15 @@ func (obj PaymentStatusInterfaceCodeSetMessagePayload) MarshalJSON() ([]byte, er
 	}{Action: "PaymentStatusInterfaceCodeSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:PaymentTransitionStateAction) update action.
+*
+ */
 type PaymentStatusStateTransitionMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [State](ctp:api:type:State) of the [Payment](ctp:api:type:Payment) after the [Transition State](ctp:api:type:PaymentTransitionStateAction) update action.
 	State StateReference `json:"state"`
-	Force bool           `json:"force"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Change Transaction State](ctp:api:type:PaymentChangeTransactionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9018,7 +13339,12 @@ func (obj PaymentStatusStateTransitionMessagePayload) MarshalJSON() ([]byte, err
 	}{Action: "PaymentStatusStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Transaction](ctp:api:type:PaymentAddTransactionAction) update action.
+*
+ */
 type PaymentTransactionAddedMessagePayload struct {
+	// [Transaction](ctp:api:type:Transaction) that was added to the [Payment](ctp:api:type:Payment).
 	Transaction Transaction `json:"transaction"`
 }
 
@@ -9032,9 +13358,15 @@ func (obj PaymentTransactionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "PaymentTransactionAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Transaction State](ctp:api:type:PaymentChangeTransactionStateAction) update action.
+*
+ */
 type PaymentTransactionStateChangedMessagePayload struct {
-	TransactionId string           `json:"transactionId"`
-	State         TransactionState `json:"state"`
+	// Unique identifier for the [Transaction](ctp:api:type:Transaction) for which the [Transaction State](ctp:api:type:TransactionState) changed.
+	TransactionId string `json:"transactionId"`
+	// [Transaction State](ctp:api:type:TransactionState) after the [Change Transaction State](ctp:api:type:PaymentChangeTransactionStateAction) update action.
+	State TransactionState `json:"state"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9047,10 +13379,15 @@ func (obj PaymentTransactionStateChangedMessagePayload) MarshalJSON() ([]byte, e
 	}{Action: "PaymentTransactionStateChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add To Category](ctp:api:type:ProductAddToCategoryAction) update action.
+*
+ */
 type ProductAddedToCategoryMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+	// [Category](ctp:api:type:Category) the [Product](ctp:api:type:Product) was added to.
 	Category CategoryReference `json:"category"`
-	Staged   bool              `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9063,7 +13400,12 @@ func (obj ProductAddedToCategoryMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductAddedToCategory", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Product](/../api/projects/products#create-product) request.
+*
+ */
 type ProductCreatedMessagePayload struct {
+	// The staged [Product Projection](ctp:api:type:ProductProjection) of the [Product](ctp:api:type:Product) at the time of creation.
 	ProductProjection ProductProjection `json:"productProjection"`
 }
 
@@ -9077,9 +13419,15 @@ func (obj ProductCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Product](/../api/projects/products#delete-product) request.
+*
+ */
 type ProductDeletedMessagePayload struct {
-	RemovedImageUrls  []string          `json:"removedImageUrls"`
-	CurrentProjection ProductProjection `json:"currentProjection"`
+	// List of image URLs that were removed during the [Delete Product](ctp:api:type:Product) request.
+	RemovedImageUrls []string `json:"removedImageUrls"`
+	// Current [Product Projection](ctp:api:type:ProductProjection) of the deleted [Product](ctp:api:type:Product).
+	CurrentProjection *ProductProjection `json:"currentProjection,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9092,10 +13440,17 @@ func (obj ProductDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add External Image](ctp:api:type:ProductAddExternalImageAction) update action or after the successful [upload of an image](/../api/projects/products#upload-product-image).
+*
+ */
 type ProductImageAddedMessagePayload struct {
-	VariantId int   `json:"variantId"`
-	Image     Image `json:"image"`
-	Staged    bool  `json:"staged"`
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) to which the [Image](ctp:api:type:Image) was added.
+	VariantId int `json:"variantId"`
+	// [Image](ctp:api:type:Image) that was added.
+	Image Image `json:"image"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9108,7 +13463,12 @@ func (obj ProductImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductImageAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a Price is updated due to a [Product Discount](ctp:api:type:ProductDiscount).
+*
+ */
 type ProductPriceDiscountsSetMessagePayload struct {
+	// Array containing details about the [Embedded Prices](ctp:api:type:Price) that were updated.
 	UpdatedPrices []ProductPriceDiscountsSetUpdatedPrice `json:"updatedPrices"`
 }
 
@@ -9122,13 +13482,23 @@ func (obj ProductPriceDiscountsSetMessagePayload) MarshalJSON() ([]byte, error) 
 	}{Action: "ProductPriceDiscountsSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Discounted Embedded Price](ctp:api:type:ProductSetDiscountedPriceAction) update action.
+*
+ */
 type ProductPriceExternalDiscountSetMessagePayload struct {
-	VariantId  int              `json:"variantId"`
-	VariantKey *string          `json:"variantKey,omitempty"`
-	Sku        *string          `json:"sku,omitempty"`
-	PriceId    string           `json:"priceId"`
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) for which the Discount was set.
+	VariantId int `json:"variantId"`
+	// Key of the [Product Variant](ctp:api:type:ProductVariant) for which the Discount was set.
+	VariantKey *string `json:"variantKey,omitempty"`
+	// SKU of the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
+	Sku *string `json:"sku,omitempty"`
+	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	PriceId string `json:"priceId"`
+	// Discounted Price for the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	Staged     bool             `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9141,10 +13511,16 @@ func (obj ProductPriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byte, 
 	}{Action: "ProductPriceExternalDiscountSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Publish](ctp:api:type:ProductPublishAction) update action.
+*
+ */
 type ProductPublishedMessagePayload struct {
-	RemovedImageUrls  []string          `json:"removedImageUrls"`
+	// List of image URLs which were removed during the [Publish](ctp:api:type:ProductPublishAction) update action.
+	RemovedImageUrls []string `json:"removedImageUrls"`
+	// Current [Product Projection](ctp:api:type:ProductProjection) of the [Product](ctp:api:type:Product) at the time of creation.
 	ProductProjection ProductProjection `json:"productProjection"`
-	// The scope controls which part of the product information is published.
+	// [Publishing Scope](ctp:api:type:ProductPublishScope) that was used during the [Publish](ctp:api:type:ProductPublishAction) update action.
 	Scope ProductPublishScope `json:"scope"`
 }
 
@@ -9158,10 +13534,15 @@ func (obj ProductPublishedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductPublished", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove From Category](ctp:api:type:ProductRemoveFromCategoryAction) update action.
+*
+ */
 type ProductRemovedFromCategoryMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Category](ctp:api:type:Category).
+	// [Category](ctp:api:type:Category) the [Product](ctp:api:type:Product) was removed from.
 	Category CategoryReference `json:"category"`
-	Staged   bool              `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9174,7 +13555,12 @@ func (obj ProductRemovedFromCategoryMessagePayload) MarshalJSON() ([]byte, error
 	}{Action: "ProductRemovedFromCategory", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Revert Staged Changes](ctp:api:type:ProductRevertStagedChangesAction) update action.
+*
+ */
 type ProductRevertedStagedChangesMessagePayload struct {
+	// List of image URLs that were removed during the [Revert Staged Changes](ctp:api:type:ProductRevertStagedChangesAction) update action.
 	RemovedImageUrls []string `json:"removedImageUrls"`
 }
 
@@ -9188,26 +13574,13 @@ func (obj ProductRevertedStagedChangesMessagePayload) MarshalJSON() ([]byte, err
 	}{Action: "ProductRevertedStagedChanges", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Product Selection](/../api/projects/product-selections#create-product-selection) request.
+*
+ */
 type ProductSelectionCreatedMessagePayload struct {
-	ProductSelection ProductSelectionType `json:"productSelection"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *ProductSelectionCreatedMessagePayload) UnmarshalJSON(data []byte) error {
-	type Alias ProductSelectionCreatedMessagePayload
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.ProductSelection != nil {
-		var err error
-		obj.ProductSelection, err = mapDiscriminatorProductSelectionType(obj.ProductSelection)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
+	// The `type` and `name` of the individual Product Selection.
+	ProductSelection IndividualProductSelectionType `json:"productSelection"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9220,9 +13593,11 @@ func (obj ProductSelectionCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSelectionCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Product Selection](/../api/projects/product-selections#create-product-selection) request.
+*
+ */
 type ProductSelectionDeletedMessagePayload struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	Name LocalizedString `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9235,11 +13610,15 @@ func (obj ProductSelectionDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSelectionDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Product](ctp:api:type:ProductSelectionAddProductAction) update action.
+*
+ */
 type ProductSelectionProductAddedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	// [Product](ctp:api:type:Product) that was added to the [Product Selection](ctp:api:type:ProductSelection).
 	Product ProductReference `json:"product"`
-	// Polymorphic base type for Product Variant Selections. The actual type is determined by the `type` field.
-	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+	// Product Variant Selection after the [Add Product](ctp:api:type:ProductSelectionAddProductAction) update action.
+	VariantSelection ProductVariantSelection `json:"variantSelection"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -9270,8 +13649,12 @@ func (obj ProductSelectionProductAddedMessagePayload) MarshalJSON() ([]byte, err
 	}{Action: "ProductSelectionProductAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Product](ctp:api:type:ProductSelectionRemoveProductAction) update action.
+*
+ */
 type ProductSelectionProductRemovedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	// [Product](ctp:api:type:Product) that was removed from the Product Selection.
 	Product ProductReference `json:"product"`
 }
 
@@ -9285,13 +13668,17 @@ func (obj ProductSelectionProductRemovedMessagePayload) MarshalJSON() ([]byte, e
 	}{Action: "ProductSelectionProductRemoved", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+*
+ */
 type ProductSelectionVariantSelectionChangedMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Product](ctp:api:type:Product).
+	// [Product](ctp:api:type:Product) for which the Product Variant Selection changed.
 	Product ProductReference `json:"product"`
-	// The former Product Variant Selection if any.
-	OldVariantSelection ProductVariantSelection `json:"oldVariantSelection,omitempty"`
-	// The updated Product Variant Selection if any.
-	NewVariantSelection ProductVariantSelection `json:"newVariantSelection,omitempty"`
+	// Product Variant Selection before the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+	OldVariantSelection ProductVariantSelection `json:"oldVariantSelection"`
+	// Product Variant Selection after the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+	NewVariantSelection ProductVariantSelection `json:"newVariantSelection"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -9329,10 +13716,14 @@ func (obj ProductSelectionVariantSelectionChangedMessagePayload) MarshalJSON() (
 	}{Action: "ProductSelectionVariantSelectionChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Slug](ctp:api:type:ProductChangeSlugAction) update action.
+*
+ */
 type ProductSlugChangedMessagePayload struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Product](ctp:api:type:Product) after the [Change Slug](ctp:api:type:ProductChangeSlugAction) update action.
 	Slug LocalizedString `json:"slug"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// The slug of the [Product](ctp:api:type:Product) before the [Change Slug](ctp:api:type:ProductChangeSlugAction) update action.
 	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
 }
 
@@ -9346,10 +13737,15 @@ func (obj ProductSlugChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductSlugChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:ProductTransitionStateAction) update action.
+*
+ */
 type ProductStateTransitionMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// Product [State](ctp:api:type:State) after the [Transition State](ctp:api:type:ProductTransitionStateAction) update action.
 	State StateReference `json:"state"`
-	Force bool           `json:"force"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:ProductTransitionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9362,6 +13758,10 @@ func (obj ProductStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Unpublish Product](ctp:api:type:ProductUnpublishAction) update action.
+*
+ */
 type ProductUnpublishedMessagePayload struct {
 }
 
@@ -9375,10 +13775,15 @@ func (obj ProductUnpublishedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductUnpublished", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Product Variant](ctp:api:type:ProductAddVariantAction) update action.
+*
+ */
 type ProductVariantAddedMessagePayload struct {
-	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) that was added.
 	Variant ProductVariant `json:"variant"`
-	Staged  bool           `json:"staged"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9391,10 +13796,15 @@ func (obj ProductVariantAddedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductVariantAdded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Remove Product Variant](ctp:api:type:ProductRemoveVariantAction) update action.
+*
+ */
 type ProductVariantDeletedMessagePayload struct {
-	// A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
-	Variant          ProductVariant `json:"variant"`
-	RemovedImageUrls []string       `json:"removedImageUrls"`
+	// Unique identifier of the [Product Variant](ctp:api:type:ProductVariant) that was added.
+	Variant *ProductVariant `json:"variant,omitempty"`
+	// List of image URLs that were removed with the [Remove Product Variant](ctp:api:type:ProductRemoveVariantAction) update action.
+	RemovedImageUrls []string `json:"removedImageUrls"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9407,7 +13817,13 @@ func (obj ProductVariantDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ProductVariantDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Quote](/../api/projects/quotes#create-quote) request.
+*
+ */
 type QuoteCreatedMessagePayload struct {
+	// [Quote](/../api/projects/quotes) that was created.
+	Quote Quote `json:"quote"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9420,6 +13836,10 @@ func (obj QuoteCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Quote](/../api/projects/quotes#delete-quote) request.
+*
+ */
 type QuoteDeletedMessagePayload struct {
 }
 
@@ -9433,7 +13853,13 @@ func (obj QuoteDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Quote Request](/../api/projects/quote-requests#create-quoterequest) request.
+*
+ */
 type QuoteRequestCreatedMessagePayload struct {
+	// [Quote Request](/../api/projects/quote-requests) that was created.
+	QuoteRequest QuoteRequest `json:"quoteRequest"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9446,6 +13872,10 @@ func (obj QuoteRequestCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteRequestCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Quote Request](/../api/projects/quote-requests#delete-quoterequest) request.
+*
+ */
 type QuoteRequestDeletedMessagePayload struct {
 }
 
@@ -9459,10 +13889,14 @@ func (obj QuoteRequestDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteRequestDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Quote Request State](ctp:api:type:QuoteRequestChangeQuoteRequestStateAction) update action.
+*
+ */
 type QuoteRequestStateChangedMessagePayload struct {
-	// Predefined states tracking the status of the Quote Request in the negotiation process.
+	// State of the Quote Request after the [Change Quote Request State](ctp:api:type:QuoteRequestChangeQuoteRequestStateAction) update action.
 	QuoteRequestState QuoteRequestState `json:"quoteRequestState"`
-	// Predefined states tracking the status of the Quote Request in the negotiation process.
+	// State of the Quote Request before the [Change Quote Request State](ctp:api:type:QuoteRequestChangeQuoteRequestStateAction) update action.
 	OldQuoteRequestState QuoteRequestState `json:"oldQuoteRequestState"`
 }
 
@@ -9485,7 +13919,7 @@ type QuoteRequestStateTransitionMessagePayload struct {
 	State StateReference `json:"state"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteRequestTransitionStateAction) update action.
 	Force bool `json:"force"`
 }
 
@@ -9499,10 +13933,14 @@ func (obj QuoteRequestStateTransitionMessagePayload) MarshalJSON() ([]byte, erro
 	}{Action: "QuoteRequestStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Quote State](ctp:api:type:QuoteChangeQuoteStateAction) update action.
+*
+ */
 type QuoteStateChangedMessagePayload struct {
-	// Predefined states tracking the status of the Quote.
+	// State of the Quote after the [Change Quote State](ctp:api:type:QuoteChangeQuoteStateAction) update action.
 	QuoteState QuoteState `json:"quoteState"`
-	// Predefined states tracking the status of the Quote.
+	// State of the Quote before the [Change Quote State](ctp:api:type:QuoteChangeQuoteStateAction) update action.
 	OldQuoteState QuoteState `json:"oldQuoteState"`
 }
 
@@ -9525,7 +13963,7 @@ type QuoteStateTransitionMessagePayload struct {
 	State StateReference `json:"state"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:QuoteTransitionStateAction) update action.
 	Force bool `json:"force"`
 }
 
@@ -9539,7 +13977,65 @@ func (obj QuoteStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "QuoteStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Add Return Info](ctp:api:type:OrderAddReturnInfoAction) update action.
+*
+ */
+type ReturnInfoAddedMessagePayload struct {
+	// The [ReturnInfo](ctp:api:type:ReturnInfo) that was added to the [Order](ctp:api:type:Order).
+	ReturnInfo ReturnInfo `json:"returnInfo"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ReturnInfoAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ReturnInfoAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ReturnInfoAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Return Info](ctp:api:type:OrderSetReturnInfoAction) update action on [Orders](ctp:api:type:Order) and [Order Edits](ctp:api:type:OrderEdit).
+*
+ */
+type ReturnInfoSetMessagePayload struct {
+	// The [ReturnInfo](ctp:api:type:ReturnInfo) that was set on the [Order](ctp:api:type:Order) or [Order Edit](ctp:api:type:OrderEdit).
+	ReturnInfo []ReturnInfo `json:"returnInfo"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ReturnInfoSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ReturnInfoSetMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ReturnInfoSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated after a successful [Create Review](/../api/projects/reviews#create-a-review) request.
+*
+ */
 type ReviewCreatedMessagePayload struct {
+	// [Review](ctp:api:type:Review) that was created.
 	Review Review `json:"review"`
 }
 
@@ -9553,11 +14049,18 @@ func (obj ReviewCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Rating](ctp:api:type:ReviewSetRatingAction) update action.
+*
+ */
 type ReviewRatingSetMessagePayload struct {
-	OldRating            *float64 `json:"oldRating,omitempty"`
-	NewRating            *float64 `json:"newRating,omitempty"`
-	IncludedInStatistics bool     `json:"includedInStatistics"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	// The `rating` of the [Review](ctp:api:type:Review) before the [Set Rating](ctp:api:type:ReviewSetRatingAction) update action.
+	OldRating *float64 `json:"oldRating,omitempty"`
+	// The `rating` of the [Review](ctp:api:type:Review) after the [Set Rating](ctp:api:type:ReviewSetRatingAction) update action.
+	NewRating *float64 `json:"newRating,omitempty"`
+	// Whether the [Review](ctp:api:type:Review) was taken into account in the ratings statistics of the target.
+	IncludedInStatistics bool `json:"includedInStatistics"`
+	// [Reference](ctp:api:type:Reference) to the resource that the [Review](ctp:api:type:Review) belongs to.
 	Target Reference `json:"target,omitempty"`
 }
 
@@ -9589,16 +14092,23 @@ func (obj ReviewRatingSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewRatingSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+*
+ */
 type ReviewStateTransitionMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
-	OldState StateReference `json:"oldState"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
-	NewState                StateReference `json:"newState"`
-	OldIncludedInStatistics bool           `json:"oldIncludedInStatistics"`
-	NewIncludedInStatistics bool           `json:"newIncludedInStatistics"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	Target Reference `json:"target"`
-	Force  bool      `json:"force"`
+	// [State](ctp:api:type:State) of the [Review](ctp:api:type:Review) before the [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// [State](ctp:api:type:State) of the [Review](ctp:api:type:Review) after the [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+	NewState StateReference `json:"newState"`
+	// Whether the old [Review](ctp:api:type:Review) was taken into account in the rating statistics of the target before the state transition.
+	OldIncludedInStatistics bool `json:"oldIncludedInStatistics"`
+	// Whether the new [Review](ctp:api:type:Review) was taken into account in the rating statistics of the target after the state transition.
+	NewIncludedInStatistics bool `json:"newIncludedInStatistics"`
+	// [Reference](ctp:api:type:Reference) to the resource that the [Review](ctp:api:type:Review) belongs to.
+	Target Reference `json:"target,omitempty"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:ReviewTransitionStateAction) update action.
+	Force bool `json:"force"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -9644,7 +14154,13 @@ func (obj ShoppingListStoreSetMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "ShoppingListStoreSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Staged Quote](/../api/projects/staged-quotes#create-stagedquote) request.
+*
+ */
 type StagedQuoteCreatedMessagePayload struct {
+	// [Staged Quote](/../api/projects/staged-quotes) that was created.
+	StagedQuote StagedQuote `json:"stagedQuote"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -9657,6 +14173,10 @@ func (obj StagedQuoteCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteCreated", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Delete Staged Quote](/../api/projects/staged-quotes#delete-stagedquote) request.
+*
+ */
 type StagedQuoteDeletedMessagePayload struct {
 }
 
@@ -9670,7 +14190,12 @@ func (obj StagedQuoteDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 	}{Action: "StagedQuoteDeleted", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Seller Comment](ctp:api:type:StagedQuoteSetSellerCommentAction) update action.
+*
+ */
 type StagedQuoteSellerCommentSetMessagePayload struct {
+	// `sellerComment` on the [StagedQuote](ctp:api:type:StagedQuote) after a successful [Set Seller Comment](ctp:api:type:StagedQuoteSetSellerCommentAction) update action.
 	SellerComment string `json:"sellerComment"`
 }
 
@@ -9684,10 +14209,14 @@ func (obj StagedQuoteSellerCommentSetMessagePayload) MarshalJSON() ([]byte, erro
 	}{Action: "StagedQuoteSellerCommentSet", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Change Staged Quote State](ctp:api:type:StagedQuoteChangeStagedQuoteStateAction) update action.
+*
+ */
 type StagedQuoteStateChangedMessagePayload struct {
-	// Predefined states tracking the status of the Staged Quote.
+	// State of the Staged Quote after the [Change Staged Quote State](ctp:api:type:StagedQuoteChangeStagedQuoteStateAction) update action.
 	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
-	// Predefined states tracking the status of the Staged Quote.
+	// State of the Staged Quote before the [Change Staged Quote State](ctp:api:type:StagedQuoteChangeStagedQuoteStateAction) update action.
 	OldStagedQuoteState StagedQuoteState `json:"oldStagedQuoteState"`
 }
 
@@ -9710,7 +14239,7 @@ type StagedQuoteStateTransitionMessagePayload struct {
 	State StateReference `json:"state"`
 	// [State](ctp:api:type:State) of the [Quote](ctp:api:type:Quote) before the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
 	OldState *StateReference `json:"oldState,omitempty"`
-	// `true`, if [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:StagedQuoteTransitionStateAction) update action.
 	Force bool `json:"force"`
 }
 
@@ -9724,7 +14253,12 @@ func (obj StagedQuoteStateTransitionMessagePayload) MarshalJSON() ([]byte, error
 	}{Action: "StagedQuoteStateTransition", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Set Valid To](ctp:api:type:StagedQuoteSetValidToAction) update action.
+*
+ */
 type StagedQuoteValidToSetMessagePayload struct {
+	// Expiration date for the Staged Quote after the [Set Valid To](ctp:api:type:StagedQuoteSetValidToAction) update action.
 	ValidTo time.Time `json:"validTo"`
 }
 
@@ -9739,11 +14273,32 @@ func (obj StagedQuoteValidToSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+*
+ */
+type StandalonePriceActiveChangedMessagePayload struct {
+	// Value of the `active` field of the StandalonePrice after the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+	Active bool `json:"active"`
+	// Value of the `active` field of the StandalonePrice before the [Change Active](ctp:api:types:StandalonePriceChangeActiveAction) update action.
+	OldActive bool `json:"oldActive"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceActiveChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceActiveChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceActiveChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
 *
  */
 type StandalonePriceCreatedMessagePayload struct {
-	// The Standalone Price as it was created.
+	// [Standalone Price](ctp:api:type:StandalonePrice) that was created.
 	StandalonePrice StandalonePrice `json:"standalonePrice"`
 }
 
@@ -9775,11 +14330,11 @@ func (obj StandalonePriceDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Emitted when the affected StandalonePrice is updated based on a [Product Discount](ctp:api:type:ProductDiscount) being applied.
+*	Generated after a [Product Discount](ctp:api:type:ProductDiscount) is successfully applied to a StandalonePrice.
 *
  */
 type StandalonePriceDiscountSetMessagePayload struct {
-	// The new `discounted` value of the updated StandalonePrice.
+	// The new `discounted` value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 }
 
@@ -9794,11 +14349,11 @@ func (obj StandalonePriceDiscountSetMessagePayload) MarshalJSON() ([]byte, error
 }
 
 /**
-*	This Message is the result of the Standalone Price [SetDiscountedPrice](/../api/projects/standalone-prices#set-discounted-price) update action.
+*	Generated after a successful [Set Discounted Price](ctp:api:type:StandalonePriceSetDiscountedPriceAction) update action.
 *
  */
 type StandalonePriceExternalDiscountSetMessagePayload struct {
-	// The new `discounted` value of the updated StandalonePrice.
+	// The `discounted` value of the [StandalonePrice](ctp:api:type:StandalonePrice) after the [Set Discounted Price](ctp:api:type:StandalonePriceSetDiscountedPriceAction) update action.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 }
 
@@ -9832,11 +14387,11 @@ func (obj StandalonePriceStagedChangesAppliedMessagePayload) MarshalJSON() ([]by
 }
 
 /**
-*	Generated after a successful [Change Value](ctp:api:types:StandalonePriceChangeValueAction) update action.
+*	Generated after a successful [Change Value](ctp:api:type:StandalonePriceChangeValueAction) update action.
 *
  */
 type StandalonePriceValueChangedMessagePayload struct {
-	// The new value of the updated StandalonePrice.
+	// The new value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
 	Value Money `json:"value"`
 	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
 	Staged bool `json:"staged"`
@@ -9852,14 +14407,22 @@ func (obj StandalonePriceValueChangedMessagePayload) MarshalJSON() ([]byte, erro
 	}{Action: "StandalonePriceValueChanged", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Generated after a successful [Create Store](/../api/projects/stores#create-store) request.
+*
+ */
 type StoreCreatedMessagePayload struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	Name                 *LocalizedString          `json:"name,omitempty"`
-	Languages            []string                  `json:"languages"`
-	DistributionChannels []ChannelReference        `json:"distributionChannels"`
-	SupplyChannels       []ChannelReference        `json:"supplyChannels"`
-	ProductSelections    []ProductSelectionSetting `json:"productSelections"`
-	// Serves as value of the `custom` field on a resource or data type customized with a [Type](ctp:api:type:Type).
+	// The `name` of the [Store](ctp:api:type:Store) that was created.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Languages of the [Store](ctp:api:type:Store) that was created. Languages are represented as [IETF language tags](https://en.wikipedia.org/wiki/IETF_language_tag).
+	Languages []string `json:"languages"`
+	// [Distribution Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
+	DistributionChannels []ChannelReference `json:"distributionChannels"`
+	// [Supply Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
+	SupplyChannels []ChannelReference `json:"supplyChannels"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) of the [Store](ctp:api:type:Store) that was created.
+	ProductSelections []ProductSelectionSetting `json:"productSelections"`
+	// [Custom Fields](ctp:api:type:CustomFields) on the [Store](ctp:api:type:Store) that was created.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
@@ -9867,12 +14430,31 @@ type StoreCreatedMessagePayload struct {
 // optional nil slices
 func (obj StoreCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias StoreCreatedMessagePayload
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreCreated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["languages"] == nil {
+		delete(raw, "languages")
+	}
+
+	return json.Marshal(raw)
+
 }
 
+/**
+*	Generated after a successful [Delete Store](/../api/projects/quote-requests#delete-quoterequest) request.
+*
+ */
 type StoreDeletedMessagePayload struct {
 }
 
@@ -9893,9 +14475,9 @@ func (obj StoreDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 *
  */
 type StoreDistributionChannelsChangedMessagePayload struct {
-	// The product distribution channels that have been added.
+	// Product distribution Channels that have been added to the [Store](ctp:api:type:Store).
 	AddedDistributionChannels []ChannelReference `json:"addedDistributionChannels"`
-	// The product distribution channels that have been removed.
+	// Product distribution Channels that have been removed from the [Store](ctp:api:type:Store).
 	RemovedDistributionChannels []ChannelReference `json:"removedDistributionChannels"`
 }
 
@@ -9903,15 +14485,120 @@ type StoreDistributionChannelsChangedMessagePayload struct {
 // optional nil slices
 func (obj StoreDistributionChannelsChangedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias StoreDistributionChannelsChangedMessagePayload
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StoreDistributionChannelsChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedDistributionChannels"] == nil {
+		delete(raw, "addedDistributionChannels")
+	}
+
+	if raw["removedDistributionChannels"] == nil {
+		delete(raw, "removedDistributionChannels")
+	}
+
+	return json.Marshal(raw)
+
 }
 
+/**
+*	Generated after a successful [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+*
+ */
+type StoreLanguagesChangedMessagePayload struct {
+	// [Locales](ctp:api:type:Locale) added to the [Store](ctp:api:type:Store) after the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+	AddedLanguages []string `json:"addedLanguages"`
+	// [Locales](ctp:api:type:Locale) removed from the [Store](ctp:api:type:Store) during the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+	RemovedLanguages []string `json:"removedLanguages"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreLanguagesChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StoreLanguagesChangedMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreLanguagesChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedLanguages"] == nil {
+		delete(raw, "addedLanguages")
+	}
+
+	if raw["removedLanguages"] == nil {
+		delete(raw, "removedLanguages")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated after a successful [Set Name](ctp:api:type:StoreSetNameAction) update action.
+*
+ */
+type StoreNameSetMessagePayload struct {
+	// Name of the [Store](ctp:api:type:Store) set during the [Set Name](ctp:api:type:StoreSetNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Names set for the [Store](ctp:api:type:Store) in different locales.
+	NameAllLocales []LocalizedString `json:"nameAllLocales"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StoreNameSetMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreNameSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["nameAllLocales"] == nil {
+		delete(raw, "nameAllLocales")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated by a successful [Add Product Selection](ctp:api:type:StoreAddProductSelectionAction),
+*	[Remove Product Selection](ctp:api:type:StoreRemoveProductSelectionAction),
+*	[Set Product Selections](ctp:api:type:StoreSetProductSelectionsAction),
+*	or [Change Product Selections Active](ctp:api:type:StoreChangeProductSelectionAction) update action.
+*
+ */
 type StoreProductSelectionsChangedMessagePayload struct {
-	AddedProductSelections   []ProductSelectionSetting `json:"addedProductSelections"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) that were added to the [Store](ctp:api:type:Store).
+	AddedProductSelections []ProductSelectionSetting `json:"addedProductSelections"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) that were removed from the [Store](ctp:api:type:Store).
 	RemovedProductSelections []ProductSelectionSetting `json:"removedProductSelections"`
+	// [ProductSelectionSettings](ctp:api:type:ProductSelectionSetting) that were updated in the [Store](ctp:api:type:Store).
 	UpdatedProductSelections []ProductSelectionSetting `json:"updatedProductSelections"`
 }
 
@@ -9942,6 +14629,48 @@ func (obj StoreProductSelectionsChangedMessagePayload) MarshalJSON() ([]byte, er
 
 	if raw["updatedProductSelections"] == nil {
 		delete(raw, "updatedProductSelections")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Generated after a successful [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction),
+*	[Remove Supply Channel](ctp:api:type:StoreRemoveSupplyChannelAction), or
+*	[Set Supply Channels](ctp:api:type:StoreSetSupplyChannelsAction) update action.
+*
+ */
+type StoreSupplyChannelsChangedMessagePayload struct {
+	// Inventory supply Channels that have been added to the [Store](ctp:api:type:Store).
+	AddedSupplyChannels []ChannelReference `json:"addedSupplyChannels"`
+	// Inventory supply Channels that have been removed from the [Store](ctp:api:type:Store).
+	RemovedSupplyChannels []ChannelReference `json:"removedSupplyChannels"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSupplyChannelsChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StoreSupplyChannelsChangedMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreSupplyChannelsChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedSupplyChannels"] == nil {
+		delete(raw, "addedSupplyChannels")
+	}
+
+	if raw["removedSupplyChannels"] == nil {
+		delete(raw, "removedSupplyChannels")
 	}
 
 	return json.Marshal(raw)

@@ -51,10 +51,6 @@ func (rb *ByProjectKeyMeRequestMethodDelete) WithHeaders(headers http.Header) *B
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Delete my Customer
- */
 func (rb *ByProjectKeyMeRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

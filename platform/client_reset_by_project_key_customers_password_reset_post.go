@@ -29,7 +29,8 @@ func (rb *ByProjectKeyCustomersPasswordResetRequestMethodPost) WithHeaders(heade
 }
 
 /**
-*	Set a new password using a token.
+*	Resetting the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=true`.
+*
  */
 func (rb *ByProjectKeyCustomersPasswordResetRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)

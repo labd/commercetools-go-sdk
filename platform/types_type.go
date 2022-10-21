@@ -451,6 +451,7 @@ type ResourceTypeId string
 const (
 	ResourceTypeIdAddress                     ResourceTypeId = "address"
 	ResourceTypeIdAsset                       ResourceTypeId = "asset"
+	ResourceTypeIdBusinessUnit                ResourceTypeId = "business-unit"
 	ResourceTypeIdCartDiscount                ResourceTypeId = "cart-discount"
 	ResourceTypeIdCategory                    ResourceTypeId = "category"
 	ResourceTypeIdChannel                     ResourceTypeId = "channel"
@@ -474,6 +475,7 @@ const (
 	ResourceTypeIdShippingMethod              ResourceTypeId = "shipping-method"
 	ResourceTypeIdShoppingList                ResourceTypeId = "shopping-list"
 	ResourceTypeIdShoppingListTextLineItem    ResourceTypeId = "shopping-list-text-line-item"
+	ResourceTypeIdStandalonePrice             ResourceTypeId = "standalone-price"
 	ResourceTypeIdStore                       ResourceTypeId = "store"
 	ResourceTypeIdTransaction                 ResourceTypeId = "transaction"
 )

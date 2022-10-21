@@ -27,12 +27,6 @@ func (rb *ByProjectKeyCustomersPasswordTokenRequestMethodPost) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	The token value is used to reset the password of the customer with the given email. The token is
-*	valid only for 10 minutes.
-*
- */
 func (rb *ByProjectKeyCustomersPasswordTokenRequestMethodPost) Execute(ctx context.Context) (result *CustomerToken, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

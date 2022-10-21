@@ -14,10 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder struct {
 }
 
 /**
-*	Returns a customer by its Key from a specific Store.
-*	It also considers customers that do not have the stores field.
-*	If the customer exists in the project but the stores field references different stores,
-*	this method returns a ResourceNotFound error.
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodGet {
@@ -28,8 +25,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Get()
 }
 
 /**
-*	If the customer exists in the project but the stores field references a different store,
-*	this method returns a ResourceNotFound error.
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Post(body CustomerUpdate) *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodPost {
@@ -40,6 +36,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Post(
 	}
 }
 
+/**
+*	Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message.
+*
+*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/customers/key=%s", rb.projectKey, rb.storeKey, rb.key),

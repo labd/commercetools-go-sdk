@@ -27,6 +27,10 @@ func (rb *ByProjectKeyCustomersKeyByKeyRequestBuilder) Post(body CustomerUpdate)
 	}
 }
 
+/**
+*	Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyCustomersKeyByKeyRequestBuilder) Delete() *ByProjectKeyCustomersKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyCustomersKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/customers/key=%s", rb.projectKey, rb.key),

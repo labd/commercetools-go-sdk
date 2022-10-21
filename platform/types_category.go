@@ -471,7 +471,7 @@ func (obj CategoryChangeParentAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the slug produces the [CategorySlugChangedMessage](ctp:api:type:CategorySlugChangedMessage).
+*	Changing the slug produces the [CategorySlugChanged](ctp:api:type:CategorySlugChangedMessage) Message.
 *
  */
 type CategoryChangeSlugAction struct {

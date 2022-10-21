@@ -12,6 +12,9 @@ type ByProjectKeyMessagesByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Deprecated scope: `view_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyMessagesByIDRequestBuilder) Get() *ByProjectKeyMessagesByIDRequestMethodGet {
 	return &ByProjectKeyMessagesByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/messages/%s", rb.projectKey, rb.id),

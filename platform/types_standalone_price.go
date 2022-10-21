@@ -74,6 +74,9 @@ type StandalonePrice struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Staged changes of the StandalonePrice. Only present if the StandalonePrice has staged changes.
 	Staged *StagedStandalonePrice `json:"staged,omitempty"`
+	// If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
+	// If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+	Active bool `json:"active"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -136,9 +139,9 @@ type StandalonePriceDraft struct {
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// Sets the product distribution [Channel](ctp:api:type:Channel) for which this Price is valid.
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
-	// Sets the date from which the Price is valid.
+	// Sets the date from which the Price is valid. Must be at least 1 ms earlier than `validUntil`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Sets the date until the Price is valid.
+	// Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Sets price tiers.
 	Tiers []PriceTierDraft `json:"tiers"`
@@ -146,6 +149,9 @@ type StandalonePriceDraft struct {
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
+	// If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+	Active *bool `json:"active,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -276,6 +282,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 			return nil, err
 		}
 		return obj, nil
+	case "changeActive":
+		obj := StandalonePriceChangeActiveAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeValue":
 		obj := StandalonePriceChangeValueAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -319,6 +331,25 @@ func (obj StandalonePriceApplyStagedChangesAction) MarshalJSON() ([]byte, error)
 		Action string `json:"action"`
 		*Alias
 	}{Action: "applyStagedChanges", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the value of a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [StandalonePriceActiveChangedMessage](ctp:api:type:StandalonePriceActiveChangedMessage).
+*
+ */
+type StandalonePriceChangeActiveAction struct {
+	// New value to set for the `active` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
+	Active bool `json:"active"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceChangeActiveAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceChangeActiveAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeActive", Alias: (*Alias)(&obj)})
 }
 
 /**

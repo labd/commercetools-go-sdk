@@ -460,16 +460,30 @@ type StagedOrder struct {
 	CustomerId    *string `json:"customerId,omitempty"`
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
-	AnonymousId     *string            `json:"anonymousId,omitempty"`
-	Store           *StoreKeyReference `json:"store,omitempty"`
-	LineItems       []LineItem         `json:"lineItems"`
-	CustomLineItems []CustomLineItem   `json:"customLineItems"`
-	TotalPrice      TypedMoney         `json:"totalPrice"`
+	AnonymousId *string `json:"anonymousId,omitempty"`
+	// The Business Unit the Order belongs to.
+	BusinessUnit    *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	Store           *StoreKeyReference        `json:"store,omitempty"`
+	LineItems       []LineItem                `json:"lineItems"`
+	CustomLineItems []CustomLineItem          `json:"customLineItems"`
+	TotalPrice      TypedMoney                `json:"totalPrice"`
 	// The taxes are calculated based on the shipping address.
-	TaxedPrice      *TaxedPrice `json:"taxedPrice,omitempty"`
-	ShippingAddress *Address    `json:"shippingAddress,omitempty"`
-	BillingAddress  *Address    `json:"billingAddress,omitempty"`
-	TaxMode         *TaxMode    `json:"taxMode,omitempty"`
+	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
+	// Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+	// For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
+	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
+	// Holds all shipping-related information per Shipping Method.
+	//
+	// For `Multi` [ShippingMode](ctp:api:typeShippingMode), it is updated automatically after the Shipping Methods are added.
+	ShippingAddress *Address `json:"shippingAddress,omitempty"`
+	BillingAddress  *Address `json:"billingAddress,omitempty"`
+	// Indicates whether one or multiple Shipping Methods are added to the Cart.
+	ShippingMode ShippingMode `json:"shippingMode"`
+	// Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
+	//
+	// It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+	Shipping []Shipping `json:"shipping"`
+	TaxMode  *TaxMode   `json:"taxMode,omitempty"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for rouding.
 	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
 	// Set when the customer is set and the customer is a member of a customer group.

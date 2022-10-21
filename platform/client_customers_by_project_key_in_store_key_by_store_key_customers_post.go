@@ -56,14 +56,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersRequestMethodPost) WithHeader
 }
 
 /**
-*	Creates a customer in a specific Store.
-*	When using this endpoint, if omitted,
-*	the customer's stores field is set to the store specified in the path parameter.
-*	If an anonymous cart is passed in as when using this method,
-*	then the cart is assigned to the created customer and the version number of the Cart increases.
-*	If the ID of an anonymous session is given, all carts and orders will be assigned to the created customer and
-*	the store specified. If you pass in a cart with a store field specified,
-*	the store field must reference the same store specified in the {storeKey} path parameter.
+*	When using this endpoint, if omitted, the Customer `stores` field is set to the Store specified in the path parameter.
+*
+*	If the `anonymousCart` field is set on the [CustomerDraft](ctp:api:type:CustomerDraft), then the newly created Customer will be assigned to that [Cart](ctp:api:type:Cart).
+*	Similarly, if the `anonymousId` field is set, the Customer will be set on all [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [ShoppingLists](ctp:api:type:ShoppingList) and [Payments](ctp:api:type:Payment) with the same `anonymousId`.
+*	If a Cart with a `store` field specified, the `store` field must reference the same Store specified in the `{storeKey}` path parameter.
+*	Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersRequestMethodPost) Execute(ctx context.Context) (result *CustomerSignInResult, err error) {

@@ -53,6 +53,10 @@ func (rb *ByProjectKeyMessagesByIDRequestMethodGet) WithHeaders(headers http.Hea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deprecated scope: `view_orders:{projectKey}`
+ */
 func (rb *ByProjectKeyMessagesByIDRequestMethodGet) Execute(ctx context.Context) (result *Message, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -27,6 +27,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestMethodPost) WithHeade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

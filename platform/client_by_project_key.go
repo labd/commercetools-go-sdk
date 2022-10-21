@@ -12,6 +12,16 @@ type ByProjectKeyRequestBuilder struct {
 }
 
 /**
+*	A Business Unit can represent a Company or a Division.
+ */
+func (rb *ByProjectKeyRequestBuilder) BusinessUnits() *ByProjectKeyBusinessUnitsRequestBuilder {
+	return &ByProjectKeyBusinessUnitsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	Categories are used to organize products in a hierarchical structure.
  */
 func (rb *ByProjectKeyRequestBuilder) Categories() *ByProjectKeyCategoriesRequestBuilder {
@@ -53,7 +63,7 @@ func (rb *ByProjectKeyRequestBuilder) Channels() *ByProjectKeyChannelsRequestBui
 }
 
 /**
-*	A customer is a person purchasing products. customers, Orders, Comments and Reviews can be associated to a customer.
+*	A Customer is a person purchasing products. Carts, Orders, Quotes, Reviews and Payments can be associated to a Customer.
 *
  */
 func (rb *ByProjectKeyRequestBuilder) Customers() *ByProjectKeyCustomersRequestBuilder {
@@ -224,7 +234,7 @@ func (rb *ByProjectKeyRequestBuilder) Quotes() *ByProjectKeyQuotesRequestBuilder
 }
 
 /**
-*	A request for a quote holds product variants and can be ordered.
+*	A request for a Quote holds product variants and can be ordered.
  */
 func (rb *ByProjectKeyRequestBuilder) QuoteRequests() *ByProjectKeyQuoteRequestsRequestBuilder {
 	return &ByProjectKeyQuoteRequestsRequestBuilder{
@@ -377,6 +387,13 @@ func (rb *ByProjectKeyRequestBuilder) StandalonePrices() *ByProjectKeyStandalone
 	return &ByProjectKeyStandalonePricesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyRequestBuilder) InBusinessUnitKeyWithBusinessUnitKeyValue(businessUnitKey string) *ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder {
+	return &ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyRequestBuilder{
+		businessUnitKey: businessUnitKey,
+		projectKey:      rb.projectKey,
+		client:          rb.client,
 	}
 }
 func (rb *ByProjectKeyRequestBuilder) Get() *ByProjectKeyRequestMethodGet {
