@@ -42,7 +42,7 @@ func createExampleProduct() platform.Product {
 							Url: "https://sphere.io/cli/data/253245821_1.jpg",
 						},
 					},
-					Prices: []platform.EmbeddedPrice{
+					Prices: []platform.Price{
 						{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
 							Value: platform.CentPrecisionMoney{
@@ -85,7 +85,7 @@ func createExampleProduct() platform.Product {
 							Url: "https://sphere.io/cli/data/253245821_1.jpg",
 						},
 					},
-					Prices: []platform.EmbeddedPrice{
+					Prices: []platform.Price{
 						{
 							ID: "753472a3-ddff-4e0f-a93b-2eb29c90ba54",
 							Value: platform.CentPrecisionMoney{

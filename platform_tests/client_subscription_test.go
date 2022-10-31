@@ -24,8 +24,8 @@ func TestSubscriptionCreate(t *testing.T) {
 				Key: ctutils.StringRef("test"),
 				Destination: platform.SqsDestination{
 					QueueUrl:     "http://example.com/",
-					AccessKey:    "A1234567890",
-					AccessSecret: "S1234567800",
+					AccessKey:    ctutils.StringRef("A1234567890"),
+					AccessSecret: ctutils.StringRef("S1234567800"),
 					Region:       "eu-central-1",
 				},
 				Messages: []platform.MessageSubscription{
@@ -56,8 +56,8 @@ func TestSubscriptionCreate(t *testing.T) {
 				Key: ctutils.StringRef("test"),
 				Destination: platform.SnsDestination{
 					TopicArn:     "x",
-					AccessKey:    "A1234567890",
-					AccessSecret: "S1234567800",
+					AccessKey:    ctutils.StringRef("A1234567890"),
+					AccessSecret: ctutils.StringRef("S1234567800"),
 				},
 				Changes: []platform.ChangeSubscription{
 					{
@@ -249,8 +249,8 @@ func TestSubscriptionUpdate(t *testing.T) {
 			&platform.SubscriptionChangeDestinationAction{
 				Destination: platform.SnsDestination{
 					TopicArn:     "arn:aws:sns:eu-central-1:123456789012345678:example:1",
-					AccessKey:    "AKIAIOSFODNN7EXAMPLE",
-					AccessSecret: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+					AccessKey:    ctutils.StringRef("AKIAIOSFODNN7EXAMPLE"),
+					AccessSecret: ctutils.StringRef("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
 				},
 			},
 		},
@@ -409,8 +409,8 @@ func TestSubscriptionGetDestinationSNS(t *testing.T) {
 	destination := subscription.Destination.(platform.SnsDestination)
 	expected := platform.SnsDestination{
 		TopicArn:     "arn:aws:sns:eu-central-1:123456789012345678:example:1",
-		AccessKey:    "AKIAIOSFODNN7EXAMPLE",
-		AccessSecret: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+		AccessKey:    ctutils.StringRef("AKIAIOSFODNN7EXAMPLE"),
+		AccessSecret: ctutils.StringRef("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
 	}
 	assert.Equal(t, destination, expected)
 }
@@ -426,8 +426,8 @@ func TestSubscriptionGetDestinationSQS(t *testing.T) {
 	destination := subscription.Destination.(platform.SqsDestination)
 	expected := platform.SqsDestination{
 		QueueUrl:     "https://queue.amazonaws.com/80398EXAMPLE/MyQueue",
-		AccessKey:    "AKIAIOSFODNN7EXAMPLE",
-		AccessSecret: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
+		AccessKey:    ctutils.StringRef("AKIAIOSFODNN7EXAMPLE"),
+		AccessSecret: ctutils.StringRef("wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"),
 	}
 	assert.Equal(t, destination, expected)
 }
