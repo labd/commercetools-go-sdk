@@ -2754,6 +2754,9 @@ func (obj CartSetLineItemSupplyChannelAction) MarshalJSON() ([]byte, error) {
 type CartSetLineItemTaxAmountAction struct {
 	LineItemId        string                  `json:"lineItemId"`
 	ExternalTaxAmount *ExternalTaxAmountDraft `json:"externalTaxAmount,omitempty"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Line Item.```
+	// This is required for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2769,6 +2772,9 @@ func (obj CartSetLineItemTaxAmountAction) MarshalJSON() ([]byte, error) {
 type CartSetLineItemTaxRateAction struct {
 	LineItemId      string                `json:"lineItemId"`
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Line Item.```
+	// This is required for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

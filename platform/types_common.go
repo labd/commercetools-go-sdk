@@ -755,6 +755,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 	}
 
 	switch discriminator {
+	case "attribute-group":
+		obj := AttributeGroupReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "business-unit":
 		obj := BusinessUnitReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -947,6 +953,7 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 type ReferenceTypeId string
 
 const (
+	ReferenceTypeIdAttributeGroup   ReferenceTypeId = "attribute-group"
 	ReferenceTypeIdBusinessUnit     ReferenceTypeId = "business-unit"
 	ReferenceTypeIdCart             ReferenceTypeId = "cart"
 	ReferenceTypeIdCartDiscount     ReferenceTypeId = "cart-discount"
@@ -1001,6 +1008,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 	}
 
 	switch discriminator {
+	case "attribute-group":
+		obj := AttributeGroupResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "business-unit":
 		obj := BusinessUnitResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
