@@ -396,6 +396,16 @@ func (rb *ByProjectKeyRequestBuilder) InBusinessUnitKeyWithBusinessUnitKeyValue(
 		client:          rb.client,
 	}
 }
+
+/**
+*	Attribute groups ... TODO
+ */
+func (rb *ByProjectKeyRequestBuilder) AttributeGroups() *ByProjectKeyAttributeGroupsRequestBuilder {
+	return &ByProjectKeyAttributeGroupsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) Get() *ByProjectKeyRequestMethodGet {
 	return &ByProjectKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s", rb.projectKey),
