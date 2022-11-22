@@ -1,3 +1,7 @@
+1.2.0 (2022-12-22)
+==================
+Regenerate code based on last RAML specifications
+
 1.1.0 (2022-06-27)
 ==================
 Correctly implement pattern properties handling by adding those values in a 
