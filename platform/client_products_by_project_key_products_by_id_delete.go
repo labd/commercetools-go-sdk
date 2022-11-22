@@ -31,6 +31,7 @@ type ByProjectKeyProductsByIDRequestMethodDeleteInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
+	LocaleProjection   []string
 	Version            int
 	Expand             []string
 }
@@ -48,6 +49,9 @@ func (input *ByProjectKeyProductsByIDRequestMethodDeleteInput) Values() url.Valu
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	for _, v := range input.LocaleProjection {
+		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
@@ -85,6 +89,14 @@ func (rb *ByProjectKeyProductsByIDRequestMethodDelete) PriceChannel(v string) *B
 		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
 	}
 	rb.params.PriceChannel = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductsByIDRequestMethodDelete) LocaleProjection(v []string) *ByProjectKeyProductsByIDRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
+	}
+	rb.params.LocaleProjection = v
 	return rb
 }
 

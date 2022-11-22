@@ -140,7 +140,7 @@ func (obj ZoneResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ZoneUpdate struct {
-	// Expected version of the Zone on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the Zone on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Zone.
 	Actions []ZoneUpdateAction `json:"actions"`

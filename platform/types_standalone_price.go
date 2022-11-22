@@ -123,7 +123,8 @@ func (obj StandalonePrice) MarshalJSON() ([]byte, error) {
 
 /**
 *	Standalone Prices are defined with a scope consisting of `currency` and optionally `country`, `customerGroup`, and `channel` and/or a validity period (`validFrom` and/or `validTo`). For more information see [price selection](/../api/projects/products#price-selection).
-*	Creating a Standalone Price is rejected if there already exists a Standalone Price for the same SKU with exactly the same price scope, or with overlapping validity periods within the same price scope. A Price without validity period does not conflict with a Price defined for a time period.
+*
+*	Creating a Standalone Price for an SKU which has a Standalone Price with exactly the same price scope, or with overlapping validity periods within the same price scope returns the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
  */
 type StandalonePriceDraft struct {
 	// User-defined unique identifier for the StandalonePrice.
@@ -238,7 +239,7 @@ func (obj StandalonePriceResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type StandalonePriceUpdate struct {
-	// Expected version of the StandalonePrice on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// Expected version of the StandalonePrice on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the StandalonePrice.
 	Actions []StandalonePriceUpdateAction `json:"actions"`
@@ -377,7 +378,7 @@ type StandalonePriceSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }

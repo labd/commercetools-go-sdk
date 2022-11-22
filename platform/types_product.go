@@ -293,42 +293,71 @@ const (
 )
 
 type ProductProjection struct {
-	// The unique ID of the Product.
+	// Unique identifier of the [Product](ctp:api:type:Product).
 	ID string `json:"id"`
-	// The current version of the Product.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the [Product](ctp:api:type:Product).
+	Version int `json:"version"`
+	// Date and time (UTC) the ProductProjection was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the ProductProjection was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// User-specific unique identifier of the Product.
-	Key         *string              `json:"key,omitempty"`
+	// User-defined unique identifier of the [Product](ctp:api:type:Product).
+	Key *string `json:"key,omitempty"`
+	// The [ProductType](ctp:api:type:ProductType) defining the Attributes of the [Product](ctp:api:type:Product).
 	ProductType ProductTypeReference `json:"productType"`
-	Name        LocalizedString      `json:"name"`
-	Description *LocalizedString     `json:"description,omitempty"`
-	Slug        LocalizedString      `json:"slug"`
-	// References to categories the product is in.
-	Categories         []CategoryReference   `json:"categories"`
-	CategoryOrderHints *CategoryOrderHints   `json:"categoryOrderHints,omitempty"`
-	MetaTitle          *LocalizedString      `json:"metaTitle,omitempty"`
-	MetaDescription    *LocalizedString      `json:"metaDescription,omitempty"`
-	MetaKeywords       *LocalizedString      `json:"metaKeywords,omitempty"`
-	SearchKeywords     *SearchKeywords       `json:"searchKeywords,omitempty"`
-	HasStagedChanges   *bool                 `json:"hasStagedChanges,omitempty"`
-	Published          *bool                 `json:"published,omitempty"`
-	MasterVariant      ProductVariant        `json:"masterVariant"`
-	Variants           []ProductVariant      `json:"variants"`
-	TaxCategory        *TaxCategoryReference `json:"taxCategory,omitempty"`
-	State              *StateReference       `json:"state,omitempty"`
-	// Statistics about the review ratings taken into account for this product.
+	// Name of the [Product](ctp:api:type:Product).
+	Name LocalizedString `json:"name"`
+	// Description of the [Product](ctp:api:type:Product).
+	Description *LocalizedString `json:"description,omitempty"`
+	// User-defined identifier used in a deep-link URL for the [Product](ctp:api:type:Product).
+	// Must be unique across a Project, but can be the same for Products in different locales.
+	// Matches the pattern `[a-zA-Z0-9_\-]{2,256}`.
+	// For [good performance](/../api/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set in the [Project](ctp:api:type:Project).
+	Slug LocalizedString `json:"slug"`
+	// [Categories](ctp:api:type:Category) assigned to the [Product](ctp:api:type:Product).
+	Categories []CategoryReference `json:"categories"`
+	// Order of [Product](ctp:api:type:Product) in [Categories](ctp:api:type:Category).
+	CategoryOrderHints *CategoryOrderHints `json:"categoryOrderHints,omitempty"`
+	// Title of the [Product](ctp:api:type:Product) displayed in search results.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// Description of the [Product](ctp:api:type:Product) displayed in search results below the meta title.
+	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
+	// Keywords that give additional information about the [Product](ctp:api:type:Product) to search engines.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// Used by [Product Suggestions](/../api/projects/products-suggestions), but is also considered for a [full text search](ctp:api:type:FullTextSearch).
+	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
+	// `true` if the staged data is different from the current data.
+	HasStagedChanges *bool `json:"hasStagedChanges,omitempty"`
+	// `true` if the [Product](ctp:api:type:Product) is [published](ctp:api:type:CurrentStaged).
+	Published *bool `json:"published,omitempty"`
+	// The Master Variant of the [Product](ctp:api:type:Product).
+	MasterVariant ProductVariant `json:"masterVariant"`
+	// Additional Product Variants.
+	Variants []ProductVariant `json:"variants"`
+	// The [TaxCategory](ctp:api:type:TaxCategory) of the [Product](ctp:api:type:Product).
+	TaxCategory *TaxCategoryReference `json:"taxCategory,omitempty"`
+	// [State](ctp:api:type:State) of the [Product](ctp:api:type:Product).
+	State *StateReference `json:"state,omitempty"`
+	// Review statistics of the [Product](ctp:api:type:Product).
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
+	// Indicates whether the Prices of the Product Projection are [embedded](ctp:api:type:Price) or [standalone](ctp:api:type:StandalonePrice). [Projecting Prices](#prices) only works with `Embedded`, there is currently no support for `Standalone`.
+	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 }
 
 type ProductProjectionPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
+	Limit int `json:"limit"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int                 `json:"offset"`
+	Offset int `json:"offset"`
+	// [ProductProjections](ctp:api:type:ProductProjection) matching the query.
 	Results []ProductProjection `json:"results"`
 }
 
@@ -1537,7 +1566,7 @@ type ProductSetAssetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -1991,7 +2020,7 @@ type ProductSetProductPriceCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }

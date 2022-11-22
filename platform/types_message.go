@@ -1275,6 +1275,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "StoreCountriesChanged":
+		obj := StoreCountriesChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "StoreCreated":
 		obj := StoreCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -10014,6 +10027,87 @@ func (obj StandalonePriceValueChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Add Country](ctp:api:type:StoreAddCountryAction),
+*	[Remove Country](ctp:api:type:StoreRemoveCountryAction), or
+*	[Set Countries](ctp:api:type:StoreSetCountriesAction) update action.
+*
+ */
+type StoreCountriesChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Countries](ctp:api:type:StoreCountry) added to the [Store](ctp:api:type:Store).
+	AddedCountries []StoreCountry `json:"addedCountries"`
+	// [Countries](ctp:api:type:StoreCountry) removed from the [Store](ctp:api:type:Store).
+	RemovedCountries []StoreCountry `json:"removedCountries"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreCountriesChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias StoreCountriesChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreCountriesChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias StoreCountriesChangedMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreCountriesChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedCountries"] == nil {
+		delete(raw, "addedCountries")
+	}
+
+	if raw["removedCountries"] == nil {
+		delete(raw, "removedCountries")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
 *	Generated after a successful [Create Store](/../api/projects/stores#create-store) request.
 *
  */
@@ -10043,6 +10137,8 @@ type StoreCreatedMessage struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Languages of the [Store](ctp:api:type:Store) that was created. Languages are represented as [IETF language tags](https://en.wikipedia.org/wiki/IETF_language_tag).
 	Languages []string `json:"languages"`
+	// [Countries](ctp:api:type:StoreCountry) of the [Store](ctp:api:type:Store) that was created.
+	Countries []StoreCountry `json:"countries"`
 	// [Distribution Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
 	// [Supply Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
@@ -10090,6 +10186,10 @@ func (obj StoreCreatedMessage) MarshalJSON() ([]byte, error) {
 
 	if raw["languages"] == nil {
 		delete(raw, "languages")
+	}
+
+	if raw["countries"] == nil {
+		delete(raw, "countries")
 	}
 
 	return json.Marshal(raw)
@@ -11187,6 +11287,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "StandalonePriceValueChanged":
 		obj := StandalonePriceValueChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreCountriesChanged":
+		obj := StoreCountriesChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -14408,6 +14514,48 @@ func (obj StandalonePriceValueChangedMessagePayload) MarshalJSON() ([]byte, erro
 }
 
 /**
+*	Generated after a successful [Add Country](ctp:api:type:StoreAddCountryAction),
+*	[Remove Country](ctp:api:type:StoreRemoveCountryAction), or
+*	[Set Countries](ctp:api:type:StoreSetCountriesAction) update action.
+*
+ */
+type StoreCountriesChangedMessagePayload struct {
+	// [Countries](ctp:api:type:StoreCountry) added to the [Store](ctp:api:type:Store).
+	AddedCountries []StoreCountry `json:"addedCountries"`
+	// [Countries](ctp:api:type:StoreCountry) removed from the [Store](ctp:api:type:Store).
+	RemovedCountries []StoreCountry `json:"removedCountries"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreCountriesChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StoreCountriesChangedMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StoreCountriesChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["addedCountries"] == nil {
+		delete(raw, "addedCountries")
+	}
+
+	if raw["removedCountries"] == nil {
+		delete(raw, "removedCountries")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
 *	Generated after a successful [Create Store](/../api/projects/stores#create-store) request.
 *
  */
@@ -14416,6 +14564,8 @@ type StoreCreatedMessagePayload struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Languages of the [Store](ctp:api:type:Store) that was created. Languages are represented as [IETF language tags](https://en.wikipedia.org/wiki/IETF_language_tag).
 	Languages []string `json:"languages"`
+	// [Countries](ctp:api:type:StoreCountry) of the [Store](ctp:api:type:Store) that was created.
+	Countries []StoreCountry `json:"countries"`
 	// [Distribution Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
 	// [Supply Channels](ctp:api:type:ChannelRoleEnum) of the [Store](ctp:api:type:Store) that was created.
@@ -14445,6 +14595,10 @@ func (obj StoreCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 	if raw["languages"] == nil {
 		delete(raw, "languages")
+	}
+
+	if raw["countries"] == nil {
+		delete(raw, "countries")
 	}
 
 	return json.Marshal(raw)

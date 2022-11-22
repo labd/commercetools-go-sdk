@@ -28,12 +28,12 @@ func (r *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Dump() map[strin
 
 type ByProjectKeyProductProjectionsSuggestRequestMethodGetInput struct {
 	Fuzzy          *bool
-	Staged         *bool
 	SearchKeywords map[string][]string
 	Sort           []string
 	Limit          *int
 	Offset         *int
 	WithTotal      *bool
+	Staged         *bool
 }
 
 func (input *ByProjectKeyProductProjectionsSuggestRequestMethodGetInput) Values() url.Values {
@@ -43,13 +43,6 @@ func (input *ByProjectKeyProductProjectionsSuggestRequestMethodGetInput) Values(
 			values.Add("fuzzy", "true")
 		} else {
 			values.Add("fuzzy", "false")
-		}
-	}
-	if input.Staged != nil {
-		if *input.Staged {
-			values.Add("staged", "true")
-		} else {
-			values.Add("staged", "false")
 		}
 	}
 	for k, v := range input.SearchKeywords {
@@ -73,6 +66,13 @@ func (input *ByProjectKeyProductProjectionsSuggestRequestMethodGetInput) Values(
 			values.Add("withTotal", "false")
 		}
 	}
+	if input.Staged != nil {
+		if *input.Staged {
+			values.Add("staged", "true")
+		} else {
+			values.Add("staged", "false")
+		}
+	}
 	return values
 }
 
@@ -81,14 +81,6 @@ func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Fuzzy(v bool) *
 		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
 	}
 	rb.params.Fuzzy = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Staged(v bool) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
-	}
-	rb.params.Staged = &v
 	return rb
 }
 
@@ -129,6 +121,14 @@ func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) WithTotal(v boo
 		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
 	}
 	rb.params.WithTotal = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Staged(v bool) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
+	}
+	rb.params.Staged = &v
 	return rb
 }
 

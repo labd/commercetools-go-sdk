@@ -32,6 +32,8 @@ func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) WithHeaders(hea
 *	This endpoint can be used to simulate which Product Discounts would be applied if a specified Product Variant had a specified Price.
 *	Given Product and Product Variant IDs and a Price, this endpoint will return the [ProductDiscount](ctp:api:type:ProductDiscount) that would have been applied to that Price.
 *
+*	If a Product Discount could not be found that could be applied to the Price of a Product Variant, a [NoMatchingProductDiscountFound](ctp:api:type:NoMatchingProductDiscountFoundError) error is returned.
+*
  */
 func (rb *ByProjectKeyProductDiscountsMatchingRequestMethodPost) Execute(ctx context.Context) (result *ProductDiscount, err error) {
 	data, err := serializeInput(rb.body)

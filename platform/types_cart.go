@@ -1145,9 +1145,8 @@ type ItemShippingDetails struct {
 	// Used to map what sub-quantity should be shipped to which address.
 	// Duplicate address keys are not allowed.
 	Targets []ItemShippingTarget `json:"targets"`
-	// `true` if the quantity of the (custom) line item is equal to the sum of the sub-quantities in `targets`, `false` otherwise.
-	// A cart cannot be ordered when the value is `false`.
-	// The error InvalidItemShippingDetails will be triggered.
+	// `true` if the quantity of the Line Item or Custom Line Item is equal to the sum of the sub-quantities in `targets`, else it is `false`.
+	// Ordering a Cart with value as `false` returns an [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError) error.
 	Valid bool `json:"valid"`
 }
 
@@ -2265,7 +2264,7 @@ type CartSetBillingAddressCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2348,7 +2347,7 @@ type CartSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2368,7 +2367,7 @@ type CartSetCustomLineItemCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2546,7 +2545,7 @@ type CartSetDeliveryAddressCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2599,7 +2598,7 @@ type CartSetItemShippingAddressCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2652,7 +2651,7 @@ type CartSetLineItemCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2834,7 +2833,7 @@ type CartSetShippingAddressCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }

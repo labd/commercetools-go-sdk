@@ -26,6 +26,7 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet)
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput struct {
+	Staged             *bool
 	PriceCurrency      *string
 	PriceCountry       *string
 	PriceCustomerGroup *string
@@ -36,6 +37,13 @@ type ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	if input.Staged != nil {
+		if *input.Staged {
+			values.Add("staged", "true")
+		} else {
+			values.Add("staged", "false")
+		}
+	}
 	if input.PriceCurrency != nil {
 		values.Add("priceCurrency", fmt.Sprintf("%v", *input.PriceCurrency))
 	}
@@ -55,6 +63,14 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethod
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) Staged(v bool) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGetInput{}
+	}
+	rb.params.Staged = &v
+	return rb
 }
 
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) PriceCurrency(v string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet {
@@ -115,7 +131,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet
 }
 
 /**
-*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its ID from the specified Store.
+*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its ID from the specified [Store](ctp:api:type:Store).
+*	If the Store has defined some languages, countries, distribution or supply Channels,
+*	they are used for projections based on [locale](ctp:api:type:ProductProjectionLocales), [price](ctp:api:type:ProductProjectionPrices)
+*	and [inventory](ctp:api:type:ProductProjectionInventoryEntries).
+*
+*	When used with an API Client that has the `view_published_products:{projectKey}` scope, this endpoint only returns published (current) Product Projections.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodGet) Execute(ctx context.Context) (result *ProductProjection, err error) {
 	var queryParams url.Values

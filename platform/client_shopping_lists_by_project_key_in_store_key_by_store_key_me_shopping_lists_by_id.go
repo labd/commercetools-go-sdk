@@ -14,7 +14,9 @@ type ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder struct {
 }
 
 /**
-*	Gets a shopping list by ID.
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodGet{
@@ -23,6 +25,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder) Get
 	}
 }
 
+/**
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder) Post(body MyShoppingListUpdate) *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodPost{
 		body:   body,
@@ -31,6 +38,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder) Pos
 	}
 }
 
+/**
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/me/shopping-lists/%s", rb.projectKey, rb.storeKey, rb.id),

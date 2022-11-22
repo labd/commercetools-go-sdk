@@ -30,7 +30,6 @@ type ByProjectKeyProductProjectionsSearchRequestMethodGetInput struct {
 	Fuzzy                *bool
 	FuzzyLevel           *float64
 	MarkMatchingVariants *bool
-	Staged               *bool
 	Filter               []string
 	FilterFacets         []string
 	FilterQuery          []string
@@ -40,6 +39,7 @@ type ByProjectKeyProductProjectionsSearchRequestMethodGetInput struct {
 	Limit                *int
 	Offset               *int
 	WithTotal            *bool
+	Staged               *bool
 	PriceCurrency        *string
 	PriceCountry         *string
 	PriceCustomerGroup   *string
@@ -66,13 +66,6 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 			values.Add("markMatchingVariants", "true")
 		} else {
 			values.Add("markMatchingVariants", "false")
-		}
-	}
-	if input.Staged != nil {
-		if *input.Staged {
-			values.Add("staged", "true")
-		} else {
-			values.Add("staged", "false")
 		}
 	}
 	for _, v := range input.Filter {
@@ -106,6 +99,13 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 			values.Add("withTotal", "true")
 		} else {
 			values.Add("withTotal", "false")
+		}
+	}
+	if input.Staged != nil {
+		if *input.Staged {
+			values.Add("staged", "true")
+		} else {
+			values.Add("staged", "false")
 		}
 	}
 	if input.PriceCurrency != nil {
@@ -153,14 +153,6 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) MarkMatchingVari
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
 	}
 	rb.params.MarkMatchingVariants = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Staged(v bool) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
-	}
-	rb.params.Staged = &v
 	return rb
 }
 
@@ -233,6 +225,14 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) WithTotal(v bool
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
 	}
 	rb.params.WithTotal = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Staged(v bool) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
+	}
+	rb.params.Staged = &v
 	return rb
 }
 

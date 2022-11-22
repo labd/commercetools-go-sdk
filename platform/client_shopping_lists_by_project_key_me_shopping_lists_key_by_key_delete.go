@@ -27,25 +27,17 @@ func (r *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete) Dump() map[stri
 }
 
 type ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDeleteInput struct {
-	Version int
 	Expand  []string
+	Version int
 }
 
 func (input *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
-	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
+	values.Add("version", strconv.Itoa(input.Version))
 	return values
-}
-
-func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete) Version(v int) *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDeleteInput{}
-	}
-	rb.params.Version = v
-	return rb
 }
 
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete) Expand(v []string) *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete {
@@ -53,6 +45,14 @@ func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete) Expand(v []str
 		rb.params = &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDeleteInput{}
 	}
 	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete) Version(v int) *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDeleteInput{}
+	}
+	rb.params.Version = v
 	return rb
 }
 

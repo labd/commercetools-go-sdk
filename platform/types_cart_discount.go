@@ -311,7 +311,7 @@ func (obj CartDiscountShippingCostTarget) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountUpdate struct {
-	// Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the CartDiscount.
 	Actions []CartDiscountUpdateAction `json:"actions"`
@@ -926,7 +926,7 @@ type CartDiscountSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }

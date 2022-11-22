@@ -27,13 +27,16 @@ func (r *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) Dump() map[string
 }
 
 type ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput struct {
+	Expand      []string
 	DataErasure *bool
 	Version     int
-	Expand      []string
 }
 
 func (input *ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
+	}
 	if input.DataErasure != nil {
 		if *input.DataErasure {
 			values.Add("dataErasure", "true")
@@ -42,10 +45,15 @@ func (input *ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput) Values()
 		}
 	}
 	values.Add("version", strconv.Itoa(input.Version))
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
-	}
 	return values
+}
+
+func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) Expand(v []string) *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput{}
+	}
+	rb.params.Expand = v
+	return rb
 }
 
 func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) DataErasure(v bool) *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete {
@@ -61,14 +69,6 @@ func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) Version(v int) *
 		rb.params = &ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput{}
 	}
 	rb.params.Version = v
-	return rb
-}
-
-func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete) Expand(v []string) *ByProjectKeyShoppingListsKeyByKeyRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyShoppingListsKeyByKeyRequestMethodDeleteInput{}
-	}
-	rb.params.Expand = v
 	return rb
 }
 

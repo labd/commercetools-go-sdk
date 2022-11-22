@@ -41,6 +41,8 @@ type Store struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Languages configured for the Store.
 	Languages []string `json:"languages"`
+	// Countries defined for the Store.
+	Countries []StoreCountry `json:"countries"`
 	// Product Distribution Channels allowed for the Store.
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
 	// Inventory Supply Channels allowed for the Store.
@@ -62,6 +64,8 @@ type StoreDraft struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
 	Languages []string `json:"languages"`
+	// Countries defined for the Store.
+	Countries []StoreCountry `json:"countries"`
 	// ResourceIdentifier of a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 	// ResourceIdentifier of a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -93,6 +97,10 @@ func (obj StoreDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["languages"] == nil {
 		delete(raw, "languages")
+	}
+
+	if raw["countries"] == nil {
+		delete(raw, "countries")
 	}
 
 	if raw["distributionChannels"] == nil {
@@ -194,7 +202,7 @@ func (obj StoreResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type StoreUpdate struct {
-	// Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Store.
 	Actions []StoreUpdateAction `json:"actions"`
@@ -232,6 +240,12 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 	}
 
 	switch discriminator {
+	case "addCountry":
+		obj := StoreAddCountryAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "addDistributionChannel":
 		obj := StoreAddDistributionChannelAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -256,6 +270,12 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "removeCountry":
+		obj := StoreRemoveCountryAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "removeDistributionChannel":
 		obj := StoreRemoveDistributionChannelAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -270,6 +290,12 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 		return obj, nil
 	case "removeSupplyChannel":
 		obj := StoreRemoveSupplyChannelAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCountries":
+		obj := StoreSetCountriesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -321,12 +347,34 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 }
 
 /**
+*	This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message.
+*	It has no effect if the given country is already present in a Store.
+*
+ */
+type StoreAddCountryAction struct {
+	// Value to append to `countries`.
+	Country StoreCountry `json:"country"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreAddCountryAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreAddCountryAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addCountry", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
 *	It has no effect if a given distribution channel is already present in a Store.
 *
+*	Adding a [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+*
  */
 type StoreAddDistributionChannelAction struct {
-	// Value to append. Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannelError](ctp:api:type:MissingRoleOnChannelError) error.
+	// Value to append.
 	DistributionChannel ChannelResourceIdentifier `json:"distributionChannel"`
 }
 
@@ -362,12 +410,15 @@ func (obj StoreAddProductSelectionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
-*	It has no effect if a given supply channel is already present in a Store.
+*	This action has no effect if a given supply channel is already present in a Store.
+*
+*	Adding a supply channel produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+*
+*	Adding a [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 *
  */
 type StoreAddSupplyChannelAction struct {
-	// Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+	// Value to append.
 	SupplyChannel ChannelResourceIdentifier `json:"supplyChannel"`
 }
 
@@ -400,6 +451,26 @@ func (obj StoreChangeProductSelectionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeProductSelectionActive", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message.
+*	It has no effect if a given country is not present in a Store.
+*
+ */
+type StoreRemoveCountryAction struct {
+	// Value to remove from `countries`.
+	Country StoreCountry `json:"country"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreRemoveCountryAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreRemoveCountryAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeCountry", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -459,11 +530,45 @@ func (obj StoreRemoveSupplyChannelAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeSupplyChannel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message.
+*
+ */
+type StoreSetCountriesAction struct {
+	// New value to set.
+	Countries []StoreCountry `json:"countries"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetCountriesAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetCountriesAction
+	data, err := json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCountries", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["countries"] == nil {
+		delete(raw, "countries")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type StoreSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -499,11 +604,12 @@ func (obj StoreSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 /**
 *	This update action produces the [StoreDistributionChannelsChanged](ctp:api:type:StoreDistributionChannelsChangedMessage) Message.
 *
+*	Setting a [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
+*
  */
 type StoreSetDistributionChannelsAction struct {
 	// Value to set.
 	// If not defined, the Store's `distributionChannels` are unset.
-	// Any attempt to use [Channel](ctp:api:type:Channel) without the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 }
 
@@ -534,11 +640,11 @@ func (obj StoreSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	This update action produces the [StoreLanguagesChanged](ctp:api:type:StoreLanguagesChangedMessage) Message.
+*	Adding a language other than the ones defined in the [Project](ctp:api:type:Project) returns a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
 *
  */
 type StoreSetLanguagesAction struct {
 	// Value to set.
-	// Any attempt to use languages other than the ones defined in the [Project](ctp:api:type:Project) will fail with a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
 	Languages []string `json:"languages"`
 }
 
@@ -624,13 +730,14 @@ func (obj StoreSetProductSelectionsAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+*	Setting a supply channel produces the [StoreSupplyChannelsChanged](ctp:api:type:StoreSupplyChannelsChangedMessage) Message.
+*
+*	Setting a [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) returns a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 *
  */
 type StoreSetSupplyChannelsAction struct {
 	// Value to set.
 	// If not defined, the Store's `supplyChannels` are unset.
-	// Any attempt to use [Channel](ctp:api:type:Channel) without the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) will fail with a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error.
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
 }
 

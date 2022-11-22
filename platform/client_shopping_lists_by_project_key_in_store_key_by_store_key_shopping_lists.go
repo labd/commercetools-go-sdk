@@ -35,6 +35,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder) Get() *By
 	}
 }
 
+/**
+*	When using this endpoint, the `store` field of a ShoppingList is always set to the Store specified in the path parameter.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder) Post(body ShoppingListDraft) *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodPost{
 		body:   body,

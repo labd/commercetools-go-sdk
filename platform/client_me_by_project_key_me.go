@@ -103,7 +103,7 @@ func (rb *ByProjectKeyMeRequestBuilder) Quotes() *ByProjectKeyMeQuotesRequestBui
 }
 
 /**
-*	The My Shopping Lists endpoint creates and provides access to shopping lists scoped to a specific user.
+*	The My Shopping Lists endpoint creates and provides access to Shopping Lists scoped to a specific user.
  */
 func (rb *ByProjectKeyMeRequestBuilder) ShoppingLists() *ByProjectKeyMeShoppingListsRequestBuilder {
 	return &ByProjectKeyMeShoppingListsRequestBuilder{

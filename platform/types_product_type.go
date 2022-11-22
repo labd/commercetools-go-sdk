@@ -51,7 +51,7 @@ type AttributeDefinition struct {
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
 	// This constraint is enforced at both [Product creation](/../api/projects/products#create-product) and [Product update](/../api/projects/products#update-product).
-	// If the length of the input exceeds the maximum size, an [InvalidFieldError](ctp:api:type:InvalidFieldError) is returned.
+	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
 
@@ -79,9 +79,12 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
  */
 type AttributeDefinitionDraft struct {
 	// Describes the Type of the Attribute.
+	//
+	// When the `type` is different for an AttributeDefinition using the same name in multiple ProductTypes, an [AttributeDefinitionTypeConflict](ctp:api:type:AttributeDefinitionTypeConflictError) error is returned.
 	Type AttributeType `json:"type"`
 	// User-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
-	// When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. Otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+	//
+	// When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes, else an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
 	// An exception to this are the values of an `enum` or `lenum` Type and sets thereof.
 	Name string `json:"name"`
 	// Human-readable label for the Attribute.
@@ -121,7 +124,7 @@ func (obj *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	Attribute type for localized enum values. Useful for predefined language-specific values selectable in drop-down menus if only one value can be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumValue instead if multiple values can be selected.
+*	A localized enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned.
 *
  */
 type AttributeLocalizedEnumValue struct {
@@ -132,7 +135,7 @@ type AttributeLocalizedEnumValue struct {
 }
 
 /**
-*	A plain enum value must be unique within the enum, otherwise a [DuplicateEnumValues](/errors#product-types-400-duplicate-enum-values) error will be returned.
+*	A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:types:DuplicateEnumValuesError) error is returned.
 *
  */
 type AttributePlainEnumValue struct {
@@ -348,6 +351,10 @@ func (obj AttributeLocalizableTextType) MarshalJSON() ([]byte, error) {
 	}{Action: "ltext", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for localized enum values. Useful for predefined language-specific values selectable in drop-down menus if only one value can be selected. Use [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeLocalizedEnumValue instead if multiple values can be selected.
+*
+ */
 type AttributeLocalizedEnumType struct {
 	// Available values that can be assigned to Products.
 	Values []AttributeLocalizedEnumValue `json:"values"`
@@ -636,7 +643,7 @@ func (obj ProductTypeResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeUpdate struct {
-	// Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the ProductType.
 	Actions []ProductTypeUpdateAction `json:"actions"`
@@ -896,12 +903,15 @@ func (obj ProductTypeChangeAttributeConstraintAction) MarshalJSON() ([]byte, err
 /**
 *	Renames an AttributeDefinition and also renames all corresponding Attributes on all [Products](/projects/products) with this ProductType. The renaming of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
 *
+*	If the AttributeDefinition name to be changed does not exist, a [AttributeNameDoesNotExist](ctp:api:type:AttributeNameDoesNotExistError) error is returned.
+*
  */
 type ProductTypeChangeAttributeNameAction struct {
 	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
 	// New user-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
-	// When using the same `name` for an Attribute in two or more ProductTypes all fields of the AttributeDefinition of this Attribute need to be the same across the ProductTypes, otherwise an [AttributeDefinitionAlreadyExistsError](ctp:api:type:AttributeDefinitionAlreadyExistsError) will be returned.
+	//
+	// When using the same `name` for an Attribute in two or more ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. If not, an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
 	// An exception to this are the values of an `enum` or `lenum` type and sets thereof.
 	NewAttributeName string `json:"newAttributeName"`
 }
@@ -962,6 +972,8 @@ func (obj ProductTypeChangeDescriptionAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	Updates the key of a single enum `value` in an [AttributeEnumType](ctp:api:type:AttributeEnumType) AttributeDefinition, [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) AttributeDefinition, [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType AttributeDefinition, or AttributeSetType of AttributeLocalizedEnumType AttributeDefinition.
+*
+*	If the AttributeDefinition does not contain an enum with the referenced key, a [EnumKeyDoesNotExist](ctp:api:type:EnumKeyDoesNotExistError) error is returned.
 *
 *	All Products will be updated to the new key in an [eventually consistent](/general-concepts#eventual-consistency) way.
 *
@@ -1074,7 +1086,7 @@ func (obj ProductTypeChangeLocalizedEnumValueLabelAction) MarshalJSON() ([]byte,
 type ProductTypeChangeLocalizedEnumValueOrderAction struct {
 	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
+	// Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](ctp:api:type:EnumValuesMustMatchError) error is returned.
 	Values []AttributeLocalizedEnumValue `json:"values"`
 }
 
@@ -1133,7 +1145,7 @@ func (obj ProductTypeChangePlainEnumValueLabelAction) MarshalJSON() ([]byte, err
 type ProductTypeChangePlainEnumValueOrderAction struct {
 	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](/errors#product-types-400-enum-values-must-match) error code will be returned.
+	// Values must be equal to the values of the Attribute enum values (except for the order). If not, an [EnumValuesMustMatch](ctp:api:type:EnumValuesMustMatchError) error is returned.
 	Values []AttributePlainEnumValue `json:"values"`
 }
 
@@ -1171,7 +1183,7 @@ func (obj ProductTypeRemoveAttributeDefinitionAction) MarshalJSON() ([]byte, err
 /**
 *	Removes enum values from an AttributeDefinition of [AttributeEnumType](ctp:api:type:AttributeEnumType), [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType), [AttributeSetType](ctp:api:type:AttributeSetType) of AttributeEnumType, or AttributeSetType of AttributeLocalizedEnumType.
 *
-*	If the Attribute is **not** required, the Attributes of all Products using those enum keys will also be removed in an [eventually consistent](/general-concepts#eventual-consistency) way. If the Attribute is required, the operation will fail with the [EnumValueIsUsed](/errors#product-types-400-enum-value-is-used) error code.
+*	If the Attribute is **not** required, the Attributes of all Products using those enum keys will also be removed in an [eventually consistent](/general-concepts#eventual-consistency) way. If the Attribute is required, the operation returns an [EnumValueIsUsed](ctp:api:type:EnumValueIsUsedError) error.
 *
  */
 type ProductTypeRemoveEnumValuesAction struct {

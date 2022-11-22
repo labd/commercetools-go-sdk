@@ -99,7 +99,7 @@ func (obj InventoryEntryResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type InventoryEntryUpdate struct {
-	// Expected version of the InventoryEntry on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// Expected version of the InventoryEntry on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the InventoryEntry.
 	Actions []InventoryEntryUpdateAction `json:"actions"`
@@ -270,7 +270,7 @@ type InventoryEntrySetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -349,7 +349,7 @@ func (obj InventoryEntrySetRestockableInDaysAction) MarshalJSON() ([]byte, error
 }
 
 /**
-*	If an entry with the same `sku` and `supplyChannel` already exists, this action will fail and a [400 Bad Request](/../api/errors#400-bad-request-1) `DuplicateField` error will be returned.
+*	If an entry with the same `sku` and `supplyChannel` already exists, an [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
  */
 type InventoryEntrySetSupplyChannelAction struct {
 	// Value to set. If empty, any existing value will be removed.

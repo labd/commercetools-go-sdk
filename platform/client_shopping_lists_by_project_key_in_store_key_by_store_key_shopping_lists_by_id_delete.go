@@ -27,13 +27,16 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) D
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDeleteInput struct {
+	Expand      []string
 	DataErasure *bool
 	Version     int
-	Expand      []string
 }
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
+	}
 	if input.DataErasure != nil {
 		if *input.DataErasure {
 			values.Add("dataErasure", "true")
@@ -42,10 +45,15 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelet
 		}
 	}
 	values.Add("version", strconv.Itoa(input.Version))
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
-	}
 	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDeleteInput{}
+	}
+	rb.params.Expand = v
+	return rb
 }
 
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) DataErasure(v bool) *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete {
@@ -64,14 +72,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) 
 	return rb
 }
 
-func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDeleteInput{}
-	}
-	rb.params.Expand = v
-	return rb
-}
-
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDeleteInput) *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete {
 	rb.params = &input
 	return rb
@@ -80,6 +80,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodDelete) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

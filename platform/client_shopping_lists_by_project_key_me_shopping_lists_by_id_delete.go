@@ -27,25 +27,17 @@ func (r *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) Dump() map[string]i
 }
 
 type ByProjectKeyMeShoppingListsByIDRequestMethodDeleteInput struct {
-	Version int
 	Expand  []string
+	Version int
 }
 
 func (input *ByProjectKeyMeShoppingListsByIDRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
-	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
+	values.Add("version", strconv.Itoa(input.Version))
 	return values
-}
-
-func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) Version(v int) *ByProjectKeyMeShoppingListsByIDRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyMeShoppingListsByIDRequestMethodDeleteInput{}
-	}
-	rb.params.Version = v
-	return rb
 }
 
 func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) Expand(v []string) *ByProjectKeyMeShoppingListsByIDRequestMethodDelete {
@@ -53,6 +45,14 @@ func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) Expand(v []string)
 		rb.params = &ByProjectKeyMeShoppingListsByIDRequestMethodDeleteInput{}
 	}
 	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) Version(v int) *ByProjectKeyMeShoppingListsByIDRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyMeShoppingListsByIDRequestMethodDeleteInput{}
+	}
+	rb.params.Version = v
 	return rb
 }
 

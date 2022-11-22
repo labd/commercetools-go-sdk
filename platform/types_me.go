@@ -1106,16 +1106,29 @@ func mapDiscriminatorMyQuoteUpdateAction(input interface{}) (MyQuoteUpdateAction
 	return nil, nil
 }
 
+/**
+*	A [MyShoppingListDraft](ctp:api:type:MyShoppingListDraft) is the object submitted as payload to the [Create MyShoppingList request](#create-shoppinglist).
+*	The `customer` field of [ShoppingList](ctp:api:type:ShoppingList) is automatically set with
+*	a [password flow token](/authorization#password-flow).
+*	The `anonymousId` is automatically set with a [token for an anonymous session](/authorization#tokens-for-anonymous-sessions).
+*	The `key` and `slug` fields can not be set.
+*
+ */
 type MyShoppingListDraft struct {
-	Name          LocalizedString             `json:"name"`
-	Description   *LocalizedString            `json:"description,omitempty"`
-	LineItems     []ShoppingListLineItemDraft `json:"lineItems"`
-	TextLineItems []TextLineItemDraft         `json:"textLineItems"`
-	// The custom fields.
+	// Name of the [ShoppingList](ctp:api:type:ShoppingList).
+	Name LocalizedString `json:"name"`
+	// Description of the ShoppingList.
+	Description *LocalizedString `json:"description,omitempty"`
+	// [Line Items](ctp:api:type:ShoppingListLineItem) (containing Products) to add to the ShoppingList.
+	LineItems []ShoppingListLineItemDraft `json:"lineItems"`
+	// [Line Items](ctp:api:type:TextLineItem) (containing text values) to add to the ShoppingList.
+	TextLineItems []TextLineItemDraft `json:"textLineItems"`
+	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// The shopping list will be deleted automatically if it hasn't been modified for the specified amount of days.
-	DeleteDaysAfterLastModification *int                     `json:"deleteDaysAfterLastModification,omitempty"`
-	Store                           *StoreResourceIdentifier `json:"store,omitempty"`
+	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
+	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
+	// Assigns the new ShoppingList to the [Store](ctp:api:type:Store). The Store assignment can not be modified.
+	Store *StoreResourceIdentifier `json:"store,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1147,7 +1160,9 @@ func (obj MyShoppingListDraft) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListUpdate struct {
-	Version int                          `json:"version"`
+	// Expected version of the ShoppingList on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	Version int `json:"version"`
+	// List of update actions to be performed on the ShoppingList.
 	Actions []MyShoppingListUpdateAction `json:"actions"`
 }
 
@@ -1551,7 +1566,7 @@ type MyBusinessUnitSetAddressCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -1610,7 +1625,7 @@ type MyBusinessUnitSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -1920,7 +1935,7 @@ type MyCartSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -1986,7 +2001,7 @@ type MyCartSetLineItemCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2321,8 +2336,8 @@ type MyCustomerSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	Value interface{} `json:"value,omitempty"`
 }
 
@@ -2577,7 +2592,7 @@ type MyPaymentSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2639,7 +2654,7 @@ type MyPaymentSetTransactionCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2687,12 +2702,17 @@ func (obj MyQuoteRequestCancelAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListAddLineItemAction struct {
-	Sku       *string    `json:"sku,omitempty"`
-	ProductId *string    `json:"productId,omitempty"`
-	VariantId *int       `json:"variantId,omitempty"`
-	Quantity  *int       `json:"quantity,omitempty"`
-	AddedAt   *time.Time `json:"addedAt,omitempty"`
-	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	// `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
+	Sku *string `json:"sku,omitempty"`
+	// Unique identifier of a [Product](ctp:api:type:Product).
+	ProductId *string `json:"productId,omitempty"`
+	// `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
+	VariantId *int `json:"variantId,omitempty"`
+	// Number of Products in the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem).
+	Quantity *int `json:"quantity,omitempty"`
+	// Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// Custom Fields defined for the ShoppingListLineItem.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -2707,13 +2727,15 @@ func (obj MyShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListAddTextLineItemAction struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Name of the [TextLineItem](ctp:api:type:TextLineItem).
 	Name LocalizedString `json:"name"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Description of the TextLineItem.
 	Description *LocalizedString `json:"description,omitempty"`
-	Quantity    *int             `json:"quantity,omitempty"`
-	AddedAt     *time.Time       `json:"addedAt,omitempty"`
-	// The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+	// Number of entries in the TextLineItem.
+	Quantity *int `json:"quantity,omitempty"`
+	// Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
+	AddedAt *time.Time `json:"addedAt,omitempty"`
+	// Custom Fields defined for the TextLineItem.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -2728,8 +2750,10 @@ func (obj MyShoppingListAddTextLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListChangeLineItemQuantityAction struct {
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
 	LineItemId string `json:"lineItemId"`
-	Quantity   int    `json:"quantity"`
+	// New value to set. If `0`, the ShoppingListLineItem is removed from the ShoppingList.
+	Quantity int `json:"quantity"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2743,6 +2767,7 @@ func (obj MyShoppingListChangeLineItemQuantityAction) MarshalJSON() ([]byte, err
 }
 
 type MyShoppingListChangeLineItemsOrderAction struct {
+	// All existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) `id`s of the [ShoppingList](ctp:api:type:ShoppingList) in the desired new order.
 	LineItemOrder []string `json:"lineItemOrder"`
 }
 
@@ -2757,7 +2782,7 @@ func (obj MyShoppingListChangeLineItemsOrderAction) MarshalJSON() ([]byte, error
 }
 
 type MyShoppingListChangeNameAction struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
 
@@ -2772,8 +2797,9 @@ func (obj MyShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListChangeTextLineItemNameAction struct {
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
 	TextLineItemId string `json:"textLineItemId"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
 
@@ -2788,8 +2814,10 @@ func (obj MyShoppingListChangeTextLineItemNameAction) MarshalJSON() ([]byte, err
 }
 
 type MyShoppingListChangeTextLineItemQuantityAction struct {
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
 	TextLineItemId string `json:"textLineItemId"`
-	Quantity       int    `json:"quantity"`
+	// New value to set. If `0`, the TextLineItem is removed from the ShoppingList.
+	Quantity int `json:"quantity"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2803,6 +2831,7 @@ func (obj MyShoppingListChangeTextLineItemQuantityAction) MarshalJSON() ([]byte,
 }
 
 type MyShoppingListChangeTextLineItemsOrderAction struct {
+	// All existing [TextLineItem](ctp:api:type:TextLineItem) `id`s in the desired new order.
 	TextLineItemOrder []string `json:"textLineItemOrder"`
 }
 
@@ -2817,8 +2846,10 @@ func (obj MyShoppingListChangeTextLineItemsOrderAction) MarshalJSON() ([]byte, e
 }
 
 type MyShoppingListRemoveLineItemAction struct {
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
 	LineItemId string `json:"lineItemId"`
-	Quantity   *int   `json:"quantity,omitempty"`
+	// Amount to remove from the `quantity` of the ShoppingListLineItem. If not set, the ShoppingListLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the ShoppingListLineItem, the ShoppingListLineItem is removed from the ShoppingList.
+	Quantity *int `json:"quantity,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2832,8 +2863,10 @@ func (obj MyShoppingListRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListRemoveTextLineItemAction struct {
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
 	TextLineItemId string `json:"textLineItemId"`
-	Quantity       *int   `json:"quantity,omitempty"`
+	// Amount to remove from the `quantity` of the TextLineItem. If not set, the TextLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the TextLineItem, the TextLineItem is removed from the ShoppingList.
+	Quantity *int `json:"quantity,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2850,7 +2883,7 @@ type MyShoppingListSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2884,6 +2917,7 @@ func (obj MyShoppingListSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListSetDeleteDaysAfterLastModificationAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
@@ -2898,7 +2932,7 @@ func (obj MyShoppingListSetDeleteDaysAfterLastModificationAction) MarshalJSON() 
 }
 
 type MyShoppingListSetDescriptionAction struct {
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -2913,11 +2947,12 @@ func (obj MyShoppingListSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListSetLineItemCustomFieldAction struct {
+	// Unique identifier of an existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) in the [ShoppingList](ctp:api:type:ShoppingList).
 	LineItemId string `json:"lineItemId"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2933,11 +2968,12 @@ func (obj MyShoppingListSetLineItemCustomFieldAction) MarshalJSON() ([]byte, err
 }
 
 type MyShoppingListSetLineItemCustomTypeAction struct {
+	// Unique identifier of an existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) in the [ShoppingList](ctp:api:type:ShoppingList).
 	LineItemId string `json:"lineItemId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the LineItem.
+	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the ShoppingListLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingListLineItem.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2952,11 +2988,12 @@ func (obj MyShoppingListSetLineItemCustomTypeAction) MarshalJSON() ([]byte, erro
 }
 
 type MyShoppingListSetTextLineItemCustomFieldAction struct {
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
 	TextLineItemId string `json:"textLineItemId"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }
@@ -2972,6 +3009,7 @@ func (obj MyShoppingListSetTextLineItemCustomFieldAction) MarshalJSON() ([]byte,
 }
 
 type MyShoppingListSetTextLineItemCustomTypeAction struct {
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
 	TextLineItemId string `json:"textLineItemId"`
 	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the TextLineItem.
@@ -2991,8 +3029,9 @@ func (obj MyShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, 
 }
 
 type MyShoppingListSetTextLineItemDescriptionAction struct {
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
 	TextLineItemId string `json:"textLineItemId"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

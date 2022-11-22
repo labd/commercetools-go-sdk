@@ -12,9 +12,6 @@ type ByProjectKeyShoppingListsByIDRequestBuilder struct {
 	client     *Client
 }
 
-/**
-*	Gets a shopping list by ID.
- */
 func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Get() *ByProjectKeyShoppingListsByIDRequestMethodGet {
 	return &ByProjectKeyShoppingListsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/shopping-lists/%s", rb.projectKey, rb.id),

@@ -55,7 +55,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodGet) Wit
 }
 
 /**
-*	Gets a shopping list by ID.
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsByIDRequestMethodGet) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	var queryParams url.Values

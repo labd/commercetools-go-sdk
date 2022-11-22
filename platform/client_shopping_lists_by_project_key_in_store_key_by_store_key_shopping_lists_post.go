@@ -54,6 +54,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodPost) WithHe
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	When using this endpoint, the `store` field of a ShoppingList is always set to the Store specified in the path parameter.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

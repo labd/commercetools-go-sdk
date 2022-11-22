@@ -33,7 +33,7 @@ type CustomerGroupDraft struct {
 	// User-defined unique identifier for the CustomerGroup.
 	Key *string `json:"key,omitempty"`
 	// Unique value which must be different from any value used for `name` in [CustomerGroup](ctp:api:type:CustomerGroup) in the Project.
-	// If not, a `DuplicateField` [error](/../api/errors#400-bad-request-1) is thrown.
+	// If not, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	GroupName string `json:"groupName"`
 	// Custom Fields for the CustomerGroup.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -104,7 +104,7 @@ func (obj CustomerGroupResourceIdentifier) MarshalJSON() ([]byte, error) {
 
 type CustomerGroupUpdate struct {
 	// Expected version of the CustomerGroup on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the CustomerGroup.
 	Actions []CustomerGroupUpdateAction `json:"actions"`
@@ -189,7 +189,7 @@ type CustomerGroupSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Trying to remove a field that does not exist will fail with an [InvalidOperation](/../api/errors#general-400-invalid-operation) error.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	// If `value` is provided, it is set for the field defined by `name`.
 	Value interface{} `json:"value,omitempty"`
 }

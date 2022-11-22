@@ -54,6 +54,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodPost) 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

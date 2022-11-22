@@ -40,6 +40,9 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Head() *ByProjectKeyProduc
 	}
 }
 
+/**
+*	A failed response can return a [DuplicatePriceScope](ctp:api:type:DuplicatePriceScopeError), [DuplicateVariantValues](ctp:api:type:DuplicateVariantValuesError), [DuplicateAttributeValue](ctp:api:type:DuplicateAttributeValueError), or [DuplicateAttributeValues](ctp:api:type:DuplicateAttributeValuesError) error.
+ */
 func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Post(body ProductUpdate) *ByProjectKeyProductsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyProductsKeyByKeyRequestMethodPost{
 		body:   body,

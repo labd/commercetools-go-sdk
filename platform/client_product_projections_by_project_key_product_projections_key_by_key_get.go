@@ -143,9 +143,9 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) WithHeaders(he
 }
 
 /**
-*	Gets the current or staged representation of a product found by Key.
-*	When used with an API client that has the view_published_products:{projectKey} scope,
-*	this endpoint only returns published (current) product projections.
+*	Gets the current or staged representation of a [Product](ctp:api:type:Product) found by Key.
+*	When used with an API Client that has the `view_published_products:{projectKey}` scope,
+*	this endpoint only returns published (current) Product Projections.
 *
  */
 func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *ProductProjection, err error) {

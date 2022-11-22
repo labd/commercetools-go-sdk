@@ -210,7 +210,7 @@ const (
 )
 
 type StateUpdate struct {
-	// Expected version of the State on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the State on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the State.
 	Actions []StateUpdateAction `json:"actions"`

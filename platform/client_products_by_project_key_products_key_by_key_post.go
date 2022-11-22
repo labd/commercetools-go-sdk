@@ -31,6 +31,7 @@ type ByProjectKeyProductsKeyByKeyRequestMethodPostInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
+	LocaleProjection   []string
 	Expand             []string
 }
 
@@ -47,6 +48,9 @@ func (input *ByProjectKeyProductsKeyByKeyRequestMethodPostInput) Values() url.Va
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	for _, v := range input.LocaleProjection {
+		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -86,6 +90,14 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) PriceChannel(v string) 
 	return rb
 }
 
+func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) LocaleProjection(v []string) *ByProjectKeyProductsKeyByKeyRequestMethodPost {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodPostInput{}
+	}
+	rb.params.LocaleProjection = v
+	return rb
+}
+
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) Expand(v []string) *ByProjectKeyProductsKeyByKeyRequestMethodPost {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodPostInput{}
@@ -102,6 +114,10 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	A failed response can return a [DuplicatePriceScope](ctp:api:type:DuplicatePriceScopeError), [DuplicateVariantValues](ctp:api:type:DuplicateVariantValuesError), [DuplicateAttributeValue](ctp:api:type:DuplicateAttributeValueError), or [DuplicateAttributeValues](ctp:api:type:DuplicateAttributeValuesError) error.
+ */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Product, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

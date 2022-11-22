@@ -15,6 +15,9 @@ type ErrorByExtension struct {
 	Key *string `json:"key,omitempty"`
 }
 
+/**
+*	Represents a single error. Multiple errors may be included in an [ErrorResponse](ctp:api:type:ErrorResponse).
+ */
 type ErrorObject interface{}
 
 func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
@@ -29,12 +32,6 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 	}
 
 	switch discriminator {
-	case "access_denied":
-		obj := AccessDeniedError{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	case "AnonymousIdAlreadyInUse":
 		obj := AnonymousIdAlreadyInUseError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -71,6 +68,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "CountryNotConfiguredInStore":
+		obj := CountryNotConfiguredInStore{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DiscountCodeNonApplicable":
 		obj := DiscountCodeNonApplicableError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -99,13 +102,6 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		obj := DuplicateFieldError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
-		}
-		if obj.ConflictingResource != nil {
-			var err error
-			obj.ConflictingResource, err = mapDiscriminatorReference(obj.ConflictingResource)
-			if err != nil {
-				return nil, err
-			}
 		}
 		return obj, nil
 	case "DuplicateFieldWithConflictingResource":
@@ -177,6 +173,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "ExtensionNoResponse":
 		obj := ExtensionNoResponseError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionPredicateEvaluationFailed":
+		obj := ExtensionPredicateEvaluationFailedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -349,6 +351,25 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ProductAssignmentMissing":
+		obj := ProductAssignmentMissingError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPresentWithDifferentVariantSelection":
+		obj := ProductPresentWithDifferentVariantSelectionError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ExistingVariantSelection != nil {
+			var err error
+			obj.ExistingVariantSelection, err = mapDiscriminatorProductVariantSelection(obj.ExistingVariantSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "ProjectNotConfiguredForLanguages":
 		obj := ProjectNotConfiguredForLanguagesError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -439,85 +460,20 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "WeakPassword":
-		obj := WeakPasswordError{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	}
 	return nil, nil
 }
 
-type AccessDeniedError struct {
-	Message     string                 `json:"message"`
-	ExtraValues map[string]interface{} `json:"-"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *AccessDeniedError) UnmarshalJSON(data []byte) error {
-	type Alias AccessDeniedError
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
-		return err
-	}
-	delete(obj.ExtraValues, "code")
-	delete(obj.ExtraValues, "message")
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj AccessDeniedError) MarshalJSON() ([]byte, error) {
-	type Alias AccessDeniedError
-	data, err := json.Marshal(struct {
-		Action string `json:"code"`
-		*Alias
-	}{Action: "access_denied", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	for key, value := range obj.ExtraValues {
-		raw[key] = value
-	}
-
-	return json.Marshal(raw)
-
-}
-
-func (obj *AccessDeniedError) DecodeStruct(src map[string]interface{}) error {
-	{
-		obj.ExtraValues = make(map[string]interface{})
-		for key, value := range src {
-			//
-			if key != "code" {
-				obj.ExtraValues[key] = value
-			}
-		}
-	}
-	return nil
-}
-
-func (obj AccessDeniedError) Error() string {
-	if obj.Message != "" {
-		return obj.Message
-	}
-	return "unknown AccessDeniedError: failed to parse error response"
-}
-
+/**
+*	Returned when the anonymous ID is being used by another resource.
+*
+*	The client application should choose another anonymous ID or retrieve an automatically generated one.
+*
+ */
 type AnonymousIdAlreadyInUseError struct {
-	Message     string                 `json:"message"`
+	// `"The given anonymous ID is already in use."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -583,12 +539,23 @@ func (obj AnonymousIdAlreadyInUseError) Error() string {
 	return "unknown AnonymousIdAlreadyInUseError: failed to parse error response"
 }
 
+/**
+*	Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
+*
+*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+*
+ */
 type AttributeDefinitionAlreadyExistsError struct {
-	Message                    string                 `json:"message"`
-	ExtraValues                map[string]interface{} `json:"-"`
-	ConflictingProductTypeId   string                 `json:"conflictingProductTypeId"`
-	ConflictingProductTypeName string                 `json:"conflictingProductTypeName"`
-	ConflictingAttributeName   string                 `json:"conflictingAttributeName"`
+	// `"An attribute definition with name $attributeName already exists on product type $productTypeName."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the Product Type containing the conflicting name.
+	ConflictingProductTypeId string `json:"conflictingProductTypeId"`
+	// Name of the Product Type containing the conflicting name.
+	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -656,12 +623,23 @@ func (obj AttributeDefinitionAlreadyExistsError) Error() string {
 	return "unknown AttributeDefinitionAlreadyExistsError: failed to parse error response"
 }
 
+/**
+*	Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
+*
+*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+*
+ */
 type AttributeDefinitionTypeConflictError struct {
-	Message                    string                 `json:"message"`
-	ExtraValues                map[string]interface{} `json:"-"`
-	ConflictingProductTypeId   string                 `json:"conflictingProductTypeId"`
-	ConflictingProductTypeName string                 `json:"conflictingProductTypeName"`
-	ConflictingAttributeName   string                 `json:"conflictingAttributeName"`
+	// `"The attribute with name $attributeName has a different type on product type $productTypeName."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the Product Type containing the conflicting name.
+	ConflictingProductTypeId string `json:"conflictingProductTypeId"`
+	// Name of the Product Type containing the conflicting name.
+	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -729,10 +707,19 @@ func (obj AttributeDefinitionTypeConflictError) Error() string {
 	return "unknown AttributeDefinitionTypeConflictError: failed to parse error response"
 }
 
+/**
+*	Returned when an [AttributeDefinition](ctp:api:type:AttributeDefinition) does not exist for an Attribute `name`.
+*
+*	The error is returned as a failed response to the [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+*
+ */
 type AttributeNameDoesNotExistError struct {
-	Message              string                 `json:"message"`
-	ExtraValues          map[string]interface{} `json:"-"`
-	InvalidAttributeName string                 `json:"invalidAttributeName"`
+	// `"Attribute definition for $attributeName does not exist on type $typeName."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Non-existent Attribute name.
+	InvalidAttributeName string `json:"invalidAttributeName"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -798,8 +785,16 @@ func (obj AttributeNameDoesNotExistError) Error() string {
 	return "unknown AttributeNameDoesNotExistError: failed to parse error response"
 }
 
+/**
+*	Returned when a server-side problem is caused by scaling infrastructure resources.
+*
+*	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+*
+ */
 type BadGatewayError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -865,10 +860,18 @@ func (obj BadGatewayError) Error() string {
 	return "unknown BadGatewayError: failed to parse error response"
 }
 
+/**
+*	Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
+*	The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
+*
+ */
 type ConcurrentModificationError struct {
-	Message        string                 `json:"message"`
-	ExtraValues    map[string]interface{} `json:"-"`
-	CurrentVersion *int                   `json:"currentVersion,omitempty"`
+	// `"Object $resourceId has a different version than expected. Expected: $expectedVersion - Actual: $currentVersion."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Current version of the resource.
+	CurrentVersion *int `json:"currentVersion,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -934,15 +937,110 @@ func (obj ConcurrentModificationError) Error() string {
 	return "unknown ConcurrentModificationError: failed to parse error response"
 }
 
+/**
+*	Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Cart in Store](/../api/projects/carts#create-a-cart-in-a-store) request and [Set Country](/../api/projects/carts#set-country) update action on Carts.
+*	- [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests and [Set Country](/../api/projects/me-carts#set-country) on My Orders.
+*	- [Create Order by Import](/../api/projects/orders#create-order-by-import) request.
+*
+ */
+type CountryNotConfiguredInStore struct {
+	// `"The country $country is not configured for the store $store."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Countries configured for the Store.
+	StoreCountries []string `json:"storeCountries"`
+	// The country that is not configured for the Store but referenced on the Cart or Order.
+	Country string `json:"country"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CountryNotConfiguredInStore) UnmarshalJSON(data []byte) error {
+	type Alias CountryNotConfiguredInStore
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "storeCountries")
+	delete(obj.ExtraValues, "country")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CountryNotConfiguredInStore) MarshalJSON() ([]byte, error) {
+	type Alias CountryNotConfiguredInStore
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "CountryNotConfiguredInStore", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *CountryNotConfiguredInStore) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests on Orders.
+*	- [Create Order from Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*
+ */
 type DiscountCodeNonApplicableError struct {
-	Message           string                 `json:"message"`
-	ExtraValues       map[string]interface{} `json:"-"`
-	DiscountCode      *string                `json:"discountCode,omitempty"`
-	Reason            *string                `json:"reason,omitempty"`
-	DicountCodeId     *string                `json:"dicountCodeId,omitempty"`
-	ValidFrom         *time.Time             `json:"validFrom,omitempty"`
-	ValidUntil        *time.Time             `json:"validUntil,omitempty"`
-	ValidityCheckTime *time.Time             `json:"validityCheckTime,omitempty"`
+	// `"The discountCode $discountCodeId cannot be applied to the cart."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Discount Code passed to the Cart.
+	DiscountCode *string `json:"discountCode,omitempty"`
+	// `"DoesNotExist"` or `"TimeRangeNonApplicable"`
+	Reason *string `json:"reason,omitempty"`
+	// Unique identifier of the Discount Code.
+	DiscountCodeId *string `json:"discountCodeId,omitempty"`
+	// Date and time (UTC) from which the Discount Code is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Discount Code is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Date and time (UTC) the Discount Code validity check was last performed.
+	ValidityCheckTime *time.Time `json:"validityCheckTime,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -960,7 +1058,7 @@ func (obj *DiscountCodeNonApplicableError) UnmarshalJSON(data []byte) error {
 	delete(obj.ExtraValues, "message")
 	delete(obj.ExtraValues, "discountCode")
 	delete(obj.ExtraValues, "reason")
-	delete(obj.ExtraValues, "dicountCodeId")
+	delete(obj.ExtraValues, "discountCodeId")
 	delete(obj.ExtraValues, "validFrom")
 	delete(obj.ExtraValues, "validUntil")
 	delete(obj.ExtraValues, "validityCheckTime")
@@ -1013,10 +1111,17 @@ func (obj DiscountCodeNonApplicableError) Error() string {
 	return "unknown DiscountCodeNonApplicableError: failed to parse error response"
 }
 
+/**
+*	Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*
+ */
 type DuplicateAttributeValueError struct {
-	Message     string                 `json:"message"`
+	// `"Attribute can't have the same value in a different variant."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	Attribute   Attribute              `json:"attribute"`
+	// Conflicting Attributes.
+	Attribute Attribute `json:"attribute"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1082,10 +1187,17 @@ func (obj DuplicateAttributeValueError) Error() string {
 	return "unknown DuplicateAttributeValueError: failed to parse error response"
 }
 
+/**
+*	Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*
+ */
 type DuplicateAttributeValuesError struct {
-	Message     string                 `json:"message"`
+	// `"The set of attributes must be unique across all variants."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	Attributes  []Attribute            `json:"attributes"`
+	// Conflicting Attributes.
+	Attributes []Attribute `json:"attributes"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1151,10 +1263,17 @@ func (obj DuplicateAttributeValuesError) Error() string {
 	return "unknown DuplicateAttributeValuesError: failed to parse error response"
 }
 
+/**
+*	Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains duplicate keys.
+*
+ */
 type DuplicateEnumValuesError struct {
-	Message     string                 `json:"message"`
+	// `"The enum values contain duplicate keys: $listOfDuplicateKeys."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	Duplicates  []string               `json:"duplicates"`
+	// Duplicate keys.
+	Duplicates []string `json:"duplicates"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1220,13 +1339,19 @@ func (obj DuplicateEnumValuesError) Error() string {
 	return "unknown DuplicateEnumValuesError: failed to parse error response"
 }
 
+/**
+*	Returned when a field value conflicts with an existing value causing a duplicate.
+*
+ */
 type DuplicateFieldError struct {
-	Message        string                 `json:"message"`
-	ExtraValues    map[string]interface{} `json:"-"`
-	Field          *string                `json:"field,omitempty"`
-	DuplicateValue interface{}            `json:"duplicateValue,omitempty"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
-	ConflictingResource Reference `json:"conflictingResource,omitempty"`
+	// `"A duplicate value $duplicateValue exists for field $field."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the conflicting field.
+	Field string `json:"field"`
+	// Conflicting duplicate value.
+	DuplicateValue interface{} `json:"duplicateValue"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1236,13 +1361,6 @@ func (obj *DuplicateFieldError) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-	if obj.ConflictingResource != nil {
-		var err error
-		obj.ConflictingResource, err = mapDiscriminatorReference(obj.ConflictingResource)
-		if err != nil {
-			return err
-		}
-	}
 
 	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
 		return err
@@ -1251,7 +1369,6 @@ func (obj *DuplicateFieldError) UnmarshalJSON(data []byte) error {
 	delete(obj.ExtraValues, "message")
 	delete(obj.ExtraValues, "field")
 	delete(obj.ExtraValues, "duplicateValue")
-	delete(obj.ExtraValues, "conflictingResource")
 
 	return nil
 }
@@ -1301,12 +1418,20 @@ func (obj DuplicateFieldError) Error() string {
 	return "unknown DuplicateFieldError: failed to parse error response"
 }
 
+/**
+*	Returned when a field value conflicts with an existing value stored in a particular resource causing a duplicate.
+*
+ */
 type DuplicateFieldWithConflictingResourceError struct {
-	Message        string                 `json:"message"`
-	ExtraValues    map[string]interface{} `json:"-"`
-	Field          string                 `json:"field"`
-	DuplicateValue interface{}            `json:"duplicateValue"`
-	// A Reference represents a loose reference to another resource in the same Project identified by its `id`. The `typeId` indicates the type of the referenced resource. Each resource type has its corresponding Reference type, like [ChannelReference](ctp:api:type:ChannelReference).  A referenced resource can be embedded through [Reference Expansion](/general-concepts#reference-expansion). The expanded reference is the value of an additional `obj` field then.
+	// `"A duplicate value $duplicateValue exists for field $field on $conflictingResource."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the conflicting field.
+	Field string `json:"field"`
+	// Conflicting duplicate value.
+	DuplicateValue interface{} `json:"duplicateValue"`
+	// Reference to the resource that has the conflicting value.
 	ConflictingResource Reference `json:"conflictingResource"`
 }
 
@@ -1382,10 +1507,19 @@ func (obj DuplicateFieldWithConflictingResourceError) Error() string {
 	return "unknown DuplicateFieldWithConflictingResourceError: failed to parse error response"
 }
 
+/**
+*	Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*
+*	Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
+*
+ */
 type DuplicatePriceScopeError struct {
-	Message           string                 `json:"message"`
-	ExtraValues       map[string]interface{} `json:"-"`
-	ConflictingPrices []Price                `json:"conflictingPrices"`
+	// `"Duplicate price scope: $priceScope. The combination of currency, country, customerGroup and channel must be unique for each price of a product variant."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting Embedded Prices.
+	ConflictingPrices []Price `json:"conflictingPrices"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1451,20 +1585,34 @@ func (obj DuplicatePriceScopeError) Error() string {
 	return "unknown DuplicatePriceScopeError: failed to parse error response"
 }
 
+/**
+*	Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
+*	Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
+*
+*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
 type DuplicateStandalonePriceScopeError struct {
-	Message     string                 `json:"message"`
+	// `"Duplicate standalone price scope for SKU: $sku. The combination of SKU, currency, country, customerGroup, channel, validFrom and validUntil must be unique for each standalone price."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+	// Reference to the conflicting Standalone Price.
 	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
-	Sku                        string                   `json:"sku"`
-	Currency                   string                   `json:"currency"`
-	Country                    *string                  `json:"country,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
+	Sku string `json:"sku"`
+	// Currency code of the country.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
-	Channel    *ChannelResourceIdentifier `json:"channel,omitempty"`
-	ValidFrom  *time.Time                 `json:"validFrom,omitempty"`
-	ValidUntil *time.Time                 `json:"validUntil,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Standalone Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Standalone Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1537,10 +1685,17 @@ func (obj DuplicateStandalonePriceScopeError) Error() string {
 	return "unknown DuplicateStandalonePriceScopeError: failed to parse error response"
 }
 
+/**
+*	Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*
+ */
 type DuplicateVariantValuesError struct {
-	Message       string                 `json:"message"`
-	ExtraValues   map[string]interface{} `json:"-"`
-	VariantValues VariantValues          `json:"variantValues"`
+	// `"A duplicate combination of the variant values (sku, key, images, prices, attributes) exists."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Every Product Variant must have a distinct combination of SKU, prices, and custom Attribute values.
+	VariantValues VariantValues `json:"variantValues"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1606,10 +1761,19 @@ func (obj DuplicateVariantValuesError) Error() string {
 	return "unknown DuplicateVariantValuesError: failed to parse error response"
 }
 
+/**
+*	Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
+*
+*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+*
+ */
 type EditPreviewFailedError struct {
-	Message     string                  `json:"message"`
-	ExtraValues map[string]interface{}  `json:"-"`
-	Result      OrderEditPreviewFailure `json:"result"`
+	// `"Error while applying staged actions. ShippingMethods could not be determined."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// State of the OrderEdit where the `stagedActions` cannot be applied to the Order.
+	Result OrderEditPreviewFailure `json:"result"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1675,11 +1839,19 @@ func (obj EditPreviewFailedError) Error() string {
 	return "unknown EditPreviewFailedError: failed to parse error response"
 }
 
+/**
+*	Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains a key that already exists.
+*
+ */
 type EnumKeyAlreadyExistsError struct {
-	Message                  string                 `json:"message"`
-	ExtraValues              map[string]interface{} `json:"-"`
-	ConflictingEnumKey       string                 `json:"conflictingEnumKey"`
-	ConflictingAttributeName string                 `json:"conflictingAttributeName"`
+	// `"The $attributeName attribute definition already contains an enum value with the key $enumKey."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting enum key.
+	ConflictingEnumKey string `json:"conflictingEnumKey"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1746,11 +1918,21 @@ func (obj EnumKeyAlreadyExistsError) Error() string {
 	return "unknown EnumKeyAlreadyExistsError: failed to parse error response"
 }
 
+/**
+*	Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) already contains a value with the given key.
+*
+*	The error is returned as a failed response to the [Change the key of an EnumValue](ctp:api:type:ProductTypeChangeEnumKeyAction) update action.
+*
+ */
 type EnumKeyDoesNotExistError struct {
-	Message                  string                 `json:"message"`
-	ExtraValues              map[string]interface{} `json:"-"`
-	ConflictingEnumKey       string                 `json:"conflictingEnumKey"`
-	ConflictingAttributeName string                 `json:"conflictingAttributeName"`
+	// `"The $fieldName field definition does not contain an enum value with the key $enumKey."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting enum key.
+	ConflictingEnumKey string `json:"conflictingEnumKey"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1817,8 +1999,16 @@ func (obj EnumKeyDoesNotExistError) Error() string {
 	return "unknown EnumKeyDoesNotExistError: failed to parse error response"
 }
 
+/**
+*	Returned when an enum value cannot be removed from an Attribute as it is being used by a Product.
+*
+*	The error is returned as a failed response to the [Remove EnumValues from AttributeDefinition](ctp:api:type:ProductTypeRemoveEnumValuesAction) update action.
+*
+ */
 type EnumValueIsUsedError struct {
-	Message     string                 `json:"message"`
+	// `"$enumKeysTranscript is used by some products and cannot be deleted because the $attributeName attribute is required."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -1884,8 +2074,16 @@ func (obj EnumValueIsUsedError) Error() string {
 	return "unknown EnumValueIsUsedError: failed to parse error response"
 }
 
+/**
+*	Returned when during an order update of [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) the new enum values do not match the existing ones.
+*
+*	The error is returned as a failed response to the [Change the order of EnumValues](ctp:api:type:ProductTypeChangePlainEnumValueOrderAction) and [Change the order of LocalizedEnumValues](ctp:api:type:ProductTypeChangeLocalizedEnumValueOrderAction) update actions.
+*
+ */
 type EnumValuesMustMatchError struct {
-	Message     string                 `json:"message"`
+	// `"The given values must be equal to the existing enum values."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -1951,12 +2149,19 @@ func (obj EnumValuesMustMatchError) Error() string {
 	return "unknown EnumValuesMustMatchError: failed to parse error response"
 }
 
+/**
+*	Base representation of an error response containing common fields to all errors.
+*
+ */
 type ErrorResponse struct {
-	StatusCode       int           `json:"statusCode"`
-	Message          string        `json:"message"`
-	ErrorMessage     *string       `json:"error,omitempty"`
-	ErrorDescription *string       `json:"error_description,omitempty"`
-	Errors           []ErrorObject `json:"errors"`
+	// HTTP status code corresponding to the error.
+	StatusCode int `json:"statusCode"`
+	// First error message in the `errors` array.
+	Message string `json:"message"`
+	// Errors returned for a request.
+	//
+	// A single error response can contain multiple errors if the errors are related to the same HTTP status code such as `400`.
+	Errors []ErrorObject `json:"errors"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2008,13 +2213,71 @@ func (obj ErrorResponse) Error() string {
 	return "unknown ErrorResponse: failed to parse error response"
 }
 
+/**
+*	Represents errors related to authentication and authorization in a format conforming to the [OAuth 2.0 specification](https://tools.ietf.org/html/rfc6749#section-5.2).
+*
+ */
+type AuthErrorResponse struct {
+	// HTTP status code corresponding to the error.
+	StatusCode int `json:"statusCode"`
+	// First error message in the `errors` array.
+	Message string `json:"message"`
+	// Authentication and authorization-related errors returned for a request.
+	Errors []ErrorObject `json:"errors"`
+	// Error code as per the [OAuth 2.0 specification](https://tools.ietf.org/html/rfc6749#section-5.2). For example: `"access_denied"`.
+	ErrorMessage string `json:"error"`
+	// Plain text description of the first error.
+	ErrorDescription *string `json:"error_description,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AuthErrorResponse) UnmarshalJSON(data []byte) error {
+	type Alias AuthErrorResponse
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Errors {
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (obj AuthErrorResponse) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AuthErrorResponse: failed to parse error response"
+}
+
+/**
+*	Returned when the response from the API Extension could not be parsed successfully (such as a `500` HTTP status code, or an invalid JSON response).
+*
+ */
 type ExtensionBadResponseError struct {
-	Message     string                 `json:"message"`
+	// Description of the invalid Extension response. For example, `"The extension did not return the expected JSON."`.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
-	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
-	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
+	// User-defined localized description of the error.
+	LocalizedMessage *LocalizedString `json:"localizedMessage,omitempty"`
+	// Any information that should be returned to the API caller.
+	ExtensionExtraInfo *interface{} `json:"extensionExtraInfo,omitempty"`
+	// Additional errors related to the API Extension.
+	ExtensionErrors []ExtensionError `json:"extensionErrors"`
+	// The response body returned by the Extension.
+	ExtensionBody *string `json:"extensionBody,omitempty"`
+	// Http status code returned by the Extension.
+	ExtensionStatusCode *int `json:"extensionStatusCode,omitempty"`
+	// Unique identifier of the Extension.
+	ExtensionId string `json:"extensionId"`
+	// User-defined unique identifier of the Extension.
+	ExtensionKey *string `json:"extensionKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2032,7 +2295,11 @@ func (obj *ExtensionBadResponseError) UnmarshalJSON(data []byte) error {
 	delete(obj.ExtraValues, "message")
 	delete(obj.ExtraValues, "localizedMessage")
 	delete(obj.ExtraValues, "extensionExtraInfo")
-	delete(obj.ExtraValues, "errorByExtension")
+	delete(obj.ExtraValues, "extensionErrors")
+	delete(obj.ExtraValues, "extensionBody")
+	delete(obj.ExtraValues, "extensionStatusCode")
+	delete(obj.ExtraValues, "extensionId")
+	delete(obj.ExtraValues, "extensionKey")
 
 	return nil
 }
@@ -2082,11 +2349,82 @@ func (obj ExtensionBadResponseError) Error() string {
 	return "unknown ExtensionBadResponseError: failed to parse error response"
 }
 
+type ExtensionError struct {
+	// Error code caused by the Extension. For example, `InvalidField`.
+	Code string `json:"code"`
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Unique identifier of the Extension.
+	ExtensionId string `json:"extensionId"`
+	// User-defined unique identifier of the Extension.
+	ExtensionKey *string `json:"extensionKey,omitempty"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "extensionId")
+	delete(obj.ExtraValues, "extensionKey")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionError
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj ExtensionError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionError: failed to parse error response"
+}
+
+/**
+*	Returned when the API Extension does not respond within the [time limit](/../api/projects/api-extensions#time-limits), or could not be reached.
+*
+ */
 type ExtensionNoResponseError struct {
-	Message      string                 `json:"message"`
-	ExtraValues  map[string]interface{} `json:"-"`
-	ExtensionId  string                 `json:"extensionId"`
-	ExtensionKey *string                `json:"extensionKey,omitempty"`
+	// `"Extension did not respond in time."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the API Extension.
+	ExtensionId string `json:"extensionId"`
+	// User-defined unique identifier of the API Extension, if available.
+	ExtensionKey *string `json:"extensionKey,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2153,13 +2491,98 @@ func (obj ExtensionNoResponseError) Error() string {
 	return "unknown ExtensionNoResponseError: failed to parse error response"
 }
 
-type ExtensionUpdateActionsFailedError struct {
-	Message     string                 `json:"message"`
+/**
+*	Returned when the predicate defined in the [ExtensionTrigger](ctp:api:type:ExtensionTrigger) could not be evaluated due to a missing field.
+*
+ */
+type ExtensionPredicateEvaluationFailedError struct {
+	// `"The compared field $fieldName is not present."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
-	LocalizedMessage   *LocalizedString `json:"localizedMessage,omitempty"`
-	ExtensionExtraInfo *interface{}     `json:"extensionExtraInfo,omitempty"`
-	ErrorByExtension   ErrorByExtension `json:"errorByExtension"`
+	// Details about the API Extension that was involved in the error.
+	ErrorByExtension ErrorByExtension `json:"errorByExtension"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionPredicateEvaluationFailedError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionPredicateEvaluationFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "errorByExtension")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionPredicateEvaluationFailedError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionPredicateEvaluationFailedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionPredicateEvaluationFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExtensionPredicateEvaluationFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExtensionPredicateEvaluationFailedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionPredicateEvaluationFailedError: failed to parse error response"
+}
+
+/**
+*	Returned when update actions could not be applied to the resource (for example, because a referenced resource does not exist).
+*	This would result in a [400 Bad Request](#400-bad-request) response if the same update action was sent from a regular client.
+*
+ */
+type ExtensionUpdateActionsFailedError struct {
+	// `"The extension returned update actions that could not be executed."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// User-defined localized description of the error.
+	LocalizedMessage *LocalizedString `json:"localizedMessage,omitempty"`
+	// Any information that should be returned to the API caller.
+	ExtensionExtraInfo *interface{} `json:"extensionExtraInfo,omitempty"`
+	// Additional errors related to the API Extension.
+	ExtensionErrors []ExtensionError `json:"extensionErrors"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2177,7 +2600,7 @@ func (obj *ExtensionUpdateActionsFailedError) UnmarshalJSON(data []byte) error {
 	delete(obj.ExtraValues, "message")
 	delete(obj.ExtraValues, "localizedMessage")
 	delete(obj.ExtraValues, "extensionExtraInfo")
-	delete(obj.ExtraValues, "errorByExtension")
+	delete(obj.ExtraValues, "extensionErrors")
 
 	return nil
 }
@@ -2227,8 +2650,14 @@ func (obj ExtensionUpdateActionsFailedError) Error() string {
 	return "unknown ExtensionUpdateActionsFailedError: failed to parse error response"
 }
 
+/**
+*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
+*
+ */
 type ExternalOAuthFailedError struct {
-	Message     string                 `json:"message"`
+	// Plain text description detailing the external OAuth error. For example, `"External OAuth did not respond in time."`.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2294,8 +2723,14 @@ func (obj ExternalOAuthFailedError) Error() string {
 	return "unknown ExternalOAuthFailedError: failed to parse error response"
 }
 
+/**
+*	Returned when the requested feature was removed.
+*
+ */
 type FeatureRemovedError struct {
-	Message     string                 `json:"message"`
+	// Description of the feature that is removed.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2361,8 +2796,16 @@ func (obj FeatureRemovedError) Error() string {
 	return "unknown FeatureRemovedError: failed to parse error response"
 }
 
+/**
+*	Returned when a server-side problem occurs.
+*
+*	If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
+*
+ */
 type GeneralError struct {
-	Message     string                 `json:"message"`
+	// Description about any known details of the problem, for example, `"Write operations are temporarily unavailable"`.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2429,7 +2872,9 @@ func (obj GeneralError) Error() string {
 }
 
 type InsufficientScopeError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the cause of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2495,8 +2940,14 @@ func (obj InsufficientScopeError) Error() string {
 	return "unknown InsufficientScopeError: failed to parse error response"
 }
 
+/**
+*	Returned when certain API-specific constraints were not met. For example, the specified [Discount Code](ctp:api:type:DiscountCode) was never applied and cannot be updated.
+*
+ */
 type InternalConstraintViolatedError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the constraints that were violated.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2562,8 +3013,19 @@ func (obj InternalConstraintViolatedError) Error() string {
 	return "unknown InternalConstraintViolatedError: failed to parse error response"
 }
 
+/**
+*	Returned when a Customer with the given credentials (matching the given email/password pair) is not found and authentication fails.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
+*	- [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+*
+ */
 type InvalidCredentialsError struct {
-	Message     string                 `json:"message"`
+	// `"Account with the given credentials not found."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2629,8 +3091,19 @@ func (obj InvalidCredentialsError) Error() string {
 	return "unknown InvalidCredentialsError: failed to parse error response"
 }
 
+/**
+*	Returned when the current password of the Customer does not match.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
+*	- [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+*
+ */
 type InvalidCurrentPasswordError struct {
-	Message     string                 `json:"message"`
+	// `"The given current password does not match."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2696,12 +3169,21 @@ func (obj InvalidCurrentPasswordError) Error() string {
 	return "unknown InvalidCurrentPasswordError: failed to parse error response"
 }
 
+/**
+*	Returned when a field has an invalid value.
+*
+ */
 type InvalidFieldError struct {
-	Message       string                 `json:"message"`
-	ExtraValues   map[string]interface{} `json:"-"`
-	Field         string                 `json:"field"`
-	InvalidValue  interface{}            `json:"invalidValue"`
-	AllowedValues []interface{}          `json:"allowedValues"`
+	// `"The value $invalidValue is not valid for field $field."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the field with the invalid value.
+	Field string `json:"field"`
+	// Value invalid for the field.
+	InvalidValue interface{} `json:"invalidValue"`
+	// Fixed set of allowed values for the field, if any.
+	AllowedValues []interface{} `json:"allowedValues"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2773,8 +3255,14 @@ func (obj InvalidFieldError) Error() string {
 	return "unknown InvalidFieldError: failed to parse error response"
 }
 
+/**
+*	Returned when an invalid input has been sent.
+*
+ */
 type InvalidInputError struct {
-	Message     string                 `json:"message"`
+	// Description of the constraints that are not met by the request. For example, `"Invalid $propertyName. It may be a non-empty string up to $maxLength"`.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -2840,11 +3328,21 @@ func (obj InvalidInputError) Error() string {
 	return "unknown InvalidInputError: failed to parse error response"
 }
 
+/**
+*	Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
+*
+*	The error is returned as a failed response to the [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests.
+*
+ */
 type InvalidItemShippingDetailsError struct {
-	Message     string                 `json:"message"`
+	// `"Inconsistent shipping details for $subject with ID $itemId. $subject quantity is $itemQuantity and shippingTargets quantity sum is $quantitySum."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	Subject     string                 `json:"subject"`
-	ItemId      string                 `json:"itemId"`
+	// `"LineItem"` or `"CustomLineItem"`
+	Subject string `json:"subject"`
+	// Unique identifier of the Line Item or Custom Line Item.
+	ItemId string `json:"itemId"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2911,9 +3409,20 @@ func (obj InvalidItemShippingDetailsError) Error() string {
 	return "unknown InvalidItemShippingDetailsError: failed to parse error response"
 }
 
+/**
+*	Returned when an invalid JSON input has been sent.
+*	Either the JSON is syntactically incorrect or does not conform to the expected shape (for example is missing a required field).
+*
+*	The client application should validate the input according to the constraints described in the error message before sending the request.
+*
+ */
 type InvalidJsonInputError struct {
-	Message     string                 `json:"message"`
+	// `"Request body does not contain valid JSON."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
+	// Further explanation about why the JSON is invalid.
+	DetailedErrorMessage string `json:"detailedErrorMessage"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -2929,6 +3438,7 @@ func (obj *InvalidJsonInputError) UnmarshalJSON(data []byte) error {
 	}
 	delete(obj.ExtraValues, "code")
 	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "detailedErrorMessage")
 
 	return nil
 }
@@ -2978,8 +3488,16 @@ func (obj InvalidJsonInputError) Error() string {
 	return "unknown InvalidJsonInputError: failed to parse error response"
 }
 
+/**
+*	Returned when the resources involved in the request are not in a valid state for the operation.
+*
+*	The client application should validate the constraints described in the error message before sending the request.
+*
+ */
 type InvalidOperationError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3046,7 +3564,9 @@ func (obj InvalidOperationError) Error() string {
 }
 
 type InvalidSubjectError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the cause of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3113,7 +3633,9 @@ func (obj InvalidSubjectError) Error() string {
 }
 
 type InvalidTokenError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the cause of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3179,8 +3701,16 @@ func (obj InvalidTokenError) Error() string {
 	return "unknown InvalidTokenError: failed to parse error response"
 }
 
+/**
+*	Returned when a language cannot be removed from a Project as it is being used by a Store.
+*
+*	The error is returned as a failed response to the [Change Languages](ctp:api:type:ProjectChangeLanguagesAction) update action.
+*
+ */
 type LanguageUsedInStoresError struct {
-	Message     string                 `json:"message"`
+	// `"Language(s) in use by a store cannot be deleted. Remove them in all the stores of this project first."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3246,16 +3776,33 @@ func (obj LanguageUsedInStoresError) Error() string {
 	return "unknown LanguageUsedInStoresError: failed to parse error response"
 }
 
+/**
+*	Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
+*	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
+*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests on Orders.
+*	- [Create Order from a Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*
+ */
 type MatchingPriceNotFoundError struct {
-	Message     string                 `json:"message"`
+	// `"The variant $variantId of product $productId does not contain a price for currency $currencyCode, $country, $customerGroup, $channel."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	ProductId   string                 `json:"productId"`
-	VariantId   int                    `json:"variantId"`
-	Currency    *string                `json:"currency,omitempty"`
-	Country     *string                `json:"country,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// Unique identifier of a [Product](ctp:api:type:Product).
+	ProductId string `json:"productId"`
+	// Unique identifier of a [ProductVariant](ctp:api:type:ProductVariant) in the Product.
+	VariantId int `json:"variantId"`
+	// Currency code of the country.
+	Currency *string `json:"currency,omitempty"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// Customer Group associated with the Price.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [Channel](ctp:api:type:Channel).
+	// Channel associated with the Price.
 	Channel *ChannelReference `json:"channel,omitempty"`
 }
 
@@ -3327,10 +3874,18 @@ func (obj MatchingPriceNotFoundError) Error() string {
 	return "unknown MatchingPriceNotFoundError: failed to parse error response"
 }
 
+/**
+*	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
+*
+*	The limits must be adjusted for this resource before sending the request again.
+*
+ */
 type MaxResourceLimitExceededError struct {
-	Message     string                 `json:"message"`
+	// `"You have exceeded the limit of $limit resources of type $resourceTypeId."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// Type of resource the value should reference. Supported resource type identifiers are:
+	// Resource type that reached its maximum limit of configured elements (for example, 100 Zones per Project).
 	ExceededResource ReferenceTypeId `json:"exceededResource"`
 }
 
@@ -3397,12 +3952,27 @@ func (obj MaxResourceLimitExceededError) Error() string {
 	return "unknown MaxResourceLimitExceededError: failed to parse error response"
 }
 
+/**
+*	Returned when one of the following states occur:
+*
+*	- [Channel](ctp:api:Channel) is added or set on a [Store](ctp:api:Store) with missing Channel `roles`.
+*	- [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
+*	- [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
 type MissingRoleOnChannelError struct {
-	Message     string                 `json:"message"`
+	// `"Given channel with $idOrKeyOfChannel does not have the required role $role."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a given [Channel](ctp:api:type:Channel).
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
-	// Describes the purpose and type of the Channel. A Channel can have one or more roles.
+	// - `ProductDistribution` for Product Distribution Channels allowed for the Store. Also required for [Standalone Prices](ctp:api:type:StandalonePrice).
+	// - `InventorySupply` for Inventory Supply Channels allowed for the Store.
 	MissingRole ChannelRoleEnum `json:"missingRole"`
 }
 
@@ -3470,12 +4040,26 @@ func (obj MissingRoleOnChannelError) Error() string {
 	return "unknown MissingRoleOnChannelError: failed to parse error response"
 }
 
+/**
+*	Returned when the Tax Category of at least one of the `lineItems`, `customLineItems`, or `shippingInfo` in the [Cart](ctp:api:type:Cart) is missing the [TaxRate](ctp:api:type:TaxRate) matching `country` and `state` given in the `shippingAddress` of that Cart.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Set Customer ID](ctp:api:type:CartSetCustomerIdAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
+*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests.
+*
+ */
 type MissingTaxRateForCountryError struct {
-	Message       string                 `json:"message"`
-	ExtraValues   map[string]interface{} `json:"-"`
-	TaxCategoryId string                 `json:"taxCategoryId"`
-	Country       *string                `json:"country,omitempty"`
-	State         *string                `json:"state,omitempty"`
+	// `"Tax category $taxCategoryId is missing a tax rate for country $countriesAndStates."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the [TaxCategory](ctp:api:type:TaxCategory).
+	TaxCategoryId string `json:"taxCategoryId"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// State within the country, such as Texas in the United States.
+	State *string `json:"state,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3543,8 +4127,16 @@ func (obj MissingTaxRateForCountryError) Error() string {
 	return "unknown MissingTaxRateForCountryError: failed to parse error response"
 }
 
+/**
+*	Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
+*
+*	The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+*
+ */
 type NoMatchingProductDiscountFoundError struct {
-	Message     string                 `json:"message"`
+	// `"Couldn't find a matching product discount for: productId=$productId, variantId=$variantId, price=$price."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3610,8 +4202,14 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 	return "unknown NoMatchingProductDiscountFoundError: failed to parse error response"
 }
 
+/**
+*	Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project.
+*
+ */
 type NotEnabledError struct {
-	Message     string                 `json:"message"`
+	// `"The category recommendations API is not yet enabled for your project."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3677,8 +4275,14 @@ func (obj NotEnabledError) Error() string {
 	return "unknown NotEnabledError: failed to parse error response"
 }
 
+/**
+*	Returned when the requested resource was not found.
+*
+ */
 type ObjectNotFoundError struct {
-	Message     string                 `json:"message"`
+	// `"A $resourceType with identifier $id was unexpectedly not found."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3744,11 +4348,24 @@ func (obj ObjectNotFoundError) Error() string {
 	return "unknown ObjectNotFoundError: failed to parse error response"
 }
 
+/**
+*	Returned when some of the [Line Items](ctp:api:type:LineItem) are out of stock at the time of placing an [Order](ctp:api:type:Order).
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart), [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+*	- [Create Order from a Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*
+ */
 type OutOfStockError struct {
-	Message     string                 `json:"message"`
+	// `"Some line items are out of stock at the time of placing the order: $itemSku."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	LineItems   []string               `json:"lineItems"`
-	Skus        []string               `json:"skus"`
+	// Unique identifiers of the Line Items that are out of stock.
+	LineItems []string `json:"lineItems"`
+	// SKUs of the Line Items that are out of stock.
+	Skus []string `json:"skus"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3815,8 +4432,16 @@ func (obj OutOfStockError) Error() string {
 	return "unknown OutOfStockError: failed to parse error response"
 }
 
+/**
+*	Returned when the service is having trouble handling the load.
+*
+*	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+*
+ */
 type OverCapacityError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -3882,22 +4507,38 @@ func (obj OverCapacityError) Error() string {
 	return "unknown OverCapacityError: failed to parse error response"
 }
 
+/**
+*	Returned when a given Price validity period conflicts with an existing one.
+*	Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
+*
+*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
 type OverlappingStandalonePriceValidityError struct {
-	Message     string                 `json:"message"`
+	// `Two standalone prices have overlapping validity periods."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// [Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+	// Reference to the conflicting Standalone Price.
 	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
-	Sku                        string                   `json:"sku"`
-	Currency                   string                   `json:"currency"`
-	Country                    *string                  `json:"country,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+	// SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
+	Sku string `json:"sku"`
+	// Currency code of the country.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
-	Channel               *ChannelResourceIdentifier `json:"channel,omitempty"`
-	ValidFrom             *time.Time                 `json:"validFrom,omitempty"`
-	ValidUntil            *time.Time                 `json:"validUntil,omitempty"`
-	ConflictingValidFrom  *time.Time                 `json:"conflictingValidFrom,omitempty"`
-	ConflictingValidUntil *time.Time                 `json:"conflictingValidUntil,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Standalone Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Standalone Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Date and time (UTC) from which the conflicting Standalone Price is valid.
+	ConflictingValidFrom *time.Time `json:"conflictingValidFrom,omitempty"`
+	// Date and time (UTC) until which the conflicting Standalone Price is valid.
+	ConflictingValidUntil *time.Time `json:"conflictingValidUntil,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3972,8 +4613,17 @@ func (obj OverlappingStandalonePriceValidityError) Error() string {
 	return "unknown OverlappingStandalonePriceValidityError: failed to parse error response"
 }
 
+/**
+*	Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
+*
+*	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+*	If the error persists, report it using the [Support Portal](https://support.commercetools.com).
+*
+ */
 type PendingOperationError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4039,11 +4689,24 @@ func (obj PendingOperationError) Error() string {
 	return "unknown PendingOperationError: failed to parse error response"
 }
 
+/**
+*	Returned when the Price, Tax Rate, or Shipping Rate of some Line Items changed since they were last added to the Cart.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests on Orders.
+*	- [Create Order from a Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*
+ */
 type PriceChangedError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the reason for the Price change. For example, `"The price or tax of some line items changed at the time of placing the order: $lineItems."`.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	LineItems   []string               `json:"lineItems"`
-	Shipping    bool                   `json:"shipping"`
+	// Unique identifiers of the Line Items for which the Price or [TaxRate](ctp:api:type:TaxRate) has changed.
+	LineItems []string `json:"lineItems"`
+	// `true` if the [ShippingRate](ctp:api:type:ShippingRate) has changed.
+	Shipping bool `json:"shipping"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4110,10 +4773,185 @@ func (obj PriceChangedError) Error() string {
 	return "unknown PriceChangedError: failed to parse error response"
 }
 
-type ProjectNotConfiguredForLanguagesError struct {
-	Message     string                 `json:"message"`
+/**
+*	Returned when a Product is not assigned to the Product Selection.
+*
+*	The error is returned as a failed response to the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+*
+ */
+type ProductAssignmentMissingError struct {
+	// `"A Product Variant Selection can only be set for a Product previously added to the Product Selection."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	Languages   []string               `json:"languages"`
+	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+	Product ProductReference `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductAssignmentMissingError) UnmarshalJSON(data []byte) error {
+	type Alias ProductAssignmentMissingError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "product")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductAssignmentMissingError) MarshalJSON() ([]byte, error) {
+	type Alias ProductAssignmentMissingError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ProductAssignmentMissing", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ProductAssignmentMissingError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ProductAssignmentMissingError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ProductAssignmentMissingError: failed to parse error response"
+}
+
+/**
+*	Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has a different [Product Variant Selection](ctp:api:type:ProductVariantSelection).
+*
+*	The error is returned as a failed response to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) update action.
+*
+ */
+type ProductPresentWithDifferentVariantSelectionError struct {
+	// `"Product is already present with the following different $variantSelections."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+	Product ProductReference `json:"product"`
+	// Existing Product Variant Selection for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+	ExistingVariantSelection ProductVariantSelection `json:"existingVariantSelection"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPresentWithDifferentVariantSelectionError) UnmarshalJSON(data []byte) error {
+	type Alias ProductPresentWithDifferentVariantSelectionError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ExistingVariantSelection != nil {
+		var err error
+		obj.ExistingVariantSelection, err = mapDiscriminatorProductVariantSelection(obj.ExistingVariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "product")
+	delete(obj.ExtraValues, "existingVariantSelection")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPresentWithDifferentVariantSelectionError) MarshalJSON() ([]byte, error) {
+	type Alias ProductPresentWithDifferentVariantSelectionError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ProductPresentWithDifferentVariantSelection", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ProductPresentWithDifferentVariantSelectionError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ProductPresentWithDifferentVariantSelectionError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ProductPresentWithDifferentVariantSelectionError: failed to parse error response"
+}
+
+/**
+*	Returned when the languages set for a Store are not supported by the Project.
+*
+*	The error is returned as a failed response to the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+*
+ */
+type ProjectNotConfiguredForLanguagesError struct {
+	// `"The project is not configured for given languages."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Languages configured for the Store.
+	Languages []string `json:"languages"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4184,7 +5022,8 @@ func (obj ProjectNotConfiguredForLanguagesError) Error() string {
 }
 
 type QueryComplexityLimitExceededError struct {
-	Message     string                 `json:"message"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4250,8 +5089,16 @@ func (obj QueryComplexityLimitExceededError) Error() string {
 	return "unknown QueryComplexityLimitExceededError: failed to parse error response"
 }
 
+/**
+*	Returned when the query times out.
+*
+*	If a query constantly times out, please check if it follows the [performance best practices](/../api/predicates/query#performance-considerations).
+*
+ */
 type QueryTimedOutError struct {
-	Message     string                 `json:"message"`
+	// `"The query timed out. If your query constantly times out, please check that it follows the performance best practices (see https://docs.commercetools.com/api/predicates/query#performance-considerations)."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4317,10 +5164,16 @@ func (obj QueryTimedOutError) Error() string {
 	return "unknown QueryTimedOutError: failed to parse error response"
 }
 
+/**
+*	Returned when a resource cannot be deleted because it is being referenced by another resource.
+*
+ */
 type ReferenceExistsError struct {
-	Message     string                 `json:"message"`
+	// `"Can not delete a $resource while it is referenced by at least one $referencedBy."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// Type of resource the value should reference. Supported resource type identifiers are:
+	// Type of referenced resource.
 	ReferencedBy *ReferenceTypeId `json:"referencedBy,omitempty"`
 }
 
@@ -4387,13 +5240,21 @@ func (obj ReferenceExistsError) Error() string {
 	return "unknown ReferenceExistsError: failed to parse error response"
 }
 
+/**
+*	Returned when a resource referenced by a [Reference](ctp:api:type:Reference) or a [ResourceIdentifier](ctp:api:type:ResourceIdentifier) could not be found.
+*
+ */
 type ReferencedResourceNotFoundError struct {
-	Message     string                 `json:"message"`
+	// `"The referenced object of type $typeId $predicate was not found. It either doesn't exist, or it can't be accessed from this endpoint (e.g., if the endpoint filters by store or customer account)."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// Type of resource the value should reference. Supported resource type identifiers are:
+	// Type of referenced resource.
 	TypeId ReferenceTypeId `json:"typeId"`
-	ID     *string         `json:"id,omitempty"`
-	Key    *string         `json:"key,omitempty"`
+	// Unique identifier of the referenced resource, if known.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the referenced resource, if known.
+	Key *string `json:"key,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4461,10 +5322,17 @@ func (obj ReferencedResourceNotFoundError) Error() string {
 	return "unknown ReferencedResourceNotFoundError: failed to parse error response"
 }
 
+/**
+*	Returned when a value is not defined for a required field.
+*
+ */
 type RequiredFieldError struct {
-	Message     string                 `json:"message"`
+	// `"A value is required for field $field."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	Field       string                 `json:"field"`
+	// Name of the field missing the value.
+	Field string `json:"field"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -4530,8 +5398,14 @@ func (obj RequiredFieldError) Error() string {
 	return "unknown RequiredFieldError: failed to parse error response"
 }
 
+/**
+*	Returned when the resource addressed by the request URL does not exist.
+*
+ */
 type ResourceNotFoundError struct {
-	Message     string                 `json:"message"`
+	// `"The Resource with ID $resourceId was not found."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4597,8 +5471,14 @@ func (obj ResourceNotFoundError) Error() string {
 	return "unknown ResourceNotFoundError: failed to parse error response"
 }
 
+/**
+*	Returned when the resource exceeds the maximum allowed size of 16 MB.
+*
+ */
 type ResourceSizeLimitExceededError struct {
-	Message     string                 `json:"message"`
+	// `"The resource size exceeds the maximal allowed size of 16 MB."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4664,8 +5544,16 @@ func (obj ResourceSizeLimitExceededError) Error() string {
 	return "unknown ResourceSizeLimitExceededError: failed to parse error response"
 }
 
+/**
+*	Returned when the indexing of Product information is deactivated in a Project.
+*
+*	To activate indexing, call [Change Product Search Indexing Enabled](ctp:api:type:ProjectChangeProductSearchIndexingEnabledAction) and set `enabled` to `true`.
+*
+ */
 type SearchDeactivatedError struct {
-	Message     string                 `json:"message"`
+	// `"The endpoint is deactivated for this project. Please enable it via the Project endpoint, via the Merchant Center in the Project settings, or reach out to Support to enable it."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4731,8 +5619,14 @@ func (obj SearchDeactivatedError) Error() string {
 	return "unknown SearchDeactivatedError: failed to parse error response"
 }
 
+/**
+*	Returned when a search query could not be completed due to an unexpected failure.
+*
+ */
 type SearchExecutionFailureError struct {
-	Message     string                 `json:"message"`
+	// `"Something went wrong during the search query execution. In most case this happens due to usage of non-existing fields and custom product attributes. Please verify all filters and facets in your search query and make sure that all paths are correct."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4798,8 +5692,14 @@ func (obj SearchExecutionFailureError) Error() string {
 	return "unknown SearchExecutionFailureError: failed to parse error response"
 }
 
+/**
+*	Returned when a search facet path could not be found.
+*
+ */
 type SearchFacetPathNotFoundError struct {
-	Message     string                 `json:"message"`
+	// `"Facet path $path not found."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4865,8 +5765,14 @@ func (obj SearchFacetPathNotFoundError) Error() string {
 	return "unknown SearchFacetPathNotFoundError: failed to parse error response"
 }
 
+/**
+*	Returned when the indexing of Product information is still in progress for Projects that have indexing activated.
+*
+ */
 type SearchIndexingInProgressError struct {
-	Message     string                 `json:"message"`
+	// `"The indexing is currently in progress. Please wait until the status is "Activated" to execute search requests."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4932,8 +5838,14 @@ func (obj SearchIndexingInProgressError) Error() string {
 	return "unknown SearchIndexingInProgressError: failed to parse error response"
 }
 
+/**
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct.
+*
+ */
 type SemanticErrorError struct {
-	Message     string                 `json:"message"`
+	// Plain text description of the error concerning the predicate. For example, `"Invalid country code $countryCode provided for the field $fieldDefinition."`.
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -4999,8 +5911,16 @@ func (obj SemanticErrorError) Error() string {
 	return "unknown SemanticErrorError: failed to parse error response"
 }
 
+/**
+*	Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
+*
+*	The error is returned as a failed response to the [Create Order from Cart](/../api/projects/orders#create-order-from-cart) or [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests.
+*
+ */
 type ShippingMethodDoesNotMatchCartError struct {
-	Message     string                 `json:"message"`
+	// `"The predicate does not match the cart."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -5066,8 +5986,14 @@ func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 	return "unknown ShippingMethodDoesNotMatchCartError: failed to parse error response"
 }
 
+/**
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax.
+*
+ */
 type SyntaxErrorError struct {
-	Message     string                 `json:"message"`
+	// `"Syntax error while parsing $fieldDefinition."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
 }
 
@@ -5134,74 +6060,10 @@ func (obj SyntaxErrorError) Error() string {
 }
 
 type VariantValues struct {
-	Sku        *string      `json:"sku,omitempty"`
-	Prices     []PriceDraft `json:"prices"`
-	Attributes []Attribute  `json:"attributes"`
-}
-
-type WeakPasswordError struct {
-	Message     string                 `json:"message"`
-	ExtraValues map[string]interface{} `json:"-"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *WeakPasswordError) UnmarshalJSON(data []byte) error {
-	type Alias WeakPasswordError
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
-		return err
-	}
-	delete(obj.ExtraValues, "code")
-	delete(obj.ExtraValues, "message")
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj WeakPasswordError) MarshalJSON() ([]byte, error) {
-	type Alias WeakPasswordError
-	data, err := json.Marshal(struct {
-		Action string `json:"code"`
-		*Alias
-	}{Action: "WeakPassword", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	for key, value := range obj.ExtraValues {
-		raw[key] = value
-	}
-
-	return json.Marshal(raw)
-
-}
-
-func (obj *WeakPasswordError) DecodeStruct(src map[string]interface{}) error {
-	{
-		obj.ExtraValues = make(map[string]interface{})
-		for key, value := range src {
-			//
-			if key != "code" {
-				obj.ExtraValues[key] = value
-			}
-		}
-	}
-	return nil
-}
-
-func (obj WeakPasswordError) Error() string {
-	if obj.Message != "" {
-		return obj.Message
-	}
-	return "unknown WeakPasswordError: failed to parse error response"
+	// SKU of the [ProductVariant](ctp:api:type:ProductVariant).
+	Sku *string `json:"sku,omitempty"`
+	// Embedded Prices of the [ProductVariant](ctp:api:type:ProductVariant).
+	Prices []PriceDraft `json:"prices"`
+	// Attributes of the [ProductVariant](ctp:api:type:ProductVariant).
+	Attributes []Attribute `json:"attributes"`
 }
