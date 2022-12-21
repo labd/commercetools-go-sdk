@@ -37,12 +37,14 @@ type SetUserAgentTransport struct {
 
 func (sat *SetUserAgentTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header.Set("User-Agent", sat.userAgent)
-	return sat.T.RoundTrip(req)
+	if sat.T != nil {
+		return sat.T.RoundTrip(req)
+	}
+	return http.DefaultTransport.RoundTrip(req)
 }
 
 // NewClient creates a new client based on the provided ClientConfig
 func NewClient(cfg *ClientConfig) (*Client, error) {
-
 	userAgent := cfg.UserAgent
 	if userAgent == "" {
 		userAgent = GetUserAgent()
