@@ -10,43 +10,47 @@ import (
 
 type Payment struct {
 	// Unique identifier of the Payment.
-	ID             string    `json:"id"`
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	ID string `json:"id"`
+	// Current version of the Payment.
+	Version int `json:"version"`
+	// Date and time (UTC) the Payment was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Payment was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// A reference to the customer this payment belongs to.
+	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// Identifies payments belonging to an anonymous session (the customer has not signed up/in yet).
+	// [Anonymous session](/../api/authorization#tokens-for-anonymous-sessions) associated with the Payment.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	ExternalId  *string `json:"externalId,omitempty"`
-	// The identifier that is used by the interface that manages the payment (usually the PSP).
-	// Cannot be changed once it has been set.
-	// The combination of this ID and the PaymentMethodInfo `paymentInterface` must be unique.
+	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	ExternalId *string `json:"externalId,omitempty"`
+	// Identifier used by the payment service that processes the Payment (for example, a PSP).
+	// The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
 	InterfaceId *string `json:"interfaceId,omitempty"`
-	// How much money this payment intends to receive from the customer.
-	// The value usually matches the cart or order gross total.
-	AmountPlanned TypedMoney `json:"amountPlanned"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	// Money value the Payment intends to receive from the customer.
+	// The value typically matches the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) gross total.
+	AmountPlanned CentPrecisionMoney `json:"amountPlanned"`
+	// Deprecated because its value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
 	AmountAuthorized TypedMoney `json:"amountAuthorized,omitempty"`
-	AuthorizedUntil  *string    `json:"authorizedUntil,omitempty"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+	// Deprecated because this field is of little practical value, as it is either not reliably known, or the authorization time is fixed for a PSP.
+	AuthorizedUntil *string `json:"authorizedUntil,omitempty"`
+	// Deprecated because its value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
 	AmountPaid TypedMoney `json:"amountPaid,omitempty"`
-	// Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
-	AmountRefunded    TypedMoney        `json:"amountRefunded,omitempty"`
+	// Deprecated because its value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
+	AmountRefunded TypedMoney `json:"amountRefunded,omitempty"`
+	// Information regarding the payment interface (for example, a PSP), and the specific payment method used.
 	PaymentMethodInfo PaymentMethodInfo `json:"paymentMethodInfo"`
-	PaymentStatus     PaymentStatus     `json:"paymentStatus"`
-	// A list of financial transactions of different TransactionTypes with different TransactionStates.
+	// Current status of the Payment.
+	PaymentStatus PaymentStatus `json:"paymentStatus"`
+	// Financial transactions of the Payment. Each Transaction has a [TransactionType](ctp:api:type:TransactionType) and a [TransactionState](ctp:api:type:TransactionState).
 	Transactions []Transaction `json:"transactions"`
-	// Interface interactions can be requests sent to the PSP, responses received from the PSP or notifications received from the PSP.
-	// Some interactions may result in a transaction.
-	// If so, the `interactionId` in the Transaction should be set to match the ID of the PSP for the interaction.
-	// Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
+	// Represents information exchange with the payment service, for example, a PSP. An interaction may be a request sent, or a response or notification received from the payment service.
 	InterfaceInteractions []CustomFields `json:"interfaceInteractions"`
-	Custom                *CustomFields  `json:"custom,omitempty"`
+	// Custom Fields for the Payment.
+	Custom *CustomFields `json:"custom,omitempty"`
 	// User-defined unique identifier of the Payment.
 	Key *string `json:"key,omitempty"`
 }
@@ -57,13 +61,6 @@ func (obj *Payment) UnmarshalJSON(data []byte) error {
 	type Alias Payment
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
-	}
-	if obj.AmountPlanned != nil {
-		var err error
-		obj.AmountPlanned, err = mapDiscriminatorTypedMoney(obj.AmountPlanned)
-		if err != nil {
-			return err
-		}
 	}
 	if obj.AmountAuthorized != nil {
 		var err error
@@ -91,41 +88,37 @@ func (obj *Payment) UnmarshalJSON(data []byte) error {
 }
 
 type PaymentDraft struct {
-	// A reference to the customer this payment belongs to.
+	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
-	// Identifies payments belonging to an anonymous session (the customer has not signed up/in yet).
+	// [Anonymous session](/../api/authorization#tokens-for-anonymous-sessions) associated with the Payment.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	ExternalId  *string `json:"externalId,omitempty"`
-	// The identifier that is used by the interface that manages the payment (usually the PSP).
-	// Cannot be changed once it has been set.
-	// The combination of this ID and the PaymentMethodInfo `paymentInterface` must be unique.
+	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	ExternalId *string `json:"externalId,omitempty"`
+	// Identifier used by the payment service that processes the Payment (for example, a PSP).
+	// The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
+	// Once set, it cannot be changed.
 	InterfaceId *string `json:"interfaceId,omitempty"`
-	// How much money this payment intends to receive from the customer.
-	// The value usually matches the cart or order gross total.
+	// Money value the Payment intends to receive from the customer.
+	// The value typically matches the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) gross total.
 	AmountPlanned Money `json:"amountPlanned"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	AmountAuthorized *Money  `json:"amountAuthorized,omitempty"`
-	AuthorizedUntil  *string `json:"authorizedUntil,omitempty"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
+	AmountAuthorized *Money `json:"amountAuthorized,omitempty"`
+	// Deprecated because this field is of little practical value, as it is either not reliably known, or the authorization time is fixed for a PSP.
+	AuthorizedUntil *string `json:"authorizedUntil,omitempty"`
+	// Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
 	AmountPaid *Money `json:"amountPaid,omitempty"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
-	AmountRefunded    *Money              `json:"amountRefunded,omitempty"`
-	PaymentMethodInfo *PaymentMethodInfo  `json:"paymentMethodInfo,omitempty"`
-	PaymentStatus     *PaymentStatusDraft `json:"paymentStatus,omitempty"`
-	// A list of financial transactions of different TransactionTypes with different TransactionStates.
+	// Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
+	AmountRefunded *Money `json:"amountRefunded,omitempty"`
+	// Information regarding the payment interface (for example, a PSP), and the specific payment method used.
+	PaymentMethodInfo *PaymentMethodInfo `json:"paymentMethodInfo,omitempty"`
+	// Current status of the Payment.
+	PaymentStatus *PaymentStatusDraft `json:"paymentStatus,omitempty"`
+	// Financial transactions of the Payment. Each Transaction has a [TransactionType](ctp:api:type:TransactionType) and a [TransactionState](ctp:api:type:TransactionState).
 	Transactions []TransactionDraft `json:"transactions"`
-	// Interface interactions can be requests send to the PSP, responses received from the PSP or notifications received from the PSP.
-	// Some interactions may result in a transaction.
-	// If so, the `interactionId` in the Transaction should be set to match the ID of the PSP for the interaction.
-	// Interactions are managed by the PSP integration and are usually neither written nor read by the user facing frontends or other services.
+	// Represents information exchange with the payment service, for example, a PSP. An interaction may be a request sent, or a response or notification received from the payment service.
 	InterfaceInteractions []CustomFieldsDraft `json:"interfaceInteractions"`
-	Custom                *CustomFieldsDraft  `json:"custom,omitempty"`
+	// Custom Fields for the Payment.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// User-defined unique identifier for the Payment.
 	Key *string `json:"key,omitempty"`
 }
@@ -159,26 +152,34 @@ func (obj PaymentDraft) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentMethodInfo struct {
-	// The interface that handles the payment (usually a PSP).
-	// Cannot be changed once it has been set.
-	// The combination of Payment`interfaceId` and this field must be unique.
+	// Payment service that processes the Payment (for example, a PSP).
+	// Once set, it cannot be changed.
+	// The combination of `paymentInterface` and the `interfaceId` of a [Payment](ctp:api:type:Payment) must be unique.
 	PaymentInterface *string `json:"paymentInterface,omitempty"`
-	// The payment method that is used, e.g.
-	// e.g.
-	// a conventional string representing Credit Card, Cash Advance etc.
+	// Payment method used, for example, credit card, or cash advance.
 	Method *string `json:"method,omitempty"`
-	// A human-readable, localized name for the payment method, e.g.
-	// 'Credit Card'.
+	// Localizable name of the payment method.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Payment](ctp:api:type:Payment).
+*
+ */
 type PaymentPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
+	Limit int `json:"limit"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int       `json:"offset"`
+	Offset int `json:"offset"`
+	// [Payments](ctp:api:type:Payment) matching the query.
 	Results []Payment `json:"results"`
 }
 
@@ -204,7 +205,7 @@ func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
 *
  */
 type PaymentResourceIdentifier struct {
@@ -225,22 +226,27 @@ func (obj PaymentResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentStatus struct {
-	// A code describing the current status returned by the interface that processes the payment.
+	// External reference that identifies the current status of the Payment.
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
-	// A text describing the current status returned by the interface that processes the payment.
-	InterfaceText *string         `json:"interfaceText,omitempty"`
-	State         *StateReference `json:"state,omitempty"`
+	// Text describing the current status of the Payment.
+	InterfaceText *string `json:"interfaceText,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	State *StateReference `json:"state,omitempty"`
 }
 
 type PaymentStatusDraft struct {
+	// External reference that identifies the current status of the Payment.
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
+	// Text describing the current status of the Payment.
 	InterfaceText *string `json:"interfaceText,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State *StateResourceIdentifier `json:"state,omitempty"`
 }
 
 type PaymentUpdate struct {
-	Version int                   `json:"version"`
+	// Expected version of the Payment on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Payment.
 	Actions []PaymentUpdateAction `json:"actions"`
 }
 
@@ -424,57 +430,48 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 	return nil, nil
 }
 
+/**
+*	Represents a financial transaction typically created as a result of a notification from the payment service.
+*
+ */
 type Transaction struct {
 	// Unique identifier of the Transaction.
 	ID string `json:"id"`
-	// The time at which the transaction took place.
+	// Date and time (UTC) the Transaction took place.
 	Timestamp *time.Time `json:"timestamp,omitempty"`
-	// The type of this transaction.
-	Type   TransactionType `json:"type"`
-	Amount TypedMoney      `json:"amount"`
-	// The identifier that is used by the interface that managed the transaction (usually the PSP).
-	// If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
+	// Type of the Transaction. For example, `Authorization`.
+	Type TransactionType `json:"type"`
+	// Money value of the Transaction.
+	Amount CentPrecisionMoney `json:"amount"`
+	// Identifier used by the interface that manages the Transaction (usually the PSP).
+	// If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction can be found with this ID.
 	InteractionId *string `json:"interactionId,omitempty"`
-	// The state of this transaction.
-	State *TransactionState `json:"state,omitempty"`
-	// Custom Fields for the Transaction.
+	// State of the Transaction.
+	State TransactionState `json:"state"`
+	// Custom Fields defined for the Transaction.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *Transaction) UnmarshalJSON(data []byte) error {
-	type Alias Transaction
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Amount != nil {
-		var err error
-		obj.Amount, err = mapDiscriminatorTypedMoney(obj.Amount)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
 type TransactionDraft struct {
-	// The time at which the transaction took place.
+	// Date and time (UTC) the Transaction took place.
 	Timestamp *time.Time `json:"timestamp,omitempty"`
-	// The type of this transaction.
-	Type   TransactionType `json:"type"`
-	Amount Money           `json:"amount"`
-	// The identifier that is used by the interface that managed the transaction (usually the PSP).
-	// If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
+	// Type of the Transaction.
+	Type TransactionType `json:"type"`
+	// Money value for the Transaction.
+	Amount Money `json:"amount"`
+	// Identifier used by the payment service that manages the Transaction.
+	// Can be used to correlate the Transaction to an interface interaction.
 	InteractionId *string `json:"interactionId,omitempty"`
-	// The state of this transaction.
-	// If not set, defaults to `Initial`.
+	// State of the Transaction.
 	State *TransactionState `json:"state,omitempty"`
-	// Custom Fields for the Transaction.
+	// Custom Fields of the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
+/**
+*	Transactions can be in one of the following States:
+*
+ */
 type TransactionState string
 
 const (
@@ -494,9 +491,15 @@ const (
 	TransactionTypeChargeback          TransactionType = "Chargeback"
 )
 
+/**
+*	Adding a Payment interaction generates the [PaymentInteractionAdded](ctp:api:type:PaymentInteractionAddedMessage) Message.
+*
+ */
 type PaymentAddInterfaceInteractionAction struct {
-	Type   TypeResourceIdentifier `json:"type"`
-	Fields *FieldContainer        `json:"fields,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type).
+	Type TypeResourceIdentifier `json:"type"`
+	// [Custom Fields](/../api/projects/custom-fields) as per [FieldDefinitions](ctp:api:type:FieldDefinition) of the [Type](ctp:api:type:Type).
+	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -509,7 +512,12 @@ func (obj PaymentAddInterfaceInteractionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addInterfaceInteraction", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Transaction to a Payment generates the [PaymentTransactionAdded](ctp:api:type:PaymentTransactionAddedMessage) Message.
+*
+ */
 type PaymentAddTransactionAction struct {
+	// Value to append to the `transactions` array.
 	Transaction TransactionDraft `json:"transaction"`
 }
 
@@ -523,7 +531,12 @@ func (obj PaymentAddTransactionAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addTransaction", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Can be used to update the Payment if a customer changes the [Cart](ctp:api:type:Cart), or adds or removes a [CartDiscount](ctp:api:type:CartDiscount) during checkout.
+*
+ */
 type PaymentChangeAmountPlannedAction struct {
+	// New value to set.
 	Amount Money `json:"amount"`
 }
 
@@ -538,7 +551,9 @@ func (obj PaymentChangeAmountPlannedAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentChangeTransactionInteractionIdAction struct {
+	// Unique identifier of the [Transaction](ctp:api:type:Transaction).
 	TransactionId string `json:"transactionId"`
+	// New value to set.
 	InteractionId string `json:"interactionId"`
 }
 
@@ -552,9 +567,15 @@ func (obj PaymentChangeTransactionInteractionIdAction) MarshalJSON() ([]byte, er
 	}{Action: "changeTransactionInteractionId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Changing the [TransactionState](ctp:api:type:TransactionState) generates the [PaymentTransactionStateChanged](ctp:api:type:PaymentTransactionStateChangedMessage) Message.
+*
+ */
 type PaymentChangeTransactionStateAction struct {
-	TransactionId string           `json:"transactionId"`
-	State         TransactionState `json:"state"`
+	// Unique identifier of the [Transaction](ctp:api:type:Transaction).
+	TransactionId string `json:"transactionId"`
+	// New TransactionState.
+	State TransactionState `json:"state"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -568,8 +589,10 @@ func (obj PaymentChangeTransactionStateAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentChangeTransactionTimestampAction struct {
-	TransactionId string    `json:"transactionId"`
-	Timestamp     time.Time `json:"timestamp"`
+	// Unique identifier of the [Transaction](ctp:api:type:Transaction).
+	TransactionId string `json:"transactionId"`
+	// Timestamp of the Transaction as reported by the payment service.
+	Timestamp time.Time `json:"timestamp"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -617,8 +640,8 @@ func (obj PaymentSetAmountRefundedAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAnonymousIdAction struct {
-	// Anonymous ID of the anonymous customer that this payment belongs to.
-	// If this field is not set any existing `anonymousId` is removed.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -688,7 +711,8 @@ func (obj PaymentSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetCustomerAction struct {
-	// A reference to the customer this payment belongs to.
+	// Value to set.
+	// If empty, any existing reference is removed.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
@@ -717,6 +741,8 @@ func (obj PaymentSetExternalIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetInterfaceIdAction struct {
+	// Value to set.
+	// Once set, the `interfaceId` cannot be changed.
 	InterfaceId string `json:"interfaceId"`
 }
 
@@ -731,9 +757,8 @@ func (obj PaymentSetInterfaceIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetKeyAction struct {
-	// User-specific unique identifier for the payment (max.
-	// 256 characters).
-	// If not provided an existing key will be removed.
+	// Value to set.
+	// If `key` is absent or `null`, the existing key, if any, will be removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -748,6 +773,8 @@ func (obj PaymentSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetMethodInfoInterfaceAction struct {
+	// Value to set.
+	// Once set, the `paymentInterface` of the `paymentMethodInfo` cannot be changed.
 	Interface string `json:"interface"`
 }
 
@@ -762,7 +789,8 @@ func (obj PaymentSetMethodInfoInterfaceAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetMethodInfoMethodAction struct {
-	// If not provided, the method is unset.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	Method *string `json:"method,omitempty"`
 }
 
@@ -777,7 +805,8 @@ func (obj PaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetMethodInfoNameAction struct {
-	// If not provided, the name is unset.
+	// Value to set.
+	// If empty, any existing value will be removed.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -791,7 +820,11 @@ func (obj PaymentSetMethodInfoNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setMethodInfoName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [PaymentStatusInterfaceCodeSet](ctp:api:type:PaymentStatusInterfaceCodeSetMessage) Message.
+ */
 type PaymentSetStatusInterfaceCodeAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
 }
 
@@ -806,6 +839,7 @@ func (obj PaymentSetStatusInterfaceCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetStatusInterfaceTextAction struct {
+	// Value to set. If empty, any existing value will be removed.
 	InterfaceText string `json:"interfaceText"`
 }
 
@@ -820,8 +854,8 @@ func (obj PaymentSetStatusInterfaceTextAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetTransactionCustomFieldAction struct {
+	// Unique identifier of the [Transaction](ctp:api:type:Transaction).
 	TransactionId string `json:"transactionId"`
-	// description: |
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -841,6 +875,7 @@ func (obj PaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error) 
 }
 
 type PaymentSetTransactionCustomTypeAction struct {
+	// Unique identifier of the [Transaction](ctp:api:type:Transaction). If the specified `transactionId` does not exist, the request will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	TransactionId string `json:"transactionId"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Transaction with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Transaction.
@@ -859,9 +894,19 @@ func (obj PaymentSetTransactionCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setTransactionCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If the Payment has no current [State](ctp:api:type:State), `initial` must be `true` for the new State.
+*	If the existing State has transitions set, the new State must be a valid transition.
+*	If the existing State has no transitions set, no validations are performed when transitioning to the new State.
+*
+*	Transitioning the State of a Payment produces the [PaymentStatusStateTransition](ctp:api:type:PaymentStatusStateTransitionMessage) Message.
+*
+ */
 type PaymentTransitionStateAction struct {
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
 	State StateResourceIdentifier `json:"state"`
-	Force *bool                   `json:"force,omitempty"`
+	// Set to `true` to skip validations when transitioning to the new State.
+	Force *bool `json:"force,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

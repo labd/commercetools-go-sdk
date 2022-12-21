@@ -107,7 +107,7 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 *
  */
 type AWSLambdaDestination struct {
-	// Amazon Resource Name (ARN) of the Lambda function in the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>`.
+	// Amazon Resource Name (ARN) of the Lambda function in the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>`. Use the format `arn:aws:lambda:<region>:<accountid>:function:<functionName>:<functionAlias/version>` to point to a specific version of the function.
 	Arn string `json:"arn"`
 	// Partially hidden on retrieval for security reasons.
 	AccessKey string `json:"accessKey"`

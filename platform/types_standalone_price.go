@@ -15,7 +15,7 @@ type StagedStandalonePrice struct {
 	// Money value of the StagedStandalonePrice.
 	Value TypedMoney `json:"value"`
 	// Discounted price for the StagedStandalonePrice.
-	Discounted DiscountedPrice `json:"discounted"`
+	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -313,6 +313,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 			return nil, err
 		}
 		return obj, nil
+	case "setKey":
+		obj := StandalonePriceSetKeyAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -428,4 +434,23 @@ func (obj StandalonePriceSetDiscountedPriceAction) MarshalJSON() ([]byte, error)
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDiscountedPrice", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Sets the key on a Standalone Price. Produces the [StandalonePriceKeySet](ctp:api:type:StandalonePriceKeySetMessage) Message.
+*
+ */
+type StandalonePriceSetKeyAction struct {
+	// Value to set. Must be unique. If empty, any existing value will be removed.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }

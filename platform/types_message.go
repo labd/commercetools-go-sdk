@@ -733,6 +733,32 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "ProductPriceAdded":
+		obj := ProductPriceAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceChanged":
+		obj := ProductPriceChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "ProductPriceDiscountsSet":
 		obj := ProductPriceDiscountsSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -748,6 +774,58 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return obj, nil
 	case "ProductPriceExternalDiscountSet":
 		obj := ProductPriceExternalDiscountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceKeySet":
+		obj := ProductPriceKeySetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceModeSet":
+		obj := ProductPriceModeSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceRemoved":
+		obj := ProductPriceRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPricesSet":
+		obj := ProductPricesSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1238,6 +1316,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return obj, nil
 	case "StandalonePriceExternalDiscountSet":
 		obj := StandalonePriceExternalDiscountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "StandalonePriceKeySet":
+		obj := StandalonePriceKeySetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -6930,7 +7021,7 @@ func (obj ParcelTrackingDataUpdatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create Payment](/../api/projects/payments#create-a-payment) request.
+*	Generated after a successful [Create Payment](/../api/projects/payments#create-payment) request.
 *
  */
 type PaymentCreatedMessage struct {
@@ -7524,6 +7615,134 @@ func (obj ProductImageAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Add Embedded Price](ctp:api:type:ProductAddPriceAction) update action.
+*
+ */
+type ProductPriceAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was added.
+	VariantId int `json:"variantId"`
+	// The [Embedded Price](ctp:api:type:Price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
+	Price Price `json:"price"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+*
+ */
+type ProductPriceChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was changed.
+	VariantId int `json:"variantId"`
+	// The current [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	OldPrice Price `json:"oldPrice"`
+	// The [Embedded Price](ctp:api:type:Price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	NewPrice Price `json:"newPrice"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// The staged [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	OldStagedPrice *Price `json:"oldStagedPrice,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a Price is updated due to a [Product Discount](ctp:api:type:ProductDiscount).
 *
  */
@@ -7666,6 +7885,253 @@ func (obj ProductPriceExternalDiscountSetMessage) MarshalJSON() ([]byte, error) 
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductPriceExternalDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+*
+ */
+type ProductPriceKeySetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	VariantId                       int                      `json:"variantId"`
+	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	PriceId *string `json:"priceId,omitempty"`
+	// `key` value of the [Embedded Price](ctp:api:type:Price) before the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+	// `key` value of the [Embedded Price](ctp:api:type:Price) after the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceKeySetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceKeySetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceKeySetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceKeySetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set PriceMode](ctp:api:type:ProductSetPriceModeAction) update action.
+*
+ */
+type ProductPriceModeSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [PriceMode](ctp:api:type:ProductPriceModeEnum) that was set.
+	To ProductPriceModeEnum `json:"to"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceModeSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceModeSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceModeSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceModeSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceModeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Embedded Price](ctp:api:type:ProductRemovePriceAction) update action.
+*
+ */
+type ProductPriceRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was removed.
+	VariantId int `json:"variantId"`
+	// The [Embedded Price](ctp:api:type:Price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
+	Price Price `json:"price"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Embedded Prices](ctp:api:type:ProductSetPricesAction) update action.
+*
+ */
+type ProductPricesSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was set.
+	VariantId int `json:"variantId"`
+	// The [Embedded Prices](ctp:api:type:Price) that were set on the [ProductVariant](ctp:api:type:ProductVariant).
+	Prices []Price `json:"prices"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPricesSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPricesSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPricesSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPricesSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPricesSet", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -9909,6 +10375,66 @@ func (obj StandalonePriceExternalDiscountSetMessage) MarshalJSON() ([]byte, erro
 }
 
 /**
+*	Generated after a successful [Set Key](ctp:api:type:StandalonePriceSetKeyAction) update action.
+*
+ */
+type StandalonePriceKeySetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `key` value of the [StandalonePrice](ctp:api:type:StandalonePrice) after the [Set Key](ctp:api:type:StandalonePriceSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [StandalonePrice](ctp:api:type:StandalonePrice) before the [Set Key](ctp:api:type:StandalonePriceSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceKeySetMessage) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceKeySetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceKeySetMessage) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceKeySetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Apply Staged Changes](ctp:api:types:StandalonePriceApplyStagedChangesAction) update action.
 *
  */
@@ -11016,6 +11542,18 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ProductPriceAdded":
+		obj := ProductPriceAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceChanged":
+		obj := ProductPriceChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ProductPriceDiscountsSet":
 		obj := ProductPriceDiscountsSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -11024,6 +11562,30 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "ProductPriceExternalDiscountSet":
 		obj := ProductPriceExternalDiscountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceKeySet":
+		obj := ProductPriceKeySetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceModeSet":
+		obj := ProductPriceModeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceRemoved":
+		obj := ProductPriceRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPricesSet":
+		obj := ProductPricesSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -11275,6 +11837,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "StandalonePriceExternalDiscountSet":
 		obj := StandalonePriceExternalDiscountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StandalonePriceKeySet":
+		obj := StandalonePriceKeySetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -13366,7 +13934,7 @@ func (obj ParcelTrackingDataUpdatedMessagePayload) MarshalJSON() ([]byte, error)
 }
 
 /**
-*	Generated after a successful [Create Payment](/../api/projects/payments#create-a-payment) request.
+*	Generated after a successful [Create Payment](/../api/projects/payments#create-payment) request.
 *
  */
 type PaymentCreatedMessagePayload struct {
@@ -13570,6 +14138,56 @@ func (obj ProductImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Add Embedded Price](ctp:api:type:ProductAddPriceAction) update action.
+*
+ */
+type ProductPriceAddedMessagePayload struct {
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was added.
+	VariantId int `json:"variantId"`
+	// The [Embedded Price](ctp:api:type:Price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
+	Price Price `json:"price"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+*
+ */
+type ProductPriceChangedMessagePayload struct {
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was changed.
+	VariantId int `json:"variantId"`
+	// The current [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	OldPrice Price `json:"oldPrice"`
+	// The [Embedded Price](ctp:api:type:Price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	NewPrice Price `json:"newPrice"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// The staged [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	OldStagedPrice *Price `json:"oldStagedPrice,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a Price is updated due to a [Product Discount](ctp:api:type:ProductDiscount).
 *
  */
@@ -13615,6 +14233,97 @@ func (obj ProductPriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byte, 
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductPriceExternalDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+*
+ */
+type ProductPriceKeySetMessagePayload struct {
+	VariantId int `json:"variantId"`
+	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	PriceId *string `json:"priceId,omitempty"`
+	// `key` value of the [Embedded Price](ctp:api:type:Price) before the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+	// `key` value of the [Embedded Price](ctp:api:type:Price) after the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceKeySetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceKeySetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set PriceMode](ctp:api:type:ProductSetPriceModeAction) update action.
+*
+ */
+type ProductPriceModeSetMessagePayload struct {
+	// The [PriceMode](ctp:api:type:ProductPriceModeEnum) that was set.
+	To ProductPriceModeEnum `json:"to"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceModeSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceModeSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceModeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove Embedded Price](ctp:api:type:ProductRemovePriceAction) update action.
+*
+ */
+type ProductPriceRemovedMessagePayload struct {
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was removed.
+	VariantId int `json:"variantId"`
+	// The [Embedded Price](ctp:api:type:Price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
+	Price Price `json:"price"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Embedded Prices](ctp:api:type:ProductSetPricesAction) update action.
+*
+ */
+type ProductPricesSetMessagePayload struct {
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was set.
+	VariantId int `json:"variantId"`
+	// The [Embedded Prices](ctp:api:type:Price) that were set on the [ProductVariant](ctp:api:type:ProductVariant).
+	Prices []Price `json:"prices"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPricesSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPricesSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPricesSet", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -14471,6 +15180,27 @@ func (obj StandalonePriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byt
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StandalonePriceExternalDiscountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:StandalonePriceSetKeyAction) update action.
+*
+ */
+type StandalonePriceKeySetMessagePayload struct {
+	// `key` value of the [StandalonePrice](ctp:api:type:StandalonePrice) after the [Set Key](ctp:api:type:StandalonePriceSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [StandalonePrice](ctp:api:type:StandalonePrice) before the [Set Key](ctp:api:type:StandalonePriceSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceKeySetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceKeySetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceKeySet", Alias: (*Alias)(&obj)})
 }
 
 /**

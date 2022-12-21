@@ -19,6 +19,10 @@ func (rb *ByProjectKeyMePaymentsKeyByKeyRequestBuilder) Get() *ByProjectKeyMePay
 	}
 }
 
+/**
+*	This endpoint can only update a Payment when it has no [Transactions](ctp:api:type:Transaction).
+*
+ */
 func (rb *ByProjectKeyMePaymentsKeyByKeyRequestBuilder) Post(body MyPaymentUpdate) *ByProjectKeyMePaymentsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyMePaymentsKeyByKeyRequestMethodPost{
 		body:   body,
@@ -27,6 +31,10 @@ func (rb *ByProjectKeyMePaymentsKeyByKeyRequestBuilder) Post(body MyPaymentUpdat
 	}
 }
 
+/**
+*	This endpoint can only delete a Payment when it has no [Transactions](ctp:api:type:Transaction).
+*
+ */
 func (rb *ByProjectKeyMePaymentsKeyByKeyRequestBuilder) Delete() *ByProjectKeyMePaymentsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyMePaymentsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/me/payments/key=%s", rb.projectKey, rb.key),

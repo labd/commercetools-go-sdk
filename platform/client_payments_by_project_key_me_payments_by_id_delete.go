@@ -64,6 +64,11 @@ func (rb *ByProjectKeyMePaymentsByIDRequestMethodDelete) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	This endpoint can only delete a Payment when it has no [Transactions](ctp:api:type:Transaction).
+*
+ */
 func (rb *ByProjectKeyMePaymentsByIDRequestMethodDelete) Execute(ctx context.Context) (result *MyPayment, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

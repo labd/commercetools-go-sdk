@@ -56,7 +56,8 @@ func (rb *ByProjectKeyPaymentsRequestMethodPost) WithHeaders(headers http.Header
 }
 
 /**
-*	To create a payment object a payment draft object has to be given with the request.
+*	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
+*
  */
 func (rb *ByProjectKeyPaymentsRequestMethodPost) Execute(ctx context.Context) (result *Payment, err error) {
 	data, err := serializeInput(rb.body)

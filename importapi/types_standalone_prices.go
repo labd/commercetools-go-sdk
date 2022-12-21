@@ -14,7 +14,7 @@ import (
 type StandalonePriceImport struct {
 	// User-defined unique identifier for the Standalone Price.
 	Key string `json:"key"`
-	// Specifies to which ProductVariant the API associates this Price. It is not validated to exist in product variants.
+	// Identifies the ProductVariant to which this Standalone Price is associated. This value is not validated to exist in Product Variants.
 	Sku string `json:"sku"`
 	// Sets the money value of this Price.
 	Value TypedMoney `json:"value"`

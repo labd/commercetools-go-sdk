@@ -624,10 +624,6 @@ func (obj ShoppingListRemoveTextLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeTextLineItem", Alias: (*Alias)(&obj)})
 }
 
-/**
-*	Sets an anonymous ID that corresponds to a Customer who has authenticated with an [anonymous session](/authorization#tokens-for-anonymous-sessions).
-*
- */
 type ShoppingListSetAnonymousIdAction struct {
 	// Value to set. If empty, any existing value will be removed.
 	AnonymousId *string `json:"anonymousId,omitempty"`

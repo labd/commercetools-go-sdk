@@ -54,6 +54,11 @@ func (rb *ByProjectKeyMePaymentsRequestMethodPost) WithHeaders(headers http.Head
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyMePaymentsRequestMethodPost) Execute(ctx context.Context) (result *MyPayment, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

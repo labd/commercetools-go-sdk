@@ -773,6 +773,12 @@ func (obj TypeAddEnumValueAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addEnumValue", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Defines a new field for a Type. Adding new required fields to a Type that is already referenced by existing entities can put those entities in a temporarily inconsistent state.
+*
+*	If a Type that is already in use requires new fields, we recommend making them optional (`required` set to `false`) whenever possible. Alternatively, any new required fields should be added one at a time followed by an update to all the resources using the Type. This prevents validation errors caused by an entity missing more than one required custom field.
+*
+ */
 type TypeAddFieldDefinitionAction struct {
 	// Value to append to the array.
 	FieldDefinition FieldDefinition `json:"fieldDefinition"`

@@ -848,7 +848,10 @@ type ProductVariantPatch struct {
 	// If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
 	ProductVariant ProductVariantKeyReference `json:"productVariant"`
 	// Maps to `ProductVariant.attributes`.
-	// The referenced attribute must be defined in an already existing [ProductType](/../api/projects/productTypes#producttype) in the Project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
+	// - The referenced Attribute must be defined in an existing [ProductType](/../api/projects/productTypes#producttype), or the `state` of the [ImportOperation](/import-operation#importoperation) will be `validationFailed`.
+	// - Setting the value of a non-required Attribute to `null` will remove the Attribute.
+	// - Attempting to set a `null` value to a required Attribute will make the import operation fail with an [InvalidOperation](/error#invalidoperation) error.
+	// - Importing [LocalizableTextAttributes](/product-variant#localizabletextattribute) or [LocalizableTextSetAttributes](/product-variant#localizabletextsetattribute) follows an override pattern, meaning that omitted localized fields will be deleted, new fields will be created, and existing fields will be updated. You can also delete localized fields by setting their value to `null`.
 	Attributes *Attributes `json:"attributes,omitempty"`
 	// If `false`, the attribute changes are applied to both [current and staged projected representations](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product).
 	Staged *bool `json:"staged,omitempty"`

@@ -33,7 +33,8 @@ func (rb *ByProjectKeyPaymentsRequestBuilder) Get() *ByProjectKeyPaymentsRequest
 }
 
 /**
-*	To create a payment object a payment draft object has to be given with the request.
+*	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
+*
  */
 func (rb *ByProjectKeyPaymentsRequestBuilder) Post(body PaymentDraft) *ByProjectKeyPaymentsRequestMethodPost {
 	return &ByProjectKeyPaymentsRequestMethodPost{

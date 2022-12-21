@@ -32,6 +32,10 @@ func (rb *ByProjectKeyMePaymentsRequestBuilder) Get() *ByProjectKeyMePaymentsReq
 	}
 }
 
+/**
+*	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyMePaymentsRequestBuilder) Post(body MyPaymentDraft) *ByProjectKeyMePaymentsRequestMethodPost {
 	return &ByProjectKeyMePaymentsRequestMethodPost{
 		body:   body,

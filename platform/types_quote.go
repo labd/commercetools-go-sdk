@@ -81,6 +81,8 @@ type Quote struct {
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
 	// Custom Fields on the Quote.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Predefined states tracking the status of the Quote.
+	QuoteState QuoteState `json:"quoteState"`
 	// [State](ctp:api:type:State) of the Quote.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
@@ -142,22 +144,22 @@ func (obj Quote) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteDraft struct {
+	// User-defined unique identifier for the Quote.
+	Key *string `json:"key,omitempty"`
 	// StagedQuote from which the Quote is created.
 	StagedQuote StagedQuoteResourceIdentifier `json:"stagedQuote"`
 	// Current version of the StagedQuote.
 	StagedQuoteVersion int `json:"stagedQuoteVersion"`
 	// If `true`, the `stagedQuoteState` of the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) will be set to `Sent`.
 	StagedQuoteStateToSent *bool `json:"stagedQuoteStateToSent,omitempty"`
-	// User-defined unique identifier for the Quote.
-	Key *string `json:"key,omitempty"`
+	// [State](ctp:api:type:State) of the Quote.
+	// This reference can point to a State in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
 	// [Custom Fields](/../api/projects/custom-fields) to be added to the Quote.
 	//
 	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) and added to the Quote.
 	// - If empty, the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) are added to the Quote automatically.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// [State](ctp:api:type:State) of the Quote.
-	// This reference can point to a State in a custom workflow.
-	State *StateReference `json:"state,omitempty"`
 }
 
 /**

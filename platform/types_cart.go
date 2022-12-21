@@ -342,6 +342,7 @@ const (
 	CartStateActive  CartState = "Active"
 	CartStateMerged  CartState = "Merged"
 	CartStateOrdered CartState = "Ordered"
+	CartStateFrozen  CartState = "Frozen"
 )
 
 type CartUpdate struct {
@@ -493,6 +494,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		return obj, nil
 	case "changeTaxRoundingMode":
 		obj := CartChangeTaxRoundingModeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "freezeCart":
+		obj := CartFreezeCartAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -802,6 +809,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			if err != nil {
 				return nil, err
 			}
+		}
+		return obj, nil
+	case "unfreezeCart":
+		obj := CartUnfreezeCartAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
 		}
 		return obj, nil
 	case "updateItemShippingAddress":
@@ -1832,6 +1845,12 @@ func (obj CartAddCustomShippingMethodAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addCustomShippingMethod", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adds a [DiscountCode](ctp:api:type:DiscountCode) to the Cart to activate the related [CartDiscounts](ctp:api:type:CartDiscount).
+*	Adding a Discount Code is only possible if no [DirectDiscount](/../api/projects/carts#directdiscount) has been applied to the cart or the order.
+*	Discount Codes can be added to [frozen Carts](ctp:api:type:FrozenCarts), but their [DiscountCodeState](ctp:api:type:DiscountCodeState) is then `DoesNotMatchCart`.
+*
+ */
 type CartAddDiscountCodeAction struct {
 	Code string `json:"code"`
 }
@@ -2119,6 +2138,24 @@ func (obj CartChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeTaxRoundingMode", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Changes the [CartState](ctp:api:type:Cartstate) from `Active` to `Frozen`. Results in a [Frozen Cart](ctp:api:type:FrozenCarts).
+*	Fails with [InvalidOperation](ctp:api:type:InvalidOperation) error when the Cart is empty.
+*
+ */
+type CartFreezeCartAction struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartFreezeCartAction) MarshalJSON() ([]byte, error) {
+	type Alias CartFreezeCartAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "freezeCart", Alias: (*Alias)(&obj)})
 }
 
 type CartRecalculateAction struct {
@@ -2985,6 +3022,24 @@ func (obj CartSetShippingRateInputAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setShippingRateInput", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Changes the [CartState](ctp:api:type:CartState) from `Frozen` to `Active`. Reactivates a [Frozen Cart](ctp:api:type:FrozenCart).
+*	This action updates all prices in the Cart according to latest Prices on related Product Variants and Shipping Methods and by applying all discounts currently being active and applicable for the Cart.
+*
+ */
+type CartUnfreezeCartAction struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartUnfreezeCartAction) MarshalJSON() ([]byte, error) {
+	type Alias CartUnfreezeCartAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "unfreezeCart", Alias: (*Alias)(&obj)})
 }
 
 type CartUpdateItemShippingAddressAction struct {

@@ -675,6 +675,12 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setPriceKey":
+		obj := ProductSetPriceKeyAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setPriceMode":
 		obj := ProductSetPriceModeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1165,7 +1171,7 @@ type ProductAddVariantAction struct {
 	// If `true` the new Product Variant is only staged. If `false` the new Product Variant is both current and staged.
 	Staged *bool `json:"staged,omitempty"`
 	// Media assets for the Product Variant.
-	Assets []Asset `json:"assets"`
+	Assets []AssetDraft `json:"assets"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1965,6 +1971,29 @@ func (obj ProductSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMetaTitle", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Sets the key of an [Embedded Price](ctp:api:type:Price). Produces the [ProductPriceKeySet](ctp:api:type:ProductPriceKeySetMessage) Message.
+*
+ */
+type ProductSetPriceKeyAction struct {
+	// The `id` of the [Embedded Price](ctp:api:type:Price) to set the key.
+	PriceId string `json:"priceId"`
+	// If `true`, only the staged [Embedded Price](ctp:api:type:Price) is updated. If `false`, both the current and staged [Embedded Price](ctp:api:type:Price) are updated.
+	Staged *bool `json:"staged,omitempty"`
+	// Value to set. If empty, any existing value will be removed.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSetPriceKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSetPriceKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setPriceKey", Alias: (*Alias)(&obj)})
 }
 
 /**

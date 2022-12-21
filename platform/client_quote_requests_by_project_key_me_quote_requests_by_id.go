@@ -12,13 +12,6 @@ type ByProjectKeyMeQuoteRequestsByIDRequestBuilder struct {
 	client     *Client
 }
 
-func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Get() *ByProjectKeyMeQuoteRequestsByIDRequestMethodGet {
-	return &ByProjectKeyMeQuoteRequestsByIDRequestMethodGet{
-		url:    fmt.Sprintf("/%s/me/quote-requests/%s", rb.projectKey, rb.id),
-		client: rb.client,
-	}
-}
-
 func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Post(body MyQuoteRequestUpdate) *ByProjectKeyMeQuoteRequestsByIDRequestMethodPost {
 	return &ByProjectKeyMeQuoteRequestsByIDRequestMethodPost{
 		body:   body,
@@ -29,6 +22,13 @@ func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Post(body MyQuoteReques
 
 func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Delete() *ByProjectKeyMeQuoteRequestsByIDRequestMethodDelete {
 	return &ByProjectKeyMeQuoteRequestsByIDRequestMethodDelete{
+		url:    fmt.Sprintf("/%s/me/quote-requests/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
+func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Get() *ByProjectKeyMeQuoteRequestsByIDRequestMethodGet {
+	return &ByProjectKeyMeQuoteRequestsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/quote-requests/%s", rb.projectKey, rb.id),
 		client: rb.client,
 	}

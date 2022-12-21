@@ -1866,7 +1866,7 @@ func (obj OrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderAddPaymentAction struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -2011,7 +2011,7 @@ func (obj OrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderRemovePaymentAction struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Payment](ctp:api:type:Payment).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 

@@ -117,6 +117,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			}
 		}
 		return obj, nil
+	case "DuplicatePriceKey":
+		obj := DuplicatePriceKeyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DuplicatePriceScope":
 		obj := DuplicatePriceScopeError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1508,6 +1514,84 @@ func (obj DuplicateFieldWithConflictingResourceError) Error() string {
 }
 
 /**
+*	Returned when a Price key conflicts with an existing key.
+*
+*	Keys of Embedded Prices must be unique per ProductVariant.
+*
+ */
+type DuplicatePriceKeyError struct {
+	// `"Duplicate price key: $priceKey. The price key must be unique per variant."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting Embedded Price.
+	ConflictingPrice Price `json:"conflictingPrice"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DuplicatePriceKeyError) UnmarshalJSON(data []byte) error {
+	type Alias DuplicatePriceKeyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingPrice")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DuplicatePriceKeyError) MarshalJSON() ([]byte, error) {
+	type Alias DuplicatePriceKeyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicatePriceKey", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DuplicatePriceKeyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DuplicatePriceKeyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DuplicatePriceKeyError: failed to parse error response"
+}
+
+/**
 *	Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
 *
 *	Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
@@ -1518,8 +1602,8 @@ type DuplicatePriceScopeError struct {
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
-	// Conflicting Embedded Prices.
-	ConflictingPrices []Price `json:"conflictingPrices"`
+	// Conflicting Embedded Price.
+	ConflictingPrice Price `json:"conflictingPrice"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1535,7 +1619,7 @@ func (obj *DuplicatePriceScopeError) UnmarshalJSON(data []byte) error {
 	}
 	delete(obj.ExtraValues, "code")
 	delete(obj.ExtraValues, "message")
-	delete(obj.ExtraValues, "conflictingPrices")
+	delete(obj.ExtraValues, "conflictingPrice")
 
 	return nil
 }

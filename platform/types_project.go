@@ -39,7 +39,7 @@ type CartsConfiguration struct {
 type ExternalOAuth struct {
 	// URL with authorization header.
 	Url string `json:"url"`
-	// Partially hidden on retrieval.
+	// Must not contain any leading or trailing whitespaces. Partially hidden on retrieval.
 	AuthorizationHeader string `json:"authorizationHeader"`
 }
 

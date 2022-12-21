@@ -205,7 +205,8 @@ type PriceDraftImport struct {
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// The tiered prices for this price.
 	Tiers []PriceTier `json:"tiers"`
-	Key   *string     `json:"key,omitempty"`
+	// User-defined unique identifier for the Embedded Price.
+	Key *string `json:"key,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

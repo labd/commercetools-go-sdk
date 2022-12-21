@@ -601,13 +601,13 @@ type TrackingData struct {
 }
 
 type Transaction struct {
-	// The unique ID of this object.
+	// Unique identifier of the Transaction.
 	ID string `json:"id"`
-	// The time at which the transaction took place.
+	// Time at which the transaction took place.
 	Timestamp string          `json:"timestamp"`
 	Type      TransactionType `json:"type"`
 	Amount    Money           `json:"amount"`
-	// The identifier that is used by the interface that managed the transaction (usually the PSP). If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
+	// Identifier used by the interface that manages the transaction (usually the PSP). If a matching interaction was logged in the `interfaceInteractions` array, the corresponding interaction should be findable with this ID.
 	InteractionId string           `json:"interactionId"`
 	State         TransactionState `json:"state"`
 }

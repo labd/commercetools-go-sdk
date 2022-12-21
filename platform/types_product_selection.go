@@ -39,6 +39,8 @@ type AssignedProductSelection struct {
 	ProductSelection ProductSelectionReference `json:"productSelection"`
 	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+	// Date and time (UTC) this assignment was initially created.
+	CreatedAt time.Time `json:"createdAt"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
