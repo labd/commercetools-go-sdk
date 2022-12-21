@@ -12,8 +12,8 @@ The SDK was initially created for enabling the creation of the
 [Terraform Provider for Commercetools](https://github.com/labd/terraform-provider-commercetools)
 That provider enables you to use infrastructure-as-code principles with Commercetools.
 
-Note that since this SDK is automatically generated we cannot guarantee backwards 
-compatibility between releases. Please pin the dependency correctly and be aware 
+Note that since this SDK is automatically generated we cannot guarantee backwards
+compatibility between releases. Please pin the dependency correctly and be aware
 of potential changes when updating
 
 ## Using the SDK
@@ -28,8 +28,10 @@ import (
     "log"
     "math/rand"
     "time"
-    "golang.org/x/oauth2/clientcredentials"
+
+	"github.com/davecgh/go-spew/spew"
     "github.com/labd/commercetools-go-sdk/platform"
+    "golang.org/x/oauth2/clientcredentials"
 )
 
 func main() {
@@ -54,39 +56,43 @@ func main() {
     // Get or Createa product type
     productTypeDraft := platform.ProductTypeDraft{
         Name: "a-product-type",
-        Key:  "a-product-type",
+		Key:  ctutils.StringRef("a-product-type"),
     }
 
     productType, err := (
         projectClient.
         ProductTypes().
-        WithKey(productTypeDraft.Key).
+        WithKey(*productTypeDraft.Key).
         Execute(ctx))
 
-    if productType == nil {
-        productType, err = (
-            projectClient.
-            ProductTypes().
-            Post(&productTypeDraft).
-            Execute(ctx))
-
-        if err != nil {
-            log.Println(err)
-        }
-    }
+	if err != nil {
+		if reqErr, ok := err.(platform.GenericRequestError); ok {
+			if reqErr.StatusCode == 404 {
+				productType, err = (projectClient.
+					ProductTypes().
+					Post(productTypeDraft).
+					Execute(ctx))
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+		} else {
+			log.Fatal(err)
+		}
+	}
 
     r := rand.New(rand.NewSource(time.Now().UnixNano()))
     randomID := r.Int()
     productDraft := &platform.ProductDraft{
-        Key: fmt.Sprintf("test-product-%d", randomID),
-        Name: &platform.LocalizedString{
+		Key: ctutils.StringRef(fmt.Sprintf("test-product-%d", randomID)),
+        Name: platform.LocalizedString{
             "nl": "Een test product",
             "en": "A test product",
         },
-        ProductType: &platform.ProductTypeResourceIdentifier{
-            ID: productType.ID,
+        ProductType: platform.ProductTypeResourceIdentifier{
+			ID: ctutils.StringRef(productType.ID),
         },
-        Slug: &platform.LocalizedString{
+        Slug: platform.LocalizedString{
             "nl": fmt.Sprintf("een-test-product-%d", randomID),
             "en": fmt.Sprintf("a-test-product-%d", randomID),
         },
@@ -97,8 +103,8 @@ func main() {
         Products().
         Post(productDraft).
         WithQueryParams(
-            &platform.ByProjectKeyProductsRequestMethodPostInput{
-                Expand: []{"foobar"},
+            platform.ByProjectKeyProductsRequestMethodPostInput{
+                Expand: []string{"foobar"},
             }
         ).
         Execute(ctx)
@@ -107,14 +113,14 @@ func main() {
     projectClient.
         Products().
         Post(productDraft).
-        Expand([]{"foobar"})
+        Expand([]string{"foobar"})
         Execute(ctx)
 
     if err != nil {
         log.Fatal(err)
     }
 
-    log.Print(product)
+	spew.Dump(product)
 }
 ```
 
