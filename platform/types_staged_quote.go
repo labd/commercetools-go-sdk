@@ -40,6 +40,9 @@ type StagedQuote struct {
 	// [State](ctp:api:type:State) of the Staged Quote.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
+	// The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
+	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }

@@ -408,7 +408,7 @@ func (obj ProductDiscountValueAbsoluteDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+*	Discounts the Product Price by allowing the client to explicitly [set a discounted value](ctp:api:type:ProductSetDiscountedPriceAction).
 *	Used when setting discounts using an external service.
 *
  */
@@ -426,7 +426,7 @@ func (obj ProductDiscountValueExternal) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Discounts the Product Price by allowing the client to explicitly [set a discounted value](/../api/projects/products#set-discounted-embedded-price).
+*	Discounts the Product Price by allowing the client to explicitly [set a discounted value](ctp:api:type:ProductSetDiscountedPriceAction).
 *	Use this when setting discounts using an external service.
 *
  */

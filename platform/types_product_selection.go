@@ -107,15 +107,13 @@ type ProductSelection struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
-/**
-*	Specifies which Product is assigned to which ProductSelection.
- */
 type ProductSelectionAssignment struct {
 	// Reference to a Product that is assigned to the ProductSelection.
 	Product ProductReference `json:"product"`
 	// Reference to the Product Selection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
 	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
 }
 

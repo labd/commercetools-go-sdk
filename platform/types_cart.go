@@ -1866,6 +1866,9 @@ func (obj CartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartAddItemShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 }
 
@@ -3043,6 +3046,9 @@ func (obj CartUnfreezeCartAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartUpdateItemShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 }
 

@@ -85,6 +85,12 @@ func mapDiscriminatorExtensionDestination(input interface{}) (ExtensionDestinati
 			return nil, err
 		}
 		return obj, nil
+	case "GoogleCloudFunction":
+		obj := GoogleCloudFunctionDestination{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "HTTP":
 		obj := HttpDestination{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -303,6 +309,25 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 		return obj, nil
 	}
 	return nil, nil
+}
+
+/**
+*	For GoogleCloudFunction destinations, you need to grant permissions to the `extensions@commercetools-platform.iam.gserviceaccount.com` service account to invoke your function. If your function's version is 1st gen, grant the service account the IAM role `Cloud Functions Invoker`. For version 2nd gen, assign the IAM role `Cloud Run Invoker` using the Cloud Run console.
+*
+ */
+type GoogleCloudFunctionDestination struct {
+	// URL to the target function.
+	Url string `json:"url"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GoogleCloudFunctionDestination) MarshalJSON() ([]byte, error) {
+	type Alias GoogleCloudFunctionDestination
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "GoogleCloudFunction", Alias: (*Alias)(&obj)})
 }
 
 /**

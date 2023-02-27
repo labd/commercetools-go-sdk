@@ -483,7 +483,7 @@ type MyCompanyDraft struct {
 	// The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	ShippingAddresses []int `json:"shippingAddresses"`
 	// Index of the entry in `addresses` to set as the default shipping address.
-	DefaultShipingAddress *int `json:"defaultShipingAddress,omitempty"`
+	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
 	// Indexes of entries in `addresses` to set as billing addresses.
 	// The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	BillingAddresses []int `json:"billingAddresses"`
@@ -779,7 +779,7 @@ type MyDivisionDraft struct {
 	// The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	ShippingAddresses []int `json:"shippingAddresses"`
 	// Index of the entry in `addresses` to set as the default shipping address.
-	DefaultShipingAddress *int `json:"defaultShipingAddress,omitempty"`
+	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
 	// Indexes of entries in `addresses` to set as billing addresses.
 	// The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	BillingAddresses []int `json:"billingAddresses"`
@@ -1711,6 +1711,9 @@ func (obj MyCartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartAddItemShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 }
 
@@ -1899,6 +1902,9 @@ func (obj MyCartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetBillingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2093,6 +2099,9 @@ func (obj MyCartSetLocaleAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2123,6 +2132,9 @@ func (obj MyCartSetShippingMethodAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartUpdateItemShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 }
 

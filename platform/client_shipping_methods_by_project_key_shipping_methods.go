@@ -30,6 +30,16 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCart() *ByProjectKe
 }
 
 /**
+*	Get ShippingMethods for a cart and location
+ */
+func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCartLocation() *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder {
+	return &ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	Get ShippingMethods for an order edit
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingOrderedit() *ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder {

@@ -138,12 +138,21 @@ type AssetSource struct {
 	ContentType *string `json:"contentType,omitempty"`
 }
 
+/**
+*	Polymorphic base type that represents a postal address and contact details.
+*	Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+*	only differ in the data type for the optional `custom` field.
+*
+ */
 type BaseAddress struct {
 	// Unique identifier of the Address.
+	//
+	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
+	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the Address.
+	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
 	Key *string `json:"key,omitempty"`
-	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Name of the country.
 	Country string `json:"country"`
 	// Title of the contact, for example 'Dr.'
 	Title *string `json:"title,omitempty"`
@@ -191,12 +200,20 @@ type BaseAddress struct {
 	ExternalId *string `json:"externalId,omitempty"`
 }
 
+/**
+*	Address type returned by read methods.
+*	Optionally, the `custom` field can be present in addition to the fields of a [BaseAddress](ctp:api:type:BaseAddress).
+*
+ */
 type Address struct {
 	// Unique identifier of the Address.
+	//
+	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
+	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the Address.
+	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
 	Key *string `json:"key,omitempty"`
-	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Name of the country.
 	Country string `json:"country"`
 	// Title of the contact, for example 'Dr.'
 	Title *string `json:"title,omitempty"`
@@ -246,12 +263,20 @@ type Address struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
+/**
+*	Address type to be used on write methods.
+*	Optionally, use the `custom` field in addition to the fields of a [BaseAddress](ctp:api:type:BaseAddress).
+*
+ */
 type AddressDraft struct {
-	// Unique identifier for the Address. Not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer). Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
+	// Unique identifier of the Address.
+	//
+	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
+	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier for the Address.
+	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
 	Key *string `json:"key,omitempty"`
-	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Name of the country.
 	Country string `json:"country"`
 	// Title of the contact, for example 'Dr.'
 	Title *string `json:"title,omitempty"`

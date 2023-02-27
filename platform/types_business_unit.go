@@ -68,7 +68,7 @@ func mapDiscriminatorBusinessUnit(input interface{}) (BusinessUnit, error) {
 }
 
 /**
-*	Generic draft type to model those fields all Business Units have in common.
+*	Generic draft type to model those fields all Business Units have in common. The additional fields required for creating a [Company](ctp:api:type:Company) or [Division](ctp:api:type:Division) are represented on [CompanyDraft](ctp:api:type:CompanyDraft) and [DivisionDraft](ctp:api:type:DivisionDraft).
 *
  */
 type BusinessUnitDraft interface{}
@@ -486,7 +486,7 @@ type Company struct {
 	// Unique identifiers of addresses used as shipping addresses.
 	ShippingAddressIds []string `json:"shippingAddressIds"`
 	// Unique identifier of the address used as the default shipping address.
-	DefaultShipingAddressId *string `json:"defaultShipingAddressId,omitempty"`
+	DefaultShippingAddressId *string `json:"defaultShippingAddressId,omitempty"`
 	// Unique identifiers of addresses used as billing addresses.
 	BillingAddressIds []string `json:"billingAddressIds"`
 	// Unique identifier of the address used as the default billing address.
@@ -533,7 +533,7 @@ func (obj Company) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Draft type to represent the top level of a business. Contains the fields and values of the generic [BusinessUnitDraft](ctp:api:type:BusinessUnitDraft] that are used specifically for creating a [Company](ctp:api:type:Company).
+*	Draft type to represent the top level of a business. Contains the fields and values of the generic [BusinessUnitDraft](ctp:api:type:BusinessUnitDraft) that are used specifically for creating a [Company](ctp:api:type:Company).
 *
  */
 type CompanyDraft struct {
@@ -541,11 +541,11 @@ type CompanyDraft struct {
 	Key string `json:"key"`
 	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
 	Status *BusinessUnitStatus `json:"status,omitempty"`
-	// References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
+	// Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
 	// If not empty, the Business Unit can only be linked to [Carts](ctp:api:type:Cart) and [Orders](ctp:api:type:Order) of a referenced Store.
 	// If empty, the Business Unit can only create [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), or [Quotes](/../api/quotes-overview) that have no `store` value.
 	// Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
-	Stores []StoreKeyReference `json:"stores"`
+	Stores []StoreResourceIdentifier `json:"stores"`
 	// Defines whether the Stores of the Business Unit are set on the Business Unit or are inherited from a parent.
 	// Defaults to `Explicit` for [Companies](ctp:api:type:BusinessUnitType) and to `FromParent` for [Divisions](ctp:api:type:BusinessUnitType).
 	StoreMode *BusinessUnitStoreMode `json:"storeMode,omitempty"`
@@ -561,7 +561,7 @@ type CompanyDraft struct {
 	// The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	ShippingAddresses []int `json:"shippingAddresses"`
 	// Index of the entry in `addresses` to set as the default shipping address.
-	DefaultShipingAddress *int `json:"defaultShipingAddress,omitempty"`
+	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
 	// Indexes of entries in `addresses` to set as billing addresses.
 	// The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	BillingAddresses []int `json:"billingAddresses"`
@@ -652,7 +652,7 @@ type Division struct {
 	// Unique identifiers of addresses used as shipping addresses.
 	ShippingAddressIds []string `json:"shippingAddressIds"`
 	// Unique identifier of the address used as the default shipping address.
-	DefaultShipingAddressId *string `json:"defaultShipingAddressId,omitempty"`
+	DefaultShippingAddressId *string `json:"defaultShippingAddressId,omitempty"`
 	// Unique identifiers of addresses used as billing addresses.
 	BillingAddressIds []string `json:"billingAddressIds"`
 	// Unique identifier of the address used as the default billing address.
@@ -708,11 +708,11 @@ type DivisionDraft struct {
 	Key string `json:"key"`
 	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
 	Status *BusinessUnitStatus `json:"status,omitempty"`
-	// References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
+	// Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
 	// If not empty, the Business Unit can only be linked to [Carts](ctp:api:type:Cart) and [Orders](ctp:api:type:Order) of a referenced Store.
 	// If empty, the Business Unit can only create [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), or [Quotes](/../api/quotes-overview) that have no `store` value.
 	// Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
-	Stores []StoreKeyReference `json:"stores"`
+	Stores []StoreResourceIdentifier `json:"stores"`
 	// If not set, the Division inherits the [Stores](ctp:api:type:Store) from its `parentUnit`.
 	// Set this to `Explicit` if you want to set the Stores explicitly in the `stores` field instead.
 	StoreMode *BusinessUnitStoreMode `json:"storeMode,omitempty"`
@@ -728,7 +728,7 @@ type DivisionDraft struct {
 	// The `shippingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	ShippingAddresses []int `json:"shippingAddresses"`
 	// Index of the entry in `addresses` to set as the default shipping address.
-	DefaultShipingAddress *int `json:"defaultShipingAddress,omitempty"`
+	DefaultShippingAddress *int `json:"defaultShippingAddress,omitempty"`
 	// Indexes of entries in `addresses` to set as billing addresses.
 	// The `billingAddressIds` of the [Customer](ctp:api:type:Customer) will be replaced by these addresses.
 	BillingAddresses []int `json:"billingAddresses"`

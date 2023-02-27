@@ -499,10 +499,13 @@ type StagedOrder struct {
 	ShipmentState *ShipmentState  `json:"shipmentState,omitempty"`
 	PaymentState  *PaymentState   `json:"paymentState,omitempty"`
 	// Set if the ShippingMethod is set.
-	ShippingInfo  *ShippingInfo      `json:"shippingInfo,omitempty"`
-	SyncInfo      []SyncInfo         `json:"syncInfo"`
-	ReturnInfo    []ReturnInfo       `json:"returnInfo"`
-	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
+	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
+	SyncInfo     []SyncInfo    `json:"syncInfo"`
+	ReturnInfo   []ReturnInfo  `json:"returnInfo"`
+	// The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
+	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	PurchaseOrderNumber *string            `json:"purchaseOrderNumber,omitempty"`
+	DiscountCodes       []DiscountCodeInfo `json:"discountCodes"`
 	// Internal-only field.
 	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
 	// Set when this order was created from a cart.
@@ -744,9 +747,12 @@ func (obj StagedOrderAddCustomLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderAddDeliveryAction struct {
-	Items   []DeliveryItem `json:"items"`
-	Address *BaseAddress   `json:"address,omitempty"`
-	Parcels []ParcelDraft  `json:"parcels"`
+	Items []DeliveryItem `json:"items"`
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
+	Address *BaseAddress  `json:"address,omitempty"`
+	Parcels []ParcelDraft `json:"parcels"`
 	// Custom Fields for the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
@@ -795,6 +801,9 @@ func (obj StagedOrderAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderAddItemShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 }
 
@@ -1196,6 +1205,9 @@ func (obj StagedOrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetBillingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -1443,8 +1455,11 @@ func (obj StagedOrderSetCustomerIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetDeliveryAddressAction struct {
-	DeliveryId string       `json:"deliveryId"`
-	Address    *BaseAddress `json:"address,omitempty"`
+	DeliveryId string `json:"deliveryId"`
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
+	Address *BaseAddress `json:"address,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1873,6 +1888,22 @@ func (obj StagedOrderSetParcelTrackingDataAction) MarshalJSON() ([]byte, error) 
 	}{Action: "setParcelTrackingData", Alias: (*Alias)(&obj)})
 }
 
+type StagedOrderSetPurchaseOrderNumberAction struct {
+	// Identifier for a purchase order, usually in a B2B context.
+	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetPurchaseOrderNumberAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetPurchaseOrderNumberAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setPurchaseOrderNumber", Alias: (*Alias)(&obj)})
+}
+
 type StagedOrderSetReturnInfoAction struct {
 	Items []ReturnInfoDraft `json:"items"`
 }
@@ -1972,6 +2003,9 @@ func (obj StagedOrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error)
 }
 
 type StagedOrderSetShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -1986,6 +2020,9 @@ func (obj StagedOrderSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderSetShippingAddressAndCustomShippingMethodAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address            BaseAddress       `json:"address"`
 	ShippingMethodName string            `json:"shippingMethodName"`
 	ShippingRate       ShippingRateDraft `json:"shippingRate"`
@@ -2005,6 +2042,9 @@ func (obj StagedOrderSetShippingAddressAndCustomShippingMethodAction) MarshalJSO
 }
 
 type StagedOrderSetShippingAddressAndShippingMethodAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
 	ShippingMethod  *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
@@ -2191,6 +2231,9 @@ func (obj StagedOrderTransitionStateAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedOrderUpdateItemShippingAddressAction struct {
+	// Polymorphic base type that represents a postal address and contact details.
+	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
+	// only differ in the data type for the optional `custom` field.
 	Address BaseAddress `json:"address"`
 }
 

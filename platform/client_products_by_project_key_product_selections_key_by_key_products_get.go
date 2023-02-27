@@ -31,6 +31,7 @@ type ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput struct {
 	Limit     *int
 	Offset    *int
 	WithTotal *bool
+	Sort      []string
 }
 
 func (input *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput) Values() url.Values {
@@ -50,6 +51,9 @@ func (input *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput)
 		} else {
 			values.Add("withTotal", "false")
 		}
+	}
+	for _, v := range input.Sort {
+		values.Add("sort", fmt.Sprintf("%v", v))
 	}
 	return values
 }
@@ -83,6 +87,14 @@ func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) WithTot
 		rb.params = &ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput{}
 	}
 	rb.params.WithTotal = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) Sort(v []string) *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput{}
+	}
+	rb.params.Sort = v
 	return rb
 }
 

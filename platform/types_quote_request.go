@@ -78,6 +78,9 @@ type QuoteRequest struct {
 	// [State](ctp:api:type:State) of the Quote Request.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
+	// Identifier for a purchase order, usually in a B2B context.
+	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer).
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
@@ -150,6 +153,9 @@ type QuoteRequestDraft struct {
 	// [State](ctp:api:type:State) of this Quote Request.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
+	// Identifier for a purchase order, usually in a B2B context.
+	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer).
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 }
 
 /**

@@ -1496,7 +1496,10 @@ func (obj ProductRemovePriceAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `id` or `sku` is required. Produces the [ProductVariantDeleted](ctp:api:type:ProductVariantDeletedMessage) Message.
+*	Either `id` or `sku` is required.
+*	Produces the [ProductVariantDeleted](ctp:api:type:ProductVariantDeletedMessage) Message.
+*	If the Product Variant to remove is part of a [ProductSelectionAssignment](ctp:api:type:ProductSelectionAssignment)
+*	its SKU will be automatically removed from the respective [ProductVariantSelection](ctp:api:type:ProductVariantSelection).
 *
  */
 type ProductRemoveVariantAction struct {
@@ -1861,7 +1864,7 @@ func (obj ProductSetDescriptionAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductSetDiscountedPriceAction struct {
-	// The `id` of the [Embedded Price](ctp:api:type:Price) to set the Discount.
+	// The `id` of the [Price](ctp:api:type:Price) to set the Discount.
 	PriceId string `json:"priceId"`
 	// If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price are updated.
 	Staged *bool `json:"staged,omitempty"`
@@ -1974,13 +1977,13 @@ func (obj ProductSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Sets the key of an [Embedded Price](ctp:api:type:Price). Produces the [ProductPriceKeySet](ctp:api:type:ProductPriceKeySetMessage) Message.
+*	Sets the key of an [Embedded Price](/projects/products#embedded-price). Produces the [ProductPriceKeySet](ctp:api:type:ProductPriceKeySetMessage) Message.
 *
  */
 type ProductSetPriceKeyAction struct {
-	// The `id` of the [Embedded Price](ctp:api:type:Price) to set the key.
+	// The `id` of the [Price](ctp:api:type:Price) to set the key.
 	PriceId string `json:"priceId"`
-	// If `true`, only the staged [Embedded Price](ctp:api:type:Price) is updated. If `false`, both the current and staged [Embedded Price](ctp:api:type:Price) are updated.
+	// If `true`, only the staged [Embedded Price](/projects/products#embedded-price) is updated. If `false`, both the current and staged Embedded Price are updated.
 	Staged *bool `json:"staged,omitempty"`
 	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
@@ -2130,6 +2133,8 @@ func (obj ProductSetSearchKeywordsAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	SKU cannot be changed or removed if it is associated with an [InventoryEntry](ctp:api:type:InventoryEntry).
+*	If the SKU to set or unset is part of a [ProductSelectionAssignment](ctp:api:type:ProductSelectionAssignment)
+*	it will be automatically added or removed from the respective [ProductVariantSelection](ctp:api:type:ProductVariantSelection).
 *
  */
 type ProductSetSkuAction struct {

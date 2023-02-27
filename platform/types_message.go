@@ -4341,6 +4341,19 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 			}
 		}
 		return obj, nil
+	case "OrderPurchaseOrderNumberSet":
+		obj := OrderPurchaseOrderNumberSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "OrderReturnShipmentStateChanged":
 		obj := OrderReturnShipmentStateChangedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -6209,6 +6222,66 @@ func (obj OrderPaymentStateChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Set PurchaseOrderNumber](/../api/projects/orders#set-purchase-order-number) update action.
+*
+ */
+type OrderPurchaseOrderNumberSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Purchase order number on the [Order](ctp:api:type:Order) after the [Set PurchaseOrderNumber](/../api/projects/orders#set-purchase-order-number) update action.
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+	// Purchase order number on the [Order](ctp:api:type:Order) before the [Set PurchaseOrderNumber](/../api/projects/orders#set-purchase-order-number) update action.
+	OldPurchaseOrderNumber *string `json:"oldPurchaseOrderNumber,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderPurchaseOrderNumberSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderPurchaseOrderNumberSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderPurchaseOrderNumberSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderPurchaseOrderNumberSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderPurchaseOrderNumberSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Set Return Shipment State](ctp:api:type:OrderSetReturnShipmentStateAction) update action.
 *
  */
@@ -7642,7 +7715,7 @@ type ProductPriceAddedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was added.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](ctp:api:type:Price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
+	// The [Embedded Price](/projects/products#embedded-price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -7704,13 +7777,13 @@ type ProductPriceChangedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was changed.
 	VariantId int `json:"variantId"`
-	// The current [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The current [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldPrice Price `json:"oldPrice"`
-	// The [Embedded Price](ctp:api:type:Price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The [Embedded Price](/projects/products#embedded-price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	NewPrice Price `json:"newPrice"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
-	// The staged [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The staged [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldStagedPrice *Price `json:"oldStagedPrice,omitempty"`
 }
 
@@ -7801,7 +7874,7 @@ func (obj ProductPriceDiscountsSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Details about a [Embedded Price](ctp:api:type:Price) that was updated due to a Discount. Specific to [ProductPriceDiscountsSet](ctp:api:type:ProductPriceDiscountsSetMessage) Message.
+*	Details about a [Embedded Price](/projects/products#embedded-price) that was updated due to a Discount. Specific to [ProductPriceDiscountsSet](ctp:api:type:ProductPriceDiscountsSetMessage) Message.
 *
  */
 type ProductPriceDiscountsSetUpdatedPrice struct {
@@ -7811,7 +7884,7 @@ type ProductPriceDiscountsSetUpdatedPrice struct {
 	VariantKey *string `json:"variantKey,omitempty"`
 	// SKU of the [ProductVariant](ctp:api:type:ProductVariant) for which Discount was set.
 	Sku *string `json:"sku,omitempty"`
-	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	// Unique identifier of the [Price](ctp:api:type:Price).
 	PriceId string `json:"priceId"`
 	// Discounted Price for the [ProductVariant](ctp:api:type:ProductVariant) for which Discount was set.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
@@ -7851,7 +7924,7 @@ type ProductPriceExternalDiscountSetMessage struct {
 	VariantKey *string `json:"variantKey,omitempty"`
 	// SKU of the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
 	Sku *string `json:"sku,omitempty"`
-	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	// Unique identifier of the [Price](ctp:api:type:Price).
 	PriceId string `json:"priceId"`
 	// Discounted Price for the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
@@ -7914,11 +7987,11 @@ type ProductPriceKeySetMessage struct {
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	VariantId                       int                      `json:"variantId"`
-	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	// Unique identifier of the [Price](ctp:api:type:Price).
 	PriceId *string `json:"priceId,omitempty"`
-	// `key` value of the [Embedded Price](ctp:api:type:Price) before the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	// `key` value of the [Price](ctp:api:type:Price) before the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
 	OldKey *string `json:"oldKey,omitempty"`
-	// `key` value of the [Embedded Price](ctp:api:type:Price) after the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	// `key` value of the [Price](ctp:api:type:Price) after the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
 	Key *string `json:"key,omitempty"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -8038,7 +8111,7 @@ type ProductPriceRemovedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was removed.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](ctp:api:type:Price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
+	// The [Embedded Price](/projects/products#embedded-price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -10522,6 +10595,9 @@ type StandalonePriceValueChangedMessage struct {
 	Value Money `json:"value"`
 	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
 	Staged bool `json:"staged"`
+	// The old value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
+	// Present on Messages created after 3 February 2023. Optional for backwards compatibility.
+	OldValue *Money `json:"oldValue,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -12908,6 +12984,12 @@ func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload
 			return nil, err
 		}
 		return obj, nil
+	case "OrderPurchaseOrderNumberSet":
+		obj := OrderPurchaseOrderNumberSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "OrderReturnShipmentStateChanged":
 		obj := OrderReturnShipmentStateChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -13618,6 +13700,27 @@ func (obj OrderPaymentStateChangedMessagePayload) MarshalJSON() ([]byte, error) 
 }
 
 /**
+*	Generated after a successful [Set PurchaseOrderNumber](/../api/projects/orders#set-purchase-order-number) update action.
+*
+ */
+type OrderPurchaseOrderNumberSetMessagePayload struct {
+	// Purchase order number on the [Order](ctp:api:type:Order) after the [Set PurchaseOrderNumber](/../api/projects/orders#set-purchase-order-number) update action.
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+	// Purchase order number on the [Order](ctp:api:type:Order) before the [Set PurchaseOrderNumber](/../api/projects/orders#set-purchase-order-number) update action.
+	OldPurchaseOrderNumber *string `json:"oldPurchaseOrderNumber,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderPurchaseOrderNumberSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderPurchaseOrderNumberSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderPurchaseOrderNumberSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Set Return Shipment State](ctp:api:type:OrderSetReturnShipmentStateAction) update action.
 *
  */
@@ -14144,7 +14247,7 @@ func (obj ProductImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductPriceAddedMessagePayload struct {
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was added.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](ctp:api:type:Price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
+	// The [Embedded Price](/projects/products#embedded-price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -14167,13 +14270,13 @@ func (obj ProductPriceAddedMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductPriceChangedMessagePayload struct {
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was changed.
 	VariantId int `json:"variantId"`
-	// The current [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The current [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldPrice Price `json:"oldPrice"`
-	// The [Embedded Price](ctp:api:type:Price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The [Embedded Price](/projects/products#embedded-price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	NewPrice Price `json:"newPrice"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
-	// The staged [Embedded Price](ctp:api:type:Price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The staged [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldStagedPrice *Price `json:"oldStagedPrice,omitempty"`
 }
 
@@ -14217,7 +14320,7 @@ type ProductPriceExternalDiscountSetMessagePayload struct {
 	VariantKey *string `json:"variantKey,omitempty"`
 	// SKU of the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
 	Sku *string `json:"sku,omitempty"`
-	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	// Unique identifier of the [Price](ctp:api:type:Price).
 	PriceId string `json:"priceId"`
 	// Discounted Price for the [Product Variant](ctp:api:type:ProductVariant) for which Discount was set.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
@@ -14241,11 +14344,11 @@ func (obj ProductPriceExternalDiscountSetMessagePayload) MarshalJSON() ([]byte, 
  */
 type ProductPriceKeySetMessagePayload struct {
 	VariantId int `json:"variantId"`
-	// Unique identifier of the [Embedded Price](ctp:api:type:Price).
+	// Unique identifier of the [Price](ctp:api:type:Price).
 	PriceId *string `json:"priceId,omitempty"`
-	// `key` value of the [Embedded Price](ctp:api:type:Price) before the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	// `key` value of the [Price](ctp:api:type:Price) before the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
 	OldKey *string `json:"oldKey,omitempty"`
-	// `key` value of the [Embedded Price](ctp:api:type:Price) after the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
+	// `key` value of the [Price](ctp:api:type:Price) after the [Set Price Key](ctp:api:type:ProductSetPriceKeyAction) update action.
 	Key *string `json:"key,omitempty"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -14287,7 +14390,7 @@ func (obj ProductPriceModeSetMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductPriceRemovedMessagePayload struct {
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was removed.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](ctp:api:type:Price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
+	// The [Embedded Price](/projects/products#embedded-price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -15231,6 +15334,9 @@ type StandalonePriceValueChangedMessagePayload struct {
 	Value Money `json:"value"`
 	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
 	Staged bool `json:"staged"`
+	// The old value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
+	// Present on Messages created after 3 February 2023. Optional for backwards compatibility.
+	OldValue *Money `json:"oldValue,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
