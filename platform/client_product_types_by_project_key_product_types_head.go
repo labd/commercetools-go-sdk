@@ -82,7 +82,8 @@ func (rb *ByProjectKeyProductTypesRequestMethodHead) Execute(ctx context.Context
 	switch resp.StatusCode {
 	case 200:
 		return nil
-
+	case 404:
+		return ErrNotFound
 	case 400, 401, 403, 500, 502, 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

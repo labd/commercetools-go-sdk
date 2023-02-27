@@ -86,7 +86,8 @@ func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestMethodGet) Execute(ctx cont
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

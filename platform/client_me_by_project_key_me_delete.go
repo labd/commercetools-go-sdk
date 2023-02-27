@@ -85,7 +85,8 @@ func (rb *ByProjectKeyMeRequestMethodDelete) Execute(ctx context.Context) (resul
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

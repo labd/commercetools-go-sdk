@@ -86,7 +86,8 @@ func (rb *ByProjectKeyZonesByIDRequestMethodGet) Execute(ctx context.Context) (r
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,
