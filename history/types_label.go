@@ -95,7 +95,9 @@ func mapDiscriminatorLabel(input interface{}) (Label, error) {
 }
 
 type CustomObjectLabel struct {
-	Key       string `json:"key"`
+	// User-defined unique identifier of the CustomObject within the defined `container`.
+	Key string `json:"key"`
+	// Namespace to group Custom Objects.
 	Container string `json:"container"`
 }
 
@@ -110,8 +112,11 @@ func (obj CustomObjectLabel) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerLabel struct {
-	FirstName      string `json:"firstName"`
-	LastName       string `json:"lastName"`
+	// Given name (first name) of the Customer.
+	FirstName string `json:"firstName"`
+	// Family name (last name) of the Customer.
+	LastName string `json:"lastName"`
+	// User-defined unique identifier of the [Customer](ctp:api:type:Customer).
 	CustomerNumber string `json:"customerNumber"`
 }
 
@@ -126,6 +131,7 @@ func (obj CustomerLabel) MarshalJSON() ([]byte, error) {
 }
 
 type LocalizedLabel struct {
+	// Changed value.
 	Value LocalizedString `json:"value"`
 }
 
@@ -140,8 +146,10 @@ func (obj LocalizedLabel) MarshalJSON() ([]byte, error) {
 }
 
 type OrderLabel struct {
+	// Email address of the Customer that the Order belongs to.
 	CustomerEmail string `json:"customerEmail"`
-	OrderNumber   string `json:"orderNumber"`
+	// User-defined unique identifier of the Order that is unique across a Project.
+	OrderNumber string `json:"orderNumber"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -155,8 +163,10 @@ func (obj OrderLabel) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentLabel struct {
-	Key           string `json:"key"`
-	AmountPlanned Money  `json:"amountPlanned"`
+	// User-defined unique identifier of the Payment.
+	Key string `json:"key"`
+	// Money value the Payment intends to receive from the Customer.
+	AmountPlanned Money `json:"amountPlanned"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -170,7 +180,9 @@ func (obj PaymentLabel) MarshalJSON() ([]byte, error) {
 }
 
 type ProductLabel struct {
+	// User-defined identifier used in a deep-link URL for the Product.
 	Slug LocalizedString `json:"slug"`
+	// Name of the Product.
 	Name LocalizedString `json:"name"`
 }
 
@@ -185,9 +197,13 @@ func (obj ProductLabel) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteLabel struct {
-	Key          string    `json:"key"`
-	Customer     Reference `json:"customer"`
-	StagedQuote  Reference `json:"stagedQuote"`
+	// User-defined unique identifier of the Quote.
+	Key string `json:"key"`
+	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
+	Customer Reference `json:"customer"`
+	// Staged Quote related to the Quote.
+	StagedQuote Reference `json:"stagedQuote"`
+	// Quote Request related to the Quote.
 	QuoteRequest Reference `json:"quoteRequest"`
 }
 
@@ -202,7 +218,9 @@ func (obj QuoteLabel) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteRequestLabel struct {
-	Key      string    `json:"key"`
+	// User-defined unique identifier of the Quote Request.
+	Key string `json:"key"`
+	// The [Buyer](/../api/quotes-overview#buyer) who raised the Quote Request.
 	Customer Reference `json:"customer"`
 }
 
@@ -217,7 +235,9 @@ func (obj QuoteRequestLabel) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewLabel struct {
-	Key   string `json:"key"`
+	// User-defined unique identifier of the Review.
+	Key string `json:"key"`
+	// Title of the Review.
 	Title string `json:"title"`
 }
 
@@ -232,8 +252,11 @@ func (obj ReviewLabel) MarshalJSON() ([]byte, error) {
 }
 
 type StagedQuoteLabel struct {
-	Key          string    `json:"key"`
-	Customer     Reference `json:"customer"`
+	// User-defined unique identifier of the Staged Quote.
+	Key string `json:"key"`
+	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
+	Customer Reference `json:"customer"`
+	// Quote Request related to the Staged Quote.
 	QuoteRequest Reference `json:"quoteRequest"`
 }
 
@@ -248,6 +271,7 @@ func (obj StagedQuoteLabel) MarshalJSON() ([]byte, error) {
 }
 
 type StringLabel struct {
+	// Changed value.
 	Value string `json:"value"`
 }
 

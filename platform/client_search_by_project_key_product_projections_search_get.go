@@ -302,7 +302,7 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) WithHeaders(head
 }
 
 /**
-*	Search Product Projection
+*	Product Projection Search
  */
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Execute(ctx context.Context) (result *ProductProjectionPagedSearchResponse, err error) {
 	var queryParams url.Values

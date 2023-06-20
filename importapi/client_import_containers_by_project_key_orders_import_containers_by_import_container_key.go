@@ -13,7 +13,7 @@ type ByProjectKeyOrdersImportContainersByImportContainerKeyRequestBuilder struct
 }
 
 /**
-*	Creates a request for creating new Orders or updating existing ones.
+*	Creates a request for creating new Orders.
  */
 func (rb *ByProjectKeyOrdersImportContainersByImportContainerKeyRequestBuilder) Post(body OrderImportRequest) *ByProjectKeyOrdersImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyOrdersImportContainersByImportContainerKeyRequestMethodPost{

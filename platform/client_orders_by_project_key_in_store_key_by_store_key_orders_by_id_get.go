@@ -57,7 +57,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodGet) WithHeader
 /**
 *	Returns an order by its ID from a specific Store.
 *	If the order exists in the project but does not have the store field,
-*	or the store field references a different store, this method returns a ResourceNotFound error.
+*	or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodGet) Execute(ctx context.Context) (result *Order, err error) {

@@ -91,3 +91,9 @@ func (rb *ByProjectKeyRequestBuilder) Inventories() *ByProjectKeyInventoriesRequ
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) Types() *ByProjectKeyTypesRequestBuilder {
+	return &ByProjectKeyTypesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}

@@ -132,10 +132,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) WithHeaders(hea
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Queries carts in a specific Store.
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) Execute(ctx context.Context) (result *CartPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

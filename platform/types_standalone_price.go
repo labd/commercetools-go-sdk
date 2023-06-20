@@ -63,11 +63,11 @@ type StandalonePrice struct {
 	Channel *ChannelReference `json:"channel,omitempty"`
 	// Date from which the Price is valid.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Date until the Price is valid.
+	// Date until the Price is valid. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Price tiers if any are defined.
 	Tiers []PriceTier `json:"tiers"`
-	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](/../api/projects/carts#lineitem-price-selection).
+	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
 	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
@@ -142,7 +142,7 @@ type StandalonePriceDraft struct {
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
 	// Sets the date from which the Price is valid. Must be at least 1 ms earlier than `validUntil`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`.
+	// Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Sets price tiers.
 	Tiers []PriceTierDraft `json:"tiers"`
@@ -277,6 +277,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 	}
 
 	switch discriminator {
+	case "addPriceTier":
+		obj := StandalonePriceAddPriceTierAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "applyStagedChanges":
 		obj := StandalonePriceApplyStagedChangesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -291,6 +297,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 		return obj, nil
 	case "changeValue":
 		obj := StandalonePriceChangeValueAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removePriceTier":
+		obj := StandalonePriceRemovePriceTierAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -319,8 +331,55 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 			return nil, err
 		}
 		return obj, nil
+	case "setPriceTier":
+		obj := StandalonePriceSetPriceTiersAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setValidFrom":
+		obj := StandalonePriceSetValidFromAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setValidFromAndUntil":
+		obj := StandalonePriceSetValidFromAndUntilAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setValidUntil":
+		obj := StandalonePriceSetValidUntilAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
+}
+
+/**
+*	Adding a [PriceTier](ctp:api:type:PriceTier) to a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [Standalone Price Tier Added](ctp:api:type:StandalonePriceTierAddedMessage) Message.
+*
+ */
+type StandalonePriceAddPriceTierAction struct {
+	// The [PriceTier](ctp:api:type:PriceTier) to be added to the `tiers` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
+	// The action returns an [InvalidField](ctp:api:type:InvalidFieldError) error in the following cases:
+	//
+	// * Trying to add a PriceTier with `minimumQuantity` < `2`.
+	// * Trying to add a PriceTier with `minimumQuantity` that already exists for the StandalonePrice.
+	Tier PriceTierDraft `json:"tier"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceAddPriceTierAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceAddPriceTierAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addPriceTier", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -378,6 +437,25 @@ func (obj StandalonePriceChangeValueAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeValue", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Removing a [PriceTier](ctp:api:type:PriceTier) from a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [Standalone Price Tier Removed](ctp:api:type:StandalonePriceTierRemovedMessage) Message.
+*
+ */
+type StandalonePriceRemovePriceTierAction struct {
+	// The `minimumQuantity` of the [PriceTier](ctp:api:type:PriceTier) to be removed from the `tiers` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
+	TierMinimumQuantity int `json:"tierMinimumQuantity"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceRemovePriceTierAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceRemovePriceTierAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removePriceTier", Alias: (*Alias)(&obj)})
 }
 
 type StandalonePriceSetCustomFieldAction struct {
@@ -453,4 +531,93 @@ func (obj StandalonePriceSetKeyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Sets all [PriceTiers](ctp:api:type:PriceTier) for a [StandalonePrice](ctp:api:type:StandalonePrice) in one action, produces the [Standalone Price Tiers Set](ctp:api:type:StandalonePriceTiersSetMessage) Message.
+*
+ */
+type StandalonePriceSetPriceTiersAction struct {
+	// Value to set. If empty, any existing value will be removed.
+	// The `minimumQuantity` of the PriceTiers must be unique and greater than `1`, otherwise an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
+	Tiers []PriceTierDraft `json:"tiers"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceSetPriceTiersAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceSetPriceTiersAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setPriceTier", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the `validFrom` value generates the [StandalonePriceValidFromSet](ctp:api:type:StandalonePriceValidFromSetMessage) Message.
+*
+*	As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
+*
+ */
+type StandalonePriceSetValidFromAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceSetValidFromAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceSetValidFromAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidFrom", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the `validFrom` and `validUntil` values generates the [StandalonePriceValidFromAndUntilSet](ctp:api:type:StandalonePriceValidFromAndUntilSetMessage) Message.
+*
+*	As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
+*
+ */
+type StandalonePriceSetValidFromAndUntilAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Value to set.
+	// If empty, any existing value is removed.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceSetValidFromAndUntilAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidFromAndUntil", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updating the `validUntil` value generates the [StandalonePriceValidUntilSet](ctp:api:type:StandalonePriceValidUntilSetMessage) Message.
+*
+*	As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
+*
+ */
+type StandalonePriceSetValidUntilAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceSetValidUntilAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceSetValidUntilAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setValidUntil", Alias: (*Alias)(&obj)})
 }

@@ -35,7 +35,7 @@ type ShoppingList struct {
 	TextLineItems []TextLineItem `json:"textLineItems"`
 	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
-	// Identifies ShoppingLists belonging to an [anonymous session](/../api/authorization#tokens-for-anonymous-sessions).
+	// Identifies ShoppingLists belonging to an [anonymous session](ctp:api:type:AnonymousSession).
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Store to which the ShoppingList is assigned.
 	Store *StoreKeyReference `json:"store,omitempty"`
@@ -60,7 +60,7 @@ type ShoppingListDraft struct {
 	Key *string `json:"key,omitempty"`
 	// Description of the ShoppingList.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Identifies ShoppingLists belonging to an [anonymous session](/../api/authorization#tokens-for-anonymous-sessions).
+	// Identifies ShoppingLists belonging to an [anonymous session](ctp:api:type:AnonymousSession).
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
@@ -132,14 +132,12 @@ type ShoppingListLineItem struct {
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) the ShoppingListLineItem refers to. If not set, the ShoppingListLineItem refers to the Master Variant.
 	VariantId *int `json:"variantId,omitempty"`
 	// Data of the [ProductVariant](ctp:api:type:ProductVariant).
-	// Returned when expanded using `expand=lineItems[*].variant`.
 	//
-	// *Limitation: `expand=lineItems[0].variant` is not supported.*
+	// Returned when expanded using `expand=lineItems[*].variant`. You cannot expand only a single element of the array.
 	Variant *ProductVariant `json:"variant,omitempty"`
 	// Slug of the current [ProductData](ctp:api:type:ProductData).
-	// Only returned when expanded using `expand=lineItems[*].productSlug`.
 	//
-	// *Limitation: `expand=lineItems[0].productSlug` is not supported.*
+	// Returned when expanded using `expand=lineItems[*].productSlug`. You cannot expand only a single element of the array.
 	ProductSlug *LocalizedString `json:"productSlug,omitempty"`
 }
 

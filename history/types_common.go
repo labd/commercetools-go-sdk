@@ -514,6 +514,11 @@ const (
 	StateTypePaymentState  StateType = "PaymentState"
 )
 
+type StoreCountry struct {
+	// Two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	Code string `json:"code"`
+}
+
 type SubRate struct {
 	Name   string `json:"name"`
 	Amount int    `json:"amount"`
@@ -569,7 +574,9 @@ type TaxedItemPrice struct {
 }
 
 type TaxedPrice struct {
-	TotalNet   Money `json:"totalNet"`
+	// Total net price of the Order.
+	TotalNet Money `json:"totalNet"`
+	// Total gross price of the Order.
 	TotalGross Money `json:"totalGross"`
 }
 

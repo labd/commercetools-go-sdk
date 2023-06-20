@@ -54,6 +54,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodPost) WithHead
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

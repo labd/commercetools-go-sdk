@@ -47,10 +47,12 @@ type Store struct {
 	DistributionChannels []ChannelReference `json:"distributionChannels"`
 	// Inventory Supply Channels allowed for the Store.
 	SupplyChannels []ChannelReference `json:"supplyChannels"`
-	// Controls availability of Products for this Store via active Product Selections.
+	// Controls availability of Products for this Store via Product Selections:
 	//
-	// - If empty all Products in the [Project](ctp:api:type:Project) are available in this Store.
-	// - If provided, Products from `active` Product Selections are available in this Store.
+	// - Leave empty if all Products in the [Project](ctp:api:type:Project) should be available in this Store.
+	// - If only `inactive` Product Selections with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) are provided, all the Products are availlable in this Store.
+	// - If all the Product Selections provided are `inactive` and there's at least a Product Selection of mode `Individual`, no Product is availlable in this Store.
+	// - If at least an `active` Product Selection is provided, only `active` Product Selections are considered to compute the availlability in this Store.
 	ProductSelections []ProductSelectionSetting `json:"productSelections"`
 	// Custom fields for the Store.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -70,10 +72,12 @@ type StoreDraft struct {
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 	// ResourceIdentifier of a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
-	// Controls availability of Products for this Store via active Product Selections.
+	// Controls availability of Products for this Store via active/inactive Product Selections:
 	//
 	// - Leave empty if all Products in the [Project](ctp:api:type:Project) should be available in this Store.
-	// - If provided, Products from `active` Product Selections are available in this Store.
+	// - If only `inactive` Product Selections with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) are provided, all the Products are available in this Store.
+	// - If all the Product Selections provided are `inactive` and there's at least a Product Selection of mode `Individual`, no Product is available in this Store.
+	// - If at least an `active` Product Selection is provided, only `active` Product Selections are considered to compute the availability in this Store.
 	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
 	// Custom fields for the Store.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`

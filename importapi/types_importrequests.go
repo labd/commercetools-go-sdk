@@ -97,6 +97,12 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "type":
+		obj := TypeImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -244,7 +250,7 @@ func (obj StandalonePriceImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created or updated in a Project.
+*	The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created in a Project.
 *
  */
 type OrderImportRequest struct {
@@ -336,4 +342,23 @@ func (obj InventoryImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "inventory", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Types](#import-types). Contains data for [Types](/../api/projects/types#type) to be created or updated in a Project.
+*
+ */
+type TypeImportRequest struct {
+	// The type import resources of this request.
+	Resources []TypeImport `json:"resources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TypeImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias TypeImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "type", Alias: (*Alias)(&obj)})
 }

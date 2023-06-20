@@ -18,6 +18,10 @@ func (rb *ByProjectKeyRequestBuilder) WithResourceTypeValue(resourceType string)
 		client:       rb.client,
 	}
 }
+
+/**
+*	The `view_audit_log:{projectKey}` scope is required, and depending on the [resource type](ctp:history:type:ChangeHistoryResourceType) queried, their respective scopes must be granted.
+ */
 func (rb *ByProjectKeyRequestBuilder) Get() *ByProjectKeyRequestMethodGet {
 	return &ByProjectKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s", rb.projectKey),

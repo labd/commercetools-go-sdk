@@ -12,7 +12,7 @@ type ByProjectKeyProductProjectionsSearchRequestBuilder struct {
 }
 
 /**
-*	Search Product Projection
+*	Product Projection Search
  */
 func (rb *ByProjectKeyProductProjectionsSearchRequestBuilder) Post(body string) *ByProjectKeyProductProjectionsSearchRequestMethodPost {
 	return &ByProjectKeyProductProjectionsSearchRequestMethodPost{
@@ -23,7 +23,7 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestBuilder) Post(body string) 
 }
 
 /**
-*	Search Product Projection
+*	Product Projection Search
  */
 func (rb *ByProjectKeyProductProjectionsSearchRequestBuilder) Get() *ByProjectKeyProductProjectionsSearchRequestMethodGet {
 	return &ByProjectKeyProductProjectionsSearchRequestMethodGet{

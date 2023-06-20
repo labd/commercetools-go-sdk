@@ -11,6 +11,23 @@ type ByProjectKeyRequestBuilder struct {
 	client     *Client
 }
 
+func (rb *ByProjectKeyRequestBuilder) AsAssociate() *ByProjectKeyAsAssociateRequestBuilder {
+	return &ByProjectKeyAsAssociateRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	An Associate Role enables permissions over a Business Unit to an Associate.
+ */
+func (rb *ByProjectKeyRequestBuilder) AssociateRoles() *ByProjectKeyAssociateRolesRequestBuilder {
+	return &ByProjectKeyAssociateRolesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
 /**
 *	A Business Unit can represent a Company or a Division.
  */
@@ -199,7 +216,7 @@ func (rb *ByProjectKeyRequestBuilder) ProductProjections() *ByProjectKeyProductP
 /**
 *	Manage individual Store assortments through Product Selections.
 *
-*	After you have created Product Selections and populated them by Products,
+*	After you have created Product Selections and populated them with Products,
 *	you can manage Store assortments by assigning Product Selections to Stores.
 *	Product Selections may be used by a single Store or shared across several Stores.
 *

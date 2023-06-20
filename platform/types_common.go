@@ -344,7 +344,7 @@ type ClientLogging struct {
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// Indicates that the resource was modified during an [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) with the logged ID.
+	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -358,7 +358,7 @@ type CreatedBy struct {
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who created the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// Indicates the [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) during which the resource was created.
+	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was created.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -438,7 +438,7 @@ func (obj GeoJsonPoint) MarshalJSON() ([]byte, error) {
 }
 
 type Image struct {
-	// URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant).
+	// URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant). If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
 	Url string `json:"url"`
 	// Dimensions of the original image.
 	Dimensions ImageDimensions `json:"dimensions"`
@@ -471,6 +471,12 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 	}
 
 	switch discriminator {
+	case "associate-role":
+		obj := AssociateRoleKeyReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "business-unit":
 		obj := BusinessUnitKeyReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -497,7 +503,7 @@ type LastModifiedBy struct {
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// Indicates the [anonymous session](/../api/authorization#tokens-for-anonymous-sessions) during which the resource was modified.
+	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was modified.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -508,9 +514,7 @@ type LastModifiedBy struct {
 type LocalizedString map[string]string
 
 /**
-*	Draft type that stores amounts in cent precision for the specified currency.
-*
-*	For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+*	Draft type that stores amounts only in cent precision for the specified currency.
 *
  */
 type Money struct {
@@ -552,11 +556,11 @@ type Price struct {
 	Channel *ChannelReference `json:"channel,omitempty"`
 	// Date and time from which this Price is valid.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Date and time until this Price is valid.
+	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
-	// If set, the API uses the DiscountedPrice value for the [LineItem Price selection](/projects/carts#lineitem-price-selection).
-	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
+	// If set, the API uses the DiscountedPrice value for the [Line Item Price selection](ctp:api:type:LineItemPriceSelection).
+	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
 	Tiers []PriceTier `json:"tiers"`
@@ -622,7 +626,7 @@ type PriceDraft struct {
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
 	// Set this field if this Price is only valid from the specified date and time. Must be at least 1 ms earlier than `validUntil`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`.
+	// Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Set this field to add a DiscountedPrice from an **external service**.
 	//
@@ -675,6 +679,7 @@ type PriceTier struct {
 	// Minimum quantity this Price tier is valid for.
 	//
 	// The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
+	// A [Price](ctp:api:type:Price) or [StandalonePrice](ctp:api:type:StandalonePrice) cannot contain more than one tier with the same `minimumQuantity`.
 	MinimumQuantity int `json:"minimumQuantity"`
 	// Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
 	//
@@ -708,6 +713,8 @@ type PriceTierDraft struct {
 	// Minimum quantity this Price tier is valid for.
 	//
 	// The minimum quantity is always greater than or equal to 2. The base Price is interpreted as valid for a minimum quantity equal to 1.
+	// A [Price](ctp:api:type:Price) or [StandalonePrice](ctp:api:type:StandalonePrice) cannot contain more than one tier with the same `minimumQuantity`.
+	// In the case one of the constraint is not met an [InvalidField](ctp:api:type:InvalidFieldError) is returned.
 	MinimumQuantity int `json:"minimumQuantity"`
 	// Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
 	//
@@ -780,6 +787,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 	}
 
 	switch discriminator {
+	case "associate-role":
+		obj := AssociateRoleReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "attribute-group":
 		obj := AttributeGroupReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -807,6 +820,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return obj, nil
 	case "cart":
 		obj := CartReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "direct-discount":
+		obj := DirectDiscountReference{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -978,6 +997,7 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 type ReferenceTypeId string
 
 const (
+	ReferenceTypeIdAssociateRole    ReferenceTypeId = "associate-role"
 	ReferenceTypeIdAttributeGroup   ReferenceTypeId = "attribute-group"
 	ReferenceTypeIdBusinessUnit     ReferenceTypeId = "business-unit"
 	ReferenceTypeIdCart             ReferenceTypeId = "cart"
@@ -986,6 +1006,7 @@ const (
 	ReferenceTypeIdChannel          ReferenceTypeId = "channel"
 	ReferenceTypeIdCustomer         ReferenceTypeId = "customer"
 	ReferenceTypeIdCustomerGroup    ReferenceTypeId = "customer-group"
+	ReferenceTypeIdDirectDiscount   ReferenceTypeId = "direct-discount"
 	ReferenceTypeIdDiscountCode     ReferenceTypeId = "discount-code"
 	ReferenceTypeIdExtension        ReferenceTypeId = "extension"
 	ReferenceTypeIdInventoryEntry   ReferenceTypeId = "inventory-entry"
@@ -1033,6 +1054,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 	}
 
 	switch discriminator {
+	case "associate-role":
+		obj := AssociateRoleResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "attribute-group":
 		obj := AttributeGroupResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1213,7 +1240,7 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 
 /**
 *	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-*	[Search Product Projection](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when Price Selection is used.
+*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](ctp:api:type:ScopedPriceSearch) is used.
 *
  */
 type ScopedPrice struct {
@@ -1233,7 +1260,7 @@ type ScopedPrice struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Date and time until which the Price is valid.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Is set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItemAction).
+	// Is set when a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItemAction).
 	//
 	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down) in favor of the Customer.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
@@ -1383,6 +1410,10 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 	return nil, nil
 }
 
+/**
+*	This draft type is the alternative to [Money](ctp:api:type:Money).
+*
+ */
 type CentPrecisionMoneyDraft struct {
 	// Amount in the smallest indivisible unit of a currency, such as:
 	//

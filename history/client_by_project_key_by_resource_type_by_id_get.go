@@ -202,6 +202,10 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) WithHeaders(headers ht
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	The `view_audit_log:{projectKey}` scope is required, and depending on the [resource type](ctp:history:type:ChangeHistoryResourceType) queried, their respective scopes must be granted.
+ */
 func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Execute(ctx context.Context) (result *RecordPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

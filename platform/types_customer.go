@@ -64,7 +64,7 @@ type Customer struct {
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 	// Company name of the Customer.
 	CompanyName *string `json:"companyName,omitempty"`
-	// Unique VAT ID of the Customer.
+	// Individual VAT ID of the Customer.
 	VatId *string `json:"vatId,omitempty"`
 	// Addresses used by the Customer.
 	Addresses []Address `json:"addresses"`
@@ -191,7 +191,7 @@ type CustomerDraft struct {
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 	// Company name of the Customer. When representing a company as a Customer, [Business Units](ctp:api:type:BusinessUnit) provide extended funtionality.
 	CompanyName *string `json:"companyName,omitempty"`
-	// Unique VAT ID of the Customer.
+	// Individual VAT ID of the Customer.
 	VatId *string `json:"vatId,omitempty"`
 	// Addresses of the Customer.
 	Addresses []BaseAddress `json:"addresses"`
@@ -345,7 +345,7 @@ func (obj CustomerResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerSignInResult struct {
-	// Customer [signed up](#create-sign-up-customer) or [signed in](#authenticate-sign-in-customer) after authentication.
+	// Customer [signed up](ctp:api:endpoint:/{projectKey}/customers:POST) or [signed in](ctp:api:endpoint:/{projectKey}/login:POST) after authentication.
 	Customer Customer `json:"customer"`
 	// Cart associated with the Customer.
 	// If empty, the Customer does not have a Cart assigned.

@@ -9,8 +9,10 @@ import (
 )
 
 type BusinessUnitConfiguration struct {
-	// Status of Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+	// Status of Business Units created using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
 	MyBusinessUnitStatusOnCreation BusinessUnitConfigurationStatus `json:"myBusinessUnitStatusOnCreation"`
+	// Default [Associate Role](ctp:api:type:AssociateRole) assigned to the Associate creating a Business Unit using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
+	MyBusinessUnitAssociateRoleOnCreation *AssociateRoleKeyReference `json:"myBusinessUnitAssociateRoleOnCreation,omitempty"`
 }
 
 /**
@@ -24,7 +26,10 @@ const (
 )
 
 type CartsConfiguration struct {
-	// Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft). This field may not be present on Projects created before January 2020.
+	// Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft) and [MyCartDraft](ctp:api:type:MyCartDraft).
+	// If a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts exists, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent upon deletion of a Cart.
+	//
+	// This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Indicates if country _- no state_ Tax Rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all Tax Categories of a Cart Line Items. This field may not be present on Projects created before June 2020.
 	CountryTaxRateFallbackEnabled *bool `json:"countryTaxRateFallbackEnabled,omitempty"`
@@ -37,7 +42,7 @@ type CartsConfiguration struct {
 *
  */
 type ExternalOAuth struct {
-	// URL with authorization header.
+	// URL with authorization header. If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
 	Url string `json:"url"`
 	// Must not contain any leading or trailing whitespaces. Partially hidden on retrieval.
 	AuthorizationHeader string `json:"authorizationHeader"`
@@ -215,6 +220,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setMyBusinessUnitAssociateRoleOnCreation":
+		obj := ProjectSetBusinessUnitAssociateRoleOnCreationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setExternalOAuth":
 		obj := ProjectSetExternalOAuthAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -369,7 +380,7 @@ type ShoppingListsConfiguration struct {
 }
 
 type ProjectChangeBusinessUnitStatusOnCreationAction struct {
-	// Status for Business Units created using the [My Business Unit endpoint](/../api/projects/me-business-units#create-businessunit).
+	// Status for Business Units created using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
 	Status BusinessUnitConfigurationStatus `json:"status"`
 }
 
@@ -550,6 +561,21 @@ func (obj ProjectChangeShoppingListsConfigurationAction) MarshalJSON() ([]byte, 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeShoppingListsConfiguration", Alias: (*Alias)(&obj)})
+}
+
+type ProjectSetBusinessUnitAssociateRoleOnCreationAction struct {
+	// Default [Associate Role](ctp:api:type:AssociateRole) assigned to the Associate creating a Business Unit using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
+	AssociateRole AssociateRoleResourceIdentifier `json:"associateRole"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetBusinessUnitAssociateRoleOnCreationAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetBusinessUnitAssociateRoleOnCreationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMyBusinessUnitAssociateRoleOnCreation", Alias: (*Alias)(&obj)})
 }
 
 type ProjectSetExternalOAuthAction struct {

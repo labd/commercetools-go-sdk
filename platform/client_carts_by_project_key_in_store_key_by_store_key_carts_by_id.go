@@ -14,11 +14,9 @@ type ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder struct {
 }
 
 /**
-*	Returns a cart by its ID from a specific Store.
-*	If the cart exists in the project but does not have the store field,
-*	or the store field references a different store, this method returns a ResourceNotFound error.
-*	The cart may not contain up-to-date prices, discounts etc.
-*	If you want to ensure they're up-to-date, send an Update request with the Recalculate update action instead.
+*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+*
+*	To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodGet {
@@ -41,6 +39,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder) Post(body Car
 	}
 }
 
+/**
+*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/carts/%s", rb.projectKey, rb.storeKey, rb.id),

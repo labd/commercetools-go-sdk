@@ -95,7 +95,7 @@ type CartDiscountDraft struct {
 	// Description of the CartDiscount.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Effect of the CartDiscount.
-	// For a target, relative or absolute discount values, or a fixed item price value can be specified. If no target is specified, a gift line item can be added to the cart.
+	// For a [target](ctp:api:type:CartDiscountTarget), relative or absolute Discount values or a fixed item Price value can be specified. If no target is specified, a [Gift Line Item](/../api/projects/cartDiscounts#gift-line-item) can be added to the Cart.
 	Value CartDiscountValueDraft `json:"value"`
 	// Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
 	CartPredicate string `json:"cartPredicate"`

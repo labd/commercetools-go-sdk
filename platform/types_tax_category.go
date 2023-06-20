@@ -221,6 +221,9 @@ type TaxRate struct {
 	// Present if the TaxRate is part of a [TaxCategory](ctp:api:type:TaxCategory).
 	// Absent for external TaxRates in [LineItem](ctp:api:type:LineItem), [CustomLineItem](ctp:api:type:CustomLineItem), and [ShippingInfo](ctp:api:type:ShippingInfo).
 	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the TaxRate.
+	// Present when set using [TaxRateDraft](ctp:api:type:TaxRateDraft). Not available for external TaxRates created using [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
+	Key *string `json:"key,omitempty"`
 	// Name of the TaxRate.
 	Name string `json:"name"`
 	// Tax rate. If subrates are used, the amount must be the sum of all subrates.
@@ -274,6 +277,8 @@ type TaxRateDraft struct {
 	State *string `json:"state,omitempty"`
 	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
 	SubRates []SubRate `json:"subRates"`
+	// User-defined unique identifier of the TaxRate.
+	Key *string `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -332,7 +337,11 @@ func (obj TaxCategoryChangeNameAction) MarshalJSON() ([]byte, error) {
 
 type TaxCategoryRemoveTaxRateAction struct {
 	// ID of the TaxRate to remove.
-	TaxRateId string `json:"taxRateId"`
+	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	TaxRateId *string `json:"taxRateId,omitempty"`
+	// Key of the TaxRate to remove.
+	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	TaxRateKey *string `json:"taxRateKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -347,7 +356,11 @@ func (obj TaxCategoryRemoveTaxRateAction) MarshalJSON() ([]byte, error) {
 
 type TaxCategoryReplaceTaxRateAction struct {
 	// ID of the TaxRate to replace.
-	TaxRateId string `json:"taxRateId"`
+	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	TaxRateId *string `json:"taxRateId,omitempty"`
+	// Key of the TaxRate to replace.
+	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	TaxRateKey *string `json:"taxRateKey,omitempty"`
 	// New TaxRate to replace with.
 	TaxRate TaxRateDraft `json:"taxRate"`
 }

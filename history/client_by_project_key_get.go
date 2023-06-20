@@ -27,7 +27,7 @@ func (r *ByProjectKeyRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ByProjectKeyRequestMethodGetInput struct {
-	ResourceType                    []ChangeHistoryResourceType
+	ResourceTypes                   []ChangeHistoryResourceType
 	DateFrom                        *interface{}
 	DateTo                          *interface{}
 	Limit                           *int
@@ -46,8 +46,8 @@ type ByProjectKeyRequestMethodGetInput struct {
 
 func (input *ByProjectKeyRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	for _, v := range input.ResourceType {
-		values.Add("resourceType", fmt.Sprintf("%v", v))
+	for _, v := range input.ResourceTypes {
+		values.Add("resourceTypes", fmt.Sprintf("%v", v))
 	}
 	if input.DateFrom != nil {
 		values.Add("date.from", fmt.Sprintf("%v", *input.DateFrom))
@@ -98,11 +98,11 @@ func (input *ByProjectKeyRequestMethodGetInput) Values() url.Values {
 	return values
 }
 
-func (rb *ByProjectKeyRequestMethodGet) ResourceType(v []ChangeHistoryResourceType) *ByProjectKeyRequestMethodGet {
+func (rb *ByProjectKeyRequestMethodGet) ResourceTypes(v []ChangeHistoryResourceType) *ByProjectKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
 	}
-	rb.params.ResourceType = v
+	rb.params.ResourceTypes = v
 	return rb
 }
 
@@ -226,6 +226,10 @@ func (rb *ByProjectKeyRequestMethodGet) WithHeaders(headers http.Header) *ByProj
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	The `view_audit_log:{projectKey}` scope is required, and depending on the [resource type](ctp:history:type:ChangeHistoryResourceType) queried, their respective scopes must be granted.
+ */
 func (rb *ByProjectKeyRequestMethodGet) Execute(ctx context.Context) (result *RecordPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

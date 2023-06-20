@@ -54,6 +54,11 @@ func (rb *ByProjectKeyMeBusinessUnitsRequestMethodPost) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Automatically assigns the Associate to the Business Unit in the default [Associate Role](ctp:api:type:AssociateRole) defined in [BusinessUnitConfiguration](ctp:api:type:BusinessUnitConfiguration). If there is no default Associate Role configured, this request fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error. When creating a Division, the Associate must have the `AddChildUnits` [Permission](ctp:api:type:Permission) in the parent unit. If the required [Permission](/projects/associate-roles#permission) is missing, an [AssociateMissingPermission](/errors#associatemissingpermission) error is returned.
+*
+ */
 func (rb *ByProjectKeyMeBusinessUnitsRequestMethodPost) Execute(ctx context.Context) (result *BusinessUnit, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

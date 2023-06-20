@@ -6,6 +6,13 @@ import (
 	"encoding/json"
 )
 
+type AuthenticationMode string
+
+const (
+	AuthenticationModePassword     AuthenticationMode = "Password"
+	AuthenticationModeExternalAuth AuthenticationMode = "ExternalAuth"
+)
+
 /**
 *	Different from Address in that `key` is required and `id` is not supported.
 *
@@ -53,8 +60,8 @@ type CustomerImport struct {
 	CustomerNumber *string `json:"customerNumber,omitempty"`
 	// Maps to `Customer.email`.
 	Email string `json:"email"`
-	// Maps to `Customer.password`.
-	Password string `json:"password"`
+	// Required when `authenticationMode` is set to `Password`. Maps to `Customer.password`.
+	Password *string `json:"password,omitempty"`
 	// The References to the Stores with which the Customer is associated. If referenced Stores do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Stores are created.
 	Stores []StoreKeyReference `json:"stores"`
 	// Maps to `Customer.firstName`.
@@ -92,8 +99,11 @@ type CustomerImport struct {
 	ShippingAddresses []int `json:"shippingAddresses"`
 	// Maps to `Customer.locale`.
 	Locale *string `json:"locale,omitempty"`
-	// The custom fields for this Customer.
+	// The Custom Fields for this Customer.
 	Custom *Custom `json:"custom,omitempty"`
+	// - Set to `Password` to make the `password` field required for the Customer.
+	// - Set to `ExternalAuth` when the password is not required for the Customer.
+	AuthenticationMode *AuthenticationMode `json:"authenticationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

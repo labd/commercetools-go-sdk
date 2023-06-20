@@ -96,12 +96,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMeth
 }
 
 /**
-*	Queries Product Selection assignments in a specific Store.
+*	Queries Product Selection assignments over all Product Selections that are active in a specific Store.
 *
 *	The response will include duplicate Products whenever more than one active Product Selection of the Store
 *	includes a Product. To make clear through which Product Selection a Product is available in the Store
 *	the response contains assignments including both the Product and the Product Selection.
-*	Only Products of Product Selections that are activated in Store will be returned.
+*	Only Products of Product Selections that are activated in the Store will be returned.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Execute(ctx context.Context) (result *ProductsInStorePagedQueryResponse, err error) {

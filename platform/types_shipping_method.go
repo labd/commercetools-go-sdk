@@ -271,8 +271,8 @@ type ShippingRate struct {
 	// Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
 	FreeAbove TypedMoney `json:"freeAbove,omitempty"`
 	// `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
-	// Only appears in response to requests for [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) or
-	// [Get ShippingMethods for a Location](#get-shippingmethods-for-a-location).
+	// Only appears in response to requests for [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) or
+	// [Get ShippingMethods for a Location](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-location:GET).
 	IsMatching *bool `json:"isMatching,omitempty"`
 	// Price tiers for the ShippingRate.
 	Tiers []ShippingRatePriceTier `json:"tiers"`
@@ -406,7 +406,7 @@ type CartClassificationTier struct {
 	Value string `json:"value"`
 	// Fixed shipping rate for the selected classification.
 	Price Money `json:"price"`
-	// Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+	// Appears in response to [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) if the shipping rate matches the search query.
 	IsMatching *bool `json:"isMatching,omitempty"`
 }
 
@@ -432,7 +432,7 @@ type CartScoreTier struct {
 	Price *Money `json:"price,omitempty"`
 	// Dynamically calculates a Price for a range of scores.
 	PriceFunction *PriceFunction `json:"priceFunction,omitempty"`
-	// Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+	// Appears in response to [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) if the shipping rate matches the search query.
 	IsMatching *bool `json:"isMatching,omitempty"`
 }
 
@@ -458,7 +458,7 @@ type CartValueTier struct {
 	MinimumCentAmount int `json:"minimumCentAmount"`
 	// Fixed shipping rate Price for a CartValue.
 	Price Money `json:"price"`
-	// Appears in response to [Get ShippingMethods for a Cart](#get-shippingmethods-for-a-cart) if the shipping rate matches the search query.
+	// Appears in response to [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) if the shipping rate matches the search query.
 	IsMatching *bool `json:"isMatching,omitempty"`
 }
 

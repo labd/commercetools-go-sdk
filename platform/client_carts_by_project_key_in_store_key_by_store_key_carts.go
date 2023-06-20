@@ -43,10 +43,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) WithId(id string)
 		client:     rb.client,
 	}
 }
-
-/**
-*	Queries carts in a specific Store.
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/carts", rb.projectKey, rb.storeKey),
@@ -55,9 +51,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectK
 }
 
 /**
-*	Creates a [Cart](ctp:api:type:Cart) in the Store specified by `storeKey`.
-*	When using this endpoint the Cart's `store` field is always set to the store specified in the path parameter.
-*	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*	The `store` field in the created [Cart](ctp:api:type:Cart) is set to the Store specified by the `storeKey` path parameter.
+*
+*	Specific Error Codes: [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Post(body CartDraft) *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodPost {

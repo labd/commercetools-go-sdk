@@ -5,6 +5,7 @@ package platform
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -14,20 +15,60 @@ type ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet struct {
 	url     string
 	client  *Client
 	headers http.Header
+	params  *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGetInput
 }
 
 func (r *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet) Dump() map[string]interface{} {
 	return map[string]interface{}{
-		"url": r.url,
+		"url":    r.url,
+		"params": r.params,
 	}
 }
 
+type ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGetInput struct {
+	Expand []string
+}
+
+func (input *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGetInput) Values() url.Values {
+	values := url.Values{}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
+	}
+	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGetInput{}
+	}
+	rb.params.Expand = v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGetInput) *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet {
+	rb.params = &input
+	return rb
+}
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet {
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves the Customer's most recently modified active Cart in the Store specified by the `storeKey` path parameter.
+*
+*	Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
+*
+*	If no active Cart exists, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet) Execute(ctx context.Context) (result *Cart, err error) {
-	queryParams := url.Values{}
+	var queryParams url.Values
+	if rb.params != nil {
+		queryParams = rb.params.Values()
+	} else {
+		queryParams = url.Values{}
+	}
 	resp, err := rb.client.get(
 		ctx,
 		rb.url,

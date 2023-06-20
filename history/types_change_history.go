@@ -7,33 +7,39 @@ import (
 )
 
 /**
-*	A Record captures the differences in a resource between one version and the next.
-*	(Recall that the version number is not always incremented by one; see [Optimistic Concurrency Control](/general-concepts#optimistic-concurrency-control).)
+*	Captures the differences between the previous and next version of a resource.
+*
+*	The maximum number of Records that can be stored and their retention period are subject to a [limit](/../api/limits#records).
 *
  */
 type Record struct {
 	// Version of the resource after the change.
+	//
+	// For more information on how the version is incremented, see [Optimistic Concurrency Control](/../api/general-concepts#optimistic-concurrency-control).
 	Version int `json:"version"`
 	// Version of the resource before the change.
 	PreviousVersion int `json:"previousVersion"`
-	// Type of the change (creation, update or deletion).
+	// Indicates the type of change.
+	// For creation, update, or deletion, the value is `"ResourceCreated"`, `"ResourceUpdated"`, or `"ResourceDeleted"` respectively.
 	Type string `json:"type"`
-	// Information about the user or the API client who performed the change.
+	// Information about the user or API Client who performed the change.
 	ModifiedBy ModifiedBy `json:"modifiedBy"`
-	// Date and time when the change was made.
+	// Date and time (UTC) when the change was made.
 	ModifiedAt string `json:"modifiedAt"`
 	// Information that describes the resource after the change.
 	Label Label `json:"label"`
 	// Information that describes the resource before the change.
 	PreviousLabel Label `json:"previousLabel"`
 	// Shows the differences in the resource between `previousVersion` and `version`.
+	//
 	// The value is not identical to the actual array of update actions sent and is not limited to update actions (see, for example, [Optimistic  Concurrency Control](/general-concepts#optimistic-concurrency-control)).
 	Changes []Change `json:"changes"`
 	// Reference to the changed resource.
 	Resource Reference `json:"resource"`
-	// References to the [Stores](ctp:api:type:Store) attached to the [Change](ctp:history:type:Change).
+	// References to the [Stores](ctp:api:type:Store) associated with the [Change](ctp:history:type:Change).
 	Stores []KeyReference `json:"stores"`
 	// `true` if no change was detected.
+	//
 	// The version number of the resource can be increased even without any change in the resource.
 	WithoutChanges bool `json:"withoutChanges"`
 }
@@ -71,7 +77,7 @@ func (obj *Record) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	Response to a query request for [Record](#record).
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Record](ctp:history:type:Record).
 *
  */
 type RecordPagedQueryResponse struct {
@@ -80,10 +86,11 @@ type RecordPagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation and not [strongly consistent](/general-concepts#strong-consistency).
+	// This number is an estimation and not [strongly consistent](/../api/general-concepts#strong-consistency).
 	Total int `json:"total"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int      `json:"offset"`
+	Offset int `json:"offset"`
+	// Records matching the query.
 	Results []Record `json:"results"`
 }
 
@@ -183,33 +190,36 @@ func (obj ErrorResponse) Error() string {
 }
 
 /**
-*	Information about the user or the API client who performed the change. This is a variant of
-*	[LastModifiedBy](/types#lastmodifiedby).
+*	Information about the user or API Client who performed the change. This is a variant of [LastModifiedBy](ctp:api:type:LastModifiedBy).
 *
  */
 type ModifiedBy struct {
 	// [ID](/general-concepts#identifier) of the Merchant Center user who made the change.
+	//
 	// Present only if the change was made in the Merchant Center.
 	ID string `json:"id"`
-	// Indicates whether the change was made by a user or the API client with or without an
-	// [External user ID](/client-logging#external-user-ids).
+	// Indicates who performed the change.
+	//
+	// - If the change was made by a user, the value is `"user"`.
+	// - If the change was made by an API Client with or without an [external user ID](/client-logging#external-user-ids), the value is `"external-user"`.
 	Type string `json:"type"`
-	// [Reference](/types#reference) to the
-	// [Customer](/projects/customers#customer) who made the change. Present only if
-	// the change was made using a token from the [Password
-	// Flow](/authorization#password-flow).
+	// [Reference](ctp:api:type:Reference) to the [Customer](ctp:api:type:Customer) who made the change.
+	//
+	// Present only if the change was made using a token from the [password flow](/authorization#password-flow).
 	Customer *Reference `json:"customer,omitempty"`
-	// Present only if the change was made using a token from an [Anonymous
-	// Session](/authorization#tokens-for-anonymous-sessions).
+	// Present only if the change was made using a token from an [anonymous session](/authorization#tokens-for-anonymous-sessions).
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// [ID](/general-concepts#identifier) of the [API
-	// Client](/projects/api-clients#apiclient) that made the change. Present only if
-	// the change was made using an API Client.
+	// [ID](/general-concepts#identifier) of the [API Client](ctp:api:type:ApiClient) that made the change.
+	//
+	// Present only if the change was made using an API Client.
 	ClientId *string `json:"clientId,omitempty"`
-	// `true` if the change was made via Merchant Center or [ImpEx](https://impex.europe-west1.gcp.commercetools.com/).
+	// `true` if the change was made using the Merchant Center or [ImpEx](https://impex.europe-west1.gcp.commercetools.com/).
 	IsPlatformClient bool `json:"isPlatformClient"`
 }
 
+/**
+*	Updates that are triggered automatically as a result of a user-initiated change.
+ */
 type PlatformInitiatedChange string
 
 const (

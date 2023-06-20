@@ -745,7 +745,7 @@ func (obj *PriceTier) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	The type of the import resource.
+*	The resource types that can be imported.
 *
  */
 type ImportResourceType string
@@ -763,6 +763,7 @@ const (
 	ImportResourceTypeCustomer            ImportResourceType = "customer"
 	ImportResourceTypeInventory           ImportResourceType = "inventory"
 	ImportResourceTypeStandalonePrice     ImportResourceType = "standalone-price"
+	ImportResourceTypeType                ImportResourceType = "type"
 )
 
 /**
@@ -836,6 +837,8 @@ type Address struct {
 	Fax                   *string `json:"fax,omitempty"`
 	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
 	ExternalId            *string `json:"externalId,omitempty"`
+	// Custom Fields defined for the Address. Custom Fields can only be applied to `shippingAddress`.
+	Custom *Custom `json:"custom,omitempty"`
 }
 
 type ProductPriceModeEnum string

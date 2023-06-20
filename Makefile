@@ -46,3 +46,11 @@ history:
 	go fmt ./generated/history/
 	rm -rf history/
 	mv generated/history .
+
+.PHONY: connect
+connect:
+	java -jar ../rmf-codegen/rmf-codegen.jar generate ../commercetools-api-reference/api-specs/connect/api.raml -b connect -o generated -t GO_CLIENT
+	goimports -w ./generated/connect/
+	go fmt ./generated/connect/
+	rm -rf connect/
+	mv generated/connect .

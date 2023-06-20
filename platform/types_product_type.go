@@ -903,7 +903,7 @@ func (obj ProductTypeChangeAttributeConstraintAction) MarshalJSON() ([]byte, err
 /**
 *	Renames an AttributeDefinition and also renames all corresponding Attributes on all [Products](/projects/products) with this ProductType. The renaming of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
 *
-*	If the AttributeDefinition name to be changed does not exist, a [AttributeNameDoesNotExist](ctp:api:type:AttributeNameDoesNotExistError) error is returned.
+*	If the AttributeDefinition name to be changed does not exist, an [AttributeNameDoesNotExist](ctp:api:type:AttributeNameDoesNotExistError) error is returned.
 *
  */
 type ProductTypeChangeAttributeNameAction struct {

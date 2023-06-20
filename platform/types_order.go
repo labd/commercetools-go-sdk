@@ -569,9 +569,91 @@ type OrderPagedSearchResponse struct {
 	Hits []Hit `json:"hits"`
 }
 
+type OrderSearchMatchType string
+
+const (
+	OrderSearchMatchTypeAny OrderSearchMatchType = "any"
+	OrderSearchMatchTypeAll OrderSearchMatchType = "all"
+)
+
+type OrderSearchQueryExpressionValue struct {
+	Field      string  `json:"field"`
+	Boost      *int    `json:"boost,omitempty"`
+	CustomType *string `json:"customType,omitempty"`
+}
+
+type OrderSearchAnyValue struct {
+	Field           string      `json:"field"`
+	Boost           *int        `json:"boost,omitempty"`
+	CustomType      *string     `json:"customType,omitempty"`
+	Value           interface{} `json:"value"`
+	Language        *string     `json:"language,omitempty"`
+	CaseInsensitive *bool       `json:"caseInsensitive,omitempty"`
+}
+
+type OrderSearchDateRangeValue struct {
+	Field      string     `json:"field"`
+	Boost      *int       `json:"boost,omitempty"`
+	CustomType *string    `json:"customType,omitempty"`
+	Gte        *time.Time `json:"gte,omitempty"`
+	Lte        *time.Time `json:"lte,omitempty"`
+}
+
+type OrderSearchFullTextValue struct {
+	Field      string                `json:"field"`
+	Boost      *int                  `json:"boost,omitempty"`
+	CustomType *string               `json:"customType,omitempty"`
+	Value      string                `json:"value"`
+	Language   *string               `json:"language,omitempty"`
+	MustMatch  *OrderSearchMatchType `json:"mustMatch,omitempty"`
+}
+
+type OrderSearchLongRangeValue struct {
+	Field      string  `json:"field"`
+	Boost      *int    `json:"boost,omitempty"`
+	CustomType *string `json:"customType,omitempty"`
+	Gte        *int    `json:"gte,omitempty"`
+	Lte        *int    `json:"lte,omitempty"`
+}
+
+type OrderSearchNumberRangeValue struct {
+	Field      string   `json:"field"`
+	Boost      *int     `json:"boost,omitempty"`
+	CustomType *string  `json:"customType,omitempty"`
+	Gte        *float64 `json:"gte,omitempty"`
+	Lte        *float64 `json:"lte,omitempty"`
+}
+
+type OrderSearchSortMode string
+
+const (
+	OrderSearchSortModeMin OrderSearchSortMode = "min"
+	OrderSearchSortModeMax OrderSearchSortMode = "max"
+	OrderSearchSortModeAvg OrderSearchSortMode = "avg"
+	OrderSearchSortModeSum OrderSearchSortMode = "sum"
+)
+
+type OrderSearchSortOrder string
+
+const (
+	OrderSearchSortOrderAsc  OrderSearchSortOrder = "asc"
+	OrderSearchSortOrderDesc OrderSearchSortOrder = "desc"
+)
+
+type OrderSearchStringValue struct {
+	Field           string  `json:"field"`
+	Boost           *int    `json:"boost,omitempty"`
+	CustomType      *string `json:"customType,omitempty"`
+	Value           string  `json:"value"`
+	Language        *string `json:"language,omitempty"`
+	CaseInsensitive *bool   `json:"caseInsensitive,omitempty"`
+}
+
 type Delivery struct {
 	// Unique identifier of the Delivery.
-	ID        string    `json:"id"`
+	ID string `json:"id"`
+	// User-defined unique identifier of the Delivery.
+	Key       *string   `json:"key,omitempty"`
 	CreatedAt time.Time `json:"createdAt"`
 	// Items which are shipped in this delivery regardless their distribution over several parcels.
 	// Can also be specified individually for each Parcel.
@@ -583,6 +665,8 @@ type Delivery struct {
 }
 
 type DeliveryDraft struct {
+	// User-defined unique identifier of the Delivery.
+	Key *string `json:"key,omitempty"`
 	// Items which are shipped in this delivery regardless their distribution over several parcels.
 	// Can also be specified individually for each Parcel.
 	Items   []DeliveryItem `json:"items"`
@@ -627,9 +711,7 @@ type DeliveryItem struct {
 }
 
 type DiscountedLineItemPriceDraft struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Draft type that stores amounts only in cent precision for the specified currency.
 	Value             Money                       `json:"value"`
 	IncludedDiscounts []DiscountedLineItemPortion `json:"includedDiscounts"`
 }
@@ -731,6 +813,10 @@ type Order struct {
 	BillingAddress  *Address `json:"billingAddress,omitempty"`
 	// Indicates whether one or multiple Shipping Methods are added to the Cart.
 	ShippingMode ShippingMode `json:"shippingMode"`
+	// User-defined unique identifier of the Shipping Method with `Single` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Custom Fields of the Shipping Method for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingCustomFields *CustomFields `json:"shippingCustomFields,omitempty"`
 	// Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
 	//
 	// It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
@@ -772,7 +858,12 @@ type Order struct {
 	Origin        CartOrigin      `json:"origin"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with LineItemLevel (horizontally) or UnitPriceLevel (vertically) calculation mode.
 	TaxCalculationMode *TaxCalculationMode `json:"taxCalculationMode,omitempty"`
-	// The shippingRateInput is used as an input to select a ShippingRatePriceTier.
+	// Input used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
+	// The data type of this field depends on the `shippingRateInputType.type` configured in the [Project](ctp:api:type:Project):
+	//
+	// - If `CartClassification`, it is [ClassificationShippingRateInput](ctp:api:type:ClassificationShippingRateInput).
+	// - If `CartScore`, it is [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput).
+	// - If `CartValue`, it cannot be used.
 	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
 	// Contains addresses for orders with multiple shipping addresses.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
@@ -840,9 +931,11 @@ func (obj Order) MarshalJSON() ([]byte, error) {
 type OrderFromCartDraft struct {
 	// Unique identifier of the Cart from which you can create an Order.
 	ID *string `json:"id,omitempty"`
-	// ResourceIdentifier of the Cart from which this order is created.
-	Cart    *CartResourceIdentifier `json:"cart,omitempty"`
-	Version int                     `json:"version"`
+	// ResourceIdentifier of the Cart from which the Order is created.
+	Cart *CartResourceIdentifier `json:"cart,omitempty"`
+	// Expected version of the Cart from which the Order is created.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
 	// String that uniquely identifies an order.
 	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
 	// It should be unique across a project.
@@ -851,12 +944,15 @@ type OrderFromCartDraft struct {
 	OrderNumber *string `json:"orderNumber,omitempty"`
 	// Identifier for a purchase order, usually in a B2B context.
 	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
-	PurchaseOrderNumber *string        `json:"purchaseOrderNumber,omitempty"`
-	PaymentState        *PaymentState  `json:"paymentState,omitempty"`
-	ShipmentState       *ShipmentState `json:"shipmentState,omitempty"`
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+	// Payment state for the Order.
+	PaymentState *PaymentState `json:"paymentState,omitempty"`
+	// Shipment state for the Order.
+	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
 	// Order will be created with `Open` status by default.
-	OrderState *OrderState              `json:"orderState,omitempty"`
-	State      *StateResourceIdentifier `json:"state,omitempty"`
+	OrderState *OrderState `json:"orderState,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
+	State *StateResourceIdentifier `json:"state,omitempty"`
 	// [Custom Fields](/../api/projects/custom-fields) for the Order. The Custom Field type must match the type of the Custom Fields in the referenced [Cart](/../api/projects/carts#cart).
 	// If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) and added to the Order.
 	// If empty, the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) are added to the Order automatically.
@@ -866,21 +962,24 @@ type OrderFromCartDraft struct {
 type OrderFromQuoteDraft struct {
 	// ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also fail if the `Quote` has expired (`validTo` check).
 	Quote QuoteResourceIdentifier `json:"quote"`
-	// `version` of the [Quote](ctp:api:type:quote) from which an Order is created.
+	// `version` of the [Quote](ctp:api:type:Quote) from which an Order is created.
 	Version int `json:"version"`
-	// If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:quote) will be set to `Accepted`.
+	// If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:Quote) will be set to `Accepted`.
 	QuoteStateToAccepted *bool `json:"quoteStateToAccepted,omitempty"`
 	// String that uniquely identifies an order.
 	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
 	// It should be unique across a project.
 	// Once it's set it cannot be changed.
 	// For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
-	OrderNumber   *string        `json:"orderNumber,omitempty"`
-	PaymentState  *PaymentState  `json:"paymentState,omitempty"`
+	OrderNumber *string `json:"orderNumber,omitempty"`
+	// Payment state of the Order.
+	PaymentState *PaymentState `json:"paymentState,omitempty"`
+	// Shipment state of the Order.
 	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
 	// Order will be created with `Open` status by default.
-	OrderState *OrderState              `json:"orderState,omitempty"`
-	State      *StateResourceIdentifier `json:"state,omitempty"`
+	OrderState *OrderState `json:"orderState,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
+	State *StateResourceIdentifier `json:"state,omitempty"`
 }
 
 type OrderImportDraft struct {
@@ -1009,6 +1108,56 @@ func (obj OrderResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSearchQuery map[string]interface{}
+type OrderSearchCompoundExpression map[string]interface{}
+type OrderSearchAndExpression struct {
+	And []OrderSearchQuery `json:"and"`
+}
+
+type OrderSearchFilterExpression struct {
+	Filter []OrderSearchQueryExpression `json:"filter"`
+}
+
+type OrderSearchNotExpression struct {
+	Not []OrderSearchQuery `json:"not"`
+}
+
+type OrderSearchOrExpression struct {
+	Or []OrderSearchQuery `json:"or"`
+}
+
+type OrderSearchQueryExpression map[string]interface{}
+type OrderSearchDateRangeExpression struct {
+	Range OrderSearchDateRangeValue `json:"range"`
+}
+
+type OrderSearchExactExpression struct {
+	Exact OrderSearchAnyValue `json:"exact"`
+}
+
+type OrderSearchExistsExpression struct {
+	Exists OrderSearchQueryExpressionValue `json:"exists"`
+}
+
+type OrderSearchFullTextExpression struct {
+	FullText OrderSearchFullTextValue `json:"fullText"`
+}
+
+type OrderSearchLongRangeExpression struct {
+	Range OrderSearchLongRangeValue `json:"range"`
+}
+
+type OrderSearchNumberRangeExpression struct {
+	Range OrderSearchNumberRangeValue `json:"range"`
+}
+
+type OrderSearchPrefixExpression struct {
+	Prefix OrderSearchStringValue `json:"prefix"`
+}
+
+type OrderSearchWildCardExpression struct {
+	Wildcard OrderSearchStringValue `json:"wildcard"`
+}
+
 type OrderSearchRequest struct {
 	// The Order search query.
 	Query OrderSearchQuery `json:"query"`
@@ -1044,7 +1193,14 @@ func (obj OrderSearchRequest) MarshalJSON() ([]byte, error) {
 
 }
 
-type OrderSearchSorting map[string]interface{}
+type OrderSearchSorting struct {
+	Field    string                      `json:"field"`
+	Language *string                     `json:"language,omitempty"`
+	Order    *OrderSearchSortOrder       `json:"order,omitempty"`
+	Mode     *OrderSearchSortMode        `json:"mode,omitempty"`
+	Filter   *OrderSearchQueryExpression `json:"filter,omitempty"`
+}
+
 type OrderState string
 
 const (
@@ -1055,7 +1211,10 @@ const (
 )
 
 type OrderUpdate struct {
-	Version int                 `json:"version"`
+	// Expected version of the Order on which the changes should be applied.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the Order.
 	Actions []OrderUpdateAction `json:"actions"`
 }
 
@@ -1439,7 +1598,9 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 
 type Parcel struct {
 	// Unique identifier of the Parcel.
-	ID           string              `json:"id"`
+	ID string `json:"id"`
+	// User-defined unique identifier of the Parcel.
+	Key          *string             `json:"key,omitempty"`
 	CreatedAt    time.Time           `json:"createdAt"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
@@ -1474,6 +1635,8 @@ func (obj Parcel) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelDraft struct {
+	// User-defined unique identifier of the Parcel.
+	Key          *string             `json:"key,omitempty"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
 	// The delivery items contained in this parcel.
@@ -1777,13 +1940,9 @@ type SyncInfo struct {
 }
 
 type TaxedItemPriceDraft struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Draft type that stores amounts only in cent precision for the specified currency.
 	TotalNet Money `json:"totalNet"`
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Draft type that stores amounts only in cent precision for the specified currency.
 	TotalGross Money `json:"totalGross"`
 }
 
@@ -1799,7 +1958,9 @@ type TrackingData struct {
 }
 
 type OrderAddDeliveryAction struct {
-	Items []DeliveryItem `json:"items"`
+	// User-defined unique identifier of a Delivery.
+	DeliveryKey *string        `json:"deliveryKey,omitempty"`
+	Items       []DeliveryItem `json:"items"`
 	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
 	ShippingKey *string `json:"shippingKey,omitempty"`
 	// Polymorphic base type that represents a postal address and contact details.
@@ -1858,7 +2019,11 @@ func (obj OrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderAddParcelToDeliveryAction struct {
-	DeliveryId   string              `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey  *string             `json:"deliveryKey,omitempty"`
+	ParcelKey    *string             `json:"parcelKey,omitempty"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
 	Items        []DeliveryItem      `json:"items"`
@@ -1993,7 +2158,10 @@ func (obj OrderImportLineItemStateAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderRemoveDeliveryAction struct {
-	DeliveryId string `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2021,7 +2189,10 @@ func (obj OrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderRemoveParcelFromDeliveryAction struct {
-	ParcelId string `json:"parcelId"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelId *string `json:"parcelId,omitempty"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelKey *string `json:"parcelKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2162,8 +2333,9 @@ func (obj OrderSetCustomLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 }
 
 type OrderSetCustomLineItemShippingDetailsAction struct {
-	CustomLineItemId string                    `json:"customLineItemId"`
-	ShippingDetails  *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	CustomLineItemId string `json:"customLineItemId"`
+	// For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
+	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2223,7 +2395,10 @@ func (obj OrderSetCustomerIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetDeliveryAddressAction struct {
-	DeliveryId string `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Polymorphic base type that represents a postal address and contact details.
 	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
 	// only differ in the data type for the optional `custom` field.
@@ -2241,7 +2416,10 @@ func (obj OrderSetDeliveryAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetDeliveryAddressCustomFieldAction struct {
-	DeliveryId string `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2261,7 +2439,10 @@ func (obj OrderSetDeliveryAddressCustomFieldAction) MarshalJSON() ([]byte, error
 }
 
 type OrderSetDeliveryAddressCustomTypeAction struct {
-	DeliveryId string `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -2280,7 +2461,10 @@ func (obj OrderSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error)
 }
 
 type OrderSetDeliveryCustomFieldAction struct {
-	DeliveryId string `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2300,7 +2484,10 @@ func (obj OrderSetDeliveryCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetDeliveryCustomTypeAction struct {
-	DeliveryId string `json:"deliveryId"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Delivery.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -2319,8 +2506,11 @@ func (obj OrderSetDeliveryCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetDeliveryItemsAction struct {
-	DeliveryId string         `json:"deliveryId"`
-	Items      []DeliveryItem `json:"items"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryId *string `json:"deliveryId,omitempty"`
+	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	DeliveryKey *string        `json:"deliveryKey,omitempty"`
+	Items       []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2412,7 +2602,8 @@ func (obj OrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetLineItemShippingDetailsAction struct {
-	LineItemId      string                    `json:"lineItemId"`
+	LineItemId string `json:"lineItemId"`
+	// For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -2455,7 +2646,10 @@ func (obj OrderSetOrderNumberAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelCustomFieldAction struct {
-	ParcelId string `json:"parcelId"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelId *string `json:"parcelId,omitempty"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2475,7 +2669,10 @@ func (obj OrderSetParcelCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelCustomTypeAction struct {
-	ParcelId string `json:"parcelId"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelId *string `json:"parcelId,omitempty"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Parcel.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -2494,8 +2691,11 @@ func (obj OrderSetParcelCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelItemsAction struct {
-	ParcelId string         `json:"parcelId"`
-	Items    []DeliveryItem `json:"items"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelId *string `json:"parcelId,omitempty"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelKey *string        `json:"parcelKey,omitempty"`
+	Items     []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2509,7 +2709,10 @@ func (obj OrderSetParcelItemsAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelMeasurementsAction struct {
-	ParcelId     string              `json:"parcelId"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelId *string `json:"parcelId,omitempty"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelKey    *string             `json:"parcelKey,omitempty"`
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 }
 
@@ -2524,7 +2727,10 @@ func (obj OrderSetParcelMeasurementsAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelTrackingDataAction struct {
-	ParcelId     string        `json:"parcelId"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelId *string `json:"parcelId,omitempty"`
+	// Either `parcelId` or `parcelKey` is required for this update action.
+	ParcelKey    *string       `json:"parcelKey,omitempty"`
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
 }
 

@@ -335,7 +335,7 @@ func (obj GoogleCloudFunctionDestination) MarshalJSON() ([]byte, error) {
 *
  */
 type HttpDestination struct {
-	// URL to the target destination.
+	// URL to the target destination. If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
 	Url string `json:"url"`
 	// Authentication methods (such as `Basic` or `Bearer`).
 	Authentication HttpDestinationAuthentication `json:"authentication,omitempty"`

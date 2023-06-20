@@ -54,6 +54,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodPost) WithHeaders(
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	The `store` field in the created [Cart](ctp:api:type:Cart) is set to the Store specified by the `storeKey` path parameter.
+*
+*	Specific Error Codes: [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

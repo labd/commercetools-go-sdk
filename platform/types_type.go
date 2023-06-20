@@ -37,6 +37,8 @@ type CustomFieldLocalizedEnumValue struct {
 type CustomFieldReferenceValue string
 
 const (
+	CustomFieldReferenceValueAssociateRole    CustomFieldReferenceValue = "associate-role"
+	CustomFieldReferenceValueBusinessUnit     CustomFieldReferenceValue = "business-unit"
 	CustomFieldReferenceValueCart             CustomFieldReferenceValue = "cart"
 	CustomFieldReferenceValueCategory         CustomFieldReferenceValue = "category"
 	CustomFieldReferenceValueChannel          CustomFieldReferenceValue = "channel"
@@ -91,7 +93,6 @@ type FieldDefinition struct {
 	Label LocalizedString `json:"label"`
 	// Defines whether the field is required to have a value.
 	Required bool `json:"required"`
-	// Must be either `SingleLine` or `MultiLine`.
 	// Defines the visual representation of the field in user interfaces like the Merchant Center.
 	// It is only relevant for string-based [FieldTypes](ctp:api:type:FieldType) like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType).
 	InputHint *TypeTextInputHint `json:"inputHint,omitempty"`
@@ -451,6 +452,7 @@ type ResourceTypeId string
 const (
 	ResourceTypeIdAddress                     ResourceTypeId = "address"
 	ResourceTypeIdAsset                       ResourceTypeId = "asset"
+	ResourceTypeIdAssociateRole               ResourceTypeId = "associate-role"
 	ResourceTypeIdBusinessUnit                ResourceTypeId = "business-unit"
 	ResourceTypeIdCartDiscount                ResourceTypeId = "cart-discount"
 	ResourceTypeIdCategory                    ResourceTypeId = "category"
@@ -472,6 +474,7 @@ const (
 	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
 	ResourceTypeIdQuote                       ResourceTypeId = "quote"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
+	ResourceTypeIdShipping                    ResourceTypeId = "shipping"
 	ResourceTypeIdShippingMethod              ResourceTypeId = "shipping-method"
 	ResourceTypeIdShoppingList                ResourceTypeId = "shopping-list"
 	ResourceTypeIdShoppingListTextLineItem    ResourceTypeId = "shopping-list-text-line-item"

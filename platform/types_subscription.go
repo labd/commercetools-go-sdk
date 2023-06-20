@@ -163,7 +163,6 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 *
  */
 type CloudEventsFormat struct {
-	// Supported versions: "1.0".
 	CloudEventsVersion string `json:"cloudEventsVersion"`
 }
 
@@ -277,6 +276,12 @@ func mapDiscriminatorDestination(input interface{}) (Destination, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ConfluentCloud":
+		obj := ConfluentCloudDestination{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "EventBridge":
 		obj := EventBridgeDestination{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -312,7 +317,7 @@ func mapDiscriminatorDestination(input interface{}) (Destination, error) {
 }
 
 /**
-*	[Azure Event Grid](https://azure.microsoft.com/en-us/services/event-grid/) can be used to push messages to Azure Functions, HTTP endpoints (webhooks), and several other Azure tools. Event Grid can only be used with the [CloudEventsFormat](ctp:api:type:CloudEventsFormat).
+*	[Azure Event Grid](https://azure.microsoft.com/en-us/products/event-grid/) can be used to push messages to Azure Functions, HTTP endpoints (webhooks), and several other Azure tools. Event Grid can only be used with the [CloudEventsFormat](ctp:api:type:CloudEventsFormat).
 *	To set up a Subscription with Azure Event Grid, first create a topic in the [Azure Portal](https://azure.microsoft.com/en-us/get-started/azure-portal/). To allow Composable Commerce to push messages to your topic, provide an [access key](https://docs.microsoft.com/en-us/azure/event-grid/get-access-keys).
 *
  */
@@ -334,7 +339,7 @@ func (obj AzureEventGridDestination) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/) can be used as a pull-queue with [Queues](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#queues), or to fan-out messages with [Topics and Subscriptions](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#topics-and-subscriptions).
+*	[Azure Service Bus](https://azure.microsoft.com/en-us/products/service-bus/) can be used as a pull-queue with [Queues](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions#queues), or to fan-out messages with [Topics and Subscriptions](https://learn.microsoft.com/en-us/azure/service-bus-messaging/service-bus-queues-topics-subscriptions).
 *	To set up a Subscription with Azure Service Bus, first create a queue/topic in the [Azure Portal](https://azure.microsoft.com/en-us/get-started/azure-portal/) with a Shared Access Policy including the `Send` permission.
 *
  */
@@ -351,6 +356,39 @@ func (obj AzureServiceBusDestination) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "AzureServiceBus", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This destination can be used to push events and messages to [Confluent Cloud](https://www.confluent.io/confluent-cloud/).
+*	To set up a Subscription of this type, first, create a topic in Confluent Cloud.
+*	Then, to allow Composable Commerce to push events and messages to your topic, generate [API keys](https://docs.confluent.io/cloud/current/access-management/authenticate/api-keys/api-keys.html) for your topic, and create the Subscription destination using the generated credentials.
+*
+*	The Composable Commerce producer uses the following values: `SASL_SSL` for`security.protocol`, `PLAIN` for`sasl.mechanism`, and the default value (1048576) for `max.request.size`.
+*
+ */
+type ConfluentCloudDestination struct {
+	// URL to the bootstrap server including the port number in the format `<xxxxx>.<region>.<provider>.confluent.cloud:9092`.
+	BootstrapServer string `json:"bootstrapServer"`
+	// Partially hidden on retrieval for security reasons.
+	ApiKey string `json:"apiKey"`
+	// Partially hidden on retrieval for security reasons.
+	ApiSecret string `json:"apiSecret"`
+	// The Kafka `acks` value. Can be `"0"`, `"1"`, or `"all"`.
+	Acks string `json:"acks"`
+	// The name of the topic.
+	Topic string `json:"topic"`
+	// The Kafka record key.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConfluentCloudDestination) MarshalJSON() ([]byte, error) {
+	type Alias ConfluentCloudDestination
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ConfluentCloud", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -515,6 +553,7 @@ func (obj MessageSubscription) MarshalJSON() ([]byte, error) {
 type MessageSubscriptionResourceTypeId string
 
 const (
+	MessageSubscriptionResourceTypeIdAssociateRole    MessageSubscriptionResourceTypeId = "associate-role"
 	MessageSubscriptionResourceTypeIdBusinessUnit     MessageSubscriptionResourceTypeId = "business-unit"
 	MessageSubscriptionResourceTypeIdCategory         MessageSubscriptionResourceTypeId = "category"
 	MessageSubscriptionResourceTypeIdCustomer         MessageSubscriptionResourceTypeId = "customer"
@@ -700,7 +739,7 @@ func (obj ResourceUpdatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 /**
 *	[AWS SNS](https://aws.amazon.com/sns/) can be used to push messages to AWS Lambda, HTTP endpoints (webhooks), or fan-out messages to SQS queues. The SQS queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type.
 *
-*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication, give permissions to user `arn:aws:iam::362576667341:user/subscriptions` to publish to the topic before creating the Subscription. Otherwise, a test message will not be sent.
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws-cn:iam::417094354346:user/subscriptions` if the Project is hosted in the China (AWS, Ningxia) Region; `arn:aws:iam::362576667341:user/subscriptions` for all other [Regions](/../api/general-concepts#regions). Otherwise, a test message will not be sent.
 *
 *	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
 *
@@ -731,7 +770,8 @@ func (obj SnsDestination) MarshalJSON() ([]byte, error) {
 /**
 *	[AWS SQS](https://aws.amazon.com/sqs/) is a pull-queue on AWS.
 *	The queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type with a `MaximumMessageSize` of `256 KB`.
-*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication, give permissions to user `arn:aws:iam::362576667341:user/subscriptions` to send messages to the queue before creating the Subscription. Otherwise, a test message will not be sent.
+*
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws-cn:iam::417094354346:user/subscriptions` if the Project is hosted in the China (AWS, Ningxia) Region; `arn:aws:iam::362576667341:user/subscriptions` for all other [Regions](/../api/general-concepts#regions). Otherwise, a test message will not be sent.
 *
 *	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
 *

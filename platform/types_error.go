@@ -38,6 +38,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "AssociateMissingPermission":
+		obj := AssociateMissingPermissionError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "AttributeDefinitionAlreadyExists":
 		obj := AttributeDefinitionAlreadyExistsError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -69,7 +75,7 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		}
 		return obj, nil
 	case "CountryNotConfiguredInStore":
-		obj := CountryNotConfiguredInStore{}
+		obj := CountryNotConfiguredInStoreError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -309,6 +315,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "MoneyOverflow":
+		obj := MoneyOverflowError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "NoMatchingProductDiscountFound":
 		obj := NoMatchingProductDiscountFoundError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -543,6 +555,93 @@ func (obj AnonymousIdAlreadyInUseError) Error() string {
 		return obj.Message
 	}
 	return "unknown AnonymousIdAlreadyInUseError: failed to parse error response"
+}
+
+/**
+*	Returned when an [Associate](/projects/business-units#associate) is missing a [Permission](/projects/associate-roles#ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources).
+*
+ */
+type AssociateMissingPermissionError struct {
+	// - When an action is performed by an Associate: `"Associate '$idOfAssociate' has no rights to $action in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredPermission'."`
+	// - When an action is performed for another Associate, like [viewing their Cart](/projects/associate-carts#get-cart-in-businessunit): `"Associate '$idOfAssociate' has no rights to $action for customer '$idOfCustomer' in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredPermission'."`
+	// - When viewing an entity: `"Associate '$idOfAssociate' has no rights to $action in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredViewMyPermission' or '$requiredViewOthersPermission'."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) to the [Associate](ctp:api:type:Associate) that tried to perform the action.
+	Associate CustomerResourceIdentifier `json:"associate"`
+	// [ResourceIdentifier](ctp:api:type:BusinessUnitResourceIdentifier) to the [BusinessUnit](ctp:api:type:BusinessUnit).
+	BusinessUnit BusinessUnitResourceIdentifier `json:"businessUnit"`
+	// [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) of the [Associate](ctp:api:type:Associate) on whose behalf the action is performed.
+	AssociateOnBehalf *CustomerResourceIdentifier `json:"associateOnBehalf,omitempty"`
+	// The Permissions that the [Associate](ctp:api:type:Associate) performing the action lacks. At least one of these Permissions is needed.
+	Permissions []Permission `json:"permissions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *AssociateMissingPermissionError) UnmarshalJSON(data []byte) error {
+	type Alias AssociateMissingPermissionError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "associate")
+	delete(obj.ExtraValues, "businessUnit")
+	delete(obj.ExtraValues, "associateOnBehalf")
+	delete(obj.ExtraValues, "permissions")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AssociateMissingPermissionError) MarshalJSON() ([]byte, error) {
+	type Alias AssociateMissingPermissionError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "AssociateMissingPermission", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *AssociateMissingPermissionError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj AssociateMissingPermissionError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown AssociateMissingPermissionError: failed to parse error response"
 }
 
 /**
@@ -948,12 +1047,17 @@ func (obj ConcurrentModificationError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Cart in Store](/../api/projects/carts#create-a-cart-in-a-store) request and [Set Country](/../api/projects/carts#set-country) update action on Carts.
-*	- [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests and [Set Country](/../api/projects/me-carts#set-country) on My Orders.
-*	- [Create Order by Import](/../api/projects/orders#create-order-by-import) request.
+*	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
+*	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
+*	- [Set Country](ctp:api:type:StagedOrderSetCountryAction) on Order Edits.
 *
  */
-type CountryNotConfiguredInStore struct {
+type CountryNotConfiguredInStoreError struct {
 	// `"The country $country is not configured for the store $store."`
 	Message string `json:"message"`
 	// Error-specific additional fields.
@@ -966,8 +1070,8 @@ type CountryNotConfiguredInStore struct {
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *CountryNotConfiguredInStore) UnmarshalJSON(data []byte) error {
-	type Alias CountryNotConfiguredInStore
+func (obj *CountryNotConfiguredInStoreError) UnmarshalJSON(data []byte) error {
+	type Alias CountryNotConfiguredInStoreError
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -985,8 +1089,8 @@ func (obj *CountryNotConfiguredInStore) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj CountryNotConfiguredInStore) MarshalJSON() ([]byte, error) {
-	type Alias CountryNotConfiguredInStore
+func (obj CountryNotConfiguredInStoreError) MarshalJSON() ([]byte, error) {
+	type Alias CountryNotConfiguredInStoreError
 	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
@@ -1008,7 +1112,7 @@ func (obj CountryNotConfiguredInStore) MarshalJSON() ([]byte, error) {
 
 }
 
-func (obj *CountryNotConfiguredInStore) DecodeStruct(src map[string]interface{}) error {
+func (obj *CountryNotConfiguredInStoreError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -1021,13 +1125,20 @@ func (obj *CountryNotConfiguredInStore) DecodeStruct(src map[string]interface{})
 	return nil
 }
 
+func (obj CountryNotConfiguredInStoreError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown CountryNotConfiguredInStoreError: failed to parse error response"
+}
+
 /**
 *	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests on Orders.
-*	- [Create Order from Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *
  */
 type DiscountCodeNonApplicableError struct {
@@ -2298,7 +2409,7 @@ func (obj ErrorResponse) Error() string {
 }
 
 /**
-*	Represents errors related to authentication and authorization in a format conforming to the [OAuth 2.0 specification](https://tools.ietf.org/html/rfc6749#section-5.2).
+*	Represents errors related to authentication and authorization in a format conforming to the [OAuth 2.0 specification](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2).
 *
  */
 type AuthErrorResponse struct {
@@ -2308,7 +2419,7 @@ type AuthErrorResponse struct {
 	Message string `json:"message"`
 	// Authentication and authorization-related errors returned for a request.
 	Errors []ErrorObject `json:"errors"`
-	// Error code as per the [OAuth 2.0 specification](https://tools.ietf.org/html/rfc6749#section-5.2). For example: `"access_denied"`.
+	// Error code as per the [OAuth 2.0 specification](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2). For example: `"access_denied"`.
 	ErrorMessage string `json:"error"`
 	// Plain text description of the first error.
 	ErrorDescription *string `json:"error_description,omitempty"`
@@ -3415,7 +3526,7 @@ func (obj InvalidInputError) Error() string {
 /**
 *	Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
 *
-*	The error is returned as a failed response to the [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests.
+*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
 *
  */
 type InvalidItemShippingDetailsError struct {
@@ -3867,8 +3978,8 @@ func (obj LanguageUsedInStoresError) Error() string {
 *
 *	- [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
 *	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
-*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests on Orders.
-*	- [Create Order from a Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *
  */
 type MatchingPriceNotFoundError struct {
@@ -4039,7 +4150,7 @@ func (obj MaxResourceLimitExceededError) Error() string {
 /**
 *	Returned when one of the following states occur:
 *
-*	- [Channel](ctp:api:Channel) is added or set on a [Store](ctp:api:Store) with missing Channel `roles`.
+*	- [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
 *	- [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
 *
 *	The error is returned as a failed response to:
@@ -4129,8 +4240,8 @@ func (obj MissingRoleOnChannelError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Set Customer ID](ctp:api:type:CartSetCustomerIdAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
-*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests.
+*	- [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
 *
  */
 type MissingTaxRateForCountryError struct {
@@ -4209,6 +4320,80 @@ func (obj MissingTaxRateForCountryError) Error() string {
 		return obj.Message
 	}
 	return "unknown MissingTaxRateForCountryError: failed to parse error response"
+}
+
+/**
+*	Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
+*	See [Money usage](/types#usage) for more information.
+*
+ */
+type MoneyOverflowError struct {
+	// `"A Money operation resulted in an overflow."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MoneyOverflowError) UnmarshalJSON(data []byte) error {
+	type Alias MoneyOverflowError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MoneyOverflowError) MarshalJSON() ([]byte, error) {
+	type Alias MoneyOverflowError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MoneyOverflow", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *MoneyOverflowError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj MoneyOverflowError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MoneyOverflowError: failed to parse error response"
 }
 
 /**
@@ -4437,8 +4622,8 @@ func (obj ObjectNotFoundError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart), [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
-*	- [Create Order from a Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *
  */
 type OutOfStockError struct {
@@ -4778,8 +4963,8 @@ func (obj PendingOperationError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](/../api/projects/orders#create-order-from-cart) and [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests on Orders.
-*	- [Create Order from a Cart](/../api/projects/me-orders#create-order-from-a-cart) and [Create Order in a Store from a Cart](/../api/projects/me-orders#create-order-in-a-store-from-a-cart) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *
  */
 type PriceChangedError struct {
@@ -4859,12 +5044,14 @@ func (obj PriceChangedError) Error() string {
 
 /**
 *	Returned when a Product is not assigned to the Product Selection.
-*
-*	The error is returned as a failed response to the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+*	The error is returned as a failed response either to the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) or to the [Set Variant Exclusion](ctp:api:type:ProductSelectionSetVariantExclusionAction) update action.
 *
  */
 type ProductAssignmentMissingError struct {
-	// `"A Product Variant Selection can only be set for a Product previously added to the Product Selection."`
+	// For Product Selection of mode Individual, the message is:
+	// `"A Product Variant Selection can only be set for a Product that has previously been added to the Product Selection."`
+	// For Product Selection of mode IndividualExclusion, the message is:
+	// `"A Variant Exclusion can only be set for a Product that has previously been added to the Product Selection of type Individual Exclusion."`
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
@@ -4936,9 +5123,9 @@ func (obj ProductAssignmentMissingError) Error() string {
 }
 
 /**
-*	Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has a different [Product Variant Selection](ctp:api:type:ProductVariantSelection).
+*	Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
 *
-*	The error is returned as a failed response to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) update action.
+*	The error is returned as a failed response either to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) or to the [Exclude Product](ctp:api:type:ProductSelectionExcludeProductAction) update action.
 *
  */
 type ProductPresentWithDifferentVariantSelectionError struct {
@@ -4948,7 +5135,7 @@ type ProductPresentWithDifferentVariantSelectionError struct {
 	ExtraValues map[string]interface{} `json:"-"`
 	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
 	Product ProductReference `json:"product"`
-	// Existing Product Variant Selection for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+	// Existing Product Variant Selection or Exclusion for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
 	ExistingVariantSelection ProductVariantSelection `json:"existingVariantSelection"`
 }
 
@@ -5998,7 +6185,7 @@ func (obj SemanticErrorError) Error() string {
 /**
 *	Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
 *
-*	The error is returned as a failed response to the [Create Order from Cart](/../api/projects/orders#create-order-from-cart) or [Create Order from Cart in a Store](/../api/projects/orders#create-order-from-cart-in-a-store) requests.
+*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) or [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
 *
  */
 type ShippingMethodDoesNotMatchCartError struct {
@@ -6150,4 +6337,5426 @@ type VariantValues struct {
 	Prices []PriceDraft `json:"prices"`
 	// Attributes of the [ProductVariant](ctp:api:type:ProductVariant).
 	Attributes []Attribute `json:"attributes"`
+}
+
+/**
+*	Represents a single error.
+ */
+type GraphQLErrorObject interface{}
+
+func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["code"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'code'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "AnonymousIdAlreadyInUse":
+		obj := GraphQLAnonymousIdAlreadyInUseError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AssociateMissingPermission":
+		obj := GraphQLAssociateMissingPermissionError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AttributeDefinitionAlreadyExists":
+		obj := GraphQLAttributeDefinitionAlreadyExistsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AttributeDefinitionTypeConflict":
+		obj := GraphQLAttributeDefinitionTypeConflictError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AttributeNameDoesNotExist":
+		obj := GraphQLAttributeNameDoesNotExistError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BadGateway":
+		obj := GraphQLBadGatewayError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ConcurrentModification":
+		obj := GraphQLConcurrentModificationError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "CountryNotConfiguredInStore":
+		obj := GraphQLCountryNotConfiguredInStoreError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DiscountCodeNonApplicable":
+		obj := GraphQLDiscountCodeNonApplicableError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateAttributeValue":
+		obj := GraphQLDuplicateAttributeValueError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateAttributeValues":
+		obj := GraphQLDuplicateAttributeValuesError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateEnumValues":
+		obj := GraphQLDuplicateEnumValuesError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateField":
+		obj := GraphQLDuplicateFieldError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateFieldWithConflictingResource":
+		obj := GraphQLDuplicateFieldWithConflictingResourceError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ConflictingResource != nil {
+			var err error
+			obj.ConflictingResource, err = mapDiscriminatorReference(obj.ConflictingResource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DuplicatePriceKey":
+		obj := GraphQLDuplicatePriceKeyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicatePriceScope":
+		obj := GraphQLDuplicatePriceScopeError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateStandalonePriceScope":
+		obj := GraphQLDuplicateStandalonePriceScopeError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DuplicateVariantValues":
+		obj := GraphQLDuplicateVariantValuesError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "EditPreviewFailed":
+		obj := GraphQLEditPreviewFailedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "EnumKeyAlreadyExists":
+		obj := GraphQLEnumKeyAlreadyExistsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "EnumKeyDoesNotExist":
+		obj := GraphQLEnumKeyDoesNotExistError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "EnumValueIsUsed":
+		obj := GraphQLEnumValueIsUsedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "EnumValuesMustMatch":
+		obj := GraphQLEnumValuesMustMatchError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionBadResponse":
+		obj := GraphQLExtensionBadResponseError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionNoResponse":
+		obj := GraphQLExtensionNoResponseError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionPredicateEvaluationFailed":
+		obj := GraphQLExtensionPredicateEvaluationFailedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionUpdateActionsFailed":
+		obj := GraphQLExtensionUpdateActionsFailedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExternalOAuthFailed":
+		obj := GraphQLExternalOAuthFailedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "FeatureRemoved":
+		obj := GraphQLFeatureRemovedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "General":
+		obj := GraphQLGeneralError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "insufficient_scope":
+		obj := GraphQLInsufficientScopeError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InternalConstraintViolated":
+		obj := GraphQLInternalConstraintViolatedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidCredentials":
+		obj := GraphQLInvalidCredentialsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidCurrentPassword":
+		obj := GraphQLInvalidCurrentPasswordError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidField":
+		obj := GraphQLInvalidFieldError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidInput":
+		obj := GraphQLInvalidInputError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidItemShippingDetails":
+		obj := GraphQLInvalidItemShippingDetailsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidJsonInput":
+		obj := GraphQLInvalidJsonInputError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidOperation":
+		obj := GraphQLInvalidOperationError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InvalidSubject":
+		obj := GraphQLInvalidSubjectError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "invalid_token":
+		obj := GraphQLInvalidTokenError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "LanguageUsedInStores":
+		obj := GraphQLLanguageUsedInStoresError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MatchingPriceNotFound":
+		obj := GraphQLMatchingPriceNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MaxResourceLimitExceeded":
+		obj := GraphQLMaxResourceLimitExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MissingRoleOnChannel":
+		obj := GraphQLMissingRoleOnChannelError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MissingTaxRateForCountry":
+		obj := GraphQLMissingTaxRateForCountryError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MoneyOverflow":
+		obj := GraphQLMoneyOverflowError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "NoMatchingProductDiscountFound":
+		obj := GraphQLNoMatchingProductDiscountFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "NotEnabled":
+		obj := GraphQLNotEnabledError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ObjectNotFound":
+		obj := GraphQLObjectNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OutOfStock":
+		obj := GraphQLOutOfStockError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OverCapacity":
+		obj := GraphQLOverCapacityError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OverlappingStandalonePriceValidity":
+		obj := GraphQLOverlappingStandalonePriceValidityError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PendingOperation":
+		obj := GraphQLPendingOperationError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PriceChanged":
+		obj := GraphQLPriceChangedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductAssignmentMissing":
+		obj := GraphQLProductAssignmentMissingError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPresentWithDifferentVariantSelection":
+		obj := GraphQLProductPresentWithDifferentVariantSelectionError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.ExistingVariantSelection != nil {
+			var err error
+			obj.ExistingVariantSelection, err = mapDiscriminatorProductVariantSelection(obj.ExistingVariantSelection)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProjectNotConfiguredForLanguages":
+		obj := GraphQLProjectNotConfiguredForLanguagesError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "QueryComplexityLimitExceeded":
+		obj := GraphQLQueryComplexityLimitExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "QueryTimedOut":
+		obj := GraphQLQueryTimedOutError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ReferenceExists":
+		obj := GraphQLReferenceExistsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ReferencedResourceNotFound":
+		obj := GraphQLReferencedResourceNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RequiredField":
+		obj := GraphQLRequiredFieldError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ResourceNotFound":
+		obj := GraphQLResourceNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ResourceSizeLimitExceeded":
+		obj := GraphQLResourceSizeLimitExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SearchDeactivated":
+		obj := GraphQLSearchDeactivatedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SearchExecutionFailure":
+		obj := GraphQLSearchExecutionFailureError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SearchFacetPathNotFound":
+		obj := GraphQLSearchFacetPathNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SearchIndexingInProgress":
+		obj := GraphQLSearchIndexingInProgressError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SemanticError":
+		obj := GraphQLSemanticErrorError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ShippingMethodDoesNotMatchCart":
+		obj := GraphQLShippingMethodDoesNotMatchCartError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SyntaxError":
+		obj := GraphQLSyntaxErrorError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Returned when the anonymous ID is being used by another resource.
+*
+*	The client application should choose another anonymous ID or retrieve an automatically generated one.
+*
+ */
+type GraphQLAnonymousIdAlreadyInUseError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLAnonymousIdAlreadyInUseError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLAnonymousIdAlreadyInUseError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLAnonymousIdAlreadyInUseError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLAnonymousIdAlreadyInUseError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "AnonymousIdAlreadyInUse", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLAnonymousIdAlreadyInUseError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an [Associate](/projects/business-units#associate) is missing a [Permission](/projects/associate-roles#ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources).
+*
+ */
+type GraphQLAssociateMissingPermissionError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) to the [Associate](ctp:api:type:Associate) that tried to perform the action.
+	Associate CustomerResourceIdentifier `json:"associate"`
+	// [ResourceIdentifier](ctp:api:type:BusinessUnitResourceIdentifier) to the [BusinessUnit](ctp:api:type:BusinessUnit).
+	BusinessUnit BusinessUnitResourceIdentifier `json:"businessUnit"`
+	// [ResourceIdentifier](ctp:api:type:CustomerResourceIdentifier) of the [Associate](ctp:api:type:Associate) on whose behalf the action is performed.
+	AssociateOnBehalf *CustomerResourceIdentifier `json:"associateOnBehalf,omitempty"`
+	// The Permissions that the [Associate](ctp:api:type:Associate) performing the action lacks. At least one of these Permissions is needed.
+	Permissions []Permission `json:"permissions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLAssociateMissingPermissionError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLAssociateMissingPermissionError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "associate")
+	delete(obj.ExtraValues, "businessUnit")
+	delete(obj.ExtraValues, "associateOnBehalf")
+	delete(obj.ExtraValues, "permissions")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLAssociateMissingPermissionError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLAssociateMissingPermissionError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "AssociateMissingPermission", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLAssociateMissingPermissionError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
+*
+*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+*
+ */
+type GraphQLAttributeDefinitionAlreadyExistsError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the Product Type containing the conflicting name.
+	ConflictingProductTypeId string `json:"conflictingProductTypeId"`
+	// Name of the Product Type containing the conflicting name.
+	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLAttributeDefinitionAlreadyExistsError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLAttributeDefinitionAlreadyExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingProductTypeId")
+	delete(obj.ExtraValues, "conflictingProductTypeName")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLAttributeDefinitionAlreadyExistsError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLAttributeDefinitionAlreadyExistsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "AttributeDefinitionAlreadyExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLAttributeDefinitionAlreadyExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
+*
+*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+*
+ */
+type GraphQLAttributeDefinitionTypeConflictError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the Product Type containing the conflicting name.
+	ConflictingProductTypeId string `json:"conflictingProductTypeId"`
+	// Name of the Product Type containing the conflicting name.
+	ConflictingProductTypeName string `json:"conflictingProductTypeName"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLAttributeDefinitionTypeConflictError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLAttributeDefinitionTypeConflictError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingProductTypeId")
+	delete(obj.ExtraValues, "conflictingProductTypeName")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLAttributeDefinitionTypeConflictError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLAttributeDefinitionTypeConflictError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "AttributeDefinitionTypeConflict", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLAttributeDefinitionTypeConflictError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an [AttributeDefinition](ctp:api:type:AttributeDefinition) does not exist for an Attribute `name`.
+*
+*	The error is returned as a failed response to the [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+*
+ */
+type GraphQLAttributeNameDoesNotExistError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Non-existent Attribute name.
+	InvalidAttributeName string `json:"invalidAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLAttributeNameDoesNotExistError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLAttributeNameDoesNotExistError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "invalidAttributeName")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLAttributeNameDoesNotExistError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLAttributeNameDoesNotExistError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "AttributeNameDoesNotExist", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLAttributeNameDoesNotExistError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a server-side problem is caused by scaling infrastructure resources.
+*
+*	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+*
+ */
+type GraphQLBadGatewayError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLBadGatewayError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLBadGatewayError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLBadGatewayError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLBadGatewayError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "BadGateway", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLBadGatewayError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
+*	The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
+*
+ */
+type GraphQLConcurrentModificationError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Current version of the resource.
+	CurrentVersion *int `json:"currentVersion,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLConcurrentModificationError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLConcurrentModificationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "currentVersion")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLConcurrentModificationError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLConcurrentModificationError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ConcurrentModification", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLConcurrentModificationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
+*	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
+*	- [Set Country](ctp:api:type:StagedOrderSetCountryAction) on Order Edits.
+*
+ */
+type GraphQLCountryNotConfiguredInStoreError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Countries configured for the Store.
+	StoreCountries []string `json:"storeCountries"`
+	// The country that is not configured for the Store but referenced on the Cart or Order.
+	Country string `json:"country"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLCountryNotConfiguredInStoreError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLCountryNotConfiguredInStoreError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "storeCountries")
+	delete(obj.ExtraValues, "country")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLCountryNotConfiguredInStoreError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLCountryNotConfiguredInStoreError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "CountryNotConfiguredInStore", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLCountryNotConfiguredInStoreError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*
+ */
+type GraphQLDiscountCodeNonApplicableError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Discount Code passed to the Cart.
+	DiscountCode *string `json:"discountCode,omitempty"`
+	// `"DoesNotExist"` or `"TimeRangeNonApplicable"`
+	Reason *string `json:"reason,omitempty"`
+	// Unique identifier of the Discount Code.
+	DiscountCodeId *string `json:"discountCodeId,omitempty"`
+	// Date and time (UTC) from which the Discount Code is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Discount Code is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Date and time (UTC) the Discount Code validity check was last performed.
+	ValidityCheckTime *time.Time `json:"validityCheckTime,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDiscountCodeNonApplicableError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDiscountCodeNonApplicableError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "discountCode")
+	delete(obj.ExtraValues, "reason")
+	delete(obj.ExtraValues, "discountCodeId")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "validityCheckTime")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDiscountCodeNonApplicableError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDiscountCodeNonApplicableError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DiscountCodeNonApplicable", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDiscountCodeNonApplicableError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*
+ */
+type GraphQLDuplicateAttributeValueError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting Attributes.
+	Attribute Attribute `json:"attribute"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateAttributeValueError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateAttributeValueError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "attribute")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateAttributeValueError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateAttributeValueError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateAttributeValue", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateAttributeValueError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*
+ */
+type GraphQLDuplicateAttributeValuesError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting Attributes.
+	Attributes []Attribute `json:"attributes"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateAttributeValuesError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateAttributeValuesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "attributes")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateAttributeValuesError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateAttributeValuesError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateAttributeValues", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateAttributeValuesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains duplicate keys.
+*
+ */
+type GraphQLDuplicateEnumValuesError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Duplicate keys.
+	Duplicates []string `json:"duplicates"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateEnumValuesError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateEnumValuesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "duplicates")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateEnumValuesError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateEnumValuesError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateEnumValues", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateEnumValuesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a field value conflicts with an existing value causing a duplicate.
+*
+ */
+type GraphQLDuplicateFieldError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the conflicting field.
+	Field string `json:"field"`
+	// Conflicting duplicate value.
+	DuplicateValue interface{} `json:"duplicateValue"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateFieldError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "duplicateValue")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateFieldError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateFieldError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a field value conflicts with an existing value stored in a particular resource causing a duplicate.
+*
+ */
+type GraphQLDuplicateFieldWithConflictingResourceError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the conflicting field.
+	Field string `json:"field"`
+	// Conflicting duplicate value.
+	DuplicateValue interface{} `json:"duplicateValue"`
+	// Reference to the resource that has the conflicting value.
+	ConflictingResource Reference `json:"conflictingResource"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateFieldWithConflictingResourceError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateFieldWithConflictingResourceError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ConflictingResource != nil {
+		var err error
+		obj.ConflictingResource, err = mapDiscriminatorReference(obj.ConflictingResource)
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "duplicateValue")
+	delete(obj.ExtraValues, "conflictingResource")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateFieldWithConflictingResourceError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateFieldWithConflictingResourceError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateFieldWithConflictingResource", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateFieldWithConflictingResourceError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Price key conflicts with an existing key.
+*
+*	Keys of Embedded Prices must be unique per ProductVariant.
+*
+ */
+type GraphQLDuplicatePriceKeyError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting Embedded Price.
+	ConflictingPrice Price `json:"conflictingPrice"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicatePriceKeyError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicatePriceKeyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingPrice")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicatePriceKeyError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicatePriceKeyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicatePriceKey", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicatePriceKeyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*
+*	Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
+*
+ */
+type GraphQLDuplicatePriceScopeError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting Embedded Price.
+	ConflictingPrice Price `json:"conflictingPrice"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicatePriceScopeError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicatePriceScopeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingPrice")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicatePriceScopeError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicatePriceScopeError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicatePriceScope", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicatePriceScopeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
+*	Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
+*
+*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
+type GraphQLDuplicateStandalonePriceScopeError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Reference to the conflicting Standalone Price.
+	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
+	// SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
+	Sku string `json:"sku"`
+	// Currency code of the country.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Standalone Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Standalone Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateStandalonePriceScopeError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateStandalonePriceScopeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingStandalonePrice")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateStandalonePriceScopeError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateStandalonePriceScopeError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateStandalonePriceScope", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateStandalonePriceScopeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*
+ */
+type GraphQLDuplicateVariantValuesError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Every Product Variant must have a distinct combination of SKU, prices, and custom Attribute values.
+	VariantValues VariantValues `json:"variantValues"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLDuplicateVariantValuesError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLDuplicateVariantValuesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "variantValues")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLDuplicateVariantValuesError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLDuplicateVariantValuesError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DuplicateVariantValues", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLDuplicateVariantValuesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
+*
+*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+*
+ */
+type GraphQLEditPreviewFailedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// State of the OrderEdit where the `stagedActions` cannot be applied to the Order.
+	Result OrderEditPreviewFailure `json:"result"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLEditPreviewFailedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLEditPreviewFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "result")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLEditPreviewFailedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLEditPreviewFailedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "EditPreviewFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLEditPreviewFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) contains a key that already exists.
+*
+ */
+type GraphQLEnumKeyAlreadyExistsError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting enum key.
+	ConflictingEnumKey string `json:"conflictingEnumKey"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLEnumKeyAlreadyExistsError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLEnumKeyAlreadyExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingEnumKey")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLEnumKeyAlreadyExistsError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLEnumKeyAlreadyExistsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "EnumKeyAlreadyExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLEnumKeyAlreadyExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) already contains a value with the given key.
+*
+*	The error is returned as a failed response to the [Change the key of an EnumValue](ctp:api:type:ProductTypeChangeEnumKeyAction) update action.
+*
+ */
+type GraphQLEnumKeyDoesNotExistError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Conflicting enum key.
+	ConflictingEnumKey string `json:"conflictingEnumKey"`
+	// Name of the conflicting Attribute.
+	ConflictingAttributeName string `json:"conflictingAttributeName"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLEnumKeyDoesNotExistError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLEnumKeyDoesNotExistError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingEnumKey")
+	delete(obj.ExtraValues, "conflictingAttributeName")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLEnumKeyDoesNotExistError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLEnumKeyDoesNotExistError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "EnumKeyDoesNotExist", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLEnumKeyDoesNotExistError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an enum value cannot be removed from an Attribute as it is being used by a Product.
+*
+*	The error is returned as a failed response to the [Remove EnumValues from AttributeDefinition](ctp:api:type:ProductTypeRemoveEnumValuesAction) update action.
+*
+ */
+type GraphQLEnumValueIsUsedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLEnumValueIsUsedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLEnumValueIsUsedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLEnumValueIsUsedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLEnumValueIsUsedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "EnumValueIsUsed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLEnumValueIsUsedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when during an order update of [AttributeEnumType](ctp:api:type:AttributeEnumType) or [AttributeLocalizedEnumType](ctp:api:type:AttributeLocalizedEnumType) the new enum values do not match the existing ones.
+*
+*	The error is returned as a failed response to the [Change the order of EnumValues](ctp:api:type:ProductTypeChangePlainEnumValueOrderAction) and [Change the order of LocalizedEnumValues](ctp:api:type:ProductTypeChangeLocalizedEnumValueOrderAction) update actions.
+*
+ */
+type GraphQLEnumValuesMustMatchError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLEnumValuesMustMatchError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLEnumValuesMustMatchError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLEnumValuesMustMatchError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLEnumValuesMustMatchError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "EnumValuesMustMatch", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLEnumValuesMustMatchError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the response from the API Extension could not be parsed successfully (such as a `500` HTTP status code, or an invalid JSON response).
+*
+ */
+type GraphQLExtensionBadResponseError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// User-defined localized description of the error.
+	LocalizedMessage *LocalizedString `json:"localizedMessage,omitempty"`
+	// Any information that should be returned to the API caller.
+	ExtensionExtraInfo *interface{} `json:"extensionExtraInfo,omitempty"`
+	// Additional errors related to the API Extension.
+	ExtensionErrors []ExtensionError `json:"extensionErrors"`
+	// The response body returned by the Extension.
+	ExtensionBody *string `json:"extensionBody,omitempty"`
+	// Http status code returned by the Extension.
+	ExtensionStatusCode *int `json:"extensionStatusCode,omitempty"`
+	// Unique identifier of the Extension.
+	ExtensionId string `json:"extensionId"`
+	// User-defined unique identifier of the Extension.
+	ExtensionKey *string `json:"extensionKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionBadResponseError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionBadResponseError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "localizedMessage")
+	delete(obj.ExtraValues, "extensionExtraInfo")
+	delete(obj.ExtraValues, "extensionErrors")
+	delete(obj.ExtraValues, "extensionBody")
+	delete(obj.ExtraValues, "extensionStatusCode")
+	delete(obj.ExtraValues, "extensionId")
+	delete(obj.ExtraValues, "extensionKey")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionBadResponseError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionBadResponseError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionBadResponse", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionBadResponseError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the API Extension does not respond within the [time limit](/../api/projects/api-extensions#time-limits), or could not be reached.
+*
+ */
+type GraphQLExtensionNoResponseError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the API Extension.
+	ExtensionId string `json:"extensionId"`
+	// User-defined unique identifier of the API Extension, if available.
+	ExtensionKey *string `json:"extensionKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionNoResponseError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionNoResponseError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "extensionId")
+	delete(obj.ExtraValues, "extensionKey")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionNoResponseError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionNoResponseError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionNoResponse", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionNoResponseError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the predicate defined in the [ExtensionTrigger](ctp:api:type:ExtensionTrigger) could not be evaluated due to a missing field.
+*
+ */
+type GraphQLExtensionPredicateEvaluationFailedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Details about the API Extension that was involved in the error.
+	ErrorByExtension ErrorByExtension `json:"errorByExtension"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionPredicateEvaluationFailedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionPredicateEvaluationFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "errorByExtension")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionPredicateEvaluationFailedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionPredicateEvaluationFailedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionPredicateEvaluationFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionPredicateEvaluationFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when update actions could not be applied to the resource (for example, because a referenced resource does not exist).
+*	This would result in a [400 Bad Request](#400-bad-request) response if the same update action was sent from a regular client.
+*
+ */
+type GraphQLExtensionUpdateActionsFailedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// User-defined localized description of the error.
+	LocalizedMessage *LocalizedString `json:"localizedMessage,omitempty"`
+	// Any information that should be returned to the API caller.
+	ExtensionExtraInfo *interface{} `json:"extensionExtraInfo,omitempty"`
+	// Additional errors related to the API Extension.
+	ExtensionErrors []ExtensionError `json:"extensionErrors"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionUpdateActionsFailedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionUpdateActionsFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "localizedMessage")
+	delete(obj.ExtraValues, "extensionExtraInfo")
+	delete(obj.ExtraValues, "extensionErrors")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionUpdateActionsFailedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionUpdateActionsFailedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionUpdateActionsFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionUpdateActionsFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
+*
+ */
+type GraphQLExternalOAuthFailedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExternalOAuthFailedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExternalOAuthFailedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExternalOAuthFailedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExternalOAuthFailedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExternalOAuthFailed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExternalOAuthFailedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the requested feature was removed.
+*
+ */
+type GraphQLFeatureRemovedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLFeatureRemovedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLFeatureRemovedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLFeatureRemovedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLFeatureRemovedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "FeatureRemoved", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLFeatureRemovedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a server-side problem occurs.
+*
+*	If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
+*
+ */
+type GraphQLGeneralError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLGeneralError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLGeneralError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLGeneralError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLGeneralError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "General", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLGeneralError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+type GraphQLInsufficientScopeError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInsufficientScopeError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInsufficientScopeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInsufficientScopeError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInsufficientScopeError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "insufficient_scope", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInsufficientScopeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when certain API-specific constraints were not met. For example, the specified [Discount Code](ctp:api:type:DiscountCode) was never applied and cannot be updated.
+*
+ */
+type GraphQLInternalConstraintViolatedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInternalConstraintViolatedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInternalConstraintViolatedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInternalConstraintViolatedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInternalConstraintViolatedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InternalConstraintViolated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInternalConstraintViolatedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Customer with the given credentials (matching the given email/password pair) is not found and authentication fails.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
+*	- [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+*
+ */
+type GraphQLInvalidCredentialsError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidCredentialsError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidCredentialsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidCredentialsError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidCredentialsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidCredentials", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidCredentialsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the current password of the Customer does not match.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
+*	- [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+*
+ */
+type GraphQLInvalidCurrentPasswordError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidCurrentPasswordError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidCurrentPasswordError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidCurrentPasswordError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidCurrentPasswordError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidCurrentPassword", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidCurrentPasswordError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a field has an invalid value.
+*
+ */
+type GraphQLInvalidFieldError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the field with the invalid value.
+	Field string `json:"field"`
+	// Value invalid for the field.
+	InvalidValue interface{} `json:"invalidValue"`
+	// Fixed set of allowed values for the field, if any.
+	AllowedValues []interface{} `json:"allowedValues"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidFieldError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "invalidValue")
+	delete(obj.ExtraValues, "allowedValues")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidFieldError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidFieldError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["allowedValues"] == nil {
+		delete(raw, "allowedValues")
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an invalid input has been sent.
+*
+ */
+type GraphQLInvalidInputError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidInputError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidInputError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidInputError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidInputError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidInput", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidInputError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
+*
+*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*
+ */
+type GraphQLInvalidItemShippingDetailsError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// `"LineItem"` or `"CustomLineItem"`
+	Subject string `json:"subject"`
+	// Unique identifier of the Line Item or Custom Line Item.
+	ItemId string `json:"itemId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidItemShippingDetailsError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidItemShippingDetailsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "subject")
+	delete(obj.ExtraValues, "itemId")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidItemShippingDetailsError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidItemShippingDetailsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidItemShippingDetails", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidItemShippingDetailsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an invalid JSON input has been sent.
+*	Either the JSON is syntactically incorrect or does not conform to the expected shape (for example is missing a required field).
+*
+*	The client application should validate the input according to the constraints described in the error message before sending the request.
+*
+ */
+type GraphQLInvalidJsonInputError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Further explanation about why the JSON is invalid.
+	DetailedErrorMessage string `json:"detailedErrorMessage"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidJsonInputError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidJsonInputError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "detailedErrorMessage")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidJsonInputError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidJsonInputError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidJsonInput", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidJsonInputError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the resources involved in the request are not in a valid state for the operation.
+*
+*	The client application should validate the constraints described in the error message before sending the request.
+*
+ */
+type GraphQLInvalidOperationError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidOperationError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidOperationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidOperationError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidOperationError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidOperation", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidOperationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+type GraphQLInvalidSubjectError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidSubjectError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidSubjectError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidSubjectError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidSubjectError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidSubject", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidSubjectError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+type GraphQLInvalidTokenError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLInvalidTokenError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLInvalidTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLInvalidTokenError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLInvalidTokenError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "invalid_token", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLInvalidTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a language cannot be removed from a Project as it is being used by a Store.
+*
+*	The error is returned as a failed response to the [Change Languages](ctp:api:type:ProjectChangeLanguagesAction) update action.
+*
+ */
+type GraphQLLanguageUsedInStoresError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLLanguageUsedInStoresError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLLanguageUsedInStoresError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLLanguageUsedInStoresError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLLanguageUsedInStoresError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LanguageUsedInStores", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLLanguageUsedInStoresError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
+*	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*
+ */
+type GraphQLMatchingPriceNotFoundError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of a [Product](ctp:api:type:Product).
+	ProductId string `json:"productId"`
+	// Unique identifier of a [ProductVariant](ctp:api:type:ProductVariant) in the Product.
+	VariantId int `json:"variantId"`
+	// Currency code of the country.
+	Currency *string `json:"currency,omitempty"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// Customer Group associated with the Price.
+	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+	// Channel associated with the Price.
+	Channel *ChannelReference `json:"channel,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMatchingPriceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMatchingPriceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "productId")
+	delete(obj.ExtraValues, "variantId")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMatchingPriceNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMatchingPriceNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MatchingPriceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMatchingPriceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
+*
+*	The limits must be adjusted for this resource before sending the request again.
+*
+ */
+type GraphQLMaxResourceLimitExceededError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Resource type that reached its maximum limit of configured elements (for example, 100 Zones per Project).
+	ExceededResource ReferenceTypeId `json:"exceededResource"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMaxResourceLimitExceededError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMaxResourceLimitExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "exceededResource")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMaxResourceLimitExceededError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMaxResourceLimitExceededError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxResourceLimitExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMaxResourceLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when one of the following states occur:
+*
+*	- [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
+*	- [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
+*	- [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
+type GraphQLMissingRoleOnChannelError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a given [Channel](ctp:api:type:Channel).
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// - `ProductDistribution` for Product Distribution Channels allowed for the Store. Also required for [Standalone Prices](ctp:api:type:StandalonePrice).
+	// - `InventorySupply` for Inventory Supply Channels allowed for the Store.
+	MissingRole ChannelRoleEnum `json:"missingRole"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMissingRoleOnChannelError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMissingRoleOnChannelError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "missingRole")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMissingRoleOnChannelError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMissingRoleOnChannelError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MissingRoleOnChannel", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMissingRoleOnChannelError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the Tax Category of at least one of the `lineItems`, `customLineItems`, or `shippingInfo` in the [Cart](ctp:api:type:Cart) is missing the [TaxRate](ctp:api:type:TaxRate) matching `country` and `state` given in the `shippingAddress` of that Cart.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*
+ */
+type GraphQLMissingTaxRateForCountryError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the [TaxCategory](ctp:api:type:TaxCategory).
+	TaxCategoryId string `json:"taxCategoryId"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// State within the country, such as Texas in the United States.
+	State *string `json:"state,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMissingTaxRateForCountryError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMissingTaxRateForCountryError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "taxCategoryId")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "state")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMissingTaxRateForCountryError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMissingTaxRateForCountryError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MissingTaxRateForCountry", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMissingTaxRateForCountryError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
+*	See [Money usage](/types#usage) for more information.
+*
+ */
+type GraphQLMoneyOverflowError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMoneyOverflowError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMoneyOverflowError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMoneyOverflowError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMoneyOverflowError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MoneyOverflow", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMoneyOverflowError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
+*
+*	The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+*
+ */
+type GraphQLNoMatchingProductDiscountFoundError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLNoMatchingProductDiscountFoundError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLNoMatchingProductDiscountFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLNoMatchingProductDiscountFoundError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLNoMatchingProductDiscountFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "NoMatchingProductDiscountFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLNoMatchingProductDiscountFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project.
+*
+ */
+type GraphQLNotEnabledError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLNotEnabledError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLNotEnabledError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLNotEnabledError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLNotEnabledError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "NotEnabled", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLNotEnabledError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the requested resource was not found.
+*
+ */
+type GraphQLObjectNotFoundError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLObjectNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLObjectNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLObjectNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLObjectNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ObjectNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLObjectNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when some of the [Line Items](ctp:api:type:LineItem) are out of stock at the time of placing an [Order](ctp:api:type:Order).
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*
+ */
+type GraphQLOutOfStockError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifiers of the Line Items that are out of stock.
+	LineItems []string `json:"lineItems"`
+	// SKUs of the Line Items that are out of stock.
+	Skus []string `json:"skus"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLOutOfStockError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLOutOfStockError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "lineItems")
+	delete(obj.ExtraValues, "skus")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLOutOfStockError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLOutOfStockError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "OutOfStock", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLOutOfStockError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the service is having trouble handling the load.
+*
+*	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+*
+ */
+type GraphQLOverCapacityError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLOverCapacityError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLOverCapacityError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLOverCapacityError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLOverCapacityError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "OverCapacity", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLOverCapacityError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a given Price validity period conflicts with an existing one.
+*	Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
+*
+*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*
+ */
+type GraphQLOverlappingStandalonePriceValidityError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Reference to the conflicting Standalone Price.
+	ConflictingStandalonePrice StandalonePriceReference `json:"conflictingStandalonePrice"`
+	// SKU of the [ProductVariant](ctp:api:type:ProductVariant) to which the conflicting Standalone Price is associated.
+	Sku string `json:"sku"`
+	// Currency code of the country.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Standalone Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Standalone Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Date and time (UTC) from which the conflicting Standalone Price is valid.
+	ConflictingValidFrom *time.Time `json:"conflictingValidFrom,omitempty"`
+	// Date and time (UTC) until which the conflicting Standalone Price is valid.
+	ConflictingValidUntil *time.Time `json:"conflictingValidUntil,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLOverlappingStandalonePriceValidityError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLOverlappingStandalonePriceValidityError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingStandalonePrice")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "conflictingValidFrom")
+	delete(obj.ExtraValues, "conflictingValidUntil")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLOverlappingStandalonePriceValidityError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLOverlappingStandalonePriceValidityError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "OverlappingStandalonePriceValidity", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLOverlappingStandalonePriceValidityError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
+*
+*	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
+*	If the error persists, report it using the [Support Portal](https://support.commercetools.com).
+*
+ */
+type GraphQLPendingOperationError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLPendingOperationError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLPendingOperationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLPendingOperationError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLPendingOperationError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "PendingOperation", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLPendingOperationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the Price, Tax Rate, or Shipping Rate of some Line Items changed since they were last added to the Cart.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*
+ */
+type GraphQLPriceChangedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifiers of the Line Items for which the Price or [TaxRate](ctp:api:type:TaxRate) has changed.
+	LineItems []string `json:"lineItems"`
+	// `true` if the [ShippingRate](ctp:api:type:ShippingRate) has changed.
+	Shipping bool `json:"shipping"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLPriceChangedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLPriceChangedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "lineItems")
+	delete(obj.ExtraValues, "shipping")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLPriceChangedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLPriceChangedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "PriceChanged", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLPriceChangedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Product is not assigned to the Product Selection.
+*	The error is returned as a failed response either to the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) or to the [Set Variant Exclusion](ctp:api:type:ProductSelectionSetVariantExclusionAction) update action.
+*
+ */
+type GraphQLProductAssignmentMissingError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+	Product ProductReference `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLProductAssignmentMissingError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLProductAssignmentMissingError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "product")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLProductAssignmentMissingError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLProductAssignmentMissingError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ProductAssignmentMissing", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLProductAssignmentMissingError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
+*
+*	The error is returned as a failed response either to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) or to the [Exclude Product](ctp:api:type:ProductSelectionExcludeProductAction) update action.
+*
+ */
+type GraphQLProductPresentWithDifferentVariantSelectionError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
+	Product ProductReference `json:"product"`
+	// Existing Product Variant Selection or Exclusion for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+	ExistingVariantSelection ProductVariantSelection `json:"existingVariantSelection"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLProductPresentWithDifferentVariantSelectionError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLProductPresentWithDifferentVariantSelectionError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.ExistingVariantSelection != nil {
+		var err error
+		obj.ExistingVariantSelection, err = mapDiscriminatorProductVariantSelection(obj.ExistingVariantSelection)
+		if err != nil {
+			return err
+		}
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "product")
+	delete(obj.ExtraValues, "existingVariantSelection")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLProductPresentWithDifferentVariantSelectionError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLProductPresentWithDifferentVariantSelectionError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ProductPresentWithDifferentVariantSelection", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLProductPresentWithDifferentVariantSelectionError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the languages set for a Store are not supported by the Project.
+*
+*	The error is returned as a failed response to the [Set Languages](ctp:api:type:StoreSetLanguagesAction) update action.
+*
+ */
+type GraphQLProjectNotConfiguredForLanguagesError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Languages configured for the Store.
+	Languages []string `json:"languages"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLProjectNotConfiguredForLanguagesError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLProjectNotConfiguredForLanguagesError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "languages")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLProjectNotConfiguredForLanguagesError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLProjectNotConfiguredForLanguagesError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ProjectNotConfiguredForLanguages", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["languages"] == nil {
+		delete(raw, "languages")
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLProjectNotConfiguredForLanguagesError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+type GraphQLQueryComplexityLimitExceededError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLQueryComplexityLimitExceededError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLQueryComplexityLimitExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLQueryComplexityLimitExceededError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLQueryComplexityLimitExceededError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "QueryComplexityLimitExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLQueryComplexityLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the query times out.
+*
+*	If a query constantly times out, please check if it follows the [performance best practices](/../api/predicates/query#performance-considerations).
+*
+ */
+type GraphQLQueryTimedOutError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLQueryTimedOutError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLQueryTimedOutError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLQueryTimedOutError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLQueryTimedOutError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "QueryTimedOut", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLQueryTimedOutError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a resource cannot be deleted because it is being referenced by another resource.
+*
+ */
+type GraphQLReferenceExistsError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Type of referenced resource.
+	ReferencedBy *ReferenceTypeId `json:"referencedBy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLReferenceExistsError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLReferenceExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "referencedBy")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLReferenceExistsError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLReferenceExistsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ReferenceExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLReferenceExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a resource referenced by a [Reference](ctp:api:type:Reference) or a [ResourceIdentifier](ctp:api:type:ResourceIdentifier) could not be found.
+*
+ */
+type GraphQLReferencedResourceNotFoundError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Type of referenced resource.
+	TypeId ReferenceTypeId `json:"typeId"`
+	// Unique identifier of the referenced resource, if known.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the referenced resource, if known.
+	Key *string `json:"key,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLReferencedResourceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLReferencedResourceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "typeId")
+	delete(obj.ExtraValues, "id")
+	delete(obj.ExtraValues, "key")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLReferencedResourceNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLReferencedResourceNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ReferencedResourceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLReferencedResourceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a value is not defined for a required field.
+*
+ */
+type GraphQLRequiredFieldError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the field missing the value.
+	Field string `json:"field"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLRequiredFieldError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLRequiredFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "field")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLRequiredFieldError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLRequiredFieldError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "RequiredField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLRequiredFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the resource addressed by the request URL does not exist.
+*
+ */
+type GraphQLResourceNotFoundError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLResourceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLResourceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLResourceNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLResourceNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ResourceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLResourceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the resource exceeds the maximum allowed size of 16 MB.
+*
+ */
+type GraphQLResourceSizeLimitExceededError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLResourceSizeLimitExceededError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLResourceSizeLimitExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLResourceSizeLimitExceededError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLResourceSizeLimitExceededError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ResourceSizeLimitExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLResourceSizeLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the indexing of Product information is deactivated in a Project.
+*
+*	To activate indexing, call [Change Product Search Indexing Enabled](ctp:api:type:ProjectChangeProductSearchIndexingEnabledAction) and set `enabled` to `true`.
+*
+ */
+type GraphQLSearchDeactivatedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSearchDeactivatedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSearchDeactivatedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSearchDeactivatedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSearchDeactivatedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SearchDeactivated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSearchDeactivatedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a search query could not be completed due to an unexpected failure.
+*
+ */
+type GraphQLSearchExecutionFailureError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSearchExecutionFailureError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSearchExecutionFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSearchExecutionFailureError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSearchExecutionFailureError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SearchExecutionFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSearchExecutionFailureError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a search facet path could not be found.
+*
+ */
+type GraphQLSearchFacetPathNotFoundError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSearchFacetPathNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSearchFacetPathNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSearchFacetPathNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSearchFacetPathNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SearchFacetPathNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSearchFacetPathNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the indexing of Product information is still in progress for Projects that have indexing activated.
+*
+ */
+type GraphQLSearchIndexingInProgressError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSearchIndexingInProgressError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSearchIndexingInProgressError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSearchIndexingInProgressError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSearchIndexingInProgressError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SearchIndexingInProgress", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSearchIndexingInProgressError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct.
+*
+ */
+type GraphQLSemanticErrorError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSemanticErrorError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSemanticErrorError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSemanticErrorError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSemanticErrorError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SemanticError", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSemanticErrorError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
+*
+*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) or [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*
+ */
+type GraphQLShippingMethodDoesNotMatchCartError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLShippingMethodDoesNotMatchCartError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLShippingMethodDoesNotMatchCartError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLShippingMethodDoesNotMatchCartError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLShippingMethodDoesNotMatchCartError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ShippingMethodDoesNotMatchCart", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLShippingMethodDoesNotMatchCartError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax.
+*
+ */
+type GraphQLSyntaxErrorError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSyntaxErrorError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSyntaxErrorError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSyntaxErrorError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSyntaxErrorError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SyntaxError", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSyntaxErrorError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
 }

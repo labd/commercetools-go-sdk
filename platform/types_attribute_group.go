@@ -186,7 +186,7 @@ func mapDiscriminatorAttributeGroupUpdateAction(input interface{}) (AttributeGro
 }
 
 type AttributeReference struct {
-	// Key of the attribute.
+	// The Attribute's `name` as given in its [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Key string `json:"key"`
 }
 

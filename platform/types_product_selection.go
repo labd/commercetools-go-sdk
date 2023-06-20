@@ -11,9 +11,16 @@ import (
 type AssignedProductReference struct {
 	// Reference to a Product that is assigned to the Product Selection.
 	Product ProductReference `json:"product"`
-	// The Variants of the Product that are included, or excluded, from the Product Selection.
+	// The Variants of the Product that are included from the Product Selection.
+	//
+	// This field may exist only in Product Selections with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	// In absence of this field, all Variants are deemed to be included.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+	// The Variants of the Product that are excluded from the Product Selection.
+	//
+	// This field may exist only in Product Selections with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	// In absence of this field, all Variants are deemed to be excluded.
+	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -37,8 +44,14 @@ func (obj *AssignedProductReference) UnmarshalJSON(data []byte) error {
 type AssignedProductSelection struct {
 	// Reference to the Product Selection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
-	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	// Defines which Variants of the Product will be included in the Product Selection.
+	//
+	// This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+	// Defines which Variants of the Product will be excluded from the Product Selection.
+	//
+	// This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
 	// Date and time (UTC) this assignment was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 }
@@ -101,20 +114,38 @@ type ProductSelection struct {
 	Name LocalizedString `json:"name"`
 	// Number of Products that are currently assigned to this ProductSelection.
 	ProductCount int `json:"productCount"`
-	// Specifies in which way the Products are assigned to the ProductSelection. Currently, the only way of doing this is to specify each Product individually. Hence, the type is fixed to `individual` for now, but we have plans to add other types in the future.
-	Type ProductSelectionTypeEnum `json:"type"`
-	// Custom Fields of this ProductSelection.
+	// Specifies in which way the Products are assigned to the ProductSelection.
+	// Currently, the only way of doing this is to specify each Product individually, either by [including or excluding](ctp:api:type:ProductSelectionMode) them explicitly.
+	Type *ProductSelectionTypeEnum `json:"type,omitempty"`
+	// Specifies in which way the Products are assigned to the ProductSelection.
+	// Currently, the only way of doing this is to specify each Product individually, either by [including or excluding](ctp:api:type:ProductSelectionMode) them explicitly.
+	Mode ProductSelectionMode `json:"mode"`
+	// Custom Fields of the ProductSelection.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
+/**
+*
+*	Given the mode of Product Selection, this assignment refers to, it may contain:
+*
+*	- `variantSelection` field for a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+*	- `variantExclusion` field for a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) ([BETA](/../offering/api-contract#public-beta)).
+ */
 type ProductSelectionAssignment struct {
 	// Reference to a Product that is assigned to the ProductSelection.
 	Product ProductReference `json:"product"`
 	// Reference to the Product Selection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
-	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	// Define which Variants of the added Product will be included in the Product Selection.
+	//
+	// This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
+	// Defines which Variants of the Product will be excluded from the Product Selection.
+	//
+	// This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
+	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -142,7 +173,22 @@ type ProductSelectionDraft struct {
 	Name LocalizedString `json:"name"`
 	// Custom Fields of this ProductSelection.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Type of the Product Selection.
+	Type *ProductSelectionTypeEnum `json:"type,omitempty"`
+	// Mode of the Product Selection.
+	Mode *ProductSelectionMode `json:"mode,omitempty"`
 }
+
+/**
+*	Product Selections can have the following modes:
+*
+ */
+type ProductSelectionMode string
+
+const (
+	ProductSelectionModeIndividual          ProductSelectionMode = "Individual"
+	ProductSelectionModeIndividualExclusion ProductSelectionMode = "IndividualExclusion"
+)
 
 /**
 *	[PagedQueryResult](/general-concepts#pagedqueryresult) containing an array of [ProductSelection](ctp:api:type:ProductSelection).
@@ -242,6 +288,12 @@ func mapDiscriminatorProductSelectionType(input interface{}) (ProductSelectionTy
 	}
 
 	switch discriminator {
+	case "individualExclusion":
+		obj := IndividualExclusionProductSelectionType{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "individual":
 		obj := IndividualProductSelectionType{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -250,6 +302,21 @@ func mapDiscriminatorProductSelectionType(input interface{}) (ProductSelectionTy
 		return obj, nil
 	}
 	return nil, nil
+}
+
+type IndividualExclusionProductSelectionType struct {
+	// The name of the ProductSelection which is recommended to be unique.
+	Name LocalizedString `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj IndividualExclusionProductSelectionType) MarshalJSON() ([]byte, error) {
+	type Alias IndividualExclusionProductSelectionType
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "individualExclusion", Alias: (*Alias)(&obj)})
 }
 
 type IndividualProductSelectionType struct {
@@ -268,13 +335,14 @@ func (obj IndividualProductSelectionType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The following type of Product Selections is supported:
+*	The following types of Product Selections are supported:
 *
  */
 type ProductSelectionTypeEnum string
 
 const (
-	ProductSelectionTypeEnumIndividual ProductSelectionTypeEnum = "individual"
+	ProductSelectionTypeEnumIndividual          ProductSelectionTypeEnum = "individual"
+	ProductSelectionTypeEnumIndividualExclusion ProductSelectionTypeEnum = "individualExclusion"
 )
 
 type ProductSelectionUpdate struct {
@@ -333,6 +401,12 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 			return nil, err
 		}
 		return obj, nil
+	case "excludeProduct":
+		obj := ProductSelectionExcludeProductAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "removeProduct":
 		obj := ProductSelectionRemoveProductAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -357,6 +431,12 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 			return nil, err
 		}
 		return obj, nil
+	case "setVariantExclusion":
+		obj := ProductSelectionSetVariantExclusionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setVariantSelection":
 		obj := ProductSelectionSetVariantSelectionAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -372,6 +452,15 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 		return obj, nil
 	}
 	return nil, nil
+}
+
+/**
+*	Only Product Variants with the explicitly listed SKUs are part of a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+*
+ */
+type ProductVariantExclusion struct {
+	// Non-empty array of SKUs representing Product Variants to be included in the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	Skus []string `json:"skus"`
 }
 
 /**
@@ -394,6 +483,18 @@ func mapDiscriminatorProductVariantSelection(input interface{}) (ProductVariantS
 	switch discriminator {
 	case "exclusion":
 		obj := ProductVariantSelectionExclusion{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "includeAllExcept":
+		obj := ProductVariantSelectionIncludeAllExcept{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "includeOnly":
+		obj := ProductVariantSelectionIncludeOnly{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -428,6 +529,44 @@ func (obj ProductVariantSelectionExclusion) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	All Product Variants except the explicitly stated SKUs are part of the Product Selection.
+*
+ */
+type ProductVariantSelectionIncludeAllExcept struct {
+	// Non-empty array of SKUs representing Product Variants to be excluded from the Product Selection.
+	Skus []string `json:"skus"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantSelectionIncludeAllExcept) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantSelectionIncludeAllExcept
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "includeAllExcept", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Only Product Variants with explicitly stated SKUs are part of the Product Selection.
+*
+ */
+type ProductVariantSelectionIncludeOnly struct {
+	// Non-empty array of SKUs representing Product Variants to be included into the Product Selection.
+	Skus []string `json:"skus"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantSelectionIncludeOnly) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantSelectionIncludeOnly
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "includeOnly", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Only Product Variants with explicitly stated SKUs are part of the Product Selection.
 *
  */
@@ -449,8 +588,10 @@ func (obj ProductVariantSelectionInclusion) MarshalJSON() ([]byte, error) {
 type ProductVariantSelectionTypeEnum string
 
 const (
-	ProductVariantSelectionTypeEnumInclusion ProductVariantSelectionTypeEnum = "inclusion"
-	ProductVariantSelectionTypeEnumExclusion ProductVariantSelectionTypeEnum = "exclusion"
+	ProductVariantSelectionTypeEnumInclusion        ProductVariantSelectionTypeEnum = "inclusion"
+	ProductVariantSelectionTypeEnumExclusion        ProductVariantSelectionTypeEnum = "exclusion"
+	ProductVariantSelectionTypeEnumIncludeOnly      ProductVariantSelectionTypeEnum = "includeOnly"
+	ProductVariantSelectionTypeEnumIncludeAllExcept ProductVariantSelectionTypeEnum = "includeAllExcept"
 )
 
 /**
@@ -483,7 +624,7 @@ type ProductsInStorePagedQueryResponse struct {
 type ProductSelectionAddProductAction struct {
 	// ResourceIdentifier of the Product
 	Product ProductResourceIdentifier `json:"product"`
-	// Selects which Variants of the newly added Product will be included, or excluded, from the Product Selection.
+	// Defines which Variants of the Product will be included in the Product Selection.
 	// If not supplied all Variants are deemed to be included.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
 }
@@ -529,6 +670,30 @@ func (obj ProductSelectionChangeNameAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Excludes a Product from a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+*
+*	If the specified Product is already assigned to the Product Selection, but the existing Product Selection has a different Product Variant Exclusion, a [ProductPresentWithDifferentVariantSelection](ctp:api:type:ProductPresentWithDifferentVariantSelectionError) error is returned.
+*
+ */
+type ProductSelectionExcludeProductAction struct {
+	// ResourceIdentifier of the Product
+	Product ProductResourceIdentifier `json:"product"`
+	// Defines which Variants of the Product will be excluded from the Product Selection.
+	// If not supplied all Variants are deemed to be excluded.
+	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionExcludeProductAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionExcludeProductAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "excludeProduct", Alias: (*Alias)(&obj)})
 }
 
 type ProductSelectionRemoveProductAction struct {
@@ -599,8 +764,33 @@ func (obj ProductSelectionSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Updates the Product Variant Exclusion of an existing [Product Selection Assignment](ctp:api:type:ProductSelectionAssignment).
+*	A [ProductVariantExclusion](ctp:api:type:ProductVariantExclusion) can only be set if the [Product](ctp:api:type:Product) has already been excluded from the [Product Selection](ctp:api:type:ProductSelection) with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+*
+*	If the specified Product is not assigned to the Product Selection, a [ProductAssignmentMissing](ctp:api:type:ProductAssignmentMissingError) error is returned.
+*
+ */
+type ProductSelectionSetVariantExclusionAction struct {
+	// ResourceIdentifier of the Product
+	Product ProductResourceIdentifier `json:"product"`
+	// Determines which Variants of the previously excluded Product are to be included in the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	// Leave it empty to unset an existing Variant Exclusion.
+	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSelectionSetVariantExclusionAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSelectionSetVariantExclusionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setVariantExclusion", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Updates the Product Variant Selection of an existing [Product Selection Assignment](ctp:api:type:ProductSelectionAssignment).
-*	A [ProductVariantSelection](ctp:api:type:ProductVariantSelection) can only be set if a [Product](/projects/products) has been added to the [Product Selection](/projects/product-selections).
+*	A [ProductVariantSelection](ctp:api:type:ProductVariantSelection) can only be set if the [Product](ctp:api:type:Product) has already been included in the Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 *
 *	If the specified Product is not assigned to the Product Selection, a [ProductAssignmentMissing](ctp:api:type:ProductAssignmentMissingError) error is returned.
 *

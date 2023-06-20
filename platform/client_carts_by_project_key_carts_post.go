@@ -56,8 +56,9 @@ func (rb *ByProjectKeyCartsRequestMethodPost) WithHeaders(headers http.Header) *
 }
 
 /**
-*	Creating a cart can fail with an InvalidOperation if the referenced shipping method in the
-*	CartDraft has a predicate which does not match the cart.
+*	Creating a Cart fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error if the
+*	[ShippingMethod](ctp:api:type:ShippingMethod) referenced in the CartDraft
+*	has a `predicate` that does not match the Cart.
 *
  */
 func (rb *ByProjectKeyCartsRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {

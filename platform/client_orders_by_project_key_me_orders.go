@@ -18,6 +18,12 @@ func (rb *ByProjectKeyMeOrdersRequestBuilder) WithId(id string) *ByProjectKeyMeO
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyMeOrdersRequestBuilder) Quotes() *ByProjectKeyMeOrdersQuotesRequestBuilder {
+	return &ByProjectKeyMeOrdersQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyMeOrdersRequestBuilder) Get() *ByProjectKeyMeOrdersRequestMethodGet {
 	return &ByProjectKeyMeOrdersRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/orders", rb.projectKey),

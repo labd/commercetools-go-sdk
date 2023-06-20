@@ -23,7 +23,7 @@ type Payment struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
 	Customer *CustomerReference `json:"customer,omitempty"`
-	// [Anonymous session](/../api/authorization#tokens-for-anonymous-sessions) associated with the Payment.
+	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
@@ -90,7 +90,7 @@ func (obj *Payment) UnmarshalJSON(data []byte) error {
 type PaymentDraft struct {
 	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
-	// [Anonymous session](/../api/authorization#tokens-for-anonymous-sessions) associated with the Payment.
+	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
@@ -239,7 +239,7 @@ type PaymentStatusDraft struct {
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
 	// Text describing the current status of the Payment.
 	InterfaceText *string `json:"interfaceText,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	State *StateResourceIdentifier `json:"state,omitempty"`
 }
 
@@ -606,9 +606,7 @@ func (obj PaymentChangeTransactionTimestampAction) MarshalJSON() ([]byte, error)
 }
 
 type PaymentSetAmountPaidAction struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Draft type that stores amounts only in cent precision for the specified currency.
 	Amount *Money `json:"amount,omitempty"`
 }
 
@@ -623,9 +621,7 @@ func (obj PaymentSetAmountPaidAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAmountRefundedAction struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Draft type that stores amounts only in cent precision for the specified currency.
 	Amount *Money `json:"amount,omitempty"`
 }
 
@@ -656,9 +652,7 @@ func (obj PaymentSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAuthorizationAction struct {
-	// Draft type that stores amounts in cent precision for the specified currency.
-	//
-	// For storing money values in fractions of the minor unit in a currency, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft) instead.
+	// Draft type that stores amounts only in cent precision for the specified currency.
 	Amount *Money     `json:"amount,omitempty"`
 	Until  *time.Time `json:"until,omitempty"`
 }
@@ -903,7 +897,7 @@ func (obj PaymentSetTransactionCustomTypeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentTransitionStateAction struct {
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	State StateResourceIdentifier `json:"state"`
 	// Set to `true` to skip validations when transitioning to the new State.
 	Force *bool `json:"force,omitempty"`

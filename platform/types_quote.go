@@ -27,9 +27,10 @@ type Quote struct {
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
 	// Staged Quote related to the Quote.
 	StagedQuote StagedQuoteReference `json:"stagedQuote"`
-	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
+	// The [Buyer](/../api/quotes-overview#buyer) who owns the Quote.
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Set automatically when `customer` is set and the Customer is a member of a Customer Group.
+	// Not updated if Customer is changed after Quote creation.
 	// Used for Product Variant price selection.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// Expiration date for the Quote.
@@ -239,6 +240,7 @@ const (
 	QuoteStatePending                  QuoteState = "Pending"
 	QuoteStateDeclined                 QuoteState = "Declined"
 	QuoteStateDeclinedForRenegotiation QuoteState = "DeclinedForRenegotiation"
+	QuoteStateRenegotiationAddressed   QuoteState = "RenegotiationAddressed"
 	QuoteStateAccepted                 QuoteState = "Accepted"
 	QuoteStateFailed                   QuoteState = "Failed"
 	QuoteStateWithdrawn                QuoteState = "Withdrawn"
@@ -284,6 +286,12 @@ func mapDiscriminatorQuoteUpdateAction(input interface{}) (QuoteUpdateAction, er
 	}
 
 	switch discriminator {
+	case "changeCustomer":
+		obj := QuoteChangeCustomerAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeQuoteState":
 		obj := QuoteChangeQuoteStateAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -316,6 +324,27 @@ func mapDiscriminatorQuoteUpdateAction(input interface{}) (QuoteUpdateAction, er
 		return obj, nil
 	}
 	return nil, nil
+}
+
+/**
+*	Changes the owner of a Quote to a different Customer.
+*	Customer Group is not updated.
+*	This update action produces the [Quote Customer Changed](ctp:api:type:QuoteCustomerChangedMessage) Message.
+*
+ */
+type QuoteChangeCustomerAction struct {
+	// New Customer to own the Quote.
+	Customer CustomerResourceIdentifier `json:"customer"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj QuoteChangeCustomerAction) MarshalJSON() ([]byte, error) {
+	type Alias QuoteChangeCustomerAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCustomer", Alias: (*Alias)(&obj)})
 }
 
 type QuoteChangeQuoteStateAction struct {

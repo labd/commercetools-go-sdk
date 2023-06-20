@@ -367,6 +367,8 @@ type Parcel struct {
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 	TrackingData *TrackingData       `json:"trackingData,omitempty"`
 	Items        []DeliveryItem      `json:"items"`
+	// The representation to be sent to the server when creating a resource with custom fields.
+	Custom *Custom `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -904,6 +906,8 @@ type OrderImport struct {
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
 	// Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Store exists.
 	Store *StoreKeyReference `json:"store,omitempty"`
+	// Reference to a State in a custom workflow.
+	State *StateKeyReference `json:"state,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
