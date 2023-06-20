@@ -6,10 +6,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/labd/commercetools-go-sdk/ctutils"
 	"github.com/labd/commercetools-go-sdk/platform"
 	"github.com/labd/commercetools-go-sdk/testutil"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestTaxCategoryCreate(t *testing.T) {
@@ -186,7 +187,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 				Version: 2,
 				Actions: []platform.TaxCategoryUpdateAction{
 					&platform.TaxCategoryReplaceTaxRateAction{
-						TaxRateId: "2",
+						TaxRateId: ctutils.StringRef("2"),
 						TaxRate: platform.TaxRateDraft{
 							Name:            "High tax rate",
 							Amount:          &high_tax_rate,
@@ -218,7 +219,7 @@ func TestTaxCategoryUpdate(t *testing.T) {
 				Version: 2,
 				Actions: []platform.TaxCategoryUpdateAction{
 					&platform.TaxCategoryRemoveTaxRateAction{
-						TaxRateId: "2",
+						TaxRateId: ctutils.StringRef("2"),
 					},
 				},
 			},
