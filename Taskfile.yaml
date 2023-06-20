@@ -1,0 +1,55 @@
+version: 3
+vars:
+  codegenJar: "../rmf-codegen/rmf-codegen.jar"
+  apiSpecsDir: "../commercetools-api-reference/api-specs"
+  generatedDir: "./generated"
+
+
+tasks:
+  install:
+    cmds:
+      - go install golang.org/x/tools/cmd/goimports@latest
+
+  build:
+    cmds:
+      - go build
+
+  test:
+    cmds:
+      - go test ./...
+
+  coverage:
+    cmds:
+      - go test -race -coverprofile=coverage.txt -covermode=atomic -coverpkg=./... ./...
+      - go tool cover -html=coverage.txt
+
+  generate:
+    deps:
+      # Checkout
+      - task: generate-api
+        vars: {apiName: checkout, path: checkout}
+
+      # Connect
+      - task: generate-api
+        vars: {apiName: connect, path: connect}
+
+      # Import API
+      - task: generate-api
+        vars: {apiName: importapi, path: importapi}
+
+      # ML
+      - task: generate-api
+        vars: {apiName: ml, path: ml}
+
+      # Platform
+      - task: generate-api
+        vars: {apiName: platform, path: api}
+
+
+  generate-api:
+    cmds:
+      - java -jar {{ .codegenJar }} generate {{ .apiSpecsDir }}/{{ .path }}/api.raml -b {{ .apiName }} -o {{ .generatedDir }}/ -t GO_CLIENT
+      - goimports -w {{ .generatedDir }}/{{ .apiName }}/
+      - go fmt {{ .generatedDir }}/{{ .apiName }}/
+      - rm -rf {{ .apiName }}/
+      - mv {{ .generatedDir }}/{{ .apiName }} .
