@@ -3,6 +3,8 @@ vars:
   codegenJar: "../rmf-codegen/rmf-codegen.jar"
   apiSpecsDir: "../commercetools-api-reference/api-specs"
   generatedDir: "./generated"
+  versionId: 1.3.0
+
 
 
 tasks:
@@ -24,24 +26,41 @@ tasks:
       - go tool cover -html=coverage.txt
 
   generate:
-    deps:
-      # Checkout
+    cmds:
+      - task: generate-checkout
+      - task: generate-connect
+      - task: generate-importapi
+      - task: generate-frontend
+      - task: generate-ml
+      - task: generate-platform
+
+  generate-checkout:
+    cmds:
       - task: generate-api
         vars: {apiName: checkout, path: checkout}
 
-      # Connect
+  generate-connect:
+    cmds:
       - task: generate-api
         vars: {apiName: connect, path: connect}
 
-      # Import API
+  generate-importapi:
+    cmds:
       - task: generate-api
         vars: {apiName: importapi, path: importapi}
 
-      # ML
+  generate-frontend:
+    cmds:
+      - task: generate-api
+        vars: {apiName: frontend, path: frontend-api}
+
+  generate-ml:
+    cmds:
       - task: generate-api
         vars: {apiName: ml, path: ml}
 
-      # Platform
+  generate-platform:
+    cmds:
       - task: generate-api
         vars: {apiName: platform, path: api}
 
@@ -53,3 +72,5 @@ tasks:
       - go fmt {{ .generatedDir }}/{{ .apiName }}/
       - rm -rf {{ .apiName }}/
       - mv {{ .generatedDir }}/{{ .apiName }} .
+      - perl -p -i -e 's/const Version = "1.0.1"/const Version = "{{ .versionId }}"/' {{ .apiName }}/client.go
+
