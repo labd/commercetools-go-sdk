@@ -23,104 +23,105 @@ of potential changes when updating
 package main
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"github.com/labd/commercetools-go-sdk/ctutils"
-	"log"
-	"math/rand"
-	"time"
+   "context"
+   "errors"
+   "fmt"
+   "github.com/labd/commercetools-go-sdk/ctutils"
+   "log"
+   "math/rand"
+   "time"
 
-	"github.com/davecgh/go-spew/spew"
-	"github.com/labd/commercetools-go-sdk/platform"
-	"golang.org/x/oauth2/clientcredentials"
+   "github.com/davecgh/go-spew/spew"
+   "github.com/labd/commercetools-go-sdk/platform"
+   "golang.org/x/oauth2/clientcredentials"
 )
 
 func main() {
 
-	// Create the new client. When an empty value is passed it will use the CTP_*
-	// environment variables to get the value. The HTTPClient arg is optional,
-	// and when empty will automatically be created using the env values.
-	client, err := platform.NewClient(&platform.ClientConfig{
-		URL: "https://api.europe-west1.gcp.commercetools.com",
-		Credentials: &clientcredentials.Config{
-			TokenURL:     "https://auth.europe-west1.gcp.commercetools.com/oauth/token",
-			ClientID:     "<client-id>",
-			ClientSecret: "<client-secret>",
-			Scopes:       []string{"manage_project:<project-key>"},
-		},
-	})
+   // Create the new client. When an empty value is passed it will use the CTP_*
+   // environment variables to get the value. The HTTPClient arg is optional,
+   // and when empty will automatically be created using the env values.
+   client, err := platform.NewClient(&platform.ClientConfig{
+      URL: "https://api.europe-west1.gcp.commercetools.com",
+      Credentials: &clientcredentials.Config{
+         TokenURL:     "https://auth.europe-west1.gcp.commercetools.com/oauth/token",
+         ClientID:     "<client-id>",
+         ClientSecret: "<client-secret>",
+         Scopes:       []string{"manage_project:<project-key>"},
+      },
+   })
 
-	projectClient := client.WithProjectKey("<project-key>")
+   projectClient := client.WithProjectKey("<project-key>")
 
-	ctx := context.Background()
+   ctx := context.Background()
 
-	// Get or Createa product type
-	productTypeDraft := platform.ProductTypeDraft{
-		Name: "a-product-type",
-		Key:  ctutils.StringRef("a-product-type"),
-	}
+   // Get or Createa product type
+   productTypeDraft := platform.ProductTypeDraft{
+      Name: "a-product-type",
+      Key:  ctutils.StringRef("a-product-type"),
+   }
 
-	productType, err := projectClient.
-		ProductTypes().
-		WithKey(*productTypeDraft.Key).
-		Get().
-		Execute(ctx)
+   productType, err := projectClient.
+      ProductTypes().
+      WithKey(*productTypeDraft.Key).
+      Get().
+      Execute(ctx)
 
-	if err != nil {
-		if errors.As(err, &platform.ErrNotFound) {
-			productType, err = projectClient.
-				ProductTypes().
-				Post(productTypeDraft).
-				Execute(ctx)
-		}
+   if err != nil {
+      if errors.As(err, &platform.ErrNotFound) {
+         productType, err = projectClient.
+            ProductTypes().
+            Post(productTypeDraft).
+            Execute(ctx)
+      }
 
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
+      if err != nil {
+         log.Fatal(err)
+      }
+   }
 
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	randomID := r.Int()
-	productDraft := platform.ProductDraft{
-		Key: ctutils.StringRef(fmt.Sprintf("test-product-%d", randomID)),
-		Name: platform.LocalizedString{
-			"nl": "Een test product",
-			"en": "A test product",
-		},
-		ProductType: platform.ProductTypeResourceIdentifier{
-			ID: ctutils.StringRef(productType.ID),
-		},
-		Slug: platform.LocalizedString{
-			"nl": fmt.Sprintf("een-test-product-%d", randomID),
-			"en": fmt.Sprintf("a-test-product-%d", randomID),
-		},
-	}
+   r := rand.New(rand.NewSource(time.Now().UnixNano()))
+   randomID := r.Int()
+   productDraft := platform.ProductDraft{
+      Key: ctutils.StringRef(fmt.Sprintf("test-product-%d", randomID)),
+      Name: platform.LocalizedString{
+         "nl": "Een test product",
+         "en": "A test product",
+      },
+      ProductType: platform.ProductTypeResourceIdentifier{
+         ID: ctutils.StringRef(productType.ID),
+      },
+      Slug: platform.LocalizedString{
+         "nl": fmt.Sprintf("een-test-product-%d", randomID),
+         "en": fmt.Sprintf("a-test-product-%d", randomID),
+      },
+   }
 
-	// The last argument is optional for reference expansion
-	product, err := projectClient.
-		Products().
-		Post(productDraft).
-		WithQueryParams(
-			platform.ByProjectKeyProductsRequestMethodPostInput{
-				Expand: []string{"foobar"},
-			},
-		).
-		Execute(ctx)
+   // The last argument is optional for reference expansion
+   product, err := projectClient.
+      Products().
+      Post(productDraft).
+           WithQueryParams(
+              platform.ByProjectKeyProductsRequestMethodPostInput{
+                 Expand: []string{"foobar"},
+              },
+           ).
+      Execute(ctx)
 
-	// Alternatively you can pass query params via methods
-	//product, err := projectClient.
-	//	Products().
-	//	Post(productDraft).
-	//	Expand([]string{"foobar"}).
-	//	Execute(ctx)
+   // Alternatively you can pass query params via methods
+   //product, err := projectClient.
+   //	Products().
+   //	Post(productDraft).
+   //	Expand([]string{"foobar"}).
+   //	Execute(ctx)
 
-	if err != nil {
-		log.Fatal(err)
-	}
+   if err != nil {
+      log.Fatal(err)
+   }
 
-	spew.Dump(product)
+   spew.Dump(product)
 }
+
 ```
 
 ## Generating code
