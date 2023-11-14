@@ -57,9 +57,15 @@ func (rb *FrontasticPageRequestMethodGet) Execute(ctx context.Context) (result *
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	case 301:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	case 404:
 		return nil, ErrNotFound

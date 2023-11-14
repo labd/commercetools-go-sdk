@@ -111,6 +111,9 @@ func (rb *ByProjectKeyCustomersByIDRequestMethodDelete) Execute(ctx context.Cont
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	case 409:
 		errorObj := ErrorResponse{}

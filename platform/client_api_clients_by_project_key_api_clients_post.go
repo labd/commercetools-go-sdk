@@ -84,6 +84,9 @@ func (rb *ByProjectKeyApiClientsRequestMethodPost) Execute(ctx context.Context) 
 	switch resp.StatusCode {
 	case 201:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	case 400:
 		errorObj := ErrorResponse{}

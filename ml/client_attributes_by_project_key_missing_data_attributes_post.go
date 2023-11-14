@@ -52,6 +52,9 @@ func (rb *ByProjectKeyMissingDataAttributesRequestMethodPost) Execute(ctx contex
 	switch resp.StatusCode {
 	case 202:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	default:
 		result := GenericRequestError{

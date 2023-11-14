@@ -102,6 +102,9 @@ func (rb *ByProjectKeyOrdersRequestMethodPost) Execute(ctx context.Context) (res
 	switch resp.StatusCode {
 	case 201:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	case 409:
 		errorObj := ErrorResponse{}

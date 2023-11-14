@@ -56,6 +56,9 @@ func (rb *ByProjectKeyGraphqlRequestMethodPost) Execute(ctx context.Context) (re
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	case 400:
 		errorObj := ErrorResponse{}

@@ -368,8 +368,8 @@ func TestSubscriptionGetDestinationInvalid(t *testing.T) {
 	defer server.Close()
 
 	subscription, err := client.WithProjectKey("unittest").Subscriptions().WithId("100").Get().Execute(context.TODO())
-	assert.Nil(t, err)
-	assert.Nil(t, subscription.Destination)
+	assert.Error(t, err)
+	assert.Nil(t, subscription)
 }
 
 func TestSubscriptionGetDestinationUnknown(t *testing.T) {
