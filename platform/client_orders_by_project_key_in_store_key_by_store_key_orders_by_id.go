@@ -14,9 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder struct {
 }
 
 /**
-*	Returns an order by its ID from a specific Store.
-*	If the order exists in the project but does not have the store field,
-*	or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Order exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodGet {
@@ -27,9 +25,17 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Get() *ByPro
 }
 
 /**
-*	Updates an order in the store specified by {storeKey}.
-*	If the order exists in the project but does not have the store field,
-*	or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	Checks if an Order exists for a given `id`. Returns a `200 OK` status if the Order exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/orders/%s", rb.projectKey, rb.storeKey, rb.id),
+		client: rb.client,
+	}
+}
+
+/**
+*	If the Order exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Post(body OrderUpdate) *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodPost {
@@ -40,6 +46,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Post(body Or
 	}
 }
 
+/**
+*	If the Order exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*
+*	Deleting an Order produces the [OrderDeleted](ctp:api:type:OrderDeletedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/orders/%s", rb.projectKey, rb.storeKey, rb.id),

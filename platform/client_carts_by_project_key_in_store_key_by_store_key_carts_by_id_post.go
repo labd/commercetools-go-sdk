@@ -56,8 +56,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodPost) WithHeader
 }
 
 /**
-*	Updates a [Cart](ctp:api:type:Cart) in the Store specified by `storeKey`.
-*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+*	Updates a [Cart](ctp:api:type:Cart) in the [Store](ctp:api:type:Store) specified by `storeKey`.
+*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
@@ -91,15 +91,56 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodPost) Execute(ct
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 409, 400, 401, 403, 500, 502, 503:
+	case 409:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

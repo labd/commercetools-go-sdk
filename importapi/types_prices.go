@@ -52,7 +52,7 @@ func (obj TaxRate) MarshalJSON() ([]byte, error) {
 *
  */
 type PriceImport struct {
-	// User-defined unique identifier for the Embedded Price.
+	// User-defined unique identifier for the Embedded Price. If a [Price](/../api/types#price) with this `key` exists on the specified `productVariant`, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Price.value`.
 	Value TypedMoney `json:"value"`

@@ -25,6 +25,16 @@ func (rb *ByProjectKeyChannelsRequestBuilder) Get() *ByProjectKeyChannelsRequest
 	}
 }
 
+/**
+*	Checks if a Channel exists for a given Query Predicate. Returns a `200 OK` status if any Channels match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyChannelsRequestBuilder) Head() *ByProjectKeyChannelsRequestMethodHead {
+	return &ByProjectKeyChannelsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/channels", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyChannelsRequestBuilder) Post(body ChannelDraft) *ByProjectKeyChannelsRequestMethodPost {
 	return &ByProjectKeyChannelsRequestMethodPost{
 		body:   body,

@@ -11,6 +11,9 @@ type ByProjectKeyCustomersEmailTokenRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Produces the [CustomerEmailTokenCreated](ctp:api:type:CustomerEmailTokenCreatedMessage) Message.
+ */
 func (rb *ByProjectKeyCustomersEmailTokenRequestBuilder) Post(body CustomerCreateEmailToken) *ByProjectKeyCustomersEmailTokenRequestMethodPost {
 	return &ByProjectKeyCustomersEmailTokenRequestMethodPost{
 		body:   body,

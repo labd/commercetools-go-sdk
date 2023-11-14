@@ -55,9 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodGet) WithHeader
 }
 
 /**
-*	Returns an order by its ID from a specific Store.
-*	If the order exists in the project but does not have the store field,
-*	or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Order exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodGet) Execute(ctx context.Context) (result *Order, err error) {
@@ -86,15 +84,49 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodGet) Execute(ct
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 400, 401, 403, 500, 502, 503:
+	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

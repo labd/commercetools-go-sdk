@@ -14,7 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder struc
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store, the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store), the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodGet {
@@ -25,7 +25,17 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder)
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	Checks if a ShoppingList exists for a given `key`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/me/shopping-lists/key=%s", rb.projectKey, rb.storeKey, rb.key),
+		client: rb.client,
+	}
+}
+
+/**
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
 *	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */
@@ -38,7 +48,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestBuilder)
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
 *	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */

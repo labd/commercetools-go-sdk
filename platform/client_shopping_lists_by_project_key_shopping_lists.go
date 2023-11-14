@@ -32,6 +32,16 @@ func (rb *ByProjectKeyShoppingListsRequestBuilder) Get() *ByProjectKeyShoppingLi
 	}
 }
 
+/**
+*	Checks if a ShoppingList exists for a given Query Predicate. Returns a `200 OK` status if any ShoppingLists match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShoppingListsRequestBuilder) Head() *ByProjectKeyShoppingListsRequestMethodHead {
+	return &ByProjectKeyShoppingListsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shopping-lists", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyShoppingListsRequestBuilder) Post(body ShoppingListDraft) *ByProjectKeyShoppingListsRequestMethodPost {
 	return &ByProjectKeyShoppingListsRequestMethodPost{
 		body:   body,

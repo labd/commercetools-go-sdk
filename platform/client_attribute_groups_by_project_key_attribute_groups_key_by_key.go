@@ -19,6 +19,16 @@ func (rb *ByProjectKeyAttributeGroupsKeyByKeyRequestBuilder) Get() *ByProjectKey
 	}
 }
 
+/**
+*	Checks if an AttributeGroup exists for a given `key`. Returns `200 OK` status if the AttributeGroup exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAttributeGroupsKeyByKeyRequestBuilder) Head() *ByProjectKeyAttributeGroupsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyAttributeGroupsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/attribute-groups/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyAttributeGroupsKeyByKeyRequestBuilder) Post(body AttributeGroupUpdate) *ByProjectKeyAttributeGroupsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyAttributeGroupsKeyByKeyRequestMethodPost{
 		body:   body,

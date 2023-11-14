@@ -135,7 +135,7 @@ type AttributeLocalizedEnumValue struct {
 }
 
 /**
-*	A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:types:DuplicateEnumValuesError) error is returned.
+*	A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned.
 *
  */
 type AttributePlainEnumValue struct {
@@ -622,13 +622,13 @@ func (obj ProductTypeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type ProductTypeResourceIdentifier struct {
-	// Unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ProductType](ctp:api:type:ProductType). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

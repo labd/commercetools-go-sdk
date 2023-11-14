@@ -33,6 +33,16 @@ func (rb *ByProjectKeyMeBusinessUnitsRequestBuilder) Get() *ByProjectKeyMeBusine
 }
 
 /**
+*	Checks if a BusinessUnit exists for a given Query Predicate. Returns a `200 OK` status if any BusinessUnits match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyMeBusinessUnitsRequestBuilder) Head() *ByProjectKeyMeBusinessUnitsRequestMethodHead {
+	return &ByProjectKeyMeBusinessUnitsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/me/business-units", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
 *	Automatically assigns the Associate to the Business Unit in the default [Associate Role](ctp:api:type:AssociateRole) defined in [BusinessUnitConfiguration](ctp:api:type:BusinessUnitConfiguration). If there is no default Associate Role configured, this request fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error. When creating a Division, the Associate must have the `AddChildUnits` [Permission](ctp:api:type:Permission) in the parent unit. If the required [Permission](/projects/associate-roles#permission) is missing, an [AssociateMissingPermission](/errors#associatemissingpermission) error is returned.
 *
  */

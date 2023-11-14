@@ -22,3 +22,13 @@ func (rb *ByProjectKeyProductProjectionsByIDRequestBuilder) Get() *ByProjectKeyP
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if the current or staged representation of a Product exists for a given `id`. Returns a `200 OK` status if the ProductProjection exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductProjectionsByIDRequestBuilder) Head() *ByProjectKeyProductProjectionsByIDRequestMethodHead {
+	return &ByProjectKeyProductProjectionsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-projections/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}

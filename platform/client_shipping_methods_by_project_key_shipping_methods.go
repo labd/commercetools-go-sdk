@@ -72,6 +72,16 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) Get() *ByProjectKeyShipping
 	}
 }
 
+/**
+*	Checks if a ShippingMethod exists for a given Query Predicate. Returns a `200 OK` status if any ShippingMethods match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShippingMethodsRequestBuilder) Head() *ByProjectKeyShippingMethodsRequestMethodHead {
+	return &ByProjectKeyShippingMethodsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shipping-methods", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) Post(body ShippingMethodDraft) *ByProjectKeyShippingMethodsRequestMethodPost {
 	return &ByProjectKeyShippingMethodsRequestMethodPost{
 		body:   body,

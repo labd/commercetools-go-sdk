@@ -132,13 +132,13 @@ func (obj AssociateRoleReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:TypeResourceIdentifier) of an [AssociateRole](ctp:api:type:AssociateRole).
+*	[ResourceIdentifier](ctp:api:type:TypeResourceIdentifier) of an [AssociateRole](ctp:api:type:AssociateRole). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type AssociateRoleResourceIdentifier struct {
-	// Unique identifier of the referenced [AssociateRole](ctp:api:type:AssociateRole). Either `id` or `key` is required.
+	// Unique identifier of the referenced [AssociateRole](ctp:api:type:AssociateRole). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [AssociateRole](ctp:api:type:AssociateRole). Either `id` or `key` is required.
+	// Unique key of the referenced [AssociateRole](ctp:api:type:AssociateRole). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -239,7 +239,7 @@ func mapDiscriminatorAssociateRoleUpdateAction(input interface{}) (AssociateRole
 }
 
 /**
-*	Permissions grant granular access to [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), and [QuoteRequests](ctp:api:type:QuoteRequest).
+*	Permissions grant granular access to [Approval Rules](ctp:api:type:ApprovalRule), [Approval Flows](ctp:api:type:ApprovalFlow), [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), and [Quote Requests](ctp:api:type:QuoteRequest).
 *
  */
 type Permission string
@@ -281,6 +281,9 @@ const (
 	PermissionUpdateOthersQuoteRequests          Permission = "UpdateOthersQuoteRequests"
 	PermissionCreateMyQuoteRequestsFromMyCarts   Permission = "CreateMyQuoteRequestsFromMyCarts"
 	PermissionCreateQuoteRequestsFromOthersCarts Permission = "CreateQuoteRequestsFromOthersCarts"
+	PermissionCreateApprovalRules                Permission = "CreateApprovalRules"
+	PermissionUpdateApprovalRules                Permission = "UpdateApprovalRules"
+	PermissionUpdateApprovalFlows                Permission = "UpdateApprovalFlows"
 )
 
 /**

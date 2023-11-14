@@ -26,6 +26,16 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
+*	Checks if a Quote exists for a given `key`. Returns a `200 OK` status if the Quote exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesKeyByKeyRequestMethodHead {
+	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/as-associate/%s/in-business-unit/key=%s/quotes/key=%s", rb.projectKey, rb.associateId, rb.businessUnitKey, rb.key),
+		client: rb.client,
+	}
+}
+
+/**
 *	If the Quote exists in the [Project](ctp:api:type:Project) but does not reference the requested [BusinessUnit](ctp:api:type:BusinessUnit), this method returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 *
  */

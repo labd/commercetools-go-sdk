@@ -97,12 +97,7 @@ func (rb *FrontasticPreviewRequestMethodGet) Execute(ctx context.Context) (resul
 		err = json.Unmarshal(content, &result)
 		return result, nil
 	case 404:
-		errorObj := Error{}
-		err = json.Unmarshal(content, &errorObj)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errorObj
+		return nil, ErrNotFound
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

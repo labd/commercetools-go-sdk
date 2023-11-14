@@ -19,6 +19,16 @@ func (rb *ByProjectKeyAssociateRolesByIDRequestBuilder) Get() *ByProjectKeyAssoc
 	}
 }
 
+/**
+*	Checks if an AssociateRole exists for a given `id`. Returns a `200 OK` status if the AssociateRole exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAssociateRolesByIDRequestBuilder) Head() *ByProjectKeyAssociateRolesByIDRequestMethodHead {
+	return &ByProjectKeyAssociateRolesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/associate-roles/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyAssociateRolesByIDRequestBuilder) Post(body AssociateRoleUpdate) *ByProjectKeyAssociateRolesByIDRequestMethodPost {
 	return &ByProjectKeyAssociateRolesByIDRequestMethodPost{
 		body:   body,

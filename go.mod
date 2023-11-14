@@ -1,15 +1,19 @@
 module github.com/labd/commercetools-go-sdk
 
-go 1.14
+go 1.21
 
 require (
-	github.com/appscode/go-querystring v0.0.0-20170504095604-0126cfb3f1dc
-	github.com/dave/jennifer v1.4.0
-	github.com/davecgh/go-spew v1.1.0
-	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334
-	github.com/mitchellh/mapstructure v1.3.2
-	github.com/pkg/errors v0.9.1
-	github.com/stretchr/testify v1.6.1
-	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
-	gopkg.in/yaml.v2 v2.3.0
+	github.com/mitchellh/mapstructure v1.5.0
+	github.com/stretchr/testify v1.8.4
+	golang.org/x/oauth2 v0.14.0
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	golang.org/x/net v0.18.0 // indirect
+	google.golang.org/appengine v1.6.7 // indirect
+	google.golang.org/protobuf v1.31.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

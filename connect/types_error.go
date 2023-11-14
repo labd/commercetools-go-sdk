@@ -54,8 +54,8 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "FeatureRemoved":
-		obj := FeatureRemovedError{}
+	case "FieldValueNotFound":
+		obj := FieldValueNotFoundError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -120,6 +120,30 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "GitRepositoryNotReachable":
+		obj := GitRepositoryNotReachableError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ConnectorSpecificationFileNotFound":
+		obj := ConnectorSpecificationFileNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ConnectorSpecificationFileNotValid":
+		obj := ConnectorSpecificationFileNotValidError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ConnectorReferenceNotFound":
+		obj := ConnectorReferenceNotFoundError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DeploymentInvalidStatusTransition":
 		obj := DeploymentInvalidStatusTransitionError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -140,6 +164,24 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "DeploymentUnsupportedRegion":
 		obj := DeploymentUnsupportedRegionError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentApplicationDoNotBelong":
+		obj := DeploymentEntityApplicationDoNotBelongError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentApplicationRequired":
+		obj := DeploymentEntityApplicationRequiredError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentMustIncludeApplication":
+		obj := DeploymentEntityMustIncludeApplicationError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -593,20 +635,24 @@ func (obj DuplicateFieldError) Error() string {
 }
 
 /**
-*	Returned when the requested feature was removed.
+*	Returned when a value for a field is not found.
 *
  */
-type FeatureRemovedError struct {
-	// Description of the feature that is removed.
+type FieldValueNotFoundError struct {
+	// `"The value $value for the $field field was not found"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
+	// Name of the field.
+	Field string `json:"field"`
+	// Conflicting value.
+	Value interface{} `json:"value"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *FeatureRemovedError) UnmarshalJSON(data []byte) error {
-	type Alias FeatureRemovedError
+func (obj *FieldValueNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias FieldValueNotFoundError
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -616,18 +662,20 @@ func (obj *FeatureRemovedError) UnmarshalJSON(data []byte) error {
 	}
 	delete(obj.ExtraValues, "code")
 	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "field")
+	delete(obj.ExtraValues, "value")
 
 	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj FeatureRemovedError) MarshalJSON() ([]byte, error) {
-	type Alias FeatureRemovedError
+func (obj FieldValueNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias FieldValueNotFoundError
 	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
-	}{Action: "FeatureRemoved", Alias: (*Alias)(&obj)})
+	}{Action: "FieldValueNotFound", Alias: (*Alias)(&obj)})
 	if err != nil {
 		return nil, err
 	}
@@ -645,7 +693,7 @@ func (obj FeatureRemovedError) MarshalJSON() ([]byte, error) {
 
 }
 
-func (obj *FeatureRemovedError) DecodeStruct(src map[string]interface{}) error {
+func (obj *FieldValueNotFoundError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -658,11 +706,11 @@ func (obj *FeatureRemovedError) DecodeStruct(src map[string]interface{}) error {
 	return nil
 }
 
-func (obj FeatureRemovedError) Error() string {
+func (obj FieldValueNotFoundError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
 	}
-	return "unknown FeatureRemovedError: failed to parse error response"
+	return "unknown FieldValueNotFoundError: failed to parse error response"
 }
 
 /**
@@ -1045,9 +1093,9 @@ func (obj ResourceNotFoundError) Error() string {
 }
 
 /**
-*	Returned when trying to trigger the certification process for a Connector, but the Connector is already certified.
+*	Returned when trying to certify a Connector that is already certified.
 *
-*	The error is returned as a failed response to the [Trigger Certification Process](ctp:connect:type:ConnectorTriggerCertificationAction) update action.
+*	The error is returned as a failed response to the [Publish](ctp:connect:type:ConnectorPublishAction) update action only when certification is required.
 *
  */
 type ConnectorAlreadyCertifiedError struct {
@@ -1120,9 +1168,9 @@ func (obj ConnectorAlreadyCertifiedError) Error() string {
 }
 
 /**
-*	Returned when trying to trigger the certification process for a Connector that is already in the certification process.
+*	Returned when trying to publish a Connector that requires certification but is already in the certification process.
 *
-*	The error is returned as a failed response to the [Trigger Certification Process](ctp:connect:type:ConnectorTriggerCertificationAction) update action.
+*	The error is returned as a failed response to the [Publish](ctp:connect:type:ConnectorPublishAction) update actiononly when certification is required.
 *
  */
 type ConnectorStagedInCertificationError struct {
@@ -1417,6 +1465,298 @@ func (obj ConnectorStagedPreviewRequestUnderProcessError) Error() string {
 		return obj.Message
 	}
 	return "unknown ConnectorStagedPreviewRequestUnderProcessError: failed to parse error response"
+}
+
+/**
+*	Returned when the GitHub repository is unreachable or not found.
+*
+ */
+type GitRepositoryNotReachableError struct {
+	// `"Repository with the tag is not reachable"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GitRepositoryNotReachableError) UnmarshalJSON(data []byte) error {
+	type Alias GitRepositoryNotReachableError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GitRepositoryNotReachableError) MarshalJSON() ([]byte, error) {
+	type Alias GitRepositoryNotReachableError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "GitRepositoryNotReachable", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GitRepositoryNotReachableError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj GitRepositoryNotReachableError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown GitRepositoryNotReachableError: failed to parse error response"
+}
+
+/**
+*	Returned when the Connector specification file was not found.
+*
+ */
+type ConnectorSpecificationFileNotFoundError struct {
+	// `"The file connect.yaml at $url with the tag $tag was not found"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ConnectorSpecificationFileNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias ConnectorSpecificationFileNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConnectorSpecificationFileNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias ConnectorSpecificationFileNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ConnectorSpecificationFileNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ConnectorSpecificationFileNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ConnectorSpecificationFileNotFoundError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ConnectorSpecificationFileNotFoundError: failed to parse error response"
+}
+
+/**
+*	Returned when the Connector specification file is not valid.
+*
+ */
+type ConnectorSpecificationFileNotValidError struct {
+	// `"The file connect.yaml at $url with the tag $tag is not valid"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ConnectorSpecificationFileNotValidError) UnmarshalJSON(data []byte) error {
+	type Alias ConnectorSpecificationFileNotValidError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConnectorSpecificationFileNotValidError) MarshalJSON() ([]byte, error) {
+	type Alias ConnectorSpecificationFileNotValidError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ConnectorSpecificationFileNotValid", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ConnectorSpecificationFileNotValidError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ConnectorSpecificationFileNotValidError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ConnectorSpecificationFileNotValidError: failed to parse error response"
+}
+
+/**
+*	Returned when the referenced Connector was not found.
+*
+ */
+type ConnectorReferenceNotFoundError struct {
+	// `"Connector '$identifier' with version $version not found"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ConnectorReferenceNotFoundError) UnmarshalJSON(data []byte) error {
+	type Alias ConnectorReferenceNotFoundError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConnectorReferenceNotFoundError) MarshalJSON() ([]byte, error) {
+	type Alias ConnectorReferenceNotFoundError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ConnectorReferenceNotFound", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ConnectorReferenceNotFoundError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ConnectorReferenceNotFoundError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ConnectorReferenceNotFoundError: failed to parse error response"
 }
 
 /**
@@ -1719,4 +2059,223 @@ func (obj DeploymentUnsupportedRegionError) Error() string {
 		return obj.Message
 	}
 	return "unknown DeploymentUnsupportedRegionError: failed to parse error response"
+}
+
+/**
+*	Returned when attempting to add an application that does not belong to the Deployment.
+*
+ */
+type DeploymentEntityApplicationDoNotBelongError struct {
+	// `"Deployment with id=$resourceId or key=$resourceKey does not include application: $applicationName"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentEntityApplicationDoNotBelongError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentEntityApplicationDoNotBelongError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentEntityApplicationDoNotBelongError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentEntityApplicationDoNotBelongError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentApplicationDoNotBelong", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentEntityApplicationDoNotBelongError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentEntityApplicationDoNotBelongError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentEntityApplicationDoNotBelongError: failed to parse error response"
+}
+
+/**
+*	Returned when a Deployment does not contain any applications.
+*
+ */
+type DeploymentEntityApplicationRequiredError struct {
+	// `"A Deployment requires at least one application"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentEntityApplicationRequiredError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentEntityApplicationRequiredError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentEntityApplicationRequiredError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentEntityApplicationRequiredError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentApplicationRequired", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentEntityApplicationRequiredError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentEntityApplicationRequiredError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentEntityApplicationRequiredError: failed to parse error response"
+}
+
+/**
+*	Returned when attempting to remove an application that belongs to the Deployment.
+*
+ */
+type DeploymentEntityMustIncludeApplicationError struct {
+	// `"Deployment with id=$resourceId or key=$resourceKey must include application: $applicationName"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentEntityMustIncludeApplicationError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentEntityMustIncludeApplicationError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentEntityMustIncludeApplicationError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentEntityMustIncludeApplicationError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentMustIncludeApplication", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentEntityMustIncludeApplicationError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentEntityMustIncludeApplicationError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentEntityMustIncludeApplicationError: failed to parse error response"
 }

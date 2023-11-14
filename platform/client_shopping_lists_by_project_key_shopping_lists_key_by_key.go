@@ -19,6 +19,16 @@ func (rb *ByProjectKeyShoppingListsKeyByKeyRequestBuilder) Get() *ByProjectKeySh
 	}
 }
 
+/**
+*	Checks if a ShoppingList exists for a given `key`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShoppingListsKeyByKeyRequestBuilder) Head() *ByProjectKeyShoppingListsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyShoppingListsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shopping-lists/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyShoppingListsKeyByKeyRequestBuilder) Post(body ShoppingListUpdate) *ByProjectKeyShoppingListsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyShoppingListsKeyByKeyRequestMethodPost{
 		body:   body,

@@ -174,13 +174,13 @@ func (obj CategoryReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type CategoryResourceIdentifier struct {
-	// Unique identifier of the referenced [Category](ctp:api:type:Channel). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Category](ctp:api:type:Channel). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Category](ctp:api:type:Category). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Category](ctp:api:type:Category). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

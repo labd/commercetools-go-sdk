@@ -20,6 +20,16 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestBuilder) G
 	}
 }
 
+/**
+*	Checks if a BusinessUnit exists for a given `id`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestMethodHead {
+	return &ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/as-associate/%s/business-units/%s", rb.projectKey, rb.associateId, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestBuilder) Post(body BusinessUnitUpdate) *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestMethodPost {
 	return &ByProjectKeyAsAssociateByAssociateIdBusinessUnitsByIDRequestMethodPost{
 		body:   body,

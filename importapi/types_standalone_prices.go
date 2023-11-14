@@ -12,7 +12,7 @@ import (
 *
  */
 type StandalonePriceImport struct {
-	// User-defined unique identifier for the Standalone Price.
+	// User-defined unique identifier for the Standalone Price. If a [StandalonePrice](/../api/projects/standalone-prices#standaloneprice) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Identifies the ProductVariant to which this Standalone Price is associated. This value is not validated to exist in Product Variants.
 	Sku string `json:"sku"`

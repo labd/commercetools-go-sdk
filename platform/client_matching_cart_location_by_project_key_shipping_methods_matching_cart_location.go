@@ -24,3 +24,13 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder) Get() *
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if a ShippingMethod that can ship to the given [Location](ctp:api:type:Location) exists for the given Cart. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingCartLocationRequestMethodHead {
+	return &ByProjectKeyShippingMethodsMatchingCartLocationRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shipping-methods/matching-cart-location", rb.projectKey),
+		client: rb.client,
+	}
+}

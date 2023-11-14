@@ -25,3 +25,13 @@ func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestBuilder) Get() *ByPr
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if a ShippingMethod that can ship to the given [Location](ctp:api:type:Location) exists. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingLocationRequestMethodHead {
+	return &ByProjectKeyShippingMethodsMatchingLocationRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shipping-methods/matching-location", rb.projectKey),
+		client: rb.client,
+	}
+}

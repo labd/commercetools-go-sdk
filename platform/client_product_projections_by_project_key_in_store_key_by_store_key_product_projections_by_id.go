@@ -28,3 +28,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestBuilder) 
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if the current or staged representations of a Product exists for a given `id` in the specified [Store](ctp:api:type:Store). Returns a `200 OK` status if the ProductProjection exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/product-projections/%s", rb.projectKey, rb.storeKey, rb.id),
+		client: rb.client,
+	}
+}

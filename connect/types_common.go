@@ -33,11 +33,32 @@ type CertificationInfoComment struct {
 	Comment string `json:"comment"`
 }
 
-type ConfigurationKey struct {
+/**
+*	The name, description, and default value of a standard environment variable.
+*
+ */
+type ConfigurationKeyStandard struct {
 	// Name of the environment variable.
 	Key string `json:"key"`
 	// Description of the environment variable.
 	Description string `json:"description"`
+	// Default value of the environment variable.
+	Default *string `json:"default,omitempty"`
+	// Indicates if the environment variable is required.
+	Required *bool `json:"required,omitempty"`
+}
+
+/**
+*	The name and description of a secret environment variable.
+*
+ */
+type ConfigurationKeySecured struct {
+	// Name of the environment variable.
+	Key string `json:"key"`
+	// Description of the environment variable.
+	Description string `json:"description"`
+	// Indicates if the environment variable is required.
+	Required *bool `json:"required,omitempty"`
 }
 
 type ConfigurationValue struct {
@@ -48,16 +69,18 @@ type ConfigurationValue struct {
 }
 
 /**
-*	Describes the required configuration for a Connector.
+*	The configuration of a Connect application. These values are automatically obtained from the connect.yaml file in the GitHub repository.
 *
  */
 type ConnectorConfigurationApplication struct {
-	// Name of the application. Should match the value of `name` within the connect.yaml file of the Connect application.
+	// Name of the Connect application.
 	ApplicationName string `json:"applicationName"`
-	// Contains the name and description of keys saved as plain text.
-	StandardConfiguration []ConfigurationKey `json:"standardConfiguration"`
-	// Contains the name and description of secret keys.
-	SecuredConfiguration []ConfigurationKey `json:"securedConfiguration"`
+	// The Connect application type.
+	ApplicationType string `json:"applicationType"`
+	// Contains the name, description, and default values of standard environment variables.
+	StandardConfiguration []ConfigurationKeyStandard `json:"standardConfiguration"`
+	// Contains the name and description of secret environment variables.
+	SecuredConfiguration []ConfigurationKeySecured `json:"securedConfiguration"`
 }
 
 /**
@@ -95,6 +118,40 @@ type ApplicationDeployment struct {
 }
 
 /**
+*	The type of message being reported.
+*
+ */
+type ConnectorReportEntryType string
+
+const (
+	ConnectorReportEntryTypeInformation ConnectorReportEntryType = "Information"
+	ConnectorReportEntryTypeWarning     ConnectorReportEntryType = "Warning"
+	ConnectorReportEntryTypeError       ConnectorReportEntryType = "Error"
+)
+
+/**
+*	Describes an information, error, or warning notice.
+ */
+type ConnectorReportEntry struct {
+	// The report entry type.
+	Type ConnectorReportEntryType `json:"type"`
+	// The title of the report entry.
+	Title string `json:"title"`
+	// The message related to the report entry.
+	Message *string `json:"message,omitempty"`
+	// When the report entry was created.
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+/**
+*	Contains report entries for publish/preview requests.
+ */
+type ConnectorReport struct {
+	// Contains information, error, and warning notices.
+	Entries []ConnectorReportEntry `json:"entries"`
+}
+
+/**
 *	Indicates the current status of the ConnectorStaged.
 *
  */
@@ -102,10 +159,11 @@ type ConnectorStatus string
 
 const (
 	ConnectorStatusDraft                 ConnectorStatus = "Draft"
+	ConnectorStatusProcessing            ConnectorStatus = "Processing"
 	ConnectorStatusReadyForCertification ConnectorStatus = "ReadyForCertification"
 	ConnectorStatusInCertification       ConnectorStatus = "InCertification"
-	ConnectorStatusFeedbackRequired      ConnectorStatus = "FeedbackRequired"
-	ConnectorStatusCertified             ConnectorStatus = "Certified"
+	ConnectorStatusPublished             ConnectorStatus = "Published"
+	ConnectorStatusFailed                ConnectorStatus = "Failed"
 )
 
 /**
@@ -123,8 +181,7 @@ type ConnectorReference struct {
 }
 
 /**
-*	Contains details of the creator of the Connector.
-*	    These details are used to contact the creator during the certification process.
+*	Details of the individual or organization who developed the Connector.
 *
  */
 type Creator struct {
@@ -132,12 +189,16 @@ type Creator struct {
 	Name *string `json:"name,omitempty"`
 	// Title of the person who owns the Connector.
 	Title *string `json:"title,omitempty"`
-	// Contact email address of the Creator.
+	// Contact email address of the creator.
 	Email string `json:"email"`
 	// Name of the company that owns the Connector.
 	Company *string `json:"company,omitempty"`
-	// Number of developers currently working for the company.
-	NoOfDevelopers *int `json:"noOfDevelopers,omitempty"`
+	// URL to a logo image used to represent the creator.
+	LogoUrl *string `json:"logoUrl,omitempty"`
+	// Number of contributors currently working for the company.
+	NoOfContributors *int `json:"noOfContributors,omitempty"`
+	// URL to the support website of the Connector.
+	SupportUrl *string `json:"supportUrl,omitempty"`
 }
 
 /**
@@ -155,18 +216,74 @@ type DeploymentConnector struct {
 	// Description of the Connector.
 	Description *string `json:"description,omitempty"`
 	// Owner of the Connector.
-	Creator Creator `json:"creator"`
-	// GitHub repository details of the Connector.
+	Creator DeploymentCreator `json:"creator"`
+	// Details of the GitHub repository that contains the Connect applications.
 	Repository Repository `json:"repository"`
+	// If `true`, the Connector is certified.
+	Certified bool `json:"certified"`
+}
+
+/**
+*	The details of the deployed [DeploymentConnector](ctp:connect:type:DeploymentConnector) creator.
+ */
+type DeploymentCreator struct {
+	// Name of the person who owns the Connector.
+	Name *string `json:"name,omitempty"`
+	// Title of the person who owns the Connector.
+	Title *string `json:"title,omitempty"`
+	// Contact email address of the creator.
+	Email string `json:"email"`
+	// Name of the company that owns the Connector.
+	Company *string `json:"company,omitempty"`
+	// Number of contributors currently working for the company.
+	NoOfContributors *int `json:"noOfContributors,omitempty"`
+}
+
+/**
+*	The type of message being reported.
+*
+ */
+type DeploymentReportEntryType string
+
+const (
+	DeploymentReportEntryTypeInformation DeploymentReportEntryType = "Information"
+	DeploymentReportEntryTypeWarning     DeploymentReportEntryType = "Warning"
+	DeploymentReportEntryTypeError       DeploymentReportEntryType = "Error"
+)
+
+/**
+*	Describes an information, error, or warning in the deployment report.
+ */
+type DeploymentReportEntry struct {
+	// The report entry type.
+	Type DeploymentReportEntryType `json:"type"`
+	// The title of the report entry.
+	Title string `json:"title"`
+	// The message related to the report entry.
+	Message *string `json:"message,omitempty"`
+	// The name of the Connect application related to the entry.
+	Application *string `json:"application,omitempty"`
+	// When the report entry was created.
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+/**
+*	Describes a report of the Connector deployment process.
+ */
+type DeploymentReport struct {
+	// Contains informations, errors and warnings about the Connector deployment.
+	Entries []DeploymentReportEntry `json:"entries"`
 }
 
 type DeploymentDetailsBuild struct {
 	// The build execution id of the deployed application.
 	ID string `json:"id"`
+	// The build report of the deployed Connector.
+	Report *DeploymentReport `json:"report,omitempty"`
 }
 
 /**
-*	The build and runtime details of deployed applications.
+*	Additional details about the deployed Connector.
  */
 type DeploymentDetails struct {
 	// The build details of deployed applications.
@@ -190,6 +307,23 @@ const (
 )
 
 /**
+*	The severity of the log message.
+ */
+type DeploymentLogSeverity string
+
+const (
+	DeploymentLogSeverityDEFAULT   DeploymentLogSeverity = "DEFAULT"
+	DeploymentLogSeverityDEBUG     DeploymentLogSeverity = "DEBUG"
+	DeploymentLogSeverityINFO      DeploymentLogSeverity = "INFO"
+	DeploymentLogSeverityNOTICE    DeploymentLogSeverity = "NOTICE"
+	DeploymentLogSeverityWARNING   DeploymentLogSeverity = "WARNING"
+	DeploymentLogSeverityERROR     DeploymentLogSeverity = "ERROR"
+	DeploymentLogSeverityCRITICAL  DeploymentLogSeverity = "CRITICAL"
+	DeploymentLogSeverityALERT     DeploymentLogSeverity = "ALERT"
+	DeploymentLogSeverityEMERGENCY DeploymentLogSeverity = "EMERGENCY"
+)
+
+/**
 *	The host Region of a commercetools Composable Commerce Project. For more information, see [Hosts](hosts-and-authorization#hosts).
 *
  */
@@ -202,7 +336,7 @@ const (
 )
 
 /**
-*	Details of the GitHub repository that contains the Connect application.
+*	Details of the GitHub repository that contains the Connect applications.
 *
  */
 type Repository struct {
@@ -210,27 +344,6 @@ type Repository struct {
 	Url string `json:"url"`
 	// Git tag of the release to use.
 	Tag string `json:"tag"`
-}
-
-/**
-*	A Paged Result.
-*
- */
-type Paged struct {
-	Limit   float64     `json:"limit"`
-	Offset  float64     `json:"offset"`
-	Count   float64     `json:"count"`
-	Total   float64     `json:"total"`
-	Results interface{} `json:"results"`
-}
-
-/**
-*	A Cursor Paged Result.
-*
- */
-type CursorPaged struct {
-	Data interface{} `json:"data"`
-	Next string      `json:"next"`
 }
 
 /**

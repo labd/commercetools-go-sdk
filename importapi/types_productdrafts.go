@@ -12,7 +12,7 @@ import (
 *
  */
 type ProductDraftImport struct {
-	// User-defined unique identifier.
+	// User-defined unique identifier. If a [Product](/../api/projects/products#product) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// The `productType` of a [Product](/../api/projects/products#product).
 	// Maps to `Product.productType`.
@@ -206,7 +206,7 @@ type PriceDraftImport struct {
 	// The tiered prices for this price.
 	Tiers []PriceTier `json:"tiers"`
 	// User-defined unique identifier for the Embedded Price.
-	Key *string `json:"key,omitempty"`
+	Key string `json:"key"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

@@ -19,6 +19,16 @@ func (rb *ByProjectKeyMeCartsKeyByKeyRequestBuilder) Get() *ByProjectKeyMeCartsK
 	}
 }
 
+/**
+*	Checks if a Cart exists for a given `key`. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyMeCartsKeyByKeyRequestBuilder) Head() *ByProjectKeyMeCartsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyMeCartsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/me/carts/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyMeCartsKeyByKeyRequestBuilder) Post(body MyCartUpdate) *ByProjectKeyMeCartsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyMeCartsKeyByKeyRequestMethodPost{
 		body:   body,

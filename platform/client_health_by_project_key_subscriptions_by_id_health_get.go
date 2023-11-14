@@ -50,8 +50,6 @@ func (rb *ByProjectKeySubscriptionsByIDHealthRequestMethodGet) Execute(ctx conte
 	switch resp.StatusCode {
 	case 200:
 		return nil
-	case 400, 503:
-		return nil
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

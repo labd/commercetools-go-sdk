@@ -129,7 +129,7 @@ type ProductSelection struct {
 *	Given the mode of Product Selection, this assignment refers to, it may contain:
 *
 *	- `variantSelection` field for a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
-*	- `variantExclusion` field for a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode) ([BETA](/../offering/api-contract#public-beta)).
+*	- `variantExclusion` field for a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
  */
 type ProductSelectionAssignment struct {
 	// Reference to a Product that is assigned to the ProductSelection.
@@ -254,13 +254,13 @@ func (obj ProductSelectionReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type ProductSelectionResourceIdentifier struct {
-	// Unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

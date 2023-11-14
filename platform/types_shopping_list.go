@@ -119,6 +119,8 @@ type ShoppingListLineItem struct {
 	DeactivatedAt *time.Time `json:"deactivatedAt,omitempty"`
 	// Unique identifier of the ShoppingListLineItem.
 	ID string `json:"id"`
+	// User-defined identifier of the ShoppingListLineItem. It is unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// Name of the Product.
 	//
 	// This data is updated in an [eventual consistent manner](/general-concepts#eventual-consistency) when the Product's name changes.
@@ -146,6 +148,8 @@ type ShoppingListLineItem struct {
 *
  */
 type ShoppingListLineItemDraft struct {
+	// User-defined identifier of the ShoppingListLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// Unique identifier of a [Product](ctp:api:type:Product).
 	ProductId *string `json:"productId,omitempty"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
@@ -199,13 +203,13 @@ func (obj ShoppingListReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type ShoppingListResourceIdentifier struct {
-	// Unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -419,6 +423,8 @@ type TextLineItem struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// Unique identifier of the TextLineItem.
 	ID string `json:"id"`
+	// User-defined identifier of the TextLineItem. It is unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// Name of the TextLineItem.
 	Name LocalizedString `json:"name"`
 	// Number of entries in the TextLineItem.
@@ -426,6 +432,8 @@ type TextLineItem struct {
 }
 
 type TextLineItemDraft struct {
+	// User-defined unique identifier of the TextLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// Custom Fields for the TextLineItem.
@@ -445,6 +453,8 @@ type TextLineItemDraft struct {
 *
  */
 type ShoppingListAddLineItemAction struct {
+	// User-defined identifier of the ShoppingListLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
 	Sku *string `json:"sku,omitempty"`
 	// Unique identifier of a [Product](ctp:api:type:Product).
@@ -472,6 +482,8 @@ func (obj ShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 type ShoppingListAddTextLineItemAction struct {
 	// Name of the TextLineItem.
 	Name LocalizedString `json:"name"`
+	// User-defined identifier of the TextLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// Description of the TextLineItem.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Number of entries in the TextLineItem.
@@ -493,8 +505,10 @@ func (obj ShoppingListAddTextLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListChangeLineItemQuantityAction struct {
-	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// New value to set. If `0`, the ShoppingListLineItem is removed from the ShoppingList.
 	Quantity int `json:"quantity"`
 }
@@ -540,8 +554,10 @@ func (obj ShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListChangeTextLineItemNameAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
@@ -557,8 +573,10 @@ func (obj ShoppingListChangeTextLineItemNameAction) MarshalJSON() ([]byte, error
 }
 
 type ShoppingListChangeTextLineItemQuantityAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// New value to set. If `0`, the TextLineItem is removed from the ShoppingList.
 	Quantity int `json:"quantity"`
 }
@@ -589,8 +607,10 @@ func (obj ShoppingListChangeTextLineItemsOrderAction) MarshalJSON() ([]byte, err
 }
 
 type ShoppingListRemoveLineItemAction struct {
-	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Amount to remove from the `quantity` of the ShoppingListLineItem. If not set, the ShoppingListLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the ShoppingListLineItem, the ShoppingListLineItem is removed from the ShoppingList.
 	Quantity *int `json:"quantity,omitempty"`
 }
@@ -606,8 +626,10 @@ func (obj ShoppingListRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListRemoveTextLineItemAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Amount to remove from the `quantity` of the TextLineItem. If not set, the TextLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the TextLineItem, the TextLineItem is removed from the ShoppingList.
 	Quantity *int `json:"quantity,omitempty"`
 }
@@ -735,8 +757,10 @@ func (obj ShoppingListSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetLineItemCustomFieldAction struct {
-	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -756,8 +780,10 @@ func (obj ShoppingListSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error
 }
 
 type ShoppingListSetLineItemCustomTypeAction struct {
-	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the ShoppingListLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -806,8 +832,10 @@ func (obj ShoppingListSetStoreAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetTextLineItemCustomFieldAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -827,8 +855,10 @@ func (obj ShoppingListSetTextLineItemCustomFieldAction) MarshalJSON() ([]byte, e
 }
 
 type ShoppingListSetTextLineItemCustomTypeAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the TextLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -847,8 +877,10 @@ func (obj ShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, er
 }
 
 type ShoppingListSetTextLineItemDescriptionAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }

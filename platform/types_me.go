@@ -13,7 +13,7 @@ type MyBusinessUnitAssociateDraft struct {
 	Version int `json:"version"`
 	// [Customer](ctp:api:type:Customer) to create and assign to the Business Unit.
 	Customer MyCustomerDraft `json:"customer"`
-	// Roles assigned to the new Associate within a Business Unit.
+	// Roles assigned to the new Associate within a Business Unit. Can only contain [AssociateRoles](ctp:api:type:AssociateRole) with the `buyerAssignable` property set to `true`.
 	AssociateRoleAssignments []AssociateRoleAssignmentDraft `json:"associateRoleAssignments"`
 }
 
@@ -431,12 +431,6 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 		return obj, nil
 	case "setDeleteDaysAfterLastModification":
 		obj := MyCartSetDeleteDaysAfterLastModificationAction{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "setDirectDiscounts":
-		obj := MyCartSetDirectDiscountsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -894,24 +888,19 @@ type MyLineItemDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
-/**
-*	When creating [B2B Orders](/../api/associates-overview#b2b-resources), the Customer must have the `MyOrderFromCartDraft` [Permission](ctp:api:type:Permission).
- */
 type MyOrderFromCartDraft struct {
-	// Unique identifier of the Cart that initiates an Order creation.
-	ID      string `json:"id"`
-	Version int    `json:"version"`
+	// `id` of the [Cart](ctp:api:type:Cart) from which the Order is created.
+	ID string `json:"id"`
+	// Current `version` of the [Cart](ctp:api:type:Cart) from which the Order is created.
+	Version int `json:"version"`
 }
 
-/**
-*	When creating [B2B Orders](/../api/associates-overview#b2b-resources), the Customer must have the `MyOrderFromQuoteDraft` [Permission](ctp:api:type:Permission).
- */
 type MyOrderFromQuoteDraft struct {
-	// Unique identifier of the Quote from which the Order is created.
+	// `id` of the [Quote](ctp:api:type:Quote) from which the Order is created.
 	ID string `json:"id"`
-	// `version` of the [Quote](ctp:api:type:quote) from which the Order is created.
+	// Current `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
 	Version int `json:"version"`
-	// Set to `true`, if the `quoteState` of the referenced [Quote](ctp:api:type:quote) should be set to `Accepted`.
+	// Set to `true`, if the `quoteState` of the referenced [Quote](ctp:api:type:Quote) should be set to `Accepted`.
 	QuoteStateToAccepted *bool `json:"quoteStateToAccepted,omitempty"`
 }
 
@@ -1059,7 +1048,7 @@ type MyQuoteRequestDraft struct {
 	// Current version of the Cart.
 	CartVersion int `json:"cartVersion"`
 	// Message from the Buyer included in the Quote Request.
-	Comment string `json:"comment"`
+	Comment *string `json:"comment,omitempty"`
 }
 
 type MyQuoteRequestUpdate struct {
@@ -1523,11 +1512,11 @@ func (obj MyBusinessUnitChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message.
+*	Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentChanged](ctp:api:type:BusinessUnitParentChangedMessage) Message.
 *
  */
 type MyBusinessUnitChangeParentUnitAction struct {
-	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit). The new parent unit must have the same top-level unit as the old parent unit.
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
 }
 
@@ -1623,6 +1612,10 @@ func (obj MyBusinessUnitRemoveShippingAddressIdAction) MarshalJSON() ([]byte, er
 	}{Action: "removeShippingAddressId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to an Address of a Business Unit generates the [BusinessUnitAddressCustomFieldAdded](ctp:api:type:BusinessUnitAddressCustomFieldAddedMessage) Message, removing one generates the [BusinessUnitAddressCustomFieldRemoved](ctp:api:type:BusinessUnitAddressCustomFieldRemovedMessage) Message, and updating an existing one generates the [BusinessUnitAddressCustomFieldChanged](ctp:api:type:BusinessUnitAddressCustomFieldChangedMessage) Message.
+*
+ */
 type MyBusinessUnitSetAddressCustomFieldAction struct {
 	// ID of the `address` to be extended.
 	AddressId string `json:"addressId"`
@@ -1644,6 +1637,10 @@ func (obj MyBusinessUnitSetAddressCustomFieldAction) MarshalJSON() ([]byte, erro
 	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type to an Address of a Business Unit generates the [BusinessUnitAddressCustomTypeSet](ctp:api:type:BusinessUnitAddressCustomTypeSetMessage) Message, and removing one generates the [BusinessUnitAddressCustomTypeRemoved](ctp:api:type:BusinessUnitAddressCustomTypeRemovedMessage) Message.
+*
+ */
 type MyBusinessUnitSetAddressCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
@@ -1684,6 +1681,10 @@ func (obj MyBusinessUnitSetContactEmailAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setContactEmail", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to a Business Unit generates the [BusinessUnitCustomFieldAdded](ctp:api:type:BusinessUnitCustomFieldAddedMessage) Message, removing one generates the [BusinessUnitCustomFieldRemoved](ctp:api:type:BusinessUnitCustomFieldRemovedMessage) Message, and updating an existing one generates the [BusinessUnitCustomFieldChanged](ctp:api:type:BusinessUnitCustomFieldChangedMessage) Message.
+*
+ */
 type MyBusinessUnitSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -1703,6 +1704,10 @@ func (obj MyBusinessUnitSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type on a Business Unit generates the [BusinessUnitCustomTypeSet](ctp:api:type:BusinessUnitCustomTypeSetMessage) Message, removing one generates the [BusinessUnitCustomTypeRemoved](ctp:api:type:BusinessUnitCustomTypeRemovedMessage) Message.
+*
+ */
 type MyBusinessUnitSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
@@ -1884,12 +1889,14 @@ func (obj MyCartAddPaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	To override the shipping details, see [Set LineItemShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction).
+*	To override the shipping details, see [Set LineItem ShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction).
 *
  */
 type MyCartApplyDeltaToLineItemShippingDetailsTargetsAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Using positive or negative quantities increases or decreases the number of items shipped to an address.
 	TargetsDelta []ItemShippingTarget `json:"targetsDelta"`
 }
@@ -1912,7 +1919,7 @@ func (obj MyCartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() 
 *	the `shippingDetails` field is kept in its current state to avoid data loss.
 *
 *	To change the Line Item quantity and shipping details together,
-*	use this update action in combination with the [Set LineItemShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction) update action
+*	use this update action in combination with the [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction) update action
 *	in a single Cart update command.
 *
 *	When the action applies to [LineItems](ctp:api:type:LineItem) with `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode),
@@ -1921,8 +1928,10 @@ func (obj MyCartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() 
 *
  */
 type MyCartChangeLineItemQuantityAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// New value to set.
 	//
 	// If `0`, the Line Item is removed from the Cart.
@@ -2027,11 +2036,12 @@ func (obj MyCartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartRemoveLineItemAction struct {
-	// `id` of the Line Item to remove.
-	LineItemId string `json:"lineItemId"`
-	// New value to set.
-	//
-	// If `0`, the Line Item is removed from the Cart.
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// Amount to subtract from the LineItem's `quantity`.
+	// If absent, the LineItem is removed from the Cart.
 	Quantity *int `json:"quantity,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when decreasing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
@@ -2200,31 +2210,11 @@ func (obj MyCartSetDeleteDaysAfterLastModificationAction) MarshalJSON() ([]byte,
 	}{Action: "setDeleteDaysAfterLastModification", Alias: (*Alias)(&obj)})
 }
 
-/**
-*	Adds a [DirectDiscount](ctp:api:type:DirectDiscount), but only if no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Cart.
-*	Either a Discount Code or a Direct Discount can exist on a Cart at the same time.
-*
- */
-type MyCartSetDirectDiscountsAction struct {
-	// - If set, all existing Direct Discounts are replaced.
-	//   The discounts apply in the order they are added to the list.
-	// - If empty, all existing Direct Discounts are removed and all affected prices on the Cart or Order are recalculated.
-	Discounts []DirectDiscountDraft `json:"discounts"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj MyCartSetDirectDiscountsAction) MarshalJSON() ([]byte, error) {
-	type Alias MyCartSetDirectDiscountsAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setDirectDiscounts", Alias: (*Alias)(&obj)})
-}
-
 type MyCartSetLineItemCustomFieldAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2244,8 +2234,10 @@ func (obj MyCartSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetLineItemCustomTypeAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -2268,8 +2260,10 @@ func (obj MyCartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartSetLineItemDistributionChannelAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// - If present, a [Reference](ctp:api:type:Reference) to the Channel is set for the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	// - If not present, the current [Reference](ctp:api:type:Reference) to a distribution channel is removed from the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	//   The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -2287,8 +2281,10 @@ func (obj MyCartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, err
 }
 
 type MyCartSetLineItemShippingDetailsAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If empty, the existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
@@ -2309,8 +2305,10 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 *
  */
 type MyCartSetLineItemSupplyChannelAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// - If present, a [Reference](ctp:api:type:Reference) to the Channel is set for the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	// - If not present, the current [Reference](ctp:api:type:Reference) to a supply channel will be removed from the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	//   The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -2606,6 +2604,10 @@ func (obj MyCustomerSetCompanyNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCompanyName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to a Customer generates the [CustomerCustomFieldAdded](ctp:api:type:CustomerCustomFieldAddedMessage) Message, removing one generates the [CustomerCustomFieldRemoved](ctp:api:type:CustomerCustomFieldRemovedMessage) Message, and updating an existing one generates the [CustomerCustomFieldChanged](ctp:api:type:CustomerCustomFieldChangedMessage) Message.
+*
+ */
 type MyCustomerSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -2625,6 +2627,10 @@ func (obj MyCustomerSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type on a Customer generates the [CustomerCustomTypeSet](ctp:api:type:CustomerCustomTypeSetMessage) Message, removing one generates the [CustomerCustomTypeRemoved](ctp:api:type:CustomerCustomTypeRemovedMessage) Message.
+*
+ */
 type MyCustomerSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the MyCustomer.
@@ -2992,6 +2998,8 @@ func (obj MyQuoteRequestCancelAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListAddLineItemAction struct {
+	// User-defined identifier of the ShoppingListLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
 	Sku *string `json:"sku,omitempty"`
 	// Unique identifier of a [Product](ctp:api:type:Product).
@@ -3019,6 +3027,8 @@ func (obj MyShoppingListAddLineItemAction) MarshalJSON() ([]byte, error) {
 type MyShoppingListAddTextLineItemAction struct {
 	// Name of the [TextLineItem](ctp:api:type:TextLineItem).
 	Name LocalizedString `json:"name"`
+	// User-defined identifier of the TextLineItem. Must be unique per [ShoppingList](ctp:api:type:ShoppingList).
+	Key *string `json:"key,omitempty"`
 	// Description of the TextLineItem.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Number of entries in the TextLineItem.
@@ -3040,8 +3050,10 @@ func (obj MyShoppingListAddTextLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListChangeLineItemQuantityAction struct {
-	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the ShoppingListLineItem to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the ShoppingListLineItem to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// New value to set. If `0`, the ShoppingListLineItem is removed from the ShoppingList.
 	Quantity int `json:"quantity"`
 }
@@ -3087,8 +3099,10 @@ func (obj MyShoppingListChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListChangeTextLineItemNameAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// New value to set. Must not be empty.
 	Name LocalizedString `json:"name"`
 }
@@ -3104,8 +3118,10 @@ func (obj MyShoppingListChangeTextLineItemNameAction) MarshalJSON() ([]byte, err
 }
 
 type MyShoppingListChangeTextLineItemQuantityAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// New value to set. If `0`, the TextLineItem is removed from the ShoppingList.
 	Quantity int `json:"quantity"`
 }
@@ -3136,8 +3152,10 @@ func (obj MyShoppingListChangeTextLineItemsOrderAction) MarshalJSON() ([]byte, e
 }
 
 type MyShoppingListRemoveLineItemAction struct {
-	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Amount to remove from the `quantity` of the ShoppingListLineItem. If not set, the ShoppingListLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the ShoppingListLineItem, the ShoppingListLineItem is removed from the ShoppingList.
 	Quantity *int `json:"quantity,omitempty"`
 }
@@ -3153,8 +3171,10 @@ func (obj MyShoppingListRemoveLineItemAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListRemoveTextLineItemAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Amount to remove from the `quantity` of the TextLineItem. If not set, the TextLineItem is removed from the ShoppingList. If this value matches or exceeds the current `quantity` of the TextLineItem, the TextLineItem is removed from the ShoppingList.
 	Quantity *int `json:"quantity,omitempty"`
 }
@@ -3237,8 +3257,10 @@ func (obj MyShoppingListSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListSetLineItemCustomFieldAction struct {
-	// Unique identifier of an existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) in the [ShoppingList](ctp:api:type:ShoppingList).
-	LineItemId string `json:"lineItemId"`
+	// Unique identifier of an the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem). Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -3278,8 +3300,10 @@ func (obj MyShoppingListSetLineItemCustomTypeAction) MarshalJSON() ([]byte, erro
 }
 
 type MyShoppingListSetTextLineItemCustomFieldAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -3299,8 +3323,10 @@ func (obj MyShoppingListSetTextLineItemCustomFieldAction) MarshalJSON() ([]byte,
 }
 
 type MyShoppingListSetTextLineItemCustomTypeAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the TextLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -3319,8 +3345,10 @@ func (obj MyShoppingListSetTextLineItemCustomTypeAction) MarshalJSON() ([]byte, 
 }
 
 type MyShoppingListSetTextLineItemDescriptionAction struct {
-	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update.
-	TextLineItemId string `json:"textLineItemId"`
+	// The `id` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemId *string `json:"textLineItemId,omitempty"`
+	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
 	// Value to set. If empty, any existing value will be removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }

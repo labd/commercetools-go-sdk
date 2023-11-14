@@ -52,8 +52,6 @@ func (rb *FrontasticDataSourceByIdentifierRequestMethodGet) Execute(ctx context.
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 415:
-		return nil, nil
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

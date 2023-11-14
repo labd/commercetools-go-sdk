@@ -32,6 +32,16 @@ func (rb *ByProjectKeyStagedQuotesRequestBuilder) Get() *ByProjectKeyStagedQuote
 	}
 }
 
+/**
+*	Checks if a StagedQuote exists for a given Query Predicate. Returns a `200 OK` status if any StagedQuotes match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyStagedQuotesRequestBuilder) Head() *ByProjectKeyStagedQuotesRequestMethodHead {
+	return &ByProjectKeyStagedQuotesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/staged-quotes", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyStagedQuotesRequestBuilder) Post(body StagedQuoteDraft) *ByProjectKeyStagedQuotesRequestMethodPost {
 	return &ByProjectKeyStagedQuotesRequestMethodPost{
 		body:   body,

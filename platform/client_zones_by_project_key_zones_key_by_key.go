@@ -19,6 +19,16 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Get() *ByProjectKeyZonesKeyBy
 	}
 }
 
+/**
+*	Checks if a Zone exists for a given `key`. Returns a `200 OK` status if the Zone exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Head() *ByProjectKeyZonesKeyByKeyRequestMethodHead {
+	return &ByProjectKeyZonesKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/zones/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Post(body ZoneUpdate) *ByProjectKeyZonesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodPost{
 		body:   body,

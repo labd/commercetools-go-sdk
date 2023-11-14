@@ -39,6 +39,16 @@ func (rb *ByProjectKeyCustomObjectsRequestBuilder) Get() *ByProjectKeyCustomObje
 }
 
 /**
+*	Checks if a CustomObject exists for a given Query Predicate. Returns a `200 OK` status if any CustomObjects match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCustomObjectsRequestBuilder) Head() *ByProjectKeyCustomObjectsRequestMethodHead {
+	return &ByProjectKeyCustomObjectsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/custom-objects", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
 *	If an object with the given container/key exists, the object will be replaced with the new value and the version is incremented.
 *	If the request contains a version and an object with the given container/key, then the version must match the version of the existing object. Concurrent updates to the same Custom Object returns a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error even if the version is not provided.
 *

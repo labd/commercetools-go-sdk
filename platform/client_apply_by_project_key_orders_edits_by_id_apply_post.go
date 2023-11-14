@@ -27,6 +27,11 @@ func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) WithHeaders(headers
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Applying an OrderEdit produces the [OrderEditApplied](ctp:api:type:OrderEditAppliedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context.Context) (result *OrderEdit, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
@@ -53,15 +58,49 @@ func (rb *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost) Execute(ctx context
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 400, 401, 403, 500, 502, 503:
+	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

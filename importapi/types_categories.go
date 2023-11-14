@@ -11,7 +11,7 @@ import (
 *
  */
 type CategoryImport struct {
-	// User-defined unique identifier.
+	// User-defined unique identifier. If a [Category](/../api/projects/categories#category) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Category.name`.
 	Name LocalizedString `json:"name"`

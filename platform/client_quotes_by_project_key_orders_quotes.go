@@ -12,7 +12,16 @@ type ByProjectKeyOrdersQuotesRequestBuilder struct {
 }
 
 /**
-*	Create an Order from a Quote
+*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+*
+*	Specific Error Codes:
+*
+*	- [OutOfStock](ctp:api:type:OutOfStockError)
+*	- [PriceChanged](ctp:api:type:PriceChangedError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [InvalidOperation](ctp:api:type:InvalidOperationError)
+*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*
  */
 func (rb *ByProjectKeyOrdersQuotesRequestBuilder) Post(body OrderFromQuoteDraft) *ByProjectKeyOrdersQuotesRequestMethodPost {
 	return &ByProjectKeyOrdersQuotesRequestMethodPost{

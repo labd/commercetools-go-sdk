@@ -66,9 +66,30 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Get() *ByProjectKeyOrdersRequestMeth
 }
 
 /**
-*	Creates an order from a Cart.
-*	The cart must have a shipping address set before creating an order.
-*	When using the Platform TaxMode, the shipping address is used for tax calculation.
+*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyOrdersRequestBuilder) Head() *ByProjectKeyOrdersRequestMethodHead {
+	return &ByProjectKeyOrdersRequestMethodHead{
+		url:    fmt.Sprintf("/%s/orders", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
+*	Before you create an Order, the Cart must have a [shipping address set](ctp:api:type:CartSetShippingAddressAction).
+*	The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
+*
+*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+*
+*	Specific Error Codes:
+*
+*	- [OutOfStock](ctp:api:type:OutOfStockError)
+*	- [PriceChanged](ctp:api:type:PriceChangedError)
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [ShippingMethodDoesNotMatchCart](ctp:api:type:ShippingMethodDoesNotMatchCartError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
 *
  */
 func (rb *ByProjectKeyOrdersRequestBuilder) Post(body OrderFromCartDraft) *ByProjectKeyOrdersRequestMethodPost {

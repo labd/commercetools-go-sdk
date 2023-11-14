@@ -19,6 +19,16 @@ func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Get() *ByProjectKeySta
 	}
 }
 
+/**
+*	Checks if a StandalonePrice exists for a given `id`. Returns a `200 OK` status if the StandalonePrice exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Head() *ByProjectKeyStandalonePricesByIDRequestMethodHead {
+	return &ByProjectKeyStandalonePricesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/standalone-prices/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Post(body StandalonePriceUpdate) *ByProjectKeyStandalonePricesByIDRequestMethodPost {
 	return &ByProjectKeyStandalonePricesByIDRequestMethodPost{
 		body:   body,

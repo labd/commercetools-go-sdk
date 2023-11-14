@@ -19,6 +19,16 @@ func (rb *ByProjectKeyStatesKeyByKeyRequestBuilder) Get() *ByProjectKeyStatesKey
 	}
 }
 
+/**
+*	Checks if a State exists for a given `key`. Returns a `200 OK` status if the State exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyStatesKeyByKeyRequestBuilder) Head() *ByProjectKeyStatesKeyByKeyRequestMethodHead {
+	return &ByProjectKeyStatesKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/states/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyStatesKeyByKeyRequestBuilder) Post(body StateUpdate) *ByProjectKeyStatesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyStatesKeyByKeyRequestMethodPost{
 		body:   body,

@@ -19,6 +19,16 @@ func (rb *ByProjectKeyPaymentsByIDRequestBuilder) Get() *ByProjectKeyPaymentsByI
 	}
 }
 
+/**
+*	Checks if a Payment exists for a given `id`. Returns a `200 OK` status if the Payment exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyPaymentsByIDRequestBuilder) Head() *ByProjectKeyPaymentsByIDRequestMethodHead {
+	return &ByProjectKeyPaymentsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/payments/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyPaymentsByIDRequestBuilder) Post(body PaymentUpdate) *ByProjectKeyPaymentsByIDRequestMethodPost {
 	return &ByProjectKeyPaymentsByIDRequestMethodPost{
 		body:   body,

@@ -683,7 +683,7 @@ func (obj ShippingAddressMissing) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated when the currently used origin URL is not in the list of the [**Origin URLs** configured in the Merchant Centre](/configuring-checkout#create-an-application) and the checkout cannot be initialized. Add the **Origin URL** in your application settings in the Merchant Center.
+*	Generated when the currently used origin URL is not in the list of the [**Origin URLs** configured in the Merchant Center](/configuring-checkout#create-an-application) and the checkout cannot be initialized. Add the **Origin URL** in your application settings in the Merchant Center.
 *
  */
 type UnallowedOrigin struct {

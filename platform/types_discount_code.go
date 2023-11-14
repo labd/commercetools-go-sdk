@@ -168,13 +168,13 @@ func (obj DiscountCodeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [DiscountCode](ctp:api:type:DiscountCode).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [DiscountCode](ctp:api:type:DiscountCode). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type DiscountCodeResourceIdentifier struct {
-	// Unique identifier of the referenced [DiscountCode](ctp:api:type:DiscountCode). Either `id` or `key` is required.
+	// Unique identifier of the referenced [DiscountCode](ctp:api:type:DiscountCode). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [DiscountCode](ctp:api:type:DiscountCode). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [DiscountCode](ctp:api:type:DiscountCode). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

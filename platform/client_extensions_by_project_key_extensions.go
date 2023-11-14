@@ -32,6 +32,16 @@ func (rb *ByProjectKeyExtensionsRequestBuilder) Get() *ByProjectKeyExtensionsReq
 	}
 }
 
+/**
+*	Checks if an Extension exists for a given Query Predicate. Returns a `200 OK` status if any Extensions match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyExtensionsRequestBuilder) Head() *ByProjectKeyExtensionsRequestMethodHead {
+	return &ByProjectKeyExtensionsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/extensions", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyExtensionsRequestBuilder) Post(body ExtensionDraft) *ByProjectKeyExtensionsRequestMethodPost {
 	return &ByProjectKeyExtensionsRequestMethodPost{
 		body:   body,

@@ -37,3 +37,13 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if a Quote exists for a given Query Predicate. Returns a `200 OK` status if any Quotes match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodHead {
+	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/as-associate/%s/in-business-unit/key=%s/quotes", rb.projectKey, rb.associateId, rb.businessUnitKey),
+		client: rb.client,
+	}
+}

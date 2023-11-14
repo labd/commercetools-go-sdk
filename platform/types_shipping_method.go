@@ -32,7 +32,7 @@ type ShippingMethod struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ShippingMethod.
 	Key *string `json:"key,omitempty"`
-	// Name of the ShippingMethod.
+	// Unique name of the ShippingMethod within a [Project](ctp:api:type:Project).
 	Name string `json:"name"`
 	// Localized name of the ShippingMethod.
 	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
@@ -55,7 +55,7 @@ type ShippingMethod struct {
 type ShippingMethodDraft struct {
 	// User-defined unique identifier for the ShippingMethod.
 	Key *string `json:"key,omitempty"`
-	// Name of the ShippingMethod.
+	// Unique name for the ShippingMethod within a [Project](ctp:api:type:Project).
 	Name string `json:"name"`
 	// Localized name of the ShippingMethod.
 	LocalizedName *LocalizedString `json:"localizedName,omitempty"`
@@ -118,13 +118,13 @@ func (obj ShippingMethodReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type ShippingMethodResourceIdentifier struct {
-	// Unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
+	// Unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [ShippingMethod](ctp:api:type:ShippingMethod). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -546,7 +546,7 @@ func (obj ShippingMethodChangeIsDefaultAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodChangeNameAction struct {
-	// Value to set. Must not be empty.
+	// Unique value to set within a [Project](ctp:api:type:Project). Must not be empty.
 	Name string `json:"name"`
 }
 

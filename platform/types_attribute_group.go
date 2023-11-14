@@ -86,13 +86,13 @@ func (obj AttributeGroupReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup).
+*	[ResourceIdentifier](/../api/types#resourceidentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type AttributeGroupResourceIdentifier struct {
-	// Platform-generated unique identifier of the referenced [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required.
+	// Platform-generated unique identifier of the referenced [AttributeGroup](ctp:api:type:AttributeGroup). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-generated unique identifier of the referenced [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required.
+	// User-generated unique identifier of the referenced [AttributeGroup](ctp:api:type:AttributeGroup). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

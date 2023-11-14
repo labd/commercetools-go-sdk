@@ -54,6 +54,20 @@ func (rb *ByProjectKeyMeOrdersRequestMethodPost) WithHeaders(headers http.Header
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	The Cart must have a [shipping address set](ctp:api:type:CartSetShippingAddressAction) for taxes to be calculated. When creating [B2B Orders](/associates-overview#b2b-resources), the Customer must have the `CreateMyOrdersFromMyCarts` [Permission](ctp:api:type:Permission).
+*
+*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+*
+*	Specific Error Codes:
+*
+*	- [OutOfStock](ctp:api:type:OutOfStockError)
+*	- [PriceChanged](ctp:api:type:PriceChangedError)
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [AssociateMissingPermission](ctp:api:type:AssociateMissingPermissionError)
+*
+ */
 func (rb *ByProjectKeyMeOrdersRequestMethodPost) Execute(ctx context.Context) (result *Order, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
@@ -85,15 +99,56 @@ func (rb *ByProjectKeyMeOrdersRequestMethodPost) Execute(ctx context.Context) (r
 	case 201:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 409, 400, 401, 403, 500, 502, 503:
+	case 409:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

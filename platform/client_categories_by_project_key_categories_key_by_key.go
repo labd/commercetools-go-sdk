@@ -24,6 +24,16 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Get() *ByProjectKeyCateg
 }
 
 /**
+*	Checks if a Category exists for a given `key`. Returns a `200 OK` status if the Category exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Head() *ByProjectKeyCategoriesKeyByKeyRequestMethodHead {
+	return &ByProjectKeyCategoriesKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/categories/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
+/**
 *	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
 *
  */

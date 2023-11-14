@@ -94,7 +94,7 @@ func (rb *ByProjectKeyDeploymentsKeyByKeyLogsRequestMethodGet) WithHeaders(heade
 /**
 *	Retrieves logs for the given deployment.
  */
-func (rb *ByProjectKeyDeploymentsKeyByKeyLogsRequestMethodGet) Execute(ctx context.Context) (result *CursorPaged, err error) {
+func (rb *ByProjectKeyDeploymentsKeyByKeyLogsRequestMethodGet) Execute(ctx context.Context) (result *DeploymentLogCursorPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

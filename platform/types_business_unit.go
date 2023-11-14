@@ -11,16 +11,40 @@ import (
 type Associate struct {
 	// Roles assigned to the Associate within a Business Unit.
 	AssociateRoleAssignments []AssociateRoleAssignment `json:"associateRoleAssignments"`
-	// Deprecated type. Use `associateRoleAssignment` instead.
+	// Deprecated type. Use `associateRoleAssignments` instead.
 	Roles []AssociateRoleDeprecated `json:"roles"`
 	// The [Customer](ctp:api:type:Customer) that acts as an Associate in the Business Unit.
 	Customer CustomerReference `json:"customer"`
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Associate) MarshalJSON() ([]byte, error) {
+	type Alias Associate
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["roles"] == nil {
+		delete(raw, "roles")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type AssociateDraft struct {
 	// Roles assigned to the Associate within a Business Unit.
 	AssociateRoleAssignments []AssociateRoleAssignmentDraft `json:"associateRoleAssignments"`
-	// Deprecated type. Use `associateRoleAssignment` instead.
+	// Deprecated type. Use `associateRoleAssignments` instead.
 	Roles []AssociateRoleDeprecated `json:"roles"`
 	// The [Customer](ctp:api:type:Customer) to be part of the Business Unit.
 	Customer CustomerResourceIdentifier `json:"customer"`
@@ -40,10 +64,6 @@ func (obj AssociateDraft) MarshalJSON() ([]byte, error) {
 	raw := make(map[string]interface{})
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return nil, err
-	}
-
-	if raw["associateRoleAssignments"] == nil {
-		delete(raw, "associateRoleAssignments")
 	}
 
 	if raw["roles"] == nil {
@@ -267,13 +287,13 @@ func (obj BusinessUnitReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit).
+*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type BusinessUnitResourceIdentifier struct {
-	// Unique identifier of the referenced [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required.
+	// Unique identifier of the referenced [BusinessUnit](ctp:api:type:BusinessUnit). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required.
+	// Unique key of the referenced [BusinessUnit](ctp:api:type:BusinessUnit). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -1078,11 +1098,11 @@ func (obj BusinessUnitChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentUnitChanged](ctp:api:type:BusinessUnitParentUnitChangedMessage) Message.
+*	Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentChanged](ctp:api:type:BusinessUnitParentChangedMessage) Message.
 *
  */
 type BusinessUnitChangeParentUnitAction struct {
-	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit). The new parent unit must have the same top-level unit as the old parent unit.
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
 }
 
@@ -1221,6 +1241,10 @@ func (obj BusinessUnitRemoveStoreAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeStore", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to an Address of a Business Unit generates the [BusinessUnitAddressCustomFieldAdded](ctp:api:type:BusinessUnitAddressCustomFieldAddedMessage) Message, removing one generates the [BusinessUnitAddressCustomFieldRemoved](ctp:api:type:BusinessUnitAddressCustomFieldRemovedMessage) Message, and updating an existing one generates the [BusinessUnitAddressCustomFieldChanged](ctp:api:type:BusinessUnitAddressCustomFieldChangedMessage) Message.
+*
+ */
 type BusinessUnitSetAddressCustomFieldAction struct {
 	// ID of the address to be extended.
 	AddressId string `json:"addressId"`
@@ -1242,6 +1266,10 @@ func (obj BusinessUnitSetAddressCustomFieldAction) MarshalJSON() ([]byte, error)
 	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type on an Address of a Business Unit generates the [BusinessUnitAddressCustomTypeSet](ctp:api:type:BusinessUnitAddressCustomTypeSetMessage) Message, and removing one generates the [BusinessUnitAddressCustomTypeRemoved](ctp:api:type:BusinessUnitAddressCustomTypeRemovedMessage) Message.
+*
+ */
 type BusinessUnitSetAddressCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
@@ -1301,8 +1329,12 @@ func (obj BusinessUnitSetContactEmailAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setContactEmail", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to a Business Unit generates the [BusinessUnitCustomFieldAdded](ctp:api:type:BusinessUnitCustomFieldAddedMessage) Message, removing one generates the [BusinessUnitCustomFieldRemoved](ctp:api:type:BusinessUnitCustomFieldRemovedMessage) Message, and updating an existing one generates the [BusinessUnitCustomFieldChanged](ctp:api:type:BusinessUnitCustomFieldChangedMessage) Message.
+*
+ */
 type BusinessUnitSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/../api/projects/custom-fields) to add, update, or remove.
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1320,6 +1352,10 @@ func (obj BusinessUnitSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type on a Business Unit generates the [BusinessUnitCustomTypeSet](ctp:api:type:BusinessUnitCustomTypeSetMessage) Message, removing one generates the [BusinessUnitCustomTypeRemoved](ctp:api:type:BusinessUnitCustomTypeRemovedMessage) Message.
+*
+ */
 type BusinessUnitSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.

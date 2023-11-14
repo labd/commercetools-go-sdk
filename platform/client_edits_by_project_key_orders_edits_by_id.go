@@ -26,6 +26,16 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Get() *ByProjectKeyOrdersEd
 	}
 }
 
+/**
+*	Checks if an OrderEdit exists for a given `id`. Returns a `200 OK` status if the OrderEdit exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Head() *ByProjectKeyOrdersEditsByIDRequestMethodHead {
+	return &ByProjectKeyOrdersEditsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/orders/edits/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Post(body OrderEditUpdate) *ByProjectKeyOrdersEditsByIDRequestMethodPost {
 	return &ByProjectKeyOrdersEditsByIDRequestMethodPost{
 		body:   body,

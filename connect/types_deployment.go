@@ -23,8 +23,27 @@ type Deployment struct {
 	DeployedRegion string `json:"deployedRegion"`
 	// Application deployments needed by the connector for hosting and configuration, refer to Connector configurations for details.
 	Applications []ApplicationDeployment `json:"applications"`
-	// Indicates the current status of the Deployment.
+	// If `true`, the Deployment is a preview.
+	Preview bool `json:"preview"`
+	// The current status of the Deployment.
 	Status string `json:"status"`
+}
+
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Deployment](ctp:connect:type:Deployment).
+*
+ */
+type DeploymentPagedQueryResponse struct {
+	// The limit of the Deployments returned.
+	Limit int `json:"limit"`
+	// The offset of the Deployments returned.
+	Offset int `json:"offset"`
+	// The number of Deployments returned.
+	Count int `json:"count"`
+	// The total number of Deployments available.
+	Total int `json:"total"`
+	// Deployments matching the query.
+	Results []Deployment `json:"results"`
 }
 
 type DeploymentDraft struct {
@@ -120,7 +139,9 @@ func mapDiscriminatorDeploymentUpdateAction(input interface{}) (DeploymentUpdate
 *
  */
 type DeploymentRedeployAction struct {
-	// New configuration values for Deployment.
+	// If scripts execution should be skipped during deployment.
+	SkipScripts *bool `json:"skipScripts,omitempty"`
+	// New configuration values for Deployment. If empty, any existing value is unchanged.
 	ConfigurationValues []DeploymentConfigurationApplication `json:"configurationValues"`
 }
 
@@ -128,10 +149,25 @@ type DeploymentRedeployAction struct {
 // optional nil slices
 func (obj DeploymentRedeployAction) MarshalJSON() ([]byte, error) {
 	type Alias DeploymentRedeployAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "redeploy", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["configurationValues"] == nil {
+		delete(raw, "configurationValues")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -150,4 +186,15 @@ type DeploymentLog struct {
 	Timestamp time.Time `json:"timestamp"`
 	// Event details of the log message.
 	Details interface{} `json:"details"`
+}
+
+/**
+*	A cursor paged query result containing an array of [DeploymentLog](ctp:connect:type:DeploymentLog).
+*
+ */
+type DeploymentLogCursorPagedQueryResponse struct {
+	// Array of DeploymentLog objects.
+	Data []DeploymentLog `json:"data"`
+	// The next page token.
+	Next string `json:"next"`
 }

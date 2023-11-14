@@ -185,13 +185,13 @@ func (obj StoreReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
+*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type StoreResourceIdentifier struct {
-	// Unique ID of the referenced [Store](ctp:api:type:Store). Either `id` or `key` is required.
+	// Unique ID of the referenced [Store](ctp:api:type:Store). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// Unique key of the referenced [Store](ctp:api:type:Store). Either `id` or `key` is required.
+	// Unique key of the referenced [Store](ctp:api:type:Store). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

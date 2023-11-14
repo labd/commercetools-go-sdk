@@ -32,7 +32,6 @@ func (rb *ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyMeCustomersRequestMethod
 *	The My Business Unit endpoint does not support assigning existing Customers to a Business Unit.
 *	Associates with the `UpdateAssociates` [Permission](ctp:api:type:Permission) can use this endpoint to create a new Customer and associate it with the Business Unit.
 *	If the required [Permission](/projects/associate-roles#permission) is missing, an [AssociateMissingPermission](/errors#associatemissingpermission) error is returned.
-*	The new Associate is created with an empty set of roles.
 *
  */
 func (rb *ByProjectKeyInBusinessUnitKeyByBusinessUnitKeyMeCustomersRequestMethodPost) Execute(ctx context.Context) (result *CustomerSignInResult, err error) {

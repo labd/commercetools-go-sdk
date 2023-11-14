@@ -19,13 +19,6 @@ func (rb *ByProjectKeyDeploymentsKeyByKeyRequestBuilder) Logs() *ByProjectKeyDep
 		client:     rb.client,
 	}
 }
-func (rb *ByProjectKeyDeploymentsKeyByKeyRequestBuilder) LogsStream() *ByProjectKeyDeploymentsKeyByKeyLogsStreamRequestBuilder {
-	return &ByProjectKeyDeploymentsKeyByKeyLogsStreamRequestBuilder{
-		projectKey: rb.projectKey,
-		key:        rb.key,
-		client:     rb.client,
-	}
-}
 func (rb *ByProjectKeyDeploymentsKeyByKeyRequestBuilder) Get() *ByProjectKeyDeploymentsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyDeploymentsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/deployments/key=%s", rb.projectKey, rb.key),

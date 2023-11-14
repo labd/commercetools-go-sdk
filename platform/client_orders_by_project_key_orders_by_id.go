@@ -19,6 +19,16 @@ func (rb *ByProjectKeyOrdersByIDRequestBuilder) Get() *ByProjectKeyOrdersByIDReq
 	}
 }
 
+/**
+*	Checks if an Order exists for a given `id`. Returns a `200 OK` status if the Order exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyOrdersByIDRequestBuilder) Head() *ByProjectKeyOrdersByIDRequestMethodHead {
+	return &ByProjectKeyOrdersByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/orders/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyOrdersByIDRequestBuilder) Post(body OrderUpdate) *ByProjectKeyOrdersByIDRequestMethodPost {
 	return &ByProjectKeyOrdersByIDRequestMethodPost{
 		body:   body,
@@ -27,6 +37,10 @@ func (rb *ByProjectKeyOrdersByIDRequestBuilder) Post(body OrderUpdate) *ByProjec
 	}
 }
 
+/**
+*	Deleting an Order produces the [OrderDeleted](ctp:api:type:OrderDeletedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyOrdersByIDRequestBuilder) Delete() *ByProjectKeyOrdersByIDRequestMethodDelete {
 	return &ByProjectKeyOrdersByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/orders/%s", rb.projectKey, rb.id),

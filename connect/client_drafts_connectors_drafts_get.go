@@ -78,7 +78,7 @@ func (rb *ConnectorsDraftsRequestMethodGet) WithHeaders(headers http.Header) *Co
 	rb.headers = headers
 	return rb
 }
-func (rb *ConnectorsDraftsRequestMethodGet) Execute(ctx context.Context) (result *Paged, err error) {
+func (rb *ConnectorsDraftsRequestMethodGet) Execute(ctx context.Context) (result *ConnectorStagedPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

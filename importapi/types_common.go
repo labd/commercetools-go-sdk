@@ -752,6 +752,8 @@ type ImportResourceType string
 
 const (
 	ImportResourceTypeCategory            ImportResourceType = "category"
+	ImportResourceTypeCustomer            ImportResourceType = "customer"
+	ImportResourceTypeInventory           ImportResourceType = "inventory"
 	ImportResourceTypeOrder               ImportResourceType = "order"
 	ImportResourceTypeOrderPatch          ImportResourceType = "order-patch"
 	ImportResourceTypePrice               ImportResourceType = "price"
@@ -760,8 +762,6 @@ const (
 	ImportResourceTypeProductType         ImportResourceType = "product-type"
 	ImportResourceTypeProductVariant      ImportResourceType = "product-variant"
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
-	ImportResourceTypeCustomer            ImportResourceType = "customer"
-	ImportResourceTypeInventory           ImportResourceType = "inventory"
 	ImportResourceTypeStandalonePrice     ImportResourceType = "standalone-price"
 	ImportResourceTypeType                ImportResourceType = "type"
 )
@@ -796,7 +796,7 @@ const (
 )
 
 /**
-*	Every [Import Operation](/import-operation) is assigned with one of the following states.
+*	Every [Import Operation](/import-operation) is assigned one of the following states.
 *
  */
 type ProcessingState string
@@ -808,6 +808,7 @@ const (
 	ProcessingStateWaitForMasterVariant ProcessingState = "waitForMasterVariant"
 	ProcessingStateImported             ProcessingState = "imported"
 	ProcessingStateRejected             ProcessingState = "rejected"
+	ProcessingStateCanceled             ProcessingState = "canceled"
 )
 
 type Address struct {

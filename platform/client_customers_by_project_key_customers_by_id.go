@@ -19,6 +19,16 @@ func (rb *ByProjectKeyCustomersByIDRequestBuilder) Get() *ByProjectKeyCustomersB
 	}
 }
 
+/**
+*	Checks if a Customer exists for a given `id`. Returns a `200 OK` status if the Customer exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCustomersByIDRequestBuilder) Head() *ByProjectKeyCustomersByIDRequestMethodHead {
+	return &ByProjectKeyCustomersByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/customers/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyCustomersByIDRequestBuilder) Post(body CustomerUpdate) *ByProjectKeyCustomersByIDRequestMethodPost {
 	return &ByProjectKeyCustomersByIDRequestMethodPost{
 		body:   body,

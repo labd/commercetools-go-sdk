@@ -19,6 +19,16 @@ func (rb *ByProjectKeyStagedQuotesByIDRequestBuilder) Get() *ByProjectKeyStagedQ
 	}
 }
 
+/**
+*	Checks if a StagedQuote exists for a given `id`. Returns a `200 OK` status if the StagedQuote exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyStagedQuotesByIDRequestBuilder) Head() *ByProjectKeyStagedQuotesByIDRequestMethodHead {
+	return &ByProjectKeyStagedQuotesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/staged-quotes/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyStagedQuotesByIDRequestBuilder) Post(body StagedQuoteUpdate) *ByProjectKeyStagedQuotesByIDRequestMethodPost {
 	return &ByProjectKeyStagedQuotesByIDRequestMethodPost{
 		body:   body,

@@ -19,6 +19,16 @@ func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Get() *ByProjectKeyShoppi
 	}
 }
 
+/**
+*	Checks if a ShoppingList exists for a given `id`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Head() *ByProjectKeyShoppingListsByIDRequestMethodHead {
+	return &ByProjectKeyShoppingListsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shopping-lists/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Post(body ShoppingListUpdate) *ByProjectKeyShoppingListsByIDRequestMethodPost {
 	return &ByProjectKeyShoppingListsByIDRequestMethodPost{
 		body:   body,

@@ -27,7 +27,6 @@ func (r *ByProjectKeyExtensionsRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ByProjectKeyExtensionsRequestMethodGetInput struct {
-	Expand       []string
 	Sort         []string
 	Limit        *int
 	Offset       *int
@@ -38,9 +37,6 @@ type ByProjectKeyExtensionsRequestMethodGetInput struct {
 
 func (input *ByProjectKeyExtensionsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
-	}
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
@@ -66,14 +62,6 @@ func (input *ByProjectKeyExtensionsRequestMethodGetInput) Values() url.Values {
 		}
 	}
 	return values
-}
-
-func (rb *ByProjectKeyExtensionsRequestMethodGet) Expand(v []string) *ByProjectKeyExtensionsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyExtensionsRequestMethodGetInput{}
-	}
-	rb.params.Expand = v
-	return rb
 }
 
 func (rb *ByProjectKeyExtensionsRequestMethodGet) Sort(v []string) *ByProjectKeyExtensionsRequestMethodGet {
@@ -158,15 +146,49 @@ func (rb *ByProjectKeyExtensionsRequestMethodGet) Execute(ctx context.Context) (
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 400, 401, 403, 500, 502, 503:
+	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

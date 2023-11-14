@@ -32,6 +32,16 @@ func (rb *ByProjectKeyCustomerGroupsRequestBuilder) Get() *ByProjectKeyCustomerG
 	}
 }
 
+/**
+*	Checks if a CustomerGroup exists for a given Query Predicate. Returns a `200 OK` status if any CustomerGroup match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCustomerGroupsRequestBuilder) Head() *ByProjectKeyCustomerGroupsRequestMethodHead {
+	return &ByProjectKeyCustomerGroupsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/customer-groups", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyCustomerGroupsRequestBuilder) Post(body CustomerGroupDraft) *ByProjectKeyCustomerGroupsRequestMethodPost {
 	return &ByProjectKeyCustomerGroupsRequestMethodPost{
 		body:   body,

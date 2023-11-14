@@ -49,7 +49,8 @@ func (rb *ByProjectKeyDeploymentsByIDRequestMethodDelete) Execute(ctx context.Co
 		err = json.Unmarshal(content, &result)
 		return result, nil
 	case 200:
-		return nil, nil
+		err = json.Unmarshal(content, &result)
+		return result, nil
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

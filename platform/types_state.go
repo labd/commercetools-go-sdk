@@ -161,13 +161,13 @@ func (obj StateReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type StateResourceIdentifier struct {
-	// Unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
+	// Unique identifier of the referenced [State](ctp:api:type:State). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [State](ctp:api:type:State). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [State](ctp:api:type:State). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

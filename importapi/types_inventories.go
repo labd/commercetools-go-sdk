@@ -11,7 +11,7 @@ import (
 *
  */
 type InventoryImport struct {
-	// User-defined unique identifier.
+	// User-defined unique identifier. If an [InventoryEntry](/../api/projects/inventory#inventoryentry) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Inventory.sku`
 	Sku string `json:"sku"`

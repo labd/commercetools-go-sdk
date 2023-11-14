@@ -49,7 +49,8 @@ func (rb *ByProjectKeyDeploymentsKeyByKeyRequestMethodDelete) Execute(ctx contex
 		err = json.Unmarshal(content, &result)
 		return result, nil
 	case 200:
-		return nil, nil
+		err = json.Unmarshal(content, &result)
+		return result, nil
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

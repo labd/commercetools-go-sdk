@@ -146,7 +146,7 @@ func (rb *ConnectorsSearchRequestMethodGet) WithHeaders(headers http.Header) *Co
 /**
 *	Retrieves all available Connectors.
  */
-func (rb *ConnectorsSearchRequestMethodGet) Execute(ctx context.Context) (result *Paged, err error) {
+func (rb *ConnectorsSearchRequestMethodGet) Execute(ctx context.Context) (result *ConnectorSearchPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

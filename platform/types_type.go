@@ -589,13 +589,13 @@ func (obj TypeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type TypeResourceIdentifier struct {
-	// Unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Type](ctp:api:type:Type). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Type](ctp:api:type:Type). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Type](ctp:api:type:Type). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

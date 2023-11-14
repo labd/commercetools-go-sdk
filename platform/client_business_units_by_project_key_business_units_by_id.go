@@ -19,6 +19,16 @@ func (rb *ByProjectKeyBusinessUnitsByIDRequestBuilder) Get() *ByProjectKeyBusine
 	}
 }
 
+/**
+*	Checks if a BusinessUnit exists for a given `id`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyBusinessUnitsByIDRequestMethodHead {
+	return &ByProjectKeyBusinessUnitsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/business-units/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyBusinessUnitsByIDRequestBuilder) Post(body BusinessUnitUpdate) *ByProjectKeyBusinessUnitsByIDRequestMethodPost {
 	return &ByProjectKeyBusinessUnitsByIDRequestMethodPost{
 		body:   body,

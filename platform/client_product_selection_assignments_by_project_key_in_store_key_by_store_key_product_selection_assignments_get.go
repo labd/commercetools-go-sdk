@@ -27,10 +27,12 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMetho
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput struct {
-	Limit     *int
-	Offset    *int
-	WithTotal *bool
-	Expand    []string
+	Limit        *int
+	Offset       *int
+	WithTotal    *bool
+	Expand       []string
+	Where        []string
+	PredicateVar map[string][]string
 }
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput) Values() url.Values {
@@ -50,6 +52,14 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestM
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.Where {
+		values.Add("where", fmt.Sprintf("%v", v))
+	}
+	for k, v := range input.PredicateVar {
+		for _, x := range v {
+			values.Set(k, x)
+		}
 	}
 	return values
 }
@@ -86,6 +96,22 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMeth
 	return rb
 }
 
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) Where(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput{}
+	}
+	rb.params.Where = v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) PredicateVar(v map[string][]string) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput{}
+	}
+	rb.params.PredicateVar = v
+	return rb
+}
+
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGetInput) *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMethodGet {
 	rb.params = &input
 	return rb
@@ -96,7 +122,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMeth
 }
 
 /**
-*	Queries Product Selection assignments over all Product Selections that are active in a specific Store.
+*	Queries Product Selection assignments in a specific [Store](ctp:api:type:Store).
 *
 *	The response will include duplicate Products whenever more than one active Product Selection of the Store
 *	includes a Product. To make clear through which Product Selection a Product is available in the Store
@@ -130,15 +156,49 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestMeth
 	case 200:
 		err = json.Unmarshal(content, &result)
 		return result, nil
-	case 400, 401, 403, 500, 502, 503:
+	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

@@ -19,6 +19,16 @@ func (rb *ByProjectKeyInventoryKeyByKeyRequestBuilder) Get() *ByProjectKeyInvent
 	}
 }
 
+/**
+*	Checks if an InventoryEntry exists for a given `key`. Returns a `200 OK` status if the InventoryEntry exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInventoryKeyByKeyRequestBuilder) Head() *ByProjectKeyInventoryKeyByKeyRequestMethodHead {
+	return &ByProjectKeyInventoryKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/inventory/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyInventoryKeyByKeyRequestBuilder) Post(body InventoryEntryUpdate) *ByProjectKeyInventoryKeyByKeyRequestMethodPost {
 	return &ByProjectKeyInventoryKeyByKeyRequestMethodPost{
 		body:   body,

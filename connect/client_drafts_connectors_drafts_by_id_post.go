@@ -54,12 +54,7 @@ func (rb *ConnectorsDraftsByIDRequestMethodPost) Execute(ctx context.Context) (r
 		err = json.Unmarshal(content, &result)
 		return result, nil
 	case 404:
-		errorObj := ErrorResponse{}
-		err = json.Unmarshal(content, &errorObj)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errorObj
+		return nil, ErrNotFound
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

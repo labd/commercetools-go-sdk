@@ -32,6 +32,16 @@ func (rb *ByProjectKeyQuotesRequestBuilder) Get() *ByProjectKeyQuotesRequestMeth
 	}
 }
 
+/**
+*	Checks if a Quote exists for a given Query Predicate. Returns a `200 OK` status if any Quotes match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyQuotesRequestBuilder) Head() *ByProjectKeyQuotesRequestMethodHead {
+	return &ByProjectKeyQuotesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/quotes", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyQuotesRequestBuilder) Post(body QuoteDraft) *ByProjectKeyQuotesRequestMethodPost {
 	return &ByProjectKeyQuotesRequestMethodPost{
 		body:   body,

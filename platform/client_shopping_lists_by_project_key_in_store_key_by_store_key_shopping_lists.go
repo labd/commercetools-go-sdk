@@ -36,7 +36,17 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder) Get() *By
 }
 
 /**
-*	When using this endpoint, the `store` field of a ShoppingList is always set to the Store specified in the path parameter.
+*	Checks if a ShoppingList exists for a given Query Predicate. Returns a `200 OK` status if any ShoppingLists match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/shopping-lists", rb.projectKey, rb.storeKey),
+		client: rb.client,
+	}
+}
+
+/**
+*	When using this endpoint, the `store` field of a ShoppingList is always set to the [Store](ctp:api:type:Store) specified in the path parameter.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder) Post(body ShoppingListDraft) *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodPost {

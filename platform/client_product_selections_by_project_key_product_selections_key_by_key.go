@@ -26,6 +26,16 @@ func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Get() *ByProjectK
 	}
 }
 
+/**
+*	Checks if a ProductSelection exists for a given `key`. Returns a `200 OK` status if the ProductSelection exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Head() *ByProjectKeyProductSelectionsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyProductSelectionsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-selections/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Post(body ProductSelectionUpdate) *ByProjectKeyProductSelectionsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyProductSelectionsKeyByKeyRequestMethodPost{
 		body:   body,
