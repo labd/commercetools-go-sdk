@@ -310,6 +310,12 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			return nil, err
 		}
 		return obj, nil
+	case "setDirectDiscounts":
+		obj := StagedOrderSetDirectDiscountsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setItemShippingAddressCustomField":
 		obj := StagedOrderSetItemShippingAddressCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -515,6 +521,12 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			}
 		}
 		return obj, nil
+	case "setStore":
+		obj := StagedOrderSetStoreAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "transitionCustomLineItemState":
 		obj := StagedOrderTransitionCustomLineItemStateAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -649,30 +661,93 @@ type OrderSearchStringValue struct {
 	CaseInsensitive *bool   `json:"caseInsensitive,omitempty"`
 }
 
+/**
+*	Custom Line Items contain generic user-defined items that are not linked to Products.
+*
+ */
+type CustomLineItemImportDraft struct {
+	// Name of the Custom Line Item.
+	Name LocalizedString `json:"name"`
+	// User-defined unique identifier of the Custom Line Item.
+	Key *string `json:"key,omitempty"`
+	// User-defined identifier used in a deep-link URL for the Custom Line Item. This value should match the pattern `[a-zA-Z0-9_-]{2,256}`.
+	Slug string `json:"slug"`
+	// The number of items in the Custom Line Item. Can be a negative value.
+	Quantity int `json:"quantity"`
+	// The cost of individual items in the Custom Line Item. The amount can be negative.
+	Money Money `json:"money"`
+	// The tax rate used to calculate the `taxedPrice` of the Order.
+	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Include a value to associate a Tax Category with the Custom Line Item.
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
+	// are applied to the Custom Line Item.
+	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
+	PriceMode *CustomLineItemPriceMode `json:"priceMode,omitempty"`
+	// Container for Custom Line Item-specific addresses.
+	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// State of the Custom Line Items.
+	State []ItemState `json:"state"`
+	// Custom Fields of the CustomLineItem.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomLineItemImportDraft) MarshalJSON() ([]byte, error) {
+	type Alias CustomLineItemImportDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["state"] == nil {
+		delete(raw, "state")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Contains information on how items are shipped to Customers, for example, a delivery note.
+*
+ */
 type Delivery struct {
 	// Unique identifier of the Delivery.
 	ID string `json:"id"`
 	// User-defined unique identifier of the Delivery.
-	Key       *string   `json:"key,omitempty"`
+	Key *string `json:"key,omitempty"`
+	// Date and time (UTC) the Delivery was created.
 	CreatedAt time.Time `json:"createdAt"`
-	// Items which are shipped in this delivery regardless their distribution over several parcels.
-	// Can also be specified individually for each Parcel.
-	Items   []DeliveryItem `json:"items"`
-	Parcels []Parcel       `json:"parcels"`
-	Address *Address       `json:"address,omitempty"`
-	// Custom Fields for the Transaction.
+	// Line Items or Custom Line Items that are delivered.
+	Items []DeliveryItem `json:"items"`
+	// Information regarding the appearance, content, and shipment of a Parcel.
+	Parcels []Parcel `json:"parcels"`
+	// Address to which Parcels are delivered.
+	Address *Address `json:"address,omitempty"`
+	// Custom Fields of the Delivery.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type DeliveryDraft struct {
 	// User-defined unique identifier of the Delivery.
 	Key *string `json:"key,omitempty"`
-	// Items which are shipped in this delivery regardless their distribution over several parcels.
-	// Can also be specified individually for each Parcel.
-	Items   []DeliveryItem `json:"items"`
-	Parcels []ParcelDraft  `json:"parcels"`
-	Address *AddressDraft  `json:"address,omitempty"`
-	// Custom Fields for the Transaction.
+	// Line Items or Custom Line Items to deliver.
+	// It can also be specified individually for each [Parcel](ctp:api:type:Parcel).
+	Items []DeliveryItem `json:"items"`
+	// Information regarding the appearance, content, and shipment of a parcel.
+	Parcels []ParcelDraft `json:"parcels"`
+	// Address to which the Parcels are delivered.
+	Address *AddressDraft `json:"address,omitempty"`
+	// Custom Fields for the Delivery.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -705,48 +780,63 @@ func (obj DeliveryDraft) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryItem struct {
-	// Unique identifier of the DeliveryItem.
-	ID       string `json:"id"`
-	Quantity int    `json:"quantity"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) or [CustomLineItem](ctp:api:type:CustomLineItem) delivered.
+	ID string `json:"id"`
+	// Number of Line Items or Custom Line Items delivered.
+	Quantity int `json:"quantity"`
 }
 
 type DiscountedLineItemPriceDraft struct {
-	// Draft type that stores amounts only in cent precision for the specified currency.
-	Value             Money                       `json:"value"`
+	// Discounted money value.
+	Value Money `json:"value"`
+	// Discounts to be applied.
 	IncludedDiscounts []DiscountedLineItemPortion `json:"includedDiscounts"`
 }
 
 type ItemState struct {
-	Quantity int            `json:"quantity"`
-	State    StateReference `json:"state"`
+	// Number of Line Items or Custom Line Items in this State.
+	Quantity int `json:"quantity"`
+	// State of the Line Items or Custom Line Items in a custom workflow.
+	State StateReference `json:"state"`
 }
 
+/**
+*	Represents a snapshot of a Product Variant at the time it was imported with the Order. The Product Variant can be specified by providing a `productId` and `variant.id`, or by providing a `variant.sku`.
+*
+ */
 type LineItemImportDraft struct {
-	// ID of the existing product.
-	// You also need to specify the ID of the variant if this property is set or alternatively you can just specify SKU of the product variant.
+	// Name of the Line Item.
+	Name LocalizedString `json:"name"`
+	// User-defined unique identifier of the Line Item.
+	Key *string `json:"key,omitempty"`
+	// The Product Variant to use as a [Line Item](ctp:api:type:LineItem).
+	Variant ProductVariantImportDraft `json:"variant"`
+	// `id` of the [Product](ctp:api:type:Product) the Product Variant belongs to.
+	//
+	// If provided, you must also set `variant.id`.
 	ProductId *string `json:"productId,omitempty"`
-	// The product name.
-	Name     LocalizedString           `json:"name"`
-	Variant  ProductVariantImportDraft `json:"variant"`
-	Price    PriceDraft                `json:"price"`
-	Quantity int                       `json:"quantity"`
-	State    []ItemState               `json:"state"`
-	// Connection to a particular supplier.
-	// By providing supply channel information, you can uniquely identify
-	// inventory entries that should be reserved.
-	// The provided channel should have the
-	// InventorySupply role.
-	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	// The channel is used to select a ProductPrice.
-	// The provided channel should have the ProductDistribution role.
+	// The number of Product Variants in the LineItem. Can be a negative value.
+	Quantity int `json:"quantity"`
+	// The Line Item price for `quantity` = `1`. The amount can be negative.
+	Price PriceDraft `json:"price"`
+	// The tax rate used to calculate the `taxedPrice` of the Order.
+	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// The Channel used to [select a Price](ctp:api:type:LineItemPriceSelection).
+	// This Channel must have the `ProductDistribution` role.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
-	TaxRate             *TaxRate                   `json:"taxRate,omitempty"`
-	// The custom fields.
-	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// Inventory mode specific to the line item only, valid for the entire `quantity` of the line item.
-	// Set only if inventory mode should be different from the `inventoryMode` specified on the [OrderImportDraft](ctp:api:type:OrderImportDraft).
-	InventoryMode   *InventoryMode            `json:"inventoryMode,omitempty"`
+	// The Channel used to supply Line Items.
+	// By providing supply Channel information, you can uniquely identify [Inventory entries](ctp:api:type:InventoryEntry) that should be reserved.
+	// This Channel must have the `InventorySupply` role.
+	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
+	// Inventory mode specific to the LineItem, valid for the entire `quantity` of the LineItem.
+	// Set only if Inventory mode should be different from the `inventoryMode` specified on the [OrderImportDraft](ctp:api:type:OrderImportDraft).
+	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
+	// Container for Line Item-specific addresses.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// States of the Line Item.
+	State []ItemState `json:"state"`
+	// Custom Fields of the LineItem.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -776,88 +866,69 @@ func (obj LineItemImportDraft) MarshalJSON() ([]byte, error) {
 type Order struct {
 	// Unique identifier of the Order.
 	ID string `json:"id"`
-	// The current version of the order.
-	Version        int       `json:"version"`
-	CreatedAt      time.Time `json:"createdAt"`
+	// Current version of the Order.
+	Version int `json:"version"`
+	// Date and time (UTC) the Order was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Order was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
-	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// This field will only be present if it was set for Order Import
-	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// String that uniquely identifies an order.
-	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
-	// It should be unique across a project.
-	// Once it's set it cannot be changed.
-	OrderNumber   *string `json:"orderNumber,omitempty"`
-	CustomerId    *string `json:"customerId,omitempty"`
+	// User-defined identifier of the Order that is unique across a Project.
+	OrderNumber *string `json:"orderNumber,omitempty"`
+	// User-defined identifier of a purchase Order.
+	//
+	// It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+	// `id` of the [Customer](ctp:api:type:Customer) that the Order belongs to.
+	CustomerId *string `json:"customerId,omitempty"`
+	// Email address of the Customer that the Order belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// Identifies carts and orders belonging to an anonymous session (the customer has not signed up/in yet).
-	AnonymousId *string `json:"anonymousId,omitempty"`
-	// The Business Unit the Order belongs to.
-	BusinessUnit    *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
-	Store           *StoreKeyReference        `json:"store,omitempty"`
-	LineItems       []LineItem                `json:"lineItems"`
-	CustomLineItems []CustomLineItem          `json:"customLineItems"`
-	TotalPrice      TypedMoney                `json:"totalPrice"`
-	// The taxes are calculated based on the shipping address.
-	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
-	// Sum of `taxedPrice` of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
-	// For `Platform` [TaxMode](ctp:api:type:TaxMode), it is set automatically only if [shipping address is set](ctp:api:type:CartSetShippingAddressAction) or [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction) to the Cart.
-	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
-	// Holds all shipping-related information per Shipping Method.
-	//
-	// For `Multi` [ShippingMode](ctp:api:typeShippingMode), it is updated automatically after the Shipping Methods are added.
-	ShippingAddress *Address `json:"shippingAddress,omitempty"`
-	BillingAddress  *Address `json:"billingAddress,omitempty"`
-	// Indicates whether one or multiple Shipping Methods are added to the Cart.
-	ShippingMode ShippingMode `json:"shippingMode"`
-	// User-defined unique identifier of the Shipping Method with `Single` [ShippingMode](ctp:api:type:ShippingMode).
-	ShippingKey *string `json:"shippingKey,omitempty"`
-	// Custom Fields of the Shipping Method for `Single` [ShippingMode](ctp:api:type:ShippingMode).
-	ShippingCustomFields *CustomFields `json:"shippingCustomFields,omitempty"`
-	// Holds all shipping-related information per Shipping Method for `Multi` [ShippingMode](ctp:api:typeShippingMode).
-	//
-	// It is updated automatically after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
-	Shipping []Shipping `json:"shipping"`
-	TaxMode  *TaxMode   `json:"taxMode,omitempty"`
-	// When calculating taxes for `taxedPrice`, the selected mode is used for rouding.
-	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
-	// Set when the customer is set and the customer is a member of a customer group.
-	// Used for product variant price selection.
+	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Order belongs to.
+	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	// Used for product variant price selection.
-	Country *string `json:"country,omitempty"`
-	// One of the four predefined OrderStates.
-	OrderState OrderState `json:"orderState"`
-	// This reference can point to a state in a custom workflow.
-	State         *StateReference `json:"state,omitempty"`
-	ShipmentState *ShipmentState  `json:"shipmentState,omitempty"`
-	PaymentState  *PaymentState   `json:"paymentState,omitempty"`
-	// Set if the ShippingMethod is set.
-	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
-	SyncInfo     []SyncInfo    `json:"syncInfo"`
-	ReturnInfo   []ReturnInfo  `json:"returnInfo"`
-	// The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
-	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
-	PurchaseOrderNumber *string            `json:"purchaseOrderNumber,omitempty"`
-	DiscountCodes       []DiscountCodeInfo `json:"discountCodes"`
-	// Internal-only field.
-	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
-	// Set when this order was created from a cart.
-	// The cart will have the state `Ordered`.
-	Cart *CartReference `json:"cart,omitempty"`
-	// Set when this order was created from a quote.
-	Quote         *QuoteReference `json:"quote,omitempty"`
-	Custom        *CustomFields   `json:"custom,omitempty"`
-	PaymentInfo   *PaymentInfo    `json:"paymentInfo,omitempty"`
-	Locale        *string         `json:"locale,omitempty"`
-	InventoryMode *InventoryMode  `json:"inventoryMode,omitempty"`
-	Origin        CartOrigin      `json:"origin"`
-	// When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with LineItemLevel (horizontally) or UnitPriceLevel (vertically) calculation mode.
+	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
+	AnonymousId *string `json:"anonymousId,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	// [Reference](ctp:api:type:Reference) to a Store the Order belongs to.
+	Store *StoreKeyReference `json:"store,omitempty"`
+	// [Line Items](ctp:api:type:LineItems) that are part of the Order.
+	LineItems []LineItem `json:"lineItems"`
+	// [Custom Line Items](ctp:api:type:CustomLineItems) that are part of the Order.
+	CustomLineItems []CustomLineItem `json:"customLineItems"`
+	// Sum of the `totalPrice` field of all [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem), and if available, the `price` field of [ShippingInfo](ctp:api:type:ShippingInfo).
+	// If a discount applies on `totalPrice`, this field holds the discounted value.
+	//
+	// Taxes are included if [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true` for each price.
+	TotalPrice TypedMoney `json:"totalPrice"`
+	// - For `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:OrderSetShippingAddressAction).
+	// - For `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
+	//
+	// If a discount applies on `totalPrice`, this field holds the discounted values.
+	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
+	// Sum of the `taxedPrice` field of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
+	// Discounts that apply on the total price of the Order.
+	DiscountOnTotalPrice *DiscountOnTotalPrice `json:"discountOnTotalPrice,omitempty"`
+	// Indicates how Tax Rates are set.
+	TaxMode *TaxMode `json:"taxMode,omitempty"`
+	// Indicates how monetary values are rounded when calculating taxes for `taxedPrice`.
+	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
+	// Indicates how taxes are calculated when calculating taxes for `taxedPrice`.
 	TaxCalculationMode *TaxCalculationMode `json:"taxCalculationMode,omitempty"`
+	// Indicates how stock quantities are tracked for Line Items in the Order.
+	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
+	// Billing address associated with the Order.
+	BillingAddress *Address `json:"billingAddress,omitempty"`
+	// Shipping address associated with the Order.
+	// Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
+	ShippingAddress *Address `json:"shippingAddress,omitempty"`
+	// Indicates whether there can be one or multiple Shipping Methods.
+	ShippingMode ShippingMode `json:"shippingMode"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Shipping-related information for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+	// Automatically set when a [Shipping Method is set](ctp:api:type:StagedOrderSetShippingMethodAction).
+	ShippingInfo *ShippingInfo `json:"shippingInfo,omitempty"`
 	// Input used to select a [ShippingRatePriceTier](ctp:api:type:ShippingRatePriceTier).
 	// The data type of this field depends on the `shippingRateInputType.type` configured in the [Project](ctp:api:type:Project):
 	//
@@ -865,10 +936,61 @@ type Order struct {
 	// - If `CartScore`, it is [ScoreShippingRateInput](ctp:api:type:ScoreShippingRateInput).
 	// - If `CartValue`, it cannot be used.
 	ShippingRateInput ShippingRateInput `json:"shippingRateInput,omitempty"`
-	// Contains addresses for orders with multiple shipping addresses.
+	// Custom Fields of the Shipping Method for `Single` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingCustomFields *CustomFields `json:"shippingCustomFields,omitempty"`
+	// Shipping-related information for `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Updated automatically each time a new [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+	Shipping []Shipping `json:"shipping"`
+	// Additional shipping addresses of the Order as specified by [LineItems](ctp:api:type:LineItem) using the `shippingDetails` field.
+	// Eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
-	// Automatically filled when a line item with LineItemMode `GiftLineItem` is removed from this order.
+	// Discount Codes added to the Order.
+	// An Order that has `directDiscounts` cannot have `discountCodes`.
+	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
+	// Direct Discounts added to the Order.
+	// An Order that has `discountCodes` cannot have `directDiscounts`.
+	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
+	// Automatically set when a Line Item with `GiftLineItem` [LineItemMode](ctp:api:type:LineItemMode) is [removed](ctp:api:type:StagedOrderRemoveLineItemAction) from the Order.
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
+	// Payment information related to the Order.
+	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
+	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	Country *string `json:"country,omitempty"`
+	// Languages of the Order.
+	// Can only contain languages supported by the [Project](ctp:api:type:Project).
+	Locale *string `json:"locale,omitempty"`
+	// Indicates the origin of the Cart from which the Order was created.
+	Origin CartOrigin `json:"origin"`
+	// [Reference](ctp:api:type:Reference) to the Cart for an [Order created from Cart](ctp:api:endpoint:/{projectKey}/orders:POST).
+	// The referenced Cart will have the `Ordered` [CartState](ctp:api:type:CartState).
+	Cart *CartReference `json:"cart,omitempty"`
+	// [Reference](ctp:api:type:Reference) to the Quote for an [Order created from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST).
+	Quote *QuoteReference `json:"quote,omitempty"`
+	// Current status of the Order.
+	OrderState OrderState `json:"orderState"`
+	// Shipment status of the Order.
+	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
+	// Payment status of the Order.
+	PaymentState *PaymentState `json:"paymentState,omitempty"`
+	// [State](ctp:api:type:State) of the Order.
+	// This reference can point to a State in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
+	// Contains synchronization activity information of the Order (like export or import).
+	// Can only be set with [Update SyncInfo](ctp:api:type:OrderUpdateSyncInfoAction) update action.
+	SyncInfo []SyncInfo `json:"syncInfo"`
+	// Contains information regarding the returns associated with the Order.
+	ReturnInfo []ReturnInfo `json:"returnInfo"`
+	// Internal-only field.
+	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
+	// Custom Fields of the Order.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// User-defined date and time (UTC) of the Order.
+	// Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
+	CompletedAt *time.Time `json:"completedAt,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -912,16 +1034,20 @@ func (obj Order) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
-	if raw["returnInfo"] == nil {
-		delete(raw, "returnInfo")
+	if raw["itemShippingAddresses"] == nil {
+		delete(raw, "itemShippingAddresses")
 	}
 
 	if raw["discountCodes"] == nil {
 		delete(raw, "discountCodes")
 	}
 
-	if raw["itemShippingAddresses"] == nil {
-		delete(raw, "itemShippingAddresses")
+	if raw["directDiscounts"] == nil {
+		delete(raw, "directDiscounts")
+	}
+
+	if raw["returnInfo"] == nil {
+		delete(raw, "returnInfo")
 	}
 
 	return json.Marshal(raw)
@@ -929,107 +1055,127 @@ func (obj Order) MarshalJSON() ([]byte, error) {
 }
 
 type OrderFromCartDraft struct {
-	// Unique identifier of the Cart from which you can create an Order.
+	// `id` of the [Cart](ctp:api:type:Cart) used to create the Order.
 	ID *string `json:"id,omitempty"`
-	// ResourceIdentifier of the Cart from which the Order is created.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Cart from which the Order is created.
+	//
+	// This field is required, but is marked as optional for backwards compatibility reasons.
 	Cart *CartResourceIdentifier `json:"cart,omitempty"`
-	// Expected version of the Cart from which the Order is created.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// `version` of the [Cart](ctp:api:type:Cart) from which the Order is created.
 	Version int `json:"version"`
-	// String that uniquely identifies an order.
-	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
-	// It should be unique across a project.
-	// Once it's set it cannot be changed.
-	// For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
+	// User-defined identifier for the Order that is unique across a Project.
+	// Once set, the value cannot be changed.
 	OrderNumber *string `json:"orderNumber,omitempty"`
-	// Identifier for a purchase order, usually in a B2B context.
-	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+	// User-defined identifier for a purchase Order.
+	//
+	// It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
-	// Payment state for the Order.
+	// Payment status for the Order.
 	PaymentState *PaymentState `json:"paymentState,omitempty"`
-	// Shipment state for the Order.
+	// Shipment status for the Order.
 	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
-	// Order will be created with `Open` status by default.
+	// Current status for the Order.
 	OrderState *OrderState `json:"orderState,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
+	// State for the Order in a custom workflow.
 	State *StateResourceIdentifier `json:"state,omitempty"`
-	// [Custom Fields](/../api/projects/custom-fields) for the Order. The Custom Field type must match the type of the Custom Fields in the referenced [Cart](/../api/projects/carts#cart).
-	// If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) and added to the Order.
-	// If empty, the Custom Fields on the referenced [Cart](/../api/projects/carts#cart) are added to the Order automatically.
+	// Custom Fields for the Order.
+	// The Custom Fields' type must match the Custom Fields' type in the referenced [Cart](ctp:api:type:Cart).
+	//
+	// - If empty, the Custom Fields on the referenced [Cart](ctp:api:type:Cart) are added to the Order automatically.
+	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [Cart](ctp:api:type:Cart) and added to the Order.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 type OrderFromQuoteDraft struct {
-	// ResourceIdentifier of the Quote from which this Order is created. If the Quote has `QuoteState` in `Accepted`, `Declined` or `Withdrawn` then the order creation will fail. The creation will also fail if the `Quote` has expired (`validTo` check).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Quote from which the Order is created.
+	// If the referenced [Quote](ctp:api:type:Quote) has expired (`validTo` check) or its `quoteState` is `Accepted`, `Declined`, or `Withdrawn`, the Order creation will fail.
 	Quote QuoteResourceIdentifier `json:"quote"`
-	// `version` of the [Quote](ctp:api:type:Quote) from which an Order is created.
+	// `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
 	Version int `json:"version"`
 	// If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:Quote) will be set to `Accepted`.
 	QuoteStateToAccepted *bool `json:"quoteStateToAccepted,omitempty"`
-	// String that uniquely identifies an order.
-	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
-	// It should be unique across a project.
-	// Once it's set it cannot be changed.
-	// For easier use on Get, Update and Delete actions we suggest assigning order numbers that match the regular expression `[a-z0-9_\-]{2,36}`.
+	// User-defined identifier for the Order that is unique across a Project.
+	// Once set, the value cannot be changed.
 	OrderNumber *string `json:"orderNumber,omitempty"`
-	// Payment state of the Order.
+	// Payment status for the Order.
 	PaymentState *PaymentState `json:"paymentState,omitempty"`
-	// Shipment state of the Order.
+	// Shipment status for the Order.
 	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
-	// Order will be created with `Open` status by default.
+	// Current status for the Order.
 	OrderState *OrderState `json:"orderState,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a [State](ctp:api:type:State) indicating the Order's state.
+	// State of the Order in a custom workflow.
 	State *StateResourceIdentifier `json:"state,omitempty"`
 }
 
+/**
+*	A snapshot of an Order at the time it was imported.
+*
+ */
 type OrderImportDraft struct {
-	// String that unique identifies an order.
-	// It can be used to create more human-readable (in contrast to ID) identifier for the order.
-	// It should be unique within a project.
+	// User-defined identifier of the Order. Must be unique across a Project.
+	// Once set, the value cannot be changed.
 	OrderNumber *string `json:"orderNumber,omitempty"`
-	// If given the customer with that ID must exist in the project.
+	// User-defined identifier for a purchase Order.
+	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+	// The `id` of the [Customer](ctp:api:type:Customer) the Order belongs to.
 	CustomerId *string `json:"customerId,omitempty"`
-	// The customer email can be used when no check against existing Customers is desired during order import.
+	// The Email address of the Customer the Order belongs to. Can be used instead of `customerId` when no check against existing [Customers](ctp:api:type:Customer) is required.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// If not given `customLineItems` must not be empty.
-	LineItems []LineItemImportDraft `json:"lineItems"`
-	// If not given `lineItems` must not be empty.
-	CustomLineItems []CustomLineItemImportDraft `json:"customLineItems"`
-	TotalPrice      Money                       `json:"totalPrice"`
-	// Order Import does not support calculation of taxes.
-	// When setting the draft the taxedPrice is to be provided.
-	TaxedPrice      *TaxedPriceDraft `json:"taxedPrice,omitempty"`
-	ShippingAddress *BaseAddress     `json:"shippingAddress,omitempty"`
-	BillingAddress  *BaseAddress     `json:"billingAddress,omitempty"`
-	// Set when the customer is set and the customer is a member of a customer group.
-	// Used for product variant price selection.
+	// The Customer Group of the Customer the Order belongs to.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	// Used for product variant price selection.
-	Country *string `json:"country,omitempty"`
-	// If not given the `Open` state will be assigned by default.
-	OrderState *OrderState `json:"orderState,omitempty"`
-	// This reference can point to a state in a custom workflow.
-	State         *StateReference `json:"state,omitempty"`
-	ShipmentState *ShipmentState  `json:"shipmentState,omitempty"`
-	PaymentState  *PaymentState   `json:"paymentState,omitempty"`
-	// Set if the ShippingMethod is set.
-	ShippingInfo *ShippingInfoImportDraft `json:"shippingInfo,omitempty"`
-	PaymentInfo  *PaymentInfo             `json:"paymentInfo,omitempty"`
-	CompletedAt  *time.Time               `json:"completedAt,omitempty"`
-	// The custom fields.
-	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// If not given the mode `None` will be assigned by default.
-	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
-	// If not given the tax rounding mode `HalfEven` will be assigned by default.
-	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
-	// Contains addresses for orders with multiple shipping addresses.
-	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
-	// The Business Unit the Cart belongs to.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Order should belong to.
+	// When the `customerId` of the Order is also set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
-	Store        *StoreResourceIdentifier        `json:"store,omitempty"`
-	// The default origin is `Customer`.
+	// The Store the Order belongs to.
+	// Used for [filtering](#filtering).
+	//
+	// If a [LineItemImportDraft](ctp:api:type:LineItemImportDraft) or a [CustomLineItemImportDraft](ctp:api:type:CustomLineItemImportDraft) specifies a `distributionChannel` or a `supplyChannel` that is not defined for the referenced Store, the Order Import gets rejected.
+	// The same applies when the provided `country` is not defined for the referenced Store.
+	Store *StoreResourceIdentifier `json:"store,omitempty"`
+	// [Line Items](ctp:api:type:LineItems) to add to the Order.
+	//
+	// If not specified, `customLineItems` must not be empty.
+	LineItems []LineItemImportDraft `json:"lineItems"`
+	// [Custom Line Items](ctp:api:type:CustomLineItems) to add to the Cart.
+	//
+	// If not specified, `lineItems` must not be empty.
+	CustomLineItems []CustomLineItemImportDraft `json:"customLineItems"`
+	// The total Price of the Order. The amount can be negative.
+	TotalPrice Money `json:"totalPrice"`
+	// Include TaxedPrice information for the Order. If not included, and if you have Tax Rates set for Line Items and Custom Line Items, the Order total will not be recalculated.
+	TaxedPrice *TaxedPriceDraft `json:"taxedPrice,omitempty"`
+	// Determines how monetary values are rounded when calculating taxes for `taxedPrice`.
+	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
+	// Determines how taxes are calculated for `taxedPrice`.
+	TaxCalculationMode *TaxCalculationMode `json:"taxCalculationMode,omitempty"`
+	// Determines how stock quantities are tracked for Line Items in the Cart.
+	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
+	// Billing address associated with the Order.
+	BillingAddress *BaseAddress `json:"billingAddress,omitempty"`
+	// Shipping address associated with the Order.
+	ShippingAddress *BaseAddress `json:"shippingAddress,omitempty"`
+	// Addresses for Orders with multiple shipping addresses. Addresses must include a value for `key`.
+	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
+	// Shipping-related information of the Order.
+	ShippingInfo *ShippingInfoImportDraft `json:"shippingInfo,omitempty"`
+	// Payment information associated with the Order.
+	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
+	// Payment status of the Order.
+	PaymentState *PaymentState `json:"paymentState,omitempty"`
+	// Shipment status of the Order.
+	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
+	// Current status of the Order.
+	OrderState *OrderState `json:"orderState,omitempty"`
+	// State of the Order in a custom workflow.
+	State *StateReference `json:"state,omitempty"`
+	// Include a value to associate a country with the Order.
+	Country *string `json:"country,omitempty"`
+	// Indicates the origin of the Order.
 	Origin *CartOrigin `json:"origin,omitempty"`
+	// User-defined date and time for the Order. This value does not influence the `createdAt` or `lastModifiedAt` values of the Order created by the Order Import.
+	CompletedAt *time.Time `json:"completedAt,omitempty"`
+	// Custom Fields for the Order.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1064,19 +1210,35 @@ func (obj OrderImportDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Order](ctp:api:type:Order).
+*
+ */
 type OrderPagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
-	Total *int `json:"total,omitempty"`
+	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int     `json:"offset"`
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
+	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+	Total *int `json:"total,omitempty"`
+	// [Orders](ctp:api:type:Order) matching the query.
 	Results []Order `json:"results"`
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to an [Order](ctp:api:type:Order).
+*
+ */
 type OrderReference struct {
-	// Unique ID of the referenced resource.
-	ID  string `json:"id"`
+	// Unique identifier of the referenced [Order](ctp:api:type:Order).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Order. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Orders.
 	Obj *Order `json:"obj,omitempty"`
 }
 
@@ -1084,23 +1246,6 @@ type OrderReference struct {
 // optional nil slices
 func (obj OrderReference) MarshalJSON() ([]byte, error) {
 	type Alias OrderReference
-	return json.Marshal(struct {
-		Action string `json:"typeId"`
-		*Alias
-	}{Action: "order", Alias: (*Alias)(&obj)})
-}
-
-type OrderResourceIdentifier struct {
-	// Unique identifier of the referenced resource. Required if `key` is absent.
-	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced resource. Required if `id` is absent.
-	Key *string `json:"key,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj OrderResourceIdentifier) MarshalJSON() ([]byte, error) {
-	type Alias OrderResourceIdentifier
 	return json.Marshal(struct {
 		Action string `json:"typeId"`
 		*Alias
@@ -1201,6 +1346,10 @@ type OrderSearchSorting struct {
 	Filter   *OrderSearchQueryExpression `json:"filter,omitempty"`
 }
 
+/**
+*	Indicates the state of the Order.
+*
+ */
 type OrderState string
 
 const (
@@ -1212,7 +1361,7 @@ const (
 
 type OrderUpdate struct {
 	// Expected version of the Order on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Order.
 	Actions []OrderUpdateAction `json:"actions"`
@@ -1596,17 +1745,24 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 	return nil, nil
 }
 
+/**
+*	Information regarding the appearance, content, and shipment of a Parcel.
+*
+ */
 type Parcel struct {
 	// Unique identifier of the Parcel.
 	ID string `json:"id"`
 	// User-defined unique identifier of the Parcel.
-	Key          *string             `json:"key,omitempty"`
-	CreatedAt    time.Time           `json:"createdAt"`
+	Key *string `json:"key,omitempty"`
+	// Date and time (UTC) the Parcel was created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Information about the dimensions of the Parcel.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
-	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	// The delivery items contained in this parcel.
+	// Shipment tracking information of the Parcel.
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// Line Items or Custom Line Items delivered in this Parcel.
 	Items []DeliveryItem `json:"items"`
-	// Custom Fields of this parcel.
+	// Custom Fields of the Parcel.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 
@@ -1636,12 +1792,14 @@ func (obj Parcel) MarshalJSON() ([]byte, error) {
 
 type ParcelDraft struct {
 	// User-defined unique identifier of the Parcel.
-	Key          *string             `json:"key,omitempty"`
+	Key *string `json:"key,omitempty"`
+	// Information about the dimensions for the Parcel.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
-	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	// The delivery items contained in this parcel.
+	// Shipment tracking information for the Parcel.
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// Line Items or Custom Line Items delivered in this Parcel.
 	Items []DeliveryItem `json:"items"`
-	// Custom Fields of this parcel.
+	// Custom Fields for the Parcel.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -1670,16 +1828,25 @@ func (obj ParcelDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelMeasurements struct {
+	// Height of the Parcel.
 	HeightInMillimeter *int `json:"heightInMillimeter,omitempty"`
+	// Length of the Parcel.
 	LengthInMillimeter *int `json:"lengthInMillimeter,omitempty"`
-	WidthInMillimeter  *int `json:"widthInMillimeter,omitempty"`
-	WeightInGram       *int `json:"weightInGram,omitempty"`
+	// Width of the Parcel.
+	WidthInMillimeter *int `json:"widthInMillimeter,omitempty"`
+	// Weight of the Parcel.
+	WeightInGram *int `json:"weightInGram,omitempty"`
 }
 
 type PaymentInfo struct {
+	// [References](ctp:api:type:Reference) to the Payments associated with the Order.
 	Payments []PaymentReference `json:"payments"`
 }
 
+/**
+*	Indicates the payment status for the Order.
+*
+ */
 type PaymentState string
 
 const (
@@ -1690,22 +1857,25 @@ const (
 	PaymentStatePaid       PaymentState = "Paid"
 )
 
+/**
+*	Contains the Product Variant to be used in the [LineItemImportDraft](ctp:api:type:LineItemImportDraft).
+*
+ */
 type ProductVariantImportDraft struct {
-	// The sequential ID of the variant within the product.
-	// The variant with provided ID should exist in some existing product, so you also need to specify the productId if this property is set,
-	// or alternatively you can just specify SKU of the product variant.
+	// The `id` of the [ProductVariant](ctp:api:type:ProductVariant). Required if you do not set a value for `sku`.
+	// If set, you must specify a `productId` in the [LineItemImportDraft](ctp:api:type:LineItemImportDraft) also.
 	ID *int `json:"id,omitempty"`
-	// The SKU of the existing variant.
+	// The `sku` of the [ProductVariant](ctp:api:type:ProductVariant). Required if you do not set a value for `id`.
 	Sku *string `json:"sku,omitempty"`
-	// The [Embedded Prices](ctp:api:type:Price) of the variant.
-	// The prices should not contain two prices for the same price scope (same currency, country, customer group, channel, valid from and valid until).
-	// If this property is defined, then it will override the `prices` property from the original product variant, otherwise `prices` property from the original product variant would be copied in the resulting order.
+	// The [Prices](ctp:api:type:Price) of the Product Variant if you want to override the `prices` property in the referenced [ProductVariant](ctp:api:type:ProductVariant).
+	// If not set, the `prices` from the referenced [ProductVariant](ctp:api:type:ProductVariant) are used in the resulting Order.
+	// If set, each Price must have its unique price scope (same `value.currencyCode`, `country`, `customerGroup`, `channel`, `validFrom` and `validUntil`).
 	Prices []PriceDraft `json:"prices"`
-	// If this property is defined, then it will override the `attributes` property from the original
-	// product variant, otherwise `attributes` property from the original product variant would be copied in the resulting order.
+	// The [Attributes](ctp:api:type:Attribute) of the Product Variant if you want to override the `attributes` property in the referenced [ProductVariant](ctp:api:type:ProductVariant).
+	// If not set, the `attributes` from the referenced [ProductVariant](ctp:api:type:ProductVariant) are copied to the resulting Order.
 	Attributes []Attribute `json:"attributes"`
-	// If this property is defined, then it will override the `images` property from the original
-	// product variant, otherwise `images` property from the original product variant would be copied in the resulting order.
+	// The [Images](ctp:api:type:Image) of the Product Variant if you want to override the `images` property in the referenced [ProductVariant](ctp:api:type:ProductVariant).
+	// If not set, the `images` from the referenced [ProductVariant](ctp:api:type:ProductVariant) are copied to the resulting Order.
 	Images []Image `json:"images"`
 }
 
@@ -1741,11 +1911,17 @@ func (obj ProductVariantImportDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Stores information about returns connected to an Order.
+*
+ */
 type ReturnInfo struct {
+	// Information on the Line Items or Custom Line Items returned.
 	Items []ReturnItem `json:"items"`
-	// Identifies, which return tracking ID is connected to this particular return.
-	ReturnTrackingId *string    `json:"returnTrackingId,omitempty"`
-	ReturnDate       *time.Time `json:"returnDate,omitempty"`
+	// User-defined identifier to track the return.
+	ReturnTrackingId *string `json:"returnTrackingId,omitempty"`
+	// Date and time (UTC) the return is initiated.
+	ReturnDate *time.Time `json:"returnDate,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1767,10 +1943,12 @@ func (obj *ReturnInfo) UnmarshalJSON(data []byte) error {
 }
 
 type ReturnInfoDraft struct {
+	// Information on the Line Items or Custom Line Items returned.
 	Items []ReturnItemDraft `json:"items"`
-	// Identifies, which return tracking ID is connected to this particular return.
-	ReturnTrackingId *string    `json:"returnTrackingId,omitempty"`
-	ReturnDate       *time.Time `json:"returnDate,omitempty"`
+	// User-defined identifier for tracking the return.
+	ReturnTrackingId *string `json:"returnTrackingId,omitempty"`
+	// Date and time (UTC) the return is initiated.
+	ReturnDate *time.Time `json:"returnDate,omitempty"`
 }
 
 type ReturnItem interface{}
@@ -1804,17 +1982,29 @@ func mapDiscriminatorReturnItem(input interface{}) (ReturnItem, error) {
 }
 
 type CustomLineItemReturnItem struct {
-	// Unique identifier of the ReturnItem.
-	ID            string              `json:"id"`
-	Quantity      int                 `json:"quantity"`
-	Comment       *string             `json:"comment,omitempty"`
+	// Unique identifier of the Return Item.
+	ID string `json:"id"`
+	// User-defined unique identifier of the CustomLineItemReturnItem.
+	Key *string `json:"key,omitempty"`
+	// Number of Custom Line Items returned.
+	Quantity int `json:"quantity"`
+	// User-defined description for the return.
+	Comment *string `json:"comment,omitempty"`
+	// Shipment status of the Return Item.
 	ShipmentState ReturnShipmentState `json:"shipmentState"`
-	PaymentState  ReturnPaymentState  `json:"paymentState"`
-	// Custom Fields of this return item.
-	Custom           *CustomFields `json:"custom,omitempty"`
-	LastModifiedAt   time.Time     `json:"lastModifiedAt"`
-	CreatedAt        time.Time     `json:"createdAt"`
-	CustomLineItemId string        `json:"customLineItemId"`
+	// Payment status of the Return Item:
+	//
+	// - `NonRefundable`, for items in the `Advised` [ReturnShipmentState](ctp:api:type:ReturnShipmentState)
+	// - `Initial`, for items in the `Returned` [ReturnShipmentState](ctp:api:type:ReturnShipmentState)
+	PaymentState ReturnPaymentState `json:"paymentState"`
+	// Custom Fields of the Return Item.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// Date and time (UTC) the Return Item was last updated.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Date and time (UTC) the Return Item was intitially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// `id` of the returned [CustomLineItem](ctp:api:type:CustomLineItem).
+	CustomLineItemId string `json:"customLineItemId"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1828,17 +2018,29 @@ func (obj CustomLineItemReturnItem) MarshalJSON() ([]byte, error) {
 }
 
 type LineItemReturnItem struct {
-	// Unique identifier of the ReturnItem.
-	ID            string              `json:"id"`
-	Quantity      int                 `json:"quantity"`
-	Comment       *string             `json:"comment,omitempty"`
+	// Unique identifier of the Return Item.
+	ID string `json:"id"`
+	// User-defined unique identifier of the LineItemReturnItem.
+	Key *string `json:"key,omitempty"`
+	// Number of Line Items returned.
+	Quantity int `json:"quantity"`
+	// User-defined description for the return.
+	Comment *string `json:"comment,omitempty"`
+	// Shipment status of the Return Item.
 	ShipmentState ReturnShipmentState `json:"shipmentState"`
-	PaymentState  ReturnPaymentState  `json:"paymentState"`
-	// Custom Fields of this return item.
-	Custom         *CustomFields `json:"custom,omitempty"`
-	LastModifiedAt time.Time     `json:"lastModifiedAt"`
-	CreatedAt      time.Time     `json:"createdAt"`
-	LineItemId     string        `json:"lineItemId"`
+	// Payment status of the Return Item:
+	//
+	// - `NonRefundable`, for items in the `Advised` [ReturnShipmentState](ctp:api:type:ReturnShipmentState)
+	// - `Initial`, for items in the `Returned` [ReturnShipmentState](ctp:api:type:ReturnShipmentState)
+	PaymentState ReturnPaymentState `json:"paymentState"`
+	// Custom Fields of the Return Item.
+	Custom *CustomFields `json:"custom,omitempty"`
+	// Date and time (UTC) the Return Item was last updated.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Date and time (UTC) the Return Item was intitially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// `id` of the returned [LineItem](ctp:api:type:LineItem).
+	LineItemId string `json:"lineItemId"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1852,12 +2054,24 @@ func (obj LineItemReturnItem) MarshalJSON() ([]byte, error) {
 }
 
 type ReturnItemDraft struct {
-	Quantity         int                 `json:"quantity"`
-	LineItemId       *string             `json:"lineItemId,omitempty"`
-	CustomLineItemId *string             `json:"customLineItemId,omitempty"`
-	Comment          *string             `json:"comment,omitempty"`
-	ShipmentState    ReturnShipmentState `json:"shipmentState"`
-	// Custom Fields of this return item.
+	// User-defined unique identifier of the Return Item.
+	Key *string `json:"key,omitempty"`
+	// Number of Line Items or Custom Line Items to return.
+	Quantity int `json:"quantity"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to return.
+	//
+	//  Required if Line Items are returned, to create a [LineItemReturnItem](ctp:api:type:LineItemReturnItem).
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to return.
+	//
+	//  Required if Custom Line Items are returned, to create a [CustomLineItemReturnItem](ctp:api:type:CustomLineItemReturnItem).
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// User-defined description for the return.
+	Comment *string `json:"comment,omitempty"`
+	// Shipment status of the item to be returned.
+	// Can either be `Advised` or `Returned` only.
+	ShipmentState ReturnShipmentState `json:"shipmentState"`
+	// Custom Fields for the Return Item.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -1879,6 +2093,10 @@ const (
 	ReturnShipmentStateUnusable    ReturnShipmentState = "Unusable"
 )
 
+/**
+*	Indicates the shipment status of the Parcel.
+*
+ */
 type ShipmentState string
 
 const (
@@ -1891,19 +2109,28 @@ const (
 	ShipmentStateBackorder ShipmentState = "Backorder"
 )
 
+/**
+*	Becomes the `shippingInfo` of the imported Order.
+*
+ */
 type ShippingInfoImportDraft struct {
+	// Name of the Shipping Method.
 	ShippingMethodName string `json:"shippingMethodName"`
-	Price              Money  `json:"price"`
-	// The shipping rate used to determine the price.
-	ShippingRate ShippingRateDraft              `json:"shippingRate"`
-	TaxRate      *TaxRate                       `json:"taxRate,omitempty"`
-	TaxCategory  *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	// Not set if custom shipping method is used.
+	// The base price for the Shipping Method.
+	Price Money `json:"price"`
+	// Shipping rate information for the Order.
+	ShippingRate ShippingRateDraft `json:"shippingRate"`
+	// Include a Tax Rate for the Shipping Method.
+	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Include a value to associate a Tax Category with the shipping information.
+	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
+	// Include a value to associate a Shipping Method with the Order.
 	ShippingMethod *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
-	// Deliveries are compilations of information on how the articles are being delivered to the customers.
-	Deliveries      []DeliveryDraft               `json:"deliveries"`
+	// Information on how items are to be delivered to customers.
+	Deliveries []DeliveryDraft `json:"deliveries"`
+	// Discounted Price of the Shipping Method.
 	DiscountedPrice *DiscountedLineItemPriceDraft `json:"discountedPrice,omitempty"`
-	// Indicates whether the ShippingMethod referenced is allowed for the cart or not.
+	// Indicates if the [ShippingMethod](ctp:api:type:ShippingMethod) referenced is allowed for the Order or not.
 	ShippingMethodState *ShippingMethodState `json:"shippingMethodState,omitempty"`
 }
 
@@ -1931,12 +2158,17 @@ func (obj ShippingInfoImportDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Contains synchronization activity information of the Order (like export or import).
+*
+ */
 type SyncInfo struct {
-	// Connection to a particular synchronization destination.
+	// Connection to a synchronization destination.
 	Channel ChannelReference `json:"channel"`
-	// Can be used to reference an external order instance, file etc.
-	ExternalId *string   `json:"externalId,omitempty"`
-	SyncedAt   time.Time `json:"syncedAt"`
+	// Identifier of an external order instance, file, or other resource.
+	ExternalId *string `json:"externalId,omitempty"`
+	// Date and time (UTC) the information was synced.
+	SyncedAt time.Time `json:"syncedAt"`
 }
 
 type TaxedItemPriceDraft struct {
@@ -1946,29 +2178,45 @@ type TaxedItemPriceDraft struct {
 	TotalGross Money `json:"totalGross"`
 }
 
+/**
+*	Information that helps track a Parcel.
+*
+ */
 type TrackingData struct {
-	// The ID to track one parcel.
+	// Identifier to track the Parcel.
 	TrackingId *string `json:"trackingId,omitempty"`
-	// The carrier that delivers the parcel.
-	Carrier             *string `json:"carrier,omitempty"`
-	Provider            *string `json:"provider,omitempty"`
+	// Name of the carrier that delivers the Parcel.
+	Carrier *string `json:"carrier,omitempty"`
+	// Name of the provider that serves as facade to several carriers.
+	Provider *string `json:"provider,omitempty"`
+	// Transaction identifier with the `provider`.
 	ProviderTransaction *string `json:"providerTransaction,omitempty"`
-	// Flag to distinguish if the parcel is on the way to the customer (false) or on the way back (true).
+	// - If `true`, the Parcel is being returned.
+	// - If `false`, the Parcel is being delivered to the customer.
 	IsReturn *bool `json:"isReturn,omitempty"`
 }
 
+/**
+*	A [Delivery](ctp:api:type:Delivery) can only be added to an [Order](ctp:api:type:Order) if
+*	its `shippingInfo` (for `shippingMode` = `Single`), or its `shipping` (for `shippingMode` = `Multiple`) exists.
+*
+*	Produces the [Delivery Added](ctp:api:type:DeliveryAddedMessage) Message.
+*
+ */
 type OrderAddDeliveryAction struct {
-	// User-defined unique identifier of a Delivery.
-	DeliveryKey *string        `json:"deliveryKey,omitempty"`
-	Items       []DeliveryItem `json:"items"`
-	// User-defined unique identifier of the Shipping Method in a Cart with `Multi` [ShippingMode](ctp:api:type:ShippingMode).
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod), required for `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	ShippingKey *string `json:"shippingKey,omitempty"`
-	// Polymorphic base type that represents a postal address and contact details.
-	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-	// only differ in the data type for the optional `custom` field.
-	Address *BaseAddress  `json:"address,omitempty"`
+	// Line Items or Custom Line Items to be included in the Delivery.
+	Items []DeliveryItem `json:"items"`
+	// Address the `parcels` should be delivered to.
+	Address *BaseAddress `json:"address,omitempty"`
+	// Parcels of the Delivery.
+	//
+	// If provided, this update action produces the [Parcel Added To Delivery](ctp:api:type:ParcelAddedToDeliveryMessage) Message.
 	Parcels []ParcelDraft `json:"parcels"`
-	// Custom Fields for the Transaction.
+	// Custom Fields for the Delivery.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -2001,10 +2249,13 @@ func (obj OrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Adds an address to an Order when shipping to multiple addresses is desired.
+*
+ */
 type OrderAddItemShippingAddressAction struct {
-	// Polymorphic base type that represents a postal address and contact details.
-	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-	// only differ in the data type for the optional `custom` field.
+	// Address to append to `itemShippingAddresses`.
+	// The new Address must have a `key` that is unique across this Order.
 	Address BaseAddress `json:"address"`
 }
 
@@ -2018,15 +2269,31 @@ func (obj OrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addItemShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To add a Parcel, at least one [Delivery](ctp:api:type:Delivery) must exist.
+*
+*	Produces the [Parcel Added To Delivery](ctp:api:type:ParcelAddedToDeliveryMessage) Message.
+*
+ */
 type OrderAddParcelToDeliveryAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
-	DeliveryKey  *string             `json:"deliveryKey,omitempty"`
-	ParcelKey    *string             `json:"parcelKey,omitempty"`
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	ParcelKey *string `json:"parcelKey,omitempty"`
+	// Value to set.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
-	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items"`
+	// Value to set.
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// Value to set.
+	Items []DeliveryItem `json:"items"`
+	// Custom Fields for the Parcel.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2055,7 +2322,8 @@ func (obj OrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderAddPaymentAction struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
+	// Payment to add to the [PaymentInfo](ctp:api:type:PaymentInfo).
+	// Must not be assigned to another Order or active Cart already.
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -2069,10 +2337,19 @@ func (obj OrderAddPaymentAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addPayment", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Return Info Added](ctp:api:type:ReturnInfoAddedMessage) Message.
+*
+ */
 type OrderAddReturnInfoAction struct {
-	ReturnTrackingId *string           `json:"returnTrackingId,omitempty"`
-	Items            []ReturnItemDraft `json:"items"`
-	ReturnDate       *time.Time        `json:"returnDate,omitempty"`
+	// Value to set.
+	ReturnTrackingId *string `json:"returnTrackingId,omitempty"`
+	// Items to be returned.
+	// Must not be empty.
+	Items []ReturnItemDraft `json:"items"`
+	// Value to set.
+	// If not set, it defaults to the current date and time.
+	ReturnDate *time.Time `json:"returnDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2085,7 +2362,12 @@ func (obj OrderAddReturnInfoAction) MarshalJSON() ([]byte, error) {
 	}{Action: "addReturnInfo", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Order State Changed](ctp:api:type:OrderStateChangedMessage) Message.
+*
+ */
 type OrderChangeOrderStateAction struct {
+	// New status of the Order.
 	OrderState OrderState `json:"orderState"`
 }
 
@@ -2099,8 +2381,13 @@ func (obj OrderChangeOrderStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeOrderState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Order Payment State Changed](ctp:api:type:OrderPaymentStateChangedMessage) Message.
+*
+ */
 type OrderChangePaymentStateAction struct {
-	PaymentState *PaymentState `json:"paymentState,omitempty"`
+	// New payment status of the Order.
+	PaymentState PaymentState `json:"paymentState"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2113,8 +2400,13 @@ func (obj OrderChangePaymentStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changePaymentState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Order Shipment State Changed](ctp:api:type:OrderShipmentStateChangedMessage) Message.
+*
+ */
 type OrderChangeShipmentStateAction struct {
-	ShipmentState *ShipmentState `json:"shipmentState,omitempty"`
+	// New shipment status of the Order.
+	ShipmentState ShipmentState `json:"shipmentState"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2127,9 +2419,18 @@ func (obj OrderChangeShipmentStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeShipmentState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	The import of States does not follow any predefined rules and should be only used if no transitions are defined.
+*	The `quantity` in the [ItemStates](ctp:api:type:ItemState) must match the sum of all Custom Line Item states' quantities.
+*
+ */
 type OrderImportCustomLineItemStateAction struct {
-	CustomLineItemId string      `json:"customLineItemId"`
-	State            []ItemState `json:"state"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
+	// New status of the Custom Line Items.
+	State []ItemState `json:"state"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2142,9 +2443,18 @@ func (obj OrderImportCustomLineItemStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "importCustomLineItemState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	The import of States does not follow any predefined rules and should be only used if no transitions are defined.
+*	The `quantity` in the [ItemStates](ctp:api:type:ItemState) must match the sum of all Line Items states' quantities.
+*
+ */
 type OrderImportLineItemStateAction struct {
-	LineItemId string      `json:"lineItemId"`
-	State      []ItemState `json:"state"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// New status of the Line Items.
+	State []ItemState `json:"state"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2157,10 +2467,18 @@ func (obj OrderImportLineItemStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "importLineItemState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [DeliveryRemoved](ctp:api:type:DeliveryRemovedMessage) Message.
+*
+ */
 type OrderRemoveDeliveryAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
 }
 
@@ -2174,7 +2492,12 @@ func (obj OrderRemoveDeliveryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	An address can only be removed if it is not referenced in any [ItemShippingTarget](ctp:api:type:ItemShippingTarget) of the Cart.
+*
+ */
 type OrderRemoveItemShippingAddressAction struct {
+	// `key` of the Address to remove from `itemShippingAddresses`.
 	AddressKey string `json:"addressKey"`
 }
 
@@ -2188,10 +2511,18 @@ func (obj OrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeItemShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ParcelRemovedFromDelivery](ctp:api:type:ParcelRemovedFromDeliveryMessage) Message.
+*
+ */
 type OrderRemoveParcelFromDeliveryAction struct {
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelId *string `json:"parcelId,omitempty"`
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
 }
 
@@ -2206,7 +2537,7 @@ func (obj OrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderRemovePaymentAction struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
+	// Payment to remove from the [PaymentInfo](ctp:api:type:PaymentInfo).
 	Payment PaymentResourceIdentifier `json:"payment"`
 }
 
@@ -2220,10 +2551,15 @@ func (obj OrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removePayment", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action updates the `billingAddress` on the Order, but it does not change the billing address on the referenced [Cart](ctp:api:type:Cart) from which the Order is created.
+*
+*	Produces the [Order Billing Address Set](ctp:api:type:OrderBillingAddressSetMessage) Message.
+*
+ */
 type OrderSetBillingAddressAction struct {
-	// Polymorphic base type that represents a postal address and contact details.
-	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-	// only differ in the data type for the optional `custom` field.
+	// Value to set.
+	// If empty, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2294,7 +2630,10 @@ func (obj OrderSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetCustomLineItemCustomFieldAction struct {
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2314,11 +2653,14 @@ func (obj OrderSetCustomLineItemCustomFieldAction) MarshalJSON() ([]byte, error)
 }
 
 type OrderSetCustomLineItemCustomTypeAction struct {
-	CustomLineItemId string `json:"customLineItemId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the CustomLineItem with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the CustomLineItem.
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the Custom Line Item with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the Custom Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CustomLineItem.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Custom Line Item.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2333,8 +2675,12 @@ func (obj OrderSetCustomLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 }
 
 type OrderSetCustomLineItemShippingDetailsAction struct {
-	CustomLineItemId string `json:"customLineItemId"`
-	// For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -2366,7 +2712,15 @@ func (obj OrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action updates the `customerEmail` on the Order, but it does not change the Customer email on the [Cart](ctp:api:type:Cart) the Order has been created from.
+*
+*	Produces the [Order Customer Email Set](ctp:api:type:OrderCustomerEmailSetMessage) Message.
+*
+ */
 type OrderSetCustomerEmailAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	Email *string `json:"email,omitempty"`
 }
 
@@ -2380,7 +2734,16 @@ func (obj OrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomerEmail", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the Order's `customerId` does not recalculate prices or discounts on the Order.
+*	If the Customer belongs to a Customer Group, `customerGroup` on the [Order](ctp:api:type:Order) is updated automatically.
+*
+*	Produces the [OrderCustomerSet](ctp:api:type:OrderCustomerSetMessage) Message.
+*
+ */
 type OrderSetCustomerIdAction struct {
+	// `id` of an existing [Customer](ctp:api:type:Customer).
+	// If empty, any existing value is removed.
 	CustomerId *string `json:"customerId,omitempty"`
 }
 
@@ -2394,14 +2757,21 @@ func (obj OrderSetCustomerIdAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomerId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [DeliveryAddressSet](ctp:api:type:DeliveryAddressSetMessage) Message.
+*
+ */
 type OrderSetDeliveryAddressAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Polymorphic base type that represents a postal address and contact details.
-	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-	// only differ in the data type for the optional `custom` field.
+	// Value to set.
+	// If empty, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2416,9 +2786,13 @@ func (obj OrderSetDeliveryAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetDeliveryAddressCustomFieldAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -2439,14 +2813,18 @@ func (obj OrderSetDeliveryAddressCustomFieldAction) MarshalJSON() ([]byte, error
 }
 
 type OrderSetDeliveryAddressCustomTypeAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the `address` in a Delivery with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the `address` in a Delivery.
+	// Defines the [Type](ctp:api:type:Type) that extends the [Delivery](ctp:api:type:Delivery) `address` with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the [Delivery](ctp:api:type:Delivery) `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address` in a Delivery.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the [Delivery](ctp:api:type:Delivery) `address`.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2461,9 +2839,13 @@ func (obj OrderSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error)
 }
 
 type OrderSetDeliveryCustomFieldAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -2484,9 +2866,13 @@ func (obj OrderSetDeliveryCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetDeliveryCustomTypeAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Delivery.
@@ -2505,12 +2891,22 @@ func (obj OrderSetDeliveryCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDeliveryCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Delivery Items Updated](ctp:api:type:DeliveryItemsUpdatedMessage) Message.
+*
+ */
 type OrderSetDeliveryItemsAction struct {
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
+	// `id` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryId *string `json:"deliveryId,omitempty"`
-	// Either `deliveryId` or `deliveryKey` is required for this update action.
-	DeliveryKey *string        `json:"deliveryKey,omitempty"`
-	Items       []DeliveryItem `json:"items"`
+	// `key` of an existing [Delivery](ctp:api:type:Delivery).
+	//
+	// Either `deliveryId` or `deliveryKey` must be provided.
+	DeliveryKey *string `json:"deliveryKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value is removed.
+	Items []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2524,6 +2920,7 @@ func (obj OrderSetDeliveryItemsAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetItemShippingAddressCustomFieldAction struct {
+	// `key` of the [Address](ctp:api:type:Address) in `itemShippingAddresses`.
 	AddressKey string `json:"addressKey"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -2544,6 +2941,7 @@ func (obj OrderSetItemShippingAddressCustomFieldAction) MarshalJSON() ([]byte, e
 }
 
 type OrderSetItemShippingAddressCustomTypeAction struct {
+	// `key` of the [Address](ctp:api:type:Address) in `itemShippingAddresses`.
 	AddressKey string `json:"addressKey"`
 	// Defines the [Type](ctp:api:type:Type) that extends the `itemShippingAddress` with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the `itemShippingAddress`.
@@ -2563,7 +2961,10 @@ func (obj OrderSetItemShippingAddressCustomTypeAction) MarshalJSON() ([]byte, er
 }
 
 type OrderSetLineItemCustomFieldAction struct {
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2583,11 +2984,14 @@ func (obj OrderSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetLineItemCustomTypeAction struct {
-	LineItemId string `json:"lineItemId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the LineItem.
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the Line Item with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the LineItem.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Line Item.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2602,8 +3006,12 @@ func (obj OrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetLineItemShippingDetailsAction struct {
-	LineItemId string `json:"lineItemId"`
-	// For order creation and updates, the sum of the `targets` must match the quantity of the Line Items or Custom Line Items.
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// Value to set.
+	// If empty, the existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -2618,6 +3026,9 @@ func (obj OrderSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetLocaleAction struct {
+	// Value to set.
+	// Must be one of the [Project](ctp:api:type:Project)'s languages.
+	// If empty, any existing value is removed.
 	Locale *string `json:"locale,omitempty"`
 }
 
@@ -2632,6 +3043,9 @@ func (obj OrderSetLocaleAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetOrderNumberAction struct {
+	// Value to set.
+	// Must be unique across a Project.
+	// Once set, the value cannot be changed.
 	OrderNumber *string `json:"orderNumber,omitempty"`
 }
 
@@ -2646,9 +3060,13 @@ func (obj OrderSetOrderNumberAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelCustomFieldAction struct {
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelId *string `json:"parcelId,omitempty"`
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -2669,9 +3087,13 @@ func (obj OrderSetParcelCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetParcelCustomTypeAction struct {
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelId *string `json:"parcelId,omitempty"`
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Parcel.
@@ -2690,12 +3112,22 @@ func (obj OrderSetParcelCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setParcelCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ParcelItemsUpdated](ctp:api:type:ParcelItemsUpdatedMessage) Message.
+*
+ */
 type OrderSetParcelItemsAction struct {
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelId *string `json:"parcelId,omitempty"`
-	// Either `parcelId` or `parcelKey` is required for this update action.
-	ParcelKey *string        `json:"parcelKey,omitempty"`
-	Items     []DeliveryItem `json:"items"`
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
+	ParcelKey *string `json:"parcelKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value is removed.
+	Items []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2708,11 +3140,21 @@ func (obj OrderSetParcelItemsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setParcelItems", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ParcelMeasurementsUpdated](ctp:api:type:ParcelMeasurementsUpdatedMessage) Message.
+*
+ */
 type OrderSetParcelMeasurementsAction struct {
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelId *string `json:"parcelId,omitempty"`
-	// Either `parcelId` or `parcelKey` is required for this update action.
-	ParcelKey    *string             `json:"parcelKey,omitempty"`
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
+	ParcelKey *string `json:"parcelKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value is removed.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 }
 
@@ -2726,11 +3168,21 @@ func (obj OrderSetParcelMeasurementsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setParcelMeasurements", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [ParcelTrackingDataUpdated](ctp:api:type:ParcelTrackingDataUpdatedMessage) Message.
+*
+ */
 type OrderSetParcelTrackingDataAction struct {
-	// Either `parcelId` or `parcelKey` is required for this update action.
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelId *string `json:"parcelId,omitempty"`
-	// Either `parcelId` or `parcelKey` is required for this update action.
-	ParcelKey    *string       `json:"parcelKey,omitempty"`
+	// `key` of an existing [Parcel](ctp:api:type:Parcel).
+	//
+	// Either `parcelId` or `parcelKey` must be provided.
+	ParcelKey *string `json:"parcelKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value is removed.
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
 }
 
@@ -2744,9 +3196,13 @@ func (obj OrderSetParcelTrackingDataAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setParcelTrackingData", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [PurchaseOrderNumberSet](ctp:api:type:OrderPurchaseOrderNumberSetMessage) Message.
+*
+ */
 type OrderSetPurchaseOrderNumberAction struct {
-	// Identifier for a purchase order, usually in a B2B context.
-	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer) and can also be used with [Quotes](/quotes-overview).
+	// Value to set.
+	// If empty, any existing value is removed.
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 }
 
@@ -2760,7 +3216,13 @@ func (obj OrderSetPurchaseOrderNumberAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setPurchaseOrderNumber", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Return Info Set](ctp:api:type:ReturnInfoSetMessage) Message.
+*
+ */
 type OrderSetReturnInfoAction struct {
+	// Value to set.
+	// If empty, any existing value is removed.
 	Items []ReturnInfoDraft `json:"items"`
 }
 
@@ -2790,7 +3252,10 @@ func (obj OrderSetReturnInfoAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetReturnItemCustomFieldAction struct {
-	ReturnItemId string `json:"returnItemId"`
+	// `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemId *string `json:"returnItemId,omitempty"`
+	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemKey *string `json:"returnItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2810,11 +3275,14 @@ func (obj OrderSetReturnItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetReturnItemCustomTypeAction struct {
-	ReturnItemId string `json:"returnItemId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the ReturnItem with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the ReturnItem.
+	// `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemId *string `json:"returnItemId,omitempty"`
+	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemKey *string `json:"returnItemKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the Return Item with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the Return Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ReturnItem.
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Return Item.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2828,8 +3296,16 @@ func (obj OrderSetReturnItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setReturnItemCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To set a [ReturnPaymentState](ctp:api:type:ReturnPaymentState), the [Order](ctp:api:type:Order) `returnInfo` must have at least one [ReturnItem](ctp:api:type:ReturnItem).
+*
+ */
 type OrderSetReturnPaymentStateAction struct {
-	ReturnItemId string             `json:"returnItemId"`
+	// `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemId *string `json:"returnItemId,omitempty"`
+	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemKey *string `json:"returnItemKey,omitempty"`
+	// New Payment status of the [ReturnItem](ctp:api:type:ReturnItem).
 	PaymentState ReturnPaymentState `json:"paymentState"`
 }
 
@@ -2843,8 +3319,18 @@ func (obj OrderSetReturnPaymentStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setReturnPaymentState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To set a `ReturnShipmentState`, the [Order](ctp:api:type:Order) `returnInfo` must have at least one [ReturnItem](ctp:api:type:ReturnItem).
+*
+*	Produces the [Order Return Shipment State Changed](ctp:api:type:OrderReturnShipmentStateChangedMessage) Message.
+*
+ */
 type OrderSetReturnShipmentStateAction struct {
-	ReturnItemId  string              `json:"returnItemId"`
+	// `id` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemId *string `json:"returnItemId,omitempty"`
+	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
+	ReturnItemKey *string `json:"returnItemKey,omitempty"`
+	// New shipment state of the [ReturnItem](ctp:api:type:ReturnItem).
 	ShipmentState ReturnShipmentState `json:"shipmentState"`
 }
 
@@ -2858,10 +3344,16 @@ func (obj OrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setReturnShipmentState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action updates the `shippingAddress` on the Order, but it does not change the shipping address on the referenced [Cart](ctp:api:type:Cart) from which the Order is created.
+*	Also, it does not recalculate the Cart as taxes may not fit to the shipping address anymore.
+*
+*	Produces the [Order Shipping Address Set](ctp:api:type:OrderShippingAddressSetMessage) Message.
+*
+ */
 type OrderSetShippingAddressAction struct {
-	// Polymorphic base type that represents a postal address and contact details.
-	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-	// only differ in the data type for the optional `custom` field.
+	// Value to set.
+	// If empty, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2912,8 +3404,20 @@ func (obj OrderSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error)
 	}{Action: "setShippingAddressCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the [Store](ctp:api:type:Store) the Order is assigned to.
+*	It should be used to migrate Orders to a new Store.
+*	No validations are performed (such as that the Customer is allowed to create Orders in the Store).
+*
+*	Produces the [Order Store Set](ctp:api:type:OrderStoreSetMessage) Message.
+*	Returns a `400` error if `store` references the same Store the Order is currently assigned to, including if you try to remove the value when no Store is currently assigned.
+*
+ */
 type OrderSetStoreAction struct {
-	// [ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store).
+	// Value to set.
+	// If empty, any existing value is removed.
+	//
+	// If `store` references the same Store the Order is currently assigned to or if you try to remove the value when no Store is currently assigned, a `400` error is returned.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
 }
 
@@ -2927,14 +3431,23 @@ func (obj OrderSetStoreAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setStore", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Custom Line Item State Transition](ctp:api:type:CustomLineItemStateTransitionMessage) Message.
+*
+ */
 type OrderTransitionCustomLineItemStateAction struct {
-	CustomLineItemId string `json:"customLineItemId"`
-	Quantity         int    `json:"quantity"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
+	// Number of Custom Line Items that should transition [State](ctp:api:type:State).
+	Quantity int `json:"quantity"`
+	// [State](ctp:api:type:State) the Custom Line Item should transition from.
 	FromState StateResourceIdentifier `json:"fromState"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
-	ToState              StateResourceIdentifier `json:"toState"`
-	ActualTransitionDate *time.Time              `json:"actualTransitionDate,omitempty"`
+	// [State](ctp:api:type:State) the Custom Line Item should transition to.
+	ToState StateResourceIdentifier `json:"toState"`
+	// Date and time (UTC) to perform the [State](ctp:api:type:State) transition.
+	ActualTransitionDate *time.Time `json:"actualTransitionDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2947,14 +3460,23 @@ func (obj OrderTransitionCustomLineItemStateAction) MarshalJSON() ([]byte, error
 	}{Action: "transitionCustomLineItemState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Line Item State Transition](ctp:api:type:LineItemStateTransitionMessage) Message.
+*
+ */
 type OrderTransitionLineItemStateAction struct {
-	LineItemId string `json:"lineItemId"`
-	Quantity   int    `json:"quantity"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// Number of Line Items that should transition [State](ctp:api:type:State).
+	Quantity int `json:"quantity"`
+	// [State](ctp:api:type:State) the Line Item should transition from.
 	FromState StateResourceIdentifier `json:"fromState"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
-	ToState              StateResourceIdentifier `json:"toState"`
-	ActualTransitionDate *time.Time              `json:"actualTransitionDate,omitempty"`
+	// [State](ctp:api:type:State) the Line Item should transition to.
+	ToState StateResourceIdentifier `json:"toState"`
+	// Date and time (UTC) to perform the [State](ctp:api:type:State) transition.
+	ActualTransitionDate *time.Time `json:"actualTransitionDate,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2967,10 +3489,19 @@ func (obj OrderTransitionLineItemStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "transitionLineItemState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If the existing [State](ctp:api:type:State) has set `transitions`, there must be a direct transition to the new State.
+*	If `transitions` is not set, no validation is performed.
+*
+*	This update action produces the [Order State Transition](ctp:api:type:OrderStateTransitionMessage) Message.
+*
+ */
 type OrderTransitionStateAction struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
+	// Value to set.
+	// If there is no State yet, the new State must be an initial State.
 	State StateResourceIdentifier `json:"state"`
-	Force *bool                   `json:"force,omitempty"`
+	// Set to `true` to turn off validation.
+	Force *bool `json:"force,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2983,10 +3514,12 @@ func (obj OrderTransitionStateAction) MarshalJSON() ([]byte, error) {
 	}{Action: "transitionState", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates an address in `itemShippingAddresses` by keeping the Address `key`.
+*
+ */
 type OrderUpdateItemShippingAddressAction struct {
-	// Polymorphic base type that represents a postal address and contact details.
-	// Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
-	// only differ in the data type for the optional `custom` field.
+	// The new Address with the same `key` as the Address it will replace.
 	Address BaseAddress `json:"address"`
 }
 
@@ -3001,10 +3534,14 @@ func (obj OrderUpdateItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderUpdateSyncInfoAction struct {
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel).
-	Channel    ChannelResourceIdentifier `json:"channel"`
-	ExternalId *string                   `json:"externalId,omitempty"`
-	SyncedAt   *time.Time                `json:"syncedAt,omitempty"`
+	// Set this to identify an external order instance, file, or other resource.
+	ExternalId *string `json:"externalId,omitempty"`
+	// The synchronization destination to set. Must not be empty.
+	// The referenced Channel must have the [Channel Role](ctp:api:type:ChannelRoleEnum) `OrderExport` or `OrderImport`.
+	// Otherwise this update action returns an [InvalidInput](ctp:api:type:InvalidInputError) error.
+	Channel ChannelResourceIdentifier `json:"channel"`
+	// If not set, it defaults to the current date and time.
+	SyncedAt *time.Time `json:"syncedAt,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

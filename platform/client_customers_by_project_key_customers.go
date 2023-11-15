@@ -49,6 +49,10 @@ func (rb *ByProjectKeyCustomersRequestBuilder) PasswordReset() *ByProjectKeyCust
 		client:     rb.client,
 	}
 }
+
+/**
+*	Produces the [CustomerPasswordTokenCreated](ctp:api:type:CustomerPasswordTokenCreatedMessage) Message.
+ */
 func (rb *ByProjectKeyCustomersRequestBuilder) PasswordToken() *ByProjectKeyCustomersPasswordTokenRequestBuilder {
 	return &ByProjectKeyCustomersPasswordTokenRequestBuilder{
 		projectKey: rb.projectKey,
@@ -71,6 +75,16 @@ func (rb *ByProjectKeyCustomersRequestBuilder) WithId(id string) *ByProjectKeyCu
 }
 func (rb *ByProjectKeyCustomersRequestBuilder) Get() *ByProjectKeyCustomersRequestMethodGet {
 	return &ByProjectKeyCustomersRequestMethodGet{
+		url:    fmt.Sprintf("/%s/customers", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
+*	Checks if a Customer exists for a given Query Predicate. Returns a `200 OK` status if any Customers match the Query Predicate, or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCustomersRequestBuilder) Head() *ByProjectKeyCustomersRequestMethodHead {
+	return &ByProjectKeyCustomersRequestMethodHead{
 		url:    fmt.Sprintf("/%s/customers", rb.projectKey),
 		client: rb.client,
 	}

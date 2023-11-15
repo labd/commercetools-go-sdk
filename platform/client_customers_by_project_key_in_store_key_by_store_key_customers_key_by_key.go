@@ -14,11 +14,21 @@ type ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder struct {
 }
 
 /**
-*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Customer exists in the Project but the `stores` field references a different [Store](ctp:api:type:Store), this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodGet{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/customers/key=%s", rb.projectKey, rb.storeKey, rb.key),
+		client: rb.client,
+	}
+}
+
+/**
+*	Checks if a Customer exists for a given `key`. Returns a `200 OK` status if the Customer exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodHead{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/customers/key=%s", rb.projectKey, rb.storeKey, rb.key),
 		client: rb.client,
 	}
@@ -39,7 +49,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Post(
 /**
 *	Deleting a Customer produces the [CustomerDeleted](ctp:api:type:CustomerDeletedMessage) Message.
 *
-*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Customer exists in the Project but the `stores` field references a different [Store](ctp:api:type:Store), this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodDelete {

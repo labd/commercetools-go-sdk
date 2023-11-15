@@ -8,8 +8,34 @@ import (
 	"time"
 )
 
+type StagedPriceDraft struct {
+	// Money value for the StagedPriceDraft.
+	Value TypedMoneyDraft `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StagedPriceDraft) UnmarshalJSON(data []byte) error {
+	type Alias StagedPriceDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoneyDraft(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 /**
-*	Staged changes on a Standalone Price. To update the `value` property of a Staged Standalone Price, use the corresponding [update action](ctp:api:type:StandalonePriceChangeValueAction). To apply all staged changes to the Standalone Price, use the `applyStagedChanges` update action.
+*	Staged changes on a Standalone Price.
+*	To update the `value` property of a Staged Standalone Price, use the [Change Value](ctp:api:type:StandalonePriceChangeValueAction) update action.
+*	To apply all staged changes to the Standalone Price, use the [Apply Staged Changes](ctp:api:type:StandalonePriceApplyStagedChangesAction) update action.
+*
  */
 type StagedStandalonePrice struct {
 	// Money value of the StagedStandalonePrice.
@@ -72,7 +98,7 @@ type StandalonePrice struct {
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// Staged changes of the StandalonePrice. Only present if the StandalonePrice has staged changes.
+	// Staged changes of the StandalonePrice. Only present if the StandalonePrice has some changes staged.
 	Staged *StagedStandalonePrice `json:"staged,omitempty"`
 	// If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
 	// If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
@@ -150,8 +176,9 @@ type StandalonePriceDraft struct {
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
-	// If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+	// Staged changes for the StandalonePrice.
+	Staged *StagedPriceDraft `json:"staged,omitempty"`
+	// Set to `false`, if the StandalonePrice should not be considered during [price selection](ctp:api:type:ProductPriceSelection).
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -307,6 +334,12 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 			return nil, err
 		}
 		return obj, nil
+	case "removeStagedChanges":
+		obj := StandalonePriceRemoveStagedChangesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCustomField":
 		obj := StandalonePriceSetCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -331,7 +364,7 @@ func mapDiscriminatorStandalonePriceUpdateAction(input interface{}) (StandaloneP
 			return nil, err
 		}
 		return obj, nil
-	case "setPriceTier":
+	case "setPriceTiers":
 		obj := StandalonePriceSetPriceTiersAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
@@ -458,6 +491,24 @@ func (obj StandalonePriceRemovePriceTierAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removePriceTier", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes all staged changes from the StandalonePrice.
+*	Removing staged changes successfully produces the [StandalonePriceStagedChangesRemoved](ctp:api:type:StandalonePriceStagedChangesRemovedMessage) Message.
+*
+ */
+type StandalonePriceRemoveStagedChangesAction struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceRemoveStagedChangesAction) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceRemoveStagedChangesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeStagedChanges", Alias: (*Alias)(&obj)})
+}
+
 type StandalonePriceSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -550,7 +601,7 @@ func (obj StandalonePriceSetPriceTiersAction) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
-	}{Action: "setPriceTier", Alias: (*Alias)(&obj)})
+	}{Action: "setPriceTiers", Alias: (*Alias)(&obj)})
 }
 
 /**

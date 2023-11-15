@@ -136,13 +136,13 @@ func (obj ReviewReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type ReviewResourceIdentifier struct {
-	// Unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Review](ctp:api:type:Review). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Review](ctp:api:type:Review). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Review](ctp:api:type:Review). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

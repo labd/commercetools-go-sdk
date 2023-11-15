@@ -19,6 +19,16 @@ func (rb *ByProjectKeyExtensionsKeyByKeyRequestBuilder) Get() *ByProjectKeyExten
 	}
 }
 
+/**
+*	Checks if an Extension exists for a given `key`. Returns a `200 OK` status if the Extension exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyExtensionsKeyByKeyRequestBuilder) Head() *ByProjectKeyExtensionsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyExtensionsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/extensions/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyExtensionsKeyByKeyRequestBuilder) Post(body ExtensionUpdate) *ByProjectKeyExtensionsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyExtensionsKeyByKeyRequestMethodPost{
 		body:   body,

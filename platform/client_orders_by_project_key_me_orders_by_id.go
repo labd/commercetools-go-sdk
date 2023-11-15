@@ -18,3 +18,13 @@ func (rb *ByProjectKeyMeOrdersByIDRequestBuilder) Get() *ByProjectKeyMeOrdersByI
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if an Order exists for a given `id`. Returns a `200 OK` status if the Order exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyMeOrdersByIDRequestBuilder) Head() *ByProjectKeyMeOrdersByIDRequestMethodHead {
+	return &ByProjectKeyMeOrdersByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/me/orders/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}

@@ -46,7 +46,7 @@ type Asset struct {
 	Tags []string `json:"tags"`
 	// Custom Fields defined for the Asset.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// User-defined unique identifier of the Asset.
+	// User-defined identifier of the Asset. It is unique per [Category](ctp:api:type:Category) or [ProductVariant](ctp:api:type:ProductVariant).
 	Key *string `json:"key,omitempty"`
 }
 
@@ -95,7 +95,7 @@ type AssetDraft struct {
 	Tags []string `json:"tags"`
 	// Custom Fields defined for the Asset.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// User-defined unique identifier for the Asset.
+	// User-defined identifier for the Asset. Must be unique per [Category](ctp:api:type:Category) or [ProductVariant](ctp:api:type:ProductVariant).
 	Key *string `json:"key,omitempty"`
 }
 
@@ -130,7 +130,7 @@ func (obj AssetDraft) MarshalJSON() ([]byte, error) {
 type AssetSource struct {
 	// URI of the AssetSource.
 	Uri string `json:"uri"`
-	// User-defined unique identifier of the AssetSource.
+	// User-defined identifier of the AssetSource. Must be unique per [Asset](ctp:api:type:Asset).
 	Key *string `json:"key,omitempty"`
 	// Width and height of the AssetSource.
 	Dimensions *AssetDimensions `json:"dimensions,omitempty"`
@@ -338,7 +338,7 @@ type BaseResource struct {
 *
  */
 type ClientLogging struct {
-	// `id` of the [APIClient](ctp:api:type:ApiClient) which created the resource.
+	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
 	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
@@ -346,13 +346,15 @@ type ClientLogging struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
+	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
 /**
 *	Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
  */
 type CreatedBy struct {
-	// `id` of the [APIClient](ctp:api:type:ApiClient) which created the resource.
+	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
 	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
@@ -360,6 +362,8 @@ type CreatedBy struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was created.
 	AnonymousId *string `json:"anonymousId,omitempty"`
+	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
 type DiscountedPrice struct {
@@ -497,7 +501,7 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 *	Present on resources modified after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
  */
 type LastModifiedBy struct {
-	// `id` of the [APIClient](ctp:api:type:ApiClient) which modified the resource.
+	// `id` of the [API Client](ctp:api:type:ApiClient) which modified the resource.
 	ClientId *string `json:"clientId,omitempty"`
 	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
@@ -505,6 +509,8 @@ type LastModifiedBy struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was modified.
 	AnonymousId *string `json:"anonymousId,omitempty"`
+	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
 /**
@@ -528,7 +534,7 @@ type Money struct {
 }
 
 /**
-*	MoneyType supports two different values, one for amounts in cent precision and another one for sub-cent amounts up to 20 fraction digits.
+*	Determines the type of money used.
  */
 type MoneyType string
 
@@ -854,6 +860,18 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "customer-email-token":
+		obj := CustomerEmailTokenReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "customer-password-token":
+		obj := CustomerPasswordTokenReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "customer":
 		obj := CustomerReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -997,41 +1015,45 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 type ReferenceTypeId string
 
 const (
-	ReferenceTypeIdAssociateRole    ReferenceTypeId = "associate-role"
-	ReferenceTypeIdAttributeGroup   ReferenceTypeId = "attribute-group"
-	ReferenceTypeIdBusinessUnit     ReferenceTypeId = "business-unit"
-	ReferenceTypeIdCart             ReferenceTypeId = "cart"
-	ReferenceTypeIdCartDiscount     ReferenceTypeId = "cart-discount"
-	ReferenceTypeIdCategory         ReferenceTypeId = "category"
-	ReferenceTypeIdChannel          ReferenceTypeId = "channel"
-	ReferenceTypeIdCustomer         ReferenceTypeId = "customer"
-	ReferenceTypeIdCustomerGroup    ReferenceTypeId = "customer-group"
-	ReferenceTypeIdDirectDiscount   ReferenceTypeId = "direct-discount"
-	ReferenceTypeIdDiscountCode     ReferenceTypeId = "discount-code"
-	ReferenceTypeIdExtension        ReferenceTypeId = "extension"
-	ReferenceTypeIdInventoryEntry   ReferenceTypeId = "inventory-entry"
-	ReferenceTypeIdKeyValueDocument ReferenceTypeId = "key-value-document"
-	ReferenceTypeIdOrder            ReferenceTypeId = "order"
-	ReferenceTypeIdOrderEdit        ReferenceTypeId = "order-edit"
-	ReferenceTypeIdPayment          ReferenceTypeId = "payment"
-	ReferenceTypeIdProduct          ReferenceTypeId = "product"
-	ReferenceTypeIdProductDiscount  ReferenceTypeId = "product-discount"
-	ReferenceTypeIdProductPrice     ReferenceTypeId = "product-price"
-	ReferenceTypeIdProductSelection ReferenceTypeId = "product-selection"
-	ReferenceTypeIdProductType      ReferenceTypeId = "product-type"
-	ReferenceTypeIdQuote            ReferenceTypeId = "quote"
-	ReferenceTypeIdQuoteRequest     ReferenceTypeId = "quote-request"
-	ReferenceTypeIdReview           ReferenceTypeId = "review"
-	ReferenceTypeIdShippingMethod   ReferenceTypeId = "shipping-method"
-	ReferenceTypeIdShoppingList     ReferenceTypeId = "shopping-list"
-	ReferenceTypeIdStagedQuote      ReferenceTypeId = "staged-quote"
-	ReferenceTypeIdStandalonePrice  ReferenceTypeId = "standalone-price"
-	ReferenceTypeIdState            ReferenceTypeId = "state"
-	ReferenceTypeIdStore            ReferenceTypeId = "store"
-	ReferenceTypeIdSubscription     ReferenceTypeId = "subscription"
-	ReferenceTypeIdTaxCategory      ReferenceTypeId = "tax-category"
-	ReferenceTypeIdType             ReferenceTypeId = "type"
-	ReferenceTypeIdZone             ReferenceTypeId = "zone"
+	ReferenceTypeIdApprovalFlow          ReferenceTypeId = "approval-flow"
+	ReferenceTypeIdApprovalRule          ReferenceTypeId = "approval-rule"
+	ReferenceTypeIdAssociateRole         ReferenceTypeId = "associate-role"
+	ReferenceTypeIdAttributeGroup        ReferenceTypeId = "attribute-group"
+	ReferenceTypeIdBusinessUnit          ReferenceTypeId = "business-unit"
+	ReferenceTypeIdCart                  ReferenceTypeId = "cart"
+	ReferenceTypeIdCartDiscount          ReferenceTypeId = "cart-discount"
+	ReferenceTypeIdCategory              ReferenceTypeId = "category"
+	ReferenceTypeIdChannel               ReferenceTypeId = "channel"
+	ReferenceTypeIdCustomer              ReferenceTypeId = "customer"
+	ReferenceTypeIdCustomerEmailToken    ReferenceTypeId = "customer-email-token"
+	ReferenceTypeIdCustomerGroup         ReferenceTypeId = "customer-group"
+	ReferenceTypeIdCustomerPasswordToken ReferenceTypeId = "customer-password-token"
+	ReferenceTypeIdDirectDiscount        ReferenceTypeId = "direct-discount"
+	ReferenceTypeIdDiscountCode          ReferenceTypeId = "discount-code"
+	ReferenceTypeIdExtension             ReferenceTypeId = "extension"
+	ReferenceTypeIdInventoryEntry        ReferenceTypeId = "inventory-entry"
+	ReferenceTypeIdKeyValueDocument      ReferenceTypeId = "key-value-document"
+	ReferenceTypeIdOrder                 ReferenceTypeId = "order"
+	ReferenceTypeIdOrderEdit             ReferenceTypeId = "order-edit"
+	ReferenceTypeIdPayment               ReferenceTypeId = "payment"
+	ReferenceTypeIdProduct               ReferenceTypeId = "product"
+	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
+	ReferenceTypeIdProductPrice          ReferenceTypeId = "product-price"
+	ReferenceTypeIdProductSelection      ReferenceTypeId = "product-selection"
+	ReferenceTypeIdProductType           ReferenceTypeId = "product-type"
+	ReferenceTypeIdQuote                 ReferenceTypeId = "quote"
+	ReferenceTypeIdQuoteRequest          ReferenceTypeId = "quote-request"
+	ReferenceTypeIdReview                ReferenceTypeId = "review"
+	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
+	ReferenceTypeIdShoppingList          ReferenceTypeId = "shopping-list"
+	ReferenceTypeIdStagedQuote           ReferenceTypeId = "staged-quote"
+	ReferenceTypeIdStandalonePrice       ReferenceTypeId = "standalone-price"
+	ReferenceTypeIdState                 ReferenceTypeId = "state"
+	ReferenceTypeIdStore                 ReferenceTypeId = "store"
+	ReferenceTypeIdSubscription          ReferenceTypeId = "subscription"
+	ReferenceTypeIdTaxCategory           ReferenceTypeId = "tax-category"
+	ReferenceTypeIdType                  ReferenceTypeId = "type"
+	ReferenceTypeIdZone                  ReferenceTypeId = "zone"
 )
 
 /**
@@ -1122,12 +1144,6 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 		return obj, nil
 	case "order-edit":
 		obj := OrderEditResourceIdentifier{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "order":
-		obj := OrderResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1294,7 +1310,7 @@ func (obj *ScopedPrice) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	Base polymorphic read-only Money type which is stored in cent precision or high precision. The actual type is determined by the `type` field.
+*	Base polymorphic read-only money type that stores currency in cent precision or high precision, that is in sub-cents.
 *
  */
 type TypedMoney interface{}
@@ -1380,6 +1396,13 @@ func (obj HighPrecisionMoney) MarshalJSON() ([]byte, error) {
 	}{Action: "highPrecision", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Base polymorphic money type containing common fields for [Money](ctp:api:type:Money) and [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
+*
+*	- To set money in cent precision, use [Money](ctp:api:type:Money).
+*	- To set money in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
+*
+ */
 type TypedMoneyDraft interface{}
 
 func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error) {
@@ -1415,11 +1438,8 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 *
  */
 type CentPrecisionMoneyDraft struct {
-	// Amount in the smallest indivisible unit of a currency, such as:
-	//
-	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
-	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
-	CentAmount int `json:"centAmount"`
+	// Amount in the smallest indivisible unit of a currency.
+	CentAmount *int `json:"centAmount,omitempty"`
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
 	// This field is optional for cent precision. If provided, it must be equal to the default number of fraction digits for the specified currency.

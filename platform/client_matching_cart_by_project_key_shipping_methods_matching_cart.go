@@ -23,3 +23,13 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartRequestBuilder) Get() *ByProjec
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if a ShippingMethod exists for the given Cart. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShippingMethodsMatchingCartRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingCartRequestMethodHead {
+	return &ByProjectKeyShippingMethodsMatchingCartRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shipping-methods/matching-cart", rb.projectKey),
+		client: rb.client,
+	}
+}

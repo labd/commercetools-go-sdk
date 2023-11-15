@@ -82,7 +82,7 @@ func (rb *ByProjectKeyDeploymentsRequestMethodGet) WithHeaders(headers http.Head
 /**
 *	Retrieves all deployments of a project key.
  */
-func (rb *ByProjectKeyDeploymentsRequestMethodGet) Execute(ctx context.Context) (result *Paged, err error) {
+func (rb *ByProjectKeyDeploymentsRequestMethodGet) Execute(ctx context.Context) (result *DeploymentPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()
@@ -107,6 +107,9 @@ func (rb *ByProjectKeyDeploymentsRequestMethodGet) Execute(ctx context.Context) 
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	default:
 		result := GenericRequestError{

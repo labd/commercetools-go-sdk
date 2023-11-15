@@ -205,13 +205,13 @@ func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type PaymentResourceIdentifier struct {
-	// Unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Payment](ctp:api:type:Payment). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Payment](ctp:api:type:Payment). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Payment](ctp:api:type:Payment). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

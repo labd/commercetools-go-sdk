@@ -19,6 +19,16 @@ func (rb *ByProjectKeyProductDiscountsKeyByKeyRequestBuilder) Get() *ByProjectKe
 	}
 }
 
+/**
+*	Checks if a ProductDiscount exists for a given `key`. Returns a `200 OK` status if the ProductDiscount exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductDiscountsKeyByKeyRequestBuilder) Head() *ByProjectKeyProductDiscountsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyProductDiscountsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-discounts/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyProductDiscountsKeyByKeyRequestBuilder) Post(body ProductDiscountUpdate) *ByProjectKeyProductDiscountsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyProductDiscountsKeyByKeyRequestMethodPost{
 		body:   body,

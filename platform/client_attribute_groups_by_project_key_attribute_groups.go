@@ -32,6 +32,16 @@ func (rb *ByProjectKeyAttributeGroupsRequestBuilder) Get() *ByProjectKeyAttribut
 	}
 }
 
+/**
+*	Checks if an AttributeGroup exists for a given Query Predicate. Returns `200 OK` status if any AttributeGroups match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAttributeGroupsRequestBuilder) Head() *ByProjectKeyAttributeGroupsRequestMethodHead {
+	return &ByProjectKeyAttributeGroupsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/attribute-groups", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyAttributeGroupsRequestBuilder) Post(body AttributeGroupDraft) *ByProjectKeyAttributeGroupsRequestMethodPost {
 	return &ByProjectKeyAttributeGroupsRequestMethodPost{
 		body:   body,

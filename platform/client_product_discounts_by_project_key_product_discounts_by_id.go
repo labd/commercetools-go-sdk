@@ -19,6 +19,16 @@ func (rb *ByProjectKeyProductDiscountsByIDRequestBuilder) Get() *ByProjectKeyPro
 	}
 }
 
+/**
+*	Checks if a ProductDiscount exists for a given `id`. Returns a `200 OK` status if the ProductDiscount exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductDiscountsByIDRequestBuilder) Head() *ByProjectKeyProductDiscountsByIDRequestMethodHead {
+	return &ByProjectKeyProductDiscountsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-discounts/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyProductDiscountsByIDRequestBuilder) Post(body ProductDiscountUpdate) *ByProjectKeyProductDiscountsByIDRequestMethodPost {
 	return &ByProjectKeyProductDiscountsByIDRequestMethodPost{
 		body:   body,

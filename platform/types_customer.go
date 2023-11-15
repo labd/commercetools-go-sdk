@@ -265,6 +265,25 @@ func (obj CustomerDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	[Reference](ctp:api:type:Reference) to a [CustomerToken](ctp:api:type:CustomerToken) for email verification.
+*
+ */
+type CustomerEmailTokenReference struct {
+	// Unique identifier of the referenced [CustomerToken](ctp:api:type:CustomerToken).
+	ID string `json:"id"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerEmailTokenReference) MarshalJSON() ([]byte, error) {
+	type Alias CustomerEmailTokenReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "customer-email-token", Alias: (*Alias)(&obj)})
+}
+
 type CustomerEmailVerify struct {
 	// Expected version of the Customer.
 	Version *int `json:"version,omitempty"`
@@ -291,6 +310,25 @@ type CustomerPagedQueryResponse struct {
 	Total *int `json:"total,omitempty"`
 	// [Customers](ctp:api:type:Customer) matching the query.
 	Results []Customer `json:"results"`
+}
+
+/**
+*	[Reference](ctp:api:type:Reference) to a [CustomerToken](ctp:api:type:CustomerToken) for password reset.
+*
+ */
+type CustomerPasswordTokenReference struct {
+	// Unique identifier of the referenced [CustomerToken](ctp:api:type:CustomerToken).
+	ID string `json:"id"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerPasswordTokenReference) MarshalJSON() ([]byte, error) {
+	type Alias CustomerPasswordTokenReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "customer-password-token", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -324,13 +362,13 @@ type CustomerResetPassword struct {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type CustomerResourceIdentifier struct {
-	// Unique identifier of the referenced [Customer](ctp:api:type:Customer).
+	// Unique identifier of the referenced [Customer](ctp:api:type:Customer). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Customer](ctp:api:type:Customer).
+	// User-defined unique identifier of the referenced [Customer](ctp:api:type:Customer). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -376,16 +414,16 @@ type CustomerSignin struct {
 type CustomerToken struct {
 	// Unique identifier of the token.
 	ID string `json:"id"`
+	// The `id` of the Customer.
+	CustomerId string `json:"customerId"`
+	// Value of the token.
+	Value string `json:"value"`
+	// Date and time (UTC) the token expires.
+	ExpiresAt time.Time `json:"expiresAt"`
 	// Date and time (UTC) the token was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// When the token is created, `lastModifiedAt` is set to `createdAt`.
 	LastModifiedAt *time.Time `json:"lastModifiedAt,omitempty"`
-	// The `id` of the Customer.
-	CustomerId string `json:"customerId"`
-	// Date and time (UTC) the token expires.
-	ExpiresAt time.Time `json:"expiresAt"`
-	// Value of the token.
-	Value string `json:"value"`
 }
 
 type CustomerUpdate struct {
@@ -864,6 +902,10 @@ func (obj CustomerRemoveStoreAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeStore", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to an Address of a Customer generates the [CustomerAddressCustomFieldAdded](ctp:api:type:CustomerAddressCustomFieldAddedMessage) Message, removing one generates the [CustomerAddressCustomFieldRemoved](ctp:api:type:CustomerAddressCustomFieldRemovedMessage) Message, and updating an existing one generates the [CustomerAddressCustomFieldChanged](ctp:api:type:CustomerAddressCustomFieldChangedMessage) Message.
+*
+ */
 type CustomerSetAddressCustomFieldAction struct {
 	// User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
 	AddressId string `json:"addressId"`
@@ -885,6 +927,10 @@ func (obj CustomerSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type on an Address of a Customer generates the [CustomerAddressCustomTypeSet](ctp:api:type:CustomerAddressCustomTypeSetMessage) Message, and removing one generates the [CustomerAddressCustomTypeRemoved](ctp:api:type:CustomerAddressCustomTypeRemovedMessage) Message.
+*
+ */
 type CustomerSetAddressCustomTypeAction struct {
 	// User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
 	AddressId string `json:"addressId"`
@@ -943,6 +989,10 @@ func (obj CustomerSetCompanyNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCompanyName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to a Customer generates the [CustomerCustomFieldAdded](ctp:api:type:CustomerCustomFieldAddedMessage) Message, removing one generates the [CustomerCustomFieldRemoved](ctp:api:type:CustomerCustomFieldRemovedMessage) Message, and updating an existing one generates the [CustomerCustomFieldChanged](ctp:api:type:CustomerCustomFieldChangedMessage) Message.
+*
+ */
 type CustomerSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -962,6 +1012,10 @@ func (obj CustomerSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding or updating a Custom Type on a Customer generates the [CustomerCustomTypeSet](ctp:api:type:CustomerCustomTypeSetMessage) Message, removing one generates the [CustomerCustomTypeRemoved](ctp:api:type:CustomerCustomTypeRemovedMessage) Message.
+*
+ */
 type CustomerSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the Customer with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Customer.

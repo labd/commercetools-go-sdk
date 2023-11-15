@@ -36,6 +36,9 @@ type ChangeSubscription struct {
 type ChangeSubscriptionResourceTypeId string
 
 const (
+	ChangeSubscriptionResourceTypeIdApprovalFlow          ChangeSubscriptionResourceTypeId = "approval-flow"
+	ChangeSubscriptionResourceTypeIdApprovalRule          ChangeSubscriptionResourceTypeId = "approval-rule"
+	ChangeSubscriptionResourceTypeIdAssociateRole         ChangeSubscriptionResourceTypeId = "associate-role"
 	ChangeSubscriptionResourceTypeIdBusinessUnit          ChangeSubscriptionResourceTypeId = "business-unit"
 	ChangeSubscriptionResourceTypeIdCart                  ChangeSubscriptionResourceTypeId = "cart"
 	ChangeSubscriptionResourceTypeIdCartDiscount          ChangeSubscriptionResourceTypeId = "cart-discount"
@@ -373,7 +376,7 @@ type ConfluentCloudDestination struct {
 	ApiKey string `json:"apiKey"`
 	// Partially hidden on retrieval for security reasons.
 	ApiSecret string `json:"apiSecret"`
-	// The Kafka `acks` value. Can be `"0"`, `"1"`, or `"all"`.
+	// The Kafka `acks` value.
 	Acks string `json:"acks"`
 	// The name of the topic.
 	Topic string `json:"topic"`
@@ -553,21 +556,26 @@ func (obj MessageSubscription) MarshalJSON() ([]byte, error) {
 type MessageSubscriptionResourceTypeId string
 
 const (
-	MessageSubscriptionResourceTypeIdAssociateRole    MessageSubscriptionResourceTypeId = "associate-role"
-	MessageSubscriptionResourceTypeIdBusinessUnit     MessageSubscriptionResourceTypeId = "business-unit"
-	MessageSubscriptionResourceTypeIdCategory         MessageSubscriptionResourceTypeId = "category"
-	MessageSubscriptionResourceTypeIdCustomer         MessageSubscriptionResourceTypeId = "customer"
-	MessageSubscriptionResourceTypeIdInventoryEntry   MessageSubscriptionResourceTypeId = "inventory-entry"
-	MessageSubscriptionResourceTypeIdOrder            MessageSubscriptionResourceTypeId = "order"
-	MessageSubscriptionResourceTypeIdPayment          MessageSubscriptionResourceTypeId = "payment"
-	MessageSubscriptionResourceTypeIdProduct          MessageSubscriptionResourceTypeId = "product"
-	MessageSubscriptionResourceTypeIdProductSelection MessageSubscriptionResourceTypeId = "product-selection"
-	MessageSubscriptionResourceTypeIdQuote            MessageSubscriptionResourceTypeId = "quote"
-	MessageSubscriptionResourceTypeIdQuoteRequest     MessageSubscriptionResourceTypeId = "quote-request"
-	MessageSubscriptionResourceTypeIdReview           MessageSubscriptionResourceTypeId = "review"
-	MessageSubscriptionResourceTypeIdStagedQuote      MessageSubscriptionResourceTypeId = "staged-quote"
-	MessageSubscriptionResourceTypeIdStandalonePrice  MessageSubscriptionResourceTypeId = "standalone-price"
-	MessageSubscriptionResourceTypeIdStore            MessageSubscriptionResourceTypeId = "store"
+	MessageSubscriptionResourceTypeIdApprovalFlow          MessageSubscriptionResourceTypeId = "approval-flow"
+	MessageSubscriptionResourceTypeIdApprovalRule          MessageSubscriptionResourceTypeId = "approval-rule"
+	MessageSubscriptionResourceTypeIdAssociateRole         MessageSubscriptionResourceTypeId = "associate-role"
+	MessageSubscriptionResourceTypeIdBusinessUnit          MessageSubscriptionResourceTypeId = "business-unit"
+	MessageSubscriptionResourceTypeIdCategory              MessageSubscriptionResourceTypeId = "category"
+	MessageSubscriptionResourceTypeIdCustomer              MessageSubscriptionResourceTypeId = "customer"
+	MessageSubscriptionResourceTypeIdCustomerEmailToken    MessageSubscriptionResourceTypeId = "customer-email-token"
+	MessageSubscriptionResourceTypeIdCustomerGroup         MessageSubscriptionResourceTypeId = "customer-group"
+	MessageSubscriptionResourceTypeIdCustomerPasswordToken MessageSubscriptionResourceTypeId = "customer-password-token"
+	MessageSubscriptionResourceTypeIdInventoryEntry        MessageSubscriptionResourceTypeId = "inventory-entry"
+	MessageSubscriptionResourceTypeIdOrder                 MessageSubscriptionResourceTypeId = "order"
+	MessageSubscriptionResourceTypeIdPayment               MessageSubscriptionResourceTypeId = "payment"
+	MessageSubscriptionResourceTypeIdProduct               MessageSubscriptionResourceTypeId = "product"
+	MessageSubscriptionResourceTypeIdProductSelection      MessageSubscriptionResourceTypeId = "product-selection"
+	MessageSubscriptionResourceTypeIdQuote                 MessageSubscriptionResourceTypeId = "quote"
+	MessageSubscriptionResourceTypeIdQuoteRequest          MessageSubscriptionResourceTypeId = "quote-request"
+	MessageSubscriptionResourceTypeIdReview                MessageSubscriptionResourceTypeId = "review"
+	MessageSubscriptionResourceTypeIdStagedQuote           MessageSubscriptionResourceTypeId = "staged-quote"
+	MessageSubscriptionResourceTypeIdStandalonePrice       MessageSubscriptionResourceTypeId = "standalone-price"
+	MessageSubscriptionResourceTypeIdStore                 MessageSubscriptionResourceTypeId = "store"
 )
 
 type PayloadNotIncluded struct {

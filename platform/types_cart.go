@@ -38,14 +38,19 @@ type Cart struct {
 	// Sum of all [LineItem](ctp:api:type:LineItem) quantities, excluding [CustomLineItems](ctp:api:type:CustomLineItem). Only present when the Cart has at least one LineItem.
 	TotalLineItemQuantity *int `json:"totalLineItemQuantity,omitempty"`
 	// Sum of the `totalPrice` field of all [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem), and if available, the `price` field of [ShippingInfo](ctp:api:type:ShippingInfo).
+	// If a discount applies on `totalPrice`, this field holds the discounted value.
 	//
 	// Taxes are included if [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true` for each price.
 	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// - For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:CartSetShippingAddressAction).
-	// - For a Cart with `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when the external Tax Rate for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
+	// - For a Cart with `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
+	//
+	// If a discount applies on `totalPrice`, this field holds the discounted values.
 	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
 	// Sum of the `taxedPrice` field of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
 	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
+	// Discounts that apply on the Cart `totalPrice`.
+	DiscountOnTotalPrice *DiscountOnTotalPrice `json:"discountOnTotalPrice,omitempty"`
 	// Indicates how Tax Rates are set.
 	TaxMode TaxMode `json:"taxMode"`
 	// Indicates how monetary values are rounded when calculating taxes for `taxedPrice`.
@@ -58,7 +63,7 @@ type Cart struct {
 	CartState CartState `json:"cartState"`
 	// Billing address associated with the Cart.
 	BillingAddress *Address `json:"billingAddress,omitempty"`
-	// Shipping address associated with the Cart. Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
+	// Shipping address for a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode). Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
 	ShippingAddress *Address `json:"shippingAddress,omitempty"`
 	// Indicates whether the Cart has one or multiple Shipping Methods.
 	ShippingMode ShippingMode `json:"shippingMode"`
@@ -79,7 +84,7 @@ type Cart struct {
 	Shipping []Shipping `json:"shipping"`
 	// Additional shipping addresses of the Cart as specified by [LineItems](ctp:api:type:LineItem) using the `shippingDetails` field.
 	//
-	// Eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
+	// For Carts with `Single` [ShippingMode](ctp:api:type:ShippingMode): eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
 	// Discount Codes applied to the Cart. A Cart that has `directDiscounts` cannot have `discountCodes`.
 	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
@@ -153,13 +158,13 @@ type CartDraft struct {
 	ExternalTaxRateForShippingMethod *ExternalTaxRateDraft `json:"externalTaxRateForShippingMethod,omitempty"`
 	// Determines how monetary values are rounded when calculating taxes for `taxedPrice`.
 	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
-	// Determines how taxes are calculated when calculating taxes for `taxedPrice`.
+	// Determines how taxes are calculated for `taxedPrice`.
 	TaxCalculationMode *TaxCalculationMode `json:"taxCalculationMode,omitempty"`
 	// Determines how stock quantities are tracked for Line Items in the Cart.
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
 	// Billing address associated with the Cart.
 	BillingAddress *BaseAddress `json:"billingAddress,omitempty"`
-	// Shipping address associated with the Cart. Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
+	// Shipping address for a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode). Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
 	ShippingAddress *BaseAddress `json:"shippingAddress,omitempty"`
 	// Shipping Method for a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode). If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) has a `predicate` that does not match the Cart, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned when [creating a Cart](ctp:api:endpoint:/{projectKey}/carts:POST).
 	ShippingMethod *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
@@ -180,7 +185,7 @@ type CartDraft struct {
 	// Multiple shipping addresses of the Cart. Each address must contain a `key` that is unique in this Cart.
 	// The keys are used by [LineItems](ctp:api:type:LineItem) to reference these addresses under their `shippingDetails`.
 	//
-	// Eligible Shipping Methods or applicable Tax Rates are determined by the address `shippingAddress`, and not `itemShippingAddresses`.
+	// For Carts with `Single` [ShippingMode](ctp:api:type:ShippingMode): eligible Shipping Methods or applicable Tax Rates are determined by the address `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
 	// `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
 	DiscountCodes []string `json:"discountCodes"`
@@ -317,13 +322,13 @@ func (obj CartReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Cart](ctp:api:type:Cart). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type CartResourceIdentifier struct {
-	// Unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
+	// Unique identifier of the referenced [Cart](ctp:api:type:Cart). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Cart](ctp:api:type:Cart). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [Cart](ctp:api:type:Cart). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -668,18 +673,6 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
-	case "setDeliveryAddressCustomField":
-		obj := CartSetDeliveryAddressCustomFieldAction{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "setDeliveryAddressCustomType":
-		obj := CartSetDeliveryAddressCustomTypeAction{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	case "setDirectDiscounts":
 		obj := CartSetDirectDiscountsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -855,12 +848,16 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 type CustomLineItem struct {
 	// Unique identifier of the Custom Line Item.
 	ID string `json:"id"`
+	// User-defined unique identifier of the Custom Line Item.
+	Key *string `json:"key,omitempty"`
 	// Name of the Custom Line Item.
 	Name LocalizedString `json:"name"`
 	// Money value of the Custom Line Item.
 	Money TypedMoney `json:"money"`
 	// Automatically set after the `taxRate` is set.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
+	// Taxed price of the Shipping Method that is automatically set after `perMethodTaxRate` is set.
+	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
 	// Total price of the Custom Line Item (`money` multiplied by `quantity`).
 	// If the Custom Line Item is discounted, the total price is `discountedPricePerQuantity` multiplied by `quantity`.
 	//
@@ -869,15 +866,18 @@ type CustomLineItem struct {
 	// User-defined identifier used in a deep-link URL for the Custom Line Item.
 	// It matches the pattern `[a-zA-Z0-9_-]{2,256}`.
 	Slug string `json:"slug"`
-	// Number of Custom Line Items in the Cart.
+	// Number of Custom Line Items in the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order).
 	Quantity int `json:"quantity"`
-	// State of the Custom Line Item in the Cart.
+	// State of the Custom Line Item in the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order).
 	State []ItemState `json:"state"`
 	// Used to select a Tax Rate when a Cart has the `Platform` [TaxMode](ctp:api:type:TaxMode).
 	TaxCategory *TaxCategoryReference `json:"taxCategory,omitempty"`
 	// - For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode), the `taxRate` of Custom Line Items is set automatically once a shipping address is set. The rate is based on the [TaxCategory](ctp:api:type:TaxCategory) that applies for the shipping address.
 	// - For a Cart with `External` TaxMode, the `taxRate` of Custom Line Items can be set using [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Tax Rate per Shipping Method for a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode). For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode) it is automatically set after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
+	// For a Cart with `External` [TaxMode](ctp:api:type:TaxMode), the Tax Rate must be set with [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
+	PerMethodTaxRate []MethodTaxRate `json:"perMethodTaxRate"`
 	// Discounted price of a single quantity of the Custom Line Item.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	// Custom Fields of the Custom Line Item.
@@ -909,6 +909,8 @@ func (obj *CustomLineItem) UnmarshalJSON(data []byte) error {
 type CustomLineItemDraft struct {
 	// Name of the Custom Line Item.
 	Name LocalizedString `json:"name"`
+	// User-defined unique identifier of the Custom Line Item.
+	Key *string `json:"key,omitempty"`
 	// Number of Custom Line Items to add to the Cart.
 	Quantity *int `json:"quantity,omitempty"`
 	// Money value of the Custom Line Item.
@@ -1020,7 +1022,7 @@ type DirectDiscount struct {
 	ID string `json:"id"`
 	// Effect of the Discount on the Cart.
 	Value CartDiscountValue `json:"value"`
-	// Part of the Cart that is discounted.
+	// Segment of the Cart that is discounted.
 	//
 	// Empty when the `value` is set to `giftLineItem`.
 	Target CartDiscountTarget `json:"target,omitempty"`
@@ -1064,7 +1066,7 @@ func (obj *DirectDiscount) UnmarshalJSON(data []byte) error {
 type DirectDiscountDraft struct {
 	// Defines the effect the Discount will have.
 	Value CartDiscountValue `json:"value"`
-	// Defines what part of the Cart will be discounted.
+	// Defines what segment of the Cart will be discounted.
 	//
 	// If `value` is set to `giftLineItem`, this must not be set.
 	Target CartDiscountTarget `json:"target,omitempty"`
@@ -1138,6 +1140,51 @@ const (
 	DiscountCodeStateApplicationStoppedByPreviousDiscount DiscountCodeState = "ApplicationStoppedByPreviousDiscount"
 )
 
+type DiscountOnTotalPrice struct {
+	// Money value of the discount on the total price of the Cart or Order.
+	DiscountedAmount TypedMoney `json:"discountedAmount"`
+	// Discounts that impact the total price of the Cart or Order.
+	IncludedDiscounts []DiscountedTotalPricePortion `json:"includedDiscounts"`
+	// Money value of the discount on the total net price of the Cart or Order.
+	// Present only when `taxedPrice` of the Cart or Order exists.
+	DiscountedNetAmount TypedMoney `json:"discountedNetAmount,omitempty"`
+	// Money value of the discount on the total gross price of the Cart or Order.
+	// Present only when `taxedPrice` of the Cart or Order exists.
+	DiscountedGrossAmount TypedMoney `json:"discountedGrossAmount,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountOnTotalPrice) UnmarshalJSON(data []byte) error {
+	type Alias DiscountOnTotalPrice
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.DiscountedAmount != nil {
+		var err error
+		obj.DiscountedAmount, err = mapDiscriminatorTypedMoney(obj.DiscountedAmount)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.DiscountedNetAmount != nil {
+		var err error
+		obj.DiscountedNetAmount, err = mapDiscriminatorTypedMoney(obj.DiscountedNetAmount)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.DiscountedGrossAmount != nil {
+		var err error
+		obj.DiscountedGrossAmount, err = mapDiscriminatorTypedMoney(obj.DiscountedGrossAmount)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 type DiscountedLineItemPortion struct {
 	// A [CartDiscountReference](ctp:api:type:CartDiscountReference) or [DirectDiscountReference](ctp:api:type:DirectDiscountReference) for the applicable discount on the Line Item.
 	Discount Reference `json:"discount"`
@@ -1202,10 +1249,33 @@ type DiscountedLineItemPriceForQuantity struct {
 	DiscountedPrice DiscountedLineItemPrice `json:"discountedPrice"`
 }
 
+type DiscountedTotalPricePortion struct {
+	// Cart Discount related to the discounted price.
+	Discount CartDiscountReference `json:"discount"`
+	// Money value of the discount.
+	DiscountedAmount TypedMoney `json:"discountedAmount"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountedTotalPricePortion) UnmarshalJSON(data []byte) error {
+	type Alias DiscountedTotalPricePortion
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.DiscountedAmount != nil {
+		var err error
+		obj.DiscountedAmount, err = mapDiscriminatorTypedMoney(obj.DiscountedAmount)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 type ExternalLineItemTotalPrice struct {
 	// Price of the Line Item.
-	//
-	// The value is selected from the Product Variant according to the [Product](ctp:api:type:Product) `priceMode`.
 	Price Money `json:"price"`
 	// Total price of the Line Item.
 	TotalPrice Money `json:"totalPrice"`
@@ -1217,7 +1287,7 @@ type ExternalLineItemTotalPrice struct {
 *	Can only be set by these update actions:
 *
 *	- [Set LineItem TaxAmount](ctp:api:type:CartSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:CartSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:CartSetShippingMethodTaxAmountAction) on Carts
-*	- [Set LineItem TaxAmount](ctp:api:type:OrderEditSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:OrderEditSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:OrderEditSetShippingMethodTaxAmountAction) on Order Edits
+*	- [Set LineItem TaxAmount](ctp:api:type:StagedOrderSetLineItemTaxAmountAction), [Set CustomLineItem TaxAmount](ctp:api:type:StagedOrderSetCustomLineItemTaxAmountAction), or [Set ShippingMethod TaxAmount](ctp:api:type:StagedOrderSetShippingMethodTaxAmountAction) on Order Edits
 *
  */
 type ExternalTaxAmountDraft struct {
@@ -1328,7 +1398,7 @@ type ItemShippingTarget struct {
 }
 
 /**
-*	The representation of a [Line Item](/../api/carts-orders-overview#line-items) in a Cart.
+*	The representation of a [Line Item](/../api/carts-orders-overview#line-items) in a [Cart](ctp:api:type:Cart) or in an [Order](ctp:api:type:Order).
 *
  */
 type LineItem struct {
@@ -1342,8 +1412,8 @@ type LineItem struct {
 	//
 	// This field is only present on:
 	//
-	// - Line Items in a [Cart](ctp:api:type:Cart) when the `key` is available on that specific Product at the time the Line Item was created or updated on the Cart.
-	// - [Orders](ctp:api:type:Order) when the `key` is available on the specific Product at the time the Order was created from the Cart.
+	// - Line Items in a [Cart](ctp:api:type:Cart) when the `key` is available on that specific Product at the time the LineItem was created or updated on the Cart.
+	// - Line Items in an [Order](ctp:api:type:Order) when the `key` is available on the specific Product at the time the Order was created from the Cart.
 	//
 	// Present on resources created or updated after 3 December 2021.
 	ProductKey *string `json:"productKey,omitempty"`
@@ -1361,7 +1431,7 @@ type LineItem struct {
 	Variant ProductVariant `json:"variant"`
 	// Price of a Line Item selected from the Product Variant according to the [Product](ctp:api:type:Product) `priceMode`. If the `priceMode` is `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) and the `variant` field hasn't been updated, the price may not correspond to a price in `variant.prices`.
 	Price Price `json:"price"`
-	// Number of Line Items of the given Product Variant present in the Cart.
+	// Number of Line Items of the given Product Variant present in the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order).
 	Quantity int `json:"quantity"`
 	// Total price of this Line Item equalling `price` multiplied by `quantity`. If the Line Item is discounted, the total price is the `discountedPricePerQuantity` multiplied by `quantity`.
 	// Includes taxes if the [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true`.
@@ -1372,7 +1442,7 @@ type LineItem struct {
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 	// Taxed price of the Shipping Method that is automatically set after `perMethodTaxRate` is set.
 	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
-	// State of the Line Item in the Cart.
+	// State of the Line Item in the [Cart](ctp:api:type:Cart) or the [Order](ctp:api:type:Order).
 	State []ItemState `json:"state"`
 	// - For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode), the `taxRate` of Line Items is set automatically once a shipping address is set. The rate is based on the [TaxCategory](ctp:api:type:TaxCategory) that applies for the shipping address.
 	// - For a Cart with `External` TaxMode, the `taxRate` of Line Items can be set using [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
@@ -1435,8 +1505,10 @@ type LineItemDraft struct {
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
-	// External Tax Rate for the Line Item if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	// Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// Sets the external Tax Rates for individual Shipping Methods, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	PerMethodExternalTaxRate []MethodExternalTaxRateDraft `json:"perMethodExternalTaxRate"`
 	// Inventory mode specific to the Line Item only, and valid for the entire `quantity` of the Line Item.
 	// Set only if the inventory mode should be different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
@@ -1444,6 +1516,30 @@ type LineItemDraft struct {
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 	// Custom Fields for the Line Item.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LineItemDraft) MarshalJSON() ([]byte, error) {
+	type Alias LineItemDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["perMethodExternalTaxRate"] == nil {
+		delete(raw, "perMethodExternalTaxRate")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -1468,6 +1564,13 @@ const (
 	LineItemPriceModeExternalPrice LineItemPriceMode = "ExternalPrice"
 	LineItemPriceModeExternalTotal LineItemPriceMode = "ExternalTotal"
 )
+
+type MethodExternalTaxRateDraft struct {
+	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingMethodKey string `json:"shippingMethodKey"`
+	// External Tax Rate for the Shipping Method, if the Cart has `External` [TaxMode](ctp:api:type:TaxMode).
+	TaxRate *ExternalTaxRateDraft `json:"taxRate,omitempty"`
+}
 
 type MethodTaxRate struct {
 	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
@@ -1884,9 +1987,9 @@ type TaxedPrice struct {
 }
 
 type TaxedPriceDraft struct {
-	// Total net price of the Line Item or Custom Line Item.
+	// Total net price of the Cart or Order.
 	TotalNet Money `json:"totalNet"`
-	// Total gross price of the Line Item or Custom Line Item.
+	// Total gross price of the Cart or Order.
 	TotalGross Money `json:"totalGross"`
 	// Taxable portions added to the `totalGross`.
 	//
@@ -1912,6 +2015,8 @@ type CartAddCustomLineItemAction struct {
 	Money Money `json:"money"`
 	// Name of the Custom Line Item.
 	Name LocalizedString `json:"name"`
+	// User-defined unique identifier of the Custom Line Item.
+	Key *string `json:"key,omitempty"`
 	// Number of Custom Line Items to add to the Cart.
 	Quantity *int `json:"quantity,omitempty"`
 	// User-defined identifier used in a deep-link URL for the Custom Line Item.
@@ -2049,7 +2154,7 @@ func (obj CartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 type CartAddItemShippingAddressAction struct {
 	// Address to append to `itemShippingAddresses`.
 	//
-	// The new Address must have a `key` that is unique accross this Cart.
+	// The new Address must have a `key` that is unique across this Cart.
 	Address BaseAddress `json:"address"`
 }
 
@@ -2241,8 +2346,10 @@ func (obj CartAddShoppingListAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Using positive or negative quantities increases or decreases the number of items shipped to an address.
 	TargetsDelta []ItemShippingTarget `json:"targetsDelta"`
 }
@@ -2258,12 +2365,14 @@ func (obj CartApplyDeltaToCustomLineItemShippingDetailsTargetsAction) MarshalJSO
 }
 
 /**
-*	To override the shipping details, see [Set LineItemShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction).
+*	To override the shipping details, see [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction).
 *
  */
 type CartApplyDeltaToLineItemShippingDetailsTargetsAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Using positive or negative quantities increases or decreases the number of items shipped to an address.
 	TargetsDelta []ItemShippingTarget `json:"targetsDelta"`
 }
@@ -2279,8 +2388,10 @@ func (obj CartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() ([
 }
 
 type CartChangeCustomLineItemMoneyAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Value to set. Must not be empty. Can be a negative amount.
 	Money Money `json:"money"`
 }
@@ -2296,8 +2407,10 @@ func (obj CartChangeCustomLineItemMoneyAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartChangeCustomLineItemPriceModeAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// New value to set. Must not be empty.
 	Mode CustomLineItemPriceMode `json:"mode"`
 }
@@ -2319,13 +2432,15 @@ func (obj CartChangeCustomLineItemPriceModeAction) MarshalJSON() ([]byte, error)
 *	the `shippingDetails` field is kept in its current state to avoid data loss.
 *
 *	To change the Custom Line Item quantity and shipping details together,
-*	use this update action in combination with the [Set CustomLineItemShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction) update action
+*	use this update action in combination with the [Set CustomLineItem ShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction) update action
 *	in a single Cart update command.
 *
  */
 type CartChangeCustomLineItemQuantityAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// New value to set.
 	//
 	// If `0`, the Custom Line Item is removed from the Cart.
@@ -2350,15 +2465,17 @@ func (obj CartChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, error) 
 *	the `shippingDetails` field is kept in its current state to avoid data loss.
 *
 *	To change the Line Item quantity and shipping details together,
-*	use this update action in combination with the [Set LineItemShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction) update action
+*	use this update action in combination with the [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction) update action
 *	in a single Cart update command.
 *
 *	The [LineItem](ctp:api:type:LineItem) price is set as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
 *
  */
 type CartChangeLineItemQuantityAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// New value to set.
 	//
 	// If `0`, the Line Item is removed from the Cart.
@@ -2489,8 +2606,10 @@ func (obj CartRecalculateAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartRemoveCustomLineItemAction struct {
-	// `id` of the Custom Line Item to remove.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2542,10 +2661,12 @@ func (obj CartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartRemoveLineItemAction struct {
-	// `id` of the Line Item to remove.
-	LineItemId string `json:"lineItemId"`
-	// New value to set.
-	// If absent or `0`, the Line Item is removed from the Cart.
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// Amount to subtract from the LineItem's `quantity`.
+	// If absent, the LineItem is removed from the Cart.
 	Quantity *int `json:"quantity,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when decreasing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
@@ -2766,8 +2887,10 @@ func (obj CartSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetCustomLineItemCustomFieldAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -2787,8 +2910,10 @@ func (obj CartSetCustomLineItemCustomFieldAction) MarshalJSON() ([]byte, error) 
 }
 
 type CartSetCustomLineItemCustomTypeAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the CustomLineItem with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the CustomLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -2807,8 +2932,10 @@ func (obj CartSetCustomLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetCustomLineItemShippingDetailsAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Value to set.
 	// If empty, any existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
@@ -2829,11 +2956,16 @@ func (obj CartSetCustomLineItemShippingDetailsAction) MarshalJSON() ([]byte, err
 *
  */
 type CartSetCustomLineItemTaxAmountAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Value to set.
 	// If empty, any existing value is removed.
 	ExternalTaxAmount *ExternalTaxAmountDraft `json:"externalTaxAmount,omitempty"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Custom Line Item.
+	// This is required for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2851,11 +2983,16 @@ func (obj CartSetCustomLineItemTaxAmountAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetCustomLineItemTaxRateAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update.
-	CustomLineItemId string `json:"customLineItemId"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Value to set.
 	// If empty, an existing value is removed.
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) used for this Custom Line Item.
+	// This is required for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2999,47 +3136,6 @@ func (obj CartSetDeleteDaysAfterLastModificationAction) MarshalJSON() ([]byte, e
 	}{Action: "setDeleteDaysAfterLastModification", Alias: (*Alias)(&obj)})
 }
 
-type CartSetDeliveryAddressCustomFieldAction struct {
-	// `id` of the [Delivery](ctp:api:type:Delivery).
-	DeliveryId string `json:"deliveryId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
-	Name string `json:"name"`
-	// If `value` is absent or `null`, this field will be removed if it exists.
-	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
-	// If `value` is provided, it is set for the field defined by `name`.
-	Value interface{} `json:"value,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CartSetDeliveryAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
-	type Alias CartSetDeliveryAddressCustomFieldAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setDeliveryAddressCustomField", Alias: (*Alias)(&obj)})
-}
-
-type CartSetDeliveryAddressCustomTypeAction struct {
-	// `id` of the [Delivery](ctp:api:type:Delivery).
-	DeliveryId string `json:"deliveryId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the [Delivery](ctp:api:type:Delivery) `address` with [Custom Fields](/../api/projects/custom-fields).
-	// If absent, any existing Type and Custom Fields are removed from the [Delivery](ctp:api:type:Delivery) `address`.
-	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the [Delivery](ctp:api:type:Delivery) `address`.
-	Fields *FieldContainer `json:"fields,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CartSetDeliveryAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
-	type Alias CartSetDeliveryAddressCustomTypeAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setDeliveryAddressCustomType", Alias: (*Alias)(&obj)})
-}
-
 /**
 *	Adds a [DirectDiscount](ctp:api:type:DirectDiscount), but only if no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Cart.
 *	Either a Discount Code or a Direct Discount can exist on a Cart at the same time.
@@ -3120,8 +3216,10 @@ func (obj CartSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetLineItemCustomFieldAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
@@ -3141,8 +3239,10 @@ func (obj CartSetLineItemCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetLineItemCustomTypeAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Defines the [Type](ctp:api:type:Type) that extends the Line Item with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
@@ -3165,8 +3265,10 @@ func (obj CartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetLineItemDistributionChannelAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// - If present, a [Reference](ctp:api:type:Reference) to the Channel is set for the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	// - If not present, the current [Reference](ctp:api:type:Reference) to a distribution channel is removed from the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	//   The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -3184,8 +3286,10 @@ func (obj CartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, error
 }
 
 type CartSetLineItemInventoryModeAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Inventory mode specific to the Line Item only, and valid for the entire `quantity` of the Line Item.
 	// Set only if the inventory mode should be different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
@@ -3206,8 +3310,10 @@ func (obj CartSetLineItemInventoryModeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetLineItemPriceAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If `externalPrice` is not given and the `priceMode` is `ExternalPrice`, the external price is unset and the `priceMode` is set to `Platform`.
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
@@ -3224,8 +3330,10 @@ func (obj CartSetLineItemPriceAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetLineItemShippingDetailsAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If empty, the existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
@@ -3246,8 +3354,10 @@ func (obj CartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetLineItemSupplyChannelAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// - If present, a [Reference](ctp:api:type:Reference) to the Channel is set for the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	// - If not present, the current [Reference](ctp:api:type:Reference) to a supply channel will be removed from the [LineItem](ctp:api:type:LineItem) specified by `lineItemId`.
 	//   The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
@@ -3269,8 +3379,10 @@ func (obj CartSetLineItemSupplyChannelAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetLineItemTaxAmountAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If empty, any existing value is removed.
 	ExternalTaxAmount *ExternalTaxAmountDraft `json:"externalTaxAmount,omitempty"`
@@ -3294,8 +3406,10 @@ func (obj CartSetLineItemTaxAmountAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetLineItemTaxRateAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If empty, any existing value is removed.
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
@@ -3319,8 +3433,10 @@ func (obj CartSetLineItemTaxRateAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetLineItemTotalPriceAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update.
-	LineItemId string `json:"lineItemId"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If `externalTotalPrice` is not given and the `priceMode` is `ExternalTotal`, the external price is unset and the `priceMode` is set to `Platform`.
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -3611,50 +3727,6 @@ func (obj CartUpdateItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "updateItemShippingAddress", Alias: (*Alias)(&obj)})
-}
-
-type CustomLineItemImportDraft struct {
-	Name LocalizedString `json:"name"`
-	// The amount of a CustomLineItem in the cart.
-	// Must be a positive integer.
-	Quantity int `json:"quantity"`
-	// The cost to add to the cart. The amount can be negative.
-	Money       Money                          `json:"money"`
-	Slug        string                         `json:"slug"`
-	State       []ItemState                    `json:"state"`
-	TaxRate     *TaxRate                       `json:"taxRate,omitempty"`
-	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	// The custom fields.
-	Custom          *CustomFieldsDraft        `json:"custom,omitempty"`
-	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
-	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
-	// are applied to the Custom Line Item.
-	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
-	PriceMode CustomLineItemPriceMode `json:"priceMode"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomLineItemImportDraft) MarshalJSON() ([]byte, error) {
-	type Alias CustomLineItemImportDraft
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["state"] == nil {
-		delete(raw, "state")
-	}
-
-	return json.Marshal(raw)
-
 }
 
 /**

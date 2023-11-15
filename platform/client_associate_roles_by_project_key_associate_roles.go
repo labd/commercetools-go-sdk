@@ -33,6 +33,16 @@ func (rb *ByProjectKeyAssociateRolesRequestBuilder) Get() *ByProjectKeyAssociate
 }
 
 /**
+*	Checks if an AssociateRole exists for a given Query Predicate. Returns a `200 OK` status if any AssociateRole match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAssociateRolesRequestBuilder) Head() *ByProjectKeyAssociateRolesRequestMethodHead {
+	return &ByProjectKeyAssociateRolesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/associate-roles", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
 *	Creating a Associate Role generates the [AssociateRoleCreated](ctp:api:type:AssociateRoleCreatedMessage) Message.
 *
  */

@@ -33,7 +33,7 @@ func (rb *ByProjectKeyProductTypesRequestBuilder) Get() *ByProjectKeyProductType
 }
 
 /**
-*	Check if Product Types exist. Responds with a `200 OK` status if any Product Types match the Query Predicate, or `404 Not Found` otherwise.
+*	Checks if a ProductType exists for a given Query Predicate. Returns a `200 OK` status if any ProductTypes match the Query Predicate or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductTypesRequestBuilder) Head() *ByProjectKeyProductTypesRequestMethodHead {
 	return &ByProjectKeyProductTypesRequestMethodHead{

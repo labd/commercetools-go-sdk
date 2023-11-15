@@ -55,7 +55,7 @@ func (rb *ByProjectKeyProductsRequestMethodHead) WithHeaders(headers http.Header
 }
 
 /**
-*	Check if Products exist. Responds with a `200 OK` status if any Products match the Query Predicate, or `404 Not Found` otherwise.
+*	Checks if a Product exists for a given Query Predicate. Returns a `200 OK` status if any Products match the Query Predicate or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values
@@ -82,9 +82,43 @@ func (rb *ByProjectKeyProductsRequestMethodHead) Execute(ctx context.Context) er
 	switch resp.StatusCode {
 	case 200:
 		return nil
-	case 404:
-		return ErrNotFound
-	case 400, 401, 403, 500, 502, 503:
+
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {

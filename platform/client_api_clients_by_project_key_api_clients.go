@@ -25,6 +25,16 @@ func (rb *ByProjectKeyApiClientsRequestBuilder) Get() *ByProjectKeyApiClientsReq
 	}
 }
 
+/**
+*	Checks if an API Client exists for a given Query Predicate. Returns a `200 OK` status if any API Clients match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyApiClientsRequestBuilder) Head() *ByProjectKeyApiClientsRequestMethodHead {
+	return &ByProjectKeyApiClientsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/api-clients", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyApiClientsRequestBuilder) Post(body ApiClientDraft) *ByProjectKeyApiClientsRequestMethodPost {
 	return &ByProjectKeyApiClientsRequestMethodPost{
 		body:   body,

@@ -32,6 +32,16 @@ func (rb *ByProjectKeyProductSelectionsRequestBuilder) Get() *ByProjectKeyProduc
 	}
 }
 
+/**
+*	Checks if a ProductSelection exists for a given Query Predicate. Returns a `200 OK` status if any ProductSelections match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductSelectionsRequestBuilder) Head() *ByProjectKeyProductSelectionsRequestMethodHead {
+	return &ByProjectKeyProductSelectionsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-selections", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyProductSelectionsRequestBuilder) Post(body ProductSelectionDraft) *ByProjectKeyProductSelectionsRequestMethodPost {
 	return &ByProjectKeyProductSelectionsRequestMethodPost{
 		body:   body,

@@ -38,6 +38,16 @@ func (rb *ByProjectKeyProductDiscountsRequestBuilder) Get() *ByProjectKeyProduct
 	}
 }
 
+/**
+*	Checks if a ProductDiscount exists for a given Query Predicate. Returns a `200 OK` status if any ProductDiscounts match the Query Predicate, or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductDiscountsRequestBuilder) Head() *ByProjectKeyProductDiscountsRequestMethodHead {
+	return &ByProjectKeyProductDiscountsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-discounts", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyProductDiscountsRequestBuilder) Post(body ProductDiscountDraft) *ByProjectKeyProductDiscountsRequestMethodPost {
 	return &ByProjectKeyProductDiscountsRequestMethodPost{
 		body:   body,

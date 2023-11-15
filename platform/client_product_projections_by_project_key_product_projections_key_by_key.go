@@ -24,3 +24,13 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestBuilder) Get() *ByProject
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if the current or staged representation of a Product exists for a given `key`. Returns a `200 OK` status if the ProductProjection exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestBuilder) Head() *ByProjectKeyProductProjectionsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyProductProjectionsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-projections/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}

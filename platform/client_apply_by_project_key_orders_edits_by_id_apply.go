@@ -12,6 +12,10 @@ type ByProjectKeyOrdersEditsByIDApplyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Applying an OrderEdit produces the [OrderEditApplied](ctp:api:type:OrderEditAppliedMessage) Message.
+*
+ */
 func (rb *ByProjectKeyOrdersEditsByIDApplyRequestBuilder) Post(body OrderEditApply) *ByProjectKeyOrdersEditsByIDApplyRequestMethodPost {
 	return &ByProjectKeyOrdersEditsByIDApplyRequestMethodPost{
 		body:   body,

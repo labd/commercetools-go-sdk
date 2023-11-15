@@ -23,3 +23,13 @@ func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder) Get() *ByP
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if a ShippingMethod that can ship to the given [Location](ctp:api:type:Location) exists for the given [OrderEdit](ctp:api:type:OrderEdit). Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodHead {
+	return &ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shipping-methods/matching-orderedit", rb.projectKey),
+		client: rb.client,
+	}
+}

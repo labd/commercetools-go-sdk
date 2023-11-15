@@ -741,9 +741,9 @@ func (obj RequiredFieldError) Error() string {
 
 type InvalidStateTransitionError struct {
 	Message string `json:"message"`
-	// Every [Import Operation](/import-operation) is assigned with one of the following states.
+	// Every [Import Operation](/import-operation) is assigned one of the following states.
 	CurrentState ProcessingState `json:"currentState"`
-	// Every [Import Operation](/import-operation) is assigned with one of the following states.
+	// Every [Import Operation](/import-operation) is assigned one of the following states.
 	NewState ProcessingState `json:"newState"`
 }
 

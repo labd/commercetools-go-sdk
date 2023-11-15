@@ -5,7 +5,6 @@ package platform
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -15,51 +14,20 @@ type ByProjectKeySubscriptionsByIDRequestMethodGet struct {
 	url     string
 	client  *Client
 	headers http.Header
-	params  *ByProjectKeySubscriptionsByIDRequestMethodGetInput
 }
 
 func (r *ByProjectKeySubscriptionsByIDRequestMethodGet) Dump() map[string]interface{} {
 	return map[string]interface{}{
-		"url":    r.url,
-		"params": r.params,
+		"url": r.url,
 	}
 }
 
-type ByProjectKeySubscriptionsByIDRequestMethodGetInput struct {
-	Expand []string
-}
-
-func (input *ByProjectKeySubscriptionsByIDRequestMethodGetInput) Values() url.Values {
-	values := url.Values{}
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
-	}
-	return values
-}
-
-func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) Expand(v []string) *ByProjectKeySubscriptionsByIDRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeySubscriptionsByIDRequestMethodGetInput{}
-	}
-	rb.params.Expand = v
-	return rb
-}
-
-func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) WithQueryParams(input ByProjectKeySubscriptionsByIDRequestMethodGetInput) *ByProjectKeySubscriptionsByIDRequestMethodGet {
-	rb.params = &input
-	return rb
-}
 func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) WithHeaders(headers http.Header) *ByProjectKeySubscriptionsByIDRequestMethodGet {
 	rb.headers = headers
 	return rb
 }
 func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) Execute(ctx context.Context) (result *Subscription, err error) {
-	var queryParams url.Values
-	if rb.params != nil {
-		queryParams = rb.params.Values()
-	} else {
-		queryParams = url.Values{}
-	}
+	queryParams := url.Values{}
 	resp, err := rb.client.get(
 		ctx,
 		rb.url,
@@ -78,16 +46,53 @@ func (rb *ByProjectKeySubscriptionsByIDRequestMethodGet) Execute(ctx context.Con
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
-	case 400, 401, 403, 500, 502, 503:
+	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

@@ -19,6 +19,16 @@ func (rb *ByProjectKeyTypesKeyByKeyRequestBuilder) Get() *ByProjectKeyTypesKeyBy
 	}
 }
 
+/**
+*	Checks if a Type exists for a given `key`. Returns a `200 OK` status if the Type exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyTypesKeyByKeyRequestBuilder) Head() *ByProjectKeyTypesKeyByKeyRequestMethodHead {
+	return &ByProjectKeyTypesKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/types/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyTypesKeyByKeyRequestBuilder) Post(body TypeUpdate) *ByProjectKeyTypesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyTypesKeyByKeyRequestMethodPost{
 		body:   body,

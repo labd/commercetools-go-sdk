@@ -19,6 +19,16 @@ func (rb *ByProjectKeyApiClientsByIDRequestBuilder) Get() *ByProjectKeyApiClient
 	}
 }
 
+/**
+*	Checks if an API Client exists for a given `id`. Returns a `200 OK` status if the API Client exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyApiClientsByIDRequestBuilder) Head() *ByProjectKeyApiClientsByIDRequestMethodHead {
+	return &ByProjectKeyApiClientsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/api-clients/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyApiClientsByIDRequestBuilder) Delete() *ByProjectKeyApiClientsByIDRequestMethodDelete {
 	return &ByProjectKeyApiClientsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/api-clients/%s", rb.projectKey, rb.id),

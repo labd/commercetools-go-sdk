@@ -27,4 +27,6 @@ type OperationStates struct {
 	Imported int `json:"imported"`
 	// The number of resources in the `rejected` state.
 	Rejected int `json:"rejected"`
+	// The number of resources in the `canceled` state.
+	Canceled int `json:"canceled"`
 }

@@ -35,6 +35,16 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestBuilder) Get()
 	}
 }
 
+/**
+*	Checks if a BusinessUnit exists for a given Query Predicate. Returns a `200 OK` status if any BusinessUnits match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestMethodHead {
+	return &ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/as-associate/%s/business-units", rb.projectKey, rb.associateId),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestBuilder) Post(body BusinessUnitDraft) *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestMethodPost {
 	return &ByProjectKeyAsAssociateByAssociateIdBusinessUnitsRequestMethodPost{
 		body:   body,

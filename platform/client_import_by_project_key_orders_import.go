@@ -12,7 +12,13 @@ type ByProjectKeyOrdersImportRequestBuilder struct {
 }
 
 /**
-*	Create an Order by Import
+*	Importing an Order produces the [Order Imported](ctp:api:type:OrderImportedMessage) Message.
+*
+*	Specific Error Codes:
+*
+*	- [OutOfStock](ctp:api:type:OutOfStockError)
+*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*
  */
 func (rb *ByProjectKeyOrdersImportRequestBuilder) Post(body OrderImportDraft) *ByProjectKeyOrdersImportRequestMethodPost {
 	return &ByProjectKeyOrdersImportRequestMethodPost{

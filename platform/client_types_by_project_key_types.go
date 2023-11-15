@@ -32,6 +32,16 @@ func (rb *ByProjectKeyTypesRequestBuilder) Get() *ByProjectKeyTypesRequestMethod
 	}
 }
 
+/**
+*	Checks if a Type exists for a given Query Predicate. Returns a `200 OK` status if any Types match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyTypesRequestBuilder) Head() *ByProjectKeyTypesRequestMethodHead {
+	return &ByProjectKeyTypesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/types", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyTypesRequestBuilder) Post(body TypeDraft) *ByProjectKeyTypesRequestMethodPost {
 	return &ByProjectKeyTypesRequestMethodPost{
 		body:   body,

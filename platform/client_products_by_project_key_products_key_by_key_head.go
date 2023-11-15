@@ -28,7 +28,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Check if a Product exists with a specified `key`. Responds with a `200 OK` status if the Product exists or `404 Not Found` otherwise.
+*	Checks if a Product exists for a given `key`. Returns a `200 OK` status if the Product exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}
@@ -50,9 +50,43 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodHead) Execute(ctx context.Con
 	switch resp.StatusCode {
 	case 200:
 		return nil
-	case 404:
-		return ErrNotFound
-	case 400, 401, 403, 500, 502, 503:
+
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {

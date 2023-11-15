@@ -14,7 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder struct 
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
 *	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */
@@ -26,7 +26,17 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder) G
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	Checks if a ShoppingList exists for a given `key`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/shopping-lists/key=%s", rb.projectKey, rb.storeKey, rb.key),
+		client: rb.client,
+	}
+}
+
+/**
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
 *	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */
@@ -39,7 +49,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestBuilder) P
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
 *	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */

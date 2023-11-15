@@ -51,8 +51,13 @@ func (rb *ByProjectKeyImportOperationsByIdRequestMethodGet) Execute(ctx context.
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
-	case 404, 503:
+	case 404:
+		return nil, ErrNotFound
+	case 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {

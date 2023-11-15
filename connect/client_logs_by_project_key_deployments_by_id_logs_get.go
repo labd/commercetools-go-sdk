@@ -94,7 +94,7 @@ func (rb *ByProjectKeyDeploymentsByIDLogsRequestMethodGet) WithHeaders(headers h
 /**
 *	Retrieves logs for the given deployment.
  */
-func (rb *ByProjectKeyDeploymentsByIDLogsRequestMethodGet) Execute(ctx context.Context) (result *CursorPaged, err error) {
+func (rb *ByProjectKeyDeploymentsByIDLogsRequestMethodGet) Execute(ctx context.Context) (result *DeploymentLogCursorPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()
@@ -119,6 +119,9 @@ func (rb *ByProjectKeyDeploymentsByIDLogsRequestMethodGet) Execute(ctx context.C
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
 	default:
 		result := GenericRequestError{

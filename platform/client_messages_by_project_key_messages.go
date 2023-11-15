@@ -28,3 +28,13 @@ func (rb *ByProjectKeyMessagesRequestBuilder) Get() *ByProjectKeyMessagesRequest
 		client: rb.client,
 	}
 }
+
+/**
+*	Checks if a Message exists for a given Query Predicate. Returns a `200 OK` status if any Messages match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyMessagesRequestBuilder) Head() *ByProjectKeyMessagesRequestMethodHead {
+	return &ByProjectKeyMessagesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/messages", rb.projectKey),
+		client: rb.client,
+	}
+}

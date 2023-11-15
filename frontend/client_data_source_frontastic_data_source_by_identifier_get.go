@@ -51,9 +51,10 @@ func (rb *FrontasticDataSourceByIdentifierRequestMethodGet) Execute(ctx context.
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
-	case 415:
-		return nil, nil
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

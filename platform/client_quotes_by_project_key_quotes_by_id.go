@@ -19,6 +19,16 @@ func (rb *ByProjectKeyQuotesByIDRequestBuilder) Get() *ByProjectKeyQuotesByIDReq
 	}
 }
 
+/**
+*	Checks if a Quote exists for a given `id`. Returns a `200 OK` status if the Quote exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyQuotesByIDRequestBuilder) Head() *ByProjectKeyQuotesByIDRequestMethodHead {
+	return &ByProjectKeyQuotesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/quotes/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyQuotesByIDRequestBuilder) Post(body QuoteUpdate) *ByProjectKeyQuotesByIDRequestMethodPost {
 	return &ByProjectKeyQuotesByIDRequestMethodPost{
 		body:   body,

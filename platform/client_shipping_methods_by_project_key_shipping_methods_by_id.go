@@ -19,6 +19,16 @@ func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Get() *ByProjectKeyShip
 	}
 }
 
+/**
+*	Checks if a ShippingMethod exists for a given `id`. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Head() *ByProjectKeyShippingMethodsByIDRequestMethodHead {
+	return &ByProjectKeyShippingMethodsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/shipping-methods/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Post(body ShippingMethodUpdate) *ByProjectKeyShippingMethodsByIDRequestMethodPost {
 	return &ByProjectKeyShippingMethodsByIDRequestMethodPost{
 		body:   body,

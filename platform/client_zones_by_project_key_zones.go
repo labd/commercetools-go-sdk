@@ -32,6 +32,16 @@ func (rb *ByProjectKeyZonesRequestBuilder) Get() *ByProjectKeyZonesRequestMethod
 	}
 }
 
+/**
+*	Checks if a Zone exists for a given Query Predicate. Returns a `200 OK` status if any Zones match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyZonesRequestBuilder) Head() *ByProjectKeyZonesRequestMethodHead {
+	return &ByProjectKeyZonesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/zones", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyZonesRequestBuilder) Post(body ZoneDraft) *ByProjectKeyZonesRequestMethodPost {
 	return &ByProjectKeyZonesRequestMethodPost{
 		body:   body,

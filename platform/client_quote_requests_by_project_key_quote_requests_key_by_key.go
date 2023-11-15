@@ -19,6 +19,16 @@ func (rb *ByProjectKeyQuoteRequestsKeyByKeyRequestBuilder) Get() *ByProjectKeyQu
 	}
 }
 
+/**
+*	Checks if a QuoteRequest exists for a given `key`. Returns a `200 OK` status if the QuoteRequest exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyQuoteRequestsKeyByKeyRequestBuilder) Head() *ByProjectKeyQuoteRequestsKeyByKeyRequestMethodHead {
+	return &ByProjectKeyQuoteRequestsKeyByKeyRequestMethodHead{
+		url:    fmt.Sprintf("/%s/quote-requests/key=%s", rb.projectKey, rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyQuoteRequestsKeyByKeyRequestBuilder) Post(body QuoteRequestUpdate) *ByProjectKeyQuoteRequestsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyQuoteRequestsKeyByKeyRequestMethodPost{
 		body:   body,

@@ -15,11 +15,21 @@ type ByProjectKeyMeActiveCartRequestBuilder struct {
 *	Retrieves the Customer's most recently modified active Cart.
 *	Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
 *
-*	If no active Cart exists, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+*	If no active Cart exists, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyMeActiveCartRequestBuilder) Get() *ByProjectKeyMeActiveCartRequestMethodGet {
 	return &ByProjectKeyMeActiveCartRequestMethodGet{
+		url:    fmt.Sprintf("/%s/me/active-cart", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
+*	Checks if an active Cart exists. Returns a `200 OK` status if an active Cart exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyMeActiveCartRequestBuilder) Head() *ByProjectKeyMeActiveCartRequestMethodHead {
+	return &ByProjectKeyMeActiveCartRequestMethodHead{
 		url:    fmt.Sprintf("/%s/me/active-cart", rb.projectKey),
 		client: rb.client,
 	}

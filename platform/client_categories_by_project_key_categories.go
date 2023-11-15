@@ -38,6 +38,16 @@ func (rb *ByProjectKeyCategoriesRequestBuilder) Get() *ByProjectKeyCategoriesReq
 }
 
 /**
+*	Checks if a Category exists for on a given Query Predicate. Returns a `200 OK` status if any Categories match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCategoriesRequestBuilder) Head() *ByProjectKeyCategoriesRequestMethodHead {
+	return &ByProjectKeyCategoriesRequestMethodHead{
+		url:    fmt.Sprintf("/%s/categories", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
 *	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
 *
 *	Creating a Category produces the [CategoryCreated](ctp:api:type:CategoryCreatedMessage) Message.

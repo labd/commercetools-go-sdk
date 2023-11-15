@@ -82,13 +82,13 @@ func (obj CustomerGroupReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type CustomerGroupResourceIdentifier struct {
-	// Unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required.
+	// Unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

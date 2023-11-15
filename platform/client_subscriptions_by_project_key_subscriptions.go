@@ -33,6 +33,16 @@ func (rb *ByProjectKeySubscriptionsRequestBuilder) Get() *ByProjectKeySubscripti
 }
 
 /**
+*	Checks if a Subscription exists for a given Query Predicate. Returns a `200 OK` status if any Subscriptions match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeySubscriptionsRequestBuilder) Head() *ByProjectKeySubscriptionsRequestMethodHead {
+	return &ByProjectKeySubscriptionsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/subscriptions", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
 *	A test message is sent to ensure the correct configuration of the Destination. If the message cannot be delivered, the Subscription will not be created. The payload of the test message is a notification of type [ResourceCreated](/../api/projects/subscriptions#resourcecreateddeliverypayload) for the `resourceTypeId` `subscription`.
 *
  */

@@ -25,7 +25,17 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder) Get() *By
 }
 
 /**
-*	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	Checks if a Customer exists for a given `id`. Returns a `200 OK` status if the Customer exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodHead {
+	return &ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/in-store/key=%s/customers/%s", rb.projectKey, rb.storeKey, rb.id),
+		client: rb.client,
+	}
+}
+
+/**
+*	If the Customer exists in the Project but the `stores` field references a different [Store](ctp:api:type:Store), this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestBuilder) Post(body CustomerUpdate) *ByProjectKeyInStoreKeyByStoreKeyCustomersByIDRequestMethodPost {

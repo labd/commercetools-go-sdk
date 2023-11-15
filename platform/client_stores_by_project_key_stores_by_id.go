@@ -19,6 +19,16 @@ func (rb *ByProjectKeyStoresByIDRequestBuilder) Get() *ByProjectKeyStoresByIDReq
 	}
 }
 
+/**
+*	Checks if a Store exists for a given `id`. Returns a `200 OK` status if the Store exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyStoresByIDRequestBuilder) Head() *ByProjectKeyStoresByIDRequestMethodHead {
+	return &ByProjectKeyStoresByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/stores/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyStoresByIDRequestBuilder) Post(body StoreUpdate) *ByProjectKeyStoresByIDRequestMethodPost {
 	return &ByProjectKeyStoresByIDRequestMethodPost{
 		body:   body,

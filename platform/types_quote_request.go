@@ -82,6 +82,8 @@ type QuoteRequest struct {
 	// Identifier for a purchase order, usually in a B2B context.
 	// The Purchase Order Number is typically entered by the [Buyer](/quotes-overview#buyer).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
+	// The [Cart](ctp:api:type:Cart) from which a Quote is requested.
+	Cart *CartReference `json:"cart,omitempty"`
 	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
@@ -148,7 +150,7 @@ type QuoteRequestDraft struct {
 	// User-defined unique identifier for the QuoteRequest.
 	Key *string `json:"key,omitempty"`
 	// Message from the Buyer included in the Quote Request.
-	Comment string `json:"comment"`
+	Comment *string `json:"comment,omitempty"`
 	// Custom Fields to be added to the Quote Request.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// [State](ctp:api:type:State) of the Quote Request.

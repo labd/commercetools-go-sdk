@@ -10,13 +10,13 @@ tasks:
     cmds:
       - go install golang.org/x/tools/cmd/goimports@latest
 
-  build:
-    cmds:
-      - go build
-
   test:
     cmds:
       - go test ./...
+
+  fmt:
+    cmds:
+      - go fmt ./...
 
   coverage:
     cmds:

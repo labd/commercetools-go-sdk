@@ -50,9 +50,43 @@ func (rb *ByProjectKeyOrdersSearchRequestMethodHead) Execute(ctx context.Context
 	switch resp.StatusCode {
 	case 200:
 		return nil
-	case 404:
-		return ErrNotFound
-	case 400, 401, 403, 500, 502, 503:
+
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 502:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return err
+		}
+		return errorObj
+	case 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {

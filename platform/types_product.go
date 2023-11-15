@@ -394,13 +394,13 @@ func (obj ProductReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product). Either `id` or `key` is required.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Product](ctp:api:type:Product). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type ProductResourceIdentifier struct {
-	// Unique identifier of the referenced [Product](ctp:api:type:Product).
+	// Unique identifier of the referenced [Product](ctp:api:type:Product). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [Product](ctp:api:type:Product).
+	// User-defined unique identifier of the referenced [Product](ctp:api:type:Product). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

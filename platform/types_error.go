@@ -74,6 +74,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ContentTooLarge":
+		obj := ContentTooLargeError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "CountryNotConfiguredInStore":
 		obj := CountryNotConfiguredInStoreError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -297,8 +303,20 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "MaxCartDiscountsReached":
+		obj := MaxCartDiscountsReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MaxResourceLimitExceeded":
 		obj := MaxResourceLimitExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MaxStoreReferencesReached":
+		obj := MaxStoreReferencesReachedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -468,6 +486,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "ShippingMethodDoesNotMatchCart":
 		obj := ShippingMethodDoesNotMatchCartError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreCartDiscountsLimitReached":
+		obj := StoreCartDiscountsLimitReachedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1043,6 +1067,79 @@ func (obj ConcurrentModificationError) Error() string {
 }
 
 /**
+*	Returned when the request results in too much data being returned from the API. Adjust the request query to reduce the size of the data returned.
+*
+ */
+type ContentTooLargeError struct {
+	// `"Content too large."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ContentTooLargeError) UnmarshalJSON(data []byte) error {
+	type Alias ContentTooLargeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ContentTooLargeError) MarshalJSON() ([]byte, error) {
+	type Alias ContentTooLargeError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ContentTooLarge", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ContentTooLargeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ContentTooLargeError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ContentTooLargeError: failed to parse error response"
+}
+
+/**
 *	Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
 *
 *	The error is returned as a failed response to:
@@ -1050,7 +1147,7 @@ func (obj ConcurrentModificationError) Error() string {
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
 *	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-*	- [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
 *	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
 *	- [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
@@ -1959,7 +2056,7 @@ func (obj DuplicateVariantValuesError) Error() string {
 /**
 *	Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 *
-*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
 *
  */
 type EditPreviewFailedError struct {
@@ -4070,6 +4167,84 @@ func (obj MatchingPriceNotFoundError) Error() string {
 }
 
 /**
+*	Returned when a Cart Discount cannot be created or activated as the [limit](/../api/limits#cart-discounts) for active Cart Discounts has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+*	- [Change IsActive](ctp:api:type:CartDiscountChangeIsActiveAction) update action
+*
+ */
+type MaxCartDiscountsReachedError struct {
+	// `"Maximum number of active cart discounts reached ($max)."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MaxCartDiscountsReachedError) UnmarshalJSON(data []byte) error {
+	type Alias MaxCartDiscountsReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MaxCartDiscountsReachedError) MarshalJSON() ([]byte, error) {
+	type Alias MaxCartDiscountsReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxCartDiscountsReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *MaxCartDiscountsReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj MaxCartDiscountsReachedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MaxCartDiscountsReachedError: failed to parse error response"
+}
+
+/**
 *	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
@@ -4145,6 +4320,84 @@ func (obj MaxResourceLimitExceededError) Error() string {
 		return obj.Message
 	}
 	return "unknown MaxResourceLimitExceededError: failed to parse error response"
+}
+
+/**
+*	Returned when a Store cannot be added to a Cart Discount as the [limit](/../api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+*	- [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+*
+ */
+type MaxStoreReferencesReachedError struct {
+	// `"Maximum number of store discounts on a single cart discount reached $max".`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MaxStoreReferencesReachedError) UnmarshalJSON(data []byte) error {
+	type Alias MaxStoreReferencesReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MaxStoreReferencesReachedError) MarshalJSON() ([]byte, error) {
+	type Alias MaxStoreReferencesReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxStoreReferencesReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *MaxStoreReferencesReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj MaxStoreReferencesReachedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MaxStoreReferencesReachedError: failed to parse error response"
 }
 
 /**
@@ -4622,7 +4875,7 @@ func (obj ObjectNotFoundError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *
  */
@@ -6258,6 +6511,87 @@ func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 }
 
 /**
+*	Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/../api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+*	- [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+*
+ */
+type StoreCartDiscountsLimitReachedError struct {
+	// `"Maximum number of active cart discounts reached for $stores."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Stores for which the limit for active Cart Discounts that can exist has been reached.
+	Stores []StoreKeyReference `json:"stores"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StoreCartDiscountsLimitReachedError) UnmarshalJSON(data []byte) error {
+	type Alias StoreCartDiscountsLimitReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "stores")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreCartDiscountsLimitReachedError) MarshalJSON() ([]byte, error) {
+	type Alias StoreCartDiscountsLimitReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "StoreCartDiscountsLimitReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *StoreCartDiscountsLimitReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj StoreCartDiscountsLimitReachedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown StoreCartDiscountsLimitReachedError: failed to parse error response"
+}
+
+/**
 *	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax.
 *
  */
@@ -6394,6 +6728,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "ConcurrentModification":
 		obj := GraphQLConcurrentModificationError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ContentTooLarge":
+		obj := GraphQLContentTooLargeError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -6621,8 +6961,20 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "MaxCartDiscountsReached":
+		obj := GraphQLMaxCartDiscountsReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MaxResourceLimitExceeded":
 		obj := GraphQLMaxResourceLimitExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MaxStoreReferencesReached":
+		obj := GraphQLMaxStoreReferencesReachedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -6792,6 +7144,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "ShippingMethodDoesNotMatchCart":
 		obj := GraphQLShippingMethodDoesNotMatchCartError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreCartDiscountsLimitReached":
+		obj := GraphQLStoreCartDiscountsLimitReachedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7295,6 +7653,69 @@ func (obj *GraphQLConcurrentModificationError) DecodeStruct(src map[string]inter
 }
 
 /**
+*	Returned when the request results in too much data being returned from the API. Adjust the request query to reduce the size of the data returned.
+*
+ */
+type GraphQLContentTooLargeError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLContentTooLargeError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLContentTooLargeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLContentTooLargeError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLContentTooLargeError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ContentTooLarge", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLContentTooLargeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when a [Cart](ctp:api:type:Cart) or an [Order](ctp:api:type:Order) in a [Store](ctp:api:type:Store) references a country that is not included in the countries configured for the Store.
 *
 *	The error is returned as a failed response to:
@@ -7302,7 +7723,7 @@ func (obj *GraphQLConcurrentModificationError) DecodeStruct(src map[string]inter
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
 *	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-*	- [Create Order from Cart in a Store](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
 *	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
 *	- [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
@@ -8101,7 +8522,7 @@ func (obj *GraphQLDuplicateVariantValuesError) DecodeStruct(src map[string]inter
 /**
 *	Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 *
-*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#get-shippingmethods-for-an-orderedit) request.
+*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
 *
  */
 type GraphQLEditPreviewFailedError struct {
@@ -9793,6 +10214,74 @@ func (obj *GraphQLMatchingPriceNotFoundError) DecodeStruct(src map[string]interf
 }
 
 /**
+*	Returned when a Cart Discount cannot be created or activated as the [limit](/../api/limits#cart-discounts) for active Cart Discounts has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+*	- [Change IsActive](ctp:api:type:CartDiscountChangeIsActiveAction) update action
+*
+ */
+type GraphQLMaxCartDiscountsReachedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMaxCartDiscountsReachedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMaxCartDiscountsReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMaxCartDiscountsReachedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMaxCartDiscountsReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxCartDiscountsReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMaxCartDiscountsReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
@@ -9848,6 +10337,74 @@ func (obj GraphQLMaxResourceLimitExceededError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLMaxResourceLimitExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Store cannot be added to a Cart Discount as the [limit](/../api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+*	- [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+*
+ */
+type GraphQLMaxStoreReferencesReachedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMaxStoreReferencesReachedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMaxStoreReferencesReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMaxStoreReferencesReachedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMaxStoreReferencesReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxStoreReferencesReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMaxStoreReferencesReachedError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -10275,7 +10832,7 @@ func (obj *GraphQLObjectNotFoundError) DecodeStruct(src map[string]interface{}) 
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](/../api/projects/me-orders) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *
  */
@@ -11686,6 +12243,77 @@ func (obj GraphQLShippingMethodDoesNotMatchCartError) MarshalJSON() ([]byte, err
 }
 
 func (obj *GraphQLShippingMethodDoesNotMatchCartError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/../api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
+*	- [Add Store](ctp:api:type:CartDiscountAddStoreAction) and [Set Store](ctp:api:type:CartDiscountSetStoresAction) update actions
+*
+ */
+type GraphQLStoreCartDiscountsLimitReachedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Stores for which the limit for active Cart Discounts that can exist has been reached.
+	Stores []StoreKeyReference `json:"stores"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLStoreCartDiscountsLimitReachedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLStoreCartDiscountsLimitReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "stores")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLStoreCartDiscountsLimitReachedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLStoreCartDiscountsLimitReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "StoreCartDiscountsLimitReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLStoreCartDiscountsLimitReachedError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {

@@ -385,7 +385,7 @@ const (
 *
  */
 type ProductTypeImport struct {
-	// User-defined unique identifier.
+	// User-defined unique identifier. If a [ProductType](/../api/projects/productTypes#producttype) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `ProductType.name`.
 	Name string `json:"name"`

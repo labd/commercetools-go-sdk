@@ -93,3 +93,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ProductSelectionAssign
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) CartDiscounts() *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}

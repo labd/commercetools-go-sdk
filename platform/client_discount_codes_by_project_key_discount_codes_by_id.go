@@ -23,6 +23,16 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Get() *ByProjectKeyDiscou
 }
 
 /**
+*	Checks if a DiscountCode exists for a given `id`. Returns a `200 OK` status if the DiscountCode exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Head() *ByProjectKeyDiscountCodesByIDRequestMethodHead {
+	return &ByProjectKeyDiscountCodesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/discount-codes/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
+/**
 *	Deprecated scope: `manage_orders:{projectKey}`
  */
 func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Post(body DiscountCodeUpdate) *ByProjectKeyDiscountCodesByIDRequestMethodPost {

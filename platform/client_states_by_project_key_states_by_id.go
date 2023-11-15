@@ -19,6 +19,16 @@ func (rb *ByProjectKeyStatesByIDRequestBuilder) Get() *ByProjectKeyStatesByIDReq
 	}
 }
 
+/**
+*	Checks if a State exists for a given `id`. Returns a `200 OK` status if the State exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyStatesByIDRequestBuilder) Head() *ByProjectKeyStatesByIDRequestMethodHead {
+	return &ByProjectKeyStatesByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/states/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyStatesByIDRequestBuilder) Post(body StateUpdate) *ByProjectKeyStatesByIDRequestMethodPost {
 	return &ByProjectKeyStatesByIDRequestMethodPost{
 		body:   body,

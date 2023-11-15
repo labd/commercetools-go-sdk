@@ -54,7 +54,7 @@ type CustomerAddress struct {
 *
  */
 type CustomerImport struct {
-	// User-defined unique identifier.
+	// User-defined unique identifier. If a [Customer](/../api/projects/customers#customer) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Customer.customerNumber`.
 	CustomerNumber *string `json:"customerNumber,omitempty"`
@@ -124,6 +124,10 @@ func (obj CustomerImport) MarshalJSON() ([]byte, error) {
 
 	if raw["stores"] == nil {
 		delete(raw, "stores")
+	}
+
+	if raw["addresses"] == nil {
+		delete(raw, "addresses")
 	}
 
 	if raw["billingAddresses"] == nil {

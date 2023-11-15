@@ -19,6 +19,16 @@ func (rb *ByProjectKeyCartDiscountsByIDRequestBuilder) Get() *ByProjectKeyCartDi
 	}
 }
 
+/**
+*	Checks if a CartDiscount exists for a given `id`. Returns a `200 OK` status if the CartDiscount exists or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyCartDiscountsByIDRequestBuilder) Head() *ByProjectKeyCartDiscountsByIDRequestMethodHead {
+	return &ByProjectKeyCartDiscountsByIDRequestMethodHead{
+		url:    fmt.Sprintf("/%s/cart-discounts/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyCartDiscountsByIDRequestBuilder) Post(body CartDiscountUpdate) *ByProjectKeyCartDiscountsByIDRequestMethodPost {
 	return &ByProjectKeyCartDiscountsByIDRequestMethodPost{
 		body:   body,

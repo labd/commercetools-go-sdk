@@ -9,22 +9,22 @@ import (
 )
 
 /**
-*	The representation to be sent to the server when creating a resource with custom fields.
+*	The representation to be sent to the server when creating a resource with Custom Fields.
  */
 type Custom struct {
 	// The type that provides the field definitions for this object.
 	Type TypeKeyReference `json:"type"`
-	// The custom fields of this object.
+	// The Custom Fields of this object.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 /**
-*	Maps the custom field names to the actual values.
+*	Maps the Custom Field names to actual values.
  */
 type FieldContainer map[string]CustomField
 
 /**
-*	Provides the value for a custom field of a specific type.
+*	Provides the value for a Custom Field of a specific type.
  */
 type CustomField interface{}
 

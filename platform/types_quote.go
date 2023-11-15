@@ -242,7 +242,6 @@ const (
 	QuoteStateDeclinedForRenegotiation QuoteState = "DeclinedForRenegotiation"
 	QuoteStateRenegotiationAddressed   QuoteState = "RenegotiationAddressed"
 	QuoteStateAccepted                 QuoteState = "Accepted"
-	QuoteStateFailed                   QuoteState = "Failed"
 	QuoteStateWithdrawn                QuoteState = "Withdrawn"
 )
 
@@ -363,7 +362,7 @@ func (obj QuoteChangeQuoteStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Represents the Buyer requesting renegotiation for a Quote. Valid for Quotes in a `Pending` or `Failed` [state](ctp:api:type:QuoteState).
+*	Represents the Buyer requesting renegotiation for a Quote. Valid for Quotes in a `Pending` [state](ctp:api:type:QuoteState).
 *
  */
 type QuoteRequestQuoteRenegotiationAction struct {

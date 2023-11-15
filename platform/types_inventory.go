@@ -78,13 +78,13 @@ func (obj InventoryEntryReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [InventoryEntry](ctp:api:type:InventoryEntry).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type InventoryEntryResourceIdentifier struct {
-	// Unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
+	// Unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Required if `key` is absent.
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Either `id` or `key` is required.
+	// User-defined unique identifier of the referenced [InventoryEntry](ctp:api:type:InventoryEntry). Required if `id` is absent.
 	Key *string `json:"key,omitempty"`
 }
 

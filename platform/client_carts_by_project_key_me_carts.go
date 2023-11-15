@@ -38,6 +38,16 @@ func (rb *ByProjectKeyMeCartsRequestBuilder) Get() *ByProjectKeyMeCartsRequestMe
 	}
 }
 
+/**
+*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyMeCartsRequestBuilder) Head() *ByProjectKeyMeCartsRequestMethodHead {
+	return &ByProjectKeyMeCartsRequestMethodHead{
+		url:    fmt.Sprintf("/%s/me/carts", rb.projectKey),
+		client: rb.client,
+	}
+}
+
 func (rb *ByProjectKeyMeCartsRequestBuilder) Post(body MyCartDraft) *ByProjectKeyMeCartsRequestMethodPost {
 	return &ByProjectKeyMeCartsRequestMethodPost{
 		body:   body,
