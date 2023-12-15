@@ -15,7 +15,7 @@ import (
 )
 
 // Version identifies the current library version. Should match the git tag
-const Version = "1.3.0"
+const Version = "1.4.1"
 
 type Client struct {
 	httpClient *http.Client
@@ -37,7 +37,10 @@ type SetUserAgentTransport struct {
 
 func (sat *SetUserAgentTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	req.Header.Set("User-Agent", sat.userAgent)
-	return sat.T.RoundTrip(req)
+	if sat.T != nil {
+		return sat.T.RoundTrip(req)
+	}
+	return http.DefaultTransport.RoundTrip(req)
 }
 
 // NewClient creates a new client based on the provided ClientConfig
