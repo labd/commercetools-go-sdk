@@ -61,13 +61,6 @@ func (rb *FrontasticPageRequestMethodGet) Execute(ctx context.Context) (result *
 			return nil, err
 		}
 		return result, nil
-	case 301:
-		errorObj := RedirectResponse{}
-		err = json.Unmarshal(content, &errorObj)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errorObj
 	case 404:
 		return nil, ErrNotFound
 	default:
