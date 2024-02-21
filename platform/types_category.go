@@ -17,9 +17,9 @@ type Category struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Category was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the Category.
 	Name LocalizedString `json:"name"`
@@ -34,7 +34,7 @@ type Category struct {
 	Ancestors []CategoryReference `json:"ancestors"`
 	// Parent Category of this Category.
 	Parent *CategoryReference `json:"parent,omitempty"`
-	// Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+	// Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
 	OrderHint string `json:"orderHint"`
 	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
@@ -88,7 +88,7 @@ type CategoryDraft struct {
 	// Parent Category of the Category.
 	// The parent can be set by its `id` or `key`.
 	Parent *CategoryResourceIdentifier `json:"parent,omitempty"`
-	// Decimal value between 0 and 1 used to order Categories that are on the same level in the Category tree.
+	// Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
 	// If not set, a random value will be assigned.
 	OrderHint *string `json:"orderHint,omitempty"`
 	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
@@ -196,7 +196,7 @@ func (obj CategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
 
 type CategoryUpdate struct {
 	// Expected version of the Category on which the changes should be applied.
-	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Category.
 	Actions []CategoryUpdateAction `json:"actions"`

@@ -11,7 +11,7 @@ type FrontasticPreviewRequestBuilder struct {
 }
 
 /**
-*	Returns the page structure and data for a specific [preview](/../frontend-studio/previewing-page-versions#accessing-page-version-preview) by its `previewId`. \
+*	Returns the page structure and data for a specific [preview](/../frontend-studio/using-the-page-builder) by its `previewId`. \
 *
 *	Headers&#58;
 *

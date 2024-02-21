@@ -131,18 +131,24 @@ func mapDiscriminatorDeploymentUpdateAction(input interface{}) (DeploymentUpdate
 }
 
 /**
-*	Update the configuration values and redeploy the Deployment.
+*	Updates configuration values and redeploys a Deployment in `Draft`, `Deployed`, `Failed`, or `UndeployFailed` states. The new configuration values must include at least one valid application. Ensure that all deployment configuration keys and values match those specified in the application's `connect.yaml` file.
 *
-*	Attempting to redeploy a Deployment that does not require configuration or a configuration key for an application returns the [DeploymentUnknownApplicationConfiguration](ctp:connect:type:DeploymentUnknownApplicationConfigurationError) or [DeploymentUnknownApplicationConfigurationKey](ctp:connect:type:DeploymentUnknownApplicationConfigurationKeyError) errors, respectively.
-*
-*	Attempting to redeploy a Deployment with a `Queued`, `Deploying`, or `Undeploying` [DeploymentStatus](ctp:connect:type:DeploymentStatus) returns a [DeploymentInvalidStatusTransition](ctp:connect:type:DeploymentInvalidStatusTransitionError) error.
+*	Specific error codes:
+*	- [DeploymentUnknownApplicationConfiguration](ctp:connect:type:DeploymentUnknownApplicationConfigurationError)
+*	- [DeploymentUnknownApplicationConfigurationKey](ctp:connect:type:DeploymentUnknownApplicationConfigurationKeyError)
+*	- [DeploymentInvalidStatusTransition](ctp:connect:type:DeploymentInvalidStatusTransitionError)
+*	- [DeploymentApplicationDoNotBelong](ctp:connect:type:DeploymentApplicationDoNotBelongError)
+*	- [DeploymentMustIncludeApplication](ctp:connect:type:DeploymentMustIncludeApplicationError)
+*	- [DeploymentConnectorUpdateFailure](ctp:connect:type:DeploymentConnectorUpdateFailureError)
 *
  */
 type DeploymentRedeployAction struct {
-	// If scripts execution should be skipped during deployment.
+	// Whether the scripts execution should be skipped during redeployment.
 	SkipScripts *bool `json:"skipScripts,omitempty"`
 	// New configuration values for Deployment. If empty, any existing value is unchanged.
 	ConfigurationValues []DeploymentConfigurationApplication `json:"configurationValues"`
+	// Whether the Deployment Connector should be updated to its latest state during redeployment.
+	UpdateConnector *bool `json:"updateConnector,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

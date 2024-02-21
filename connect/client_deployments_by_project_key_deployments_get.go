@@ -27,13 +27,17 @@ func (r *ByProjectKeyDeploymentsRequestMethodGet) Dump() map[string]interface{} 
 }
 
 type ByProjectKeyDeploymentsRequestMethodGetInput struct {
-	Limit  *int
-	Offset *int
-	Sort   []string
+	IntegrationTypes []IntegrationType
+	Limit            *int
+	Offset           *int
+	Sort             []string
 }
 
 func (input *ByProjectKeyDeploymentsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.IntegrationTypes {
+		values.Add("integrationTypes", fmt.Sprintf("%v", v))
+	}
 	if input.Limit != nil {
 		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
@@ -44,6 +48,14 @@ func (input *ByProjectKeyDeploymentsRequestMethodGetInput) Values() url.Values {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyDeploymentsRequestMethodGet) IntegrationTypes(v []IntegrationType) *ByProjectKeyDeploymentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyDeploymentsRequestMethodGetInput{}
+	}
+	rb.params.IntegrationTypes = v
+	return rb
 }
 
 func (rb *ByProjectKeyDeploymentsRequestMethodGet) Limit(v int) *ByProjectKeyDeploymentsRequestMethodGet {

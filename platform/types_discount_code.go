@@ -17,9 +17,11 @@ type DiscountCode struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the DiscountCode was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// User-defined unique identifier of the DiscountCode.
+	Key *string `json:"key,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the DiscountCode.
 	Name *LocalizedString `json:"name,omitempty"`
@@ -74,6 +76,8 @@ func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
 }
 
 type DiscountCodeDraft struct {
+	// User-defined unique identifier for the DiscountCode.
+	Key *string `json:"key,omitempty"`
 	// Name of the DiscountCode.
 	Name *LocalizedString `json:"name,omitempty"`
 	// Description of the DiscountCode.
@@ -190,7 +194,7 @@ func (obj DiscountCodeResourceIdentifier) MarshalJSON() ([]byte, error) {
 
 type DiscountCodeUpdate struct {
 	// Expected version of the DiscountCode on which the changes should be applied.
-	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the DiscountCode.
 	Actions []DiscountCodeUpdateAction `json:"actions"`
@@ -266,6 +270,12 @@ func mapDiscriminatorDiscountCodeUpdateAction(input interface{}) (DiscountCodeUp
 		return obj, nil
 	case "setDescription":
 		obj := DiscountCodeSetDescriptionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setKey":
+		obj := DiscountCodeSetKeyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -420,6 +430,26 @@ func (obj DiscountCodeSetDescriptionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates a [DiscountCodeKeySet](ctp:api:type:DiscountCodeKeySetMessage) Message.
+*
+ */
+type DiscountCodeSetKeyAction struct {
+	// Unique value to set.
+	// If empty, any existing value will be removed.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountCodeSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
 type DiscountCodeSetMaxApplicationsAction struct {

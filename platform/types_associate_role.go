@@ -17,9 +17,9 @@ type AssociateRole struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the AssociateRole was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the AssociateRole.
 	Key string `json:"key"`
@@ -71,7 +71,7 @@ func (obj AssociateRoleDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[Reference](ctp:api:type:TypeReference) to an [AssociateRole](ctp:api:type:AssociateRole) by its key.
+*	[Reference](ctp:api:type:Reference) to an [AssociateRole](ctp:api:type:AssociateRole) by its key.
 *
  */
 type AssociateRoleKeyReference struct {
@@ -111,7 +111,7 @@ type AssociateRolePagedQueryResponse struct {
 }
 
 /**
-*	[Reference](ctp:api:type:TypeReference) to an [AssociateRole](ctp:api:type:AssociateRole).
+*	[Reference](ctp:api:type:Reference) to an [AssociateRole](ctp:api:type:AssociateRole).
 *
  */
 type AssociateRoleReference struct {
@@ -154,7 +154,7 @@ func (obj AssociateRoleResourceIdentifier) MarshalJSON() ([]byte, error) {
 
 type AssociateRoleUpdate struct {
 	// Expected version of the AssociateRole on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the AssociateRole.
 	Actions []AssociateRoleUpdateAction `json:"actions"`

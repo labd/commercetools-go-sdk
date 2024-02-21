@@ -2,6 +2,10 @@ package frontend
 
 // Generated file, please do not change!!!
 
+import (
+	"io"
+)
+
 type DataSourceConfiguration struct {
 	DataSourceId  string      `json:"dataSourceId"`
 	Type          string      `json:"type"`
@@ -146,4 +150,41 @@ type TasticConfiguration struct {
 type ViewData struct {
 	// Data sources configured for the page folder and referenced in the page. They are indexed by data source identifier.
 	DataSources DataSources `json:"dataSources"`
+}
+
+type BuildUpload struct {
+	// Metadata about the build.
+	Metadata BuildMetadata `json:"metadata"`
+	// Javascript bundle containing all code of the backend extensions.
+	Extension io.Reader `json:"extension"`
+	// Map for the build file. When provided, exceptions will be logged with readable stack traces.
+	ExtensionMap *io.Reader `json:"extension_map,omitempty"`
+}
+
+type BuildMetadata struct {
+	// Name of the Git branch to deploy.
+	Branch string `json:"branch"`
+	// Full commit ID hash of the current HEAD.
+	Revision string `json:"revision"`
+	// Current time represented in the format `YYYY.MM.DD.HH.mm`. This value should be unique and sortable.
+	VersionNumber string `json:"versionNumber"`
+	// Node.js version for the [Extension runner](/../frontend-getting-started/development-concepts#extension-runner).
+	NodeJsVersion *int `json:"nodeJsVersion,omitempty"`
+	// If `true`, the build is marked as successful and [displayed in the Studio](/../frontend-studio/using-deployment-in-the-studio).
+	BuildSuccessful bool `json:"buildSuccessful"`
+	// Date and time of the build in the [RFC3339](https://datatracker.ietf.org/doc/html/rfc3339) format. For example, `2023-11-21T08:14:31.830Z`.
+	BuildTime string `json:"buildTime"`
+	// Build duration in seconds.
+	BuildDuration int `json:"buildDuration"`
+	// CI execution logs.
+	BuildLog string `json:"buildLog"`
+	// If `true`, the build is automatically deployed to the staging environment, if `buildSuccessful` is `true`.
+	Deploy *bool `json:"deploy,omitempty"`
+}
+
+type BuildUploadResult struct {
+	// Status of the build.
+	Status string `json:"status"`
+	// Description of the upload result.
+	Message string `json:"message"`
 }

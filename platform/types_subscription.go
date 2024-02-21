@@ -664,7 +664,7 @@ type ResourceDeletedDeliveryPayload struct {
 	Version int `json:"version"`
 	// Date and time (UTC) the resource was last deleted.
 	ModifiedAt time.Time `json:"modifiedAt"`
-	// `true` if the `dataErasure` [parameter](/../api/general-concepts#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
+	// `true` if the `dataErasure` [parameter](/../api/gdpr#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
 	DataErasure *bool `json:"dataErasure,omitempty"`
 }
 
@@ -818,9 +818,9 @@ type Subscription struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Subscription was last modified.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Change notifications subscribed to.
 	Changes []ChangeSubscription `json:"changes"`
@@ -966,7 +966,8 @@ type SubscriptionPagedQueryResponse struct {
 }
 
 type SubscriptionUpdate struct {
-	// Expected version of the Subscription on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the Subscription on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Subscription.
 	Actions []SubscriptionUpdateAction `json:"actions"`

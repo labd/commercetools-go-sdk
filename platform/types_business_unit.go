@@ -190,7 +190,7 @@ func mapDiscriminatorBusinessUnitDraft(input interface{}) (BusinessUnitDraft, er
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [BusinessUnit](ctp:api:type:BusinessUnit) by its key.
+*	[Reference](ctp:api:type:Reference) to a [BusinessUnit](ctp:api:type:BusinessUnit) by its key.
 *
  */
 type BusinessUnitKeyReference struct {
@@ -248,7 +248,7 @@ func (obj *BusinessUnitPagedQueryResponse) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [BusinessUnit](ctp:api:type:BusinessUnit).
+*	[Reference](ctp:api:type:Reference) to a [BusinessUnit](ctp:api:type:BusinessUnit).
 *
  */
 type BusinessUnitReference struct {
@@ -287,7 +287,7 @@ func (obj BusinessUnitReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type BusinessUnitResourceIdentifier struct {
@@ -342,7 +342,7 @@ const (
 
 type BusinessUnitUpdate struct {
 	// Expected version of the BusinessUnit on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the BusinessUnit.
 	Actions []BusinessUnitUpdateAction `json:"actions"`
@@ -554,9 +554,9 @@ type Company struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Business Unit was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Business Unit.
 	Key string `json:"key"`
@@ -590,7 +590,7 @@ type Company struct {
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
 	// Associates that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []Associate `json:"associates"`
-	// Associates that are inherited from a parent Business Unit. This value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
+	// Associates that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
 	InheritedAssociates []InheritedAssociate `json:"inheritedAssociates"`
 	// Parent unit of the Business Unit. Only present when the `unitType` is `Division`.
 	ParentUnit *BusinessUnitKeyReference `json:"parentUnit,omitempty"`
@@ -734,9 +734,9 @@ type Division struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Business Unit was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Business Unit.
 	Key string `json:"key"`
@@ -770,7 +770,7 @@ type Division struct {
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
 	// Associates that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []Associate `json:"associates"`
-	// Associates that are inherited from a parent Business Unit. This value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
+	// Associates that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
 	InheritedAssociates []InheritedAssociate `json:"inheritedAssociates"`
 	// Parent unit of the Division.
 	ParentUnit BusinessUnitKeyReference `json:"parentUnit"`
@@ -1357,7 +1357,7 @@ func (obj BusinessUnitSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type BusinessUnitSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
 	// Sets the [Custom Fields](/../api/projects/custom-fields) for the BusinessUnit.

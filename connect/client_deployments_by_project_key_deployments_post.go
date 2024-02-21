@@ -29,11 +29,14 @@ func (rb *ByProjectKeyDeploymentsRequestMethodPost) WithHeaders(headers http.Hea
 }
 
 /**
-*	Specific Error Codes:
+*	Specific error codes:
 *	- [ConnectorStagedNotPreviewable](ctp:connect:type:ConnectorStagedNotPreviewableError)
 *	- [DeploymentUnsupportedRegion](ctp:connect:type:DeploymentUnsupportedRegionError)
 *	- [DeploymentUnknownApplicationConfiguration](ctp:connect:type:DeploymentUnknownApplicationConfigurationError)
 *	- [DeploymentUnknownApplicationConfigurationKey](ctp:connect:type:DeploymentUnknownApplicationConfigurationKeyError)
+*	- [DeploymentApplicationDoNotBelong](ctp:connect:type:DeploymentApplicationDoNotBelongError)
+*	- [DeploymentMustIncludeApplication](ctp:connect:type:DeploymentMustIncludeApplicationError)
+*	- [DeploymentApplicationRequired](ctp:connect:type:DeploymentApplicationRequiredError)
 *
  */
 func (rb *ByProjectKeyDeploymentsRequestMethodPost) Execute(ctx context.Context) (result *Deployment, err error) {

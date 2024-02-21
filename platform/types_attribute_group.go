@@ -17,9 +17,9 @@ type AttributeGroup struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the AttributeGroup was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the AttributeGroup.
 	Name LocalizedString `json:"name"`
@@ -65,7 +65,7 @@ type AttributeGroupPagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to an [AttributeGroup](ctp:api:type:AttributeGroup).
+*	[Reference](ctp:api:type:Reference) to an [AttributeGroup](ctp:api:type:AttributeGroup).
 *
  */
 type AttributeGroupReference struct {
@@ -86,7 +86,7 @@ func (obj AttributeGroupReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type AttributeGroupResourceIdentifier struct {
@@ -107,7 +107,8 @@ func (obj AttributeGroupResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeGroupUpdate struct {
-	// Expected version of the AttributeGroup on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the AttributeGroup on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the AttributeGroup.
 	Actions []AttributeGroupUpdateAction `json:"actions"`

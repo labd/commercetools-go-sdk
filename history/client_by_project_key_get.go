@@ -33,13 +33,16 @@ type ByProjectKeyRequestMethodGetInput struct {
 	Limit                           *int
 	Offset                          *int
 	UserId                          *string
-	Type                            *string
 	ClientId                        *string
+	CustomerId                      *string
+	AssociateId                     *string
+	BusinessUnit                    *string
+	Type                            *string
 	ResourceId                      *string
+	ResourceKey                     *string
 	Source                          *string
 	Changes                         []string
 	Stores                          []string
-	CustomerId                      *string
 	ExcludePlatformInitiatedChanges []PlatformInitiatedChange
 	Expand                          *bool
 }
@@ -64,14 +67,26 @@ func (input *ByProjectKeyRequestMethodGetInput) Values() url.Values {
 	if input.UserId != nil {
 		values.Add("userId", fmt.Sprintf("%v", *input.UserId))
 	}
-	if input.Type != nil {
-		values.Add("type", fmt.Sprintf("%v", *input.Type))
-	}
 	if input.ClientId != nil {
 		values.Add("clientId", fmt.Sprintf("%v", *input.ClientId))
 	}
+	if input.CustomerId != nil {
+		values.Add("customerId", fmt.Sprintf("%v", *input.CustomerId))
+	}
+	if input.AssociateId != nil {
+		values.Add("associateId", fmt.Sprintf("%v", *input.AssociateId))
+	}
+	if input.BusinessUnit != nil {
+		values.Add("businessUnit", fmt.Sprintf("%v", *input.BusinessUnit))
+	}
+	if input.Type != nil {
+		values.Add("type", fmt.Sprintf("%v", *input.Type))
+	}
 	if input.ResourceId != nil {
 		values.Add("resourceId", fmt.Sprintf("%v", *input.ResourceId))
+	}
+	if input.ResourceKey != nil {
+		values.Add("resourceKey", fmt.Sprintf("%v", *input.ResourceKey))
 	}
 	if input.Source != nil {
 		values.Add("source", fmt.Sprintf("%v", *input.Source))
@@ -81,9 +96,6 @@ func (input *ByProjectKeyRequestMethodGetInput) Values() url.Values {
 	}
 	for _, v := range input.Stores {
 		values.Add("stores", fmt.Sprintf("%v", v))
-	}
-	if input.CustomerId != nil {
-		values.Add("customerId", fmt.Sprintf("%v", *input.CustomerId))
 	}
 	for _, v := range input.ExcludePlatformInitiatedChanges {
 		values.Add("excludePlatformInitiatedChanges", fmt.Sprintf("%v", v))
@@ -146,14 +158,6 @@ func (rb *ByProjectKeyRequestMethodGet) UserId(v string) *ByProjectKeyRequestMet
 	return rb
 }
 
-func (rb *ByProjectKeyRequestMethodGet) Type(v string) *ByProjectKeyRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyRequestMethodGetInput{}
-	}
-	rb.params.Type = &v
-	return rb
-}
-
 func (rb *ByProjectKeyRequestMethodGet) ClientId(v string) *ByProjectKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
@@ -162,11 +166,51 @@ func (rb *ByProjectKeyRequestMethodGet) ClientId(v string) *ByProjectKeyRequestM
 	return rb
 }
 
+func (rb *ByProjectKeyRequestMethodGet) CustomerId(v string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.CustomerId = &v
+	return rb
+}
+
+func (rb *ByProjectKeyRequestMethodGet) AssociateId(v string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.AssociateId = &v
+	return rb
+}
+
+func (rb *ByProjectKeyRequestMethodGet) BusinessUnit(v string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.BusinessUnit = &v
+	return rb
+}
+
+func (rb *ByProjectKeyRequestMethodGet) Type(v string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.Type = &v
+	return rb
+}
+
 func (rb *ByProjectKeyRequestMethodGet) ResourceId(v string) *ByProjectKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
 	}
 	rb.params.ResourceId = &v
+	return rb
+}
+
+func (rb *ByProjectKeyRequestMethodGet) ResourceKey(v string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.ResourceKey = &v
 	return rb
 }
 
@@ -191,14 +235,6 @@ func (rb *ByProjectKeyRequestMethodGet) Stores(v []string) *ByProjectKeyRequestM
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
 	}
 	rb.params.Stores = v
-	return rb
-}
-
-func (rb *ByProjectKeyRequestMethodGet) CustomerId(v string) *ByProjectKeyRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyRequestMethodGetInput{}
-	}
-	rb.params.CustomerId = &v
 	return rb
 }
 
@@ -255,8 +291,39 @@ func (rb *ByProjectKeyRequestMethodGet) Execute(ctx context.Context) (result *Re
 	switch resp.StatusCode {
 	case 200:
 		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
 		return result, nil
-	case 400, 401, 403, 500, 503:
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 401:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 500:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 503:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {

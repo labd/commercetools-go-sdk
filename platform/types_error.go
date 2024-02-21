@@ -345,12 +345,6 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "NotEnabled":
-		obj := NotEnabledError{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	case "ObjectNotFound":
 		obj := ObjectNotFoundError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -671,7 +665,7 @@ func (obj AssociateMissingPermissionError) Error() string {
 /**
 *	Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
 *
-*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+*	The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
 *
  */
 type AttributeDefinitionAlreadyExistsError struct {
@@ -755,7 +749,7 @@ func (obj AttributeDefinitionAlreadyExistsError) Error() string {
 /**
 *	Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
 *
-*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+*	The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request.
 *
  */
 type AttributeDefinitionTypeConflictError struct {
@@ -1881,7 +1875,7 @@ func (obj DuplicatePriceScopeError) Error() string {
 *	Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
 *	Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
 *
-*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*	The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 *
  */
 type DuplicateStandalonePriceScopeError struct {
@@ -2056,7 +2050,7 @@ func (obj DuplicateVariantValuesError) Error() string {
 /**
 *	Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 *
-*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
+*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-orderedit:GET) request.
 *
  */
 type EditPreviewFailedError struct {
@@ -3089,7 +3083,7 @@ func (obj FeatureRemovedError) Error() string {
 }
 
 /**
-*	Returned when a server-side problem occurs.
+*	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
 *	If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
 *
@@ -3310,8 +3304,8 @@ func (obj InternalConstraintViolatedError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
-*	- [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+*	- [Authenticate a global Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
+*	- [Authenticating Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
 *
  */
 type InvalidCredentialsError struct {
@@ -3388,8 +3382,8 @@ func (obj InvalidCredentialsError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
-*	- [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+*	- [Change Customer Password](ctp:api:endpoint:/{projectKey}/customers/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password:POST) requests on Customers.
+*	- [Change Customer Password](ctp:api:endpoint:/{projectKey}/me/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/password:POST) requests on My Customer Profile.
 *
  */
 type InvalidCurrentPasswordError struct {
@@ -4404,12 +4398,12 @@ func (obj MaxStoreReferencesReachedError) Error() string {
 *	Returned when one of the following states occur:
 *
 *	- [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
-*	- [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+*	- [Standalone Price](ctp:api:type:StandalonePrice) references a Channel that does not contain the `ProductDistribution` role.
 *
 *	The error is returned as a failed response to:
 *
 *	- [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
-*	- [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+*	- [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 *
  */
 type MissingRoleOnChannelError struct {
@@ -4652,7 +4646,7 @@ func (obj MoneyOverflowError) Error() string {
 /**
 *	Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
 *
-*	The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+*	The error is returned as a failed response to the [Get Matching ProductDiscount](ctp:api:endpoint:/{projectKey}/product-discounts/matching:POST) request.
 *
  */
 type NoMatchingProductDiscountFoundError struct {
@@ -4722,79 +4716,6 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 		return obj.Message
 	}
 	return "unknown NoMatchingProductDiscountFoundError: failed to parse error response"
-}
-
-/**
-*	Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project.
-*
- */
-type NotEnabledError struct {
-	// `"The category recommendations API is not yet enabled for your project."`
-	Message string `json:"message"`
-	// Error-specific additional fields.
-	ExtraValues map[string]interface{} `json:"-"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *NotEnabledError) UnmarshalJSON(data []byte) error {
-	type Alias NotEnabledError
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
-		return err
-	}
-	delete(obj.ExtraValues, "code")
-	delete(obj.ExtraValues, "message")
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj NotEnabledError) MarshalJSON() ([]byte, error) {
-	type Alias NotEnabledError
-	data, err := json.Marshal(struct {
-		Action string `json:"code"`
-		*Alias
-	}{Action: "NotEnabled", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	for key, value := range obj.ExtraValues {
-		raw[key] = value
-	}
-
-	return json.Marshal(raw)
-
-}
-
-func (obj *NotEnabledError) DecodeStruct(src map[string]interface{}) error {
-	{
-		obj.ExtraValues = make(map[string]interface{})
-		for key, value := range src {
-			//
-			if key != "code" {
-				obj.ExtraValues[key] = value
-			}
-		}
-	}
-	return nil
-}
-
-func (obj NotEnabledError) Error() string {
-	if obj.Message != "" {
-		return obj.Message
-	}
-	return "unknown NotEnabledError: failed to parse error response"
 }
 
 /**
@@ -5033,7 +4954,7 @@ func (obj OverCapacityError) Error() string {
 *	Returned when a given Price validity period conflicts with an existing one.
 *	Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
 *
-*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*	The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 *
  */
 type OverlappingStandalonePriceValidityError struct {
@@ -7003,12 +6924,6 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
-	case "NotEnabled":
-		obj := GraphQLNotEnabledError{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	case "ObjectNotFound":
 		obj := GraphQLObjectNotFoundError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7307,7 +7222,7 @@ func (obj *GraphQLAssociateMissingPermissionError) DecodeStruct(src map[string]i
 /**
 *	Returned when the `name` of the [AttributeDefinition](ctp:api:type:AttributeDefinition) conflicts with an existing Attribute.
 *
-*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
+*	The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request or [Change AttributeDefinition Name](ctp:api:type:ProductTypeChangeAttributeNameAction) update action.
 *
  */
 type GraphQLAttributeDefinitionAlreadyExistsError struct {
@@ -7381,7 +7296,7 @@ func (obj *GraphQLAttributeDefinitionAlreadyExistsError) DecodeStruct(src map[st
 /**
 *	Returned when the `type` is different for an AttributeDefinition using the same `name` in multiple Product Types.
 *
-*	The error is returned as a failed response to the [Create ProductType](/../api/projects/productTypes#create-producttype) request.
+*	The error is returned as a failed response to the [Create ProductType](ctp:api:endpoint:/{projectKey}/product-types:POST) request.
 *
  */
 type GraphQLAttributeDefinitionTypeConflictError struct {
@@ -8367,7 +8282,7 @@ func (obj *GraphQLDuplicatePriceScopeError) DecodeStruct(src map[string]interfac
 *	Returned when the given Price scope conflicts with the Price scope of an existing Standalone Price.
 *	Every Standalone Price associated with the same SKU must have a distinct combination of currency, country, Customer Group, Channel, and validity periods (`validFrom` and `validUntil`).
 *
-*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*	The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 *
  */
 type GraphQLDuplicateStandalonePriceScopeError struct {
@@ -8522,7 +8437,7 @@ func (obj *GraphQLDuplicateVariantValuesError) DecodeStruct(src map[string]inter
 /**
 *	Returned when a preview to find an appropriate Shipping Method for an OrderEdit could not be generated.
 *
-*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](/../api/projects/shippingMethods#for-an-orderedit) request.
+*	The error is returned as a failed response to the [Get Shipping Methods for an OrderEdit](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-orderedit:GET) request.
 *
  */
 type GraphQLEditPreviewFailedError struct {
@@ -9276,7 +9191,7 @@ func (obj *GraphQLFeatureRemovedError) DecodeStruct(src map[string]interface{}) 
 }
 
 /**
-*	Returned when a server-side problem occurs.
+*	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
 *	If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
 *
@@ -9467,8 +9382,8 @@ func (obj *GraphQLInternalConstraintViolatedError) DecodeStruct(src map[string]i
 *
 *	The error is returned as a failed response to:
 *
-*	- [Authenticate a global Customer (Sign-in)](/../api/projects/customers#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/customers#authenticate-sign-in-customer-in-store) requests on Customers.
-*	- [Authenticating Customer (Sign-in)](/../api/projects/me-profile#authenticate-sign-in-customer) and [Authenticate Customer (Sign-in) in a Store](/../api/projects/me-profile#authenticate-sign-in-customer-in-store) requests on My Customer Profile.
+*	- [Authenticate a global Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
+*	- [Authenticating Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
 *
  */
 type GraphQLInvalidCredentialsError struct {
@@ -9535,8 +9450,8 @@ func (obj *GraphQLInvalidCredentialsError) DecodeStruct(src map[string]interface
 *
 *	The error is returned as a failed response to:
 *
-*	- [Change Customer Password](/../api/projects/customers#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/customers#change-password-of-customer-in-store) requests on Customers.
-*	- [Change Customer Password](/../api/projects/me-profile#change-password-of-customer) and [Change Customer Password in a Store](/../api/projects/me-profile#change-password-of-customer-in-store) requests on My Customer Profile.
+*	- [Change Customer Password](ctp:api:endpoint:/{projectKey}/customers/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password:POST) requests on Customers.
+*	- [Change Customer Password](ctp:api:endpoint:/{projectKey}/me/password:POST) and [Change Customer Password in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/password:POST) requests on My Customer Profile.
 *
  */
 type GraphQLInvalidCurrentPasswordError struct {
@@ -10421,12 +10336,12 @@ func (obj *GraphQLMaxStoreReferencesReachedError) DecodeStruct(src map[string]in
 *	Returned when one of the following states occur:
 *
 *	- [Channel](ctp:api:type:Channel) is added or set on a [Store](ctp:api:type:Store) with missing Channel `roles`.
-*	- [Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) references a Channel that does not contain the `ProductDistribution` role.
+*	- [Standalone Price](ctp:api:type:StandalonePrice) references a Channel that does not contain the `ProductDistribution` role.
 *
 *	The error is returned as a failed response to:
 *
 *	- [Add Distribution Channel](ctp:api:type:StoreAddDistributionChannelAction), [Set Distribution Channel](ctp:api:type:StoreSetDistributionChannelsAction), [Add Supply Channel](ctp:api:type:StoreAddSupplyChannelAction), and [Set Supply Channel](ctp:api:type:StoreSetSupplyChannelsAction) update actions.
-*	- [Create a Standalone Price](/../api/projects/standalone-prices#create-standaloneprice) request.
+*	- [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 *
  */
 type GraphQLMissingRoleOnChannelError struct {
@@ -10639,7 +10554,7 @@ func (obj *GraphQLMoneyOverflowError) DecodeStruct(src map[string]interface{}) e
 /**
 *	Returned when a Product Discount could not be found that could be applied to the Price of a Product Variant.
 *
-*	The error is returned as a failed response to the [Get Matching ProductDiscount](/../api/projects/productDiscounts#get-matching-productdiscount) request.
+*	The error is returned as a failed response to the [Get Matching ProductDiscount](ctp:api:endpoint:/{projectKey}/product-discounts/matching:POST) request.
 *
  */
 type GraphQLNoMatchingProductDiscountFoundError struct {
@@ -10689,69 +10604,6 @@ func (obj GraphQLNoMatchingProductDiscountFoundError) MarshalJSON() ([]byte, err
 }
 
 func (obj *GraphQLNoMatchingProductDiscountFoundError) DecodeStruct(src map[string]interface{}) error {
-	{
-		obj.ExtraValues = make(map[string]interface{})
-		for key, value := range src {
-			//
-			if key != "code" {
-				obj.ExtraValues[key] = value
-			}
-		}
-	}
-	return nil
-}
-
-/**
-*	Returned when the [Project-specific category recommendations feature](/../api/projects/categoryRecommendations#project-specific-category-recommendations) is not enabled for the Project.
-*
- */
-type GraphQLNotEnabledError struct {
-	// Error-specific additional fields.
-	ExtraValues map[string]interface{} `json:"-"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *GraphQLNotEnabledError) UnmarshalJSON(data []byte) error {
-	type Alias GraphQLNotEnabledError
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-
-	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
-		return err
-	}
-	delete(obj.ExtraValues, "code")
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj GraphQLNotEnabledError) MarshalJSON() ([]byte, error) {
-	type Alias GraphQLNotEnabledError
-	data, err := json.Marshal(struct {
-		Action string `json:"code"`
-		*Alias
-	}{Action: "NotEnabled", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	for key, value := range obj.ExtraValues {
-		raw[key] = value
-	}
-
-	return json.Marshal(raw)
-
-}
-
-func (obj *GraphQLNotEnabledError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -10970,7 +10822,7 @@ func (obj *GraphQLOverCapacityError) DecodeStruct(src map[string]interface{}) er
 *	Returned when a given Price validity period conflicts with an existing one.
 *	Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
 *
-*	The error is returned as a failed response to the [Create StandalonePrice](/../api/projects/standalone-prices#create-standaloneprice) request.
+*	The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
 *
  */
 type GraphQLOverlappingStandalonePriceValidityError struct {

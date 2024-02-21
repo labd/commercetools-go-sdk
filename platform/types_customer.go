@@ -43,9 +43,9 @@ type Customer struct {
 	CustomerNumber *string `json:"customerNumber,omitempty"`
 	// Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
 	// It is the mandatory unique identifier of a Customer.
@@ -427,7 +427,8 @@ type CustomerToken struct {
 }
 
 type CustomerUpdate struct {
-	// Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// Expected version of the Customer on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Customer.
 	Actions []CustomerUpdateAction `json:"actions"`
@@ -797,7 +798,7 @@ func (obj CustomerChangeAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the email of the Customer produces the [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message.
+*	Changes the `email` of the Customer and sets the `isEmailVerified` property to `false`. This update action generates a [CustomerEmailChanged](ctp:api:type:CustomerEmailChangedMessage) Message.
 *
  */
 type CustomerChangeEmailAction struct {
@@ -1156,6 +1157,10 @@ func (obj CustomerSetExternalIdAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setExternalId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Setting the first name of the Customer produces the [CustomeFirstNameSet](ctp:api:type:CustomerFirstNameSetMessage) Message.
+*
+ */
 type CustomerSetFirstNameAction struct {
 	// Value to set. If empty, any existing value is removed.
 	FirstName *string `json:"firstName,omitempty"`
@@ -1187,7 +1192,7 @@ func (obj CustomerSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage).
+*	Setting the last name of the Customer produces the [CustomerLastNameSet](ctp:api:type:CustomerLastNameSetMessage) Message.
 *
  */
 type CustomerSetLastNameAction struct {
@@ -1287,7 +1292,7 @@ func (obj CustomerSetStoresAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting the title of the Customer produces the [CustomerTitleSetMessage](ctp:api:type:CustomerTitleSetMessage).
+*	Setting the title of the Customer produces the [CustomerTitleSet](ctp:api:type:CustomerTitleSetMessage) Message.
 *
  */
 type CustomerSetTitleAction struct {

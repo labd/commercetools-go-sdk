@@ -27,14 +27,15 @@ func (r *ConnectorsSearchRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ConnectorsSearchRequestMethodGetInput struct {
-	Text           *string
-	Limit          *int
-	Offset         *int
-	Sort           []string
-	Private        *bool
-	CreatorCompany *string
-	ID             []string
-	Key            []string
+	Text             *string
+	Limit            *int
+	Offset           *int
+	Sort             []string
+	Private          *bool
+	CreatorCompany   *string
+	ID               []string
+	Key              []string
+	IntegrationTypes []IntegrationType
 }
 
 func (input *ConnectorsSearchRequestMethodGetInput) Values() url.Values {
@@ -66,6 +67,9 @@ func (input *ConnectorsSearchRequestMethodGetInput) Values() url.Values {
 	}
 	for _, v := range input.Key {
 		values.Add("key", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.IntegrationTypes {
+		values.Add("integrationTypes", fmt.Sprintf("%v", v))
 	}
 	return values
 }
@@ -131,6 +135,14 @@ func (rb *ConnectorsSearchRequestMethodGet) Key(v []string) *ConnectorsSearchReq
 		rb.params = &ConnectorsSearchRequestMethodGetInput{}
 	}
 	rb.params.Key = v
+	return rb
+}
+
+func (rb *ConnectorsSearchRequestMethodGet) IntegrationTypes(v []IntegrationType) *ConnectorsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ConnectorsSearchRequestMethodGetInput{}
+	}
+	rb.params.IntegrationTypes = v
 	return rb
 }
 

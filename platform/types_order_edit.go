@@ -30,9 +30,9 @@ type OrderEdit struct {
 	Comment *string `json:"comment,omitempty"`
 	// Custom Fields of the Order Edit.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -62,7 +62,7 @@ func (obj *OrderEdit) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	If the `editVersion` and/or `resourceVersion` do not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+*	If the `editVersion` and/or `resourceVersion` do not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 *
  */
 type OrderEditApply struct {
@@ -370,7 +370,7 @@ func (obj OrderEditPreviewSuccess) MarshalJSON() ([]byte, error) {
 
 type OrderEditUpdate struct {
 	// Expected version of the Order Edit on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Order Edit.
 	Actions []OrderEditUpdateAction `json:"actions"`
@@ -619,9 +619,9 @@ type StagedOrder struct {
 	// User-defined date and time (UTC) of the Order.
 	// Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 

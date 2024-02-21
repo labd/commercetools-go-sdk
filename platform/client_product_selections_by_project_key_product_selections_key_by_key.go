@@ -45,7 +45,7 @@ func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Post(body Product
 }
 
 /**
-*	Deletion will only succeed if the Product Selection is not assigned to any [Store](/../api/projects/stores#store).
+*	Deletion will only succeed if the Product Selection is not assigned to any [Store](ctp:api:type:Store).
  */
 func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Delete() *ByProjectKeyProductSelectionsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyProductSelectionsKeyByKeyRequestMethodDelete{

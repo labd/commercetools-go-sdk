@@ -37,6 +37,9 @@ func (rb *ByProjectKeyCartDiscountsByIDRequestBuilder) Post(body CartDiscountUpd
 	}
 }
 
+/**
+*	Deleting a Cart Discount produces the [CartDiscountDeleted](ctp:api:type:CartDiscountDeletedMessage) Message.
+ */
 func (rb *ByProjectKeyCartDiscountsByIDRequestBuilder) Delete() *ByProjectKeyCartDiscountsByIDRequestMethodDelete {
 	return &ByProjectKeyCartDiscountsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/cart-discounts/%s", rb.projectKey, rb.id),

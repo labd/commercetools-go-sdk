@@ -26,9 +26,9 @@ type ShippingMethod struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ShippingMethod was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ShippingMethod.
 	Key *string `json:"key,omitempty"`
@@ -268,7 +268,7 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 type ShippingRate struct {
 	// Currency amount of the ShippingRate.
 	Price TypedMoney `json:"price"`
-	// Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
+	// [Free shipping](/../api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
 	FreeAbove TypedMoney `json:"freeAbove,omitempty"`
 	// `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
 	// Only appears in response to requests for [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) or
@@ -313,7 +313,7 @@ func (obj *ShippingRate) UnmarshalJSON(data []byte) error {
 type ShippingRateDraft struct {
 	// Money value of the ShippingRate.
 	Price Money `json:"price"`
-	// Shipping is free if the sum of the (Custom) Line Item Prices reaches the specified value.
+	// [Free shipping](/../api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
 	FreeAbove *Money `json:"freeAbove,omitempty"`
 	// Price tiers for the ShippingRate.
 	Tiers []ShippingRatePriceTier `json:"tiers"`
@@ -426,7 +426,7 @@ func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 *
  */
 type CartScoreTier struct {
-	// Abstract value for categorizing a Cart. The range starts at `0`. The default price covers `0`, tiers start at `1`. See [Using Tiered Shipping Rates](/../tutorials/shipping-rate) for details and examples.
+	// Abstract value for categorizing a Cart. The range starts at `0`. The default price covers `0`, tiers start at `1`. See [Tiered shipping rates](/../api/shipping-delivery-overview#tiered-shipping-rates) for details and examples.
 	Score int `json:"score"`
 	// Defines a fixed price for the `score`.
 	Price *Money `json:"price,omitempty"`

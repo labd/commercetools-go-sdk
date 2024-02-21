@@ -7,3 +7,8 @@ func (c *Client) Frontastic() *FrontasticRequestBuilder {
 		client: c,
 	}
 }
+func (c *Client) Api() *ApiRequestBuilder {
+	return &ApiRequestBuilder{
+		client: c,
+	}
+}

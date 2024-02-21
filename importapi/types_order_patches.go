@@ -20,7 +20,7 @@ const (
 )
 
 type ReturnItemDraft struct {
-	Quantity         float64 `json:"quantity"`
+	Quantity         int     `json:"quantity"`
 	LineItemId       *string `json:"lineItemId,omitempty"`
 	CustomLineItemId *string `json:"customLineItemId,omitempty"`
 	Comment          *string `json:"comment,omitempty"`

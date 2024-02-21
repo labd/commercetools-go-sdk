@@ -790,7 +790,7 @@ type DiscountedLineItemPriceDraft struct {
 	// Discounted money value.
 	Value Money `json:"value"`
 	// Discounts to be applied.
-	IncludedDiscounts []DiscountedLineItemPortion `json:"includedDiscounts"`
+	IncludedDiscounts []DiscountedLineItemPortionDraft `json:"includedDiscounts"`
 }
 
 type ItemState struct {
@@ -987,9 +987,9 @@ type Order struct {
 	// User-defined date and time (UTC) of the Order.
 	// Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -1361,7 +1361,7 @@ const (
 
 type OrderUpdate struct {
 	// Expected version of the Order on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Order.
 	Actions []OrderUpdateAction `json:"actions"`
@@ -2094,7 +2094,7 @@ const (
 )
 
 /**
-*	Indicates the shipment status of the Parcel.
+*	Indicates the shipment status of the Order.
 *
  */
 type ShipmentState string
@@ -2494,6 +2494,7 @@ func (obj OrderRemoveDeliveryAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	An address can only be removed if it is not referenced in any [ItemShippingTarget](ctp:api:type:ItemShippingTarget) of the Cart.
+*	In such case, change the Line Item shipping address to a different `addressKey` first using the [Set LineItemShippingDetails](ctp:api:type:OrderSetLineItemShippingDetailsAction) update action, before you remove the obsolete address.
 *
  */
 type OrderRemoveItemShippingAddressAction struct {

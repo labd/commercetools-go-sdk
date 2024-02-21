@@ -17,9 +17,9 @@ type ProductDiscount struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ProductDiscount was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the ProductDiscount.
 	Name LocalizedString `json:"name"`
@@ -189,7 +189,8 @@ func (obj ProductDiscountResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductDiscountUpdate struct {
-	// Expected version of the ProductDiscount on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the ProductDiscount on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the ProductDiscount.
 	Actions []ProductDiscountUpdateAction `json:"actions"`

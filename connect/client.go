@@ -15,7 +15,7 @@ import (
 )
 
 // Version identifies the current library version. Should match the git tag
-const Version = "1.4.1"
+const Version = "1.5.0"
 
 type Client struct {
 	httpClient *http.Client

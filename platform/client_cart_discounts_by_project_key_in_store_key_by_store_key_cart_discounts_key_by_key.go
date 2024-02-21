@@ -45,6 +45,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestBuilder) P
 /**
 *	To delete a CartDiscount, specify the `manage_cart_discounts:{projectKey}:{storeKey}` scope for all Stores associated with the CartDiscount.
 *
+*	Deleting a Cart Discount produces the [CartDiscountDeleted](ctp:api:type:CartDiscountDeletedMessage) Message.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestMethodDelete{

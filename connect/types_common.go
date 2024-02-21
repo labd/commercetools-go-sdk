@@ -174,10 +174,10 @@ type ConnectorReference struct {
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced Connector.
 	Key *string `json:"key,omitempty"`
-	// If `true`, the previewable [ConnectorStaged](ctp:connect:type:ConnectorStaged) will be referenced instead of the certified Connector. The `isPreviewable` field of the [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be `true` to reference a previewable ConnectorStaged.
+	// If `true`, the previewable [ConnectorStaged](ctp:connect:type:ConnectorStaged) will be referenced instead of the published Connector. The `isPreviewable` field of the [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be `true` to reference a previewable ConnectorStaged.
 	Staged *bool `json:"staged,omitempty"`
 	// Version of the referenced Connector.
-	Version int `json:"version"`
+	Version *int `json:"version,omitempty"`
 }
 
 /**
@@ -215,6 +215,8 @@ type DeploymentConnector struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description *string `json:"description,omitempty"`
+	// Connector integration type list.
+	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator DeploymentCreator `json:"creator"`
 	// Details of the GitHub repository that contains the Connect applications.
@@ -333,6 +335,28 @@ const (
 	RegionEuropeWest1Gcp         Region = "europe-west1.gcp"
 	RegionUsCentral1Gcp          Region = "us-central1.gcp"
 	RegionAustraliaSoutheast1Gcp Region = "australia-southeast1.gcp"
+)
+
+/**
+*	The type of integration provided by a Connector.
+*
+ */
+type IntegrationType string
+
+const (
+	IntegrationTypeTax         IntegrationType = "tax"
+	IntegrationTypeMarketplace IntegrationType = "marketplace"
+	IntegrationTypeOms         IntegrationType = "oms"
+	IntegrationTypePsp         IntegrationType = "psp"
+	IntegrationTypePim         IntegrationType = "pim"
+	IntegrationTypePromotion   IntegrationType = "promotion"
+	IntegrationTypeSearch      IntegrationType = "search"
+	IntegrationTypeErp         IntegrationType = "erp"
+	IntegrationTypeCrm         IntegrationType = "crm"
+	IntegrationTypeEmail       IntegrationType = "email"
+	IntegrationTypeAnalytics   IntegrationType = "analytics"
+	IntegrationTypeShipping    IntegrationType = "shipping"
+	IntegrationTypeOther       IntegrationType = "other"
 )
 
 /**

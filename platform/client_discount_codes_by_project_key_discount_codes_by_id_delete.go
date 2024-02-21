@@ -82,7 +82,10 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestMethodDelete) WithHeaders(headers 
 }
 
 /**
+*	Deleting a Discount Code produces the [DiscountCodeDeleted](ctp:api:type:DiscountCodeDeletedMessage) Message.
+*
 *	Deprecated scope: `manage_orders:{projectKey}`
+*
  */
 func (rb *ByProjectKeyDiscountCodesByIDRequestMethodDelete) Execute(ctx context.Context) (result *DiscountCode, err error) {
 	var queryParams url.Values

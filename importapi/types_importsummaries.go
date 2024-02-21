@@ -14,6 +14,9 @@ type ImportSummary struct {
 	Total int `json:"total"`
 }
 
+/**
+*	The number of resources in each [Processing State](/processing-state#processingstate).
+ */
 type OperationStates struct {
 	// The number of resources in the `processing` state.
 	Processing int `json:"processing"`

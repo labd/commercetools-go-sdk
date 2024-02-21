@@ -13,7 +13,7 @@ import (
 *
  */
 type ItemState struct {
-	Quantity float64 `json:"quantity"`
+	Quantity int `json:"quantity"`
 	// Maps to `ItemState.state`.
 	State StateKeyReference `json:"state"`
 }
@@ -26,7 +26,7 @@ type ItemShippingTarget struct {
 	// Maps to `ItemShippingTarget.addressKey`.
 	AddressKey string `json:"addressKey"`
 	// Maps to `ItemShippingTarget.quantity`.
-	Quantity float64 `json:"quantity"`
+	Quantity int `json:"quantity"`
 }
 
 type ItemShippingDetailsDraft struct {
@@ -177,7 +177,7 @@ type LineItemImportDraft struct {
 	// Maps to `LineItem.price`.
 	Price LineItemPrice `json:"price"`
 	// Maps to `LineItem.quantity`.
-	Quantity float64     `json:"quantity"`
+	Quantity int         `json:"quantity"`
 	State    []ItemState `json:"state"`
 	// Maps to `LineItem.supplyChannel`.
 	// The Reference to the Supply [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
@@ -342,10 +342,10 @@ func (obj ShippingRateDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelMeasurements struct {
-	HeightInMillimeter *float64 `json:"heightInMillimeter,omitempty"`
-	LengthInMillimeter *float64 `json:"lengthInMillimeter,omitempty"`
-	WidthInMillimeter  *float64 `json:"widthInMillimeter,omitempty"`
-	WeightInGram       *float64 `json:"weightInGram,omitempty"`
+	HeightInMillimeter *int `json:"heightInMillimeter,omitempty"`
+	LengthInMillimeter *int `json:"lengthInMillimeter,omitempty"`
+	WidthInMillimeter  *int `json:"widthInMillimeter,omitempty"`
+	WeightInGram       *int `json:"weightInGram,omitempty"`
 }
 
 type TrackingData struct {
@@ -357,8 +357,8 @@ type TrackingData struct {
 }
 
 type DeliveryItem struct {
-	ID       string  `json:"id"`
-	Quantity float64 `json:"quantity"`
+	ID       string `json:"id"`
+	Quantity int    `json:"quantity"`
 }
 
 type Parcel struct {
@@ -559,7 +559,7 @@ type CustomLineItemDraft struct {
 	TaxedPrice *CustomLineItemTaxedPrice `json:"taxedPrice,omitempty"`
 	TotalPrice TypedMoney                `json:"totalPrice"`
 	Slug       string                    `json:"slug"`
-	Quantity   float64                   `json:"quantity"`
+	Quantity   int                       `json:"quantity"`
 	State      []ItemState               `json:"state"`
 	// References a tax category by key.
 	TaxCategory                *TaxCategoryKeyReference       `json:"taxCategory,omitempty"`
@@ -837,7 +837,7 @@ func (obj ClassificationShippingRateInput) MarshalJSON() ([]byte, error) {
 }
 
 type ScoreShippingRateInput struct {
-	Score float64 `json:"score"`
+	Score int `json:"score"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -854,7 +854,7 @@ func (obj ScoreShippingRateInput) MarshalJSON() ([]byte, error) {
 *	The data representation for an Order to be imported that is persisted as an [Order](/../api/projects/orders#top) in the Project.
 *
 *	In commercetools, you can import an Order using the
-*	[Create Order by Import](/../api/projects/orders-import#create-order-by-import)
+*	[Create Order by Import](ctp:importapi:endpoint:/{projectKey}/orders/import:POST)
 *	endpoint method instead of creating it from a Cart.
 *
 *	An OrderImport is a snapshot of an order at the time it was imported.

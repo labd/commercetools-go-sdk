@@ -47,7 +47,7 @@ func (input *ByProjectKeyProductProjectionsSuggestRequestMethodGetInput) Values(
 	}
 	for k, v := range input.SearchKeywords {
 		for _, x := range v {
-			values.Set(k, x)
+			values.Add(k, x)
 		}
 	}
 	for _, v := range input.Sort {

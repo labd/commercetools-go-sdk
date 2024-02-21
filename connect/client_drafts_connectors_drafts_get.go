@@ -27,13 +27,17 @@ func (r *ConnectorsDraftsRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ConnectorsDraftsRequestMethodGetInput struct {
-	Limit  *int
-	Offset *int
-	Sort   []string
+	IntegrationTypes []IntegrationType
+	Limit            *int
+	Offset           *int
+	Sort             []string
 }
 
 func (input *ConnectorsDraftsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.IntegrationTypes {
+		values.Add("integrationTypes", fmt.Sprintf("%v", v))
+	}
 	if input.Limit != nil {
 		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
@@ -44,6 +48,14 @@ func (input *ConnectorsDraftsRequestMethodGetInput) Values() url.Values {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ConnectorsDraftsRequestMethodGet) IntegrationTypes(v []IntegrationType) *ConnectorsDraftsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ConnectorsDraftsRequestMethodGetInput{}
+	}
+	rb.params.IntegrationTypes = v
+	return rb
 }
 
 func (rb *ConnectorsDraftsRequestMethodGet) Limit(v int) *ConnectorsDraftsRequestMethodGet {

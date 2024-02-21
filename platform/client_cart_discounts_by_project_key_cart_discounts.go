@@ -42,6 +42,9 @@ func (rb *ByProjectKeyCartDiscountsRequestBuilder) Head() *ByProjectKeyCartDisco
 	}
 }
 
+/**
+*	Creating a Cart Discount produces the [CartDiscountCreated](ctp:api:type:CartDiscountCreatedMessage) Message.
+ */
 func (rb *ByProjectKeyCartDiscountsRequestBuilder) Post(body CartDiscountDraft) *ByProjectKeyCartDiscountsRequestMethodPost {
 	return &ByProjectKeyCartDiscountsRequestMethodPost{
 		body:   body,

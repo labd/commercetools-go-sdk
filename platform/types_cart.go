@@ -104,9 +104,9 @@ type Cart struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Number of days after which an active Cart is deleted since its last modification. Configured in [Project settings](ctp:api:type:CartsConfiguration).
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -165,6 +165,7 @@ type CartDraft struct {
 	// Billing address associated with the Cart.
 	BillingAddress *BaseAddress `json:"billingAddress,omitempty"`
 	// Shipping address for a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode). Determines eligible [ShippingMethod](ctp:api:type:ShippingMethod) rates and Tax Rates of Line Items.
+	// Must be one of the `itemShippingAddresses` when that field is also provided.
 	ShippingAddress *BaseAddress `json:"shippingAddress,omitempty"`
 	// Shipping Method for a Cart with `Single` [ShippingMode](ctp:api:type:ShippingMode). If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) has a `predicate` that does not match the Cart, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned when [creating a Cart](ctp:api:endpoint:/{projectKey}/carts:POST).
 	ShippingMethod *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
@@ -357,7 +358,7 @@ const (
 
 type CartUpdate struct {
 	// Expected version of the Cart on which the changes apply.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) is returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Cart.
 	Actions []CartUpdateAction `json:"actions"`
@@ -856,7 +857,8 @@ type CustomLineItem struct {
 	Money TypedMoney `json:"money"`
 	// Automatically set after the `taxRate` is set.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
-	// Taxed price of the Shipping Method that is automatically set after `perMethodTaxRate` is set.
+	// Total taxed prices based on the quantity of the Custom Line Item assigned to each [Shipping Method](ctp:api:type:ShippingMethod). Only applicable for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Automatically set after `perMethodTaxRate` is set.
 	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
 	// Total price of the Custom Line Item (`money` multiplied by `quantity`).
 	// If the Custom Line Item is discounted, the total price is `discountedPricePerQuantity` multiplied by `quantity`.
@@ -1186,9 +1188,9 @@ func (obj *DiscountOnTotalPrice) UnmarshalJSON(data []byte) error {
 }
 
 type DiscountedLineItemPortion struct {
-	// A [CartDiscountReference](ctp:api:type:CartDiscountReference) or [DirectDiscountReference](ctp:api:type:DirectDiscountReference) for the applicable discount on the Line Item.
+	// A [CartDiscountReference](ctp:api:type:CartDiscountReference) or [DirectDiscountReference](ctp:api:type:DirectDiscountReference) of the applicable discount on the Line Item.
 	Discount Reference `json:"discount"`
-	// Money value of the discount applicable.
+	// Money value of the applicable discount.
 	DiscountedAmount TypedMoney `json:"discountedAmount"`
 }
 
@@ -1209,6 +1211,38 @@ func (obj *DiscountedLineItemPortion) UnmarshalJSON(data []byte) error {
 	if obj.DiscountedAmount != nil {
 		var err error
 		obj.DiscountedAmount, err = mapDiscriminatorTypedMoney(obj.DiscountedAmount)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+type DiscountedLineItemPortionDraft struct {
+	// A [CartDiscountReference](ctp:api:type:CartDiscountReference) or [DirectDiscountReference](ctp:api:type:DirectDiscountReference) for the discount applicable on the Line Item.
+	Discount Reference `json:"discount"`
+	// Money value for the discount applicable.
+	DiscountedAmount TypedMoneyDraft `json:"discountedAmount"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountedLineItemPortionDraft) UnmarshalJSON(data []byte) error {
+	type Alias DiscountedLineItemPortionDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Discount != nil {
+		var err error
+		obj.Discount, err = mapDiscriminatorReference(obj.Discount)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.DiscountedAmount != nil {
+		var err error
+		obj.DiscountedAmount, err = mapDiscriminatorTypedMoneyDraft(obj.DiscountedAmount)
 		if err != nil {
 			return err
 		}
@@ -1316,7 +1350,7 @@ type ExternalTaxRateDraft struct {
 	Country string `json:"country"`
 	// State within the specified country.
 	State *string `json:"state,omitempty"`
-	// For countries (such as the US) where the total tax is a combination of multiple taxes (such as state and local taxes).
+	// For countries (such as the US) where the total tax is a combination of multiple taxes (such as state and local taxes). The total of all subrates must equal the TaxRate `amount`.
 	SubRates []SubRate `json:"subRates"`
 }
 
@@ -1393,7 +1427,7 @@ type ItemShippingTarget struct {
 	Quantity int `json:"quantity"`
 	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	//
-	// It connects Line Item quantities with individual shipping addresses.
+	// It connects Line Item or Custom Line Item quantities with individual Shipping Methods.
 	ShippingMethodKey *string `json:"shippingMethodKey,omitempty"`
 }
 
@@ -1440,7 +1474,8 @@ type LineItem struct {
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	// Automatically set after `taxRate` is set.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
-	// Taxed price of the Shipping Method that is automatically set after `perMethodTaxRate` is set.
+	// Total taxed prices based on the quantity of Line Item assigned to each [Shipping Method](ctp:api:type:ShippingMethod). Only applicable for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Automatically set after `perMethodTaxRate` is set.
 	TaxedPricePortions []MethodTaxedPrice `json:"taxedPricePortions"`
 	// State of the Line Item in the [Cart](ctp:api:type:Cart) or the [Order](ctp:api:type:Order).
 	State []ItemState `json:"state"`
@@ -1580,14 +1615,14 @@ type MethodTaxRate struct {
 }
 
 type MethodTaxedPrice struct {
-	// User-defined unique identifier of the Shipping Method in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// User-defined unique identifier of the [Shipping Method](ctp:api:type:ShippingMethod) in a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	ShippingMethodKey string `json:"shippingMethodKey"`
-	// Taxed price for the Shipping Method.
+	// Total taxed price based on the quantity of the Line Item or Custom Line Item assigned to the Shipping Method identified by `shippingMethodKey`.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 }
 
 /**
-*	Used for [replicating an existing Cart](/../api/projects/carts#replicate-cart) or Order.
+*	Used for [replicating an existing Cart](ctp:api:endpoint:/{projectKey}/carts/replicate:POST) or Order.
 *
  */
 type ReplicaCartDraft struct {
@@ -2215,6 +2250,8 @@ type CartAddLineItemAction struct {
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 	// External Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// Sets the external Tax Rates for individual Shipping Methods, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	PerMethodExternalTaxRate []MethodExternalTaxRateDraft `json:"perMethodExternalTaxRate"`
 	// Inventory mode specific to the Line Item only, and valid for the entire `quantity` of the Line Item.
 	// Set only if the inventory mode should be different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
@@ -2228,10 +2265,25 @@ type CartAddLineItemAction struct {
 // optional nil slices
 func (obj CartAddLineItemAction) MarshalJSON() ([]byte, error) {
 	type Alias CartAddLineItemAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "addLineItem", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["perMethodExternalTaxRate"] == nil {
+		delete(raw, "perMethodExternalTaxRate")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 type CartAddPaymentAction struct {

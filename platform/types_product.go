@@ -125,9 +125,9 @@ type Product struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Product was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Product.
 	//
@@ -415,7 +415,8 @@ func (obj ProductResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductUpdate struct {
-	// Expected version of the Product on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the Product on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Product.
 	Actions []ProductUpdateAction `json:"actions"`
@@ -2208,7 +2209,7 @@ func (obj ProductTransitionStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](/projects/productProjections#query-productprojections)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
+*	Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](ctp:api:endpoint:/{projectKey}/product-projections:GET)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
 *
 *	Unpublished Products cannot be added to a Cart. However, if a Cart contains Line Items for Products that were added before the Product was unpublished, the Cart is unaffected and can still be used to create an Order. To prevent this, in addition to unpublishing the Product you should remove the Prices from the Product using [Remove Price](ctp:api:type:ProductRemovePriceAction) for Embedded Prices or [Delete StandalonePrice](/projects/standalone-prices#delete-standaloneprice) for Standalone Prices.
 *

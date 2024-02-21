@@ -9,7 +9,8 @@ import (
 )
 
 type MyBusinessUnitAssociateDraft struct {
-	// Expected version of the BusinessUnit on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// Expected version of the BusinessUnit on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// [Customer](ctp:api:type:Customer) to create and assign to the Business Unit.
 	Customer MyCustomerDraft `json:"customer"`
@@ -49,7 +50,7 @@ func mapDiscriminatorMyBusinessUnitDraft(input interface{}) (MyBusinessUnitDraft
 
 type MyBusinessUnitUpdate struct {
 	// Expected version of the BusinessUnit on which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the BusinessUnit.
 	Actions []BusinessUnitUpdateAction `json:"actions"`
@@ -232,6 +233,9 @@ type MyCartDraft struct {
 	//
 	// Eligible Shipping Methods or applicable Tax Rates are determined by the [Cart](ctp:api:type:Cart) `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
+	// - If set to `Single`, only a single Shipping Method can be added to the Cart.
+	// - If set to `Multiple`, multiple Shipping Methods can be added to the Cart.
+	ShippingMode *ShippingMode `json:"shippingMode,omitempty"`
 	// `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
 	DiscountCodes []string `json:"discountCodes"`
 	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
@@ -283,7 +287,7 @@ func (obj MyCartDraft) MarshalJSON() ([]byte, error) {
 
 type MyCartUpdate struct {
 	// Expected version of the Cart on which the changes apply.
-	// If it does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error is returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Cart.
 	Actions []MyCartUpdateAction `json:"actions"`
@@ -621,7 +625,8 @@ func (obj MyCustomerDraft) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerUpdate struct {
-	// Expected version of the Customer on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// Expected version of the Customer on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Customer.
 	Actions []MyCustomerUpdateAction `json:"actions"`
@@ -958,7 +963,8 @@ type MyPaymentPagedQueryResponse struct {
 }
 
 type MyPaymentUpdate struct {
-	// Expected version of the Payment on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the Payment on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Payment.
 	Actions []MyPaymentUpdateAction `json:"actions"`
@@ -1111,7 +1117,7 @@ const (
 
 type MyQuoteUpdate struct {
 	// Expected version of the [Quote](ctp:api:type:Quote) to which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the [Quote](ctp:api:type:Quote).
 	Actions []MyQuoteUpdateAction `json:"actions"`
@@ -1213,7 +1219,8 @@ func (obj MyShoppingListDraft) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListUpdate struct {
-	// Expected version of the ShoppingList on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the ShoppingList on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// List of update actions to be performed on the ShoppingList.
 	Actions []MyShoppingListUpdateAction `json:"actions"`
@@ -1817,7 +1824,6 @@ func (obj MyCartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 /**
 *	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](/../api/projects/custom-fields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
-*	A new Line Item is added when the `externalPrice` or `externalTotalPrice` is set in this update action.
 *	The [LineItem](ctp:api:type:LineItem) price is set as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
 *
 *	If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
@@ -2714,7 +2720,7 @@ func (obj MyCustomerSetDefaultShippingAddressAction) MarshalJSON() ([]byte, erro
 }
 
 /**
-*	Setting the first name of the Customer produces the [CustomerFirstNameSetMessage](ctp:api:type:CustomerFirstNameSetMessage).
+*	Setting the first name of the Customer produces the [CustomerFirstNameSet](ctp:api:type:CustomerFirstNameSetMessage) Message.
 *
  */
 type MyCustomerSetFirstNameAction struct {
@@ -2734,7 +2740,7 @@ func (obj MyCustomerSetFirstNameAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting the last name of the Customer produces the [CustomerLastNameSetMessage](ctp:api:type:CustomerLastNameSetMessage).
+*	Setting the last name of the Customer produces the [CustomerLastNameSet](ctp:api:type:CustomerLastNameSetMessage) Message.
 *
  */
 type MyCustomerSetLastNameAction struct {

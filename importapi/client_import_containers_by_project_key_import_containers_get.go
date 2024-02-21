@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type ByProjectKeyImportContainersRequestMethodGet struct {
@@ -26,18 +27,18 @@ func (r *ByProjectKeyImportContainersRequestMethodGet) Dump() map[string]interfa
 }
 
 type ByProjectKeyImportContainersRequestMethodGetInput struct {
-	Limit  *float64
-	Offset *float64
+	Limit  *int
+	Offset *int
 	Sort   []string
 }
 
 func (input *ByProjectKeyImportContainersRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
 	if input.Limit != nil {
-		values.Add("limit", fmt.Sprintf("%f", *input.Limit))
+		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
 	if input.Offset != nil {
-		values.Add("offset", fmt.Sprintf("%f", *input.Offset))
+		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
@@ -45,7 +46,7 @@ func (input *ByProjectKeyImportContainersRequestMethodGetInput) Values() url.Val
 	return values
 }
 
-func (rb *ByProjectKeyImportContainersRequestMethodGet) Limit(v float64) *ByProjectKeyImportContainersRequestMethodGet {
+func (rb *ByProjectKeyImportContainersRequestMethodGet) Limit(v int) *ByProjectKeyImportContainersRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyImportContainersRequestMethodGetInput{}
 	}
@@ -53,7 +54,7 @@ func (rb *ByProjectKeyImportContainersRequestMethodGet) Limit(v float64) *ByProj
 	return rb
 }
 
-func (rb *ByProjectKeyImportContainersRequestMethodGet) Offset(v float64) *ByProjectKeyImportContainersRequestMethodGet {
+func (rb *ByProjectKeyImportContainersRequestMethodGet) Offset(v int) *ByProjectKeyImportContainersRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyImportContainersRequestMethodGetInput{}
 	}
