@@ -19,9 +19,9 @@ type StagedQuote struct {
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// User-specific unique identifier of the staged quote.
 	Key *string `json:"key,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Predefined states tracking the status of the Staged Quote.
 	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
@@ -144,7 +144,7 @@ const (
 
 type StagedQuoteUpdate struct {
 	// Expected version of the [StagedQuote](ctp:api:type:StagedQuote) to which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the [StagedQuote](ctp:api:type:StagedQuote).
 	Actions []StagedQuoteUpdateAction `json:"actions"`

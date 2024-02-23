@@ -24,6 +24,18 @@ func mapDiscriminatorLabel(input interface{}) (Label, error) {
 	}
 
 	switch discriminator {
+	case "AssociateRoleLabel":
+		obj := AssociateRoleLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitLabel":
+		obj := BusinessUnitLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "CustomObjectLabel":
 		obj := CustomObjectLabel{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -92,6 +104,40 @@ func mapDiscriminatorLabel(input interface{}) (Label, error) {
 		return obj, nil
 	}
 	return nil, nil
+}
+
+type AssociateRoleLabel struct {
+	// User-defined unique identifier of the [Associate Role](ctp:api:type:AssociateRole).
+	Key string `json:"key"`
+	// Name of the Associate Role.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AssociateRoleLabel) MarshalJSON() ([]byte, error) {
+	type Alias AssociateRoleLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AssociateRoleLabel", Alias: (*Alias)(&obj)})
+}
+
+type BusinessUnitLabel struct {
+	// User-defined unique identifier of the [Business Unit](ctp:api:type:BusinessUnit).
+	Key string `json:"key"`
+	// Name of the Business Unit.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitLabel) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitLabel", Alias: (*Alias)(&obj)})
 }
 
 type CustomObjectLabel struct {

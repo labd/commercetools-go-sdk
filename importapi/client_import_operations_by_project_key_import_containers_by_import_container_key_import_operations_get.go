@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strconv"
 )
 
 type ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet struct {
@@ -26,8 +27,8 @@ func (r *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequest
 }
 
 type ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGetInput struct {
-	Limit       *float64
-	Offset      *float64
+	Limit       *int
+	Offset      *int
 	Sort        []string
 	ResourceKey *string
 	State       *ProcessingState
@@ -37,10 +38,10 @@ type ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMeth
 func (input *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
 	if input.Limit != nil {
-		values.Add("limit", fmt.Sprintf("%f", *input.Limit))
+		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
 	if input.Offset != nil {
-		values.Add("offset", fmt.Sprintf("%f", *input.Offset))
+		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
@@ -61,7 +62,7 @@ func (input *ByProjectKeyImportContainersByImportContainerKeyImportOperationsReq
 	return values
 }
 
-func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet) Limit(v float64) *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet {
+func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet) Limit(v int) *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGetInput{}
 	}
@@ -69,7 +70,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsReques
 	return rb
 }
 
-func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet) Offset(v float64) *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet {
+func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet) Offset(v int) *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGetInput{}
 	}

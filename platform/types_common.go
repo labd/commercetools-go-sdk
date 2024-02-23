@@ -334,13 +334,13 @@ type BaseResource struct {
 }
 
 /**
-*	These objects represent information about which [API Client](/../api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/client-logging).
+*	These objects represent information about which [API Client](/../api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/../api/general-concepts#client-logging).
 *
  */
 type ClientLogging struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -351,12 +351,12 @@ type ClientLogging struct {
 }
 
 /**
-*	Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+*	Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
  */
 type CreatedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header or [`external_user_id:{externalUserId}`](/../api/scopes#external_user_idexternaluserid) scope.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who created the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -498,12 +498,12 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 }
 
 /**
-*	Present on resources modified after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+*	Present on resources modified after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
  */
 type LastModifiedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which modified the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/client-logging#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header or [`external_user_id:{externalUserId}`](/../api/scopes#external_user_idexternaluserid) scope.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -569,6 +569,8 @@ type Price struct {
 	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
+	//
+	// If `discounted` is present, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTier `json:"tiers"`
 	// Custom Fields defined for the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -644,6 +646,8 @@ type PriceDraft struct {
 	// * A `predicate` that matches the [ProductVariant](ctp:api:type:ProductVariant) the Price is referenced from.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
 	// Set this field to specify different Prices for certain [LineItem](ctp:api:type:LineItem) quantities.
+	//
+	// If `discounted` is set, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTierDraft `json:"tiers"`
 	// Custom Fields for the Price.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -748,6 +752,8 @@ type QueryPrice struct {
 	// Custom Fields for the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Price tier applied when the minimum quantity for the [LineItem](ctp:api:type:LineItem) of a ProductVariant with the related Price is reached in a Cart.
+	//
+	// If `discounted` is specified, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTierDraft `json:"tiers"`
 }
 

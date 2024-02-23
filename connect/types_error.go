@@ -144,6 +144,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "DeploymentConnectorUpdateFailure":
+		obj := DeploymentConnectorUpdateFailureError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DeploymentInvalidStatusTransition":
 		obj := DeploymentInvalidStatusTransitionError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -169,19 +175,19 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		}
 		return obj, nil
 	case "DeploymentApplicationDoNotBelong":
-		obj := DeploymentEntityApplicationDoNotBelongError{}
+		obj := DeploymentApplicationDoNotBelongError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
 	case "DeploymentApplicationRequired":
-		obj := DeploymentEntityApplicationRequiredError{}
+		obj := DeploymentApplicationRequiredError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
 	case "DeploymentMustIncludeApplication":
-		obj := DeploymentEntityMustIncludeApplicationError{}
+		obj := DeploymentMustIncludeApplicationError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -714,9 +720,9 @@ func (obj FieldValueNotFoundError) Error() string {
 }
 
 /**
-*	Returned when a server-side problem occurs.
+*	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
-*	If you encounter this error, report it using the [Support Portal](TBC for connect).
+*	If you encounter this error, report it using the [Support Portal](https://commercetools.atlassian.net/servicedesk/customer/portal/27).
 *
  */
 type GeneralError struct {
@@ -1245,7 +1251,7 @@ func (obj ConnectorStagedInCertificationError) Error() string {
 /**
 *	Returned when a ConnectorStaged to be deployed is not previewable.
 *
-*	The error is returned as a failed response to the [Create a Deployment](deployments#create-deployment) request.
+*	The error is returned as a failed response to the [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
 *
  */
 type ConnectorStagedNotPreviewableError struct {
@@ -1760,6 +1766,79 @@ func (obj ConnectorReferenceNotFoundError) Error() string {
 }
 
 /**
+*	Returned when updating a Connector fails during [redeployment](ctp:connect:type:DeploymentRedeploy).
+*
+ */
+type DeploymentConnectorUpdateFailureError struct {
+	// `"Deployment with id=$resourceId or key=$resourceKey failed while trying to update Connector id=$resourceId or key=$resourceKey (cause: $cause)"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentConnectorUpdateFailureError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentConnectorUpdateFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentConnectorUpdateFailureError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentConnectorUpdateFailureError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentConnectorUpdateFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentConnectorUpdateFailureError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentConnectorUpdateFailureError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentConnectorUpdateFailureError: failed to parse error response"
+}
+
+/**
 *	Returned when the Deployment operation results in a invalid status transition.
 *
 *	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action.
@@ -1839,7 +1918,7 @@ func (obj DeploymentInvalidStatusTransitionError) Error() string {
 /**
 *	Returned when the Deployment contains configuration values that are not defined in the Connect application's connect.yaml file.
 *
-*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action and [Create a Deployment](deployments#create-deployment) request.
+*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action and [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
 *
  */
 type DeploymentUnknownApplicationConfigurationError struct {
@@ -1914,7 +1993,7 @@ func (obj DeploymentUnknownApplicationConfigurationError) Error() string {
 /**
 *	Returned when the Deployment contains a configuration key that is not defined in the Connect application's connect.yaml file.
 *
-*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action and [Create a Deployment](deployments#create-deployment) request.
+*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action and [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
 *
  */
 type DeploymentUnknownApplicationConfigurationKeyError struct {
@@ -1989,7 +2068,7 @@ func (obj DeploymentUnknownApplicationConfigurationKeyError) Error() string {
 /**
 *	Returned when the Deployment region is not supported.
 *
-*	The error is returned as a failed response to the [Create a Deployment](deployments#create-deployment) request.
+*	The error is returned as a failed response to the [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
 *
  */
 type DeploymentUnsupportedRegionError struct {
@@ -2065,7 +2144,7 @@ func (obj DeploymentUnsupportedRegionError) Error() string {
 *	Returned when attempting to add an application that does not belong to the Deployment.
 *
  */
-type DeploymentEntityApplicationDoNotBelongError struct {
+type DeploymentApplicationDoNotBelongError struct {
 	// `"Deployment with id=$resourceId or key=$resourceKey does not include application: $applicationName"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
@@ -2074,8 +2153,8 @@ type DeploymentEntityApplicationDoNotBelongError struct {
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *DeploymentEntityApplicationDoNotBelongError) UnmarshalJSON(data []byte) error {
-	type Alias DeploymentEntityApplicationDoNotBelongError
+func (obj *DeploymentApplicationDoNotBelongError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentApplicationDoNotBelongError
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -2091,8 +2170,8 @@ func (obj *DeploymentEntityApplicationDoNotBelongError) UnmarshalJSON(data []byt
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj DeploymentEntityApplicationDoNotBelongError) MarshalJSON() ([]byte, error) {
-	type Alias DeploymentEntityApplicationDoNotBelongError
+func (obj DeploymentApplicationDoNotBelongError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentApplicationDoNotBelongError
 	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
@@ -2114,7 +2193,7 @@ func (obj DeploymentEntityApplicationDoNotBelongError) MarshalJSON() ([]byte, er
 
 }
 
-func (obj *DeploymentEntityApplicationDoNotBelongError) DecodeStruct(src map[string]interface{}) error {
+func (obj *DeploymentApplicationDoNotBelongError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -2127,18 +2206,18 @@ func (obj *DeploymentEntityApplicationDoNotBelongError) DecodeStruct(src map[str
 	return nil
 }
 
-func (obj DeploymentEntityApplicationDoNotBelongError) Error() string {
+func (obj DeploymentApplicationDoNotBelongError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
 	}
-	return "unknown DeploymentEntityApplicationDoNotBelongError: failed to parse error response"
+	return "unknown DeploymentApplicationDoNotBelongError: failed to parse error response"
 }
 
 /**
 *	Returned when a Deployment does not contain any applications.
 *
  */
-type DeploymentEntityApplicationRequiredError struct {
+type DeploymentApplicationRequiredError struct {
 	// `"A Deployment requires at least one application"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
@@ -2147,8 +2226,8 @@ type DeploymentEntityApplicationRequiredError struct {
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *DeploymentEntityApplicationRequiredError) UnmarshalJSON(data []byte) error {
-	type Alias DeploymentEntityApplicationRequiredError
+func (obj *DeploymentApplicationRequiredError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentApplicationRequiredError
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -2164,8 +2243,8 @@ func (obj *DeploymentEntityApplicationRequiredError) UnmarshalJSON(data []byte) 
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj DeploymentEntityApplicationRequiredError) MarshalJSON() ([]byte, error) {
-	type Alias DeploymentEntityApplicationRequiredError
+func (obj DeploymentApplicationRequiredError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentApplicationRequiredError
 	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
@@ -2187,7 +2266,7 @@ func (obj DeploymentEntityApplicationRequiredError) MarshalJSON() ([]byte, error
 
 }
 
-func (obj *DeploymentEntityApplicationRequiredError) DecodeStruct(src map[string]interface{}) error {
+func (obj *DeploymentApplicationRequiredError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -2200,18 +2279,18 @@ func (obj *DeploymentEntityApplicationRequiredError) DecodeStruct(src map[string
 	return nil
 }
 
-func (obj DeploymentEntityApplicationRequiredError) Error() string {
+func (obj DeploymentApplicationRequiredError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
 	}
-	return "unknown DeploymentEntityApplicationRequiredError: failed to parse error response"
+	return "unknown DeploymentApplicationRequiredError: failed to parse error response"
 }
 
 /**
 *	Returned when attempting to remove an application that belongs to the Deployment.
 *
  */
-type DeploymentEntityMustIncludeApplicationError struct {
+type DeploymentMustIncludeApplicationError struct {
 	// `"Deployment with id=$resourceId or key=$resourceKey must include application: $applicationName"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
@@ -2220,8 +2299,8 @@ type DeploymentEntityMustIncludeApplicationError struct {
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *DeploymentEntityMustIncludeApplicationError) UnmarshalJSON(data []byte) error {
-	type Alias DeploymentEntityMustIncludeApplicationError
+func (obj *DeploymentMustIncludeApplicationError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentMustIncludeApplicationError
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -2237,8 +2316,8 @@ func (obj *DeploymentEntityMustIncludeApplicationError) UnmarshalJSON(data []byt
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj DeploymentEntityMustIncludeApplicationError) MarshalJSON() ([]byte, error) {
-	type Alias DeploymentEntityMustIncludeApplicationError
+func (obj DeploymentMustIncludeApplicationError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentMustIncludeApplicationError
 	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
@@ -2260,7 +2339,7 @@ func (obj DeploymentEntityMustIncludeApplicationError) MarshalJSON() ([]byte, er
 
 }
 
-func (obj *DeploymentEntityMustIncludeApplicationError) DecodeStruct(src map[string]interface{}) error {
+func (obj *DeploymentMustIncludeApplicationError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -2273,9 +2352,9 @@ func (obj *DeploymentEntityMustIncludeApplicationError) DecodeStruct(src map[str
 	return nil
 }
 
-func (obj DeploymentEntityMustIncludeApplicationError) Error() string {
+func (obj DeploymentMustIncludeApplicationError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
 	}
-	return "unknown DeploymentEntityMustIncludeApplicationError: failed to parse error response"
+	return "unknown DeploymentMustIncludeApplicationError: failed to parse error response"
 }

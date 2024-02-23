@@ -18,6 +18,13 @@ func (rb *ByProjectKeyDiscountCodesRequestBuilder) WithId(id string) *ByProjectK
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyDiscountCodesRequestBuilder) WithKey(key string) *ByProjectKeyDiscountCodesKeyByKeyRequestBuilder {
+	return &ByProjectKeyDiscountCodesKeyByKeyRequestBuilder{
+		key:        key,
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 
 /**
 *	Deprecated scope: `view_orders:{projectKey}`
@@ -40,7 +47,10 @@ func (rb *ByProjectKeyDiscountCodesRequestBuilder) Head() *ByProjectKeyDiscountC
 }
 
 /**
+*	Creating a Discount Code produces the [DiscountCodeCreated](ctp:api:type:DiscountCodeCreatedMessage) Message.
+*
 *	Deprecated scope: `manage_orders:{projectKey}`
+*
  */
 func (rb *ByProjectKeyDiscountCodesRequestBuilder) Post(body DiscountCodeDraft) *ByProjectKeyDiscountCodesRequestMethodPost {
 	return &ByProjectKeyDiscountCodesRequestMethodPost{

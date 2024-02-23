@@ -41,9 +41,9 @@ type ShoppingList struct {
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -224,7 +224,8 @@ func (obj ShoppingListResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListUpdate struct {
-	// Expected version of the ShoppingList on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) will be returned.
+	// Expected version of the ShoppingList on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// List of update actions to be performed on the ShoppingList.
 	Actions []ShoppingListUpdateAction `json:"actions"`

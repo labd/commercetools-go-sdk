@@ -17,9 +17,9 @@ type CartDiscount struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) for the CartDiscount was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the CartDiscount.
 	Name LocalizedString `json:"name"`
@@ -372,7 +372,8 @@ func (obj CartDiscountTotalPriceTarget) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountUpdate struct {
-	// Expected version of the CartDiscount on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the CartDiscount on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the CartDiscount.
 	Actions []CartDiscountUpdateAction `json:"actions"`
@@ -908,6 +909,8 @@ const (
 /**
 *	If a referenced Store does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
 *
+*	This action generates a [CartDiscountStoreAdded](ctp:api:type:CartDiscountStoreAddedMessage) Message.
+*
  */
 type CartDiscountAddStoreAction struct {
 	// [Store](ctp:api:type:Store) to add.
@@ -1099,6 +1102,8 @@ func (obj CartDiscountChangeValueAction) MarshalJSON() ([]byte, error) {
 /**
 *	If a referenced Store does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
 *
+*	This action generates a [CartDiscountStoreRemoved](ctp:api:type:CartDiscountStoreRemovedMessage) Message.
+*
  */
 type CartDiscountRemoveStoreAction struct {
 	// [Store](ctp:api:type:Store) to remove.
@@ -1184,6 +1189,8 @@ func (obj CartDiscountSetKeyAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	If a referenced Store does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
+*
+*	This action generates a [CartDiscountStoresSet](ctp:api:type:CartDiscountStoresSetMessage) Message.
 *
  */
 type CartDiscountSetStoresAction struct {

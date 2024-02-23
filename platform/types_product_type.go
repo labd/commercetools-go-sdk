@@ -50,7 +50,7 @@ type AttributeDefinition struct {
 	//
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
-	// This constraint is enforced at both [Product creation](/../api/projects/products#create-product) and [Product update](/../api/projects/products#update-product).
+	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/../api/projects/products#update-product).
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
@@ -152,7 +152,10 @@ type AttributePlainEnumValue struct {
 type AttributeReferenceTypeId string
 
 const (
+	AttributeReferenceTypeIdAssociateRole    AttributeReferenceTypeId = "associate-role"
+	AttributeReferenceTypeIdBusinessUnit     AttributeReferenceTypeId = "business-unit"
 	AttributeReferenceTypeIdCart             AttributeReferenceTypeId = "cart"
+	AttributeReferenceTypeIdCartDiscount     AttributeReferenceTypeId = "cart-discount"
 	AttributeReferenceTypeIdCategory         AttributeReferenceTypeId = "category"
 	AttributeReferenceTypeIdChannel          AttributeReferenceTypeId = "channel"
 	AttributeReferenceTypeIdCustomer         AttributeReferenceTypeId = "customer"
@@ -506,9 +509,9 @@ type ProductType struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ProductType was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ProductType.
 	Key *string `json:"key,omitempty"`
@@ -643,7 +646,8 @@ func (obj ProductTypeResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeUpdate struct {
-	// Expected version of the ProductType on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the ProductType on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the ProductType.
 	Actions []ProductTypeUpdateAction `json:"actions"`

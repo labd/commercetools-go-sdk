@@ -26,9 +26,9 @@ type TaxCategory struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the TaxCategory was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the TaxCategory.
 	Name string `json:"name"`
@@ -139,7 +139,8 @@ func (obj TaxCategoryResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type TaxCategoryUpdate struct {
-	// Expected version of the TaxCategory on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the TaxCategory on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the TaxCategory.
 	Actions []TaxCategoryUpdateAction `json:"actions"`
@@ -226,7 +227,7 @@ type TaxRate struct {
 	Key *string `json:"key,omitempty"`
 	// Name of the TaxRate.
 	Name string `json:"name"`
-	// Tax rate. If subrates are used, the amount must be the sum of all subrates.
+	// Tax rate. If subrates are used, the amount is the sum of all rates in `subRates`.
 	Amount float64 `json:"amount"`
 	// If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
@@ -234,7 +235,7 @@ type TaxRate struct {
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
-	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
+	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes). The total of all subrates equals the TaxRate `amount`.
 	SubRates []SubRate `json:"subRates"`
 }
 
@@ -275,7 +276,7 @@ type TaxRateDraft struct {
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
-	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes).
+	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes). The total of all subrates must equal the TaxRate `amount`.
 	SubRates []SubRate `json:"subRates"`
 	// User-defined unique identifier of the TaxRate.
 	Key *string `json:"key,omitempty"`

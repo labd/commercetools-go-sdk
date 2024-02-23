@@ -17,9 +17,9 @@ type ApprovalFlow struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Approval Flow was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// [Order](ctp:api:type:Order) that needs to be approved.
 	Order OrderReference `json:"order"`
@@ -40,6 +40,8 @@ type ApprovalFlow struct {
 	PendingApprovers []RuleApprover `json:"pendingApprovers"`
 	// Associate Roles required for approval based on the approver hierarchy tiers defined in `rules` only for the currently active tier(s).
 	CurrentTierPendingApprovers []RuleApprover `json:"currentTierPendingApprovers"`
+	// Custom Fields on the Approval Flow.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type ApprovalFlowApproval struct {
@@ -93,7 +95,7 @@ const (
 
 type ApprovalFlowUpdate struct {
 	// Expected version of the [Approval Flow](ctp:api:type:ApprovalFlow) to which the changes should be applied.
-	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the [Approval Flow](ctp:api:type:ApprovalFlow).
 	Actions []ApprovalFlowUpdateAction `json:"actions"`
@@ -143,6 +145,18 @@ func mapDiscriminatorApprovalFlowUpdateAction(input interface{}) (ApprovalFlowUp
 			return nil, err
 		}
 		return obj, nil
+	case "setCustomField":
+		obj := ApprovalFlowSetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomType":
+		obj := ApprovalFlowSetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -187,4 +201,41 @@ func (obj ApprovalFlowRejectAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "reject", Alias: (*Alias)(&obj)})
+}
+
+type ApprovalFlowSetCustomFieldAction struct {
+	// Name of the [Custom Field](ctp:api:type:CustomFields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ApprovalFlowSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias ApprovalFlowSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+type ApprovalFlowSetCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the ApprovalFlow with [Custom Fields](ctp:api:type:CustomFields).
+	// If absent, any existing Type and Custom Fields are removed from the ApprovalFlow.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](ctp:api:type:CustomFields) fields for the ApprovalFlow.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ApprovalFlowSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias ApprovalFlowSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }

@@ -44,7 +44,10 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Post(body DiscountCodeUpd
 }
 
 /**
+*	Deleting a Discount Code produces the [DiscountCodeDeleted](ctp:api:type:DiscountCodeDeletedMessage) Message.
+*
 *	Deprecated scope: `manage_orders:{projectKey}`
+*
  */
 func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Delete() *ByProjectKeyDiscountCodesByIDRequestMethodDelete {
 	return &ByProjectKeyDiscountCodesByIDRequestMethodDelete{

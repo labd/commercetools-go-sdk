@@ -17,9 +17,9 @@ type State struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the State was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the State.
 	Key string `json:"key"`
@@ -210,7 +210,8 @@ const (
 )
 
 type StateUpdate struct {
-	// Expected version of the State on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the State on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the State.
 	Actions []StateUpdateAction `json:"actions"`

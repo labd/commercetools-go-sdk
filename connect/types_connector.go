@@ -18,6 +18,8 @@ type Connector struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description *string `json:"description,omitempty"`
+	// Type of integration provided by the Connector. Can be used to filter search and query results.
+	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator Creator `json:"creator"`
 	// GitHub repository details of the Connector.
@@ -65,6 +67,8 @@ type ConnectorDraft struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description *string `json:"description,omitempty"`
+	// Type of integration provided by the Connector. Can be used to filter search and query results.
+	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator Creator `json:"creator"`
 	// GitHub repository details of the Connector.
@@ -93,6 +97,10 @@ func (obj ConnectorDraft) MarshalJSON() ([]byte, error) {
 		return nil, err
 	}
 
+	if raw["integrationTypes"] == nil {
+		delete(raw, "integrationTypes")
+	}
+
 	if raw["supportedRegions"] == nil {
 		delete(raw, "supportedRegions")
 	}
@@ -116,6 +124,8 @@ type ConnectorStaged struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description string `json:"description"`
+	// Type of integration provided by the Connector. Can be used to filter search and query results.
+	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator Creator `json:"creator"`
 	// GitHub repository details of the Connector.
@@ -299,6 +309,12 @@ func mapDiscriminatorConnectorUpdateAction(input interface{}) (ConnectorUpdateAc
 		return obj, nil
 	case "setDocumentationUrl":
 		obj := ConnectorSetDocumentationUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setIntegrationTypes":
+		obj := ConnectorSetIntegrationTypesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -604,6 +620,25 @@ func (obj ConnectorSetDocumentationUrlAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Updates the integration types of the Connector.
+*
+ */
+type ConnectorSetIntegrationTypesAction struct {
+	// New value to set.
+	IntegrationTypes []IntegrationType `json:"integrationTypes"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConnectorSetIntegrationTypesAction) MarshalJSON() ([]byte, error) {
+	type Alias ConnectorSetIntegrationTypesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setIntegrationTypes", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Removes a certified and listed Connector from search results and listings. This update action does not affect deployed instances of the Connector.
 *
  */
@@ -640,13 +675,12 @@ func (obj ConnectorAddCertificationCommentAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Requests previewable status for the ConnectorStaged. A previewable ConnectorStaged can be used in a Deployment for testing/preview purposes.
+*	Requests the previewable status of a ConnectorStaged. A previewable ConnectorStaged can be used in a Deployment for testing and preview purposes.
 *
-*	After using this update action the status of `isPreviewable` will change to `pending` and your request will be reviewed by the Connect team. After being reviewed, the status of `isPreviewable` will change to `true` if the previewable status has been granted or `false` if rejected.
+*	After using this update action, the status of `isPreviewable` will change to `pending`. Following validation, the status of `isPreviewable` will change to `true` if the previewable status is granted, or `false` if it is rejected.
+*	In the case of a `false` status, contact our [support team](https://commercetools.atlassian.net/servicedesk/customer/portal/27) regarding any issues raised during the validation process.
 *
-*	If `false`, the Connect team will contact you regarding any issues raised during the review process.
-*
-*	Requesting previewable status for a ConnectorStaged that is currently being reviewed for previewable status returns the [ConnectorStagedPreviewRequestUnderProcess](ctp:connect:type:ConnectorStagedPreviewRequestUnderProcessError) error.
+*	Requesting the previewable status for a ConnectorStaged that is currently being reviewed returns the [ConnectorStagedPreviewRequestUnderProcess](ctp:connect:type:ConnectorStagedPreviewRequestUnderProcessError) error.
 *
  */
 type ConnectorUpdatePreviewableAction struct {

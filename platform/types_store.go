@@ -31,9 +31,9 @@ type Store struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Store was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique and immutable identifier for the Store.
 	Key string `json:"key"`
@@ -124,7 +124,7 @@ func (obj StoreDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store) by its key.
+*	[Reference](ctp:api:type:Reference) to a [Store](ctp:api:type:Store) by its key.
 *
  */
 type StoreKeyReference struct {
@@ -164,7 +164,7 @@ type StorePagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [Store](ctp:api:type:Store).
+*	[Reference](ctp:api:type:Reference) to a [Store](ctp:api:type:Store).
 *
  */
 type StoreReference struct {
@@ -185,7 +185,7 @@ func (obj StoreReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [Store](ctp:api:type:Store). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Store](ctp:api:type:Store). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
 *
  */
 type StoreResourceIdentifier struct {
@@ -206,7 +206,8 @@ func (obj StoreResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type StoreUpdate struct {
-	// Expected version of the Store on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the Store on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Store.
 	Actions []StoreUpdateAction `json:"actions"`

@@ -66,7 +66,7 @@ func (rb *ByProjectKeyProductSelectionsByIDRequestMethodDelete) WithHeaders(head
 }
 
 /**
-*	Deletion will only succeed if the Product Selection is not assigned to any [Store](/../api/projects/stores#store).
+*	Deletion will only succeed if the Product Selection is not assigned to any [Store](ctp:api:type:Store).
  */
 func (rb *ByProjectKeyProductSelectionsByIDRequestMethodDelete) Execute(ctx context.Context) (result *ProductSelection, err error) {
 	var queryParams url.Values

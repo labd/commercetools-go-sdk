@@ -17,9 +17,9 @@ type Payment struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Payment was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -244,7 +244,8 @@ type PaymentStatusDraft struct {
 }
 
 type PaymentUpdate struct {
-	// Expected version of the Payment on which the changes should be applied. If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) error will be returned.
+	// Expected version of the Payment on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Payment.
 	Actions []PaymentUpdateAction `json:"actions"`

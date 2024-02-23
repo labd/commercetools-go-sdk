@@ -48,6 +48,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder) Head() *B
 /**
 *	When using the endpoint, the Store specified in the path and the Stores specified in the payload's `stores` field are added to the CartDiscount.
 *
+*	Creating a Cart Discount produces the [CartDiscountCreated](ctp:api:type:CartDiscountCreatedMessage) Message.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder) Post(body CartDiscountDraft) *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestMethodPost{

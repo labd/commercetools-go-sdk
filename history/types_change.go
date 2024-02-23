@@ -39,6 +39,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "AddAssociateChange":
+		obj := AddAssociateChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "AddAttributeDefinitionChange":
 		obj := AddAttributeDefinitionChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -89,6 +95,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "AddFieldDefinitionChange":
 		obj := AddFieldDefinitionChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AddInheritedAssociateChange":
+		obj := AddInheritedAssociateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -149,6 +161,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "AddProductChange":
 		obj := AddProductChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "AddProductSelectionChange":
+		obj := AddProductSelectionChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -243,6 +261,18 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ChangeAssociateChange":
+		obj := ChangeAssociateChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeAssociateModeChange":
+		obj := ChangeAssociateModeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ChangeAttributeConstraintChange":
 		obj := ChangeAttributeConstraintChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -251,6 +281,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "ChangeAttributeOrderByNameChange":
 		obj := ChangeAttributeOrderByNameChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeBuyerAssignableChange":
+		obj := ChangeBuyerAssignableChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -305,6 +341,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "ChangeGroupsChange":
 		obj := ChangeGroupsChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeInheritedAssociateChange":
+		obj := ChangeInheritedAssociateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -405,6 +447,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ChangeParentUnitChange":
+		obj := ChangeParentUnitChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ChangePaymentStateChange":
 		obj := ChangePaymentStateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -431,6 +479,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "ChangePriceChange":
 		obj := ChangePriceChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeProductSelectionActiveChange":
+		obj := ChangeProductSelectionActiveChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -509,6 +563,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "ChangeStateTypeChange":
 		obj := ChangeStateTypeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ChangeStatusChange":
+		obj := ChangeStatusChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -631,6 +691,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "RemoveAssociateChange":
+		obj := RemoveAssociateChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "RemoveAttributeDefinitionChange":
 		obj := RemoveAttributeDefinitionChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -691,6 +757,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "RemoveInheritedAssociateChange":
+		obj := RemoveInheritedAssociateChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "RemoveItemShippingAddressesChange":
 		obj := RemoveItemShippingAddressesChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -739,6 +811,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "RemoveProductSelectionChange":
+		obj := RemoveProductSelectionChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "RemovePropertyChange":
 		obj := RemovePropertyChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -781,8 +859,26 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "RequestQuoteRenegotiationChange":
+		obj := RequestQuoteRenegotiationChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetAddressChange":
 		obj := SetAddressChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetAddressCustomFieldChange":
+		obj := SetAddressCustomFieldChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetAddressCustomTypeChange":
+		obj := SetAddressCustomTypeChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -883,14 +979,20 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "SetCountryChange":
-		obj := SetCountryChange{}
+	case "SetContactEmailChange":
+		obj := SetContactEmailChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
 	case "SetCountriesChange":
 		obj := SetCountriesChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetCountryChange":
+		obj := SetCountryChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1261,6 +1363,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetLocalizedNameChange":
+		obj := SetLocalizedNameChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetOrderLineItemCustomFieldChange":
 		obj := SetOrderLineItemCustomFieldChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1315,8 +1423,8 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "SetPurchaseOrderNumberChange":
-		obj := SetPurchaseOrderNumberChange{}
+	case "SetPermissionsChange":
+		obj := SetPermissionsChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1359,6 +1467,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetPropertyChange":
 		obj := SetPropertyChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetPurchaseOrderNumberChange":
+		obj := SetPurchaseOrderNumberChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1507,6 +1621,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetStoreModeChange":
+		obj := SetStoreModeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetStoresChange":
 		obj := SetStoresChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1609,6 +1729,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetVariantSelectionChange":
+		obj := SetVariantSelectionChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetVatIdChange":
 		obj := SetVatIdChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1666,8 +1792,6 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
  */
 type AddAddressChange struct {
 	Change string `json:"change"`
-	// Value before the change.
-	PreviousValue Address `json:"previousValue"`
 	// Value after the change.
 	NextValue Address `json:"nextValue"`
 }
@@ -1705,6 +1829,25 @@ func (obj AddAssetChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "AddAssetChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action.
+ */
+type AddAssociateChange struct {
+	Change string `json:"change"`
+	// Value after the change.
+	NextValue Associate `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AddAssociateChange) MarshalJSON() ([]byte, error) {
+	type Alias AddAssociateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AddAssociateChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1755,9 +1898,9 @@ func (obj AddBillingAddressIdChange) MarshalJSON() ([]byte, error) {
 type AddChannelRolesChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue []ChannelRole `json:"previousValue"`
+	PreviousValue []ChannelRoleEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue []ChannelRole `json:"nextValue"`
+	NextValue []ChannelRoleEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1896,6 +2039,25 @@ func (obj AddFieldDefinitionChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action on a parent of a Business Unit in cases where [inheritance applies](/../api/associates-overview#conditions-for-inheritance).
+ */
+type AddInheritedAssociateChange struct {
+	Change string `json:"change"`
+	// Value after the change.
+	NextValue InheritedAssociate `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AddInheritedAssociateChange) MarshalJSON() ([]byte, error) {
+	type Alias AddInheritedAssociateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AddInheritedAssociateChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Add InterfaceInteraction](ctp:api:type:PaymentAddInterfaceInteractionAction) update action.
  */
 type AddInterfaceInteractionChange struct {
@@ -1949,7 +2111,7 @@ func (obj AddItemShippingAddressesChange) MarshalJSON() ([]byte, error) {
 type AddLocalizedEnumValueChange struct {
 	Change string `json:"change"`
 	// Value after the change.
-	NextValue LocalizedEnumValue `json:"nextValue"`
+	NextValue AttributeLocalizedEnumValue `json:"nextValue"`
 	// Name of the updated [FieldDefinition](ctp:api:type:FieldDefinition); only present on changes to Types.
 	FieldName string `json:"fieldName"`
 	// Name of the updated [AttributeDefinition](ctp:api:type:AttributeDefinition); only present on changes to Product Types.
@@ -1971,8 +2133,6 @@ func (obj AddLocalizedEnumValueChange) MarshalJSON() ([]byte, error) {
  */
 type AddLocationChange struct {
 	Change string `json:"change"`
-	// Value before the change.
-	PreviousValue Location `json:"previousValue"`
 	// Value after the change.
 	NextValue Location `json:"nextValue"`
 }
@@ -2064,7 +2224,7 @@ func (obj AddPaymentChange) MarshalJSON() ([]byte, error) {
 type AddPlainEnumValueChange struct {
 	Change string `json:"change"`
 	// Value after the change.
-	NextValue EnumValue `json:"nextValue"`
+	NextValue AttributePlainEnumValue `json:"nextValue"`
 	// Name of the updated [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	AttributeName string `json:"attributeName"`
 }
@@ -2110,6 +2270,8 @@ type AddProductChange struct {
 	Change string `json:"change"`
 	// Value after the change.
 	NextValue Reference `json:"nextValue"`
+	// The [Product Variants](ctp:api:type:ProductVariant) included in the [Product Selection](ctp:api:type:ProductSelection).
+	VariantSelection ProductVariantSelection `json:"variantSelection"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2120,6 +2282,25 @@ func (obj AddProductChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "AddProductChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Add Product Selection](ctp:api:type:StoreAddProductSelectionAction) update action.
+ */
+type AddProductSelectionChange struct {
+	Change        string                  `json:"change"`
+	PreviousValue ProductSelectionSetting `json:"previousValue"`
+	NextValue     ProductSelectionSetting `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AddProductSelectionChange) MarshalJSON() ([]byte, error) {
+	type Alias AddProductSelectionChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AddProductSelectionChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -2216,9 +2397,9 @@ func (obj AddShoppingListLineItemChange) MarshalJSON() ([]byte, error) {
 type AddStateRolesChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue []StateRole `json:"previousValue"`
+	PreviousValue []StateRoleEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue []StateRole `json:"nextValue"`
+	NextValue []StateRoleEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -2451,6 +2632,48 @@ func (obj ChangeAssetOrderChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Change Associate](ctp:api:type:BusinessUnitChangeAssociateAction) update action.
+ */
+type ChangeAssociateChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue Associate `json:"previousValue"`
+	// Value after the change.
+	NextValue Associate `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeAssociateChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeAssociateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeAssociateChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Change Associate Mode](ctp:api:type:BusinessUnitChangeAssociateModeAction) update action.
+ */
+type ChangeAssociateModeChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue BusinessUnitAssociateMode `json:"previousValue"`
+	// Value after the change.
+	NextValue BusinessUnitAssociateMode `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeAssociateModeChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeAssociateModeChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeAssociateModeChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Change AttributeDefinition AttributeConstraint](ctp:api:type:ProductTypeChangeAttributeConstraintAction) update action.
  */
 type ChangeAttributeConstraintChange struct {
@@ -2492,6 +2715,28 @@ func (obj ChangeAttributeOrderByNameChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ChangeAttributeOrderByNameChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Change BuyerAssignable](ctp:api:type:AssociateRoleChangeBuyerAssignableAction) update action.
+*
+ */
+type ChangeBuyerAssignableChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue bool `json:"previousValue"`
+	// Value after the change.
+	NextValue bool `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeBuyerAssignableChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeBuyerAssignableChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeBuyerAssignableChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -2562,10 +2807,7 @@ func (obj ChangeCustomLineItemQuantityChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the following update actions:
-*
-*	- [Change Description](ctp:api:type:ChannelChangeDescriptionAction) on Channels.
-*	- [Change Description](ctp:api:type:ProductTypeChangeDescriptionAction) on Product Types.
+*	Change triggered by the [Change Description](ctp:api:type:ProductTypeChangeDescriptionAction) update action.
 *
  */
 type ChangeDescriptionChange struct {
@@ -2695,6 +2937,27 @@ func (obj ChangeGroupsChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ChangeGroupsChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Change Associate](ctp:api:type:BusinessUnitChangeAssociateAction) update action on a parent of a Business Unit in cases where [inheritance applies](/../api/associates-overview#conditions-for-inheritance).
+ */
+type ChangeInheritedAssociateChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue InheritedAssociate `json:"previousValue"`
+	// Value after the change.
+	NextValue InheritedAssociate `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeInheritedAssociateChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeInheritedAssociateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeInheritedAssociateChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -2877,10 +3140,7 @@ func (obj ChangeLineItemQuantityChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the following update actions:
-*
-*	- [Change Description](ctp:api:type:ProductTypeChangeDescriptionAction) on Product Types.
-*	- [Change Description](ctp:api:type:ChannelChangeDescriptionAction) on Channels.
+*	Change triggered by the [Change Description](ctp:api:type:ChannelChangeDescriptionAction) update action.
 *
  */
 type ChangeLocalizedDescriptionChange struct {
@@ -2967,14 +3227,10 @@ func (obj ChangeLocalizedEnumValueOrderChange) MarshalJSON() ([]byte, error) {
 *	- [Change Name](ctp:api:type:CartDiscountChangeNameAction) on Cart Discounts.
 *	- [Change Name](ctp:api:type:CategoryChangeNameAction) on Categories.
 *	- [Change Name](ctp:api:type:ChannelChangeNameAction) on Channels.
-*	- [Change Name](ctp:api:type:CustomerGroupChangeNameAction) on Customer Groups.
 *	- [Change Name](ctp:api:type:ProductChangeNameAction) on Products.
 *	- [Change Name](ctp:api:type:ProductDiscountChangeNameAction) on Product Discounts.
 *	- [Change Name](ctp:api:type:ProductSelectionChangeNameAction) on Product Selections.
-*	- [Change Name](ctp:api:type:ProductTypeChangeNameAction) on Product Types.
 *	- [Change Name](ctp:api:type:ShoppingListChangeNameAction) on Shopping Lists.
-*	- [Change Name](ctp:api:type:TaxCategoryChangeNameAction) on Tax Categories.
-*	- [Change Name](ctp:api:type:TypeChangeNameAction) on Types.
 *	- [Change Name](ctp:api:type:ZoneChangeNameAction) on Zones.
 *
  */
@@ -3023,17 +3279,9 @@ func (obj ChangeMasterVariantChange) MarshalJSON() ([]byte, error) {
 /**
 *	Change triggered by the following update actions:
 *
-*	- [Change Name](ctp:api:type:CartDiscountChangeNameAction) on Cart Discounts.
-*	- [Change Name](ctp:api:type:CategoryChangeNameAction) on Categories.
-*	- [Change Name](ctp:api:type:ChannelChangeNameAction) on Channels.
 *	- [Change Name](ctp:api:type:CustomerGroupChangeNameAction) on Customer Groups.
-*	- [Change Name](ctp:api:type:ProductChangeNameAction) on Products.
-*	- [Change Name](ctp:api:type:ProductDiscountChangeNameAction) on Product Discounts.
-*	- [Change Name](ctp:api:type:ProductSelectionChangeNameAction) on Product Selections.
 *	- [Change Name](ctp:api:type:ProductTypeChangeNameAction) on Product Types.
-*	- [Change Name](ctp:api:type:ShoppingListChangeNameAction) on Shopping Lists.
 *	- [Change Name](ctp:api:type:TaxCategoryChangeNameAction) on Tax Categories.
-*	- [Change Name](ctp:api:type:TypeChangeNameAction) on Types.
 *	- [Change Name](ctp:api:type:ZoneChangeNameAction) on Zones.
 *
  */
@@ -3120,6 +3368,27 @@ func (obj ChangeParentChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ChangeParentChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+ */
+type ChangeParentUnitChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue KeyReference `json:"previousValue"`
+	// Value after the change.
+	NextValue KeyReference `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeParentUnitChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeParentUnitChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeParentUnitChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -3240,6 +3509,29 @@ func (obj ChangePriceChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ChangePriceChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Change Product Selection Active](ctp:api:type:StoreChangeProductSelectionAction) update action.
+ */
+type ChangeProductSelectionActiveChange struct {
+	Change string `json:"change"`
+	// Reference to the Product Selection which was changed.
+	ProductSelection Reference `json:"productSelection"`
+	// Value before the change.
+	PreviousValue bool `json:"previousValue"`
+	// Value after the change.
+	NextValue bool `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeProductSelectionActiveChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeProductSelectionActiveChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeProductSelectionActiveChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -3511,9 +3803,9 @@ func (obj ChangeStagedQuoteStateChange) MarshalJSON() ([]byte, error) {
 type ChangeStateTypeChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue StateType `json:"previousValue"`
+	PreviousValue StateTypeEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue StateType `json:"nextValue"`
+	NextValue StateTypeEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -3524,6 +3816,27 @@ func (obj ChangeStateTypeChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ChangeStateTypeChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Change Status](ctp:api:type:BusinessUnitChangeStatusAction) update action.
+ */
+type ChangeStatusChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue BusinessUnitStatus `json:"previousValue"`
+	// Value after the change.
+	NextValue BusinessUnitStatus `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeStatusChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeStatusChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeStatusChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -3905,6 +4218,25 @@ func (obj RemoveAssetChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Remove Associate](ctp:api:type:BusinessUnitRemoveAssociateAction) update action.
+ */
+type RemoveAssociateChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue Associate `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RemoveAssociateChange) MarshalJSON() ([]byte, error) {
+	type Alias RemoveAssociateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RemoveAssociateChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Remove AttributeDefinition](ctp:api:type:ProductTypeRemoveAttributeDefinitionAction) update action.
  */
 type RemoveAttributeDefinitionChange struct {
@@ -3952,9 +4284,9 @@ func (obj RemoveBillingAddressIdChange) MarshalJSON() ([]byte, error) {
 type RemoveChannelRolesChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue []ChannelRole `json:"previousValue"`
+	PreviousValue []ChannelRoleEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue []ChannelRole `json:"nextValue"`
+	NextValue []ChannelRoleEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -4114,6 +4446,25 @@ func (obj RemoveImageChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Remove Associate](ctp:api:type:BusinessUnitRemoveAssociateAction) update action on a parent of a Business Unit in cases where [inheritance applies](/../api/associates-overview#conditions-for-inheritance).
+ */
+type RemoveInheritedAssociateChange struct {
+	Change string `json:"change"`
+	// The value before the change.
+	PreviousValue InheritedAssociate `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RemoveInheritedAssociateChange) MarshalJSON() ([]byte, error) {
+	type Alias RemoveInheritedAssociateChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RemoveInheritedAssociateChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Remove Item Shipping Address](ctp:api:type:OrderRemoveItemShippingAddressAction) update action.
  */
 type RemoveItemShippingAddressesChange struct {
@@ -4162,8 +4513,6 @@ type RemoveLocationChange struct {
 	Change string `json:"change"`
 	// Value before the change.
 	PreviousValue Location `json:"previousValue"`
-	// Value after the change.
-	NextValue Location `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -4293,6 +4642,25 @@ func (obj RemoveProductChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Remove Product Selection](ctp:api:type:StoreRemoveProductSelectionAction) update action.
+ */
+type RemoveProductSelectionChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue ProductSelectionSetting `json:"previousValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RemoveProductSelectionChange) MarshalJSON() ([]byte, error) {
+	type Alias RemoveProductSelectionChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RemoveProductSelectionChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Update CustomObject](ctp:api:endpoint:/{projectKey}/custom-objects:POST) request when an existing property is removed.
  */
 type RemovePropertyChange struct {
@@ -4363,9 +4731,9 @@ func (obj RemoveShoppingListLineItemChange) MarshalJSON() ([]byte, error) {
 type RemoveStateRolesChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue []StateRole `json:"previousValue"`
+	PreviousValue []StateRoleEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue []StateRole `json:"nextValue"`
+	NextValue []StateRoleEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -4385,8 +4753,6 @@ type RemoveTaxRateChange struct {
 	Change string `json:"change"`
 	// Value before the change.
 	PreviousValue TaxRate `json:"previousValue"`
-	// Value after the change.
-	NextValue TaxRate `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -4445,6 +4811,30 @@ func (obj RemoveVariantChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Request Quote Renegotiation](ctp:api:type:QuoteRequestQuoteRenegotiationAction) update action.
+*
+ */
+type RequestQuoteRenegotiationChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue QuoteState `json:"previousValue"`
+	// Value after the change.
+	NextValue QuoteState `json:"nextValue"`
+	// Message from the [Buyer](/../api/quotes-overview#buyer) regarding the [Quote](ctp:api:type:Quote) renegotiation request.
+	BuyerComment string `json:"buyerComment"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RequestQuoteRenegotiationChange) MarshalJSON() ([]byte, error) {
+	type Alias RequestQuoteRenegotiationChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RequestQuoteRenegotiationChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Set Address](ctp:api:type:ChannelSetAddressAction) update action.
  */
 type SetAddressChange struct {
@@ -4463,6 +4853,57 @@ func (obj SetAddressChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetAddressChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Address Custom Field](ctp:api:type:BusinessUnitSetAddressCustomFieldAction) update action.
+*
+ */
+type SetAddressCustomFieldChange struct {
+	Change string `json:"change"`
+	// [Address](ctp:api:type:Address) which was extended.
+	Address Address `json:"address"`
+	// Name of the [Custom Field](ctp:api:type:CustomFields).
+	Name string `json:"name"`
+	// `id` of the referenced [Type](ctp:api:type:Type).
+	CustomTypeId string `json:"customTypeId"`
+	// Value before the change.
+	PreviousValue interface{} `json:"previousValue"`
+	// Value after the change.
+	NextValue interface{} `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetAddressCustomFieldChange) MarshalJSON() ([]byte, error) {
+	type Alias SetAddressCustomFieldChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetAddressCustomFieldChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Address Custom Type](ctp:api:type:BusinessUnitSetAddressCustomTypeAction) update action.
+ */
+type SetAddressCustomTypeChange struct {
+	Change string `json:"change"`
+	// [Address](ctp:api:type:Address) which was extended.
+	Address Address `json:"address"`
+	// Value before the change.
+	PreviousValue CustomFields `json:"previousValue"`
+	// Value after the change.
+	NextValue CustomFields `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetAddressCustomTypeChange) MarshalJSON() ([]byte, error) {
+	type Alias SetAddressCustomTypeChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetAddressCustomTypeChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -4821,9 +5262,9 @@ func (obj SetCategoryOrderHintChange) MarshalJSON() ([]byte, error) {
 type SetChannelRolesChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue []ChannelRole `json:"previousValue"`
+	PreviousValue []ChannelRoleEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue []ChannelRole `json:"nextValue"`
+	NextValue []ChannelRoleEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -4858,9 +5299,9 @@ func (obj SetCompanyNameChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the [Set Country](ctp:api:type:StagedOrderSetCountryAction) update action.
+*	Change triggered by the [Set Contact Email](ctp:api:type:BusinessUnitSetContactEmailAction) update action.
  */
-type SetCountryChange struct {
+type SetContactEmailChange struct {
 	Change string `json:"change"`
 	// Value before the change.
 	PreviousValue string `json:"previousValue"`
@@ -4870,12 +5311,12 @@ type SetCountryChange struct {
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj SetCountryChange) MarshalJSON() ([]byte, error) {
-	type Alias SetCountryChange
+func (obj SetContactEmailChange) MarshalJSON() ([]byte, error) {
+	type Alias SetContactEmailChange
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
-	}{Action: "SetCountryChange", Alias: (*Alias)(&obj)})
+	}{Action: "SetContactEmailChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -4897,6 +5338,27 @@ func (obj SetCountriesChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetCountriesChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Country](ctp:api:type:StagedOrderSetCountryAction) update action.
+ */
+type SetCountryChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue string `json:"previousValue"`
+	// Value after the change.
+	NextValue string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetCountryChange) MarshalJSON() ([]byte, error) {
+	type Alias SetCountryChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetCountryChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -5032,8 +5494,8 @@ func (obj SetCustomLineItemMoneyChange) MarshalJSON() ([]byte, error) {
 /**
 *	Change triggered by the following update actions:
 *
-*	- [Set CustomLineItemShippingDetails](ctp:api:type:OrderSetCustomLineItemShippingDetailsAction) on Orders.
-*	- [Set CustomLineItemShippingDetails](ctp:api:type:StagedOrderSetCustomLineItemShippingDetailsAction) on Staged Orders.
+*	- [Set CustomLineItem ShippingDetails](ctp:api:type:OrderSetCustomLineItemShippingDetailsAction) on Orders.
+*	- [Set CustomLineItem ShippingDetails](ctp:api:type:StagedOrderSetCustomLineItemShippingDetailsAction) on Staged Orders.
 *
  */
 type SetCustomLineItemShippingDetailsChange struct {
@@ -5497,15 +5959,7 @@ func (obj SetDeliveryItemsChange) MarshalJSON() ([]byte, error) {
 /**
 *	Change triggered by the following update actions:
 *
-*	- [Set Description](ctp:api:type:CartDiscountSetDescriptionAction) on Cart Discounts.
-*	- [Set Description](ctp:api:type:CategorySetDescriptionAction) on Categories.
-*	- [Set Description](ctp:api:type:DiscountCodeSetDescriptionAction) on Discount Codes.
-*	- [Set Description](ctp:api:type:ProductSetDescriptionAction) on Products.
-*	- [Set Description](ctp:api:type:ProductDiscountSetDescriptionAction) on Product Discounts.
-*	- [Set Description](ctp:api:type:ShoppingListSetDescriptionAction) on Shopping Lists.
-*	- [Set Description](ctp:api:type:StateSetDescriptionAction) on States.
 *	- [Set Description](ctp:api:type:TaxCategorySetDescriptionAction) on Tax Categories.
-*	- [Set Description](ctp:api:type:TypeSetDescriptionAction) on Types.
 *	- [Set Description](ctp:api:type:ZoneSetDescriptionAction) on Zones.
 *
  */
@@ -5994,8 +6448,8 @@ func (obj SetLineItemProductSlugChange) MarshalJSON() ([]byte, error) {
 /**
 *	Change triggered by the following update actions:
 *
-*	- [Set LineItemShippingDetails](ctp:api:type:OrderSetLineItemShippingDetailsAction) on Orders.
-*	- [Set LineItemShippingDetails](ctp:api:type:StagedOrderSetLineItemShippingDetailsAction) on Staged Orders.
+*	- [Set LineItem ShippingDetails](ctp:api:type:OrderSetLineItemShippingDetailsAction) on Orders.
+*	- [Set LineItem ShippingDetails](ctp:api:type:StagedOrderSetLineItemShippingDetailsAction) on Staged Orders.
 *
  */
 type SetLineItemShippingDetailsChange struct {
@@ -6154,9 +6608,7 @@ func (obj SetLocaleChange) MarshalJSON() ([]byte, error) {
 *	- [Set Description](ctp:api:type:ProductDiscountSetDescriptionAction) on Product Discounts.
 *	- [Set Description](ctp:api:type:ShoppingListSetDescriptionAction) on Shopping Lists.
 *	- [Set Description](ctp:api:type:StateSetDescriptionAction) on States.
-*	- [Set Description](ctp:api:type:TaxCategorySetDescriptionAction) on Tax Categories.
 *	- [Set Description](ctp:api:type:TypeSetDescriptionAction) on Types.
-*	- [Set Description](ctp:api:type:ZoneSetDescriptionAction) on Zones.
 *
  */
 type SetLocalizedDescriptionChange struct {
@@ -6379,19 +6831,14 @@ func (obj SetMiddleNameChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the following update actions:
-*
-*	- [Set Name](ctp:api:type:DiscountCodeSetNameAction) on Discount Codes.
-*	- [Set Name](ctp:api:type:StateSetNameAction) on States.
-*	- [Set Name](ctp:api:type:StoreSetNameAction) on Stores.
-*
+*	Change triggered by the [Set Name](ctp:api:type:AssociateRoleSetNameAction) update action.
  */
 type SetNameChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue LocalizedString `json:"previousValue"`
+	PreviousValue string `json:"previousValue"`
 	// Value after the change.
-	NextValue LocalizedString `json:"nextValue"`
+	NextValue string `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -6402,6 +6849,32 @@ func (obj SetNameChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetNameChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the following update actions:
+*
+*	- [Set Name](ctp:api:type:DiscountCodeSetNameAction) on Discount Codes.
+*	- [Set State Name](ctp:api:type:StateSetNameAction) on States.
+*	- [Set Name](ctp:api:type:StoreSetNameAction) on Stores.
+*
+ */
+type SetLocalizedNameChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue LocalizedString `json:"previousValue"`
+	// Value after the change.
+	NextValue LocalizedString `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetLocalizedNameChange) MarshalJSON() ([]byte, error) {
+	type Alias SetLocalizedNameChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetLocalizedNameChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -6636,28 +7109,25 @@ func (obj SetParcelTrackingDataChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the following update actions:
-*
-*	- [Set Purchase Order Number](ctp:api:type:OrderSetPurchaseOrderNumberAction) on Orders.
-*	- [Set Purchase Order Number](ctp:api:type:StagedOrderSetPurchaseOrderNumberAction) on Staged Orders.
+*	Change triggered by the [Set Permissions](ctp:api:type:AssociateRoleSetPermissionsAction), [Add Permission](ctp:api:type:AssociateRoleAddPermissionAction), and [Remove Permission](ctp:api:type:AssociateRoleRemovePermissionAction) update actions.
 *
  */
-type SetPurchaseOrderNumberChange struct {
+type SetPermissionsChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue string `json:"previousValue"`
+	PreviousValue []Permission `json:"previousValue"`
 	// Value after the change.
-	NextValue string `json:"nextValue"`
+	NextValue []Permission `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj SetPurchaseOrderNumberChange) MarshalJSON() ([]byte, error) {
-	type Alias SetPurchaseOrderNumberChange
+func (obj SetPermissionsChange) MarshalJSON() ([]byte, error) {
+	type Alias SetPermissionsChange
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
-	}{Action: "SetPurchaseOrderNumberChange", Alias: (*Alias)(&obj)})
+	}{Action: "SetPermissionsChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -6821,6 +7291,31 @@ func (obj SetPropertyChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetPropertyChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the following update actions:
+*
+*	- [Set Purchase Order Number](ctp:api:type:OrderSetPurchaseOrderNumberAction) on Orders.
+*	- [Set Purchase Order Number](ctp:api:type:StagedOrderSetPurchaseOrderNumberAction) on Staged Orders.
+*
+ */
+type SetPurchaseOrderNumberChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue string `json:"previousValue"`
+	// Value after the change.
+	NextValue string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetPurchaseOrderNumberChange) MarshalJSON() ([]byte, error) {
+	type Alias SetPurchaseOrderNumberChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetPurchaseOrderNumberChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -7267,9 +7762,9 @@ func (obj SetSlugChange) MarshalJSON() ([]byte, error) {
 type SetStateRolesChange struct {
 	Change string `json:"change"`
 	// Value before the change.
-	PreviousValue []StateRole `json:"previousValue"`
+	PreviousValue []StateRoleEnum `json:"previousValue"`
 	// Value after the change.
-	NextValue []StateRole `json:"nextValue"`
+	NextValue []StateRoleEnum `json:"nextValue"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -7347,6 +7842,27 @@ func (obj SetStoreChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetStoreChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Store Mode](ctp:api:type:BusinessUnitSetStoreModeAction) update action.
+ */
+type SetStoreModeChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue BusinessUnitStoreMode `json:"previousValue"`
+	// Value after the change.
+	NextValue BusinessUnitStoreMode `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetStoreModeChange) MarshalJSON() ([]byte, error) {
+	type Alias SetStoreModeChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetStoreModeChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -7738,6 +8254,29 @@ func (obj SetVariantAvailabilityChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetVariantAvailabilityChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Variant Selection](ctp:api:type:ProductSelectionSetVariantSelectionAction) update action.
+ */
+type SetVariantSelectionChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue ProductVariantSelection `json:"previousValue"`
+	// Value after the change.
+	NextValue ProductVariantSelection `json:"nextValue"`
+	// Reference to the updated [Product](ctp:api:type:Product).
+	Product Reference `json:"product"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetVariantSelectionChange) MarshalJSON() ([]byte, error) {
+	type Alias SetVariantSelectionChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetVariantSelectionChange", Alias: (*Alias)(&obj)})
 }
 
 /**

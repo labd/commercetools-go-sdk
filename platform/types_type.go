@@ -37,6 +37,7 @@ type CustomFieldLocalizedEnumValue struct {
 type CustomFieldReferenceValue string
 
 const (
+	CustomFieldReferenceValueApprovalFlow     CustomFieldReferenceValue = "approval-flow"
 	CustomFieldReferenceValueAssociateRole    CustomFieldReferenceValue = "associate-role"
 	CustomFieldReferenceValueBusinessUnit     CustomFieldReferenceValue = "business-unit"
 	CustomFieldReferenceValueCart             CustomFieldReferenceValue = "cart"
@@ -452,6 +453,7 @@ type ResourceTypeId string
 const (
 	ResourceTypeIdAddress                     ResourceTypeId = "address"
 	ResourceTypeIdAsset                       ResourceTypeId = "asset"
+	ResourceTypeIdApprovalFlow                ResourceTypeId = "approval-flow"
 	ResourceTypeIdAssociateRole               ResourceTypeId = "associate-role"
 	ResourceTypeIdBusinessUnit                ResourceTypeId = "business-unit"
 	ResourceTypeIdCartDiscount                ResourceTypeId = "cart-discount"
@@ -492,9 +494,9 @@ type Type struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Type was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Type.
 	Key string `json:"key"`
@@ -622,7 +624,7 @@ const (
 
 type TypeUpdate struct {
 	// Expected version of the type on which the changes should be applied.
-	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the Type.
 	Actions []TypeUpdateAction `json:"actions"`

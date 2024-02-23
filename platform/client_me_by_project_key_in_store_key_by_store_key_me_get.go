@@ -62,7 +62,7 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodGetInput) Values() u
 	}
 	for k, v := range input.PredicateVar {
 		for _, x := range v {
-			values.Set(k, x)
+			values.Add(k, x)
 		}
 	}
 	return values

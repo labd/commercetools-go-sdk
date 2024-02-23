@@ -53,6 +53,27 @@ type AssetSource struct {
 	ContentType string          `json:"contentType"`
 }
 
+type Associate struct {
+	AssociateRoleAssignments []AssociateRoleAssignment `json:"associateRoleAssignments"`
+	Customer                 Reference                 `json:"customer"`
+}
+
+type AssociateRoleAssignment struct {
+	AssociateRole KeyReference `json:"associateRole"`
+	// Determines whether an [AssociateRoleAssignment](ctp:api:type:AssociateRoleAssignment) can be inherited by child Business Units.
+	Inheritance AssociateRoleInheritanceMode `json:"inheritance"`
+}
+
+/**
+*	Determines whether an [AssociateRoleAssignment](ctp:api:type:AssociateRoleAssignment) can be inherited by child Business Units.
+ */
+type AssociateRoleInheritanceMode string
+
+const (
+	AssociateRoleInheritanceModeEnabled  AssociateRoleInheritanceMode = "Enabled"
+	AssociateRoleInheritanceModeDisabled AssociateRoleInheritanceMode = "Disabled"
+)
+
 type AttributeConstraintEnum string
 
 const (
@@ -76,6 +97,28 @@ type AttributeDefinition struct {
 	IsSearchable bool `json:"isSearchable"`
 }
 
+/**
+*	A localized enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned.
+*
+ */
+type AttributeLocalizedEnumValue struct {
+	// Key of the value used as a programmatic identifier, for example in facets & filters.
+	Key string `json:"key"`
+	// Descriptive, localized label of the value.
+	Label LocalizedString `json:"label"`
+}
+
+/**
+*	A plain enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned.
+*
+ */
+type AttributePlainEnumValue struct {
+	// Key of the value used as a programmatic identifier, for example in facets & filters.
+	Key string `json:"key"`
+	// Descriptive label of the value.
+	Label string `json:"label"`
+}
+
 type AttributeType struct {
 	Name string `json:"name"`
 }
@@ -87,15 +130,50 @@ const (
 	AuthenticationModeExternalAuth AuthenticationMode = "ExternalAuth"
 )
 
-type CategoryOrderHints map[string]string
-type ChannelRole string
+/**
+*	Determines whether a Business Unit can inherit Associates from a parent.
+ */
+type BusinessUnitAssociateMode string
 
 const (
-	ChannelRoleInventorySupply     ChannelRole = "InventorySupply"
-	ChannelRoleProductDistribution ChannelRole = "ProductDistribution"
-	ChannelRoleOrderExport         ChannelRole = "OrderExport"
-	ChannelRoleOrderImport         ChannelRole = "OrderImport"
-	ChannelRolePrimary             ChannelRole = "Primary"
+	BusinessUnitAssociateModeExplicit              BusinessUnitAssociateMode = "Explicit"
+	BusinessUnitAssociateModeExplicitAndFromParent BusinessUnitAssociateMode = "ExplicitAndFromParent"
+)
+
+/**
+*	Indicates whether the Business Unit can be edited and used in [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quote Requests](ctp:api:type:QuoteRequest), or [Quotes](ctp:api:type:Quote).
+ */
+type BusinessUnitStatus string
+
+const (
+	BusinessUnitStatusActive   BusinessUnitStatus = "Active"
+	BusinessUnitStatusInactive BusinessUnitStatus = "Inactive"
+)
+
+/**
+*	Defines whether the Stores of the Business Unit are set directly on the Business Unit or are inherited from its parent unit.
+ */
+type BusinessUnitStoreMode string
+
+const (
+	BusinessUnitStoreModeExplicit   BusinessUnitStoreMode = "Explicit"
+	BusinessUnitStoreModeFromParent BusinessUnitStoreMode = "FromParent"
+)
+
+type CategoryOrderHints map[string]string
+
+/**
+*	Describes the purpose and type of the Channel. A Channel can have one or more roles.
+*
+ */
+type ChannelRoleEnum string
+
+const (
+	ChannelRoleEnumInventorySupply     ChannelRoleEnum = "InventorySupply"
+	ChannelRoleEnumProductDistribution ChannelRoleEnum = "ProductDistribution"
+	ChannelRoleEnumOrderExport         ChannelRoleEnum = "OrderExport"
+	ChannelRoleEnumOrderImport         ChannelRoleEnum = "OrderImport"
+	ChannelRoleEnumPrimary             ChannelRoleEnum = "Primary"
 )
 
 type CustomFields struct {
@@ -189,6 +267,16 @@ type Image struct {
 type ImageDimensions struct {
 	W int `json:"w"`
 	H int `json:"h"`
+}
+
+type InheritedAssociate struct {
+	AssociateRoleAssignments []InheritedAssociateRoleAssignment `json:"associateRoleAssignments"`
+	Customer                 Reference                          `json:"customer"`
+}
+
+type InheritedAssociateRoleAssignment struct {
+	AssociateRole KeyReference `json:"associateRole"`
+	Source        KeyReference `json:"source"`
 }
 
 type ItemShippingDetails struct {
@@ -289,6 +377,50 @@ const (
 	PaymentStatePaid       PaymentState = "Paid"
 )
 
+/**
+*	Permissions grant granular access to [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), and [Quote Requests](ctp:api:type:QuoteRequest).
+ */
+type Permission string
+
+const (
+	PermissionAddChildUnits                      Permission = "AddChildUnits"
+	PermissionUpdateAssociates                   Permission = "UpdateAssociates"
+	PermissionUpdateBusinessUnitDetails          Permission = "UpdateBusinessUnitDetails"
+	PermissionUpdateParentUnit                   Permission = "UpdateParentUnit"
+	PermissionViewMyCarts                        Permission = "ViewMyCarts"
+	PermissionViewOthersCarts                    Permission = "ViewOthersCarts"
+	PermissionUpdateMyCarts                      Permission = "UpdateMyCarts"
+	PermissionUpdateOthersCarts                  Permission = "UpdateOthersCarts"
+	PermissionCreateMyCarts                      Permission = "CreateMyCarts"
+	PermissionCreateOthersCarts                  Permission = "CreateOthersCarts"
+	PermissionDeleteMyCarts                      Permission = "DeleteMyCarts"
+	PermissionDeleteOthersCarts                  Permission = "DeleteOthersCarts"
+	PermissionViewMyOrders                       Permission = "ViewMyOrders"
+	PermissionViewOthersOrders                   Permission = "ViewOthersOrders"
+	PermissionUpdateMyOrders                     Permission = "UpdateMyOrders"
+	PermissionUpdateOthersOrders                 Permission = "UpdateOthersOrders"
+	PermissionCreateMyOrdersFromMyCarts          Permission = "CreateMyOrdersFromMyCarts"
+	PermissionCreateMyOrdersFromMyQuotes         Permission = "CreateMyOrdersFromMyQuotes"
+	PermissionCreateOrdersFromOthersCarts        Permission = "CreateOrdersFromOthersCarts"
+	PermissionCreateOrdersFromOthersQuotes       Permission = "CreateOrdersFromOthersQuotes"
+	PermissionViewMyQuotes                       Permission = "ViewMyQuotes"
+	PermissionViewOthersQuotes                   Permission = "ViewOthersQuotes"
+	PermissionAcceptMyQuotes                     Permission = "AcceptMyQuotes"
+	PermissionAcceptOthersQuotes                 Permission = "AcceptOthersQuotes"
+	PermissionDeclineMyQuotes                    Permission = "DeclineMyQuotes"
+	PermissionDeclineOthersQuotes                Permission = "DeclineOthersQuotes"
+	PermissionRenegotiateMyQuotes                Permission = "RenegotiateMyQuotes"
+	PermissionRenegotiateOthersQuotes            Permission = "RenegotiateOthersQuotes"
+	PermissionReassignMyQuotes                   Permission = "ReassignMyQuotes"
+	PermissionReassignOthersQuotes               Permission = "ReassignOthersQuotes"
+	PermissionViewMyQuoteRequests                Permission = "ViewMyQuoteRequests"
+	PermissionViewOthersQuoteRequests            Permission = "ViewOthersQuoteRequests"
+	PermissionUpdateMyQuoteRequests              Permission = "UpdateMyQuoteRequests"
+	PermissionUpdateOthersQuoteRequests          Permission = "UpdateOthersQuoteRequests"
+	PermissionCreateMyQuoteRequestsFromMyCarts   Permission = "CreateMyQuoteRequestsFromMyCarts"
+	PermissionCreateQuoteRequestsFromOthersCarts Permission = "CreateQuoteRequestsFromOthersCarts"
+)
+
 type Price struct {
 	ID    string `json:"id"`
 	Value Money  `json:"value"`
@@ -313,6 +445,18 @@ type ProductVariantChannelAvailability struct {
 }
 
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
+type ProductVariantSelection struct {
+	Type ProductVariantSelectionTypeEnum `json:"type"`
+	Skus []string                        `json:"skus"`
+}
+
+type ProductVariantSelectionTypeEnum string
+
+const (
+	ProductVariantSelectionTypeEnumInclusion ProductVariantSelectionTypeEnum = "inclusion"
+	ProductVariantSelectionTypeEnumExclusion ProductVariantSelectionTypeEnum = "exclusion"
+)
+
 type QuoteRequestState string
 
 const (
@@ -326,11 +470,12 @@ const (
 type QuoteState string
 
 const (
-	QuoteStatePending   QuoteState = "Pending"
-	QuoteStateDeclined  QuoteState = "Declined"
-	QuoteStateAccepted  QuoteState = "Accepted"
-	QuoteStateFailed    QuoteState = "Failed"
-	QuoteStateWithdrawn QuoteState = "Withdrawn"
+	QuoteStatePending                  QuoteState = "Pending"
+	QuoteStateDeclined                 QuoteState = "Declined"
+	QuoteStateDeclinedForRenegotiation QuoteState = "DeclinedForRenegotiation"
+	QuoteStateAccepted                 QuoteState = "Accepted"
+	QuoteStateFailed                   QuoteState = "Failed"
+	QuoteStateWithdrawn                QuoteState = "Withdrawn"
 )
 
 type Reference struct {
@@ -341,6 +486,8 @@ type Reference struct {
 type ReferenceTypeId string
 
 const (
+	ReferenceTypeIdAssociateRole         ReferenceTypeId = "associate-role"
+	ReferenceTypeIdBusinessUnit          ReferenceTypeId = "business-unit"
 	ReferenceTypeIdCart                  ReferenceTypeId = "cart"
 	ReferenceTypeIdCartDiscount          ReferenceTypeId = "cart-discount"
 	ReferenceTypeIdCategory              ReferenceTypeId = "category"
@@ -379,6 +526,12 @@ type Reservation struct {
 	Owner             Reference `json:"owner"`
 	CreatedAt         string    `json:"createdAt"`
 	CheckoutStartedAt string    `json:"checkoutStartedAt"`
+}
+
+type ResourceIdentifier struct {
+	ID     string          `json:"id"`
+	Key    string          `json:"key"`
+	TypeId ReferenceTypeId `json:"typeId"`
 }
 
 type ReturnInfo struct {
@@ -497,21 +650,32 @@ const (
 	StagedQuoteStateClosed     StagedQuoteState = "Closed"
 )
 
-type StateRole string
+/**
+*	For some resource types, a State can fulfill the following predefined roles:
+*
+ */
+type StateRoleEnum string
 
 const (
-	StateRoleReviewIncludedInStatistics StateRole = "ReviewIncludedInStatistics"
-	StateRoleReturn                     StateRole = "Return"
+	StateRoleEnumReviewIncludedInStatistics StateRoleEnum = "ReviewIncludedInStatistics"
+	StateRoleEnumReturn                     StateRoleEnum = "Return"
 )
 
-type StateType string
+/**
+*	Resource or object type the State can be assigned to.
+*
+ */
+type StateTypeEnum string
 
 const (
-	StateTypeOrderState    StateType = "OrderState"
-	StateTypeLineItemState StateType = "LineItemState"
-	StateTypeProductState  StateType = "ProductState"
-	StateTypeReviewState   StateType = "ReviewState"
-	StateTypePaymentState  StateType = "PaymentState"
+	StateTypeEnumOrderState        StateTypeEnum = "OrderState"
+	StateTypeEnumLineItemState     StateTypeEnum = "LineItemState"
+	StateTypeEnumProductState      StateTypeEnum = "ProductState"
+	StateTypeEnumReviewState       StateTypeEnum = "ReviewState"
+	StateTypeEnumPaymentState      StateTypeEnum = "PaymentState"
+	StateTypeEnumQuoteRequestState StateTypeEnum = "QuoteRequestState"
+	StateTypeEnumStagedQuoteState  StateTypeEnum = "StagedQuoteState"
+	StateTypeEnumQuoteState        StateTypeEnum = "QuoteState"
 )
 
 type StoreCountry struct {

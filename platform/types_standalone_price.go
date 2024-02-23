@@ -71,9 +71,9 @@ type StandalonePrice struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the StandalonePrice was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/client-logging#events-tracked).
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the StandalonePrice.
 	Key *string `json:"key,omitempty"`
@@ -92,6 +92,8 @@ type StandalonePrice struct {
 	// Date until the Price is valid. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Price tiers if any are defined.
+	//
+	// If `discounted` is present, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTier `json:"tiers"`
 	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
 	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
@@ -171,6 +173,8 @@ type StandalonePriceDraft struct {
 	// Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Sets price tiers.
+	//
+	// If `discounted` is set, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTierDraft `json:"tiers"`
 	// Sets a discounted price for this Price that is different from the base price with `value`.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
@@ -224,7 +228,7 @@ type StandalonePricePagedQueryResponse struct {
 }
 
 /**
-*	[Reference](/../api/types#reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+*	[Reference](ctp:api:type:Reference) to a [StandalonePrice](ctp:api:type:StandalonePrice).
 *
  */
 type StandalonePriceReference struct {
@@ -245,7 +249,7 @@ func (obj StandalonePriceReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](/../api/types#resourceidentifier) to a [StandalonePrice](ctp:api:type:StandalonePrice).
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [StandalonePrice](ctp:api:type:StandalonePrice).
 *
  */
 type StandalonePriceResourceIdentifier struct {
@@ -266,7 +270,8 @@ func (obj StandalonePriceResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 type StandalonePriceUpdate struct {
-	// Expected version of the StandalonePrice on which the changes should be applied. If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error is returned.
+	// Expected version of the StandalonePrice on which the changes should be applied.
+	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the StandalonePrice.
 	Actions []StandalonePriceUpdateAction `json:"actions"`
@@ -433,7 +438,7 @@ func (obj StandalonePriceApplyStagedChangesAction) MarshalJSON() ([]byte, error)
 }
 
 /**
-*	Updating the value of a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [StandalonePriceActiveChangedMessage](ctp:api:type:StandalonePriceActiveChangedMessage).
+*	Updating the value of a [StandalonePrice](ctp:api:type:StandalonePrice) produces the [StandalonePriceActiveChanged](ctp:api:type:StandalonePriceActiveChangedMessage) Message.
 *
  */
 type StandalonePriceChangeActiveAction struct {

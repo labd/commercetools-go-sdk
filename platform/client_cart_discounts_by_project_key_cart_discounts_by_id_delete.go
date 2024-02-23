@@ -64,6 +64,10 @@ func (rb *ByProjectKeyCartDiscountsByIDRequestMethodDelete) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deleting a Cart Discount produces the [CartDiscountDeleted](ctp:api:type:CartDiscountDeletedMessage) Message.
+ */
 func (rb *ByProjectKeyCartDiscountsByIDRequestMethodDelete) Execute(ctx context.Context) (result *CartDiscount, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -82,7 +82,7 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 	}
 	for k, v := range input.Text {
 		for _, x := range v {
-			values.Set(k, x)
+			values.Add(k, x)
 		}
 	}
 	for _, v := range input.Sort {
