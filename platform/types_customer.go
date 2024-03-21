@@ -41,7 +41,7 @@ type Customer struct {
 	//
 	// Can be used to refer to a Customer in a human-readable way (in emails, invoices, and other correspondence).
 	CustomerNumber *string `json:"customerNumber,omitempty"`
-	// Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	// Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
 	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
@@ -165,7 +165,7 @@ type CustomerDraft struct {
 	//
 	// Can be used to refer to a Customer in a human-readable way (in emails, invoices, and other correspondence).
 	CustomerNumber *string `json:"customerNumber,omitempty"`
-	// Optional identifier for use in external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	// Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
 	// Email address of the Customer that must be [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
 	// It is the mandatory unique identifier of a Customer.

@@ -50,7 +50,8 @@ func (rb *ByProjectKeyInventoryKeyByKeyRequestMethodHead) Execute(ctx context.Co
 	switch resp.StatusCode {
 	case 200:
 		return nil
-
+	case 404:
+		return ErrNotFound
 	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

@@ -751,6 +751,8 @@ func (obj CartDiscountValueFixedDraft) MarshalJSON() ([]byte, error) {
 
 type CartDiscountValueGiftLineItem struct {
 	// Reference to a Product.
+	//
+	// A Gift Line Item can be present on a Cart even if the referenced Product is unpublished.
 	Product ProductReference `json:"product"`
 	// [ProductVariant](ctp:api:type:ProductVariant) of the Product.
 	VariantId int `json:"variantId"`
@@ -777,6 +779,8 @@ func (obj CartDiscountValueGiftLineItem) MarshalJSON() ([]byte, error) {
  */
 type CartDiscountValueGiftLineItemDraft struct {
 	// ResourceIdentifier of a Product.
+	//
+	// A Gift Line Item is added to a Cart even if the referenced Product is unpublished.
 	Product ProductResourceIdentifier `json:"product"`
 	// [ProductVariant](ctp:api:type:ProductVariant) of the Product.
 	VariantId int `json:"variantId"`

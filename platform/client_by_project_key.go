@@ -231,6 +231,16 @@ func (rb *ByProjectKeyRequestBuilder) ProductSelections() *ByProjectKeyProductSe
 }
 
 /**
+*	Product tailoring are used to contextualize product data for specific stores.
+ */
+func (rb *ByProjectKeyRequestBuilder) ProductTailoring() *ByProjectKeyProductTailoringRequestBuilder {
+	return &ByProjectKeyProductTailoringRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	Product Types are used to describe common characteristics, most importantly common custom attributes,
 *	of many concrete products.
 *

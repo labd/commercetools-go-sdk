@@ -1729,6 +1729,97 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "ProductTailoringCreated":
+		obj := ProductTailoringCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringDeleted":
+		obj := ProductTailoringDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringDescriptionSet":
+		obj := ProductTailoringDescriptionSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringNameSet":
+		obj := ProductTailoringNameSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringPublished":
+		obj := ProductTailoringPublishedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringSlugSet":
+		obj := ProductTailoringSlugSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringUnpublished":
+		obj := ProductTailoringUnpublishedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "ProductUnpublished":
 		obj := ProductUnpublishedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -13460,6 +13551,464 @@ func (obj ProductStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Create Product Tailoring](/../api/projects/product-tailoring#create-producttailoring) or
+*	[Create Product Tailoring in Store](/../api/projects/product-tailoring#create-producttailoring-in-store) request.
+*
+ */
+type ProductTailoringCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// User-defined unique identifier of the Product Tailoring.
+	Key *string `json:"key,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The description of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Description *LocalizedString `json:"description,omitempty"`
+	// The name of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Name *LocalizedString `json:"name,omitempty"`
+	// The slug of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Slug *LocalizedString `json:"slug,omitempty"`
+	// `true` if the ProductTailoring is published.
+	Published bool `json:"published"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete Product Tailoring](/../api/projects/product-tailoring#delete-producttailoring) or
+*	[Delete ProductTailoring assigned to Product in Store](/../api/projects/product-tailoring#delete-producttailoring-assigned-to-product-in-store) request.
+*
+ */
+type ProductTailoringDeletedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful Product Tailoring [Set Description](ctp:api:type:ProductTailoringSetDescriptionAction) update action.
+*
+ */
+type ProductTailoringDescriptionSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The description of the [Product Tailoring](ctp:api:type:ProductTailoring) after the [Set Description](ctp:api:type:ProductTailoringSetDescriptionAction) update action.
+	Description *LocalizedString `json:"description,omitempty"`
+	// The description of the [ProductTailoring](ctp:api:type:ProductTailoring) before the [Set Description](ctp:api:type:ProductTailoringSetDescriptionAction) update action.
+	OldDescription *LocalizedString `json:"oldDescription,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringDescriptionSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringDescriptionSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringDescriptionSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringDescriptionSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringDescriptionSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful Product Tailoring [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
+*
+ */
+type ProductTailoringNameSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The name of the [Product Tailoring](ctp:api:type:ProductTailoring) after the [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// The name of the [ProductTailoring](ctp:api:type:ProductTailoring) before the [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
+	OldName *LocalizedString `json:"oldName,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringNameSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringNameSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringNameSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringNameSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Product Tailoring Publish](ctp:api:type:ProductTailoringPublishAction) update action.
+*
+ */
+type ProductTailoringPublishedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringPublishedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringPublishedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringPublishedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringPublishedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringPublished", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful Product Tailoring [Set Slug](ctp:api:type:ProductTailoringSetSlugAction) update action.
+*
+ */
+type ProductTailoringSlugSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The slug of the [Product Tailoring](ctp:api:type:ProductTailoring) after the [Set Slug](ctp:api:type:ProductTailoringSetSlugAction) update action.
+	Slug *LocalizedString `json:"slug,omitempty"`
+	// The slug of the [ProductTailoring](ctp:api:type:ProductTailoring) before the [Set Slug](ctp:api:type:ProductTailoringSetSlugAction) update action.
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringSlugSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringSlugSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSlugSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSlugSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringSlugSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Product Tailoring Unpublish](ctp:api:type:ProductTailoringUnpublishAction) update action.
+*
+ */
+type ProductTailoringUnpublishedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Value of `createdBy`.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringUnpublishedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringUnpublishedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringUnpublishedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringUnpublishedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringUnpublished", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Unpublish Product](ctp:api:type:ProductUnpublishAction) update action.
 *
  */
@@ -17320,6 +17869,48 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "ProductStateTransition":
 		obj := ProductStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringCreated":
+		obj := ProductTailoringCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringDeleted":
+		obj := ProductTailoringDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringDescriptionSet":
+		obj := ProductTailoringDescriptionSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringNameSet":
+		obj := ProductTailoringNameSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringPublished":
+		obj := ProductTailoringPublishedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringSlugSet":
+		obj := ProductTailoringSlugSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringUnpublished":
+		obj := ProductTailoringUnpublishedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -21624,6 +22215,191 @@ func (obj ProductStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductStateTransition", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create Product Tailoring](/../api/projects/product-tailoring#create-producttailoring) or
+*	[Create Product Tailoring in Store](/../api/projects/product-tailoring#create-producttailoring-in-store) request.
+*
+ */
+type ProductTailoringCreatedMessagePayload struct {
+	// User-defined unique identifier of the Product Tailoring.
+	Key *string `json:"key,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The description of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Description *LocalizedString `json:"description,omitempty"`
+	// The name of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Name *LocalizedString `json:"name,omitempty"`
+	// The slug of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Slug *LocalizedString `json:"slug,omitempty"`
+	// `true` if the ProductTailoring is published.
+	Published bool `json:"published"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete Product Tailoring](/../api/projects/product-tailoring#delete-producttailoring) or
+*	[Delete ProductTailoring assigned to Product in Store](/../api/projects/product-tailoring#delete-producttailoring-assigned-to-product-in-store) request.
+*
+ */
+type ProductTailoringDeletedMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful Product Tailoring [Set Description](ctp:api:type:ProductTailoringSetDescriptionAction) update action.
+*
+ */
+type ProductTailoringDescriptionSetMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The description of the [Product Tailoring](ctp:api:type:ProductTailoring) after the [Set Description](ctp:api:type:ProductTailoringSetDescriptionAction) update action.
+	Description *LocalizedString `json:"description,omitempty"`
+	// The description of the [ProductTailoring](ctp:api:type:ProductTailoring) before the [Set Description](ctp:api:type:ProductTailoringSetDescriptionAction) update action.
+	OldDescription *LocalizedString `json:"oldDescription,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringDescriptionSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringDescriptionSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringDescriptionSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful Product Tailoring [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
+*
+ */
+type ProductTailoringNameSetMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The name of the [Product Tailoring](ctp:api:type:ProductTailoring) after the [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// The name of the [ProductTailoring](ctp:api:type:ProductTailoring) before the [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
+	OldName *LocalizedString `json:"oldName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringNameSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Product Tailoring Publish](ctp:api:type:ProductTailoringPublishAction) update action.
+*
+ */
+type ProductTailoringPublishedMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringPublishedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringPublishedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringPublished", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful Product Tailoring [Set Slug](ctp:api:type:ProductTailoringSetSlugAction) update action.
+*
+ */
+type ProductTailoringSlugSetMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// The slug of the [Product Tailoring](ctp:api:type:ProductTailoring) after the [Set Slug](ctp:api:type:ProductTailoringSetSlugAction) update action.
+	Slug *LocalizedString `json:"slug,omitempty"`
+	// The slug of the [ProductTailoring](ctp:api:type:ProductTailoring) before the [Set Slug](ctp:api:type:ProductTailoringSetSlugAction) update action.
+	OldSlug *LocalizedString `json:"oldSlug,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSlugSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSlugSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringSlugSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Product Tailoring Unpublish](ctp:api:type:ProductTailoringUnpublishAction) update action.
+*
+ */
+type ProductTailoringUnpublishedMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// User-defined unique identifier of the Product this Product Tailoring belongs to.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringUnpublishedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringUnpublishedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringUnpublished", Alias: (*Alias)(&obj)})
 }
 
 /**

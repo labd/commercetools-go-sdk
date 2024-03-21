@@ -69,7 +69,8 @@ func (rb *ByProjectKeyExtensionsByIDRequestMethodHead) Execute(ctx context.Conte
 			return err
 		}
 		return errorObj
-
+	case 404:
+		return ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

@@ -25,7 +25,7 @@ type Payment struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	// Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
 	// Identifier used by the payment service that processes the Payment (for example, a PSP).
 	// The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.
@@ -92,7 +92,7 @@ type PaymentDraft struct {
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	// Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
 	// Identifier used by the payment service that processes the Payment (for example, a PSP).
 	// The combination of `interfaceId` and the `paymentInterface` field on [PaymentMethodInfo](ctp:api:type:PaymentMethodInfo) must be unique.

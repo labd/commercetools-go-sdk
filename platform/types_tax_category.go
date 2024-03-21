@@ -276,7 +276,7 @@ type TaxRateDraft struct {
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
-	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes). The total of all subrates must equal the TaxRate `amount`.
+	// Used to calculate the `taxPortions` field in a [Cart or Order](/../api/projects/carts#taxedprice) or [(Custom) Line Items](/../api/projects/carts#taxeditemprice). It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes). The total of all subrates must equal the TaxRate `amount`.
 	SubRates []SubRate `json:"subRates"`
 	// User-defined unique identifier of the TaxRate.
 	Key *string `json:"key,omitempty"`

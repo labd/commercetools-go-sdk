@@ -926,6 +926,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "product-tailoring":
+		obj := ProductTailoringReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "product-type":
 		obj := ProductTypeReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1046,6 +1052,7 @@ const (
 	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
 	ReferenceTypeIdProductPrice          ReferenceTypeId = "product-price"
 	ReferenceTypeIdProductSelection      ReferenceTypeId = "product-selection"
+	ReferenceTypeIdProductTailoring      ReferenceTypeId = "product-tailoring"
 	ReferenceTypeIdProductType           ReferenceTypeId = "product-type"
 	ReferenceTypeIdQuote                 ReferenceTypeId = "quote"
 	ReferenceTypeIdQuoteRequest          ReferenceTypeId = "quote-request"
@@ -1168,6 +1175,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 		return obj, nil
 	case "product-selection":
 		obj := ProductSelectionResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "product-tailoring":
+		obj := ProductTailoringResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
