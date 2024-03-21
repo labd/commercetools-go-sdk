@@ -33,6 +33,8 @@ func (rb *ByProjectKeyLoginRequestMethodPost) WithHeaders(headers http.Header) *
 *	For more information, see [Global versus Store-specific Customers](/../api/customers-overview#global-versus-store-specific-customers).
 *	If the Customer is registered in a Store, use the [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) method.
 *
+*	Triggers [Cart merge during sign-in](/../api/customers-overview#cart-merge-during-sign-in).
+*
 *	If an account with the given credentials is not found, an [InvalidCredentials](ctp:api:type:InvalidCredentialsError) error is returned.
 *
  */
@@ -86,7 +88,8 @@ func (rb *ByProjectKeyLoginRequestMethodPost) Execute(ctx context.Context) (resu
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

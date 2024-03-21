@@ -25,10 +25,10 @@ tasks:
 
   generate:
     cmds:
-      - task: generate-checkout
+#      - task: generate-checkout
       - task: generate-connect
       - task: generate-importapi
-      - task: generate-frontend
+#      - task: generate-frontend
 #      - task: generate-ml
       - task: generate-platform
       - task: generate-history

@@ -100,3 +100,21 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) CartDiscounts() *ByPro
 		client:     rb.client,
 	}
 }
+
+/**
+*	A Product Tailoring holds tailored data of Product in the Store.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ProductTailoring() *ByProjectKeyInStoreKeyByStoreKeyProductTailoringRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyProductTailoringRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Products() *ByProjectKeyInStoreKeyByStoreKeyProductsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyProductsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}

@@ -85,7 +85,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersEmailConfirmRequestMethodPost
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

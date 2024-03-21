@@ -36,7 +36,7 @@ type Category struct {
 	Parent *CategoryReference `json:"parent,omitempty"`
 	// Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
 	OrderHint string `json:"orderHint"`
-	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	// Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
 	// Name of the Category used by external search engines for improved search engine performance.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
@@ -91,7 +91,7 @@ type CategoryDraft struct {
 	// Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
 	// If not set, a random value will be assigned.
 	OrderHint *string `json:"orderHint,omitempty"`
-	// Additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+	// Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
 	// Name of the Category used by external search engines for improved search engine performance.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
@@ -699,7 +699,7 @@ func (obj CategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action sets a new ID that can be used as an additional identifier for external systems like Customer Relationship Management (CRM) or Enterprise Resource Planning (ERP).
+*	This update action sets a new ID that can be used as an additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 *
  */
 type CategorySetExternalIdAction struct {

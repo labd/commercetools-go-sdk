@@ -182,7 +182,8 @@ func (rb *ByProjectKeyCustomersRequestMethodGet) Execute(ctx context.Context) (r
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

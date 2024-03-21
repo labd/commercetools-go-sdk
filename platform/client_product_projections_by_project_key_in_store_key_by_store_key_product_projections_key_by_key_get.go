@@ -131,7 +131,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMetho
 }
 
 /**
-*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key from the specified [Store](ctp:api:type:Store).
+*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key in the specified [Store](ctp:api:type:Store).
 *	If the Store has defined some languages, countries, distribution, supply Channels, and/or Product Selection,
 *	they are used for projections based on [locale](ctp:api:type:ProductProjectionLocales), [price](ctp:api:type:ProductProjectionPrices)
 *	and [inventory](ctp:api:type:ProductProjectionInventoryEntries).
@@ -191,7 +191,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMetho
 			return nil, err
 		}
 		return nil, errorObj
-
+	case 404:
+		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

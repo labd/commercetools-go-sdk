@@ -933,7 +933,7 @@ type CustomLineItemDraft struct {
 	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
 	// are applied to the Custom Line Item.
 	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
-	PriceMode CustomLineItemPriceMode `json:"priceMode"`
+	PriceMode *CustomLineItemPriceMode `json:"priceMode,omitempty"`
 }
 
 /**
@@ -1578,7 +1578,7 @@ func (obj LineItemDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Indicates how a Line Item is added to a Cart.
+*	Indicates how a Line Item was added to a Cart.
 *
  */
 type LineItemMode string
@@ -2001,6 +2001,10 @@ type TaxedItemPrice struct {
 	TotalNet CentPrecisionMoney `json:"totalNet"`
 	// Total gross amount of the Line Item or Custom Line Item.
 	TotalGross CentPrecisionMoney `json:"totalGross"`
+	// Taxable portions added to the total net price.
+	//
+	// Calculated from the [TaxRates](ctp:api:type:TaxRate).
+	TaxPortions []TaxPortion `json:"taxPortions"`
 	// Total tax applicable for the Line Item or Custom Line Item.
 	// Automatically calculated as the difference between the `totalGross` and `totalNet` values.
 	TotalTax *CentPrecisionMoney `json:"totalTax,omitempty"`
@@ -2030,6 +2034,26 @@ type TaxedPriceDraft struct {
 	//
 	// Calculated from the [TaxRates](ctp:api:type:TaxRate).
 	TaxPortions []TaxPortionDraft `json:"taxPortions"`
+	// Total tax applicable for the Cart or Order.
+	TotalTax TypedMoneyDraft `json:"totalTax,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *TaxedPriceDraft) UnmarshalJSON(data []byte) error {
+	type Alias TaxedPriceDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.TotalTax != nil {
+		var err error
+		obj.TotalTax, err = mapDiscriminatorTypedMoneyDraft(obj.TotalTax)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 /**
@@ -3779,6 +3803,32 @@ func (obj CartUpdateItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "updateItemShippingAddress", Alias: (*Alias)(&obj)})
+}
+
+type ProductTailoringUpdate struct {
+	// Expected version of the ProductTailoring on which the changes apply.
+	// If the expected version does not match the actual version, a [409 Conflict](/../api/errors#409-conflict) is returned.
+	Version int `json:"version"`
+	// Update actions to be performed on the ProductTailoring.
+	Actions []ProductTailoringUpdateAction `json:"actions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringUpdate) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringUpdate
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Actions {
+		var err error
+		obj.Actions[i], err = mapDiscriminatorProductTailoringUpdateAction(obj.Actions[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 /**

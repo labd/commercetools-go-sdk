@@ -831,11 +831,15 @@ type ProductVariantAvailability struct {
 	// For each [InventoryEntry](ctp:api:type:InventoryEntry) with a supply Channel, an entry is added to `channels`.
 	Channels *ProductVariantChannelAvailabilityMap `json:"channels,omitempty"`
 	// Indicates whether a Product Variant is in stock.
-	IsOnStock *bool `json:"isOnStock,omitempty"`
+	IsOnStock bool `json:"isOnStock"`
 	// Number of days to restock a Product Variant once it is out of stock.
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Number of items of the Product Variant that are in stock.
 	AvailableQuantity *int `json:"availableQuantity,omitempty"`
+	// Unique identifier of the [InventoryEntry](ctp:api:type:InventoryEntry).
+	ID *string `json:"id,omitempty"`
+	// Current version of the [InventoryEntry](ctp:api:type:InventoryEntry).
+	Version *int `json:"version,omitempty"`
 }
 
 type ProductVariantChannelAvailability struct {
