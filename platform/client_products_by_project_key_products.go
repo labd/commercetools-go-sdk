@@ -27,7 +27,18 @@ func (rb *ByProjectKeyProductsRequestBuilder) WithId(id string) *ByProjectKeyPro
 }
 
 /**
-*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	This endpoint provides high-performance search queries over Products. Product Search allows searching through all products with a current projection in your Project.
+*
+ */
+func (rb *ByProjectKeyProductsRequestBuilder) Search() *ByProjectKeyProductsSearchRequestBuilder {
+	return &ByProjectKeyProductsSearchRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsRequestBuilder) Get() *ByProjectKeyProductsRequestMethodGet {
 	return &ByProjectKeyProductsRequestMethodGet{
@@ -48,7 +59,7 @@ func (rb *ByProjectKeyProductsRequestBuilder) Head() *ByProjectKeyProductsReques
 
 /**
 *	To create a new Product, send a representation that is going to become the initial _staged_ and _current_ representation of the new Product in the catalog.
-*	If [Price Selection](ctp:api:type:ProductPriceSelection) query parameters are provided, selected Prices will be added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, selected Prices will be added to the response.
 *	Produces the [ProductCreated](/projects/messages#product-created) Message.
 *
  */

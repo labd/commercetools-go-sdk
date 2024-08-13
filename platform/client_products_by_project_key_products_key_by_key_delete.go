@@ -31,7 +31,6 @@ type ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   []string
 	Version            int
 	Expand             []string
 }
@@ -49,9 +48,6 @@ func (input *ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput) Values() url.
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	for _, v := range input.LocaleProjection {
-		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
@@ -92,14 +88,6 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) PriceChannel(v string
 	return rb
 }
 
-func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) LocaleProjection(v []string) *ByProjectKeyProductsKeyByKeyRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput{}
-	}
-	rb.params.LocaleProjection = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) Version(v int) *ByProjectKeyProductsKeyByKeyRequestMethodDelete {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput{}
@@ -126,7 +114,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) WithHeaders(headers h
 }
 
 /**
-*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
 *	Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *Product, err error) {

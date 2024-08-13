@@ -27,6 +27,11 @@ func (rb *ByProjectKeyMeRequestMethodPost) WithHeaders(headers http.Header) *ByP
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates the Customer specified in the [customer:{id}](/scopes#customer_idid) scope. Returns a `200 OK` status if successful.
+*
+ */
 func (rb *ByProjectKeyMeRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

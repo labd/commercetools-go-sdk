@@ -336,6 +336,7 @@ const (
 	CustomFieldReferenceValueCategory         CustomFieldReferenceValue = "category"
 	CustomFieldReferenceValueChannel          CustomFieldReferenceValue = "channel"
 	CustomFieldReferenceValueCustomer         CustomFieldReferenceValue = "customer"
+	CustomFieldReferenceValueCustomerGroup    CustomFieldReferenceValue = "customer-group"
 	CustomFieldReferenceValueKeyValueDocument CustomFieldReferenceValue = "key-value-document"
 	CustomFieldReferenceValueOrder            CustomFieldReferenceValue = "order"
 	CustomFieldReferenceValueProduct          CustomFieldReferenceValue = "product"

@@ -22,6 +22,11 @@ type ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCarts
 *
 *	If the Cart exists in the [Project](ctp:api:type:Project) but does not reference the requested [BusinessUnit](ctp:api:type:BusinessUnit), this method returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 *
+*	Specific Error Codes:
+*
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsReplicateRequestBuilder) Post(body ReplicaCartDraft) *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsReplicateRequestMethodPost {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsReplicateRequestMethodPost{

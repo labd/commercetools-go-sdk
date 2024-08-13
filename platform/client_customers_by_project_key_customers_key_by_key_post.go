@@ -54,6 +54,10 @@ func (rb *ByProjectKeyCustomersKeyByKeyRequestMethodPost) WithHeaders(headers ht
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Simultaneously updating two Customers with the same email address can return a [LockedField](ctp:api:type:LockedFieldError) error.
+ */
 func (rb *ByProjectKeyCustomersKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

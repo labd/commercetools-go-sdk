@@ -490,6 +490,18 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			return nil, err
 		}
 		return obj, nil
+	case "setShippingCustomField":
+		obj := StagedOrderSetShippingCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setShippingCustomType":
+		obj := StagedOrderSetShippingCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setShippingMethod":
 		obj := StagedOrderSetShippingMethodAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -581,6 +593,31 @@ type OrderPagedSearchResponse struct {
 	Hits []Hit `json:"hits"`
 }
 
+/**
+*	Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+ */
+type OrderSearchCustomType string
+
+const (
+	OrderSearchCustomTypeBooleanType                OrderSearchCustomType = "BooleanType"
+	OrderSearchCustomTypeStringType                 OrderSearchCustomType = "StringType"
+	OrderSearchCustomTypeLocalizedStringType        OrderSearchCustomType = "LocalizedStringType"
+	OrderSearchCustomTypeEnumType                   OrderSearchCustomType = "EnumType"
+	OrderSearchCustomTypeLocalizedEnumType          OrderSearchCustomType = "LocalizedEnumType"
+	OrderSearchCustomTypeNumberType                 OrderSearchCustomType = "NumberType"
+	OrderSearchCustomTypeDateType                   OrderSearchCustomType = "DateType"
+	OrderSearchCustomTypeTimeType                   OrderSearchCustomType = "TimeType"
+	OrderSearchCustomTypeDateTimeType               OrderSearchCustomType = "DateTimeType"
+	OrderSearchCustomTypeSetTypeStringType          OrderSearchCustomType = "SetType.StringType"
+	OrderSearchCustomTypeSetTypeLocalizedStringType OrderSearchCustomType = "SetType.LocalizedStringType"
+	OrderSearchCustomTypeSetTypeEnumType            OrderSearchCustomType = "SetType.EnumType"
+	OrderSearchCustomTypeSetTypeLocalizedEnumType   OrderSearchCustomType = "SetType.LocalizedEnumType"
+	OrderSearchCustomTypeSetTypeNumberType          OrderSearchCustomType = "SetType.NumberType"
+	OrderSearchCustomTypeSetTypeDateType            OrderSearchCustomType = "SetType.DateType"
+	OrderSearchCustomTypeSetTypeTimeType            OrderSearchCustomType = "SetType.TimeType"
+	OrderSearchCustomTypeSetTypeDateTimeType        OrderSearchCustomType = "SetType.DateTimeType"
+)
+
 type OrderSearchMatchType string
 
 const (
@@ -589,51 +626,57 @@ const (
 )
 
 type OrderSearchQueryExpressionValue struct {
-	Field      string  `json:"field"`
-	Boost      *int    `json:"boost,omitempty"`
-	CustomType *string `json:"customType,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 }
 
 type OrderSearchAnyValue struct {
-	Field           string      `json:"field"`
-	Boost           *int        `json:"boost,omitempty"`
-	CustomType      *string     `json:"customType,omitempty"`
-	Value           interface{} `json:"value"`
-	Language        *string     `json:"language,omitempty"`
-	CaseInsensitive *bool       `json:"caseInsensitive,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType      *OrderSearchCustomType `json:"customType,omitempty"`
+	Value           interface{}            `json:"value"`
+	Language        *string                `json:"language,omitempty"`
+	CaseInsensitive *bool                  `json:"caseInsensitive,omitempty"`
 }
 
 type OrderSearchDateRangeValue struct {
-	Field      string     `json:"field"`
-	Boost      *int       `json:"boost,omitempty"`
-	CustomType *string    `json:"customType,omitempty"`
-	Gte        *time.Time `json:"gte,omitempty"`
-	Lte        *time.Time `json:"lte,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
+	Gte        *time.Time             `json:"gte,omitempty"`
+	Lte        *time.Time             `json:"lte,omitempty"`
 }
 
 type OrderSearchFullTextValue struct {
-	Field      string                `json:"field"`
-	Boost      *int                  `json:"boost,omitempty"`
-	CustomType *string               `json:"customType,omitempty"`
-	Value      string                `json:"value"`
-	Language   *string               `json:"language,omitempty"`
-	MustMatch  *OrderSearchMatchType `json:"mustMatch,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
+	Value      string                 `json:"value"`
+	Language   *string                `json:"language,omitempty"`
+	MustMatch  *OrderSearchMatchType  `json:"mustMatch,omitempty"`
 }
 
 type OrderSearchLongRangeValue struct {
-	Field      string  `json:"field"`
-	Boost      *int    `json:"boost,omitempty"`
-	CustomType *string `json:"customType,omitempty"`
-	Gte        *int    `json:"gte,omitempty"`
-	Lte        *int    `json:"lte,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
+	Gte        *int                   `json:"gte,omitempty"`
+	Lte        *int                   `json:"lte,omitempty"`
 }
 
 type OrderSearchNumberRangeValue struct {
-	Field      string   `json:"field"`
-	Boost      *int     `json:"boost,omitempty"`
-	CustomType *string  `json:"customType,omitempty"`
-	Gte        *float64 `json:"gte,omitempty"`
-	Lte        *float64 `json:"lte,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
+	Gte        *float64               `json:"gte,omitempty"`
+	Lte        *float64               `json:"lte,omitempty"`
 }
 
 type OrderSearchSortMode string
@@ -653,12 +696,13 @@ const (
 )
 
 type OrderSearchStringValue struct {
-	Field           string  `json:"field"`
-	Boost           *int    `json:"boost,omitempty"`
-	CustomType      *string `json:"customType,omitempty"`
-	Value           string  `json:"value"`
-	Language        *string `json:"language,omitempty"`
-	CaseInsensitive *bool   `json:"caseInsensitive,omitempty"`
+	Field string `json:"field"`
+	Boost *int   `json:"boost,omitempty"`
+	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	CustomType      *OrderSearchCustomType `json:"customType,omitempty"`
+	Value           string                 `json:"value"`
+	Language        *string                `json:"language,omitempty"`
+	CaseInsensitive *bool                  `json:"caseInsensitive,omitempty"`
 }
 
 /**
@@ -821,7 +865,7 @@ type LineItemImportDraft struct {
 	Price PriceDraft `json:"price"`
 	// The tax rate used to calculate the `taxedPrice` of the Order.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
-	// The Channel used to [select a Price](ctp:api:type:LineItemPriceSelection).
+	// The Channel used to [select a Price](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	// This Channel must have the `ProductDistribution` role.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	// The Channel used to supply Line Items.
@@ -883,7 +927,7 @@ type Order struct {
 	// Email address of the Customer that the Order belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Order belongs to.
-	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
 	AnonymousId *string `json:"anonymousId,omitempty"`
@@ -954,7 +998,7 @@ type Order struct {
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Order.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
-	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	Country *string `json:"country,omitempty"`
 	// Languages of the Order.
 	// Can only contain languages supported by the [Project](ctp:api:type:Project).
@@ -987,9 +1031,9 @@ type Order struct {
 	// User-defined date and time (UTC) of the Order.
 	// Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Order.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Order.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -1308,9 +1352,9 @@ type OrderSearchRequest struct {
 	Query OrderSearchQuery `json:"query"`
 	// Controls how results to your query are sorted. If not provided, the results are sorted by relevance in descending order.
 	Sort []OrderSearchSorting `json:"sort"`
-	// The maximum number of search results to be returned.
+	// The maximum number of search results to be returned on one [page](#pagination).
 	Limit *int `json:"limit,omitempty"`
-	// The number of search results to be skipped in the response for pagination.
+	// The number of search results to be skipped in the response for [pagination](#pagination).
 	Offset *int `json:"offset,omitempty"`
 }
 
@@ -1701,6 +1745,18 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 		return obj, nil
 	case "setShippingAddressCustomType":
 		obj := OrderSetShippingAddressCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setShippingCustomField":
+		obj := OrderSetShippingCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setShippingCustomType":
+		obj := OrderSetShippingCustomTypeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2172,9 +2228,9 @@ type SyncInfo struct {
 }
 
 type TaxedItemPriceDraft struct {
-	// Draft type that stores amounts only in cent precision for the specified currency.
+	// Draft object to store money in cent amounts for a specific currency.
 	TotalNet Money `json:"totalNet"`
-	// Draft type that stores amounts only in cent precision for the specified currency.
+	// Draft object to store money in cent amounts for a specific currency.
 	TotalGross Money `json:"totalGross"`
 }
 
@@ -3403,6 +3459,55 @@ func (obj OrderSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, error)
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setShippingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type OrderSetShippingCustomFieldAction struct {
+	// The `shippingKey` of the [Shipping](ctp:api:type:Shipping) to customize. Used to specify which Shipping Method to customize
+	// on a Order with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Leave this empty to customize the one and only ShippingMethod on a `Single` ShippingMode Order.
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderSetShippingCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderSetShippingCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingCustomField", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action sets, overwrites, or removes any existing Custom Type and Custom Fields for the Order's `shippingMethod` or `shipping`.
+*
+ */
+type OrderSetShippingCustomTypeAction struct {
+	// The `shippingKey` of the [Shipping](ctp:api:type:Shipping) to customize. Used to specify which Shipping Method to customize
+	// on a Order with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Leave this empty to customize the one and only ShippingMethod on a `Single` ShippingMode Order.
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the specified ShippingMethod with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the ShippingMethod.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingMethod`.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderSetShippingCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderSetShippingCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingCustomType", Alias: (*Alias)(&obj)})
 }
 
 /**

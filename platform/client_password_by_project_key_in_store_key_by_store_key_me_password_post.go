@@ -29,7 +29,12 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestMethodPost) WithHeade
 }
 
 /**
-*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.
+*	Changing the password of the Customer produces the [CustomerPasswordUpdated](ctp:api:type:CustomerPasswordUpdatedMessage) Message with `reset=false`.  Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Customer exists with the `id` specified in the [customer:{id}](/scopes#customer_idid) scope.
+*	- If the Customer exists but is associated with a different Store than what is specified in the `manage_my_profile:{projectKey}:{storeKey}` scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMePasswordRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {

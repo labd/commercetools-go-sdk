@@ -19,9 +19,9 @@ type QuoteRequest struct {
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// User-defined unique identifier of the QuoteRequest.
 	Key *string `json:"key,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the QuoteRequest.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the QuoteRequest.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Indicates the current state of the Quote Request in the negotiation process.
 	QuoteRequestState QuoteRequestState `json:"quoteRequestState"`
@@ -143,7 +143,8 @@ func (obj QuoteRequest) MarshalJSON() ([]byte, error) {
 
 type QuoteRequestDraft struct {
 	// Cart for which a Quote is requested.
-	// Anonymous Carts, Carts with [Discount Codes](ctp:api:type:DiscountCode), or Carts with a `Multiple` [ShippingMode](ctp:api:type:ShippingMode) are not supported.
+	// Anonymous Carts, Carts with [Discount Codes](ctp:api:type:DiscountCode), and Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode) are not supported.
+	// The Cart must have a `shippingAddress` defined, otherwise an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned when [creating a Quote Request](ctp:api:endpoint:/{projectKey}/quote-requests:POST).
 	Cart CartResourceIdentifier `json:"cart"`
 	// Current version of the referenced Cart.
 	CartVersion int `json:"cartVersion"`

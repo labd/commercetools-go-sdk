@@ -125,9 +125,9 @@ type Product struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Product was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Product.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Product.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Product.
 	//
@@ -189,7 +189,7 @@ type ProductData struct {
 	MasterVariant ProductVariant `json:"masterVariant"`
 	// Additional Product Variants.
 	Variants []ProductVariant `json:"variants"`
-	// Used by [Product Suggestions](ctp:api:type:ProductSuggestions), but is also considered for a full text search.
+	// Used by [Product Suggestions](/projects/products-suggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
 	SearchKeywords SearchKeywords `json:"searchKeywords"`
 }
 
@@ -203,6 +203,8 @@ type ProductDraft struct {
 	// It must match the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug LocalizedString `json:"slug"`
 	// User-defined unique identifier for the Product.
+	//
+	// To update a Product using the [Import API](/../import-export/product), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
 	Key *string `json:"key,omitempty"`
 	// Description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
@@ -222,7 +224,7 @@ type ProductDraft struct {
 	Variants []ProductVariantDraft `json:"variants"`
 	// The Tax Category to be assigned to the Product.
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	// Used by [Product Suggestions](ctp:api:type:ProductSuggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
+	// Used by [Product Suggestions](/projects/products-suggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
 	// State to be assigned to the Product.
 	State *StateResourceIdentifier `json:"state,omitempty"`
@@ -282,7 +284,8 @@ type ProductPagedQueryResponse struct {
 }
 
 /**
-*	This mode determines the type of Prices used for [Product Price Selection](ctp:api:type:ProductPriceSelection) and for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	This mode determines the type of Prices used for [price selection](/../api/pricing-and-discounts-overview#price-selection) by Line Items and Products.
+*	For more information about the difference between the Prices, see [Pricing](/../api/pricing-and-discounts-overview).
 *
  */
 type ProductPriceModeEnum string
@@ -764,7 +767,7 @@ type ProductVariant struct {
 	Prices []Price `json:"prices"`
 	// Attributes of the Product Variant.
 	Attributes []Attribute `json:"attributes"`
-	// Only available when [Price selection](#price-selection) is used.
+	// Only available when [price selection](/../api/pricing-and-discounts-overview#price-selection) is used.
 	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
 	Price *Price `json:"price,omitempty"`
 	// Images of the Product Variant.
@@ -779,11 +782,11 @@ type ProductVariant struct {
 	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request.
 	IsMatchingVariant *bool `json:"isMatchingVariant,omitempty"`
 	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request
-	// with [price selection](ctp:api:type:ProductPriceSelection).
+	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	// Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
 	ScopedPrice *ScopedPrice `json:"scopedPrice,omitempty"`
 	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
-	// with [price selection](ctp:api:type:ProductPriceSelection).
+	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
 }
 
@@ -831,7 +834,7 @@ type ProductVariantAvailability struct {
 	// For each [InventoryEntry](ctp:api:type:InventoryEntry) with a supply Channel, an entry is added to `channels`.
 	Channels *ProductVariantChannelAvailabilityMap `json:"channels,omitempty"`
 	// Indicates whether a Product Variant is in stock.
-	IsOnStock bool `json:"isOnStock"`
+	IsOnStock *bool `json:"isOnStock,omitempty"`
 	// Number of days to restock a Product Variant once it is out of stock.
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Number of items of the Product Variant that are in stock.
@@ -932,7 +935,7 @@ func (obj RangeFacetResult) MarshalJSON() ([]byte, error) {
 }
 
 type SearchKeyword struct {
-	// Text to return in the result of a [suggest query](ctp:api:type:ProductSuggestionsSuggestQuery).
+	// Text to return in the [SuggestionResult](ctp:api:type:SuggestionResult).
 	Text string `json:"text"`
 	// If no tokenizer is defined, the `text` is used as a single token.
 	SuggestTokenizer SuggestTokenizer `json:"suggestTokenizer,omitempty"`
@@ -957,7 +960,8 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	Search keywords are JSON objects primarily used by [Product Suggestions](ctp:api:type:ProductSuggestions), but are also considered for a full text search. The keys are of type [Locale](ctp:api:type:Locale), and the values are an array of [SearchKeyword](ctp:api:type:SearchKeyword).
+*	Search keywords are JSON objects primarily used by [Product Suggestions](/projects/products-suggestions), but are also considered for a [full text search](/projects/products-search#full-text-search).
+*	The keys are of type [Locale](ctp:api:type:Locale), and the values are an array of [SearchKeyword](ctp:api:type:SearchKeyword).
 *
  */
 type SearchKeywords map[string][]SearchKeyword
@@ -1928,6 +1932,8 @@ func (obj ProductSetImageLabelAction) MarshalJSON() ([]byte, error) {
 
 type ProductSetKeyAction struct {
 	// Value to set. If empty, any existing value will be removed.
+	//
+	// To update a Product using the [Import API](/../import-export/product), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -1993,13 +1999,13 @@ func (obj ProductSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Sets the key of an [Embedded Price](/projects/products#embedded-price). Produces the [ProductPriceKeySet](ctp:api:type:ProductPriceKeySetMessage) Message.
+*	Sets the key of an [Embedded Price](ctp:api:type:Price). Produces the [ProductPriceKeySet](ctp:api:type:ProductPriceKeySetMessage) Message.
 *
  */
 type ProductSetPriceKeyAction struct {
 	// The `id` of the [Price](ctp:api:type:Price) to set the key.
 	PriceId string `json:"priceId"`
-	// If `true`, only the staged [Embedded Price](/projects/products#embedded-price) is updated. If `false`, both the current and staged Embedded Price are updated.
+	// If `true`, only the staged [Embedded Price](ctp:api:type:Price) is updated. If `false`, both the current and staged Embedded Price are updated.
 	Staged *bool `json:"staged,omitempty"`
 	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
@@ -2215,7 +2221,10 @@ func (obj ProductTransitionStateAction) MarshalJSON() ([]byte, error) {
 /**
 *	Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](ctp:api:endpoint:/{projectKey}/product-projections:GET)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
 *
-*	Unpublished Products cannot be added to a Cart. However, if a Cart contains Line Items for Products that were added before the Product was unpublished, the Cart is unaffected and can still be used to create an Order. To prevent this, in addition to unpublishing the Product you should remove the Prices from the Product using [Remove Price](ctp:api:type:ProductRemovePriceAction) for Embedded Prices or [Delete StandalonePrice](/projects/standalone-prices#delete-standaloneprice) for Standalone Prices.
+*	When a Product is unpublished, any associated Line Items already present in a Cart remain unaffected and can still be ordered. To prevent this, do the following:
+*
+*	- If the Product uses Embedded Prices, [remove the Embedded Prices](ctp:api:type:ProductRemovePriceAction) from the unpublished Product.
+*	- If the Product uses Standalone Prices, [inactivate](ctp:api:type:StandalonePriceChangeActiveAction) or [delete](/projects/standalone-prices#delete-standaloneprice) the Standalone Prices.
 *
  */
 type ProductUnpublishAction struct {

@@ -17,9 +17,9 @@ type Extension struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Extension was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Extension.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Extension.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Extension.
 	Key *string `json:"key,omitempty"`
@@ -143,7 +143,7 @@ type ExtensionDraft struct {
 	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
 	//
 	// This limit can be increased per Project after we review the performance impact.
-	// Please contact our support via the [Support Portal](https://support.commercetools.com) and provide the Region, Project key, and use case.
+	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 
@@ -226,6 +226,7 @@ const (
 	ExtensionResourceTypeIdStagedQuote  ExtensionResourceTypeId = "staged-quote"
 	ExtensionResourceTypeIdQuote        ExtensionResourceTypeId = "quote"
 	ExtensionResourceTypeIdBusinessUnit ExtensionResourceTypeId = "business-unit"
+	ExtensionResourceTypeIdShoppingList ExtensionResourceTypeId = "shopping-list"
 )
 
 type ExtensionTrigger struct {
@@ -512,7 +513,7 @@ type ExtensionSetTimeoutInMsAction struct {
 	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
 	//
 	// This limit can be increased per Project after we review the performance impact.
-	// Please contact our support via the [Support Portal](https://support.commercetools.com/) and provide the Region, Project key, and use case.
+	// Please contact the [Composable Commerce support team](https://support.commercetools.com/) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 

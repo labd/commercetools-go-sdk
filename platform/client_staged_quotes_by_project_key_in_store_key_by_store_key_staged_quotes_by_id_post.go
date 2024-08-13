@@ -11,26 +11,26 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyMeCartsKeyByKeyRequestMethodPost struct {
-	body    MyCartUpdate
+type ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost struct {
+	body    StagedQuoteUpdate
 	url     string
 	client  *Client
 	headers http.Header
-	params  *ByProjectKeyMeCartsKeyByKeyRequestMethodPostInput
+	params  *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPostInput
 }
 
-func (r *ByProjectKeyMeCartsKeyByKeyRequestMethodPost) Dump() map[string]interface{} {
+func (r *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url":    r.url,
 		"params": r.params,
 	}
 }
 
-type ByProjectKeyMeCartsKeyByKeyRequestMethodPostInput struct {
+type ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPostInput struct {
 	Expand []string
 }
 
-func (input *ByProjectKeyMeCartsKeyByKeyRequestMethodPostInput) Values() url.Values {
+func (input *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPostInput) Values() url.Values {
 	values := url.Values{}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -38,23 +38,23 @@ func (input *ByProjectKeyMeCartsKeyByKeyRequestMethodPostInput) Values() url.Val
 	return values
 }
 
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodPost) Expand(v []string) *ByProjectKeyMeCartsKeyByKeyRequestMethodPost {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost {
 	if rb.params == nil {
-		rb.params = &ByProjectKeyMeCartsKeyByKeyRequestMethodPostInput{}
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPostInput{}
 	}
 	rb.params.Expand = v
 	return rb
 }
 
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodPost) WithQueryParams(input ByProjectKeyMeCartsKeyByKeyRequestMethodPostInput) *ByProjectKeyMeCartsKeyByKeyRequestMethodPost {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPostInput) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost {
 	rb.params = &input
 	return rb
 }
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyMeCartsKeyByKeyRequestMethodPost {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost {
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
 		return nil, err

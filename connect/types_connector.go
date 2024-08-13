@@ -18,7 +18,7 @@ type Connector struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description *string `json:"description,omitempty"`
-	// Type of integration provided by the Connector. Can be used to filter search and query results.
+	// Integration types of the Connector. Can be used to filter search and query results.
 	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator Creator `json:"creator"`
@@ -67,7 +67,7 @@ type ConnectorDraft struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description *string `json:"description,omitempty"`
-	// Type of integration provided by the Connector. Can be used to filter search and query results.
+	// Integration types of the Connector. Can be used to filter search and query results.
 	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator Creator `json:"creator"`
@@ -124,7 +124,7 @@ type ConnectorStaged struct {
 	Name string `json:"name"`
 	// Description of the Connector.
 	Description string `json:"description"`
-	// Type of integration provided by the Connector. Can be used to filter search and query results.
+	// Integration types of the Connector. Can be used to filter search and query results.
 	IntegrationTypes []IntegrationType `json:"integrationTypes"`
 	// Owner of the Connector.
 	Creator Creator `json:"creator"`
@@ -675,10 +675,10 @@ func (obj ConnectorAddCertificationCommentAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Requests the previewable status of a ConnectorStaged. A previewable ConnectorStaged can be used in a Deployment for testing and preview purposes.
+*	Requests the previewable status of a ConnectorStaged. Previewable ConnectorStaged should be deployed for testing and preview purposes. You can only deploy previewable ConnectorStaged to Projects listed in `privateProjects`.
 *
 *	After using this update action, the status of `isPreviewable` will change to `pending`. Following validation, the status of `isPreviewable` will change to `true` if the previewable status is granted, or `false` if it is rejected.
-*	In the case of a `false` status, contact our [support team](https://commercetools.atlassian.net/servicedesk/customer/portal/27) regarding any issues raised during the validation process.
+*	In the case of a `false` status, contact the [Connect support team](https://support.commercetools.com/) regarding any issues raised during the validation process.
 *
 *	Requesting the previewable status for a ConnectorStaged that is currently being reviewed returns the [ConnectorStagedPreviewRequestUnderProcess](ctp:connect:type:ConnectorStagedPreviewRequestUnderProcessError) error.
 *
@@ -699,9 +699,12 @@ func (obj ConnectorUpdatePreviewableAction) MarshalJSON() ([]byte, error) {
 /**
 *	Starts the Connector publishing process. You will be unable to update the Connector until the process completes.
 *
+*	`certification` should only be `true` if you want to make the Connector publicly available.
+*
  */
 type ConnectorPublishAction struct {
-	// If `true`, the ConnectorStaged enters the certification process. After completing the certification process, the Connector will become publicly available. If `false`, the published Connector becomes private and is available for deployment to Projects listed in `ConnectorStaged.privateProjects`.
+	// - Set to `false` to make the Connector private and skip the [certification process](/certification). The published Connector will only be deployable on Projects listed in `ConnectorStaged.privateProjects`.
+	// - Set to `true` to make the Connector public. This will submit the ConnectorStaged to the [certification process](/certification). After completing the certification process, the Connector will become publicly available.
 	Certification bool `json:"certification"`
 }
 

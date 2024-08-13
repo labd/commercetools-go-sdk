@@ -97,3 +97,9 @@ func (rb *ByProjectKeyRequestBuilder) Types() *ByProjectKeyTypesRequestBuilder {
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodesRequestBuilder {
+	return &ByProjectKeyDiscountCodesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}

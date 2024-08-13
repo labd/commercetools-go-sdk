@@ -37,6 +37,10 @@ func (rb *ByProjectKeyChannelsByIDRequestBuilder) Post(body ChannelUpdate) *ByPr
 	}
 }
 
+/**
+*	Returns a [ReferenceExists](ctp:api:type:ReferenceExistsError) error if other resources reference the Channel to be deleted.
+*
+ */
 func (rb *ByProjectKeyChannelsByIDRequestBuilder) Delete() *ByProjectKeyChannelsByIDRequestMethodDelete {
 	return &ByProjectKeyChannelsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/channels/%s", rb.projectKey, rb.id),

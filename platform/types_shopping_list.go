@@ -41,9 +41,9 @@ type ShoppingList struct {
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the ShoppingList.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the ShoppingList.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -645,6 +645,10 @@ func (obj ShoppingListRemoveTextLineItemAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeTextLineItem", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If the Shopping List is already associated with a Customer, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
+ */
 type ShoppingListSetAnonymousIdAction struct {
 	// Value to set. If empty, any existing value will be removed.
 	AnonymousId *string `json:"anonymousId,omitempty"`

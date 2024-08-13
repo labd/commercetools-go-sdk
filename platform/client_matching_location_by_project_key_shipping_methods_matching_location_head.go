@@ -77,7 +77,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestMethodHead) WithHead
 }
 
 /**
-*	Checks if a ShippingMethod that can ship to the given [Location](ctp:api:type:Location) exists. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+*	Checks if an active ShippingMethod that can ship to the given [Location](ctp:api:type:Location) exists. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

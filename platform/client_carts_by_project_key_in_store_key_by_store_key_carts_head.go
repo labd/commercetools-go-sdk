@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead) WithHeaders(he
 }
 
 /**
-*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

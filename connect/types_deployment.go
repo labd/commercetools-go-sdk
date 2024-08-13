@@ -49,7 +49,7 @@ type DeploymentPagedQueryResponse struct {
 type DeploymentDraft struct {
 	// User-defined unique identifier for the Deployment.
 	Key *string `json:"key,omitempty"`
-	// Reference to the [Connector](ctp:connect:type:Connector) being deployed.
+	// Reference to the [Connector](ctp:connect:type:Connector) or [ConnectorStaged](ctp:connect:type:ConnectorStaged) being deployed.
 	Connector ConnectorReference `json:"connector"`
 	// Configuration values needed by the [Connector](ctp:connect:type:Connector) for hosting. Keys should match those in the Connector's `configurations` field.
 	Configurations []DeploymentConfigurationApplication `json:"configurations"`

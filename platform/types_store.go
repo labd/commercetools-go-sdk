@@ -31,9 +31,9 @@ type Store struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Store was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Store.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Store.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique and immutable identifier for the Store.
 	Key string `json:"key"`
@@ -124,7 +124,7 @@ func (obj StoreDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[Reference](ctp:api:type:Reference) to a [Store](ctp:api:type:Store) by its key.
+*	[KeyReference](ctp:api:type:KeyReference) to a [Store](ctp:api:type:Store).
 *
  */
 type StoreKeyReference struct {

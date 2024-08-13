@@ -28,7 +28,14 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestMethodHead) WithHea
 }
 
 /**
-*	Checks if an Order exists for a given `id`. Returns a `200 OK` status if the My Order exists or a `404 Not Found` otherwise.
+*	Checks if an Order exists for a given `id` in a Store. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Order exists in the Store for the given `id`.
+*	- If the Order exists but does not have a `store` specified, or the `store` field references a different Store.
+*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

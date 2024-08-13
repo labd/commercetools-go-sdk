@@ -87,7 +87,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartLocationRequestMethodGet) WithH
 }
 
 /**
-*	Retrieves all the ShippingMethods that can ship to the given [Location](ctp:api:type:Location)
+*	Retrieves all the active ShippingMethods that can ship to the given [Location](ctp:api:type:Location)
 *	with a `predicate` that matches the given Cart.
 *	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`.
 *	This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).

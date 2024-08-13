@@ -17,9 +17,9 @@ type ApprovalFlow struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Approval Flow was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+	// IDs and references that created the ApprovalFlow.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+	// IDs and references that last modified the ApprovalFlow.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// [Order](ctp:api:type:Order) that needs to be approved.
 	Order OrderReference `json:"order"`
@@ -47,7 +47,7 @@ type ApprovalFlow struct {
 type ApprovalFlowApproval struct {
 	// Associate who approved the [Approval Flow](ctp:api:type:ApprovalFlow).
 	Approver Associate `json:"approver"`
-	// Date and time (UTC) when the [Approval Flow](ctp:api:type:ApprovalFlow) was approved at.
+	// Date and time (UTC) the [Approval Flow](ctp:api:type:ApprovalFlow) was approved.
 	ApprovedAt time.Time `json:"approvedAt"`
 }
 
@@ -75,7 +75,7 @@ type ApprovalFlowPagedQueryResponse struct {
 type ApprovalFlowRejection struct {
 	// Associate who rejected the [Approval Flow](ctp:api:type:ApprovalFlow).
 	Rejecter Associate `json:"rejecter"`
-	// Date and time (UTC) when the [Approval Flow](ctp:api:type:ApprovalFlow) was rejected at.
+	// Date and time (UTC) the [Approval Flow](ctp:api:type:ApprovalFlow) was rejected.
 	RejectedAt time.Time `json:"rejectedAt"`
 	// The reason for the rejection of the [Approval Flow](ctp:api:type:ApprovalFlow).
 	Reason *string `json:"reason,omitempty"`

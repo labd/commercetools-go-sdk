@@ -17,9 +17,9 @@ type ApprovalRule struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Approval Rule was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+	// IDs and references that created the ApprovalRule.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
+	// IDs and references that last modified the ApprovalRule.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// User-defined unique identifier of the Approval Rule. Must be unique within a [Business Unit](ctp:api:type:BusinessUnit).
 	Key *string `json:"key,omitempty"`

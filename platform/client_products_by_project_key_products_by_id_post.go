@@ -31,7 +31,6 @@ type ByProjectKeyProductsByIDRequestMethodPostInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   []string
 	Expand             []string
 }
 
@@ -48,9 +47,6 @@ func (input *ByProjectKeyProductsByIDRequestMethodPostInput) Values() url.Values
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	for _, v := range input.LocaleProjection {
-		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -90,14 +86,6 @@ func (rb *ByProjectKeyProductsByIDRequestMethodPost) PriceChannel(v string) *ByP
 	return rb
 }
 
-func (rb *ByProjectKeyProductsByIDRequestMethodPost) LocaleProjection(v []string) *ByProjectKeyProductsByIDRequestMethodPost {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsByIDRequestMethodPostInput{}
-	}
-	rb.params.LocaleProjection = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsByIDRequestMethodPost) Expand(v []string) *ByProjectKeyProductsByIDRequestMethodPost {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsByIDRequestMethodPostInput{}
@@ -116,7 +104,7 @@ func (rb *ByProjectKeyProductsByIDRequestMethodPost) WithHeaders(headers http.He
 }
 
 /**
-*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
 *
 *	A failed response can return a [DuplicatePriceScope](ctp:api:type:DuplicatePriceScopeError), [DuplicateVariantValues](ctp:api:type:DuplicateVariantValuesError), [DuplicateAttributeValue](ctp:api:type:DuplicateAttributeValueError), or [DuplicateAttributeValues](ctp:api:type:DuplicateAttributeValuesError) error.
  */

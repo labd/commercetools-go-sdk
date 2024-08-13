@@ -61,6 +61,16 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 *	The Cart must have a shipping address set before creating an Order.
 *	Creating an Order fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) if the Cart does not reference the same BusinessUnit as the `businessUnitKey` path parameter.
 *
+*	Specific Error Codes:
+*
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [OutOfStock](ctp:api:type:OutOfStockError)
+*	- [PriceChanged](ctp:api:type:PriceChangedError)
+*	- [ShippingMethodDoesNotMatchCart](ctp:api:type:ShippingMethodDoesNotMatchCartError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestBuilder) Post(body OrderFromCartDraft) *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestMethodPost {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestMethodPost{

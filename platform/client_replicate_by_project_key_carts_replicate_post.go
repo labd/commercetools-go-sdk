@@ -35,6 +35,11 @@ func (rb *ByProjectKeyCartsReplicateRequestMethodPost) WithHeaders(headers http.
 *
 *	The new Cart does not contain Payments or Deliveries. The [State](ctp:api:type:ItemState) of Line Items and Custom Line Items is reset to `initial`.
 *
+*	Specific Error Codes:
+*
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*
  */
 func (rb *ByProjectKeyCartsReplicateRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
 	data, err := serializeInput(rb.body)

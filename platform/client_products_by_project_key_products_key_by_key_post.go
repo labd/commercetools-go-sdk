@@ -31,7 +31,6 @@ type ByProjectKeyProductsKeyByKeyRequestMethodPostInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   []string
 	Expand             []string
 }
 
@@ -48,9 +47,6 @@ func (input *ByProjectKeyProductsKeyByKeyRequestMethodPostInput) Values() url.Va
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	for _, v := range input.LocaleProjection {
-		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -87,14 +83,6 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) PriceChannel(v string) 
 		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodPostInput{}
 	}
 	rb.params.PriceChannel = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) LocaleProjection(v []string) *ByProjectKeyProductsKeyByKeyRequestMethodPost {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodPostInput{}
-	}
-	rb.params.LocaleProjection = v
 	return rb
 }
 

@@ -71,9 +71,9 @@ type StandalonePrice struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the StandalonePrice was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the StandalonePrice.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the StandalonePrice.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the StandalonePrice.
 	Key *string `json:"key,omitempty"`
@@ -95,15 +95,15 @@ type StandalonePrice struct {
 	//
 	// If `discounted` is present, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTier `json:"tiers"`
-	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Staged changes of the StandalonePrice. Only present if the StandalonePrice has some changes staged.
 	Staged *StagedStandalonePrice `json:"staged,omitempty"`
-	// If set to `true`, the StandalonePrice is considered during [price selection](ctp:api:type:ProductPriceSelection).
-	// If set to `false`, the StandalonePrice is not considered during [price selection](ctp:api:type:ProductPriceSelection).
+	// If set to `true`, the StandalonePrice is considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
+	// If set to `false`, the StandalonePrice is not considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) and any associated Line Items in a Cart cannot be ordered.
 	Active bool `json:"active"`
 }
 
@@ -149,11 +149,6 @@ func (obj StandalonePrice) MarshalJSON() ([]byte, error) {
 
 }
 
-/**
-*	Standalone Prices are defined with a scope consisting of `currency` and optionally `country`, `customerGroup`, and `channel` and/or a validity period (`validFrom` and/or `validTo`). For more information see [price selection](/../api/projects/products#price-selection).
-*
-*	Creating a Standalone Price for an SKU which has a Standalone Price with exactly the same price scope, or with overlapping validity periods within the same price scope returns the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
- */
 type StandalonePriceDraft struct {
 	// User-defined unique identifier for the StandalonePrice.
 	Key *string `json:"key,omitempty"`
@@ -182,7 +177,7 @@ type StandalonePriceDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Staged changes for the StandalonePrice.
 	Staged *StagedPriceDraft `json:"staged,omitempty"`
-	// Set to `false`, if the StandalonePrice should not be considered during [price selection](ctp:api:type:ProductPriceSelection).
+	// Set to `false`, if the StandalonePrice should not be considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -210,6 +205,10 @@ func (obj StandalonePriceDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	[PagedQueryResult](/general-concepts#pagedqueryresult) with `results` containing an array of [StandalonePrice](ctp:api:type:StandalonePrice).
+*
+ */
 type StandalonePricePagedQueryResponse struct {
 	// Number of requested results.
 	Limit int `json:"limit"`

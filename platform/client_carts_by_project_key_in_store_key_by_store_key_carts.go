@@ -45,7 +45,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) WithId(id string)
 }
 
 /**
-*	Queries carts in a specific [Store](ctp:api:type:Store).
+*	Queries Carts in a specific [Store](ctp:api:type:Store).
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet{
@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectK
 }
 
 /**
-*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead{
@@ -66,8 +66,16 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Head() *ByProject
 
 /**
 *	Creates a [Cart](ctp:api:type:Cart) in the [Store](ctp:api:type:Store) specified by `storeKey`.
-*	When using this endpoint the Cart's `store` field is always set to the [Store](ctp:api:type:Store) specified in the path parameter.
-*	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
+*	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, or if the Shipping Method is not active, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
+*	Specific Error Codes:
+*
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Post(body CartDraft) *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodPost {

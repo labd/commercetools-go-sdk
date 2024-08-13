@@ -8,6 +8,19 @@ import (
 	"time"
 )
 
+/**
+*	The current indexing status of Customer Search.
+*
+ */
+type CustomerIndexingStatus string
+
+const (
+	CustomerIndexingStatusScheduled CustomerIndexingStatus = "Scheduled"
+	CustomerIndexingStatusIndexing  CustomerIndexingStatus = "Indexing"
+	CustomerIndexingStatusReady     CustomerIndexingStatus = "Ready"
+	CustomerIndexingStatusFailed    CustomerIndexingStatus = "Failed"
+)
+
 type BusinessUnitConfiguration struct {
 	// Status of Business Units created using the [My Business Unit endpoint](ctp:api:endpoint:/{projectKey}/me/business-units:POST).
 	MyBusinessUnitStatusOnCreation BusinessUnitConfigurationStatus `json:"myBusinessUnitStatusOnCreation"`
@@ -36,6 +49,18 @@ type CartsConfiguration struct {
 }
 
 /**
+*	Specifies the status of the [Customer Search](/../api/projects/customer-search) index.
+*	You can change the status using the [Change Customer Search Status](ctp:api:type:ProjectChangeCustomerSearchStatusAction) update action.
+*
+ */
+type CustomerSearchStatus string
+
+const (
+	CustomerSearchStatusActivated   CustomerSearchStatus = "Activated"
+	CustomerSearchStatusDeactivated CustomerSearchStatus = "Deactivated"
+)
+
+/**
 *	Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server).
 *
 *	You can only configure **one** external OAuth 2.0 endpoint per Project. To authenticate using multiple external services (such as social network logins), use a middle layer authentication service.
@@ -56,6 +81,23 @@ type OrderSearchStatus string
 const (
 	OrderSearchStatusActivated   OrderSearchStatus = "Activated"
 	OrderSearchStatusDeactivated OrderSearchStatus = "Deactivated"
+)
+
+type ProductSearchIndexingMode string
+
+const (
+	ProductSearchIndexingModeProductProjectionsSearch ProductSearchIndexingMode = "ProductProjectionsSearch"
+	ProductSearchIndexingModeProductsSearch           ProductSearchIndexingMode = "ProductsSearch"
+)
+
+/**
+*	Specifies the status of the [Product Search](/../api/projects/product-search) index.
+ */
+type ProductSearchStatus string
+
+const (
+	ProductSearchStatusActivated   ProductSearchStatus = "Activated"
+	ProductSearchStatusDeactivated ProductSearchStatus = "Deactivated"
 )
 
 type Project struct {
@@ -179,6 +221,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "changeCustomerSearchStatus":
+		obj := ProjectChangeCustomerSearchStatusAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeLanguages":
 		obj := ProjectChangeLanguagesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -257,6 +305,8 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 type SearchIndexingConfiguration struct {
 	// Configuration for the [Product Projection Search](/../api/projects/products-search) and [Product Suggestions](/../api/projects/products-suggestions) endpoints.
 	Products *SearchIndexingConfigurationValues `json:"products,omitempty"`
+	// Configuration for the [Product Search](/../api/projects/product-search) feature.
+	ProductsSearch *SearchIndexingConfigurationValues `json:"productsSearch,omitempty"`
 	// Configuration for the [Order Search](/../api/projects/order-search) feature.
 	Orders *SearchIndexingConfigurationValues `json:"orders,omitempty"`
 }
@@ -277,7 +327,7 @@ type SearchIndexingConfigurationValues struct {
 	Status *SearchIndexingConfigurationStatus `json:"status,omitempty"`
 	// Date and time (UTC) the Project was last updated. Only present on Projects last modified after 1 February 2019.
 	LastModifiedAt *time.Time `json:"lastModifiedAt,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the SearchIndexingConfigurationValues.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 }
 
@@ -318,7 +368,7 @@ func mapDiscriminatorShippingRateInputType(input interface{}) (ShippingRateInput
 }
 
 /**
-*	Used when the ShippingRate maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
+*	The [ShippingRate](ctp:api:type:ShippingRate) maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
 *	Only keys defined in the `values` array can be used to create a tier or to set a value of the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
 *	Keys must be unique.
 *
@@ -339,7 +389,7 @@ func (obj CartClassificationType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges).
+*	The [ShippingRate](ctp:api:type:ShippingRate) maps to an abstract [Cart](ctp:api:type:Cart) categorization expressed by integers (such as shipping scores or weight ranges).
 *
  */
 type CartScoreType struct {
@@ -356,8 +406,8 @@ func (obj CartScoreType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Used when the ShippingRate maps to the sum of [LineItem](ctp:api:type:LineItem) Prices.
-*	The value of the Cart is used to select a tier.
+*	The [ShippingRate](ctp:api:type:ShippingRate) maps to the value of the Cart and is used to select a tier.
+*	The value of the [Cart](ctp:api:type:Cart) is the sum of all Line Item totals and Custom Line Item totals (via the `totalPrice` field) after any Product Discounts and Cart Discounts have been applied.
 *	If chosen, it is not possible to set a value for the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
 *
  */
@@ -455,6 +505,21 @@ func (obj ProjectChangeCurrenciesAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeCurrencies", Alias: (*Alias)(&obj)})
 }
 
+type ProjectChangeCustomerSearchStatusAction struct {
+	// Activates or deactivates the [Customer Search](/../api/projects/customer-search) feature. Activation will trigger building a search index for the Customers in the Project.
+	Status CustomerSearchStatus `json:"status"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectChangeCustomerSearchStatusAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeCustomerSearchStatusAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeCustomerSearchStatus", Alias: (*Alias)(&obj)})
+}
+
 /**
 *	Removing a language used by a [Store](ctp:api:type:Store) returns a [LanguageUsedInStores](ctp:api:type:LanguageUsedInStoresError) error.
 *
@@ -537,6 +602,8 @@ type ProjectChangeProductSearchIndexingEnabledAction struct {
 	// - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
 	// - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
 	Enabled bool `json:"enabled"`
+	// Controls whether the action should apply to [Product Projection Search](/../api/projects/products-search) or to [Product Search](/../api/projects/product-search).
+	Mode *ProductSearchIndexingMode `json:"mode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

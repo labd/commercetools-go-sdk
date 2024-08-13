@@ -13,6 +13,15 @@ type ByProjectKeyInStoreKeyByStoreKeyProductsByProductIDProductTailoringRequestB
 	client     *Client
 }
 
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductsByProductIDProductTailoringRequestBuilder) Images() *ByProjectKeyInStoreKeyByStoreKeyProductsByProductIDProductTailoringImagesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyProductsByProductIDProductTailoringImagesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		productId:  rb.productId,
+		client:     rb.client,
+	}
+}
+
 /**
 *	Gets the current or staged representation of a [Product Tailoring](ctp:api:type:ProductTailoring) by its Product ID in the specified [Store](ctp:api:type:Store).
 *

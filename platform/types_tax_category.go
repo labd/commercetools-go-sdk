@@ -26,9 +26,9 @@ type TaxCategory struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the TaxCategory was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the TaxCategory.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the TaxCategory.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the TaxCategory.
 	Name string `json:"name"`
@@ -235,7 +235,8 @@ type TaxRate struct {
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
-	// Used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order. It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes). The total of all subrates equals the TaxRate `amount`.
+	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
+	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
 	SubRates []SubRate `json:"subRates"`
 }
 
@@ -276,7 +277,8 @@ type TaxRateDraft struct {
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
 	State *string `json:"state,omitempty"`
-	// Used to calculate the `taxPortions` field in a [Cart or Order](/../api/projects/carts#taxedprice) or [(Custom) Line Items](/../api/projects/carts#taxeditemprice). It is useful if the total tax of a country (such as the US) is a combination of multiple taxes (such as state and local taxes). The total of all subrates must equal the TaxRate `amount`.
+	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
+	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
 	SubRates []SubRate `json:"subRates"`
 	// User-defined unique identifier of the TaxRate.
 	Key *string `json:"key,omitempty"`

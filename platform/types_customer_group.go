@@ -17,9 +17,9 @@ type CustomerGroup struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the CustomerGroup was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the CustomerGroup.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the CustomerGroup.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier for the CustomerGroup.
 	Key *string `json:"key,omitempty"`

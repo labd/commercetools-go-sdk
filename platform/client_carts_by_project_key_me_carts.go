@@ -11,13 +11,6 @@ type ByProjectKeyMeCartsRequestBuilder struct {
 	client     *Client
 }
 
-func (rb *ByProjectKeyMeCartsRequestBuilder) WithKey(key string) *ByProjectKeyMeCartsKeyByKeyRequestBuilder {
-	return &ByProjectKeyMeCartsKeyByKeyRequestBuilder{
-		key:        key,
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}
 func (rb *ByProjectKeyMeCartsRequestBuilder) WithId(id string) *ByProjectKeyMeCartsByIDRequestBuilder {
 	return &ByProjectKeyMeCartsByIDRequestBuilder{
 		id:         id,
@@ -31,6 +24,11 @@ func (rb *ByProjectKeyMeCartsRequestBuilder) Replicate() *ByProjectKeyMeCartsRep
 		client:     rb.client,
 	}
 }
+
+/**
+*	Returns all Carts that match a given Query Predicate and contain either a matching `customerId` or `anonymousId`.
+*
+ */
 func (rb *ByProjectKeyMeCartsRequestBuilder) Get() *ByProjectKeyMeCartsRequestMethodGet {
 	return &ByProjectKeyMeCartsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/carts", rb.projectKey),
@@ -39,7 +37,8 @@ func (rb *ByProjectKeyMeCartsRequestBuilder) Get() *ByProjectKeyMeCartsRequestMe
 }
 
 /**
-*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if a Cart exists that matches a given Query Predicate and contains either a matching `customerId` or `anonymousId`. Returns a `200 OK` status if the Cart exists, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
  */
 func (rb *ByProjectKeyMeCartsRequestBuilder) Head() *ByProjectKeyMeCartsRequestMethodHead {
 	return &ByProjectKeyMeCartsRequestMethodHead{
@@ -48,6 +47,18 @@ func (rb *ByProjectKeyMeCartsRequestBuilder) Head() *ByProjectKeyMeCartsRequestM
 	}
 }
 
+/**
+*
+*	Creates a Cart for the Customer or anonymous user. The `customerId` or `anonymousId` field on the Cart is automatically set based on the [customer:{id}](/scopes#customer_idid) or [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
+*	Specific Error Codes:
+*
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*
+ */
 func (rb *ByProjectKeyMeCartsRequestBuilder) Post(body MyCartDraft) *ByProjectKeyMeCartsRequestMethodPost {
 	return &ByProjectKeyMeCartsRequestMethodPost{
 		body:   body,

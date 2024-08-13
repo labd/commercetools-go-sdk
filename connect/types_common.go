@@ -107,7 +107,7 @@ type ApplicationDeployment struct {
 	ApplicationName string `json:"applicationName"`
 	// Contains values of keys that are saved in plain text. Can be accessed after being set.
 	StandardConfiguration []ConfigurationValue `json:"standardConfiguration"`
-	// Contains values of secret keys. Cannot be accessed after being set.
+	// Contains values of secret keys. After being set, these values are encrypted and cannot be accessed.
 	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
 	// URL generated after deployment of service applications.
 	Url *string `json:"url,omitempty"`
@@ -167,14 +167,14 @@ const (
 )
 
 /**
-*	Reference to a Connector. Either `id` or `key` is required.
+*	Reference to a [Connector](ctp:connect:type:Connector) or [ConnectorStaged](ctp:connect:type:ConnectorStaged). Either `id` or `key` is required.
  */
 type ConnectorReference struct {
 	// Unique identifier of the referenced Connector.
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced Connector.
 	Key *string `json:"key,omitempty"`
-	// If `true`, the previewable [ConnectorStaged](ctp:connect:type:ConnectorStaged) will be referenced instead of the published Connector. The `isPreviewable` field of the [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be `true` to reference a previewable ConnectorStaged.
+	// If `true`, a previewable [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be referenced in `id` or `key` instead of the published Connector. The `isPreviewable` field of the [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be `true` to reference a previewable ConnectorStaged.
 	Staged *bool `json:"staged,omitempty"`
 	// Version of the referenced Connector.
 	Version *int `json:"version,omitempty"`
@@ -326,7 +326,7 @@ const (
 )
 
 /**
-*	The host Region of a commercetools Composable Commerce Project. For more information, see [Hosts](hosts-and-authorization#hosts).
+*	The Region of a commercetools Composable Commerce Project or Deployment. For more information, see [Hosts](/hosts-and-authorization#hosts).
 *
  */
 type Region string
@@ -338,7 +338,7 @@ const (
 )
 
 /**
-*	The type of integration provided by a Connector.
+*	Integration type of the Connector.
 *
  */
 type IntegrationType string
@@ -357,6 +357,17 @@ const (
 	IntegrationTypeAnalytics   IntegrationType = "analytics"
 	IntegrationTypeShipping    IntegrationType = "shipping"
 	IntegrationTypeOther       IntegrationType = "other"
+)
+
+/**
+*	Deployment type of the Connector.
+*
+ */
+type DeploymentType string
+
+const (
+	DeploymentTypePreview    DeploymentType = "preview"
+	DeploymentTypeProduction DeploymentType = "production"
 )
 
 /**

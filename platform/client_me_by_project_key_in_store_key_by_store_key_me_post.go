@@ -27,6 +27,16 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Customer exists with the `id` specified in the [customer:{id}](/scopes#customer_idid) scope.
+*	- If the Customer exists but is associated with a different Store than what is specified in the `manage_my_profile:{projectKey}:{storeKey}` scope.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

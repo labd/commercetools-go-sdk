@@ -10,27 +10,27 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyMeCartsKeyByKeyRequestMethodHead struct {
+type ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead struct {
 	url     string
 	client  *Client
 	headers http.Header
 }
 
-func (r *ByProjectKeyMeCartsKeyByKeyRequestMethodHead) Dump() map[string]interface{} {
+func (r *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url": r.url,
 	}
 }
 
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyMeCartsKeyByKeyRequestMethodHead {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead {
 	rb.headers = headers
 	return rb
 }
 
 /**
-*	Checks if a Cart exists for a given `key`. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise.
+*	Checks if a Quote exists for a given `key`. Returns a `200 OK` status if the Quote exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}
 	resp, err := rb.client.head(
 		ctx,

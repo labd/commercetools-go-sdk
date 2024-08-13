@@ -19,9 +19,9 @@ type StagedQuote struct {
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// User-specific unique identifier of the staged quote.
 	Key *string `json:"key,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the StagedQuote.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the StagedQuote.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Predefined states tracking the status of the Staged Quote.
 	StagedQuoteState StagedQuoteState `json:"stagedQuoteState"`
@@ -45,6 +45,8 @@ type StagedQuote struct {
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
+	Store *StoreKeyReference `json:"store,omitempty"`
 }
 
 type StagedQuoteDraft struct {

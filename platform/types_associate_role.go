@@ -17,11 +17,11 @@ type AssociateRole struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the AssociateRole was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the AssociateRole.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the AssociateRole.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier of the AssociateRole.
+	// User-defined unique and immutable identifier of the AssociateRole.
 	Key string `json:"key"`
 	// Whether the AssociateRole can be assigned to an Associate by a [buyer](/../api/associates-overview#buyer). If false, the AssociateRole can only be assigned using the [general endpoint](/../api/associates-overview#through-the-general-endpoints).
 	BuyerAssignable bool `json:"buyerAssignable"`
@@ -34,7 +34,7 @@ type AssociateRole struct {
 }
 
 type AssociateRoleDraft struct {
-	// User-defined unique identifier for the AssociateRole.
+	// User-defined unique and immutable identifier for the AssociateRole.
 	Key string `json:"key"`
 	// Name of the AssociateRole.
 	Name *string `json:"name,omitempty"`
@@ -71,7 +71,7 @@ func (obj AssociateRoleDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[Reference](ctp:api:type:Reference) to an [AssociateRole](ctp:api:type:AssociateRole) by its key.
+*	[KeyReference](ctp:api:type:KeyReference) to an [AssociateRole](ctp:api:type:AssociateRole).
 *
  */
 type AssociateRoleKeyReference struct {

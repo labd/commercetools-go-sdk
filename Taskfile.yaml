@@ -46,7 +46,7 @@ tasks:
   generate-importapi:
     cmds:
       - task: generate-api
-        vars: {apiName: importapi, path: importapi}
+        vars: {apiName: importapi, path: import}
 
   generate-frontend:
     cmds:

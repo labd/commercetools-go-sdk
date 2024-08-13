@@ -51,6 +51,16 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete) WithHeaders(hea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Customer exists with the `id` specified in the [customer:{id}](/scopes#customer_idid) scope.
+*	- If the Customer exists but is associated with a different Store than what is specified in the `manage_my_profile:{projectKey}:{storeKey}` scope.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

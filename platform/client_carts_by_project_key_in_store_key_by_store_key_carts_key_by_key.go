@@ -14,7 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder struct {
 }
 
 /**
-*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Cart exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
 *	To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.
 *
@@ -27,7 +27,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder) Get() *By
 }
 
 /**
-*	Checks if a Cart exists for a given `key`. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise.
+*	Checks if a Cart exists for a given `key`. Returns a `200 OK` status if the Cart exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestMethodHead{
@@ -37,7 +37,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder) Head() *B
 }
 
 /**
-*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Cart exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder) Post(body CartUpdate) *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestMethodPost {
@@ -49,7 +49,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder) Post(body
 }
 
 /**
-*	If the Cart exists in the Project but does not have the `store` field, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	If the Cart exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestMethodDelete {

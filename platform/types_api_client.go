@@ -20,7 +20,7 @@ type ApiClient struct {
 	LastUsedAt *Date `json:"lastUsedAt,omitempty"`
 	// If set, the Client will be deleted on (or shortly after) this point in time.
 	DeleteAt *time.Time `json:"deleteAt,omitempty"`
-	// Date and time (UTC) the APIClient was initially created at.
+	// Date and time (UTC) the APIClient was initially created.
 	CreatedAt *time.Time `json:"createdAt,omitempty"`
 	// Expiration time in seconds for each access token obtained by the APIClient. Only present when set with the [APIClientDraft](ctp:api:type:ApiClientDraft). If not present the default value applies.
 	AccessTokenValiditySeconds *int `json:"accessTokenValiditySeconds,omitempty"`

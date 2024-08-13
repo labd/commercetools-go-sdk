@@ -12,7 +12,7 @@ import (
 *
  */
 type ErrorResponse struct {
-	// The http status code of the response.
+	// The HTTP status code of the response.
 	StatusCode int `json:"statusCode"`
 	// Describes the error.
 	Message string `json:"message"`

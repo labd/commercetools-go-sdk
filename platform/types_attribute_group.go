@@ -17,9 +17,9 @@ type AttributeGroup struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the AttributeGroup was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the AttributeGroup.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the AttributeGroup.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the AttributeGroup.
 	Name LocalizedString `json:"name"`

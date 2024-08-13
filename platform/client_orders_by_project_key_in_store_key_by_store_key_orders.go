@@ -12,6 +12,13 @@ type ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder struct {
 	client     *Client
 }
 
+func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) OrderQuote() *ByProjectKeyInStoreKeyByStoreKeyOrdersQuotesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyOrdersQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) WithOrderNumber(orderNumber string) *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestBuilder{
 		orderNumber: orderNumber,
@@ -36,7 +43,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Get() *ByProject
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodHead{
@@ -50,6 +57,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Head() *ByProjec
 *	The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
 *
 *	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+*	If a server-side problem occurs, indicated by a 500 Internal Server Error HTTP response, the Order creation may still successfully complete after the error is returned.
+*	If you receive this error, you should verify the status of the Order by querying a unique identifier supplied during the creation request, such as the Order number.
 *
 *	Specific Error Codes:
 *
@@ -58,6 +67,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Head() *ByProjec
 *	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
 *	- [ShippingMethodDoesNotMatchCart](ctp:api:type:ShippingMethodDoesNotMatchCartError)
 *	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [InvalidOperation](ctp:api:type:InvalidOperationError)
 *	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
 *	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
 *	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)

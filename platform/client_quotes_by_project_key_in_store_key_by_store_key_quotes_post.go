@@ -9,74 +9,68 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
-type ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete struct {
+type ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost struct {
+	body    QuoteDraft
 	url     string
 	client  *Client
 	headers http.Header
-	params  *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDeleteInput
+	params  *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPostInput
 }
 
-func (r *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) Dump() map[string]interface{} {
+func (r *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url":    r.url,
 		"params": r.params,
 	}
 }
 
-type ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDeleteInput struct {
-	Version int
-	Expand  []string
+type ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPostInput struct {
+	Expand []string
 }
 
-func (input *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDeleteInput) Values() url.Values {
+func (input *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPostInput) Values() url.Values {
 	values := url.Values{}
-	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	return values
 }
 
-func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) Version(v int) *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost {
 	if rb.params == nil {
-		rb.params = &ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDeleteInput{}
-	}
-	rb.params.Version = v
-	return rb
-}
-
-func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) Expand(v []string) *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDeleteInput{}
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPostInput{}
 	}
 	rb.params.Expand = v
 	return rb
 }
 
-func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) WithQueryParams(input ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDeleteInput) *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPostInput) *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost {
 	rb.params = &input
 	return rb
 }
-func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) WithHeaders(headers http.Header) *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost {
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *QuoteRequest, err error) {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodPost) Execute(ctx context.Context) (result *Quote, err error) {
+	data, err := serializeInput(rb.body)
+	if err != nil {
+		return nil, err
+	}
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()
 	} else {
 		queryParams = url.Values{}
 	}
-	resp, err := rb.client.delete(
+	resp, err := rb.client.post(
 		ctx,
 		rb.url,
 		queryParams,
 		rb.headers,
-		nil,
+		data,
 	)
 
 	if err != nil {
@@ -88,19 +82,12 @@ func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete) Execute(ctx co
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
-	case 200:
+	case 201:
 		err = json.Unmarshal(content, &result)
 		if err != nil {
 			return nil, err
 		}
 		return result, nil
-	case 409:
-		errorObj := ErrorResponse{}
-		err = json.Unmarshal(content, &errorObj)
-		if err != nil {
-			return nil, err
-		}
-		return nil, errorObj
 	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

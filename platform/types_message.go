@@ -388,6 +388,19 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "BusinessUnitApprovalRuleModeChanged":
+		obj := BusinessUnitApprovalRuleModeChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "BusinessUnitAssociateAdded":
 		obj := BusinessUnitAssociateAddedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1474,6 +1487,71 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "ProductPriceCustomFieldAdded":
+		obj := ProductPriceCustomFieldAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldChanged":
+		obj := ProductPriceCustomFieldChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldRemoved":
+		obj := ProductPriceCustomFieldRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldsRemoved":
+		obj := ProductPriceCustomFieldsRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldsSet":
+		obj := ProductPriceCustomFieldsSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "ProductPriceDiscountsSet":
 		obj := ProductPriceDiscountsSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1768,6 +1846,32 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "ProductTailoringImageAdded":
+		obj := ProductTailoringImageAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductTailoringImagesSet":
+		obj := ProductTailoringImagesSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "ProductTailoringNameSet":
 		obj := ProductTailoringNameSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1848,6 +1952,32 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return obj, nil
 	case "ProductVariantDeleted":
 		obj := ProductVariantDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductVariantTailoringAdded":
+		obj := ProductVariantTailoringAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ProductVariantTailoringRemoved":
+		obj := ProductVariantTailoringRemovedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2327,6 +2457,20 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 				return nil, err
 			}
 		}
+		if obj.Value != nil {
+			var err error
+			obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.OldValue != nil {
+			var err error
+			obj.OldValue, err = mapDiscriminatorTypedMoney(obj.OldValue)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "StoreCountriesChanged":
 		obj := StoreCountriesChangedMessage{}
@@ -2449,9 +2593,9 @@ type ApprovalFlowApprovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2509,9 +2653,9 @@ type ApprovalFlowCompletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2569,9 +2713,9 @@ type ApprovalFlowCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2627,9 +2771,9 @@ type ApprovalFlowRejectedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2689,9 +2833,9 @@ type ApprovalRuleApproversSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2749,9 +2893,9 @@ type ApprovalRuleCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2807,9 +2951,9 @@ type ApprovalRuleDescriptionSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2867,9 +3011,9 @@ type ApprovalRuleKeySetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2927,9 +3071,9 @@ type ApprovalRuleNameSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -2987,9 +3131,9 @@ type ApprovalRulePredicateSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3047,9 +3191,9 @@ type ApprovalRuleRequestersSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3107,9 +3251,9 @@ type ApprovalRuleStatusSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3167,9 +3311,9 @@ type AssociateRoleBuyerAssignableChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3225,9 +3369,9 @@ type AssociateRoleCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3283,9 +3427,9 @@ type AssociateRoleDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3339,9 +3483,9 @@ type AssociateRoleNameChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3397,9 +3541,9 @@ type AssociateRolePermissionAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3455,9 +3599,9 @@ type AssociateRolePermissionRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3513,9 +3657,9 @@ type AssociateRolePermissionsSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3571,9 +3715,9 @@ type BusinessUnitAddressAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3629,9 +3773,9 @@ type BusinessUnitAddressChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3687,9 +3831,9 @@ type BusinessUnitAddressCustomFieldAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3704,6 +3848,8 @@ type BusinessUnitAddressCustomFieldAddedMessage struct {
 	Name string `json:"name"`
 	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
 	Value interface{} `json:"value"`
+	// `id` of the [Address](ctp:api:type:Address) to which the Custom Field was added.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3747,9 +3893,9 @@ type BusinessUnitAddressCustomFieldChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3766,6 +3912,8 @@ type BusinessUnitAddressCustomFieldChangedMessage struct {
 	Value interface{} `json:"value"`
 	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:BusinessUnitSetAddressCustomFieldAction) update action.
 	OldValue interface{} `json:"oldValue,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) of which the Custom Field was changed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3809,9 +3957,9 @@ type BusinessUnitAddressCustomFieldRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3824,6 +3972,8 @@ type BusinessUnitAddressCustomFieldRemovedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Name of the Custom Field that was removed.
 	Name string `json:"name"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Field was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3867,9 +4017,9 @@ type BusinessUnitAddressCustomTypeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3882,6 +4032,8 @@ type BusinessUnitAddressCustomTypeRemovedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
 	OldTypeId *string `json:"oldTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Type was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3925,9 +4077,9 @@ type BusinessUnitAddressCustomTypeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -3942,6 +4094,8 @@ type BusinessUnitAddressCustomTypeSetMessage struct {
 	CustomFields CustomFields `json:"customFields"`
 	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
 	OldTypeId *string `json:"oldTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) on which the Custom Field was set.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -3985,9 +4139,9 @@ type BusinessUnitAddressRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4031,6 +4185,66 @@ func (obj BusinessUnitAddressRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Change Approval Rule Mode](ctp:api:type:BusinessUnitChangeApprovalRuleModeAction) update action.
+*
+ */
+type BusinessUnitApprovalRuleModeChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [BusinessUnitApprovalRuleMode](ctp:api:type:BusinessUnitApprovalRuleMode) of the Business Unit after the [Change Approval Rule Mode](ctp:api:type:BusinessUnitChangeApprovalRuleModeAction) update action.
+	ApprovalRuleMode BusinessUnitApprovalRuleMode `json:"approvalRuleMode"`
+	// [BusinessUnitApprovalRuleMode](ctp:api:type:BusinessUnitApprovalRuleMode) of the Business Unit before the [Change Approval Rule Mode](ctp:api:type:BusinessUnitChangeApprovalRuleModeAction) update action.
+	OldApprovalRuleMode *BusinessUnitApprovalRuleMode `json:"oldApprovalRuleMode,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitApprovalRuleModeChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitApprovalRuleModeChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitApprovalRuleModeChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitApprovalRuleModeChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitApprovalRuleModeChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action.
 *
  */
@@ -4043,9 +4257,9 @@ type BusinessUnitAssociateAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4101,9 +4315,9 @@ type BusinessUnitAssociateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4159,9 +4373,9 @@ type BusinessUnitAssociateModeChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4219,9 +4433,9 @@ type BusinessUnitAssociateRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4277,9 +4491,9 @@ type BusinessUnitAssociatesSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4335,9 +4549,9 @@ type BusinessUnitBillingAddressAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4393,9 +4607,9 @@ type BusinessUnitBillingAddressRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4451,9 +4665,9 @@ type BusinessUnitContactEmailSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4509,9 +4723,9 @@ type BusinessUnitCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4574,9 +4788,9 @@ type BusinessUnitCustomFieldAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4634,9 +4848,9 @@ type BusinessUnitCustomFieldChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4696,9 +4910,9 @@ type BusinessUnitCustomFieldRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4754,9 +4968,9 @@ type BusinessUnitCustomTypeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4812,9 +5026,9 @@ type BusinessUnitCustomTypeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4872,9 +5086,9 @@ type BusinessUnitDefaultBillingAddressSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4930,9 +5144,9 @@ type BusinessUnitDefaultShippingAddressSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -4988,9 +5202,9 @@ type BusinessUnitDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5044,9 +5258,9 @@ type BusinessUnitNameChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5102,9 +5316,9 @@ type BusinessUnitParentChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5162,9 +5376,9 @@ type BusinessUnitShippingAddressAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5220,9 +5434,9 @@ type BusinessUnitShippingAddressRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5278,9 +5492,9 @@ type BusinessUnitStatusChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5336,9 +5550,9 @@ type BusinessUnitStoreAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5394,9 +5608,9 @@ type BusinessUnitStoreModeChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5458,9 +5672,9 @@ type BusinessUnitStoreRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5516,9 +5730,9 @@ type BusinessUnitStoresSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5574,9 +5788,9 @@ type CartDiscountCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5632,9 +5846,9 @@ type CartDiscountDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5688,9 +5902,9 @@ type CartDiscountStoreAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5746,9 +5960,9 @@ type CartDiscountStoreRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5804,9 +6018,9 @@ type CartDiscountStoresSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5862,9 +6076,9 @@ type CategoryCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5920,9 +6134,9 @@ type CategorySlugChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -5980,9 +6194,9 @@ type CustomerAddressAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6038,9 +6252,9 @@ type CustomerAddressChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6097,9 +6311,9 @@ type CustomerAddressCustomFieldAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6114,6 +6328,8 @@ type CustomerAddressCustomFieldAddedMessage struct {
 	Name string `json:"name"`
 	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
 	Value interface{} `json:"value"`
+	// `id` of the [Address](ctp:api:type:Address) to which the Custom Field was added.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6157,9 +6373,9 @@ type CustomerAddressCustomFieldChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6177,6 +6393,8 @@ type CustomerAddressCustomFieldChangedMessage struct {
 	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:CustomerSetAddressCustomFieldAction) update action.
 	// When there has not been a Custom Field with the `name` on the Customer Address before, a [Customer Address Custom Field Added](ctp:api:type:CustomerAddressCustomFieldAddedMessage) Message is generated instead.
 	PreviousValue interface{} `json:"previousValue,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) of which the Custom Field was changed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6220,9 +6438,9 @@ type CustomerAddressCustomFieldRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6235,6 +6453,8 @@ type CustomerAddressCustomFieldRemovedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Name of the Custom Field that was removed.
 	Name string `json:"name"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Field was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6278,9 +6498,9 @@ type CustomerAddressCustomTypeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6293,6 +6513,8 @@ type CustomerAddressCustomTypeRemovedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
 	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Type was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6336,9 +6558,9 @@ type CustomerAddressCustomTypeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6353,6 +6575,8 @@ type CustomerAddressCustomTypeSetMessage struct {
 	CustomFields CustomFields `json:"customFields"`
 	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
 	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) on which the Custom Field was set.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -6396,9 +6620,9 @@ type CustomerAddressRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6454,9 +6678,9 @@ type CustomerCompanyNameSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6512,9 +6736,9 @@ type CustomerCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6571,9 +6795,9 @@ type CustomerCustomFieldAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6631,9 +6855,9 @@ type CustomerCustomFieldChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6694,9 +6918,9 @@ type CustomerCustomFieldRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6752,9 +6976,9 @@ type CustomerCustomTypeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6810,9 +7034,9 @@ type CustomerCustomTypeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6870,9 +7094,9 @@ type CustomerDateOfBirthSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6928,9 +7152,9 @@ type CustomerDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -6984,9 +7208,9 @@ type CustomerEmailChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7042,9 +7266,9 @@ type CustomerEmailTokenCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7102,9 +7326,9 @@ type CustomerEmailVerifiedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7158,9 +7382,9 @@ type CustomerFirstNameSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7217,9 +7441,9 @@ type CustomerGroupCustomFieldAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7277,9 +7501,9 @@ type CustomerGroupCustomFieldChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7339,9 +7563,9 @@ type CustomerGroupCustomFieldRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7397,9 +7621,9 @@ type CustomerGroupCustomTypeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7455,9 +7679,9 @@ type CustomerGroupCustomTypeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7515,9 +7739,9 @@ type CustomerGroupSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7573,9 +7797,9 @@ type CustomerLastNameSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7631,9 +7855,9 @@ type CustomerPasswordTokenCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7691,9 +7915,9 @@ type CustomerPasswordUpdatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7749,9 +7973,9 @@ type CustomerTitleSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7807,9 +8031,9 @@ type DiscountCodeCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7865,9 +8089,9 @@ type DiscountCodeDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7921,9 +8145,9 @@ type DiscountCodeKeySetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -7981,9 +8205,9 @@ type InventoryEntryCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -8039,9 +8263,9 @@ type InventoryEntryDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -8100,9 +8324,9 @@ type InventoryEntryQuantitySetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -8256,6 +8480,71 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 		return obj, nil
 	case "DeliveryAddressSet":
 		obj := DeliveryAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryCustomFieldAdded":
+		obj := DeliveryCustomFieldAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryCustomFieldChanged":
+		obj := DeliveryCustomFieldChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryCustomFieldRemoved":
+		obj := DeliveryCustomFieldRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryCustomTypeRemoved":
+		obj := DeliveryCustomTypeRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DeliveryCustomTypeSet":
+		obj := DeliveryCustomTypeSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -8870,9 +9159,9 @@ type CustomLineItemStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -8887,7 +9176,7 @@ type CustomLineItemStateTransitionMessage struct {
 	CustomLineItemId string `json:"customLineItemId"`
 	// User-defined unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
 	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
-	// Date and time (UTC) when the transition of the [Custom Line Item](ctp:api:type:CustomLineItem) [State](ctp:api:type:State) was performed.
+	// Date and time (UTC) the transition of the [Custom Line Item](ctp:api:type:CustomLineItem) [State](ctp:api:type:State) was performed.
 	TransitionDate time.Time `json:"transitionDate"`
 	// Number of [Custom Line Items](ctp:api:type:CustomLineItem) for which the [State](ctp:api:type:State) was transitioned.
 	Quantity int `json:"quantity"`
@@ -8938,9 +9227,9 @@ type DeliveryAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -8998,9 +9287,9 @@ type DeliveryAddressSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9011,7 +9300,7 @@ type DeliveryAddressSetMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Unique identifier of the [Parcel](ctp:api:type:Delivery).
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
 	DeliveryId string `json:"deliveryId"`
 	// [Address](ctp:api:type:Address) after the [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
 	Address *Address `json:"address,omitempty"`
@@ -9050,6 +9339,315 @@ func (obj DeliveryAddressSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after adding a Custom Field to a Delivery using the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+*
+ */
+type DeliveryCustomFieldAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeliveryCustomFieldAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias DeliveryCustomFieldAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomFieldAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomFieldAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when an existing Custom Field on a Delivery has been changed using the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+*
+ */
+type DeliveryCustomFieldChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+	// When there has not been a Custom Field with the `name` on the Delivery before, a [Delivery Custom Field Added](ctp:api:type:DeliveryCustomFieldAddedMessage) Message is generated instead.
+	PreviousValue interface{} `json:"previousValue,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeliveryCustomFieldChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias DeliveryCustomFieldChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomFieldChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomFieldChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when a Custom Field has been removed from the Delivery using the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+*
+ */
+type DeliveryCustomFieldRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeliveryCustomFieldRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias DeliveryCustomFieldRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomFieldRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomFieldRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Type from a Delivery using the [Set Custom Type](ctp:api:type:OrderSetDeliveryCustomTypeAction) update action with empty parameters.
+*
+ */
+type DeliveryCustomTypeRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeliveryCustomTypeRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias DeliveryCustomTypeRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomTypeRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomTypeRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Type to a Delivery using the [Set Custom Type](ctp:api:type:OrderSetDeliveryCustomTypeAction) update action.
+*
+ */
+type DeliveryCustomTypeSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Custom Fields that have been set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeliveryCustomTypeSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias DeliveryCustomTypeSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomTypeSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomTypeSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Set Delivery Items](ctp:api:type:OrderSetDeliveryItemsAction) update action.
 *
  */
@@ -9062,9 +9660,9 @@ type DeliveryItemsUpdatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9126,9 +9724,9 @@ type DeliveryRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9186,9 +9784,9 @@ type LineItemStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9203,7 +9801,7 @@ type LineItemStateTransitionMessage struct {
 	LineItemId string `json:"lineItemId"`
 	// User-defined unique identifier of the LineItem.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Date and time (UTC) when the transition of the [Line Item](ctp:api:type:LineItem) [State](ctp:api:type:State) was performed.
+	// Date and time (UTC) the transition of the [Line Item](ctp:api:type:LineItem) [State](ctp:api:type:State) was performed.
 	TransitionDate time.Time `json:"transitionDate"`
 	// Number of [Line Items](ctp:api:type:LineItem) for which the [State](ctp:api:type:State) was transitioned.
 	Quantity int `json:"quantity"`
@@ -9254,9 +9852,9 @@ type OrderBillingAddressSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9314,9 +9912,9 @@ type OrderCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9372,9 +9970,9 @@ type OrderCustomFieldAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9432,9 +10030,9 @@ type OrderCustomFieldChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9495,9 +10093,9 @@ type OrderCustomFieldRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9553,9 +10151,9 @@ type OrderCustomLineItemAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9611,9 +10209,9 @@ type OrderCustomLineItemDiscountSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9675,9 +10273,9 @@ type OrderCustomLineItemQuantityChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9739,9 +10337,9 @@ type OrderCustomLineItemRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9801,9 +10399,9 @@ type OrderCustomTypeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9859,9 +10457,9 @@ type OrderCustomTypeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9919,9 +10517,9 @@ type OrderCustomerEmailSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -9979,9 +10577,9 @@ type OrderCustomerGroupSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10039,9 +10637,9 @@ type OrderCustomerSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10103,9 +10701,9 @@ type OrderDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10161,9 +10759,9 @@ type OrderDiscountCodeAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10219,9 +10817,9 @@ type OrderDiscountCodeRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10277,9 +10875,9 @@ type OrderDiscountCodeStateSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10339,9 +10937,9 @@ type OrderEditAppliedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10399,9 +10997,9 @@ type OrderImportedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10457,9 +11055,9 @@ type OrderLineItemAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10517,9 +11115,9 @@ type OrderLineItemDiscountSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10537,7 +11135,7 @@ type OrderLineItemDiscountSetMessage struct {
 	// Array of [DiscountedLineItemPriceForQuantity](ctp:api:type:DiscountedLineItemPriceForQuantity) after the Discount recalculation.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	// Total Price of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
-	TotalPrice Money `json:"totalPrice"`
+	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 	// Total taxed prices based on the quantity of Line Item assigned to each [Shipping Method](ctp:api:type:ShippingMethod). Only applicable for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
@@ -10586,9 +11184,9 @@ type OrderLineItemDistributionChannelSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10648,9 +11246,9 @@ type OrderLineItemRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10665,19 +11263,19 @@ type OrderLineItemRemovedMessage struct {
 	LineItemId string `json:"lineItemId"`
 	// User-defined unique identifier of the LineItem.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Quantity of [Line Items](ctp:api:type:LineItem) that were removed during the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// Quantity of [Line Items](ctp:api:type:LineItem) that were removed during the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	RemovedQuantity int `json:"removedQuantity"`
-	// [Line Item](ctp:api:type:LineItem) quantity after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [Line Item](ctp:api:type:LineItem) quantity after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewQuantity int `json:"newQuantity"`
-	// [ItemStates](ctp:api:type:ItemState) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [ItemStates](ctp:api:type:ItemState) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewState []ItemState `json:"newState"`
-	// `totalPrice` of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// `totalPrice` of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewTotalPrice CentPrecisionMoney `json:"newTotalPrice"`
-	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewTaxedPrice *TaxedItemPrice `json:"newTaxedPrice,omitempty"`
-	// [Price](ctp:api:type:Price) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [Price](ctp:api:type:Price) of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewPrice *Price `json:"newPrice,omitempty"`
-	// [Shipping Details](ctp:api:type:ItemShippingDetails) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [Shipping Details](ctp:api:type:ItemShippingDetails) of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewShippingDetail *ItemShippingDetails `json:"newShippingDetail,omitempty"`
 }
 
@@ -10722,9 +11320,9 @@ type OrderPaymentAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10780,9 +11378,9 @@ type OrderPaymentStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10840,9 +11438,9 @@ type OrderPurchaseOrderNumberSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10900,9 +11498,9 @@ type OrderReturnShipmentStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -10960,9 +11558,9 @@ type OrderShipmentStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11020,9 +11618,9 @@ type OrderShippingAddressSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11080,9 +11678,9 @@ type OrderShippingInfoSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11140,9 +11738,9 @@ type OrderShippingRateInputSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11214,9 +11812,9 @@ type OrderStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11274,9 +11872,9 @@ type OrderStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11336,9 +11934,9 @@ type OrderStoreSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11394,9 +11992,9 @@ type ParcelAddedToDeliveryMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11456,9 +12054,9 @@ type ParcelItemsUpdatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11522,9 +12120,9 @@ type ParcelMeasurementsUpdatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11586,9 +12184,9 @@ type ParcelRemovedFromDeliveryMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11648,9 +12246,9 @@ type ParcelTrackingDataUpdatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11712,9 +12310,9 @@ type PaymentCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11770,9 +12368,9 @@ type PaymentInteractionAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11828,9 +12426,9 @@ type PaymentStatusInterfaceCodeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11888,9 +12486,9 @@ type PaymentStatusStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -11948,9 +12546,9 @@ type PaymentTransactionAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12006,9 +12604,9 @@ type PaymentTransactionStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12066,9 +12664,9 @@ type ProductAddedToCategoryMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12126,9 +12724,9 @@ type ProductCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12184,9 +12782,9 @@ type ProductDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12244,9 +12842,9 @@ type ProductImageAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12306,9 +12904,9 @@ type ProductPriceAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12321,7 +12919,7 @@ type ProductPriceAddedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was added.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](/projects/products#embedded-price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
+	// The Embedded Price that was added to the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -12368,9 +12966,9 @@ type ProductPriceChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12383,13 +12981,13 @@ type ProductPriceChangedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was changed.
 	VariantId int `json:"variantId"`
-	// The current [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The current Embedded Price before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldPrice Price `json:"oldPrice"`
-	// The [Embedded Price](/projects/products#embedded-price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The Embedded Price after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	NewPrice Price `json:"newPrice"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
-	// The staged [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The staged Embedded Price before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldStagedPrice *Price `json:"oldStagedPrice,omitempty"`
 }
 
@@ -12422,6 +13020,330 @@ func (obj ProductPriceChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after adding a Custom Field to a Price using the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+*
+ */
+type ProductPriceCustomFieldAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [Price](ctp:api:type:Price) to which the Custom Field was added.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceCustomFieldAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceCustomFieldAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after changing an existing Custom Field on a Price using the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+*
+ */
+type ProductPriceCustomFieldChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [Price](ctp:api:type:Price) of which the Custom Field was changed.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Name of the Custom Field that was changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceCustomFieldChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceCustomFieldChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Field from a Price using the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+*
+ */
+type ProductPriceCustomFieldRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [Price](ctp:api:type:Price) from which the Custom Field was removed.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceCustomFieldRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceCustomFieldRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Type from a Price using the [Set Price Custom Type](ctp:api:type:ProductSetProductPriceCustomTypeAction) update action.
+*
+ */
+type ProductPriceCustomFieldsRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [Price](ctp:api:type:Price) from which the Custom Type was removed.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceCustomFieldsRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceCustomFieldsRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldsRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldsRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldsRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Price Custom Type](ctp:api:type:ProductSetProductPriceCustomTypeAction) update action.
+*
+ */
+type ProductPriceCustomFieldsSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique identifier of the [Price](ctp:api:type:Price) on which the Custom Type was set.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Custom Fields that were set.
+	CustomField CustomFields `json:"customField"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductPriceCustomFieldsSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductPriceCustomFieldsSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldsSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldsSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldsSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a Price is updated due to a [Product Discount](ctp:api:type:ProductDiscount).
 *
  */
@@ -12434,9 +13356,9 @@ type ProductPriceDiscountsSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12480,7 +13402,7 @@ func (obj ProductPriceDiscountsSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Details about a [Embedded Price](/projects/products#embedded-price) that was updated due to a Discount. Specific to [Product Price Discounts Set](ctp:api:type:ProductPriceDiscountsSetMessage) Message.
+*	Details about an [Embedded Price](ctp:api:type:Price) that was updated due to a Discount. Specific to [Product Price Discounts Set](ctp:api:type:ProductPriceDiscountsSetMessage) Message.
 *
  */
 type ProductPriceDiscountsSetUpdatedPrice struct {
@@ -12511,9 +13433,9 @@ type ProductPriceExternalDiscountSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12579,9 +13501,9 @@ type ProductPriceKeySetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12644,9 +13566,9 @@ type ProductPriceModeSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12702,9 +13624,9 @@ type ProductPriceRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12717,7 +13639,7 @@ type ProductPriceRemovedMessage struct {
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was removed.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](/projects/products#embedded-price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
+	// The Embedded Price that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -12764,9 +13686,9 @@ type ProductPricesSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12826,9 +13748,9 @@ type ProductPublishedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12888,9 +13810,9 @@ type ProductRemovedFromCategoryMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -12948,9 +13870,9 @@ type ProductRevertedStagedChangesMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13006,9 +13928,9 @@ type ProductSelectionCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13064,9 +13986,9 @@ type ProductSelectionDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13120,9 +14042,9 @@ type ProductSelectionProductAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13187,9 +14109,9 @@ type ProductSelectionProductExcludedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13247,9 +14169,9 @@ type ProductSelectionProductRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13305,9 +14227,9 @@ type ProductSelectionVariantExclusionChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13367,9 +14289,9 @@ type ProductSelectionVariantSelectionChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13443,9 +14365,9 @@ type ProductSlugChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13503,9 +14425,9 @@ type ProductStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13564,9 +14486,9 @@ type ProductTailoringCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13591,6 +14513,14 @@ type ProductTailoringCreatedMessage struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// The slug of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
 	Slug *LocalizedString `json:"slug,omitempty"`
+	// The metaTitle of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// The metaDescription of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
+	// The metaKeywords of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// The variants of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Variants []ProductVariantTailoring `json:"variants"`
 	// `true` if the ProductTailoring is published.
 	Published bool `json:"published"`
 }
@@ -13617,10 +14547,25 @@ func (obj *ProductTailoringCreatedMessage) UnmarshalJSON(data []byte) error {
 // optional nil slices
 func (obj ProductTailoringCreatedMessage) MarshalJSON() ([]byte, error) {
 	type Alias ProductTailoringCreatedMessage
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductTailoringCreated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["variants"] == nil {
+		delete(raw, "variants")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -13637,9 +14582,9 @@ type ProductTailoringDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13699,9 +14644,9 @@ type ProductTailoringDescriptionSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13753,6 +14698,160 @@ func (obj ProductTailoringDescriptionSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Add External Image](ctp:api:type:ProductTailoringAddExternalImageAction) update action
+*	or after a successful [Upload Product Tailoring image](/projects/product-tailoring#upload-product-tailoring-image) request.
+*
+ */
+type ProductTailoringImageAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the tailored Product.
+	Product ProductReference `json:"product"`
+	// `id` of the tailored [ProductVariant](ctp:api:type:ProductVariant).
+	VariantId int `json:"variantId"`
+	// [Image](ctp:api:type:Image) that was added.
+	Image Image `json:"image"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringImageAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringImageAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringImageAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringImageAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringImageAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Images](ctp:api:type:ProductTailoringSetExternalImagesAction) update action.
+*
+ */
+type ProductTailoringImagesSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// `id` of the tailored Product Variant.
+	VariantId int `json:"variantId"`
+	// [Images](ctp:api:type:Image) on the tailored [Product Variant](ctp:api:type:ProductVariantTailoring) before the [Set Images](ctp:api:type:ProductTailoringSetExternalImagesAction) update action.
+	OldImages []Image `json:"oldImages"`
+	// [Images](ctp:api:type:Image) on the tailored [Product Variant](ctp:api:type:ProductVariantTailoring) after the [Set Images](ctp:api:type:ProductTailoringSetExternalImagesAction) update action.
+	Images []Image `json:"images"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoringImagesSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoringImagesSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringImagesSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringImagesSetMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringImagesSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["oldImages"] == nil {
+		delete(raw, "oldImages")
+	}
+
+	if raw["images"] == nil {
+		delete(raw, "images")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
 *	Generated after a successful Product Tailoring [Set Name](ctp:api:type:ProductTailoringSetNameAction) update action.
 *
  */
@@ -13765,9 +14864,9 @@ type ProductTailoringNameSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13831,9 +14930,9 @@ type ProductTailoringPublishedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13893,9 +14992,9 @@ type ProductTailoringSlugSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -13959,9 +15058,9 @@ type ProductTailoringUnpublishedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14021,9 +15120,9 @@ type ProductUnpublishedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14077,9 +15176,9 @@ type ProductVariantAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14137,9 +15236,9 @@ type ProductVariantDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14185,6 +15284,138 @@ func (obj ProductVariantDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Add ProductVariant Tailoring](ctp:api:type:ProductTailoringAddVariantAction) update action.
+*
+ */
+type ProductVariantTailoringAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the tailored Product.
+	Product ProductReference `json:"product"`
+	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) added to the Tailoring.
+	VariantId int `json:"variantId"`
+	// The [ProductVariantTailoring](ctp:api:type:ProductVariantTailoring) that was added to the ProductTailoring.
+	Variant ProductVariantTailoring `json:"variant"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductVariantTailoringAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductVariantTailoringAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantTailoringAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantTailoringAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductVariantTailoringAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove ProductVariant Tailoring](ctp:api:type:ProductTailoringRemoveVariantAction) update action.
+*
+ */
+type ProductVariantTailoringRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) removed from the Tailoring.
+	VariantId int `json:"variantId"`
+	// The [ProductVariantTailoring](ctp:api:type:ProductVariantTailoring) that was removed from the ProductTailoring.
+	Variant ProductVariantTailoring `json:"variant"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductVariantTailoringRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ProductVariantTailoringRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantTailoringRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantTailoringRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductVariantTailoringRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Create Quote](ctp:api:endpoint:/{projectKey}/quotes:POST) request.
 *
  */
@@ -14197,9 +15428,9 @@ type QuoteCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14255,9 +15486,9 @@ type QuoteCustomerChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14315,9 +15546,9 @@ type QuoteDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14371,9 +15602,9 @@ type QuoteRenegotiationRequestedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14429,9 +15660,9 @@ type QuoteRequestCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14487,9 +15718,9 @@ type QuoteRequestCustomerChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14547,9 +15778,9 @@ type QuoteRequestDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14603,9 +15834,9 @@ type QuoteRequestStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14663,9 +15894,9 @@ type QuoteRequestStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14725,9 +15956,9 @@ type QuoteStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14785,9 +16016,9 @@ type QuoteStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14847,9 +16078,9 @@ type ReturnInfoAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14905,9 +16136,9 @@ type ReturnInfoSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -14978,9 +16209,9 @@ type ReviewCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15036,9 +16267,9 @@ type ReviewRatingSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15107,9 +16338,9 @@ type ReviewStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15182,9 +16413,9 @@ type StagedQuoteCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15240,9 +16471,9 @@ type StagedQuoteDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15296,9 +16527,9 @@ type StagedQuoteSellerCommentSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15354,9 +16585,9 @@ type StagedQuoteStateChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15414,9 +16645,9 @@ type StagedQuoteStateTransitionMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15476,9 +16707,9 @@ type StagedQuoteValidToSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15534,9 +16765,9 @@ type StandalonePriceActiveChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15594,9 +16825,9 @@ type StandalonePriceCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15652,9 +16883,9 @@ type StandalonePriceDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15710,9 +16941,9 @@ type StandalonePriceDiscountSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15768,9 +16999,9 @@ type StandalonePriceExternalDiscountSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15826,9 +17057,9 @@ type StandalonePriceKeySetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15886,9 +17117,9 @@ type StandalonePriceStagedChangesAppliedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -15944,9 +17175,9 @@ type StandalonePriceStagedChangesRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16002,9 +17233,9 @@ type StandalonePriceTierAddedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16060,9 +17291,9 @@ type StandalonePriceTierRemovedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16118,9 +17349,9 @@ type StandalonePriceTiersSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16178,9 +17409,9 @@ type StandalonePriceValidFromAndUntilSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16242,9 +17473,9 @@ type StandalonePriceValidFromSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16302,9 +17533,9 @@ type StandalonePriceValidUntilSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16362,9 +17593,9 @@ type StandalonePriceValueChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16376,12 +17607,12 @@ type StandalonePriceValueChangedMessage struct {
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
 	// The new value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
-	Value Money `json:"value"`
+	Value TypedMoney `json:"value"`
 	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
 	Staged bool `json:"staged"`
 	// The old value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
 	// Present on Messages created after 3 February 2023. Optional for backwards compatibility.
-	OldValue *Money `json:"oldValue,omitempty"`
+	OldValue TypedMoney `json:"oldValue,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -16394,6 +17625,20 @@ func (obj *StandalonePriceValueChangedMessage) UnmarshalJSON(data []byte) error 
 	if obj.Resource != nil {
 		var err error
 		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.OldValue != nil {
+		var err error
+		obj.OldValue, err = mapDiscriminatorTypedMoney(obj.OldValue)
 		if err != nil {
 			return err
 		}
@@ -16427,9 +17672,9 @@ type StoreCountriesChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16506,9 +17751,9 @@ type StoreCreatedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16595,9 +17840,9 @@ type StoreDeletedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16653,9 +17898,9 @@ type StoreDistributionChannelsChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16732,9 +17977,9 @@ type StoreLanguagesChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16811,9 +18056,9 @@ type StoreNameSetMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16889,9 +18134,9 @@ type StoreProductSelectionsChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -16976,9 +18221,9 @@ type StoreSupplyChannelsChangedMessage struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Value of `createdAt`.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Value of `createdBy`.
+	// IDs and references that last modified the Message.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Message.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
 	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
@@ -17235,6 +18480,12 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "BusinessUnitAddressRemoved":
 		obj := BusinessUnitAddressRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitApprovalRuleModeChanged":
+		obj := BusinessUnitApprovalRuleModeChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -17744,6 +18995,36 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ProductPriceCustomFieldAdded":
+		obj := ProductPriceCustomFieldAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldChanged":
+		obj := ProductPriceCustomFieldChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldRemoved":
+		obj := ProductPriceCustomFieldRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldsRemoved":
+		obj := ProductPriceCustomFieldsRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductPriceCustomFieldsSet":
+		obj := ProductPriceCustomFieldsSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ProductPriceDiscountsSet":
 		obj := ProductPriceDiscountsSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -17891,6 +19172,18 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ProductTailoringImageAdded":
+		obj := ProductTailoringImageAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductTailoringImagesSet":
+		obj := ProductTailoringImagesSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ProductTailoringNameSet":
 		obj := ProductTailoringNameSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -17929,6 +19222,18 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "ProductVariantDeleted":
 		obj := ProductVariantDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductVariantTailoringAdded":
+		obj := ProductVariantTailoringAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductVariantTailoringRemoved":
+		obj := ProductVariantTailoringRemovedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -18161,6 +19466,20 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		obj := StandalonePriceValueChangedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		if obj.Value != nil {
+			var err error
+			obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.OldValue != nil {
+			var err error
+			obj.OldValue, err = mapDiscriminatorTypedMoney(obj.OldValue)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "StoreCountriesChanged":
@@ -18643,6 +19962,8 @@ type BusinessUnitAddressCustomFieldAddedMessagePayload struct {
 	Name string `json:"name"`
 	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
 	Value interface{} `json:"value"`
+	// `id` of the [Address](ctp:api:type:Address) to which the Custom Field was added.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -18666,6 +19987,8 @@ type BusinessUnitAddressCustomFieldChangedMessagePayload struct {
 	Value interface{} `json:"value"`
 	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:BusinessUnitSetAddressCustomFieldAction) update action.
 	OldValue interface{} `json:"oldValue,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) of which the Custom Field was changed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -18685,6 +20008,8 @@ func (obj BusinessUnitAddressCustomFieldChangedMessagePayload) MarshalJSON() ([]
 type BusinessUnitAddressCustomFieldRemovedMessagePayload struct {
 	// Name of the Custom Field that was removed.
 	Name string `json:"name"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Field was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -18704,6 +20029,8 @@ func (obj BusinessUnitAddressCustomFieldRemovedMessagePayload) MarshalJSON() ([]
 type BusinessUnitAddressCustomTypeRemovedMessagePayload struct {
 	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
 	OldTypeId *string `json:"oldTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Type was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -18725,6 +20052,8 @@ type BusinessUnitAddressCustomTypeSetMessagePayload struct {
 	CustomFields CustomFields `json:"customFields"`
 	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
 	OldTypeId *string `json:"oldTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) on which the Custom Field was set.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -18754,6 +20083,27 @@ func (obj BusinessUnitAddressRemovedMessagePayload) MarshalJSON() ([]byte, error
 		Action string `json:"type"`
 		*Alias
 	}{Action: "BusinessUnitAddressRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Change Approval Rule Mode](ctp:api:type:BusinessUnitChangeApprovalRuleModeAction) update action.
+*
+ */
+type BusinessUnitApprovalRuleModeChangedMessagePayload struct {
+	// [BusinessUnitApprovalRuleMode](ctp:api:type:BusinessUnitApprovalRuleMode) of the Business Unit after the [Change Approval Rule Mode](ctp:api:type:BusinessUnitChangeApprovalRuleModeAction) update action.
+	ApprovalRuleMode BusinessUnitApprovalRuleMode `json:"approvalRuleMode"`
+	// [BusinessUnitApprovalRuleMode](ctp:api:type:BusinessUnitApprovalRuleMode) of the Business Unit before the [Change Approval Rule Mode](ctp:api:type:BusinessUnitChangeApprovalRuleModeAction) update action.
+	OldApprovalRuleMode *BusinessUnitApprovalRuleMode `json:"oldApprovalRuleMode,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitApprovalRuleModeChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitApprovalRuleModeChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitApprovalRuleModeChanged", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -19465,6 +20815,8 @@ type CustomerAddressCustomFieldAddedMessagePayload struct {
 	Name string `json:"name"`
 	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
 	Value interface{} `json:"value"`
+	// `id` of the [Address](ctp:api:type:Address) to which the Custom Field was added.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -19489,6 +20841,8 @@ type CustomerAddressCustomFieldChangedMessagePayload struct {
 	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:CustomerSetAddressCustomFieldAction) update action.
 	// When there has not been a Custom Field with the `name` on the Customer Address before, a [Customer Address Custom Field Added](ctp:api:type:CustomerAddressCustomFieldAddedMessage) Message is generated instead.
 	PreviousValue interface{} `json:"previousValue,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) of which the Custom Field was changed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -19508,6 +20862,8 @@ func (obj CustomerAddressCustomFieldChangedMessagePayload) MarshalJSON() ([]byte
 type CustomerAddressCustomFieldRemovedMessagePayload struct {
 	// Name of the Custom Field that was removed.
 	Name string `json:"name"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Field was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -19527,6 +20883,8 @@ func (obj CustomerAddressCustomFieldRemovedMessagePayload) MarshalJSON() ([]byte
 type CustomerAddressCustomTypeRemovedMessagePayload struct {
 	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
 	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) from which the Custom Type was removed.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -19548,6 +20906,8 @@ type CustomerAddressCustomTypeSetMessagePayload struct {
 	CustomFields CustomFields `json:"customFields"`
 	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
 	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// `id` of the [Address](ctp:api:type:Address) on which the Custom Field was set.
+	AddressId *string `json:"addressId,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -20192,6 +21552,36 @@ func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload
 			return nil, err
 		}
 		return obj, nil
+	case "DeliveryCustomFieldAdded":
+		obj := DeliveryCustomFieldAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeliveryCustomFieldChanged":
+		obj := DeliveryCustomFieldChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeliveryCustomFieldRemoved":
+		obj := DeliveryCustomFieldRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeliveryCustomTypeRemoved":
+		obj := DeliveryCustomTypeRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeliveryCustomTypeSet":
+		obj := DeliveryCustomTypeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DeliveryItemsUpdated":
 		obj := DeliveryItemsUpdatedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -20483,7 +21873,7 @@ type CustomLineItemStateTransitionMessagePayload struct {
 	CustomLineItemId string `json:"customLineItemId"`
 	// User-defined unique identifier of the [Custom Line Item](ctp:api:type:CustomLineItem).
 	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
-	// Date and time (UTC) when the transition of the [Custom Line Item](ctp:api:type:CustomLineItem) [State](ctp:api:type:State) was performed.
+	// Date and time (UTC) the transition of the [Custom Line Item](ctp:api:type:CustomLineItem) [State](ctp:api:type:State) was performed.
 	TransitionDate time.Time `json:"transitionDate"`
 	// Number of [Custom Line Items](ctp:api:type:CustomLineItem) for which the [State](ctp:api:type:State) was transitioned.
 	Quantity int `json:"quantity"`
@@ -20529,7 +21919,7 @@ func (obj DeliveryAddedMessagePayload) MarshalJSON() ([]byte, error) {
 *
  */
 type DeliveryAddressSetMessagePayload struct {
-	// Unique identifier of the [Parcel](ctp:api:type:Delivery).
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
 	DeliveryId string `json:"deliveryId"`
 	// [Address](ctp:api:type:Address) after the [Set Delivery Address](ctp:api:type:OrderSetDeliveryAddressAction) update action.
 	Address *Address `json:"address,omitempty"`
@@ -20547,6 +21937,120 @@ func (obj DeliveryAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "DeliveryAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field to a Delivery using the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+*
+ */
+type DeliveryCustomFieldAddedMessagePayload struct {
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomFieldAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomFieldAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when an existing Custom Field on a Delivery has been changed using the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+*
+ */
+type DeliveryCustomFieldChangedMessagePayload struct {
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+	// When there has not been a Custom Field with the `name` on the Delivery before, a [Delivery Custom Field Added](ctp:api:type:DeliveryCustomFieldAddedMessage) Message is generated instead.
+	PreviousValue interface{} `json:"previousValue,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomFieldChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomFieldChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when a Custom Field has been removed from the Delivery using the [Set CustomField](ctp:api:type:OrderSetDeliveryCustomFieldAction) update action.
+*
+ */
+type DeliveryCustomFieldRemovedMessagePayload struct {
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomFieldRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomFieldRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Type from a Delivery using the [Set Custom Type](ctp:api:type:OrderSetDeliveryCustomTypeAction) update action with empty parameters.
+*
+ */
+type DeliveryCustomTypeRemovedMessagePayload struct {
+	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomTypeRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomTypeRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Type to a Delivery using the [Set Custom Type](ctp:api:type:OrderSetDeliveryCustomTypeAction) update action.
+*
+ */
+type DeliveryCustomTypeSetMessagePayload struct {
+	// The Custom Fields that have been set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+	// Unique identifier of the [Delivery](ctp:api:type:Delivery).
+	DeliveryId string `json:"deliveryId"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeliveryCustomTypeSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DeliveryCustomTypeSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DeliveryCustomTypeSet", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -20604,7 +22108,7 @@ type LineItemStateTransitionMessagePayload struct {
 	LineItemId string `json:"lineItemId"`
 	// User-defined unique identifier of the LineItem.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Date and time (UTC) when the transition of the [Line Item](ctp:api:type:LineItem) [State](ctp:api:type:State) was performed.
+	// Date and time (UTC) the transition of the [Line Item](ctp:api:type:LineItem) [State](ctp:api:type:State) was performed.
 	TransitionDate time.Time `json:"transitionDate"`
 	// Number of [Line Items](ctp:api:type:LineItem) for which the [State](ctp:api:type:State) was transitioned.
 	Quantity int `json:"quantity"`
@@ -21080,7 +22584,7 @@ type OrderLineItemDiscountSetMessagePayload struct {
 	// Array of [DiscountedLineItemPriceForQuantity](ctp:api:type:DiscountedLineItemPriceForQuantity) after the Discount recalculation.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
 	// Total Price of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
-	TotalPrice Money `json:"totalPrice"`
+	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Line Item](ctp:api:type:LineItem) after the Discount recalculation.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
 	// Total taxed prices based on the quantity of Line Item assigned to each [Shipping Method](ctp:api:type:ShippingMethod). Only applicable for Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
@@ -21130,19 +22634,19 @@ type OrderLineItemRemovedMessagePayload struct {
 	LineItemId string `json:"lineItemId"`
 	// User-defined unique identifier of the LineItem.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Quantity of [Line Items](ctp:api:type:LineItem) that were removed during the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// Quantity of [Line Items](ctp:api:type:LineItem) that were removed during the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	RemovedQuantity int `json:"removedQuantity"`
-	// [Line Item](ctp:api:type:LineItem) quantity after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [Line Item](ctp:api:type:LineItem) quantity after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewQuantity int `json:"newQuantity"`
-	// [ItemStates](ctp:api:type:ItemState) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [ItemStates](ctp:api:type:ItemState) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewState []ItemState `json:"newState"`
-	// `totalPrice` of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// `totalPrice` of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewTotalPrice CentPrecisionMoney `json:"newTotalPrice"`
-	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [TaxedItemPrice](ctp:api:type:TaxedItemPrice) of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewTaxedPrice *TaxedItemPrice `json:"newTaxedPrice,omitempty"`
-	// [Price](ctp:api:type:Price) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [Price](ctp:api:type:Price) of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewPrice *Price `json:"newPrice,omitempty"`
-	// [Shipping Details](ctp:api:type:ItemShippingDetails) of the [Order](ctp:api:type:Order) after the [Remove Line Item](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
+	// [Shipping Details](ctp:api:type:ItemShippingDetails) of the [Order](ctp:api:type:Order) after the [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update action.
 	NewShippingDetail *ItemShippingDetails `json:"newShippingDetail,omitempty"`
 }
 
@@ -21744,7 +23248,7 @@ func (obj ProductImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductPriceAddedMessagePayload struct {
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was added.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](/projects/products#embedded-price) that was added to the [ProductVariant](ctp:api:type:ProductVariant).
+	// The Embedded Price that was added to the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -21767,13 +23271,13 @@ func (obj ProductPriceAddedMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductPriceChangedMessagePayload struct {
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was changed.
 	VariantId int `json:"variantId"`
-	// The current [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The current Embedded Price before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldPrice Price `json:"oldPrice"`
-	// The [Embedded Price](/projects/products#embedded-price) after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The Embedded Price after the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	NewPrice Price `json:"newPrice"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
-	// The staged [Embedded Price](/projects/products#embedded-price) before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
+	// The staged Embedded Price before the [Change Embedded Price](ctp:api:type:ProductChangePriceAction) update action.
 	OldStagedPrice *Price `json:"oldStagedPrice,omitempty"`
 }
 
@@ -21785,6 +23289,135 @@ func (obj ProductPriceChangedMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductPriceChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field to a Price using the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+*
+ */
+type ProductPriceCustomFieldAddedMessagePayload struct {
+	// Unique identifier of the [Price](ctp:api:type:Price) to which the Custom Field was added.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after changing an existing Custom Field on a Price using the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+*
+ */
+type ProductPriceCustomFieldChangedMessagePayload struct {
+	// Unique identifier of the [Price](ctp:api:type:Price) of which the Custom Field was changed.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Name of the Custom Field that was changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Field from a Price using the [Set Price CustomField](ctp:api:type:ProductSetProductPriceCustomFieldAction) update action.
+*
+ */
+type ProductPriceCustomFieldRemovedMessagePayload struct {
+	// Unique identifier of the [Price](ctp:api:type:Price) from which the Custom Field was removed.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Type from a Price using the [Set Price Custom Type](ctp:api:type:ProductSetProductPriceCustomTypeAction) update action.
+*
+ */
+type ProductPriceCustomFieldsRemovedMessagePayload struct {
+	// Unique identifier of the [Price](ctp:api:type:Price) from which the Custom Type was removed.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldsRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldsRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldsRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Price Custom Type](ctp:api:type:ProductSetProductPriceCustomTypeAction) update action.
+*
+ */
+type ProductPriceCustomFieldsSetMessagePayload struct {
+	// Unique identifier of the [Price](ctp:api:type:Price) on which the Custom Type was set.
+	PriceId string `json:"priceId"`
+	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) to which the Price belongs.
+	VariantId int `json:"variantId"`
+	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
+	Staged bool `json:"staged"`
+	// Custom Fields that were set.
+	CustomField CustomFields `json:"customField"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductPriceCustomFieldsSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductPriceCustomFieldsSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductPriceCustomFieldsSet", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -21887,7 +23520,7 @@ func (obj ProductPriceModeSetMessagePayload) MarshalJSON() ([]byte, error) {
 type ProductPriceRemovedMessagePayload struct {
 	// Unique identifier of the [ProductVariant](ctp:api:type:ProductVariant) for which the Price was removed.
 	VariantId int `json:"variantId"`
-	// The [Embedded Price](/projects/products#embedded-price) that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
+	// The Embedded Price that was removed from the [ProductVariant](ctp:api:type:ProductVariant).
 	Price Price `json:"price"`
 	// Whether the update was only applied to the staged [Product Projection](ctp:api:type:ProductProjection).
 	Staged bool `json:"staged"`
@@ -22237,6 +23870,14 @@ type ProductTailoringCreatedMessagePayload struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// The slug of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
 	Slug *LocalizedString `json:"slug,omitempty"`
+	// The metaTitle of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
+	// The metaDescription of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
+	// The metaKeywords of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
+	// The variants of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
+	Variants []ProductVariantTailoring `json:"variants"`
 	// `true` if the ProductTailoring is published.
 	Published bool `json:"published"`
 }
@@ -22245,10 +23886,25 @@ type ProductTailoringCreatedMessagePayload struct {
 // optional nil slices
 func (obj ProductTailoringCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 	type Alias ProductTailoringCreatedMessagePayload
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductTailoringCreated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["variants"] == nil {
+		delete(raw, "variants")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -22300,6 +23956,82 @@ func (obj ProductTailoringDescriptionSetMessagePayload) MarshalJSON() ([]byte, e
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductTailoringDescriptionSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add External Image](ctp:api:type:ProductTailoringAddExternalImageAction) update action
+*	or after a successful [Upload Product Tailoring image](/projects/product-tailoring#upload-product-tailoring-image) request.
+*
+ */
+type ProductTailoringImageAddedMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the tailored Product.
+	Product ProductReference `json:"product"`
+	// `id` of the tailored [ProductVariant](ctp:api:type:ProductVariant).
+	VariantId int `json:"variantId"`
+	// [Image](ctp:api:type:Image) that was added.
+	Image Image `json:"image"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringImageAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringImageAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Images](ctp:api:type:ProductTailoringSetExternalImagesAction) update action.
+*
+ */
+type ProductTailoringImagesSetMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// `id` of the tailored Product Variant.
+	VariantId int `json:"variantId"`
+	// [Images](ctp:api:type:Image) on the tailored [Product Variant](ctp:api:type:ProductVariantTailoring) before the [Set Images](ctp:api:type:ProductTailoringSetExternalImagesAction) update action.
+	OldImages []Image `json:"oldImages"`
+	// [Images](ctp:api:type:Image) on the tailored [Product Variant](ctp:api:type:ProductVariantTailoring) after the [Set Images](ctp:api:type:ProductTailoringSetExternalImagesAction) update action.
+	Images []Image `json:"images"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringImagesSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringImagesSetMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductTailoringImagesSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["oldImages"] == nil {
+		delete(raw, "oldImages")
+	}
+
+	if raw["images"] == nil {
+		delete(raw, "images")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -22459,6 +24191,60 @@ func (obj ProductVariantDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ProductVariantDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add ProductVariant Tailoring](ctp:api:type:ProductTailoringAddVariantAction) update action.
+*
+ */
+type ProductVariantTailoringAddedMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the tailored Product.
+	Product ProductReference `json:"product"`
+	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) added to the Tailoring.
+	VariantId int `json:"variantId"`
+	// The [ProductVariantTailoring](ctp:api:type:ProductVariantTailoring) that was added to the ProductTailoring.
+	Variant ProductVariantTailoring `json:"variant"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantTailoringAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantTailoringAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductVariantTailoringAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove ProductVariant Tailoring](ctp:api:type:ProductTailoringRemoveVariantAction) update action.
+*
+ */
+type ProductVariantTailoringRemovedMessagePayload struct {
+	// The Store to which the Product Tailoring belongs.
+	Store StoreKeyReference `json:"store"`
+	// `key` of the tailored Product.
+	ProductKey *string `json:"productKey,omitempty"`
+	// Reference to the Product the Product Tailoring belongs to.
+	Product ProductReference `json:"product"`
+	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) removed from the Tailoring.
+	VariantId int `json:"variantId"`
+	// The [ProductVariantTailoring](ctp:api:type:ProductVariantTailoring) that was removed from the ProductTailoring.
+	Variant ProductVariantTailoring `json:"variant"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantTailoringRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantTailoringRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ProductVariantTailoringRemoved", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -22845,7 +24631,7 @@ func (obj ReviewStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListStoreSetMessagePayload struct {
-	// [Reference](ctp:api:type:Reference) to a [Store](ctp:api:type:Store) by its key.
+	// [KeyReference](ctp:api:type:KeyReference) to a [Store](ctp:api:type:Store).
 	Store StoreKeyReference `json:"store"`
 }
 
@@ -23265,12 +25051,37 @@ func (obj StandalonePriceValidUntilSetMessagePayload) MarshalJSON() ([]byte, err
  */
 type StandalonePriceValueChangedMessagePayload struct {
 	// The new value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
-	Value Money `json:"value"`
+	Value TypedMoney `json:"value"`
 	// Whether the new value was applied to the current or the staged representation of the StandalonePrice. Staged changes are stored on the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice).
 	Staged bool `json:"staged"`
 	// The old value of the updated [StandalonePrice](ctp:api:type:StandalonePrice).
 	// Present on Messages created after 3 February 2023. Optional for backwards compatibility.
-	OldValue *Money `json:"oldValue,omitempty"`
+	OldValue TypedMoney `json:"oldValue,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StandalonePriceValueChangedMessagePayload) UnmarshalJSON(data []byte) error {
+	type Alias StandalonePriceValueChangedMessagePayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Value != nil {
+		var err error
+		obj.Value, err = mapDiscriminatorTypedMoney(obj.Value)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.OldValue != nil {
+		var err error
+		obj.OldValue, err = mapDiscriminatorTypedMoney(obj.OldValue)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -55,7 +55,14 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) With
 }
 
 /**
-*	Checks if a ShoppingList exists for a given Query Predicate. Returns a `200 OK` status if any ShoppingLists match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if a ShoppingList exists for the given Query Predicate in a Store. Returns `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingLists exist for a given Query Predicate in a Store.
+*	- If a ShoppingList matches the Query Predicate but does not have a `store` specified, or the `store` field references a different Store.
+*	- If a ShoppingList exists in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

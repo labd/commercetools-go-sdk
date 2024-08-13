@@ -21,7 +21,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) ProductSelections() *ByPro
 }
 
 /**
-*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Get() *ByProjectKeyProductsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyProductsKeyByKeyRequestMethodGet{
@@ -52,7 +52,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Post(body ProductUpdate) *
 }
 
 /**
-*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
 *	Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestBuilder) Delete() *ByProjectKeyProductsKeyByKeyRequestMethodDelete {

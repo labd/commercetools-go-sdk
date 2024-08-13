@@ -58,6 +58,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodPost) Wi
 /**
 *	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
+*	Simultaneously updating two Customers with the same email address can return a [LockedField](ctp:api:type:LockedFieldError) error.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)

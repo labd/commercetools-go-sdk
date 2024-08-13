@@ -54,6 +54,11 @@ func (rb *ByProjectKeyMeShoppingListsRequestMethodPost) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Creates a ShoppingList for the Customer or anonymous user. The `customerId` or `anonymousId` on the ShoppingList is automatically set based on the given [customer:{id}](/scopes#customer_idid) or [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeShoppingListsRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

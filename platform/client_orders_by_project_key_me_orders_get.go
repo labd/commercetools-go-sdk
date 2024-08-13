@@ -132,6 +132,16 @@ func (rb *ByProjectKeyMeOrdersRequestMethodGet) WithHeaders(headers http.Header)
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns all Orders that match a given Query Predicate.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Orders exist for a given Query Predicate.
+*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeOrdersRequestMethodGet) Execute(ctx context.Context) (result *OrderPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

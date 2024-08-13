@@ -297,6 +297,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "LockedField":
+		obj := LockedFieldError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MatchingPriceNotFound":
 		obj := MatchingPriceNotFoundError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1140,12 +1146,10 @@ func (obj ContentTooLargeError) Error() string {
 *
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
-*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
-*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
-*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
 *	- [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
-*	- [Set Country](ctp:api:type:StagedOrderSetCountryAction) on Order Edits.
+*	- [Set Country](ctp:api:type:StagedOrderSetCountryAction) update action on Order Edits.
 *
  */
 type CountryNotConfiguredInStoreError struct {
@@ -1228,8 +1232,13 @@ func (obj CountryNotConfiguredInStoreError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests and [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type DiscountCodeNonApplicableError struct {
@@ -3085,7 +3094,7 @@ func (obj FeatureRemovedError) Error() string {
 /**
 *	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
-*	If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
+*	If you encounter this error, report it to the [Composable Commerce support team](https://support.commercetools.com).
 *
  */
 type GeneralError struct {
@@ -3304,8 +3313,8 @@ func (obj InternalConstraintViolatedError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Authenticate a global Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
-*	- [Authenticating Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
 *
  */
 type InvalidCredentialsError struct {
@@ -3617,7 +3626,17 @@ func (obj InvalidInputError) Error() string {
 /**
 *	Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
 *
-*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*	When a Cart is frozen, the error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [My Carts](ctp:api:type:MyCartUpdateAction).
+*
+*	The error is also returned as a failed response to:
+*
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction), [Set CustomLineItem ShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction), [Add Shopping List](ctp:api:type:CartAddShoppingListAction), and [Remove LineItem](ctp:api:type:CartRemoveLineItemAction) update actions on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests, and [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Set LineItem ShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction), and [Remove LineItem](ctp:api:type:MyCartRemoveLineItemAction) update actions on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), [Set LineItem ShippingDetails](ctp:api:type:StagedOrderSetLineItemShippingDetailsAction), [Set CustomLineItem ShippingDetails](ctp:api:type:StagedOrderSetCustomLineItemShippingDetailsAction), [Add Shopping List](ctp:api:type:StagedOrderAddShoppingListAction), and [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update actions on Order Edits.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) and [Create Order from Quote in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders/quotes:POST) requests on Associate Orders.
 *
  */
 type InvalidItemShippingDetailsError struct {
@@ -4063,14 +4082,98 @@ func (obj LanguageUsedInStoresError) Error() string {
 }
 
 /**
+*	Returned when two [Customers](ctp:api:type:Customer) are simultaneously created or updated with the same email address.
+*
+*	To confirm if the operation was successful, repeat the request.
+*
+ */
+type LockedFieldError struct {
+	// `"'$field' is locked by another request. Please try again later."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Field that is currently locked.
+	Field string `json:"field"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *LockedFieldError) UnmarshalJSON(data []byte) error {
+	type Alias LockedFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "field")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LockedFieldError) MarshalJSON() ([]byte, error) {
+	type Alias LockedFieldError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LockedField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *LockedFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj LockedFieldError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown LockedFieldError: failed to parse error response"
+}
+
+/**
 *	Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
 *
-*	The error is returned as a failed response to:
+*	The error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [Staged Orders](ctp:api:type:StagedOrderUpdateAction).
 *
-*	- [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
-*	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
+*	The error is also returned as a failed response to:
+*
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests and [Set CustomerGroup](ctp:api:type:CustomerSetCustomerGroupAction) update action on Customers.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST), [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST), [Replicate Cart](ctp:api:endpoint:/{projectKey}/carts/replicate:POST), and [Replicate Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts/replicate:POST) requests on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) and [Replicate My Cart](ctp:api:endpoint:/{projectKey}/me/carts/replicate:POST) requests on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) and [Replicate Cart in Business Unit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts/replicate:POST) requests on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type MatchingPriceNotFoundError struct {
@@ -4485,10 +4588,18 @@ func (obj MissingRoleOnChannelError) Error() string {
 /**
 *	Returned when the Tax Category of at least one of the `lineItems`, `customLineItems`, or `shippingInfo` in the [Cart](ctp:api:type:Cart) is missing the [TaxRate](ctp:api:type:TaxRate) matching `country` and `state` given in the `shippingAddress` of that Cart.
 *
-*	The error is returned as a failed response to:
+*	The error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [Staged Orders](ctp:api:type:StagedOrderUpdateAction).
 *
-*	- [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*	The error is also returned as a failed response to:
+*
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests and [Set CustomerGroup](ctp:api:type:CustomerSetCustomerGroupAction) update action on Customers.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) on My Customer Profile.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST), [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST), [Replicate Cart](ctp:api:endpoint:/{projectKey}/carts/replicate:POST), and [Replicate Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts/replicate:POST) requests on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) and [Replicate My Cart](ctp:api:endpoint:/{projectKey}/me/carts/replicate:POST) requests on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) and [Replicate Cart in Business Unit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts/replicate:POST) requests on Associate Carts.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) requests on Associate Orders.
 *
  */
 type MissingTaxRateForCountryError struct {
@@ -4796,8 +4907,9 @@ func (obj ObjectNotFoundError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) and [Create Order from Quote in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders/quotes:POST) requests on Associate Orders.
 *
  */
 type OutOfStockError struct {
@@ -5060,7 +5172,7 @@ func (obj OverlappingStandalonePriceValidityError) Error() string {
 *	Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
 *
 *	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
-*	If the error persists, report it using the [Support Portal](https://support.commercetools.com).
+*	If the error persists, report it to the [Composable Commerce support team](https://support.commercetools.com).
 *
  */
 type PendingOperationError struct {
@@ -5133,12 +5245,15 @@ func (obj PendingOperationError) Error() string {
 }
 
 /**
-*	Returned when the Price, Tax Rate, or Shipping Rate of some Line Items changed since they were last added to the Cart.
+*	Returned when the Price or Tax Rate of some Line Items or Shipping Rate of some Shipping Methods changed since they were last added to the Cart.
 *
-*	The error is returned as a failed response to:
+*	When a Cart is frozen, the error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [My Carts](ctp:api:type:MyCartUpdateAction).
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	The error is also returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type PriceChangedError struct {
@@ -6359,7 +6474,13 @@ func (obj SemanticErrorError) Error() string {
 /**
 *	Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
 *
-*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) or [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*	When a Cart is frozen, the error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [My Carts](ctp:api:type:MyCartUpdateAction).
+*
+*	The error is also returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type ShippingMethodDoesNotMatchCartError struct {
@@ -6872,6 +6993,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "LanguageUsedInStores":
 		obj := GraphQLLanguageUsedInStoresError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "LockedField":
+		obj := GraphQLLockedFieldError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7637,12 +7764,10 @@ func (obj *GraphQLContentTooLargeError) DecodeStruct(src map[string]interface{})
 *
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST) request and [Set Country](ctp:api:type:CartSetCountryAction) update action on Carts.
 *	- [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST) request and [Set Country](ctp:api:type:MyCartSetCountryAction) update action on My Carts.
-*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
-*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
-*	- [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+*	- [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
 *	- [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) request on Order Import.
-*	- [Set Country](ctp:api:type:StagedOrderSetCountryAction) on Order Edits.
+*	- [Set Country](ctp:api:type:StagedOrderSetCountryAction) update action on Order Edits.
 *
  */
 type GraphQLCountryNotConfiguredInStoreError struct {
@@ -7715,8 +7840,13 @@ func (obj *GraphQLCountryNotConfiguredInStoreError) DecodeStruct(src map[string]
 *
 *	The error is returned as a failed response to:
 *
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests and [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type GraphQLDiscountCodeNonApplicableError struct {
@@ -9193,7 +9323,7 @@ func (obj *GraphQLFeatureRemovedError) DecodeStruct(src map[string]interface{}) 
 /**
 *	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
-*	If you encounter this error, report it using the [Support Portal](https://support.commercetools.com).
+*	If you encounter this error, report it to the [Composable Commerce support team](https://support.commercetools.com).
 *
  */
 type GraphQLGeneralError struct {
@@ -9382,8 +9512,8 @@ func (obj *GraphQLInternalConstraintViolatedError) DecodeStruct(src map[string]i
 *
 *	The error is returned as a failed response to:
 *
-*	- [Authenticate a global Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
-*	- [Authenticating Customer (Sign-in)](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate Customer (Sign-in) in a Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests on Customers.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
 *
  */
 type GraphQLInvalidCredentialsError struct {
@@ -9655,7 +9785,17 @@ func (obj *GraphQLInvalidInputError) DecodeStruct(src map[string]interface{}) er
 /**
 *	Returned when Line Item or Custom Line Item quantities set under [ItemShippingDetails](ctp:api:type:ItemShippingDetails) do not match the sum of the quantities in their respective shipping details.
 *
-*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*	When a Cart is frozen, the error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [My Carts](ctp:api:type:MyCartUpdateAction).
+*
+*	The error is also returned as a failed response to:
+*
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction), [Set CustomLineItem ShippingDetails](ctp:api:type:CartSetCustomLineItemShippingDetailsAction), [Add Shopping List](ctp:api:type:CartAddShoppingListAction), and [Remove LineItem](ctp:api:type:CartRemoveLineItemAction) update actions on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests, and [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Set LineItem ShippingDetails](ctp:api:type:MyCartSetLineItemShippingDetailsAction), and [Remove LineItem](ctp:api:type:MyCartRemoveLineItemAction) update actions on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), [Set LineItem ShippingDetails](ctp:api:type:StagedOrderSetLineItemShippingDetailsAction), [Set CustomLineItem ShippingDetails](ctp:api:type:StagedOrderSetCustomLineItemShippingDetailsAction), [Add Shopping List](ctp:api:type:StagedOrderAddShoppingListAction), and [Remove LineItem](ctp:api:type:StagedOrderRemoveLineItemAction) update actions on Order Edits.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) and [Create Order from Quote in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders/quotes:POST) requests on Associate Orders.
 *
  */
 type GraphQLInvalidItemShippingDetailsError struct {
@@ -10041,14 +10181,88 @@ func (obj *GraphQLLanguageUsedInStoresError) DecodeStruct(src map[string]interfa
 }
 
 /**
+*	Returned when two [Customers](ctp:api:type:Customer) are simultaneously created or updated with the same email address.
+*
+*	To confirm if the operation was successful, repeat the request.
+*
+ */
+type GraphQLLockedFieldError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Field that is currently locked.
+	Field string `json:"field"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLLockedFieldError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLLockedFieldError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "field")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLLockedFieldError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLLockedFieldError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LockedField", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLLockedFieldError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when the Product Variant does not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency, country, Customer Group, or Channel.
 *
-*	The error is returned as a failed response to:
+*	The error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [Staged Orders](ctp:api:type:StagedOrderUpdateAction).
 *
-*	- [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update actions on Carts.
-*	- [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction), and [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update actions on Order Edits.
+*	The error is also returned as a failed response to:
+*
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests and [Set CustomerGroup](ctp:api:type:CustomerSetCustomerGroupAction) update action on Customers.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) requests on My Customer Profile.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST), [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST), [Replicate Cart](ctp:api:endpoint:/{projectKey}/carts/replicate:POST), and [Replicate Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts/replicate:POST) requests on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) and [Replicate My Cart](ctp:api:endpoint:/{projectKey}/me/carts/replicate:POST) requests on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) and [Replicate Cart in Business Unit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts/replicate:POST) requests on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type GraphQLMatchingPriceNotFoundError struct {
@@ -10413,10 +10627,18 @@ func (obj *GraphQLMissingRoleOnChannelError) DecodeStruct(src map[string]interfa
 /**
 *	Returned when the Tax Category of at least one of the `lineItems`, `customLineItems`, or `shippingInfo` in the [Cart](ctp:api:type:Cart) is missing the [TaxRate](ctp:api:type:TaxRate) matching `country` and `state` given in the `shippingAddress` of that Cart.
 *
-*	The error is returned as a failed response to:
+*	The error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [Staged Orders](ctp:api:type:StagedOrderUpdateAction).
 *
-*	- [Set Default Shipping Address](ctp:api:type:CustomerSetDefaultShippingAddressAction), [Add LineItem](ctp:api:type:CartAddLineItemAction), [Add CustomLineItem](ctp:api:type:CartAddCustomLineItemAction), [Set Shipping Address](ctp:api:type:CartSetShippingAddressAction), [Add LineItem](ctp:api:type:MyCartAddLineItemAction), [Add LineItem](ctp:api:type:StagedOrderAddLineItemAction), and [Add CustomLineItem](ctp:api:type:StagedOrderAddCustomLineItemAction) update actions
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*	The error is also returned as a failed response to:
+*
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/login:POST) requests and [Set CustomerGroup](ctp:api:type:CustomerSetCustomerGroupAction) update action on Customers.
+*	- [Authenticate (sign in) Customer](ctp:api:endpoint:/{projectKey}/me/login:POST) and [Authenticate (sign in) Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/login:POST) on My Customer Profile.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST), [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST), [Replicate Cart](ctp:api:endpoint:/{projectKey}/carts/replicate:POST), and [Replicate Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts/replicate:POST) requests on Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) and [Replicate My Cart](ctp:api:endpoint:/{projectKey}/me/carts/replicate:POST) requests on My Carts.
+*	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) and [Replicate Cart in Business Unit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts/replicate:POST) requests on Associate Carts.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) requests on Associate Orders.
 *
  */
 type GraphQLMissingTaxRateForCountryError struct {
@@ -10684,8 +10906,9 @@ func (obj *GraphQLObjectNotFoundError) DecodeStruct(src map[string]interface{}) 
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST), and [Create Order by Import](ctp:api:endpoint:/{projectKey}/orders/import:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) and [Create Order from Quote in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders/quotes:POST) requests on Associate Orders.
 *
  */
 type GraphQLOutOfStockError struct {
@@ -10918,7 +11141,7 @@ func (obj *GraphQLOverlappingStandalonePriceValidityError) DecodeStruct(src map[
 *	Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
 *
 *	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
-*	If the error persists, report it using the [Support Portal](https://support.commercetools.com).
+*	If the error persists, report it to the [Composable Commerce support team](https://support.commercetools.com).
 *
  */
 type GraphQLPendingOperationError struct {
@@ -10981,12 +11204,15 @@ func (obj *GraphQLPendingOperationError) DecodeStruct(src map[string]interface{}
 }
 
 /**
-*	Returned when the Price, Tax Rate, or Shipping Rate of some Line Items changed since they were last added to the Cart.
+*	Returned when the Price or Tax Rate of some Line Items or Shipping Rate of some Shipping Methods changed since they were last added to the Cart.
 *
-*	The error is returned as a failed response to:
+*	When a Cart is frozen, the error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [My Carts](ctp:api:type:MyCartUpdateAction).
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	The error is also returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type GraphQLPriceChangedError struct {
@@ -12045,7 +12271,13 @@ func (obj *GraphQLSemanticErrorError) DecodeStruct(src map[string]interface{}) e
 /**
 *	Returned when the Cart contains a [ShippingMethod](ctp:api:type:ShippingMethod) that is not allowed for the [Cart](ctp:api:type:Cart). In this case, the [ShippingMethodState](ctp:api:type:ShippingMethodState) value is `DoesNotMatchCart`.
 *
-*	The error is returned as a failed response to the [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) or [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests.
+*	When a Cart is frozen, the error can be returned as a failed response to all update actions on [Carts](ctp:api:type:CartUpdateAction) and [My Carts](ctp:api:type:MyCartUpdateAction).
+*
+*	The error is also returned as a failed response to:
+*
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
+*	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
 type GraphQLShippingMethodDoesNotMatchCartError struct {

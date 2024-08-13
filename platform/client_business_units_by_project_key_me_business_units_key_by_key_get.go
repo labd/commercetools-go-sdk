@@ -53,6 +53,10 @@ func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodGet) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns a Business Unit for a given `key`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+ */
 func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *BusinessUnit, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

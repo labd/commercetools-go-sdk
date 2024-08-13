@@ -132,6 +132,16 @@ func (rb *ByProjectKeyMeShoppingListsRequestMethodGet) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns all ShoppingLists that match the given Query Predicate. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingList exists for the given Query Predicate.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeShoppingListsRequestMethodGet) Execute(ctx context.Context) (result *ShoppingListPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

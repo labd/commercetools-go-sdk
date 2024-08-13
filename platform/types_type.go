@@ -41,9 +41,11 @@ const (
 	CustomFieldReferenceValueAssociateRole    CustomFieldReferenceValue = "associate-role"
 	CustomFieldReferenceValueBusinessUnit     CustomFieldReferenceValue = "business-unit"
 	CustomFieldReferenceValueCart             CustomFieldReferenceValue = "cart"
+	CustomFieldReferenceValueCartDiscount     CustomFieldReferenceValue = "cart-discount"
 	CustomFieldReferenceValueCategory         CustomFieldReferenceValue = "category"
 	CustomFieldReferenceValueChannel          CustomFieldReferenceValue = "channel"
 	CustomFieldReferenceValueCustomer         CustomFieldReferenceValue = "customer"
+	CustomFieldReferenceValueCustomerGroup    CustomFieldReferenceValue = "customer-group"
 	CustomFieldReferenceValueKeyValueDocument CustomFieldReferenceValue = "key-value-document"
 	CustomFieldReferenceValueOrder            CustomFieldReferenceValue = "order"
 	CustomFieldReferenceValueProduct          CustomFieldReferenceValue = "product"
@@ -494,9 +496,9 @@ type Type struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Type was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Type.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Type.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the Type.
 	Key string `json:"key"`
@@ -939,7 +941,8 @@ func (obj TypeChangeKeyAction) MarshalJSON() ([]byte, error) {
 type TypeChangeLabelAction struct {
 	// Name of the [Field Definition](ctp:api:type:FieldDefinition) to update.
 	FieldName string `json:"fieldName"`
-	// JSON object where the keys are of type [Locale](ctp:api:type:Locale), and the values are the strings used for the corresponding language.
+	// New value to set.
+	// Must not be empty.
 	Label LocalizedString `json:"label"`
 }
 

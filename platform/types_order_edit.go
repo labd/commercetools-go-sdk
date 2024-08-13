@@ -30,9 +30,9 @@ type OrderEdit struct {
 	Comment *string `json:"comment,omitempty"`
 	// Custom Fields of the Order Edit.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the OrderEdit.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the OrderEdit.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -515,7 +515,7 @@ type StagedOrder struct {
 	// Email address of the Customer that the Order belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Order belongs to.
-	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
 	AnonymousId *string `json:"anonymousId,omitempty"`
@@ -586,7 +586,7 @@ type StagedOrder struct {
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Order.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
-	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	Country *string `json:"country,omitempty"`
 	// Languages of the Order.
 	// Can only contain languages supported by the [Project](ctp:api:type:Project).
@@ -619,9 +619,9 @@ type StagedOrder struct {
 	// User-defined date and time (UTC) of the Order.
 	// Present only on an Order created using [Order Import](ctp:api:endpoint:/{projectKey}/orders/import:POST).
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Order.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Order.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -687,7 +687,7 @@ func (obj StagedOrder) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	If the [edit was applied](ctp:api:endpoint:/{projectKey}/orders/edits/{id}/apply:POST), this cannot be updated.
+*	The `stagedActions` field cannot be updated if the Order Edit `result` is [OrderEdit Applied](/projects/order-edits#orderedit-applied).
 *
  */
 type OrderEditAddStagedActionAction struct {
@@ -793,7 +793,7 @@ func (obj OrderEditSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	If the [edit is applied](ctp:api:endpoint:/{projectKey}/orders/edits/{id}/apply:POST), `stagedActions` cannot be updated.
+*	The `stagedActions` field cannot be updated if the Order Edit `result` is [OrderEdit Applied](/projects/order-edits#orderedit-applied).
 *
  */
 type OrderEditSetStagedActionsAction struct {
@@ -978,7 +978,7 @@ func (obj StagedOrderAddItemShippingAddressAction) MarshalJSON() ([]byte, error)
 *	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](/../api/projects/custom-fields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
 *	A new Line Item is added when the `externalPrice` or `externalTotalPrice` is set in this update action.
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
 *	If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
@@ -1008,7 +1008,7 @@ type StagedOrderAddLineItemAction struct {
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](/../api/carts-orders-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set, the Channel must match one of the Store's distribution channels.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
@@ -1019,7 +1019,7 @@ type StagedOrderAddLineItemAction struct {
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
-	// External Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	// Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode). If the Cart has `Multiple` [ShippingMode](ctp:api:type:ShippingMode), the Tax Rate is accepted but ignored.
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 	// Inventory mode specific to the Line Item only, and valid for the entire `quantity` of the Line Item.
 	// Set only if the inventory mode should be different from the `inventoryMode` specified on the [Cart](ctp:api:type:Cart).
@@ -1210,7 +1210,7 @@ func (obj StagedOrderChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, 
 *
 *	To change the Line Item quantity and shipping details together, use this update action in combination with the [Set LineItem ShippingDetails](ctp:api:type:StagedOrderSetLineItemShippingDetailsAction) update action in a single Order update command.
 *
-*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type StagedOrderChangeLineItemQuantityAction struct {
@@ -1221,11 +1221,13 @@ type StagedOrderChangeLineItemQuantityAction struct {
 	// New value to set.
 	// If `0`, the LineItem is removed from the Order.
 	Quantity int `json:"quantity"`
-	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when changing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	// Required when the Line Item uses `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when changing the quantity of a Line Item.
 	//
-	// The [LineItem](ctp:api:type:LineItem) price is updated as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` to the given value when changing the quantity of a Line Item with the `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	// If `externalTotalPrice` is not given and the `priceMode` is `ExternalTotal`, the external price is unset and the `priceMode` is set to `Platform`.
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 }
 
@@ -1485,7 +1487,7 @@ func (obj StagedOrderRemoveItemShippingAddressAction) MarshalJSON() ([]byte, err
 }
 
 /**
-*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type StagedOrderRemoveLineItemAction struct {
@@ -1842,9 +1844,10 @@ func (obj StagedOrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action can only be used if a Customer is not assigned to a Cart. If a Customer is already assigned, the Cart has the same Customer Group as the assigned Customer.
+*	This update action can only be used if a Customer is not assigned to a Cart.
+*	If a Customer is already assigned, the Cart uses the Customer Group of the assigned Customer.
 *
-*	Setting the Customer Group also updates the [LineItem](ctp:api:type:LineItem) `prices` according to the Customer Group.
+*	To reflect the new Customer Group, this update action can result in [updates to the Cart](/../carts-orders-overview#cart-updates). When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
 *
  */
 type StagedOrderSetCustomerGroupAction struct {
@@ -2157,7 +2160,7 @@ func (obj StagedOrderSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
 *	Produces the [OrderLineItemDistributionChannelSet](ctp:api:type:OrderLineItemDistributionChannelSetMessage) Message.
 *
@@ -2228,7 +2231,7 @@ func (obj StagedOrderSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, er
 }
 
 /**
-*	Can be used if the Cart has the `ExternalAmount` [TaxMode](ctp:api:type:TaxMode).
+*	Can be used if the Cart has the `ExternalAmount` [TaxMode](ctp:api:type:TaxMode). This update action sets the `taxedPrice` and `taxRate` on a Line Item and must be used after any price-affecting change occurs.
 *
  */
 type StagedOrderSetLineItemTaxAmountAction struct {
@@ -2766,6 +2769,55 @@ func (obj StagedOrderSetShippingAddressCustomTypeAction) MarshalJSON() ([]byte, 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setShippingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+type StagedOrderSetShippingCustomFieldAction struct {
+	// The `shippingKey` of the [Shipping](ctp:api:type:Shipping) to customize. Used to specify which Shipping Method to customize
+	// on a Order with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Leave this empty to customize the one and only ShippingMethod on a `Single` ShippingMode Order.
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetShippingCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetShippingCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingCustomField", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action sets, overwrites, or removes any existing Custom Type and Custom Fields for the Order's `shippingMethod` or `shipping`.
+*
+ */
+type StagedOrderSetShippingCustomTypeAction struct {
+	// The `shippingKey` of the [Shipping](ctp:api:type:Shipping) to customize. Used to specify which Shipping Method to customize
+	// on a Order with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// Leave this empty to customize the one and only ShippingMethod on a `Single` ShippingMode Order.
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the specified ShippingMethod with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the ShippingMethod.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingMethod`.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetShippingCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetShippingCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingCustomType", Alias: (*Alias)(&obj)})
 }
 
 /**

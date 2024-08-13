@@ -26,9 +26,9 @@ type ShippingMethod struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ShippingMethod was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the ShippingMethod.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the ShippingMethod.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ShippingMethod.
 	Key *string `json:"key,omitempty"`
@@ -44,7 +44,11 @@ type ShippingMethod struct {
 	TaxCategory TaxCategoryReference `json:"taxCategory"`
 	// Defines [ShippingRates](ctp:api:type:ShippingRate) (prices) for specific Zones.
 	ZoneRates []ZoneRate `json:"zoneRates"`
-	// If `true` this ShippingMethod is the [Project](ctp:api:type:Project)'s default ShippingMethod.
+	// Indicates if the ShippingMethod is active.
+	//
+	// If `true`, the ShippingMethod can be used during the creation or update of a Cart or Order.
+	Active bool `json:"active"`
+	// If `true`, this ShippingMethod is the [Project](ctp:api:type:Project)'s default ShippingMethod.
 	IsDefault bool `json:"isDefault"`
 	// Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
 	Predicate *string `json:"predicate,omitempty"`
@@ -67,7 +71,9 @@ type ShippingMethodDraft struct {
 	TaxCategory TaxCategoryResourceIdentifier `json:"taxCategory"`
 	// Defines [ShippingRates](ctp:api:type:ShippingRate) (prices) for specific zones.
 	ZoneRates []ZoneRateDraft `json:"zoneRates"`
-	// If `true` the ShippingMethod will be the [Project](ctp:api:type:Project)'s default ShippingMethod.
+	// If set to `true`, the ShippingMethod can be used during the creation or update of a Cart or Order.
+	Active *bool `json:"active,omitempty"`
+	// If set to `true`, the ShippingMethod will be the [Project](ctp:api:type:Project)'s default ShippingMethod.
 	IsDefault bool `json:"isDefault"`
 	// Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
 	Predicate *string `json:"predicate,omitempty"`
@@ -189,6 +195,12 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 			return nil, err
 		}
 		return obj, nil
+	case "changeActive":
+		obj := ShippingMethodChangeActiveAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeIsDefault":
 		obj := ShippingMethodChangeIsDefaultAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -267,9 +279,9 @@ func mapDiscriminatorShippingMethodUpdateAction(input interface{}) (ShippingMeth
 
 type ShippingRate struct {
 	// Currency amount of the ShippingRate.
-	Price TypedMoney `json:"price"`
+	Price CentPrecisionMoney `json:"price"`
 	// [Free shipping](/../api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
-	FreeAbove TypedMoney `json:"freeAbove,omitempty"`
+	FreeAbove *CentPrecisionMoney `json:"freeAbove,omitempty"`
 	// `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
 	// Only appears in response to requests for [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) or
 	// [Get ShippingMethods for a Location](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-location:GET).
@@ -284,20 +296,6 @@ func (obj *ShippingRate) UnmarshalJSON(data []byte) error {
 	type Alias ShippingRate
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
-	}
-	if obj.Price != nil {
-		var err error
-		obj.Price, err = mapDiscriminatorTypedMoney(obj.Price)
-		if err != nil {
-			return err
-		}
-	}
-	if obj.FreeAbove != nil {
-		var err error
-		obj.FreeAbove, err = mapDiscriminatorTypedMoney(obj.FreeAbove)
-		if err != nil {
-			return err
-		}
 	}
 	for i := range obj.Tiers {
 		var err error
@@ -398,7 +396,7 @@ func mapDiscriminatorShippingRatePriceTier(input interface{}) (ShippingRatePrice
 }
 
 /**
-*	Used when the ShippingRate maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
+*	The [ShippingRate](ctp:api:type:ShippingRate) maps to an abstract Cart categorization expressed by strings (for example, `Light`, `Medium`, or `Heavy`).
 *
  */
 type CartClassificationTier struct {
@@ -421,7 +419,7 @@ func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Used when the ShippingRate maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges).
+*	The [ShippingRate](ctp:api:type:ShippingRate) maps to an abstract Cart categorization expressed by integers (such as shipping scores or weight ranges).
 *	Either `price` or `priceFunction` is required.
 *
  */
@@ -447,8 +445,9 @@ func (obj CartScoreTier) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Used when the ShippingRate maps to the sum of [LineItem](ctp:api:type:LineItem) Prices.
-*	The value of the Cart is used to select a tier.
+*
+*	The [ShippingRate](ctp:api:type:ShippingRate) maps to the value of the Cart and is used to select a tier.
+*	The value of the [Cart](ctp:api:type:Cart) is the sum of all Line Item totals and Custom Line Item totals (via the `totalPrice` field) after any Product Discounts and Cart Discounts have been applied.
 *	If chosen, it is not possible to set a value for the `shippingRateInput` on the [Cart](ctp:api:type:Cart).
 *	Tiers contain the `centAmount` (a value of `100` in the currency `USD` corresponds to `$ 1.00`), and start at `1`.'
 *
@@ -528,6 +527,23 @@ func (obj ShippingMethodAddZoneAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "addZone", Alias: (*Alias)(&obj)})
+}
+
+type ShippingMethodChangeActiveAction struct {
+	// Value to set.
+	//
+	// If set to `false`, the ShippingMethod cannot be used during the creation or update of a Cart or Order.
+	Active bool `json:"active"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShippingMethodChangeActiveAction) MarshalJSON() ([]byte, error) {
+	type Alias ShippingMethodChangeActiveAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeActive", Alias: (*Alias)(&obj)})
 }
 
 type ShippingMethodChangeIsDefaultAction struct {
