@@ -13,13 +13,13 @@ type CartDiscount struct {
 	ID string `json:"id"`
 	// Current version of the CartDiscount.
 	Version int `json:"version"`
-	// Date and time (UTC) for the CartDiscount was initially created.
+	// Date and time (UTC) the CartDiscount was initially created.
 	CreatedAt time.Time `json:"createdAt"`
-	// Date and time (UTC) for the CartDiscount was last updated.
+	// Date and time (UTC) the CartDiscount was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the CartDiscount.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the CartDiscount.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the CartDiscount.
 	Name LocalizedString `json:"name"`
@@ -1213,25 +1213,10 @@ type CartDiscountSetStoresAction struct {
 // optional nil slices
 func (obj CartDiscountSetStoresAction) MarshalJSON() ([]byte, error) {
 	type Alias CartDiscountSetStoresAction
-	data, err := json.Marshal(struct {
+	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setStores", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["stores"] == nil {
-		delete(raw, "stores")
-	}
-
-	return json.Marshal(raw)
-
 }
 
 type CartDiscountSetValidFromAction struct {

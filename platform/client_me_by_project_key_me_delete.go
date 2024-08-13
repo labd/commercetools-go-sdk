@@ -51,6 +51,10 @@ func (rb *ByProjectKeyMeRequestMethodDelete) WithHeaders(headers http.Header) *B
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes the Customer specified in the [customer:{id}](/scopes#customer_idid) scope. Returns a `200 OK` status if successful.
+ */
 func (rb *ByProjectKeyMeRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -114,7 +114,8 @@ const (
 *	Generic type to model the fields that all types of Business Units have in common.
 *
  */
-type BusinessUnit interface{}
+type BusinessUnit interface {
+}
 
 func mapDiscriminatorBusinessUnit(input interface{}) (BusinessUnit, error) {
 	var discriminator string
@@ -143,6 +144,17 @@ func mapDiscriminatorBusinessUnit(input interface{}) (BusinessUnit, error) {
 	}
 	return nil, nil
 }
+
+/**
+*	Determines whether a Business Unit can inherit [Approval Rules](/projects/approval-rules) from a parent. Only Business Units of type `Division` can use `ExplicitAndFromParent`.
+*
+ */
+type BusinessUnitApprovalRuleMode string
+
+const (
+	BusinessUnitApprovalRuleModeExplicit              BusinessUnitApprovalRuleMode = "Explicit"
+	BusinessUnitApprovalRuleModeExplicitAndFromParent BusinessUnitApprovalRuleMode = "ExplicitAndFromParent"
+)
 
 /**
 *	Determines whether a Business Unit can inherit Associates from a parent.
@@ -190,7 +202,7 @@ func mapDiscriminatorBusinessUnitDraft(input interface{}) (BusinessUnitDraft, er
 }
 
 /**
-*	[Reference](ctp:api:type:Reference) to a [BusinessUnit](ctp:api:type:BusinessUnit) by its key.
+*	[KeyReference](ctp:api:type:KeyReference) to a [BusinessUnit](ctp:api:type:BusinessUnit).
 *
  */
 type BusinessUnitKeyReference struct {
@@ -416,6 +428,12 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 			return nil, err
 		}
 		return obj, nil
+	case "changeApprovalRuleMode":
+		obj := BusinessUnitChangeApprovalRuleModeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeAssociate":
 		obj := BusinessUnitChangeAssociateAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -548,17 +566,18 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 type Company struct {
 	// Unique identifier of the Business Unit.
 	ID string `json:"id"`
+
 	// Current version of the Business Unit.
 	Version int `json:"version"`
 	// Date and time (UTC) the Business Unit was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Business Unit was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the BusinessUnit.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the BusinessUnit.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier of the Business Unit.
+	// User-defined unique and immutable identifier of the Business Unit.
 	Key string `json:"key"`
 	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
 	Status BusinessUnitStatus `json:"status"`
@@ -568,7 +587,7 @@ type Company struct {
 	//
 	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
 	Stores []StoreKeyReference `json:"stores"`
-	// Is always `Explicit` since a Company cannot have a parent Business Unit that Stores can be inherited from.
+	// The value of this field is always `Explicit` because a Company cannot have a parent Business Unit that Stores can be inherited from.
 	StoreMode BusinessUnitStoreMode `json:"storeMode"`
 	// Name of the Business Unit.
 	Name string `json:"name"`
@@ -586,7 +605,7 @@ type Company struct {
 	BillingAddressIds []string `json:"billingAddressIds"`
 	// Unique identifier of the address used as the default billing address.
 	DefaultBillingAddressId *string `json:"defaultBillingAddressId,omitempty"`
-	// Is always `Explicit` since a Company cannot have a parent Business Unit that Associates can be inherited from.
+	// The value of this field is always `Explicit` because a Company cannot have a parent Business Unit that Associates can be inherited from.
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
 	// Associates that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []Associate `json:"associates"`
@@ -596,6 +615,8 @@ type Company struct {
 	ParentUnit *BusinessUnitKeyReference `json:"parentUnit,omitempty"`
 	// Top-level unit of the Business Unit. The top-level unit is of `unitType` `Company`.
 	TopLevelUnit BusinessUnitKeyReference `json:"topLevelUnit"`
+	// The value of this field is always `Explicit` because a Company cannot have a parent Business Unit that Approval Rules can be inherited from.
+	ApprovalRuleMode BusinessUnitApprovalRuleMode `json:"approvalRuleMode"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -640,7 +661,7 @@ func (obj Company) MarshalJSON() ([]byte, error) {
 *
  */
 type CompanyDraft struct {
-	// User-defined unique identifier for the Business Unit.
+	// User-defined unique and immutable identifier for the Business Unit.
 	Key string `json:"key"`
 	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
 	Status *BusinessUnitStatus `json:"status,omitempty"`
@@ -663,6 +684,10 @@ type CompanyDraft struct {
 	AssociateMode *BusinessUnitAssociateMode `json:"associateMode,omitempty"`
 	// List of members that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []AssociateDraft `json:"associates"`
+	// Determines whether the Business Unit can inherit Approval Rules from a parent.
+	// For [Companies](ctp:api:type:BusinessUnitType), the value of this field is always `Explicit`.
+	// For [Divisions](ctp:api:type:BusinessUnitType), the default value is `ExplicitAndFromParent`.
+	ApprovalRuleMode *BusinessUnitApprovalRuleMode `json:"approvalRuleMode,omitempty"`
 	// Addresses used by the Business Unit.
 	Addresses []BaseAddress `json:"addresses"`
 	// Indexes of entries in `addresses` to set as shipping addresses.
@@ -728,17 +753,18 @@ func (obj CompanyDraft) MarshalJSON() ([]byte, error) {
 type Division struct {
 	// Unique identifier of the Business Unit.
 	ID string `json:"id"`
+
 	// Current version of the Business Unit.
 	Version int `json:"version"`
 	// Date and time (UTC) the Business Unit was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Business Unit was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the BusinessUnit.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the BusinessUnit.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// User-defined unique identifier of the Business Unit.
+	// User-defined unique and immutable identifier of the Business Unit.
 	Key string `json:"key"`
 	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
 	Status BusinessUnitStatus `json:"status"`
@@ -776,6 +802,8 @@ type Division struct {
 	ParentUnit BusinessUnitKeyReference `json:"parentUnit"`
 	// Top-level unit of the Business Unit. The top-level unit is of `unitType` `Company`.
 	TopLevelUnit BusinessUnitKeyReference `json:"topLevelUnit"`
+	// Determines whether a Business Unit can inherit Approval Rules from a parent.
+	ApprovalRuleMode BusinessUnitApprovalRuleMode `json:"approvalRuleMode"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -821,7 +849,7 @@ func (obj Division) MarshalJSON() ([]byte, error) {
 *
  */
 type DivisionDraft struct {
-	// User-defined unique identifier for the Business Unit.
+	// User-defined unique and immutable identifier for the Business Unit.
 	Key string `json:"key"`
 	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
 	Status *BusinessUnitStatus `json:"status,omitempty"`
@@ -843,6 +871,8 @@ type DivisionDraft struct {
 	AssociateMode *BusinessUnitAssociateMode `json:"associateMode,omitempty"`
 	// List of members that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []AssociateDraft `json:"associates"`
+	// Determines whether the Division can inherit Approval Rules from a parent.
+	ApprovalRuleMode *BusinessUnitApprovalRuleMode `json:"approvalRuleMode,omitempty"`
 	// Addresses used by the Business Unit.
 	Addresses []BaseAddress `json:"addresses"`
 	// Indexes of entries in `addresses` to set as shipping addresses.
@@ -1037,6 +1067,29 @@ func (obj BusinessUnitChangeAddressAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeAddress", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updates [Approval Rules](/projects/approval-rules) inheritance behavior between Business Units.
+*
+*	Only Business Units of type `Division` can be changed to `ExplicitAndFromParent`.
+*
+*	This update action generates a [BusinessUnitApprovalRuleModeChanged](ctp:api:type:BusinessUnitApprovalRuleModeChangedMessage) Message.
+*
+ */
+type BusinessUnitChangeApprovalRuleModeAction struct {
+	// The new value for `approvalRuleMode`.
+	ApprovalRuleMode BusinessUnitApprovalRuleMode `json:"approvalRuleMode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitChangeApprovalRuleModeAction) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitChangeApprovalRuleModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeApprovalRuleMode", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1470,23 +1523,8 @@ type BusinessUnitSetStoresAction struct {
 // optional nil slices
 func (obj BusinessUnitSetStoresAction) MarshalJSON() ([]byte, error) {
 	type Alias BusinessUnitSetStoresAction
-	data, err := json.Marshal(struct {
+	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setStores", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["stores"] == nil {
-		delete(raw, "stores")
-	}
-
-	return json.Marshal(raw)
-
 }

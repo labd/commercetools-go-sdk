@@ -54,6 +54,11 @@ func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodPost) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a Business Unit for a given `id`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
+ */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodPost) Execute(ctx context.Context) (result *BusinessUnit, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

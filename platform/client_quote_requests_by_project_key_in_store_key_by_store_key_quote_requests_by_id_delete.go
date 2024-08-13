@@ -12,27 +12,35 @@ import (
 	"strconv"
 )
 
-type ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete struct {
+type ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete struct {
 	url     string
 	client  *Client
 	headers http.Header
-	params  *ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput
+	params  *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput
 }
 
-func (r *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete) Dump() map[string]interface{} {
+func (r *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url":    r.url,
 		"params": r.params,
 	}
 }
 
-type ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput struct {
-	Version int
-	Expand  []string
+type ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput struct {
+	DataErasure *bool
+	Version     int
+	Expand      []string
 }
 
-func (input *ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput) Values() url.Values {
+func (input *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
+	if input.DataErasure != nil {
+		if *input.DataErasure {
+			values.Add("dataErasure", "true")
+		} else {
+			values.Add("dataErasure", "false")
+		}
+	}
 	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -40,31 +48,39 @@ func (input *ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput) Values() u
 	return values
 }
 
-func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete) Version(v int) *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) DataErasure(v bool) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete {
 	if rb.params == nil {
-		rb.params = &ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput{}
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput{}
+	}
+	rb.params.DataErasure = &v
+	return rb
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) Version(v int) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput{}
 	}
 	rb.params.Version = v
 	return rb
 }
 
-func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete) Expand(v []string) *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete {
 	if rb.params == nil {
-		rb.params = &ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput{}
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput{}
 	}
 	rb.params.Expand = v
 	return rb
 }
 
-func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete) WithQueryParams(input ByProjectKeyMeBusinessUnitsByIDRequestMethodDeleteInput) *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDeleteInput) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete {
 	rb.params = &input
 	return rb
 }
-func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete) WithHeaders(headers http.Header) *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete {
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete) Execute(ctx context.Context) (result *BusinessUnit, err error) {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

@@ -75,7 +75,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodGet) WithHead
 }
 
 /**
-*	Retrieves all the ShippingMethods that can ship to the given [Location](ctp:api:type:Location) for an [OrderEdit](ctp:api:type:OrderEdit).
+*	Retrieves all the active ShippingMethods that can ship to the given [Location](ctp:api:type:Location) for an [OrderEdit](ctp:api:type:OrderEdit).
 *
 *	If the OrderEdit preview cannot be generated, an [EditPreviewFailed](ctp:api:type:EditPreviewFailedError) error is returned.
 *

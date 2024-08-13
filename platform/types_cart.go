@@ -23,7 +23,7 @@ type Cart struct {
 	CustomerId *string `json:"customerId,omitempty"`
 	// Email address of the Customer that the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Cart belongs to. Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Cart belongs to. Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Cart.
 	AnonymousId *string `json:"anonymousId,omitempty"`
@@ -42,8 +42,8 @@ type Cart struct {
 	//
 	// Taxes are included if [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true` for each price.
 	TotalPrice CentPrecisionMoney `json:"totalPrice"`
-	// - For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:CartSetShippingAddressAction).
-	// - For a Cart with `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
+	// - For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:CartSetShippingAddressAction). For Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode), all Line Items and Custom Line Items must be fully distributed between the Shipping Methods (via `shippingDetails`), otherwise `taxedPrice` is not automatically set.
+	// - For a Cart with `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set. For Carts with `Multiple` [ShippingMode](ctp:api:type:ShippingMode), all allocations must have their respective tax rates present in `perMethodTaxRate`, otherwise `taxedPrice` is not automatically set.
 	//
 	// If a discount applies on `totalPrice`, this field holds the discounted values.
 	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
@@ -94,7 +94,7 @@ type Cart struct {
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Cart.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
-	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	Country *string `json:"country,omitempty"`
 	// Languages of the Cart. Can only contain languages supported by the [Project](ctp:api:type:Project).
 	Locale *string `json:"locale,omitempty"`
@@ -104,9 +104,9 @@ type Cart struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Number of days after which an active Cart is deleted since its last modification. Configured in [Project settings](ctp:api:type:CartsConfiguration).
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Cart.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Cart.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 }
 
@@ -137,7 +137,7 @@ type CartDraft struct {
 	CustomerId *string `json:"customerId,omitempty"`
 	// Email address of the Customer that the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Customer Group of the Customer that the Cart belongs to. Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Customer Group of the Customer that the Cart belongs to. Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	//
 	// It is automatically set if the Customer referenced in `customerId` belongs to a Customer Group.
 	// It can also be set explicitly when no `customerId` is present.
@@ -190,7 +190,7 @@ type CartDraft struct {
 	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
 	// `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
 	DiscountCodes []string `json:"discountCodes"`
-	// Used for [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	// If used for [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST), the provided country must be one of the [Store's](ctp:api:type:Store) `countries`.
 	Country *string `json:"country,omitempty"`
 	// Languages of the Cart. Can only contain languages supported by the [Project](ctp:api:type:Project).
@@ -490,6 +490,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		return obj, nil
 	case "changeLineItemQuantity":
 		obj := CartChangeLineItemQuantityAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeLineItemsOrder":
+		obj := CartChangeLineItemsOrderAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1058,16 +1064,12 @@ func (obj *DirectDiscount) UnmarshalJSON(data []byte) error {
 /**
 *	Represents a [CartDiscount](ctp:api:type:CartDiscount) that can only be associated with a single Cart or Order.
 *
-*	Direct Discounts are always active and valid, and have the default `Stacking` [StackingMode](ctp:api:type:StackingMode).
-*	They apply in the order in which they are listed in the `directDiscounts` array of [Carts](ctp:api:type:Cart) or [Orders](ctp:api:type:Order), and do not have a sorting order like Cart Discounts.
-*
-*	If a Direct Discount is present, any matching Cart Discounts in the Project are ignored.
-*	Additionally, a Cart or Order supports either Discount Codes or Direct Discounts at the same time.
+*	For an introduction to Direct Discounts and to understand how they work in Composable Commerce, see the [Direct Discounts overview](/pricing-and-discounts-overview#direct-discounts).
 *
  */
 type DirectDiscountDraft struct {
 	// Defines the effect the Discount will have.
-	Value CartDiscountValue `json:"value"`
+	Value CartDiscountValueDraft `json:"value"`
 	// Defines what segment of the Cart will be discounted.
 	//
 	// If `value` is set to `giftLineItem`, this must not be set.
@@ -1083,7 +1085,7 @@ func (obj *DirectDiscountDraft) UnmarshalJSON(data []byte) error {
 	}
 	if obj.Value != nil {
 		var err error
-		obj.Value, err = mapDiscriminatorCartDiscountValue(obj.Value)
+		obj.Value, err = mapDiscriminatorCartDiscountValueDraft(obj.Value)
 		if err != nil {
 			return err
 		}
@@ -1350,7 +1352,8 @@ type ExternalTaxRateDraft struct {
 	Country string `json:"country"`
 	// State within the specified country.
 	State *string `json:"state,omitempty"`
-	// For countries (such as the US) where the total tax is a combination of multiple taxes (such as state and local taxes). The total of all subrates must equal the TaxRate `amount`.
+	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
+	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
 	SubRates []SubRate `json:"subRates"`
 }
 
@@ -1487,7 +1490,7 @@ type LineItem struct {
 	PerMethodTaxRate []MethodTaxRate `json:"perMethodTaxRate"`
 	// Identifies [Inventory entries](/../api/projects/inventory) that are reserved. The referenced Channel has the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-	// Used to [select](ctp:api:type:LineItemPriceSelection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 	// Indicates how the Price for the Line Item is set.
 	PriceMode LineItemPriceMode `json:"priceMode"`
@@ -1527,7 +1530,7 @@ type LineItemDraft struct {
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](ctp:api:type:LineItemPriceSelection) a Product Price.
+	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
 	// The referenced Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	//
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set,
@@ -1540,7 +1543,7 @@ type LineItemDraft struct {
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
-	// Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	// Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Single` [ShippingMode](ctp:api:type:ShippingMode). If the Cart has `Multiple` [ShippingMode](ctp:api:type:ShippingMode), the Tax Rate is accepted but ignored.
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 	// Sets the external Tax Rates for individual Shipping Methods, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	PerMethodExternalTaxRate []MethodExternalTaxRateDraft `json:"perMethodExternalTaxRate"`
@@ -1798,7 +1801,7 @@ func (obj ShippingInfo) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Determines whether a [ShippingMethod](ctp:api:type:ShippingMethod) is allowed for a Cart.
+*	Determines whether the selected [ShippingMethod](ctp:api:type:ShippingMethod) is allowed for the Cart. For more information, see [Predicates](/shipping-delivery-overview#predicates).
 *
  */
 type ShippingMethodState string
@@ -2231,7 +2234,7 @@ func (obj CartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 *	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](/../api/projects/custom-fields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
 *	A new Line Item is added when the `externalPrice` or `externalTotalPrice` is set in this update action.
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
 *	If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
@@ -2261,7 +2264,7 @@ type CartAddLineItemAction struct {
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](ctp:api:type:LineItemPriceSelection) a Product Price.
+	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set, the Channel must match one of the Store's distribution channels.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
@@ -2272,7 +2275,7 @@ type CartAddLineItemAction struct {
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
-	// External Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	// Sets the external Tax Rate for the Line Item, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Single` [ShippingMode](ctp:api:type:ShippingMode). If the Cart has `Multiple` [ShippingMode](ctp:api:type:ShippingMode), the Tax Rate is accepted but ignored.
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 	// Sets the external Tax Rates for individual Shipping Methods, if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode) and `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	PerMethodExternalTaxRate []MethodExternalTaxRateDraft `json:"perMethodExternalTaxRate"`
@@ -2544,7 +2547,7 @@ func (obj CartChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, error) 
 *	use this update action in combination with the [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction) update action
 *	in a single Cart update command.
 *
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type CartChangeLineItemQuantityAction struct {
@@ -2556,11 +2559,13 @@ type CartChangeLineItemQuantityAction struct {
 	//
 	// If `0`, the Line Item is removed from the Cart.
 	Quantity int `json:"quantity"`
-	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when changing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	// Required when the Line Item uses `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when changing the quantity of a Line Item.
 	//
-	// The LineItem price is updated as described in LineItem Price selection.
+	// The LineItem price is updated as described in Line Item price selection.
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` to the given value when changing the quantity of a Line Item with the `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	// If `externalTotalPrice` is not given and the `priceMode` is `ExternalTotal`, the external price is unset and the `priceMode` is set to `Platform`.
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
 }
 
@@ -2572,6 +2577,21 @@ func (obj CartChangeLineItemQuantityAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeLineItemQuantity", Alias: (*Alias)(&obj)})
+}
+
+type CartChangeLineItemsOrderAction struct {
+	// All existing [LineItem](ctp:api:type:LineItem) `id`s in the desired new order.
+	LineItemOrder []string `json:"lineItemOrder"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartChangeLineItemsOrderAction) MarshalJSON() ([]byte, error) {
+	type Alias CartChangeLineItemsOrderAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeLineItemsOrder", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -2634,7 +2654,7 @@ func (obj CartChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	Changes the [CartState](ctp:api:type:CartState) from `Active` to `Frozen`. Results in a [Frozen Cart](ctp:api:type:FrozenCarts).
-*	Fails with [InvalidOperation](ctp:api:type:InvalidOperation) error when the Cart is empty.
+*	Fails with [InvalidOperation](ctp:api:type:InvalidOperationError) error when the Cart is empty.
 *
  */
 type CartFreezeCartAction struct {
@@ -2733,7 +2753,7 @@ func (obj CartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type CartRemoveLineItemAction struct {
@@ -2796,6 +2816,10 @@ func (obj CartRemoveShippingMethodAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeShippingMethod", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If the Cart is already associated with a Customer, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
+ */
 type CartSetAnonymousIdAction struct {
 	// Value to set.
 	// If empty, any existing value is removed.
@@ -2885,7 +2909,7 @@ func (obj CartSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action results in the `taxedPrice` field being added to the Cart when the `ExternalAmount` [TaxMode](ctp:api:type:TaxMode) is used.
+*	Can be used if the Cart has the `ExternalAmount` [TaxMode](ctp:api:type:TaxMode). This update action adds the `taxedPrice` field to the Cart and must be used after any price-affecting change occurs within the Cart.
 *
  */
 type CartSetCartTotalTaxAction struct {
@@ -3146,10 +3170,10 @@ func (obj CartSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action can only be used if a Customer is not assigned to a Cart.
-*	If a Customer is already assigned, the Cart has the same Customer Group as the assigned Customer.
+*	This update action can only be used if a Customer is not assigned to the Cart.
+*	If a Customer is already assigned, the Cart uses the Customer Group of the assigned Customer.
 *
-*	Setting the Customer Group also updates the [LineItem](ctp:api:type:LineItem) `prices` according to the Customer Group.
+*	To reflect the new Customer Group, this update action can result in [updates to the Cart](/api/carts-orders-overview#cart-updates). When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
 *
  */
 type CartSetCustomerGroupAction struct {
@@ -3176,7 +3200,9 @@ func (obj CartSetCustomerGroupAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CartSetCustomerIdAction struct {
-	// `id` of an existing [Customer](ctp:api:type:Customer). If empty, any value is removed.
+	// `id` of an existing [Customer](ctp:api:type:Customer).
+	// If the Customer is assigned to a [CustomerGroup](ctp:api:type:CustomerGroup), this update action also sets the value for the `customerGroup` field.
+	// If empty, the update action removes the value for both `customerId` and `customerGroup`.
 	CustomerId *string `json:"customerId,omitempty"`
 }
 
@@ -3337,7 +3363,7 @@ func (obj CartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [LineItem Price selection](ctp:api:type:LineItemPriceSelection).
+*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type CartSetLineItemDistributionChannelAction struct {
@@ -3451,7 +3477,7 @@ func (obj CartSetLineItemSupplyChannelAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Can be used if the Cart has the `ExternalAmount` [TaxMode](ctp:api:type:TaxMode).
+*	Can be used if the Cart has the `ExternalAmount` [TaxMode](ctp:api:type:TaxMode). This update action sets the `taxedPrice` and `taxRate` on a Line Item and must be used after any price-affecting change occurs.
 *
  */
 type CartSetLineItemTaxAmountAction struct {
@@ -3548,7 +3574,7 @@ func (obj CartSetLocaleAction) MarshalJSON() ([]byte, error) {
 /**
 *	Setting the shipping address also sets the [TaxRate](ctp:api:type:TaxRate) of Line Items and calculates the [TaxedPrice](ctp:api:type:TaxedPrice).
 *
-*	If a matching price cannot be found for the given shipping address during [Line Item Price selection](ctp:api:type:LineItemPriceSelection),
+*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection),
 *	a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
 *	If you want to allow shipping to states inside a country that are not explicitly covered by a TaxRate,

@@ -32,7 +32,6 @@ type ByProjectKeyProductsRequestMethodGetInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   []string
 	Expand             []string
 	Sort               []string
 	Limit              *int
@@ -57,9 +56,6 @@ func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	for _, v := range input.LocaleProjection {
-		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -128,14 +124,6 @@ func (rb *ByProjectKeyProductsRequestMethodGet) PriceChannel(v string) *ByProjec
 	return rb
 }
 
-func (rb *ByProjectKeyProductsRequestMethodGet) LocaleProjection(v []string) *ByProjectKeyProductsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
-	}
-	rb.params.LocaleProjection = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsRequestMethodGet) Expand(v []string) *ByProjectKeyProductsRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
@@ -194,7 +182,7 @@ func (rb *ByProjectKeyProductsRequestMethodGet) WithHeaders(headers http.Header)
 }
 
 /**
-*	If [Price selection](ctp:api:type:ProductPriceSelection) query parameters are provided, the selected Prices are added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsRequestMethodGet) Execute(ctx context.Context) (result *ProductPagedQueryResponse, err error) {
 	var queryParams url.Values

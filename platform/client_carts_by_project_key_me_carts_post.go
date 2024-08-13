@@ -54,6 +54,19 @@ func (rb *ByProjectKeyMeCartsRequestMethodPost) WithHeaders(headers http.Header)
 	rb.headers = headers
 	return rb
 }
+
+/**
+*
+*	Creates a Cart for the Customer or anonymous user. The `customerId` or `anonymousId` field on the Cart is automatically set based on the [customer:{id}](/scopes#customer_idid) or [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
+*	Specific Error Codes:
+*
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*
+ */
 func (rb *ByProjectKeyMeCartsRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

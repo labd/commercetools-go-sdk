@@ -29,6 +29,9 @@ func (rb *ByProjectKeyCustomersKeyByKeyRequestBuilder) Head() *ByProjectKeyCusto
 	}
 }
 
+/**
+*	Simultaneously updating two Customers with the same email address can return a [LockedField](ctp:api:type:LockedFieldError) error.
+ */
 func (rb *ByProjectKeyCustomersKeyByKeyRequestBuilder) Post(body CustomerUpdate) *ByProjectKeyCustomersKeyByKeyRequestMethodPost {
 	return &ByProjectKeyCustomersKeyByKeyRequestMethodPost{
 		body:   body,

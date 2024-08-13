@@ -17,9 +17,9 @@ type Payment struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Payment was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Payment.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Payment.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment.
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -607,7 +607,7 @@ func (obj PaymentChangeTransactionTimestampAction) MarshalJSON() ([]byte, error)
 }
 
 type PaymentSetAmountPaidAction struct {
-	// Draft type that stores amounts only in cent precision for the specified currency.
+	// Draft object to store money in cent amounts for a specific currency.
 	Amount *Money `json:"amount,omitempty"`
 }
 
@@ -622,7 +622,7 @@ func (obj PaymentSetAmountPaidAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAmountRefundedAction struct {
-	// Draft type that stores amounts only in cent precision for the specified currency.
+	// Draft object to store money in cent amounts for a specific currency.
 	Amount *Money `json:"amount,omitempty"`
 }
 
@@ -636,9 +636,12 @@ func (obj PaymentSetAmountRefundedAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAmountRefunded", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	If the Payment is already associated with a Customer, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
+ */
 type PaymentSetAnonymousIdAction struct {
-	// Value to set.
-	// If empty, any existing value will be removed.
+	// Value to set. If empty, any existing value will be removed.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -653,7 +656,7 @@ func (obj PaymentSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetAuthorizationAction struct {
-	// Draft type that stores amounts only in cent precision for the specified currency.
+	// Draft object to store money in cent amounts for a specific currency.
 	Amount *Money     `json:"amount,omitempty"`
 	Until  *time.Time `json:"until,omitempty"`
 }

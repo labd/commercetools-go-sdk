@@ -5,7 +5,6 @@ package platform
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -27,43 +26,27 @@ func (r *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Dump() map[strin
 }
 
 type ByProjectKeyProductProjectionsSuggestRequestMethodGetInput struct {
-	Fuzzy          *bool
 	SearchKeywords map[string][]string
-	Sort           []string
 	Limit          *int
-	Offset         *int
-	WithTotal      *bool
+	Fuzzy          *bool
 	Staged         *bool
 }
 
 func (input *ByProjectKeyProductProjectionsSuggestRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	if input.Fuzzy != nil {
-		if *input.Fuzzy {
-			values.Add("fuzzy", "true")
-		} else {
-			values.Add("fuzzy", "false")
-		}
-	}
 	for k, v := range input.SearchKeywords {
 		for _, x := range v {
 			values.Add(k, x)
 		}
 	}
-	for _, v := range input.Sort {
-		values.Add("sort", fmt.Sprintf("%v", v))
-	}
 	if input.Limit != nil {
 		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
-	if input.Offset != nil {
-		values.Add("offset", strconv.Itoa(*input.Offset))
-	}
-	if input.WithTotal != nil {
-		if *input.WithTotal {
-			values.Add("withTotal", "true")
+	if input.Fuzzy != nil {
+		if *input.Fuzzy {
+			values.Add("fuzzy", "true")
 		} else {
-			values.Add("withTotal", "false")
+			values.Add("fuzzy", "false")
 		}
 	}
 	if input.Staged != nil {
@@ -76,27 +59,11 @@ func (input *ByProjectKeyProductProjectionsSuggestRequestMethodGetInput) Values(
 	return values
 }
 
-func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Fuzzy(v bool) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
-	}
-	rb.params.Fuzzy = &v
-	return rb
-}
-
 func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) SearchKeywords(v map[string][]string) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
 	}
 	rb.params.SearchKeywords = v
-	return rb
-}
-
-func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Sort(v []string) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
-	}
-	rb.params.Sort = v
 	return rb
 }
 
@@ -108,19 +75,11 @@ func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Limit(v int) *B
 	return rb
 }
 
-func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Offset(v int) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
+func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) Fuzzy(v bool) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
 	}
-	rb.params.Offset = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductProjectionsSuggestRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductProjectionsSuggestRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSuggestRequestMethodGetInput{}
-	}
-	rb.params.WithTotal = &v
+	rb.params.Fuzzy = &v
 	return rb
 }
 

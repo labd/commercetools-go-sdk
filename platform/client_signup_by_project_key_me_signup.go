@@ -12,7 +12,7 @@ type ByProjectKeyMeSignupRequestBuilder struct {
 }
 
 /**
-*	If used with an [access token for an anonymous session](ctp:api:type:AnonymousSession), all Orders and Carts that belong to the `anonymousId` are assigned to the newly created Customer.
+*	If used with an optional [access token for an anonymous session](ctp:api:type:AnonymousSession), all Orders and Carts that belong to the `anonymousId` are assigned to the newly created Customer.
 *
 *	Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message.
 *

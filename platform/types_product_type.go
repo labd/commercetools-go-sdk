@@ -159,6 +159,7 @@ const (
 	AttributeReferenceTypeIdCategory         AttributeReferenceTypeId = "category"
 	AttributeReferenceTypeIdChannel          AttributeReferenceTypeId = "channel"
 	AttributeReferenceTypeIdCustomer         AttributeReferenceTypeId = "customer"
+	AttributeReferenceTypeIdCustomerGroup    AttributeReferenceTypeId = "customer-group"
 	AttributeReferenceTypeIdKeyValueDocument AttributeReferenceTypeId = "key-value-document"
 	AttributeReferenceTypeIdOrder            AttributeReferenceTypeId = "order"
 	AttributeReferenceTypeIdProduct          AttributeReferenceTypeId = "product"
@@ -509,9 +510,9 @@ type ProductType struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ProductType was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the ProductType.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the ProductType.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ProductType.
 	Key *string `json:"key,omitempty"`

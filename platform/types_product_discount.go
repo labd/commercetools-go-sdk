@@ -17,9 +17,9 @@ type ProductDiscount struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ProductDiscount was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the ProductDiscount.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the ProductDiscount.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the ProductDiscount.
 	Name LocalizedString `json:"name"`

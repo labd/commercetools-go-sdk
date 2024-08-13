@@ -43,9 +43,9 @@ type Customer struct {
 	CustomerNumber *string `json:"customerNumber,omitempty"`
 	// Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Customer.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Customer.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
 	// It is the mandatory unique identifier of a Customer.
@@ -88,7 +88,7 @@ type Customer struct {
 	Salutation *string `json:"salutation,omitempty"`
 	// [Stores](ctp:api:type:Store) to which the Customer is assigned to.
 	//
-	// - If no Stores are specified, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/../api/authorization#password-flow-for-global-customers).
+	// - If `stores` is empty, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/../api/authorization#password-flow-for-global-customers).
 	// - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/../api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
 	Stores []StoreKeyReference `json:"stores"`
 	// Indicates whether the `password` is required for the Customer.
@@ -117,10 +117,6 @@ func (obj Customer) MarshalJSON() ([]byte, error) {
 
 	if raw["billingAddressIds"] == nil {
 		delete(raw, "billingAddressIds")
-	}
-
-	if raw["stores"] == nil {
-		delete(raw, "stores")
 	}
 
 	return json.Marshal(raw)
@@ -1038,6 +1034,8 @@ func (obj CustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 /**
 *	Setting the Customer Group of the Customer produces the [CustomerGroupSet](ctp:api:type:CustomerGroupSetMessage) Message.
 *
+*	To reflect the new Customer Group, this update action can result in [updates](/api/carts-orders-overview#cart-updates) to the most recently modified active Cart. When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
+*
  */
 type CustomerSetCustomerGroupAction struct {
 	// Value to set.
@@ -1120,8 +1118,6 @@ func (obj CustomerSetDefaultBillingAddressAction) MarshalJSON() ([]byte, error) 
 /**
 *	Sets the default shipping address from `addresses`.
 *	The action adds the `id` of the specified address to the `shippingAddressIds` if not contained already. Either `addressId` or `addressKey` is required.
-*
-*	If the Tax Category of the Cart [ShippingInfo](ctp:api:type:ShippingInfo) is missing the TaxRate matching country and state given in the `shippingAddress` of that Cart, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
  */
 type CustomerSetDefaultShippingAddressAction struct {
@@ -1270,25 +1266,10 @@ type CustomerSetStoresAction struct {
 // optional nil slices
 func (obj CustomerSetStoresAction) MarshalJSON() ([]byte, error) {
 	type Alias CustomerSetStoresAction
-	data, err := json.Marshal(struct {
+	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setStores", Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["stores"] == nil {
-		delete(raw, "stores")
-	}
-
-	return json.Marshal(raw)
-
 }
 
 /**

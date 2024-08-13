@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestM
 }
 
 /**
-*	Checks if an Order exists for a given `orderNumber`. Returns a `200 OK` status if the Order exists or a `404 Not Found` otherwise.
+*	Checks if an Order exists for a given `orderNumber`. Returns a `200 OK` status if the Order exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

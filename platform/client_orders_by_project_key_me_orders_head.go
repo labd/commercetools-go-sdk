@@ -55,7 +55,13 @@ func (rb *ByProjectKeyMeOrdersRequestMethodHead) WithHeaders(headers http.Header
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Order exists that matches the Query Predicate.
+*	- If one or more Orders exist but don't have either a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
  */
 func (rb *ByProjectKeyMeOrdersRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

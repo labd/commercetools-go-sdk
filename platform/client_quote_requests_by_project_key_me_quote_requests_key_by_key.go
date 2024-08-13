@@ -20,7 +20,7 @@ func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder) Get() *ByProjectKey
 }
 
 /**
-*	Checks if my QuoteRequest exists for a given `key`. Returns a `200 OK` status if the QuoteRequest exists or a `404 Not Found` otherwise.
+*	Checks if a QuoteRequest exists for a given `key`. Returns a `200 OK` status if the QuoteRequest exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder) Head() *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodHead{
@@ -32,13 +32,6 @@ func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder) Head() *ByProjectKe
 func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder) Post(body MyQuoteRequestUpdate) *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodPost{
 		body:   body,
-		url:    fmt.Sprintf("/%s/me/quote-requests/key=%s", rb.projectKey, rb.key),
-		client: rb.client,
-	}
-}
-
-func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestBuilder) Delete() *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete {
-	return &ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/me/quote-requests/key=%s", rb.projectKey, rb.key),
 		client: rb.client,
 	}

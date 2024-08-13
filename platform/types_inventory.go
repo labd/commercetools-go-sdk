@@ -17,9 +17,9 @@ type InventoryEntry struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the InventoryEntry was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the InventoryEntry.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the InventoryEntry.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the InventoryEntry.
 	Key *string `json:"key,omitempty"`

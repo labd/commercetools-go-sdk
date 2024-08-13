@@ -19,6 +19,11 @@ type ByProjectKeyInStoreKeyByStoreKeyCartsReplicateRequestBuilder struct {
 *
 *	The new Cart does not contain payments or deliveries. The [State](ctp:api:type:ItemState) of Line Items and Custom Line Items is reset to `initial`.
 *
+*	Specific Error Codes:
+*
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsReplicateRequestBuilder) Post(body ReplicaCartDraft) *ByProjectKeyInStoreKeyByStoreKeyCartsReplicateRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsReplicateRequestMethodPost{

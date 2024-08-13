@@ -19,9 +19,9 @@ type Quote struct {
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// User-defined unique identifier of the Quote.
 	Key *string `json:"key,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Quote.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Quote.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Quote Request related to the Quote.
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`

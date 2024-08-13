@@ -21,9 +21,9 @@ type ProductTailoring struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ProductTailoring was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the ProductTailoring.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the ProductTailoring.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ProductTailoring.
 	Key *string `json:"key,omitempty"`
@@ -59,6 +59,32 @@ type ProductTailoringData struct {
 	// User-defined identifier used in a deep-link URL for the ProductTailoring.
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug *LocalizedString `json:"slug,omitempty"`
+	// Tailored Variants of the Product.
+	Variants []ProductVariantTailoring `json:"variants"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringData) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringData
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["variants"] == nil {
+		delete(raw, "variants")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -87,6 +113,32 @@ type ProductTailoringDraft struct {
 	Slug *LocalizedString `json:"slug,omitempty"`
 	// If `true`, the ProductTailoring is published immediately.
 	Publish *bool `json:"publish,omitempty"`
+	// Tailored Variants of the Product.
+	Variants []ProductVariantTailoringDraft `json:"variants"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringDraft) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["variants"] == nil {
+		delete(raw, "variants")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -113,6 +165,32 @@ type ProductTailoringInStoreDraft struct {
 	Slug *LocalizedString `json:"slug,omitempty"`
 	// If `true`, the ProductTailoring is published immediately.
 	Publish *bool `json:"publish,omitempty"`
+	// Tailored Variants of the Product.
+	Variants []ProductVariantTailoringDraft `json:"variants"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringInStoreDraft) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringInStoreDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["variants"] == nil {
+		delete(raw, "variants")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -192,14 +270,116 @@ func mapDiscriminatorProductTailoringUpdateAction(input interface{}) (ProductTai
 	}
 
 	switch discriminator {
+	case "addAsset":
+		obj := ProductTailoringAddAssetAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "addExternalImage":
+		obj := ProductTailoringAddExternalImageAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "addVariant":
+		obj := ProductTailoringAddVariantAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeAssetName":
+		obj := ProductTailoringChangeAssetNameAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeAssetOrder":
+		obj := ProductTailoringChangeAssetOrderAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "moveImageToPosition":
+		obj := ProductTailoringMoveImageToPositionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "publish":
 		obj := ProductTailoringPublishAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
 		return obj, nil
+	case "removeAsset":
+		obj := ProductTailoringRemoveAssetAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeImage":
+		obj := ProductTailoringRemoveImageAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeVariant":
+		obj := ProductTailoringRemoveVariantAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAssetCustomField":
+		obj := ProductTailoringSetAssetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAssetCustomType":
+		obj := ProductTailoringSetAssetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAssetDescription":
+		obj := ProductTailoringSetAssetDescriptionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAssetKey":
+		obj := ProductTailoringSetAssetKeyAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAssetSources":
+		obj := ProductTailoringSetAssetSourcesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAssetTags":
+		obj := ProductTailoringSetAssetTagsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setDescription":
 		obj := ProductTailoringSetDescriptionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setImages":
+		obj := ProductTailoringSetExternalImagesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setImageLabel":
+		obj := ProductTailoringSetImageLabelAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -251,6 +431,273 @@ func mapDiscriminatorProductTailoringUpdateAction(input interface{}) (ProductTai
 }
 
 /**
+*	The tailoring of a [ProductVariant](ctp:api:type:ProductVariant).
+*
+ */
+type ProductVariantTailoring struct {
+	// The `id` of the tailored [ProductVariant](ctp:api:type:ProductVariant).
+	ID int `json:"id"`
+	// Images of the tailored Product Variant.
+	// If present, these images will override the images of the corresponding [ProductVariant](ctp:api:type:ProductVariant) in total.
+	Images []Image `json:"images"`
+	// Media assets of the tailored Product Variant.
+	// If present, these assets will override the assets of the corresponding [ProductVariant](ctp:api:type:ProductVariant) in total.
+	Assets []Asset `json:"assets"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantTailoring) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantTailoring
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["images"] == nil {
+		delete(raw, "images")
+	}
+
+	if raw["assets"] == nil {
+		delete(raw, "assets")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Either `id` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductVariantTailoringDraft struct {
+	// The `id` of the [ProductVariant](ctp:api:type:ProductVariant) to be tailored.
+	ID *int `json:"id,omitempty"`
+	// The `sku` of the [ProductVariant](ctp:api:type:ProductVariant) to be tailored.
+	Sku *string `json:"sku,omitempty"`
+	// Images of the tailored Product Variant.
+	Images []Image `json:"images"`
+	// Media assets of the tailored Product Variant.
+	Assets []Asset `json:"assets"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductVariantTailoringDraft) MarshalJSON() ([]byte, error) {
+	type Alias ProductVariantTailoringDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["images"] == nil {
+		delete(raw, "images")
+	}
+
+	if raw["assets"] == nil {
+		delete(raw, "assets")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductTailoringAddAssetAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged `assets` are updated. If `false`, both the current and staged `assets` are updated.
+	Staged *bool `json:"staged,omitempty"`
+	// Value to append.
+	Asset AssetDraft `json:"asset"`
+	// Position in `assets` where the Asset should be put. When specified, the value must be between `0` and the total number of Assets minus `1`.
+	Position *int `json:"position,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringAddAssetAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringAddAssetAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addAsset", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImageAdded](/projects/messages#product-tailoring-image-added) Message.
+*
+ */
+type ProductTailoringAddExternalImageAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// Value to add to `images`.
+	Image Image `json:"image"`
+	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringAddExternalImageAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringAddExternalImageAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addExternalImage", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `id` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Produces the [ProductVariantTailoringAdded](ctp:api:type:ProductVariantTailoringAddedMessage) Message.
+*
+ */
+type ProductTailoringAddVariantAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	ID *int `json:"id,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// Images for the Product Variant Tailoring.
+	Images []Image `json:"images"`
+	// Media assets for the Product Variant Tailoring.
+	Assets []AssetDraft `json:"assets"`
+	// If `true` the new Product Variant Tailoring is only staged. If `false` the new Product Variant Tailoring is both current and staged.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringAddVariantAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringAddVariantAction
+	data, err := json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addVariant", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["images"] == nil {
+		delete(raw, "images")
+	}
+
+	if raw["assets"] == nil {
+		delete(raw, "assets")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The Asset to update must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringChangeAssetNameAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// New value to set. Must not be empty.
+	Name LocalizedString `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringChangeAssetNameAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringChangeAssetNameAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeAssetName", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductTailoringChangeAssetOrderAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged `assets` is updated. If `false`, both the current and staged `assets` are updated.
+	Staged *bool `json:"staged,omitempty"`
+	// All existing Asset `id`s of the ProductTailoringVariant in the desired new order.
+	AssetOrder []string `json:"assetOrder"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringChangeAssetOrderAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringChangeAssetOrderAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeAssetOrder", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductTailoringMoveImageToPositionAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The URL of the image to update.
+	ImageUrl string `json:"imageUrl"`
+	// Position in `images` where the image should be moved. Must be between `0` and the total number of images minus `1`.
+	Position int `json:"position"`
+	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringMoveImageToPositionAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringMoveImageToPositionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "moveImageToPosition", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Publishes the `staged` data of the ProductTailoring to `current`. Sets `hasStagedChanges` to `false`.
 *	Generates the [ProductTailoringPublished](ctp:api:type:ProductTailoringPublishedMessage) Message.
 *
@@ -266,6 +713,282 @@ func (obj ProductTailoringPublishAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "publish", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The Asset to remove must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringRemoveAssetAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is removed. If `false`, both the current and staged Asset is removed.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to remove.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to remove.
+	AssetKey *string `json:"assetKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringRemoveAssetAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringRemoveAssetAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeAsset", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductTailoringRemoveImageAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The URL of the image to remove.
+	ImageUrl string `json:"imageUrl"`
+	// If `true`, only the staged image is removed. If `false`, both the current and staged image is removed.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringRemoveImageAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringRemoveImageAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeImage", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `id` or `sku` is required.
+*	Produces the [ProductVariantTailoringDeleted](ctp:api:type:ProductVariantTailoringRemovedMessage) Message.
+*
+ */
+type ProductTailoringRemoveVariantAction struct {
+	// The `id` of the ProductVariant to remove from the Tailoring.
+	ID *int `json:"id,omitempty"`
+	// The `sku` of the ProductVariant to remove from the Tailoring.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Product Variant Tailoring is removed. If `false`, both the current and staged Product Variant Tailoring is removed.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringRemoveVariantAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringRemoveVariantAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeVariant", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringSetAssetCustomFieldAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAssetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAssetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAssetCustomField", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringSetAssetCustomTypeAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+	// If absent, any existing Type and Custom Fields are removed from the Asset.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAssetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAssetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAssetCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringSetAssetDescriptionAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Value to set. If empty, any existing value will be removed.
+	Description *LocalizedString `json:"description,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAssetDescriptionAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAssetDescriptionAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAssetDescription", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductTailoringSetAssetKeyAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId string `json:"assetId"`
+	// Value to set. If empty, any existing value will be removed.
+	AssetKey *string `json:"assetKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAssetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAssetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAssetKey", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The [Asset](ctp:api:type:Asset) to update must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringSetAssetSourcesAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false` both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Value to set.
+	Sources []AssetSource `json:"sources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAssetSourcesAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAssetSourcesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAssetSources", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	The Asset to update must be specified using either `assetId` or `assetKey`.
+*
+ */
+type ProductTailoringSetAssetTagsAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	Staged *bool `json:"staged,omitempty"`
+	// The `id` of the Asset to update.
+	AssetId *string `json:"assetId,omitempty"`
+	// The `key` of the Asset to update.
+	AssetKey *string `json:"assetKey,omitempty"`
+	// Keywords for categorizing and organizing Assets.
+	Tags []string `json:"tags"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAssetTagsAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAssetTagsAction
+	data, err := json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAssetTags", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["tags"] == nil {
+		delete(raw, "tags")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -287,6 +1010,58 @@ func (obj ProductTailoringSetDescriptionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImagesSet](/projects/messages#product-tailoring-images-set) Message.
+*
+ */
+type ProductTailoringSetExternalImagesAction struct {
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// Value to set to `images`.
+	Images []Image `json:"images"`
+	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetExternalImagesAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetExternalImagesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setImages", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*
+ */
+type ProductTailoringSetImageLabelAction struct {
+	// The `sku` of the tailored ProductVariant to update.
+	Sku *string `json:"sku,omitempty"`
+	// The `id` of the tailored ProductVariant to update.
+	VariantId *int `json:"variantId,omitempty"`
+	// The URL of the image to set the label.
+	ImageUrl string `json:"imageUrl"`
+	// Value to set. If empty, any existing value will be removed.
+	Label *string `json:"label,omitempty"`
+	// If `true`, only the staged image is updated. If `false`, both the current and staged image is updated.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetImageLabelAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetImageLabelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setImageLabel", Alias: (*Alias)(&obj)})
 }
 
 /**

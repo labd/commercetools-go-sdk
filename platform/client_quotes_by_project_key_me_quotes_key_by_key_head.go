@@ -28,7 +28,7 @@ func (rb *ByProjectKeyMeQuotesKeyByKeyRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if a Quote exists for a given `key`. Returns a `200 OK` status if the Quote exists or a `404 Not Found` otherwise.
+*	Checks if a Quote exists for a given `key`. Returns a `200 OK` status if the Quote exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyMeQuotesKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

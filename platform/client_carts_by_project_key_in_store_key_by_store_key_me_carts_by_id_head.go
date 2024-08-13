@@ -26,10 +26,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodHead) WithHead
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Checks ifa My Cart exists for a given `id`. Returns a `200 OK` status if the My Cart exists or a `404 Not Found` otherwise.
- */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}
 	resp, err := rb.client.head(

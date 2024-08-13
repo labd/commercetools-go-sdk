@@ -80,6 +80,17 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Login() *ByProjectKe
 		client:     rb.client,
 	}
 }
+
+/**
+*	Returns a Customer for a given Query Predicate in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Customer exists in the Store for the given Query Predicate.
+*	- If a Customer exists in the Store for the given Query Predicate, but does not have an `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*	- If a Customer exists for the given Query Predicate but is associated with a different Store than what is specified in the `manage_my_profile:{projectKey}:{storeKey}` scope.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/me", rb.projectKey, rb.storeKey),
@@ -87,6 +98,15 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Get() *ByProjectKeyI
 	}
 }
 
+/**
+*	Updates the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Customer exists with the `id` specified in the [customer:{id}](/scopes#customer_idid) scope.
+*	- If the Customer exists but is associated with a different Store than what is specified in the `manage_my_profile:{projectKey}:{storeKey}` scope.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost{
 		body:   body,
@@ -95,6 +115,15 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Post(body MyCustomer
 	}
 }
 
+/**
+*	Deletes the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no Customer exists with the `id` specified in the [customer:{id}](/scopes#customer_idid) scope.
+*	- If the Customer exists but is associated with a different Store than what is specified in the `manage_my_profile:{projectKey}:{storeKey}` scope.
+*
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/me", rb.projectKey, rb.storeKey),

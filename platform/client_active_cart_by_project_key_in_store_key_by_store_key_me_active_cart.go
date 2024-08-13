@@ -13,11 +13,15 @@ type ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder struct {
 }
 
 /**
-*	Retrieves the Customer's most recently modified active Cart in the Store specified by the `storeKey` path parameter.
+*	Retrieves the Customer's most recently modified [active Cart](ctp:api:type:CartState) in a Store. Returns a `200 OK` status if successful.
 *
 *	Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
 *
-*	If no active Cart exists, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no active Cart exists.
+*	- If an active Cart exists but does not have a `store` specified, or the `store` field references a different Store.
+*	- If an active Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodGet {
@@ -28,7 +32,14 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder) Get() *ByP
 }
 
 /**
-*	Checks if an active Cart exists. Returns a `200 OK` status if an active Cart exists or a `404 Not Found` otherwise.
+*	Checks if an active Cart exists in a Store. Returns `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no active Cart exists in a Store.
+*	- If an active Cart exists but does not have a `store` specified, or the `store` field references a different Store.
+*	- If an active Cart exists but does not contain a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeActiveCartRequestMethodHead{

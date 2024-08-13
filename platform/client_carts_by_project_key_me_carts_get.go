@@ -132,6 +132,11 @@ func (rb *ByProjectKeyMeCartsRequestMethodGet) WithHeaders(headers http.Header) 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns all Carts that match a given Query Predicate and contain either a matching `customerId` or `anonymousId`.
+*
+ */
 func (rb *ByProjectKeyMeCartsRequestMethodGet) Execute(ctx context.Context) (result *CartPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -56,9 +56,18 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodPost) WithHeaders(
 }
 
 /**
+*
+*	Creates a Cart in a Store for the Customer or anonymous user. The `customerId` or `anonymousId` field on the Cart is automatically set based on the [customer:{id}](/scopes#customer_idid) or [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
 *	The `store` field in the created [Cart](ctp:api:type:Cart) is set to the Store specified by the `storeKey` path parameter.
 *
-*	Specific Error Codes: [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*	Specific Error Codes:
+*
+*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {

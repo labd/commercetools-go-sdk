@@ -12,6 +12,10 @@ type ByProjectKeyMeBusinessUnitsByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Returns a Business Unit for a given `id`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
+ */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Get() *ByProjectKeyMeBusinessUnitsByIDRequestMethodGet {
 	return &ByProjectKeyMeBusinessUnitsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/business-units/%s", rb.projectKey, rb.id),
@@ -20,7 +24,7 @@ func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Get() *ByProjectKeyMeBu
 }
 
 /**
-*	Checks if a BusinessUnit exists for a given `id`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
+*	Checks if a BusinessUnit exists for a given `id`. Returns a `200 OK` status if the BusinessUnit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyMeBusinessUnitsByIDRequestMethodHead {
 	return &ByProjectKeyMeBusinessUnitsByIDRequestMethodHead{
@@ -29,16 +33,13 @@ func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyMeB
 	}
 }
 
+/**
+*	Updates a Business Unit for a given `id`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
+ */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Post(body MyBusinessUnitUpdate) *ByProjectKeyMeBusinessUnitsByIDRequestMethodPost {
 	return &ByProjectKeyMeBusinessUnitsByIDRequestMethodPost{
 		body:   body,
-		url:    fmt.Sprintf("/%s/me/business-units/%s", rb.projectKey, rb.id),
-		client: rb.client,
-	}
-}
-
-func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Delete() *ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete {
-	return &ByProjectKeyMeBusinessUnitsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/me/business-units/%s", rb.projectKey, rb.id),
 		client: rb.client,
 	}

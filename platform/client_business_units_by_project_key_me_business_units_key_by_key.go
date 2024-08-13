@@ -12,6 +12,9 @@ type ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Returns a Business Unit for a given `key`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+ */
 func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder) Get() *ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/business-units/key=%s", rb.projectKey, rb.key),
@@ -20,7 +23,7 @@ func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder) Get() *ByProjectKey
 }
 
 /**
-*	Checks if a BusinessUnit exists for a given `key`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
+*	Checks if a BusinessUnit exists for a given `key`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder) Head() *ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodHead{
@@ -29,16 +32,12 @@ func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder) Head() *ByProjectKe
 	}
 }
 
+/**
+*	Updates a Business Unit for a given `key`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+ */
 func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder) Post(body MyBusinessUnitUpdate) *ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodPost{
 		body:   body,
-		url:    fmt.Sprintf("/%s/me/business-units/key=%s", rb.projectKey, rb.key),
-		client: rb.client,
-	}
-}
-
-func (rb *ByProjectKeyMeBusinessUnitsKeyByKeyRequestBuilder) Delete() *ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodDelete {
-	return &ByProjectKeyMeBusinessUnitsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/me/business-units/key=%s", rb.projectKey, rb.key),
 		client: rb.client,
 	}

@@ -31,7 +31,6 @@ type ByProjectKeyProductsRequestMethodPostInput struct {
 	PriceCountry       *string
 	PriceCustomerGroup *string
 	PriceChannel       *string
-	LocaleProjection   []string
 	Expand             []string
 }
 
@@ -48,9 +47,6 @@ func (input *ByProjectKeyProductsRequestMethodPostInput) Values() url.Values {
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
-	}
-	for _, v := range input.LocaleProjection {
-		values.Add("localeProjection", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -90,14 +86,6 @@ func (rb *ByProjectKeyProductsRequestMethodPost) PriceChannel(v string) *ByProje
 	return rb
 }
 
-func (rb *ByProjectKeyProductsRequestMethodPost) LocaleProjection(v []string) *ByProjectKeyProductsRequestMethodPost {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsRequestMethodPostInput{}
-	}
-	rb.params.LocaleProjection = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductsRequestMethodPost) Expand(v []string) *ByProjectKeyProductsRequestMethodPost {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsRequestMethodPostInput{}
@@ -117,7 +105,7 @@ func (rb *ByProjectKeyProductsRequestMethodPost) WithHeaders(headers http.Header
 
 /**
 *	To create a new Product, send a representation that is going to become the initial _staged_ and _current_ representation of the new Product in the catalog.
-*	If [Price Selection](ctp:api:type:ProductPriceSelection) query parameters are provided, selected Prices will be added to the response.
+*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, selected Prices will be added to the response.
 *	Produces the [ProductCreated](/projects/messages#product-created) Message.
 *
  */

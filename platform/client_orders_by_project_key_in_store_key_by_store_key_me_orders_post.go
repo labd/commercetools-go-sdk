@@ -56,17 +56,26 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestMethodPost) WithHeaders
 }
 
 /**
+*
+*	Creates an Order in a Store from a Cart for the Customer or anonymous user. The `customerId` or `anonymousId` field on the Order is automatically set based on the [customer:{id}](/scopes#customer_idid) or [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
 *	The Cart must have a [shipping address set](ctp:api:type:CartSetShippingAddressAction) for taxes to be calculated. When creating [B2B Orders](/associates-overview#b2b-resources), the Customer must have the `CreateMyOrdersFromMyCarts` [Permission](ctp:api:type:Permission).
+*
+*	If the Cart's `customerId` does not match the [customer:{id}](/scopes#customer_idid) scope, or the `anonymousId` does not match the [anonymous_id:{id}](/scopes#anonymous_idid) scope, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
 *
 *	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
 *
 *	Specific Error Codes:
 *
+*	- [AssociateMissingPermission](ctp:api:type:AssociateMissingPermissionError)
+*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
+*	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
+*	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
+*	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
 *	- [OutOfStock](ctp:api:type:OutOfStockError)
 *	- [PriceChanged](ctp:api:type:PriceChangedError)
-*	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
-*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
-*	- [AssociateMissingPermission](ctp:api:type:AssociateMissingPermissionError)
+*	- [ShippingMethodDoesNotMatchCart](ctp:api:type:ShippingMethodDoesNotMatchCartError)
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestMethodPost) Execute(ctx context.Context) (result *Order, err error) {

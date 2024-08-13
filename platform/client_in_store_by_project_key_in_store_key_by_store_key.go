@@ -118,3 +118,36 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Products() *ByProjectK
 		client:     rb.client,
 	}
 }
+
+/**
+*	A request for a Quote holds product variants and can be ordered.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) QuoteRequests() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A staged quote holds the negotiation between the [Buyer](/../api/quotes-overview#buyer) and the [Seller](/../api/quotes-overview#seller).
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) StagedQuotes() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A quote holds the negotiated offer.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Quotes() *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}

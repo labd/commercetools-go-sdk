@@ -19,9 +19,9 @@ type DiscountCode struct {
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
 	// User-defined unique identifier of the DiscountCode.
 	Key *string `json:"key,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the DiscountCode.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the DiscountCode.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the DiscountCode.
 	Name *LocalizedString `json:"name,omitempty"`
@@ -92,8 +92,12 @@ type DiscountCodeDraft struct {
 	// Only active DiscountCodes can be applied to the Cart.
 	IsActive *bool `json:"isActive,omitempty"`
 	// Number of times the DiscountCode can be applied.
+	//
+	// If not set, the DiscountCode can be applied any number of times.
 	MaxApplications *int `json:"maxApplications,omitempty"`
 	// Number of times the DiscountCode can be applied per Customer.
+	//
+	// If not set, the DiscountCode can be applied any number of times.
 	MaxApplicationsPerCustomer *int `json:"maxApplicationsPerCustomer,omitempty"`
 	// Custom Fields for the DiscountCode.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -453,7 +457,9 @@ func (obj DiscountCodeSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type DiscountCodeSetMaxApplicationsAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set.
+	//
+	// If empty, any existing value will be removed and the DiscountCode can be applied any number of times.
 	MaxApplications *int `json:"maxApplications,omitempty"`
 }
 
@@ -468,7 +474,9 @@ func (obj DiscountCodeSetMaxApplicationsAction) MarshalJSON() ([]byte, error) {
 }
 
 type DiscountCodeSetMaxApplicationsPerCustomerAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set.
+	//
+	// If empty, any existing value will be removed and the DiscountCode can be applied any number of times.
 	MaxApplicationsPerCustomer *int `json:"maxApplicationsPerCustomer,omitempty"`
 }
 

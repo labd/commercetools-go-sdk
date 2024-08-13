@@ -33,11 +33,11 @@ func (rb *ByProjectKeyOrdersQuotesRequestMethodPost) WithHeaders(headers http.He
 *
 *	Specific Error Codes:
 *
-*	- [OutOfStock](ctp:api:type:OutOfStockError)
-*	- [PriceChanged](ctp:api:type:PriceChangedError)
+*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
 *	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
 *	- [InvalidOperation](ctp:api:type:InvalidOperationError)
-*	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*	- [OutOfStock](ctp:api:type:OutOfStockError)
+*	- [PriceChanged](ctp:api:type:PriceChangedError)
 *
  */
 func (rb *ByProjectKeyOrdersQuotesRequestMethodPost) Execute(ctx context.Context) (result *Order, err error) {

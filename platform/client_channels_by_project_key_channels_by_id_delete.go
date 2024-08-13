@@ -64,6 +64,11 @@ func (rb *ByProjectKeyChannelsByIDRequestMethodDelete) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns a [ReferenceExists](ctp:api:type:ReferenceExistsError) error if other resources reference the Channel to be deleted.
+*
+ */
 func (rb *ByProjectKeyChannelsByIDRequestMethodDelete) Execute(ctx context.Context) (result *Channel, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

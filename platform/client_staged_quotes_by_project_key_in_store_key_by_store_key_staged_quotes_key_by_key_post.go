@@ -11,25 +11,26 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyMeCartsKeyByKeyRequestMethodGet struct {
+type ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost struct {
+	body    StagedQuoteUpdate
 	url     string
 	client  *Client
 	headers http.Header
-	params  *ByProjectKeyMeCartsKeyByKeyRequestMethodGetInput
+	params  *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPostInput
 }
 
-func (r *ByProjectKeyMeCartsKeyByKeyRequestMethodGet) Dump() map[string]interface{} {
+func (r *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url":    r.url,
 		"params": r.params,
 	}
 }
 
-type ByProjectKeyMeCartsKeyByKeyRequestMethodGetInput struct {
+type ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPostInput struct {
 	Expand []string
 }
 
-func (input *ByProjectKeyMeCartsKeyByKeyRequestMethodGetInput) Values() url.Values {
+func (input *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPostInput) Values() url.Values {
 	values := url.Values{}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -37,34 +38,39 @@ func (input *ByProjectKeyMeCartsKeyByKeyRequestMethodGetInput) Values() url.Valu
 	return values
 }
 
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodGet) Expand(v []string) *ByProjectKeyMeCartsKeyByKeyRequestMethodGet {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost {
 	if rb.params == nil {
-		rb.params = &ByProjectKeyMeCartsKeyByKeyRequestMethodGetInput{}
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPostInput{}
 	}
 	rb.params.Expand = v
 	return rb
 }
 
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodGet) WithQueryParams(input ByProjectKeyMeCartsKeyByKeyRequestMethodGetInput) *ByProjectKeyMeCartsKeyByKeyRequestMethodGet {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPostInput) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost {
 	rb.params = &input
 	return rb
 }
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodGet) WithHeaders(headers http.Header) *ByProjectKeyMeCartsKeyByKeyRequestMethodGet {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost {
 	rb.headers = headers
 	return rb
 }
-func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *Cart, err error) {
+func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *StagedQuote, err error) {
+	data, err := serializeInput(rb.body)
+	if err != nil {
+		return nil, err
+	}
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()
 	} else {
 		queryParams = url.Values{}
 	}
-	resp, err := rb.client.get(
+	resp, err := rb.client.post(
 		ctx,
 		rb.url,
 		queryParams,
 		rb.headers,
+		data,
 	)
 
 	if err != nil {
@@ -82,6 +88,13 @@ func (rb *ByProjectKeyMeCartsKeyByKeyRequestMethodGet) Execute(ctx context.Conte
 			return nil, err
 		}
 		return result, nil
+	case 409:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

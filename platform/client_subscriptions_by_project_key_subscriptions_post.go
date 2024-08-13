@@ -29,7 +29,7 @@ func (rb *ByProjectKeySubscriptionsRequestMethodPost) WithHeaders(headers http.H
 }
 
 /**
-*	A test message is sent to ensure the correct configuration of the Destination. If the message cannot be delivered, the Subscription will not be created. The payload of the test message is a notification of type [ResourceCreated](/../api/projects/subscriptions#resourcecreateddeliverypayload) for the `resourceTypeId` `subscription`.
+*	A test notification is sent to ensure the correct configuration of the Destination. If the notification cannot be delivered, the Subscription will not be created. The payload of the test notification is of type [ResourceCreated](/../api/projects/subscriptions#resourcecreateddeliverypayload) for the `resourceTypeId` `subscription`.
 *
  */
 func (rb *ByProjectKeySubscriptionsRequestMethodPost) Execute(ctx context.Context) (result *Subscription, err error) {

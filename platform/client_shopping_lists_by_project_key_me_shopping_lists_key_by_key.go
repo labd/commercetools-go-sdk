@@ -12,6 +12,15 @@ type ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Returns a ShoppingList for a given `key`. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingList exists for the given `key`.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Get() *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/shopping-lists/key=%s", rb.projectKey, rb.key),
@@ -20,7 +29,13 @@ func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Get() *ByProjectKey
 }
 
 /**
-*	Checks if a ShoppingList exists for a given `key`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise.
+*	Checks if a ShoppingList exists for a given `key`. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingList exists for the given `key`.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
  */
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Head() *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodHead{
@@ -29,6 +44,15 @@ func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Head() *ByProjectKe
 	}
 }
 
+/**
+*	Updates a ShoppingList for a given `key`. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingList exists for the given `key`.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Post(body MyShoppingListUpdate) *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodPost{
 		body:   body,
@@ -37,6 +61,15 @@ func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Post(body MyShoppin
 	}
 }
 
+/**
+*	Deletes the ShoppingList for a given `key`. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingList exists for the given `key`.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestBuilder) Delete() *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyMeShoppingListsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/me/shopping-lists/key=%s", rb.projectKey, rb.key),

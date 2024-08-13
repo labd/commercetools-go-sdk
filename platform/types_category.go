@@ -17,9 +17,9 @@ type Category struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the Category was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that last modified the Category.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// IDs and references that created the Category.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// Name of the Category.
 	Name LocalizedString `json:"name"`

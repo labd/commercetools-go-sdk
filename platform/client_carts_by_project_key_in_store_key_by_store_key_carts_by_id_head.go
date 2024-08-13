@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodHead) WithHeader
 }
 
 /**
-*	Checks if a Cart exists for a given `id`. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise.
+*	Checks if a Cart exists for a given `id`. Returns a `200 OK` status if the Cart exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

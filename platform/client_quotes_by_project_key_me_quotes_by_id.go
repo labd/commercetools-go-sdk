@@ -20,7 +20,7 @@ func (rb *ByProjectKeyMeQuotesByIDRequestBuilder) Get() *ByProjectKeyMeQuotesByI
 }
 
 /**
-*	Checks if a Quote exists for a given `id`. Returns a `200 OK` status if the Quote exists or a `404 Not Found` otherwise.
+*	Checks if a Quote exists for a given `id`. Returns a `200 OK` status if the Quote exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyMeQuotesByIDRequestBuilder) Head() *ByProjectKeyMeQuotesByIDRequestMethodHead {
 	return &ByProjectKeyMeQuotesByIDRequestMethodHead{

@@ -53,6 +53,16 @@ func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodGet) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns a ShoppingList for a given `key`. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no ShoppingList exists for the given `key`.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*
+ */
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

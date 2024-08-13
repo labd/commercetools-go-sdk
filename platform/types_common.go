@@ -139,6 +139,23 @@ type AssetSource struct {
 }
 
 /**
+*	Indicates the source and method that indirectly created or modified the resource. This is present on resources created or updated after 1 April 2024.
+ */
+type Attribution struct {
+	// `id` of the [API Client](ctp:api:type:ApiClient) that created or modified the resource.
+	ClientId *string `json:"clientId,omitempty"`
+	// Method used to initiate the creation or modification of the resource.
+	Source AttributionSource `json:"source"`
+}
+
+type AttributionSource string
+
+const (
+	AttributionSourceImport AttributionSource = "Import"
+	AttributionSourceExport AttributionSource = "Export"
+)
+
+/**
 *	Polymorphic base type that represents a postal address and contact details.
 *	Depending on the read or write action, it can be either [Address](ctp:api:type:Address) or [AddressDraft](ctp:api:type:AddressDraft) that
 *	only differ in the data type for the optional `custom` field.
@@ -351,7 +368,7 @@ type ClientLogging struct {
 }
 
 /**
-*	Present on resources created after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+*	IDs and references that created the resource. This is present on resources created after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
  */
 type CreatedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
@@ -364,6 +381,8 @@ type CreatedBy struct {
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
+	// Indicates if the resource was created indirectly.
+	AttributedTo *Attribution `json:"attributedTo,omitempty"`
 }
 
 type DiscountedPrice struct {
@@ -498,7 +517,7 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 }
 
 /**
-*	Present on resources modified after 1 February 2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+*	IDs and references that last modified the resource. This is present on resources created or updated after 1 February 2019 except for [events not tracked](/general-concepts#events-tracked).
  */
 type LastModifiedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which modified the resource.
@@ -511,6 +530,8 @@ type LastModifiedBy struct {
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
+	// Indicates if the resource was modified indirectly.
+	AttributedTo *Attribution `json:"attributedTo,omitempty"`
 }
 
 /**
@@ -520,8 +541,7 @@ type LastModifiedBy struct {
 type LocalizedString map[string]string
 
 /**
-*	Draft type that stores amounts only in cent precision for the specified currency.
-*
+*	Draft object to store money in cent amounts for a specific currency.
  */
 type Money struct {
 	// Amount in the smallest indivisible unit of a currency, such as:
@@ -565,7 +585,7 @@ type Price struct {
 	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
-	// If set, the API uses the DiscountedPrice value for the [Line Item Price selection](ctp:api:type:LineItemPriceSelection).
+	// If set, the API uses the DiscountedPrice value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
@@ -1275,7 +1295,7 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 
 /**
 *	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](ctp:api:type:ScopedPriceSearch) is used.
+*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/../api/pricing-and-discounts-overview#scoped-price-search) is used.
 *
  */
 type ScopedPrice struct {
@@ -1363,8 +1383,7 @@ func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
 }
 
 /**
-*	Object that stores cent amounts in a specific currency.
-*
+*	Object that stores money in cent amounts of a specific currency.
  */
 type CentPrecisionMoney struct {
 	// Amount in the smallest indivisible unit of a currency, such as:
@@ -1389,7 +1408,7 @@ func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Money object that stores an amount of a fraction of the smallest indivisible unit of the specified currency.
+*	Object that stores money as a fraction of the smallest indivisible unit of a specific currency.
  */
 type HighPrecisionMoney struct {
 	// Amount in the smallest indivisible unit of a currency, such as:
@@ -1476,7 +1495,7 @@ func (obj CentPrecisionMoneyDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Money draft object to store an amount of a fraction of the smallest indivisible unit of the specified currency.
+*	Draft object to store money as a fraction of the smallest indivisible unit for a specific currency.
  */
 type HighPrecisionMoneyDraft struct {
 	// Amount in the smallest indivisible unit of a currency. This field is optional for high precision. If provided, it is checked for validity. Example:

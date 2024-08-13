@@ -132,6 +132,11 @@ func (rb *ByProjectKeyMeBusinessUnitsRequestMethodGet) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns all of the authenticated Customer’s Business Units in a Project. Returns a `200 OK` status if successful, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
+ */
 func (rb *ByProjectKeyMeBusinessUnitsRequestMethodGet) Execute(ctx context.Context) (result *BusinessUnitPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -28,7 +28,13 @@ func (rb *ByProjectKeyMeActiveCartRequestMethodHead) WithHeaders(headers http.He
 }
 
 /**
-*	Checks if an active Cart exists. Returns a `200 OK` status if an active Cart exists or a `404 Not Found` otherwise.
+*	Checks if an active Cart exists. Returns a `200 OK` status if successful.
+*
+*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*
+*	- If no active Cart exists.
+*	- If an active Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*
  */
 func (rb *ByProjectKeyMeActiveCartRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}
