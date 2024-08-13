@@ -764,6 +764,7 @@ const (
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
 	ImportResourceTypeStandalonePrice     ImportResourceType = "standalone-price"
 	ImportResourceTypeType                ImportResourceType = "type"
+	ImportResourceTypeDiscountCode        ImportResourceType = "discount-code"
 )
 
 /**

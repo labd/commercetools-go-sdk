@@ -24,7 +24,7 @@ type Record struct {
 	Type string `json:"type"`
 	// Information about the user or API Client who performed the change.
 	ModifiedBy ModifiedBy `json:"modifiedBy"`
-	// Date and time (UTC) when the change was made.
+	// Date and time (UTC) the change was made.
 	ModifiedAt string `json:"modifiedAt"`
 	// Information that describes the resource after the change.
 	Label Label `json:"label"`

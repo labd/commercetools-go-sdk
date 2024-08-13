@@ -114,8 +114,7 @@ const (
 *	Generic type to model the fields that all types of Business Units have in common.
 *
  */
-type BusinessUnit interface {
-}
+type BusinessUnit interface{}
 
 func mapDiscriminatorBusinessUnit(input interface{}) (BusinessUnit, error) {
 	var discriminator string
@@ -566,7 +565,6 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 type Company struct {
 	// Unique identifier of the Business Unit.
 	ID string `json:"id"`
-
 	// Current version of the Business Unit.
 	Version int `json:"version"`
 	// Date and time (UTC) the Business Unit was initially created.
@@ -753,7 +751,6 @@ func (obj CompanyDraft) MarshalJSON() ([]byte, error) {
 type Division struct {
 	// Unique identifier of the Business Unit.
 	ID string `json:"id"`
-
 	// Current version of the Business Unit.
 	Version int `json:"version"`
 	// Date and time (UTC) the Business Unit was initially created.

@@ -103,6 +103,12 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "discount-code":
+		obj := DiscountCodeImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -212,7 +218,7 @@ func (obj ProductVariantImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Embedded Prices](#import-embedded-prices). Contains data for [Embedded Prices](/../api/projects/products#embedded-price) to be created or updated in a Project.
+*	The request body to [import Embedded Prices](#import-embedded-prices). Contains data for [Embedded Prices](/../api/types#price) to be created or updated in a Project.
 *
  */
 type PriceImportRequest struct {
@@ -361,4 +367,23 @@ func (obj TypeImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "type", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Discount Codes](#import-discount-codes). Contains data for [Discount Codes](/../api/projects/discountCodes#discountcode) to be created or updated in a Project.
+*
+ */
+type DiscountCodeImportRequest struct {
+	// The Discount Code import resources of this request.
+	Resources []DiscountCodeImport `json:"resources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountCodeImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias DiscountCodeImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "discount-code", Alias: (*Alias)(&obj)})
 }
