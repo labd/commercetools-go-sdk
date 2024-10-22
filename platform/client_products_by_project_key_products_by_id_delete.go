@@ -115,7 +115,7 @@ func (rb *ByProjectKeyProductsByIDRequestMethodDelete) WithHeaders(headers http.
 
 /**
 *	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
-*	Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
+*	Produces the [ProductDeleted](/projects/messages/product-catalog-messages#product-deleted) Message.
  */
 func (rb *ByProjectKeyProductsByIDRequestMethodDelete) Execute(ctx context.Context) (result *Product, err error) {
 	var queryParams url.Values

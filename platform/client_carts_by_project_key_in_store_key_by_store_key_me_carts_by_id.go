@@ -20,7 +20,7 @@ type ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder struct {
 *
 *	- If no Cart exists in the Store for the given `id`.
 *	- If the Cart exists but does not belong to a Store, or the Cart's `store` field references a different Store.
-*	- If the Cart exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodGet {
@@ -44,7 +44,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder) Head() *ByP
 *
 *	- If no Cart exists in the Store for the given `id`.
 *	- If the Cart exists but does not belong to a Store, or the Cart's `store` field references a different Store.
-*	- If the Cart exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder) Post(body MyCartUpdate) *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodPost {
@@ -62,7 +62,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder) Post(body M
 *
 *	- If no Cart exists in the Store for the given `id`.
 *	- If the Cart exists in the Project but does not belong to a Store, or the Cart's `store` field references a different Store.
-*	- If the Cart exists in the Project but does not have either a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists in the Project but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodDelete {

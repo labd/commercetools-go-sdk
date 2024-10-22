@@ -84,11 +84,6 @@ func (rb *ByProjectKeyCustomersRequestBuilder) Search() *ByProjectKeyCustomersSe
 		client:     rb.client,
 	}
 }
-
-/**
-*	This endpoint provides information on the status of a Customer search for a project
-*
- */
 func (rb *ByProjectKeyCustomersRequestBuilder) SearchIndexingStatus() *ByProjectKeyCustomersSearchIndexingStatusRequestBuilder {
 	return &ByProjectKeyCustomersSearchIndexingStatusRequestBuilder{
 		projectKey: rb.projectKey,

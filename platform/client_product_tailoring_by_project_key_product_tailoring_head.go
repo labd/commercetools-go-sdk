@@ -11,25 +11,25 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead struct {
+type ByProjectKeyProductTailoringRequestMethodHead struct {
 	url     string
 	client  *Client
 	headers http.Header
-	params  *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHeadInput
+	params  *ByProjectKeyProductTailoringRequestMethodHeadInput
 }
 
-func (r *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) Dump() map[string]interface{} {
+func (r *ByProjectKeyProductTailoringRequestMethodHead) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url":    r.url,
 		"params": r.params,
 	}
 }
 
-type ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHeadInput struct {
+type ByProjectKeyProductTailoringRequestMethodHeadInput struct {
 	Where []string
 }
 
-func (input *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHeadInput) Values() url.Values {
+func (input *ByProjectKeyProductTailoringRequestMethodHeadInput) Values() url.Values {
 	values := url.Values{}
 	for _, v := range input.Where {
 		values.Add("where", fmt.Sprintf("%v", v))
@@ -37,34 +37,27 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHeadInp
 	return values
 }
 
-func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) Where(v []string) *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead {
+func (rb *ByProjectKeyProductTailoringRequestMethodHead) Where(v []string) *ByProjectKeyProductTailoringRequestMethodHead {
 	if rb.params == nil {
-		rb.params = &ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHeadInput{}
+		rb.params = &ByProjectKeyProductTailoringRequestMethodHeadInput{}
 	}
 	rb.params.Where = v
 	return rb
 }
 
-func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) WithQueryParams(input ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHeadInput) *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead {
+func (rb *ByProjectKeyProductTailoringRequestMethodHead) WithQueryParams(input ByProjectKeyProductTailoringRequestMethodHeadInput) *ByProjectKeyProductTailoringRequestMethodHead {
 	rb.params = &input
 	return rb
 }
-func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead {
+func (rb *ByProjectKeyProductTailoringRequestMethodHead) WithHeaders(headers http.Header) *ByProjectKeyProductTailoringRequestMethodHead {
 	rb.headers = headers
 	return rb
 }
 
 /**
-*	Checks if a ShoppingList exists for the given Query Predicate in a Store. Returns `200 OK` status if successful.
-*
-*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
-*
-*	- If no ShoppingLists exist for a given Query Predicate in a Store.
-*	- If a ShoppingList matches the Query Predicate but does not have a `store` specified, or the `store` field references a different Store.
-*	- If a ShoppingList exists in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
-*
+*	Checks if a ProductTailoring exists for a given Query Predicate. Returns a `200 OK` status if any ProductTailoring match the Query Predicate or a `404 Not Found` otherwise.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) Execute(ctx context.Context) error {
+func (rb *ByProjectKeyProductTailoringRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values
 	if rb.params != nil {
 		queryParams = rb.params.Values()

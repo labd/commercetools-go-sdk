@@ -19,10 +19,16 @@ type StandalonePriceImport struct {
 	// Sets the money value of this Price.
 	Value TypedMoney `json:"value"`
 	// Sets the country for which this Price is valid.
+	//
+	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
 	Country *string `json:"country,omitempty"`
 	// Sets the CustomerGroup for which this Price is valid.
+	//
+	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
-	// Sets the product distribution Channel for which this Price is valid
+	// Sets the product distribution Channel for which this Price is valid.
+	//
+	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
 	Channel *ChannelKeyReference `json:"channel,omitempty"`
 	// Sets the date from which the Price is valid.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`

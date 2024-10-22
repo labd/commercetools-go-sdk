@@ -56,7 +56,7 @@ func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestMethodPost) WithHeaders(header
 }
 
 /**
-*	Deprecated scope: `manage_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `manage_orders:{projectKey}`
  */
 func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *DiscountCode, err error) {
 	data, err := serializeInput(rb.body)

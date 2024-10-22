@@ -218,19 +218,20 @@ type ExtensionPagedQueryResponse struct {
 type ExtensionResourceTypeId string
 
 const (
-	ExtensionResourceTypeIdCart         ExtensionResourceTypeId = "cart"
-	ExtensionResourceTypeIdOrder        ExtensionResourceTypeId = "order"
-	ExtensionResourceTypeIdPayment      ExtensionResourceTypeId = "payment"
-	ExtensionResourceTypeIdCustomer     ExtensionResourceTypeId = "customer"
-	ExtensionResourceTypeIdQuoteRequest ExtensionResourceTypeId = "quote-request"
-	ExtensionResourceTypeIdStagedQuote  ExtensionResourceTypeId = "staged-quote"
-	ExtensionResourceTypeIdQuote        ExtensionResourceTypeId = "quote"
-	ExtensionResourceTypeIdBusinessUnit ExtensionResourceTypeId = "business-unit"
-	ExtensionResourceTypeIdShoppingList ExtensionResourceTypeId = "shopping-list"
+	ExtensionResourceTypeIdCart          ExtensionResourceTypeId = "cart"
+	ExtensionResourceTypeIdOrder         ExtensionResourceTypeId = "order"
+	ExtensionResourceTypeIdPayment       ExtensionResourceTypeId = "payment"
+	ExtensionResourceTypeIdCustomer      ExtensionResourceTypeId = "customer"
+	ExtensionResourceTypeIdCustomerGroup ExtensionResourceTypeId = "customer-group"
+	ExtensionResourceTypeIdQuoteRequest  ExtensionResourceTypeId = "quote-request"
+	ExtensionResourceTypeIdStagedQuote   ExtensionResourceTypeId = "staged-quote"
+	ExtensionResourceTypeIdQuote         ExtensionResourceTypeId = "quote"
+	ExtensionResourceTypeIdBusinessUnit  ExtensionResourceTypeId = "business-unit"
+	ExtensionResourceTypeIdShoppingList  ExtensionResourceTypeId = "shopping-list"
 )
 
 type ExtensionTrigger struct {
-	// `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, `quote`, and `business-unit` are supported.
+	// `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, `quote`, `business-unit`, and `shopping-list` are supported.
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
 	// `Create` and `Update` requests are supported.
 	Actions []ExtensionAction `json:"actions"`
@@ -337,7 +338,7 @@ func (obj GoogleCloudFunctionDestination) MarshalJSON() ([]byte, error) {
 *
  */
 type HttpDestination struct {
-	// URL to the target destination. If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
+	// URL to the target destination.
 	Url string `json:"url"`
 	// Authentication methods (such as `Basic` or `Bearer`).
 	Authentication HttpDestinationAuthentication `json:"authentication,omitempty"`

@@ -221,12 +221,10 @@ const (
 
 /**
 *	Sorting parameters provided with a Search request.
-*	Sorting allows you to control how results to your query are sorted.
-*	If no sorting is specified, the results are sorted by relevance in descending (`desc`) order.
 *
  */
 type SearchSorting struct {
-	// Use any searchable field of the resource as sort criterion.
+	// Use any searchable field of the resource as sort criterion, or `"score"` to sort by relevance score calculated by the API.
 	Field string `json:"field"`
 	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
 	Language *string `json:"language,omitempty"`

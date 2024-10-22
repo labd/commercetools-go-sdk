@@ -28,7 +28,7 @@ type Connector struct {
 	Configurations []ConnectorConfigurationApplication `json:"configurations"`
 	// If `true`, only Composable Commerce Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
-	// If not empty, Connectors can only be deployed in these Regions. If empty, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts).
+	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
 	// If `true`, the Connector is certified.
 	Certified bool `json:"certified"`
@@ -73,7 +73,7 @@ type ConnectorDraft struct {
 	Creator Creator `json:"creator"`
 	// GitHub repository details of the Connector.
 	Repository Repository `json:"repository"`
-	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts).
+	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
 	// Composable Commerce Projects that can access the Connector. If empty, only the creator can access this Connector.
 	PrivateProjects []string `json:"privateProjects"`
@@ -136,7 +136,7 @@ type ConnectorStaged struct {
 	Private bool `json:"private"`
 	// If `private` is true, only these Composable Commerce Projects can access the Connector.
 	PrivateProjects []string `json:"privateProjects"`
-	// If not empty, Connectors can only be deployed in these Regions. If empty, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts).
+	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
 	// Comments made during the certification process.
 	CertificationInfo *CertificationInfo `json:"certificationInfo,omitempty"`

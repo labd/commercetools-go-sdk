@@ -145,6 +145,51 @@ type Product struct {
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
 	// Type of Price to be used when looking up a price for the Product.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+	// Warnings about processing of a request.
+	// Appears in response to requests with response status code `202 Accepted`.
+	Warnings []WarningObject `json:"warnings"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *Product) UnmarshalJSON(data []byte) error {
+	type Alias Product
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Warnings {
+		var err error
+		obj.Warnings[i], err = mapDiscriminatorWarningObject(obj.Warnings[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Product) MarshalJSON() ([]byte, error) {
+	type Alias Product
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["warnings"] == nil {
+		delete(raw, "warnings")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -1094,7 +1139,7 @@ func (obj ProductAddAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required. Produces the [ProductImageAdded](/projects/messages#product-image-added) Message.
+*	Either `variantId` or `sku` is required. Produces the [ProductImageAdded](/projects/messages/product-catalog-messages#product-image-added) Message.
 *
  */
 type ProductAddExternalImageAction struct {
@@ -1145,7 +1190,7 @@ func (obj ProductAddPriceAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Produces the [ProductAddedToCategory](/projects/messages#product-added-to-category) Message.
+*	Produces the [ProductAddedToCategory](/projects/messages/product-catalog-messages#product-added-to-category) Message.
  */
 type ProductAddToCategoryAction struct {
 	// The Category to add.

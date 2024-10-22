@@ -28,8 +28,8 @@ func (rb *ByProjectKeyCustomersSearchRequestMethodHead) WithHeaders(headers http
 }
 
 /**
-*	Checks whether a search index for the Project's Customers exists.
-*	Returns a `200 OK` status if the index exists or `404 Not Found` otherwise.
+*	Checks whether a search index of Customers exists for a Project.
+*	If an index exists, a `200 OK` is returned; otherwise, a `409 Conflict`.
 *
  */
 func (rb *ByProjectKeyCustomersSearchRequestMethodHead) Execute(ctx context.Context) error {
@@ -52,8 +52,7 @@ func (rb *ByProjectKeyCustomersSearchRequestMethodHead) Execute(ctx context.Cont
 	switch resp.StatusCode {
 	case 200:
 		return nil
-	case 404:
-		return ErrNotFound
+
 	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -75,6 +74,8 @@ func (rb *ByProjectKeyCustomersSearchRequestMethodHead) Execute(ctx context.Cont
 			return err
 		}
 		return errorObj
+	case 404:
+		return ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

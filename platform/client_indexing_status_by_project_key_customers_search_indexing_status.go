@@ -11,6 +11,10 @@ type ByProjectKeyCustomersSearchIndexingStatusRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Returns the indexing status of the Customer Search for a Project.
+*
+ */
 func (rb *ByProjectKeyCustomersSearchIndexingStatusRequestBuilder) Get() *ByProjectKeyCustomersSearchIndexingStatusRequestMethodGet {
 	return &ByProjectKeyCustomersSearchIndexingStatusRequestMethodGet{
 		url:    fmt.Sprintf("/%s/customers/search/indexing-status", rb.projectKey),

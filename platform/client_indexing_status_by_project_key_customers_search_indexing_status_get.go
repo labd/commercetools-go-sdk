@@ -26,6 +26,11 @@ func (rb *ByProjectKeyCustomersSearchIndexingStatusRequestMethodGet) WithHeaders
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns the indexing status of the Customer Search for a Project.
+*
+ */
 func (rb *ByProjectKeyCustomersSearchIndexingStatusRequestMethodGet) Execute(ctx context.Context) (result *CustomerSearchIndexingStatusResponse, err error) {
 	queryParams := url.Values{}
 	resp, err := rb.client.get(

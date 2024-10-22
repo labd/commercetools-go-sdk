@@ -593,6 +593,8 @@ func mapDiscriminatorCartDiscountValue(input interface{}) (CartDiscountValue, er
 type CartDiscountValueAbsolute struct {
 	// Cent precision money values in different currencies.
 	Money []CentPrecisionMoney `json:"money"`
+	// Determines how the discount is applied on [CartDiscountLineItemTarget](ctp:api:type:CartDiscountLineItemsTarget) and [CartDiscountCustomLineItemTarget](ctp:api:type:CartDiscountCustomLineItemsTarget).
+	ApplicationMode *DiscountApplicationMode `json:"applicationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -660,6 +662,10 @@ type CartDiscountValueAbsoluteDraft struct {
 	//
 	// If the array is empty, the discount does not apply.
 	Money []Money `json:"money"`
+	// Determines how the discount applies on [CartDiscountLineItemTarget](ctp:api:type:CartDiscountLineItemsTarget) and [CartDiscountCustomLineItemTarget](ctp:api:type:CartDiscountCustomLineItemsTarget).
+	//
+	// If not set, the default behavior is `ProportionateDistribution`.
+	ApplicationMode *DiscountApplicationMode `json:"applicationMode,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -833,6 +839,18 @@ func (obj CartDiscountValueRelativeDraft) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "relative", Alias: (*Alias)(&obj)})
 }
+
+/**
+*	This mode determines how absolute Discounts are applied on Line Items or Custom Line Items.
+*
+ */
+type DiscountApplicationMode string
+
+const (
+	DiscountApplicationModeProportionateDistribution DiscountApplicationMode = "ProportionateDistribution"
+	DiscountApplicationModeEvenDistribution          DiscountApplicationMode = "EvenDistribution"
+	DiscountApplicationModeIndividualApplication     DiscountApplicationMode = "IndividualApplication"
+)
 
 /**
 *	This Discount target is similar to `MultiBuyLineItems`, but is applied on Custom Line Items instead of Line Items.

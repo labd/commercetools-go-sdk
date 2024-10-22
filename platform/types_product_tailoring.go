@@ -39,6 +39,72 @@ type ProductTailoring struct {
 	Staged ProductTailoringData `json:"staged"`
 	// `true` if the `staged` data is different from the `current` data.
 	HasStagedChanges bool `json:"hasStagedChanges"`
+	// Warnings about processing of a request.
+	// Appears in response to requests with response status code `202 Accepted`.
+	Warnings []WarningObject `json:"warnings"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductTailoring) UnmarshalJSON(data []byte) error {
+	type Alias ProductTailoring
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Warnings {
+		var err error
+		obj.Warnings[i], err = mapDiscriminatorWarningObject(obj.Warnings[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoring) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoring
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["warnings"] == nil {
+		delete(raw, "warnings")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	The same rules for `name` and `value` apply as for [Attribute](ctp:api:type:Attribute) in Product Variants.
+*
+ */
+type ProductTailoringAttribute struct {
+	// Name of the Attribute.
+	Name string `json:"name"`
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+	//   or the complete objects as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	//
+	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is not supported.
+	Value interface{} `json:"value"`
 }
 
 /**
@@ -366,6 +432,18 @@ func mapDiscriminatorProductTailoringUpdateAction(input interface{}) (ProductTai
 			return nil, err
 		}
 		return obj, nil
+	case "setAttribute":
+		obj := ProductTailoringSetAttributeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAttributeInAllVariants":
+		obj := ProductTailoringSetAttributeInAllVariantsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setDescription":
 		obj := ProductTailoringSetDescriptionAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -443,6 +521,12 @@ type ProductVariantTailoring struct {
 	// Media assets of the tailored Product Variant.
 	// If present, these assets will override the assets of the corresponding [ProductVariant](ctp:api:type:ProductVariant) in total.
 	Assets []Asset `json:"assets"`
+	// Attributes of the tailored Product Variant.
+	// If present, these Attributes are selectively merged into the `attributes` of the corresponding [ProductVariant](ctp:api:type:ProductVariant):
+	//
+	// - If the ProductVariant contains an Attribute with the same `name`, its `value` is overwritten,
+	// - otherwise the Attribute and its value are added to the ProductVariant.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -469,6 +553,10 @@ func (obj ProductVariantTailoring) MarshalJSON() ([]byte, error) {
 		delete(raw, "assets")
 	}
 
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
+	}
+
 	return json.Marshal(raw)
 
 }
@@ -486,6 +574,12 @@ type ProductVariantTailoringDraft struct {
 	Images []Image `json:"images"`
 	// Media assets of the tailored Product Variant.
 	Assets []Asset `json:"assets"`
+	// Attributes of the tailored Product Variant according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	// If provided, these Attributes are selectively merged into the `attributes` of the corresponding [ProductVariant](ctp:api:type:ProductVariant):
+	//
+	// - If the ProductVariant contains an Attribute with the same `name`, its `value` is overwritten,
+	// - otherwise the Attribute and its value are added to the ProductVariant.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -510,6 +604,10 @@ func (obj ProductVariantTailoringDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["assets"] == nil {
 		delete(raw, "assets")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	return json.Marshal(raw)
@@ -544,7 +642,7 @@ func (obj ProductTailoringAddAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImageAdded](/projects/messages#product-tailoring-image-added) Message.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImageAdded](/projects/messages/product-catalog-messages#product-tailoring-image-added) Message.
 *
  */
 type ProductTailoringAddExternalImageAction struct {
@@ -582,6 +680,8 @@ type ProductTailoringAddVariantAction struct {
 	Images []Image `json:"images"`
 	// Media assets for the Product Variant Tailoring.
 	Assets []AssetDraft `json:"assets"`
+	// Attributes for the Product Variant Tailoring.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 	// If `true` the new Product Variant Tailoring is only staged. If `false` the new Product Variant Tailoring is both current and staged.
 	Staged *bool `json:"staged,omitempty"`
 }
@@ -609,6 +709,10 @@ func (obj ProductTailoringAddVariantAction) MarshalJSON() ([]byte, error) {
 
 	if raw["assets"] == nil {
 		delete(raw, "assets")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	return json.Marshal(raw)
@@ -656,7 +760,7 @@ type ProductTailoringChangeAssetOrderAction struct {
 	Sku *string `json:"sku,omitempty"`
 	// If `true`, only the staged `assets` is updated. If `false`, both the current and staged `assets` are updated.
 	Staged *bool `json:"staged,omitempty"`
-	// All existing Asset `id`s of the ProductTailoringVariant in the desired new order.
+	// All existing Asset `id`s of the ProductVariantTailoring in the desired new order.
 	AssetOrder []string `json:"assetOrder"`
 }
 
@@ -992,6 +1096,82 @@ func (obj ProductTailoringSetAssetTagsAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Either `variantId` or `sku` is required.
+*
+ */
+type ProductTailoringSetAttributeAction struct {
+	// The `id` of the ProductVariant to update.
+	// Required if `sku` is absent.
+	VariantId *int `json:"variantId,omitempty"`
+	// The `sku` of the ProductVariant to update.
+	// Required if `variantId` is absent.
+	Sku *string `json:"sku,omitempty"`
+	// The name of the Attribute to set.
+	Name string `json:"name"`
+	// Value to set for the Attribute. If empty, any existing value will be removed.
+	//
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+	//   or the complete objects as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	//
+	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is **not supported**.
+	Value interface{} `json:"value,omitempty"`
+	// If `true`, only the staged Attribute is set. If `false`, both current and staged Attribute is set.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAttributeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAttributeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAttribute", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adds, removes, or changes a tailored Attribute in all Product Variants of a Product at the same time.
+*	This action is useful for setting tailored values for Attributes with the [Constraint](ctp:api:type:AttributeConstraintEnum) `SameForAll`.
+ */
+type ProductTailoringSetAttributeInAllVariantsAction struct {
+	// The name of the Attribute to set.
+	Name string `json:"name"`
+	// Value to set for the Attributes. If empty, any existing value will be removed.
+	//
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
+	//   or the complete objects as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	//
+	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is **not supported**.
+	Value interface{} `json:"value,omitempty"`
+	// If `true`, only the staged Attributes are set. If `false`, both the current and staged Attributes are set.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetAttributeInAllVariantsAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetAttributeInAllVariantsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAttributeInAllVariants", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generates the [ProductTailoringDescriptionSet](ctp:api:type:ProductTailoringDescriptionSetMessage) Message.
 *
  */
@@ -1013,7 +1193,7 @@ func (obj ProductTailoringSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImagesSet](/projects/messages#product-tailoring-images-set) Message.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImagesSet](/projects/messages/product-catalog-messages#product-tailoring-images-set) Message.
 *
  */
 type ProductTailoringSetExternalImagesAction struct {

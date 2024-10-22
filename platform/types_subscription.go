@@ -513,7 +513,7 @@ func (obj MessageDeliveryPayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	For supported resources and message types, see [Message Types](/../api/projects/messages#message-types). Messages will be delivered even if the Messages Query HTTP API [is not enabled](/../api/projects/messages#enable-querying-messages-via-the-api).
+*	Messages will be delivered even if the Messages Query HTTP API [is not enabled](/../api/projects/messages#enable-querying-messages-via-the-api).
 *
 *	For MessageSubscriptions, the format of the payload is [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload).
 *
@@ -571,6 +571,7 @@ const (
 	MessageSubscriptionResourceTypeIdPayment               MessageSubscriptionResourceTypeId = "payment"
 	MessageSubscriptionResourceTypeIdProduct               MessageSubscriptionResourceTypeId = "product"
 	MessageSubscriptionResourceTypeIdProductSelection      MessageSubscriptionResourceTypeId = "product-selection"
+	MessageSubscriptionResourceTypeIdProductTailoring      MessageSubscriptionResourceTypeId = "product-tailoring"
 	MessageSubscriptionResourceTypeIdQuote                 MessageSubscriptionResourceTypeId = "quote"
 	MessageSubscriptionResourceTypeIdQuoteRequest          MessageSubscriptionResourceTypeId = "quote-request"
 	MessageSubscriptionResourceTypeIdReview                MessageSubscriptionResourceTypeId = "review"
@@ -748,7 +749,7 @@ func (obj ResourceUpdatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 /**
 *	[AWS SNS](https://aws.amazon.com/sns/) can be used to push messages to AWS Lambda, HTTP endpoints (webhooks), or fan-out messages to SQS queues. The SQS queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type.
 *
-*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws-cn:iam::417094354346:user/subscriptions` if the Project is hosted in the China (AWS, Ningxia) Region; `arn:aws:iam::362576667341:user/subscriptions` for all other [Regions](/../api/general-concepts#regions). Otherwise, a test notification will not be sent.
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test notification will not be sent.
 *
 *	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
 *
@@ -780,7 +781,7 @@ func (obj SnsDestination) MarshalJSON() ([]byte, error) {
 *	[AWS SQS](https://aws.amazon.com/sqs/) is a pull-queue on AWS.
 *	The queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type with a `MaximumMessageSize` of `256 KB`.
 *
-*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws-cn:iam::417094354346:user/subscriptions` if the Project is hosted in the China (AWS, Ningxia) Region; `arn:aws:iam::362576667341:user/subscriptions` for all other [Regions](/../api/general-concepts#regions). Otherwise, a test message will not be sent.
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test message will not be sent.
 *
 *	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
 *

@@ -476,6 +476,7 @@ const (
 	ResourceTypeIdPaymentInterfaceInteraction ResourceTypeId = "payment-interface-interaction"
 	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
 	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
+	ResourceTypeIdProductTailoring            ResourceTypeId = "product-tailoring"
 	ResourceTypeIdQuote                       ResourceTypeId = "quote"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
 	ResourceTypeIdShipping                    ResourceTypeId = "shipping"

@@ -53,7 +53,7 @@ func (rb *ByProjectKeyMeRequestMethodDelete) WithHeaders(headers http.Header) *B
 }
 
 /**
-*	Deletes the Customer specified in the [customer:{id}](/scopes#customer_idid) scope. Returns a `200 OK` status if successful.
+*	Deletes the Customer specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope. Returns a `200 OK` status if successful.
  */
 func (rb *ByProjectKeyMeRequestMethodDelete) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values

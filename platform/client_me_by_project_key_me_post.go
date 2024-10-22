@@ -29,7 +29,7 @@ func (rb *ByProjectKeyMeRequestMethodPost) WithHeaders(headers http.Header) *ByP
 }
 
 /**
-*	Updates the Customer specified in the [customer:{id}](/scopes#customer_idid) scope. Returns a `200 OK` status if successful.
+*	Updates the Customer specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope. Returns a `200 OK` status if successful.
 *
  */
 func (rb *ByProjectKeyMeRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {

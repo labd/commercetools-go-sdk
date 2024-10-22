@@ -478,6 +478,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SearchNotReady":
+		obj := SearchNotReadyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SemanticError":
 		obj := SemanticErrorError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -991,7 +997,7 @@ func (obj BadGatewayError) Error() string {
 
 /**
 *	Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
-*	The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
+*	The client application should resolve the conflict (with or without involving the end user) before retrying the request.
 *
  */
 type ConcurrentModificationError struct {
@@ -6399,6 +6405,79 @@ func (obj SearchIndexingInProgressError) Error() string {
 }
 
 /**
+*	Returned if the requested search service is not ready. The search might be deactivated or indexing is in progress.
+*
+ */
+type SearchNotReadyError struct {
+	// `$Search is not ready. Check the indexing-status endpoint and that the feature has been activated in the project settings.`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SearchNotReadyError) UnmarshalJSON(data []byte) error {
+	type Alias SearchNotReadyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SearchNotReadyError) MarshalJSON() ([]byte, error) {
+	type Alias SearchNotReadyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SearchNotReady", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *SearchNotReadyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj SearchNotReadyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown SearchNotReadyError: failed to parse error response"
+}
+
+/**
 *	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct.
 *
  */
@@ -7178,6 +7257,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "SearchNotReady":
+		obj := GraphQLSearchNotReadyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SemanticError":
 		obj := GraphQLSemanticErrorError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7629,7 +7714,7 @@ func (obj *GraphQLBadGatewayError) DecodeStruct(src map[string]interface{}) erro
 
 /**
 *	Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
-*	The client application should resolve the conflict (with or without involving the end-user) before retrying the request.
+*	The client application should resolve the conflict (with or without involving the end user) before retrying the request.
 *
  */
 type GraphQLConcurrentModificationError struct {
@@ -12193,6 +12278,69 @@ func (obj GraphQLSearchIndexingInProgressError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLSearchIndexingInProgressError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned if the requested search service is not ready. The search might be deactivated or indexing is in progress.
+*
+ */
+type GraphQLSearchNotReadyError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLSearchNotReadyError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLSearchNotReadyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLSearchNotReadyError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLSearchNotReadyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "SearchNotReady", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLSearchNotReadyError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {

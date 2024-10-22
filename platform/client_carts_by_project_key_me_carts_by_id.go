@@ -18,7 +18,7 @@ type ByProjectKeyMeCartsByIDRequestBuilder struct {
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Cart exists for a given `id`.
-*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Get() *ByProjectKeyMeCartsByIDRequestMethodGet {
@@ -34,7 +34,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Get() *ByProjectKeyMeCartsByIDR
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Cart exists for a given `id`.
-*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Head() *ByProjectKeyMeCartsByIDRequestMethodHead {
@@ -50,7 +50,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Head() *ByProjectKeyMeCartsByID
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Cart exists for a given `id`.
-*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Post(body MyCartUpdate) *ByProjectKeyMeCartsByIDRequestMethodPost {
@@ -67,7 +67,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Post(body MyCartUpdate) *ByProj
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Cart exists for a given `id`.
-*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Delete() *ByProjectKeyMeCartsByIDRequestMethodDelete {

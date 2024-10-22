@@ -12,6 +12,9 @@ type ByProjectKeyMePaymentsByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Returns a [Payment](/projects/me-payments#mypayment) for a given `id`.
+ */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Get() *ByProjectKeyMePaymentsByIDRequestMethodGet {
 	return &ByProjectKeyMePaymentsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/payments/%s", rb.projectKey, rb.id),
@@ -20,7 +23,7 @@ func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Get() *ByProjectKeyMePayment
 }
 
 /**
-*	Checks if a Payment exists for a given `id`. Returns a `200 OK` status if the Payment exists or a `404 Not Found` otherwise.
+*	Checks if a [Payment](/projects/me-payments#mypayment) exists for a given `id`. Returns a `200 OK` status if the Payment exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Head() *ByProjectKeyMePaymentsByIDRequestMethodHead {
 	return &ByProjectKeyMePaymentsByIDRequestMethodHead{
@@ -30,7 +33,8 @@ func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Head() *ByProjectKeyMePaymen
 }
 
 /**
-*	This endpoint can only update a Payment when it has no [Transactions](ctp:api:type:Transaction).
+*	Updates a [Payment](/projects/me-payments#mypayment) for a given `id`.
+*	You can only update a [Payment](/projects/me-payments#mypayment) if it has no [Transactions](ctp:api:type:Transaction).
 *
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Post(body MyPaymentUpdate) *ByProjectKeyMePaymentsByIDRequestMethodPost {
@@ -42,7 +46,8 @@ func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Post(body MyPaymentUpdate) *
 }
 
 /**
-*	This endpoint can only delete a Payment when it has no [Transactions](ctp:api:type:Transaction).
+*	Deletes the [Payment](/projects/me-payments#mypayment) for a given `id`.
+*	You can only delete a [Payment](/projects/me-payments#mypayment) if it has no [Transactions](ctp:api:type:Transaction).
 *
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Delete() *ByProjectKeyMePaymentsByIDRequestMethodDelete {

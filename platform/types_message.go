@@ -15253,6 +15253,9 @@ type ProductVariantDeletedMessage struct {
 	Variant *ProductVariant `json:"variant,omitempty"`
 	// List of image URLs that were removed with the [Remove Product Variant](ctp:api:type:ProductRemoveVariantAction) update action.
 	RemovedImageUrls []string `json:"removedImageUrls"`
+	// If `true`, this message informs that only the staged ProductVariant has been removed by the update action.
+	// If `false`, both the current and staged ProductVariant have been removed.
+	Staged bool `json:"staged"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -24181,6 +24184,9 @@ type ProductVariantDeletedMessagePayload struct {
 	Variant *ProductVariant `json:"variant,omitempty"`
 	// List of image URLs that were removed with the [Remove Product Variant](ctp:api:type:ProductRemoveVariantAction) update action.
 	RemovedImageUrls []string `json:"removedImageUrls"`
+	// If `true`, this message informs that only the staged ProductVariant has been removed by the update action.
+	// If `false`, both the current and staged ProductVariant have been removed.
+	Staged bool `json:"staged"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -132,6 +132,10 @@ func (rb *ByProjectKeyMePaymentsRequestMethodGet) WithHeaders(headers http.Heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Returns all [Payments](/projects/me-payments#mypayment) that match a given Query Predicate.
+ */
 func (rb *ByProjectKeyMePaymentsRequestMethodGet) Execute(ctx context.Context) (result *MyPaymentPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

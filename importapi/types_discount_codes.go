@@ -19,6 +19,8 @@ type DiscountCodeImport struct {
 	// Maps to `DiscountCode.description`.
 	Description *LocalizedString `json:"description,omitempty"`
 	// User-defined unique identifier of the DiscountCode that is used by the customer to apply the discount.
+	//
+	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
 	Code string `json:"code"`
 	// Reference to CartDiscounts that can be applied to the Cart once the DiscountCode is applied.
 	CartDiscounts []CartDiscountKeyReference `json:"cartDiscounts"`

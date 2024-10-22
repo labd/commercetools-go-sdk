@@ -67,7 +67,7 @@ const (
 *
  */
 type ExternalOAuth struct {
-	// URL with authorization header. If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
+	// URL with authorization header.
 	Url string `json:"url"`
 	// Must not contain any leading or trailing whitespaces. Partially hidden on retrieval.
 	AuthorizationHeader string `json:"authorizationHeader"`
@@ -88,16 +88,6 @@ type ProductSearchIndexingMode string
 const (
 	ProductSearchIndexingModeProductProjectionsSearch ProductSearchIndexingMode = "ProductProjectionsSearch"
 	ProductSearchIndexingModeProductsSearch           ProductSearchIndexingMode = "ProductsSearch"
-)
-
-/**
-*	Specifies the status of the [Product Search](/../api/projects/product-search) index.
- */
-type ProductSearchStatus string
-
-const (
-	ProductSearchStatusActivated   ProductSearchStatus = "Activated"
-	ProductSearchStatusDeactivated ProductSearchStatus = "Deactivated"
 )
 
 type Project struct {
@@ -309,6 +299,8 @@ type SearchIndexingConfiguration struct {
 	ProductsSearch *SearchIndexingConfigurationValues `json:"productsSearch,omitempty"`
 	// Configuration for the [Order Search](/../api/projects/order-search) feature.
 	Orders *SearchIndexingConfigurationValues `json:"orders,omitempty"`
+	// Configuration for the [Customer Search](/../api/projects/customer-search) feature.
+	Customers *SearchIndexingConfigurationValues `json:"customers,omitempty"`
 }
 
 /**

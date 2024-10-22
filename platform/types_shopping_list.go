@@ -464,7 +464,7 @@ type ShoppingListAddLineItemAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// Number of Products in the ShoppingListLineItem.
 	Quantity *int `json:"quantity,omitempty"`
-	// Date and time the TextLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
+	// Date and time the ShoppingListLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
 	// Custom Fields defined for the ShoppingListLineItem.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`

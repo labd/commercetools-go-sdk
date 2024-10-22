@@ -33,6 +33,16 @@ func (rb *ByProjectKeyProductTailoringRequestBuilder) Get() *ByProjectKeyProduct
 }
 
 /**
+*	Checks if a ProductTailoring exists for a given Query Predicate. Returns a `200 OK` status if any ProductTailoring match the Query Predicate or a `404 Not Found` otherwise.
+ */
+func (rb *ByProjectKeyProductTailoringRequestBuilder) Head() *ByProjectKeyProductTailoringRequestMethodHead {
+	return &ByProjectKeyProductTailoringRequestMethodHead{
+		url:    fmt.Sprintf("/%s/product-tailoring", rb.projectKey),
+		client: rb.client,
+	}
+}
+
+/**
 *	Generates the [ProductTailoringCreated](ctp:api:type:ProductTailoringCreatedMessage) Message.
 *
  */

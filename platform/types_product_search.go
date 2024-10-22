@@ -91,6 +91,10 @@ type ProductSearchMatchingVariants struct {
 	MatchedVariants []ProductSearchMatchingVariantEntry `json:"matchedVariants"`
 }
 
+/**
+*	The query parameters used for [data integration with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters).
+*
+ */
 type ProductSearchProjectionParams struct {
 	// Expands a `value` of type [Reference](ctp:api:type:Reference) in a [ProductProjection](ctp:api:type:ProductProjection).
 	// In case the referenced object does not exist, the API returns the non-expanded reference.
@@ -146,16 +150,16 @@ func (obj ProductSearchProjectionParams) MarshalJSON() ([]byte, error) {
 type ProductSearchRequest struct {
 	// The search query against [searchable Product fields](/../api/projects/product-search#searchable-product-fields).
 	Query *SearchQuery `json:"query,omitempty"`
-	// Controls how results to your query are sorted. If not provided, the results are sorted by relevance in descending order.
+	// Controls how results to your query are [sorted](/../api/projects/product-search#sorting).
+	// If not provided, the results are sorted by relevance score in descending order.
 	Sort []SearchSorting `json:"sort"`
-	// The maximum number of search results to be returned.
+	// The maximum number of search results to be returned in one [page](/../api/projects/product-search#pagination).
 	Limit *int `json:"limit,omitempty"`
-	// The number of search results to be skipped in the response for pagination.
+	// The number of search results to be skipped in the response for [pagination](/../api/projects/product-search#pagination).
 	Offset *int `json:"offset,omitempty"`
 	// The search can return Products where not all Product Variants match the search criteria. If `true`, the response will include a field called `matchingVariants` that contains the `sku` of Product Variants that match the search query. If the query does not specify any variant-level criteria, `matchingVariants` will be null signifying that all Product Variants are a match.
 	MarkMatchingVariants *bool `json:"markMatchingVariants,omitempty"`
-	// Set this field to `{}` to get the [ProductProjection](ctp:api:type:ProductProjection) included in the [ProductSearchResult](ctp:api:type:ProductSearchResult).
-	// Include query parameters for controlling [Reference Expansion](/../api/general-concepts#reference-expansion) or [projections](/../api/projects/productProjections#projection-dimensions) according to your needs.
+	// Controls data integration [with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters).
 	// If not set, the result does not include the Product Projection.
 	ProductProjectionParameters *ProductSearchProjectionParams `json:"productProjectionParameters,omitempty"`
 	// Set this field to request [facets](/../api/projects/product-search#facets).

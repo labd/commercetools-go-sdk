@@ -139,7 +139,7 @@ func (rb *ByProjectKeyMeRequestMethodGet) WithHeaders(headers http.Header) *ByPr
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Customer exists for the given Query Predicate.
-*	- If a Customer exists for the given Query Predicate, but does not have an `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*	- If a Customer exists for the given Query Predicate, but does not have an `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeRequestMethodGet) Execute(ctx context.Context) (result *Customer, err error) {

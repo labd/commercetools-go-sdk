@@ -134,7 +134,7 @@ func (rb *ByProjectKeyMessagesRequestMethodGet) WithHeaders(headers http.Header)
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyMessagesRequestMethodGet) Execute(ctx context.Context) (result *MessagePagedQueryResponse, err error) {
 	var queryParams url.Values

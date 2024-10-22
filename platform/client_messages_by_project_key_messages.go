@@ -20,7 +20,7 @@ func (rb *ByProjectKeyMessagesRequestBuilder) WithId(id string) *ByProjectKeyMes
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyMessagesRequestBuilder) Get() *ByProjectKeyMessagesRequestMethodGet {
 	return &ByProjectKeyMessagesRequestMethodGet{

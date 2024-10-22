@@ -27,7 +27,7 @@ func (rb *ByProjectKeyDiscountCodesRequestBuilder) WithKey(key string) *ByProjec
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyDiscountCodesRequestBuilder) Get() *ByProjectKeyDiscountCodesRequestMethodGet {
 	return &ByProjectKeyDiscountCodesRequestMethodGet{
@@ -49,7 +49,7 @@ func (rb *ByProjectKeyDiscountCodesRequestBuilder) Head() *ByProjectKeyDiscountC
 /**
 *	Creating a Discount Code produces the [DiscountCodeCreated](ctp:api:type:DiscountCodeCreatedMessage) Message.
 *
-*	Deprecated scope: `manage_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `manage_orders:{projectKey}`
 *
  */
 func (rb *ByProjectKeyDiscountCodesRequestBuilder) Post(body DiscountCodeDraft) *ByProjectKeyDiscountCodesRequestMethodPost {

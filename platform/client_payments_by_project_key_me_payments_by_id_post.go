@@ -56,7 +56,8 @@ func (rb *ByProjectKeyMePaymentsByIDRequestMethodPost) WithHeaders(headers http.
 }
 
 /**
-*	This endpoint can only update a Payment when it has no [Transactions](ctp:api:type:Transaction).
+*	Updates a [Payment](/projects/me-payments#mypayment) for a given `id`.
+*	You can only update a [Payment](/projects/me-payments#mypayment) if it has no [Transactions](ctp:api:type:Transaction).
 *
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestMethodPost) Execute(ctx context.Context) (result *MyPayment, err error) {

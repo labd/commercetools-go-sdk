@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMessagesByIDRequestMethodGet) WithHeaders(headers http.Hea
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyMessagesByIDRequestMethodGet) Execute(ctx context.Context) (result *Message, err error) {
 	var queryParams url.Values

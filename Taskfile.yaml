@@ -29,7 +29,6 @@ tasks:
       - task: generate-connect
       - task: generate-importapi
 #      - task: generate-frontend
-#      - task: generate-ml
       - task: generate-platform
       - task: generate-history
 
@@ -52,11 +51,6 @@ tasks:
     cmds:
       - task: generate-api
         vars: {apiName: frontend, path: frontend-api}
-
-  generate-ml:
-    cmds:
-      - task: generate-api
-        vars: {apiName: ml, path: ml}
 
   generate-platform:
     cmds:

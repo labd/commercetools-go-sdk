@@ -13,7 +13,7 @@ type ByProjectKeyDiscountCodesKeyByKeyRequestBuilder struct {
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestBuilder) Get() *ByProjectKeyDiscountCodesKeyByKeyRequestMethodGet {
 	return &ByProjectKeyDiscountCodesKeyByKeyRequestMethodGet{
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestBuilder) Head() *ByProjectKeyD
 }
 
 /**
-*	Deprecated scope: `manage_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `manage_orders:{projectKey}`
  */
 func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestBuilder) Post(body DiscountCodeUpdate) *ByProjectKeyDiscountCodesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyDiscountCodesKeyByKeyRequestMethodPost{
@@ -46,7 +46,7 @@ func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestBuilder) Post(body DiscountCod
 /**
 *	Deleting a Discount Code produces the [DiscountCodeDeleted](ctp:api:type:DiscountCodeDeletedMessage) Message.
 *
-*	Deprecated scope: `manage_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `manage_orders:{projectKey}`
 *
  */
 func (rb *ByProjectKeyDiscountCodesKeyByKeyRequestBuilder) Delete() *ByProjectKeyDiscountCodesKeyByKeyRequestMethodDelete {

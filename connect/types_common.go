@@ -111,8 +111,10 @@ type ApplicationDeployment struct {
 	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
 	// URL generated after deployment of service applications.
 	Url *string `json:"url,omitempty"`
-	// Pub/Sub Topic generated after deployment of event applications.
+	// Google Cloud Pub/Sub Topic generated after deployment of event applications.
 	Topic *string `json:"topic,omitempty"`
+	// Azure Service Bus connection string generated after deployment of event applications.
+	ConnectionString *string `json:"connectionString,omitempty"`
 	// Cron schedule for job applications.
 	Schedule *string `json:"schedule,omitempty"`
 }
@@ -335,6 +337,7 @@ const (
 	RegionEuropeWest1Gcp         Region = "europe-west1.gcp"
 	RegionUsCentral1Gcp          Region = "us-central1.gcp"
 	RegionAustraliaSoutheast1Gcp Region = "australia-southeast1.gcp"
+	RegionEastusAzure            Region = "eastus.azure"
 )
 
 /**

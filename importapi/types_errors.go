@@ -170,6 +170,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "InvalidFieldUpdate":
+		obj := InvalidFieldsUpdateError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "InvalidJsonInput":
 		obj := InvalidJsonInput{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -232,6 +238,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "Generic":
 		obj := GenericError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ReferencedResourceNotFound":
+		obj := ReferencedResourceNotFound{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -587,6 +599,34 @@ func (obj InvalidFieldError) Error() string {
 }
 
 /**
+*	Returned when a field cannot be updated.
+*
+ */
+type InvalidFieldsUpdateError struct {
+	// `"The following fields are currently not supported for changes/updates"`
+	Message string `json:"message"`
+	// Fields that cannot be updated.
+	Fields []string `json:"fields"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InvalidFieldsUpdateError) MarshalJSON() ([]byte, error) {
+	type Alias InvalidFieldsUpdateError
+	return json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "InvalidFieldUpdate", Alias: (*Alias)(&obj)})
+}
+
+func (obj InvalidFieldsUpdateError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown InvalidFieldsUpdateError: failed to parse error response"
+}
+
+/**
 *	An invalid JSON input has been sent to the service.
 *	Either the JSON is syntactically incorrect or the JSON has an unexpected shape, for example, a required field is missing.
 *	The client application should validate the input according to the constraints described in the error message before sending the request again.
@@ -837,4 +877,29 @@ func (obj GenericError) Error() string {
 		return obj.Message
 	}
 	return "unknown GenericError: failed to parse error response"
+}
+
+/**
+*	Returned when a resource referenced by a [Reference](/../api/types#reference) or a [ResourceIdentifier](/../api/types#resourceidentifier) could not be found.
+*
+ */
+type ReferencedResourceNotFound struct {
+	// `"The referenced object of type $typeId $predicate was not found. It either doesn't exist, or it can't be accessed from this endpoint (e.g., if the endpoint filters by store or customer account)."`
+	Message string `json:"message"`
+	// Type of referenced resource.
+	TypeId ReferenceType `json:"typeId"`
+	// Unique identifier of the referenced resource, if known.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the referenced resource, if known.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ReferencedResourceNotFound) MarshalJSON() ([]byte, error) {
+	type Alias ReferencedResourceNotFound
+	return json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ReferencedResourceNotFound", Alias: (*Alias)(&obj)})
 }

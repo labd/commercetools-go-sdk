@@ -27,6 +27,11 @@ func (rb *ByProjectKeyCustomersSearchRequestMethodPost) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	A [SearchNotReady](ctp:api:type:SearchNotReadyError) error is returned if the indexing is in progress or the feature is deactivated. If deactivated, you can [reactivate](/../api/projects/customer-search#reactivate) it.
+*
+ */
 func (rb *ByProjectKeyCustomersSearchRequestMethodPost) Execute(ctx context.Context) (result *CustomerPagedSearchResponse, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

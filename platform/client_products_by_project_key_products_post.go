@@ -106,7 +106,7 @@ func (rb *ByProjectKeyProductsRequestMethodPost) WithHeaders(headers http.Header
 /**
 *	To create a new Product, send a representation that is going to become the initial _staged_ and _current_ representation of the new Product in the catalog.
 *	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, selected Prices will be added to the response.
-*	Produces the [ProductCreated](/projects/messages#product-created) Message.
+*	Produces the [ProductCreated](/projects/messages/product-catalog-messages#product-created) Message.
 *
  */
 func (rb *ByProjectKeyProductsRequestMethodPost) Execute(ctx context.Context) (result *Product, err error) {

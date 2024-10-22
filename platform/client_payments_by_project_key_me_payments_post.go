@@ -56,6 +56,7 @@ func (rb *ByProjectKeyMePaymentsRequestMethodPost) WithHeaders(headers http.Head
 }
 
 /**
+*	Creates a [Payment](/projects/me-payments#mypayment) for the Customer or an anonymous user.
 *	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
 *
  */

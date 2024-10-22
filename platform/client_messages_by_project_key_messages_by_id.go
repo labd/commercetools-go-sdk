@@ -13,7 +13,7 @@ type ByProjectKeyMessagesByIDRequestBuilder struct {
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyMessagesByIDRequestBuilder) Get() *ByProjectKeyMessagesByIDRequestMethodGet {
 	return &ByProjectKeyMessagesByIDRequestMethodGet{

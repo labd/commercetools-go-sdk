@@ -55,7 +55,7 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestMethodGet) WithHeaders(headers htt
 }
 
 /**
-*	Deprecated scope: `view_orders:{projectKey}`
+*	Deprecated OAuth 2.0 Scope: `view_orders:{projectKey}`
  */
 func (rb *ByProjectKeyDiscountCodesByIDRequestMethodGet) Execute(ctx context.Context) (result *DiscountCode, err error) {
 	var queryParams url.Values

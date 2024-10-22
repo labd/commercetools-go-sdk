@@ -72,7 +72,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodDelete) WithHe
 *
 *	- If no Cart exists in the Store for the given `id`.
 *	- If the Cart exists in the Project but does not belong to a Store, or the Cart's `store` field references a different Store.
-*	- If the Cart exists in the Project but does not have either a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Cart exists in the Project but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodDelete) Execute(ctx context.Context) (result *Cart, err error) {

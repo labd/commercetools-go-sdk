@@ -373,7 +373,7 @@ type ClientLogging struct {
 type CreatedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header or [`external_user_id:{externalUserId}`](/../api/scopes#external_user_idexternaluserid) scope.
+	// [External user ID](/../api/general-concepts#external-user-ids) provided by the `X-External-User-ID` HTTP Header or `external_user_id:{externalUserId}` [scope](/../api/scopes#external-oauth).
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who created the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -461,7 +461,7 @@ func (obj GeoJsonPoint) MarshalJSON() ([]byte, error) {
 }
 
 type Image struct {
-	// URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant). If the Project is hosted in the China (AWS, Ningxia) Region, verify that the URL is not blocked due to firewall restrictions.
+	// URL of the image in its original size that must be unique within a single [ProductVariant](ctp:api:type:ProductVariant).
 	Url string `json:"url"`
 	// Dimensions of the original image.
 	Dimensions ImageDimensions `json:"dimensions"`
@@ -522,7 +522,7 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 type LastModifiedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which modified the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header or [`external_user_id:{externalUserId}`](/../api/scopes#external_user_idexternaluserid) scope.
+	// [External user ID](/../api/general-concepts#external-user-ids) provided by the `X-External-User-ID` HTTP Header or `external_user_id:{externalUserId}` [scope](/../api/scopes#external-oauth).
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`

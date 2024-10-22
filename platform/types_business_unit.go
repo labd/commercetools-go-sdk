@@ -1345,7 +1345,7 @@ func (obj BusinessUnitSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 *
  */
 type BusinessUnitSetAssociatesAction struct {
-	// The new list of Associates. If not provided, any existing list is removed.
+	// The new list of Associates. If empty, existing values will be removed.
 	Associates []AssociateDraft `json:"associates"`
 }
 

@@ -62,7 +62,7 @@ func (rb *ByProjectKeyProductsByIDRequestBuilder) Post(body ProductUpdate) *ByPr
 
 /**
 *	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
-*	Produces the [ProductDeleted](/projects/messages#product-deleted) Message.
+*	Produces the [ProductDeleted](/projects/messages/product-catalog-messages#product-deleted) Message.
  */
 func (rb *ByProjectKeyProductsByIDRequestBuilder) Delete() *ByProjectKeyProductsByIDRequestMethodDelete {
 	return &ByProjectKeyProductsByIDRequestMethodDelete{

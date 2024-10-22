@@ -20,7 +20,7 @@ type ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestBuilder struct {
 *
 *	- If no Order exists in the Store for the given `id`.
 *	- If the Order exists but does not have a `store` specified, or the `store` field references a different Store.
-*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestMethodGet {
@@ -37,7 +37,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestBuilder) Get() *ByP
 *
 *	- If no Order exists in the Store for the given `id`.
 *	- If the Order exists but does not have a `store` specified, or the `store` field references a different Store.
-*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#customer_idid) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope.
+*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestMethodHead {

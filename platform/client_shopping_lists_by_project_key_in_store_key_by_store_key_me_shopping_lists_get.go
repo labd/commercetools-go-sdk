@@ -140,7 +140,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodGet) WithH
 *
 *	- If no ShoppingLists exist in a Store.
 *	- If a ShoppingList exists but does not have a `store` specified, or the `store` field references a different Store.
-*	- If a ShoppingList exists in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#anonymous_idid) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#customer_idid) scope.
+*	- If a ShoppingList exists in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodGet) Execute(ctx context.Context) (result *ShoppingListPagedQueryResponse, err error) {
