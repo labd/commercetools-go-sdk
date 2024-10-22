@@ -1,0 +1,3 @@
+kind: Fixed
+body: Use go version from go mod for tests
+time: 2024-10-22T10:46:59.499310463+02:00
