@@ -28,7 +28,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyImportSummariesRequest
 }
 
 /**
-*	Retrieves an [ImportSummary](ctp:import:type:ImportSummary) for the given import container. An [ImportSummary](ctp:import:type:ImportSummary) is calculated on demand.
+*	Retrieves an [ImportSummary](ctp:import:type:ImportSummary) for the [ImportContainer](ctp:import:type:ImportContainer) with the provided `importContainerKey`.
 *
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyImportSummariesRequestMethodGet) Execute(ctx context.Context) (result *ImportSummary, err error) {

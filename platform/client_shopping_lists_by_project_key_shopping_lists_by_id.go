@@ -12,6 +12,9 @@ type ByProjectKeyShoppingListsByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a ShoppingList with the provided `id`.
+ */
 func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Get() *ByProjectKeyShoppingListsByIDRequestMethodGet {
 	return &ByProjectKeyShoppingListsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/shopping-lists/%s", rb.projectKey, rb.id),
@@ -20,7 +23,7 @@ func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Get() *ByProjectKeyShoppi
 }
 
 /**
-*	Checks if a ShoppingList exists for a given `id`. Returns a `200 OK` status if the ShoppingList exists or a `404 Not Found` otherwise.
+*	Checks if a ShoppingList exists with the provided `id`. Returns a `200 OK` status if the ShoppingList exists, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Head() *ByProjectKeyShoppingListsByIDRequestMethodHead {
 	return &ByProjectKeyShoppingListsByIDRequestMethodHead{
@@ -29,6 +32,9 @@ func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Head() *ByProjectKeyShopp
 	}
 }
 
+/**
+*	Updates a ShoppingList in the Project using one or more [update actions](/../api/projects/shoppingLists#update-actions).
+ */
 func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Post(body ShoppingListUpdate) *ByProjectKeyShoppingListsByIDRequestMethodPost {
 	return &ByProjectKeyShoppingListsByIDRequestMethodPost{
 		body:   body,
@@ -37,6 +43,9 @@ func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Post(body ShoppingListUpd
 	}
 }
 
+/**
+*	Deletes a ShoppingList in the Project.
+ */
 func (rb *ByProjectKeyShoppingListsByIDRequestBuilder) Delete() *ByProjectKeyShoppingListsByIDRequestMethodDelete {
 	return &ByProjectKeyShoppingListsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/shopping-lists/%s", rb.projectKey, rb.id),

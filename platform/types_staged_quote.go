@@ -31,7 +31,7 @@ type StagedQuote struct {
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
 	// [Cart](ctp:api:type:Cart) containing the offered items. May contain either [DirectDiscounts](ctp:api:type:DirectDiscount) or [CartDiscounts](ctp:api:type:CartDiscount).
 	QuotationCart CartReference `json:"quotationCart"`
-	// Expiration date for the Quote.
+	// Expiration date for the Quote. Once a Quote expires, it cannot be ordered.
 	ValidTo *time.Time `json:"validTo,omitempty"`
 	// Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
 	SellerComment *string `json:"sellerComment,omitempty"`
@@ -43,7 +43,7 @@ type StagedQuote struct {
 	// The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
 	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
 	Store *StoreKeyReference `json:"store,omitempty"`

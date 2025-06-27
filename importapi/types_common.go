@@ -12,24 +12,13 @@ type Asset struct {
 	// Asset keys are unique inside their container (a product variant or a category).
 	Key     string        `json:"key"`
 	Sources []AssetSource `json:"sources"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// Name of the Asset.
 	Name LocalizedString `json:"name"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// Description of the Asset.
 	Description *LocalizedString `json:"description,omitempty"`
-	Tags        []string         `json:"tags"`
-	// The representation to be sent to the server when creating a resource with custom fields.
+	// Keywords for categorizing and organizing Assets.
+	Tags []string `json:"tags"`
+	// Custom Fields defined for the Asset.
 	Custom *Custom `json:"custom,omitempty"`
 }
 
@@ -184,6 +173,12 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "key-value-document":
+		obj := CustomObjectKeyReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "discount-code":
 		obj := DiscountCodeKeyReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -262,20 +257,15 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "key-value-document":
-		obj := CustomObjectKeyReference{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	}
 	return nil, nil
 }
 
 /**
-*	References a cart by key.
+*	Used by the [Import API](/import-export/overview) to identify a Cart
  */
 type CartKeyReference struct {
+	// User-defined unique identifier of the referenced Cart.
 	Key string `json:"key"`
 }
 
@@ -290,9 +280,10 @@ func (obj CartKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a cart discount by key.
+*	Used by the [Import API](/import-export/overview) to identify a CartDiscount.
  */
 type CartDiscountKeyReference struct {
+	// User-defined unique identifier of the referenced CartDiscount.
 	Key string `json:"key"`
 }
 
@@ -307,9 +298,10 @@ func (obj CartDiscountKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a category by key.
+*	Used by the [Import API](/import-export/overview) to identify a Category.
  */
 type CategoryKeyReference struct {
+	// User-defined unique identifier of the referenced Category.
 	Key string `json:"key"`
 }
 
@@ -324,9 +316,10 @@ func (obj CategoryKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a channel by key.
+*	Used by the [Import API](/import-export/overview) to identify a Channel.
  */
 type ChannelKeyReference struct {
+	// User-defined unique identifier of the referenced Channel.
 	Key string `json:"key"`
 }
 
@@ -341,9 +334,10 @@ func (obj ChannelKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a customer by key.
+*	Used by the [Import API](/import-export/overview) to identify a Customer.
  */
 type CustomerKeyReference struct {
+	// User-defined unique identifier of the referenced Customer.
 	Key string `json:"key"`
 }
 
@@ -358,9 +352,10 @@ func (obj CustomerKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a customer group by key.
+*	Used by the [Import API](/import-export/overview) to identify a CustomerGroup.
  */
 type CustomerGroupKeyReference struct {
+	// User-defined unique identifier of the referenced CustomerGroup.
 	Key string `json:"key"`
 }
 
@@ -375,9 +370,30 @@ func (obj CustomerGroupKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a discount code by key.
+*	Used by the [Import API](/import-export/overview) to identify a CustomObject.
+ */
+type CustomObjectKeyReference struct {
+	// User-defined unique identifier of the referenced CustomObject.
+	Key string `json:"key"`
+	// The `container` of the referenced CustomObject.
+	Container string `json:"container"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomObjectKeyReference) MarshalJSON() ([]byte, error) {
+	type Alias CustomObjectKeyReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "key-value-document", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Used by the [Import API](/import-export/overview) to identify a DiscountCode.
  */
 type DiscountCodeKeyReference struct {
+	// User-defined unique identifier of the referenced DiscountCode.
 	Key string `json:"key"`
 }
 
@@ -395,6 +411,8 @@ func (obj DiscountCodeKeyReference) MarshalJSON() ([]byte, error) {
 *	References an order by key.
  */
 type OrderKeyReference struct {
+	// User-defined unique identifier of the referenced resource.
+	// If the referenced resource does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced resource is created.
 	Key string `json:"key"`
 }
 
@@ -409,9 +427,10 @@ func (obj OrderKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a payment by key.
+*	Used by the [Import API](/import-export/overview) to identify a Payment.
  */
 type PaymentKeyReference struct {
+	// User-defined unique identifier of the referenced Payment.
 	Key string `json:"key"`
 }
 
@@ -426,9 +445,10 @@ func (obj PaymentKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a price by key.
+*	Used by the [Import API](/import-export/overview) to identify an Embedded Price.
  */
 type PriceKeyReference struct {
+	// User-defined unique identifier of the referenced Embedded Price.
 	Key string `json:"key"`
 }
 
@@ -443,9 +463,10 @@ func (obj PriceKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a product by key.
+*	Used by the [Import API](/import-export/overview) to identify a Product.
  */
 type ProductKeyReference struct {
+	// User-defined unique identifier of the referenced Product.
 	Key string `json:"key"`
 }
 
@@ -460,9 +481,10 @@ func (obj ProductKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a product discount by key.
+*	Used by the [Import API](/import-export/overview) to identify a ProductDiscount.
  */
 type ProductDiscountKeyReference struct {
+	// User-defined unique identifier of the referenced ProductDiscount.
 	Key string `json:"key"`
 }
 
@@ -477,9 +499,10 @@ func (obj ProductDiscountKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a product type by key.
+*	Used by the [Import API](/import-export/overview) to identify a ProductType.
  */
 type ProductTypeKeyReference struct {
+	// User-defined unique identifier of the referenced ProductType.
 	Key string `json:"key"`
 }
 
@@ -494,9 +517,10 @@ func (obj ProductTypeKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a product variant by key.
+*	Used by the [Import API](/import-export/overview) to identify a ProductVariant.
  */
 type ProductVariantKeyReference struct {
+	// User-defined unique identifier of the referenced ProductVariant.
 	Key string `json:"key"`
 }
 
@@ -511,9 +535,10 @@ func (obj ProductVariantKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a shipping method by key.
+*	Used by the [Import API](/import-export/overview) to identify a ShippingMethod.
  */
 type ShippingMethodKeyReference struct {
+	// User-defined unique identifier of the referenced ShippingMethod.
 	Key string `json:"key"`
 }
 
@@ -528,9 +553,10 @@ func (obj ShippingMethodKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a state by key.
+*	Used by the [Import API](/import-export/overview) to identify a State.
  */
 type StateKeyReference struct {
+	// User-defined unique identifier of the referenced State.
 	Key string `json:"key"`
 }
 
@@ -545,9 +571,10 @@ func (obj StateKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a store by key.
+*	Used by the [Import API](/import-export/overview) to identify a Store.
  */
 type StoreKeyReference struct {
+	// User-defined unique identifier of the referenced Store.
 	Key string `json:"key"`
 }
 
@@ -562,9 +589,10 @@ func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a tax category by key.
+*	Used by the [Import API](/import-export/overview) to identify a TaxCategory.
  */
 type TaxCategoryKeyReference struct {
+	// User-defined unique identifier of the referenced TaxCategory.
 	Key string `json:"key"`
 }
 
@@ -579,9 +607,10 @@ func (obj TaxCategoryKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a type by key.
+*	Used by the [Import API](/import-export/overview) to identify a Type.
  */
 type TypeKeyReference struct {
+	// User-defined unique identifier of the referenced Type.
 	Key string `json:"key"`
 }
 
@@ -596,29 +625,21 @@ func (obj TypeKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	References a key value document by key.
+*	Contains a reference to a resource which does not exist. For example, if a Category is imported with a parent Category that does not exist, the reference to the parent Category is an unresolved reference.
  */
-type CustomObjectKeyReference struct {
-	Key       string `json:"key"`
-	Container string `json:"container"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj CustomObjectKeyReference) MarshalJSON() ([]byte, error) {
-	type Alias CustomObjectKeyReference
-	return json.Marshal(struct {
-		Action string `json:"typeId"`
-		*Alias
-	}{Action: "key-value-document", Alias: (*Alias)(&obj)})
-}
-
 type UnresolvedReferences struct {
+	// `key` of the unresolved resource.
 	Key string `json:"key"`
-	// The type of the referenced resource.
+	// Type of the unresolved resource.
 	TypeId ReferenceType `json:"typeId"`
 }
 
+/**
+*	The type of money.
+*	The `centPrecision` type is used for currencies with minor units, such as EUR and USD.
+*	The `highPrecision` type is used for currencies without minor units, such as JPY.
+*
+ */
 type MoneyType string
 
 const (
@@ -657,8 +678,15 @@ func mapDiscriminatorTypedMoney(input interface{}) (TypedMoney, error) {
 }
 
 type HighPrecisionMoney struct {
+	// The number of fraction digits of the money value.
+	// This is used to determine how many digits are after the decimal point.
+	// For example, for EUR and USD, this is `2`, and for JPY, this is `0`.
 	FractionDigits *int `json:"fractionDigits,omitempty"`
-	CentAmount     int  `json:"centAmount"`
+	// Amount in the smallest indivisible unit of a currency, such as:
+	//
+	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
+	CentAmount int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode  string `json:"currencyCode"`
 	PreciseAmount int    `json:"preciseAmount"`
@@ -675,8 +703,15 @@ func (obj HighPrecisionMoney) MarshalJSON() ([]byte, error) {
 }
 
 type Money struct {
+	// The number of fraction digits of the money value.
+	// This is used to determine how many digits are after the decimal point.
+	// For example, for EUR and USD, this is `2`, and for JPY, this is `0`.
 	FractionDigits *int `json:"fractionDigits,omitempty"`
-	CentAmount     int  `json:"centAmount"`
+	// Amount in the smallest indivisible unit of a currency, such as:
+	//
+	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
+	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
+	CentAmount int `json:"centAmount"`
 	// The currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
 }
@@ -692,8 +727,9 @@ func (obj Money) MarshalJSON() ([]byte, error) {
 }
 
 type DiscountedPrice struct {
+	// Money value of the discounted price.
 	Value TypedMoney `json:"value"`
-	// Reference to a ProductDiscount.
+	// Reference to a ProductDiscount. If the referenced [ProductDiscount](ctp:api:type:ProductDiscount) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced ProductDiscount is created.
 	Discount ProductDiscountKeyReference `json:"discount"`
 }
 
@@ -753,22 +789,23 @@ type ImportResourceType string
 const (
 	ImportResourceTypeCategory            ImportResourceType = "category"
 	ImportResourceTypeCustomer            ImportResourceType = "customer"
+	ImportResourceTypeDiscountCode        ImportResourceType = "discount-code"
 	ImportResourceTypeInventory           ImportResourceType = "inventory"
 	ImportResourceTypeOrder               ImportResourceType = "order"
 	ImportResourceTypeOrderPatch          ImportResourceType = "order-patch"
 	ImportResourceTypePrice               ImportResourceType = "price"
 	ImportResourceTypeProduct             ImportResourceType = "product"
 	ImportResourceTypeProductDraft        ImportResourceType = "product-draft"
+	ImportResourceTypeProductSelection    ImportResourceType = "product-selection"
 	ImportResourceTypeProductType         ImportResourceType = "product-type"
 	ImportResourceTypeProductVariant      ImportResourceType = "product-variant"
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
 	ImportResourceTypeStandalonePrice     ImportResourceType = "standalone-price"
 	ImportResourceTypeType                ImportResourceType = "type"
-	ImportResourceTypeDiscountCode        ImportResourceType = "discount-code"
 )
 
 /**
-*	The type of the referenced resource.
+*	Type of referenced resource.
 *
  */
 type ReferenceType string
@@ -781,6 +818,7 @@ const (
 	ReferenceTypeCustomer         ReferenceType = "customer"
 	ReferenceTypeCustomerGroup    ReferenceType = "customer-group"
 	ReferenceTypeDiscountCode     ReferenceType = "discount-code"
+	ReferenceTypeKeyValueDocument ReferenceType = "key-value-document"
 	ReferenceTypeOrder            ReferenceType = "order"
 	ReferenceTypePayment          ReferenceType = "payment"
 	ReferenceTypePrice            ReferenceType = "price"
@@ -793,11 +831,10 @@ const (
 	ReferenceTypeStore            ReferenceType = "store"
 	ReferenceTypeTaxCategory      ReferenceType = "tax-category"
 	ReferenceTypeType             ReferenceType = "type"
-	ReferenceTypeKeyValueDocument ReferenceType = "key-value-document"
 )
 
 /**
-*	Every [Import Operation](/import-operation) is assigned one of the following states.
+*	Every [Import Operation](ctp:import:type:ImportOperation) is assigned one of the following states.
 *
  */
 type ProcessingState string
@@ -813,33 +850,60 @@ const (
 )
 
 type Address struct {
-	ID                   *string `json:"id,omitempty"`
-	Key                  *string `json:"key,omitempty"`
-	Title                *string `json:"title,omitempty"`
-	Salutation           *string `json:"salutation,omitempty"`
-	FirstName            *string `json:"firstName,omitempty"`
-	LastName             *string `json:"lastName,omitempty"`
-	StreetName           *string `json:"streetName,omitempty"`
-	StreetNumber         *string `json:"streetNumber,omitempty"`
+	// Unique identifier of the Address.
+	//
+	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
+	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
+	ID *string `json:"id,omitempty"`
+	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
+	Key *string `json:"key,omitempty"`
+	// Title of the contact, for example 'Dr.'
+	Title *string `json:"title,omitempty"`
+	// Salutation of the contact, for example 'Mr.' or 'Ms.'
+	Salutation *string `json:"salutation,omitempty"`
+	// Given name (first name) of the contact.
+	FirstName *string `json:"firstName,omitempty"`
+	// Family name (last name) of the contact.
+	LastName *string `json:"lastName,omitempty"`
+	// Name of the street.
+	StreetName *string `json:"streetName,omitempty"`
+	// Street number.
+	StreetNumber *string `json:"streetNumber,omitempty"`
+	// Further information on the street address.
 	AdditionalStreetInfo *string `json:"additionalStreetInfo,omitempty"`
-	PostalCode           *string `json:"postalCode,omitempty"`
-	City                 *string `json:"city,omitempty"`
-	Region               *string `json:"region,omitempty"`
-	State                *string `json:"state,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	Country               string  `json:"country"`
-	Company               *string `json:"company,omitempty"`
-	Department            *string `json:"department,omitempty"`
-	Building              *string `json:"building,omitempty"`
-	Apartment             *string `json:"apartment,omitempty"`
-	POBox                 *string `json:"pOBox,omitempty"`
-	Phone                 *string `json:"phone,omitempty"`
-	Mobile                *string `json:"mobile,omitempty"`
-	Email                 *string `json:"email,omitempty"`
-	Fax                   *string `json:"fax,omitempty"`
+	// Postal code.
+	PostalCode *string `json:"postalCode,omitempty"`
+	// Name of the city.
+	City *string `json:"city,omitempty"`
+	// Name of the region.
+	Region *string `json:"region,omitempty"`
+	// Name of the state, for example, Colorado.
+	State *string `json:"state,omitempty"`
+	// Name of the country.
+	Country string `json:"country"`
+	// Name of the company.
+	Company *string `json:"company,omitempty"`
+	// Name of the department.
+	Department *string `json:"department,omitempty"`
+	// Number or name of the building.
+	Building *string `json:"building,omitempty"`
+	// Number or name of the apartment.
+	Apartment *string `json:"apartment,omitempty"`
+	// Post office box number.
+	POBox *string `json:"pOBox,omitempty"`
+	// Phone number of the contact.
+	Phone *string `json:"phone,omitempty"`
+	// Mobile phone number of the contact.
+	Mobile *string `json:"mobile,omitempty"`
+	// Email address of the contact.
+	Email *string `json:"email,omitempty"`
+	// Fax number of the contact.
+	Fax *string `json:"fax,omitempty"`
+	// Further information on the Address.
 	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
-	ExternalId            *string `json:"externalId,omitempty"`
-	// Custom Fields defined for the Address. Custom Fields can only be applied to `shippingAddress`.
+	// ID for the contact used in an external system.
+	ExternalId *string `json:"externalId,omitempty"`
+	// Custom Fields defined for the Address.
 	Custom *Custom `json:"custom,omitempty"`
 }
 

@@ -25,6 +25,10 @@ func (rb *ByProjectKeyOrdersEditsRequestBuilder) WithId(id string) *ByProjectKey
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves OrderEdits in the Project.
+ */
 func (rb *ByProjectKeyOrdersEditsRequestBuilder) Get() *ByProjectKeyOrdersEditsRequestMethodGet {
 	return &ByProjectKeyOrdersEditsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/orders/edits", rb.projectKey),
@@ -33,7 +37,7 @@ func (rb *ByProjectKeyOrdersEditsRequestBuilder) Get() *ByProjectKeyOrdersEditsR
 }
 
 /**
-*	Checks if an OrderEdit exists for a given Query Predicate. Returns a `200 OK` status if any OrderEdits match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more OrderEdits exist for the provided query predicate. Returns a `200 OK` status if any OrderEdits match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyOrdersEditsRequestBuilder) Head() *ByProjectKeyOrdersEditsRequestMethodHead {
 	return &ByProjectKeyOrdersEditsRequestMethodHead{
@@ -43,6 +47,7 @@ func (rb *ByProjectKeyOrdersEditsRequestBuilder) Head() *ByProjectKeyOrdersEdits
 }
 
 /**
+*	Creates an OrderEdit in the Project.
 *	You can either create multiple Order Edits for an Order and apply them sequentially to an Order, or create multiple Order Edits parallelly (as alternatives to each other) and apply one of them to the Order.
 *
 *	You can only create an Order Edit if the [InventoryMode](/projects/carts#inventorymode) of the Order and its [LineItems](/projects/carts#lineitem) is `None`.

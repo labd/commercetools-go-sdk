@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInventoryRequestMethodHead) WithHeaders(headers http.Heade
 }
 
 /**
-*	Checks if an InventoryEntry exists for a given Query Predicate. Returns a `200 OK` status if any Inventory Entries match the Query Predicate, a `404 Not Found` otherwise.
+*	Checks if one or more InventoryEntries exist for the provided query predicate. Returns a `200 OK` status if any Inventory Entries match the Query Predicate, a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyInventoryRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodHead) WithHeaders(
 }
 
 /**
-*	Checks if a Cart exists for a Store that matches the given Query Predicate, and contains a matching `customerId` or `anonymousId`. Returns a `200 OK` status if any Carts match these conditions, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Cart exists for a Store that matches the given Query Predicate, and contains a matching `customerId` or `anonymousId`. Returns a `200 OK` status if any Carts match these conditions, or [Not Found](/../api/errors#404-not-found) otherwise.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodHead) Execute(ctx context.Context) error {

@@ -9,6 +9,19 @@ import (
 )
 
 /**
+*	The current indexing status of Business Unit Search.
+*
+ */
+type BusinessUnitIndexingStatus string
+
+const (
+	BusinessUnitIndexingStatusScheduled BusinessUnitIndexingStatus = "Scheduled"
+	BusinessUnitIndexingStatusIndexing  BusinessUnitIndexingStatus = "Indexing"
+	BusinessUnitIndexingStatusReady     BusinessUnitIndexingStatus = "Ready"
+	BusinessUnitIndexingStatusFailed    BusinessUnitIndexingStatus = "Failed"
+)
+
+/**
 *	The current indexing status of Customer Search.
 *
  */
@@ -38,6 +51,18 @@ const (
 	BusinessUnitConfigurationStatusInactive BusinessUnitConfigurationStatus = "Inactive"
 )
 
+/**
+*	Specifies the status of the [Business Unit Search](/../api/projects/business-unit-search) index.
+*	You can change the status using the [Change Business Unit Search Status](ctp:api:type:ProjectChangeBusinessUnitSearchStatusAction) update action.
+*
+ */
+type BusinessUnitSearchStatus string
+
+const (
+	BusinessUnitSearchStatusActivated   BusinessUnitSearchStatus = "Activated"
+	BusinessUnitSearchStatusDeactivated BusinessUnitSearchStatus = "Deactivated"
+)
+
 type CartsConfiguration struct {
 	// Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft) and [MyCartDraft](ctp:api:type:MyCartDraft).
 	// If a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts exists, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent upon deletion of a Cart.
@@ -46,6 +71,12 @@ type CartsConfiguration struct {
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Indicates if country _- no state_ Tax Rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all Tax Categories of a Cart Line Items. This field may not be present on Projects created before June 2020.
 	CountryTaxRateFallbackEnabled *bool `json:"countryTaxRateFallbackEnabled,omitempty"`
+	// Default value for the `priceRoundingMode` parameter of the [CartDraft](ctp:api:type:CartDraft).
+	// Indicates how the total prices on [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem) are rounded when calculated.
+	PriceRoundingMode *RoundingMode `json:"priceRoundingMode,omitempty"`
+	// Default value for the `taxRoundingMode` parameter of the [CartDraft](ctp:api:type:CartDraft).
+	// Indicates how monetary values are rounded when calculating taxes for `taxedPrice`.
+	TaxRoundingMode *RoundingMode `json:"taxRoundingMode,omitempty"`
 }
 
 /**
@@ -61,7 +92,7 @@ const (
 )
 
 /**
-*	Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server).
+*	Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#request-an-access-token-using-an-external-oauth-server).
 *
 *	You can only configure **one** external OAuth 2.0 endpoint per Project. To authenticate using multiple external services (such as social network logins), use a middle layer authentication service.
 *
@@ -181,6 +212,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 	}
 
 	switch discriminator {
+	case "changeBusinessUnitSearchStatus":
+		obj := ProjectChangeBusinessUnitSearchStatusAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeMyBusinessUnitStatusOnCreation":
 		obj := ProjectChangeBusinessUnitStatusOnCreationAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -247,6 +284,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "changePriceRoundingMode":
+		obj := ProjectChangePriceRoundingModeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeProductSearchIndexingEnabled":
 		obj := ProjectChangeProductSearchIndexingEnabledAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -255,6 +298,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 		return obj, nil
 	case "changeShoppingListsConfiguration":
 		obj := ProjectChangeShoppingListsConfigurationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "changeTaxRoundingMode":
+		obj := ProjectChangeTaxRoundingModeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -293,7 +342,7 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 *
  */
 type SearchIndexingConfiguration struct {
-	// Configuration for the [Product Projection Search](/../api/projects/products-search) and [Product Suggestions](/../api/projects/products-suggestions) endpoints.
+	// Configuration for the [Product Projection Search](/../api/projects/product-projection-search) and [Search Term Suggestions](/../api/projects/search-term-suggestions) APIs.
 	Products *SearchIndexingConfigurationValues `json:"products,omitempty"`
 	// Configuration for the [Product Search](/../api/projects/product-search) feature.
 	ProductsSearch *SearchIndexingConfigurationValues `json:"productsSearch,omitempty"`
@@ -301,6 +350,8 @@ type SearchIndexingConfiguration struct {
 	Orders *SearchIndexingConfigurationValues `json:"orders,omitempty"`
 	// Configuration for the [Customer Search](/../api/projects/customer-search) feature.
 	Customers *SearchIndexingConfigurationValues `json:"customers,omitempty"`
+	// Configuration for the [Business Unit Search](/../api/projects/business-unit-search) feature.
+	BusinessUnits *SearchIndexingConfigurationValues `json:"businessUnits,omitempty"`
 }
 
 /**
@@ -420,6 +471,21 @@ type ShoppingListsConfiguration struct {
 	// Default value for the `deleteDaysAfterLastModification` parameter of the [ShoppingListDraft](ctp:api:type:ShoppingListDraft).
 	// This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
+}
+
+type ProjectChangeBusinessUnitSearchStatusAction struct {
+	// Activates or deactivates the [Search Business Units](ctp:api:endpoint:/{projectKey}/business-units/search:POST) feature. Activation will trigger building a search index for the Business Units in the Project.
+	Status BusinessUnitSearchStatus `json:"status"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectChangeBusinessUnitSearchStatusAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeBusinessUnitSearchStatusAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeBusinessUnitSearchStatus", Alias: (*Alias)(&obj)})
 }
 
 type ProjectChangeBusinessUnitStatusOnCreationAction struct {
@@ -590,11 +656,26 @@ func (obj ProjectChangeOrderSearchStatusAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeOrderSearchStatus", Alias: (*Alias)(&obj)})
 }
 
+type ProjectChangePriceRoundingModeAction struct {
+	// Project-level default rounding mode for calculating the total prices on [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem). See [CartsConfiguration](ctp:api:type:CartsConfiguration).
+	PriceRoundingMode RoundingMode `json:"priceRoundingMode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectChangePriceRoundingModeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangePriceRoundingModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changePriceRoundingMode", Alias: (*Alias)(&obj)})
+}
+
 type ProjectChangeProductSearchIndexingEnabledAction struct {
-	// - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will not be available anymore for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
-	// - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/products-search) as well as the [Product Suggestions](/../api/projects/products-suggestions) endpoint will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned endpoints fully available for this Project.
+	// - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/product-projection-search) as well as the [Search Term Suggestions](/../api/projects/search-term-suggestions) API will no longer be available for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
+	// - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/product-projection-search) as well as the [Search Term Suggestions](/../api/projects/search-term-suggestions) API will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned APIs fully available for this Project.
 	Enabled bool `json:"enabled"`
-	// Controls whether the action should apply to [Product Projection Search](/../api/projects/products-search) or to [Product Search](/../api/projects/product-search).
+	// Controls whether the action should apply to [Product Projection Search](/../api/projects/product-projection-search) or to [Product Search](/../api/projects/product-search).
 	Mode *ProductSearchIndexingMode `json:"mode,omitempty"`
 }
 
@@ -621,6 +702,21 @@ func (obj ProjectChangeShoppingListsConfigurationAction) MarshalJSON() ([]byte, 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "changeShoppingListsConfiguration", Alias: (*Alias)(&obj)})
+}
+
+type ProjectChangeTaxRoundingModeAction struct {
+	// Project-level default rounding mode for tax calculation. See [CartsConfiguration](ctp:api:type:CartsConfiguration).
+	TaxRoundingMode RoundingMode `json:"taxRoundingMode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectChangeTaxRoundingModeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectChangeTaxRoundingModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changeTaxRoundingMode", Alias: (*Alias)(&obj)})
 }
 
 type ProjectSetBusinessUnitAssociateRoleOnCreationAction struct {

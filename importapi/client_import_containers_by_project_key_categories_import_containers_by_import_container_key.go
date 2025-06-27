@@ -13,7 +13,7 @@ type ByProjectKeyCategoriesImportContainersByImportContainerKeyRequestBuilder st
 }
 
 /**
-*	Creates a request for creating new Categories or updating existing ones.
+*	Creates an Import Request for Categories.
  */
 func (rb *ByProjectKeyCategoriesImportContainersByImportContainerKeyRequestBuilder) Post(body CategoryImportRequest) *ByProjectKeyCategoriesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyCategoriesImportContainersByImportContainerKeyRequestMethodPost{

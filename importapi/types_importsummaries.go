@@ -3,33 +3,32 @@ package importapi
 // Generated file, please do not change!!!
 
 /**
-*	Describes the status of an [ImportContainer](/import-container#importcontainer) by the number of resources in each [Processing State](/processing-state#processingstate).
-*	Can be used to monitor the import progress per [Import Container](/import-container).
+*	The current status of [ImportOperations](ctp:import:type:ImportOperation) in an [ImportContainer](ctp:import:type:ImportContainer).
 *
  */
 type ImportSummary struct {
-	// The import status of an [ImportContainer](/import-container#importcontainer) given by the number of resources in each [Processing State](/processing-state#processingstate).
+	// The current [ProcessingStates](ctp:import:type:ProcessingState) of ImportOperations in an ImportContainer.
 	States OperationStates `json:"states"`
-	// The total number of [ImportOperations](/import-operation#importoperation) received for this Import Summary.
+	// The total number of ImportOperations in `states`.
 	Total int `json:"total"`
 }
 
 /**
-*	The number of resources in each [Processing State](/processing-state#processingstate).
+*	The number of [ImportOperations](ctp:import:type:ImportOperation) in each [ProcessingState](ctp:import:type:ProcessingState).
  */
 type OperationStates struct {
-	// The number of resources in the `processing` state.
+	// The number of ImportOperations in the `processing` state.
 	Processing int `json:"processing"`
-	// The number of resources in the `validationFailed` state.
+	// The number of ImportOperations in the `validationFailed` state.
 	ValidationFailed int `json:"validationFailed"`
-	// The number of resources in the `unresolved` state.
+	// The number of ImportOperations in the `unresolved` state.
 	Unresolved int `json:"unresolved"`
-	// The number of resources in the `waitForMasterVariant` state.
+	// The number of ImportOperations in the `waitForMasterVariant` state.
 	WaitForMasterVariant int `json:"waitForMasterVariant"`
-	// The number of resources in the `imported` state.
+	// The number of ImportOperations in the `imported` state.
 	Imported int `json:"imported"`
-	// The number of resources in the `rejected` state.
+	// The number of ImportOperations in the `rejected` state.
 	Rejected int `json:"rejected"`
-	// The number of resources in the `canceled` state.
+	// The number of ImportOperations in the `canceled` state.
 	Canceled int `json:"canceled"`
 }

@@ -35,10 +35,11 @@ type CartDiscount struct {
 	//
 	// Empty, if the `value` is `giftLineItem`.
 	Target CartDiscountTarget `json:"target,omitempty"`
-	// Value between `0` and `1`.
-	// All matching CartDiscounts are applied to a Cart in the order defined by this field.
-	// A Discount with a higher sortOrder is prioritized.
-	// The sort order is unambiguous among all CartDiscounts.
+	// Value between `0` and `1` that determines the order in which the CartDiscounts are applied; a CartDiscount with a higher value is prioritized.
+	//
+	// It is unique among all CartDiscounts and DiscountGroups.
+	//
+	// If the CartDiscount is part of a DiscountGroup, it uses the sort order of the DiscountGroup.
 	SortOrder string `json:"sortOrder"`
 	// - If a value exists, the Cart Discount applies on [Carts](ctp:api:type:Cart) having a [Store](ctp:api:type:Store) matching any Store defined for this field.
 	// - If empty, the Cart Discount applies on all [Carts](ctp:api:type:Cart), irrespective of a Store.
@@ -58,6 +59,8 @@ type CartDiscount struct {
 	StackingMode StackingMode `json:"stackingMode"`
 	// Custom Fields of the CartDiscount.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Reference to a DiscountGroup that the CartDiscount belongs to.
+	DiscountGroup *DiscountGroupReference `json:"discountGroup,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -107,10 +110,12 @@ type CartDiscountDraft struct {
 	//
 	// Must not be set if the `value` is `giftLineItem`.
 	Target CartDiscountTarget `json:"target,omitempty"`
-	// Value between `0` and `1`.
-	// A Discount with a higher sortOrder is prioritized.
-	// The sort order must be unambiguous among all CartDiscounts.
-	SortOrder string `json:"sortOrder"`
+	// Value between `0` and `1` that determines the order in which the CartDiscounts will be applied; a CartDiscount with a higher value will be prioritized.
+	//
+	// It must be unique among all CartDiscounts and DiscountGroups.
+	//
+	// If the CartDiscount is part of a DiscountGroup, it will use the sort order of the DiscountGroup.
+	SortOrder *string `json:"sortOrder,omitempty"`
 	// - If defined, the Cart Discount applies on [Carts](ctp:api:type:Cart) having a [Store](ctp:api:type:Store) matching any Store defined for this field.
 	// - If not defined, the Cart Discount applies on all Carts, irrespective of a Store.
 	//
@@ -131,6 +136,8 @@ type CartDiscountDraft struct {
 	StackingMode *StackingMode `json:"stackingMode,omitempty"`
 	// Custom Fields of the CartDiscount.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Reference to a DiscountGroup that the CartDiscount must belong to.
+	DiscountGroup *DiscountGroupResourceIdentifier `json:"discountGroup,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -271,6 +278,26 @@ func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, 
 			return nil, err
 		}
 		return obj, nil
+	case "pattern":
+		obj := CartDiscountPatternTarget{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		for i := range obj.TriggerPattern {
+			var err error
+			obj.TriggerPattern[i], err = mapDiscriminatorPatternComponent(obj.TriggerPattern[i])
+			if err != nil {
+				return nil, err
+			}
+		}
+		for i := range obj.TargetPattern {
+			var err error
+			obj.TargetPattern[i], err = mapDiscriminatorPatternComponent(obj.TargetPattern[i])
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "shipping":
 		obj := CartDiscountShippingCostTarget{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -338,6 +365,69 @@ func (obj CartDiscountLineItemsTarget) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Pattern targets can be used to model Buy and Get discounts.
+*
+*	Unlike [CartDiscountLineItemsTarget](#cartdiscountlineitemstarget) and [CartDiscountCustomLineItemsTarget](#cartdiscountcustomlineitemstarget), it does not apply to a (Custom) Line Item as a whole, but to individual units of a (Custom) Line Item. The discounts can apply multiple times on the same cart, but each unit can be discounted only once.
+*
+ */
+type CartDiscountPatternTarget struct {
+	// Defines the set of units of (Custom) Line Items in a Cart that trigger a discount application.
+	//
+	// Based on the availability of matching units, the `triggerPattern` can match multiple times, limiting the number of maximum times the discount will be applied.
+	// The units matched in the `triggerPattern` are excluded and not considered for the `targetPattern`.
+	//
+	// To further limit the discount application, set the `maxOccurrence`.
+	TriggerPattern []PatternComponent `json:"triggerPattern"`
+	// Defines the set of units of (Custom) Line Items in a Cart on which the Discount is applied.
+	//
+	// Based on the availability of matching units and the limits from the `triggerPattern` or `maxOccurrence`, the `targetPattern` can match multiple times.
+	//
+	// This array cannot be empty.
+	TargetPattern []PatternComponent `json:"targetPattern"`
+	// Maximum number of times the Discount can apply on a Cart.
+	//
+	// If empty or not set, the Discount will apply indefinitely.
+	MaxOccurrence *int `json:"maxOccurrence,omitempty"`
+	// Determines which of the matching units of (Custom) Line Items are discounted.
+	SelectionMode SelectionMode `json:"selectionMode"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartDiscountPatternTarget) UnmarshalJSON(data []byte) error {
+	type Alias CartDiscountPatternTarget
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.TriggerPattern {
+		var err error
+		obj.TriggerPattern[i], err = mapDiscriminatorPatternComponent(obj.TriggerPattern[i])
+		if err != nil {
+			return err
+		}
+	}
+	for i := range obj.TargetPattern {
+		var err error
+		obj.TargetPattern[i], err = mapDiscriminatorPatternComponent(obj.TargetPattern[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartDiscountPatternTarget) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountPatternTarget
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "pattern", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Discount is applied to the shipping costs of the [Cart](ctp:api:type:Cart).
 *
  */
@@ -356,6 +446,7 @@ func (obj CartDiscountShippingCostTarget) MarshalJSON() ([]byte, error) {
 
 /**
 *	Discount is applied to the total price of the [Cart](ctp:api:type:Cart).
+*	The same percentage of discount applies on the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) `taxedPrice` and `taxedShippingPrice`.
 *
  */
 type CartDiscountTotalPriceTarget struct {
@@ -499,6 +590,12 @@ func mapDiscriminatorCartDiscountUpdateAction(input interface{}) (CartDiscountUp
 		return obj, nil
 	case "setDescription":
 		obj := CartDiscountSetDescriptionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setDiscountGroup":
+		obj := CartDiscountSetDiscountGroupAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -658,9 +755,9 @@ func mapDiscriminatorCartDiscountValueDraft(input interface{}) (CartDiscountValu
 
 type CartDiscountValueAbsoluteDraft struct {
 	// Money values in different currencies.
-	// An absolute Cart Discount will match a price only if the array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15$. If the array has multiple values of the same currency, the API returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// An absolute Cart Discount will match a price only if the array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be decreased by 10€ and the matching $ price will be decreased by 15$.
 	//
-	// If the array is empty, the discount does not apply.
+	// If the array is empty or has multiple values of the same currency, the API returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	Money []Money `json:"money"`
 	// Determines how the discount applies on [CartDiscountLineItemTarget](ctp:api:type:CartDiscountLineItemsTarget) and [CartDiscountCustomLineItemTarget](ctp:api:type:CartDiscountCustomLineItemsTarget).
 	//
@@ -685,6 +782,10 @@ func (obj CartDiscountValueAbsoluteDraft) MarshalJSON() ([]byte, error) {
 type CartDiscountValueFixed struct {
 	// Money values in [cent precision](ctp:api:type:CentPrecisionMoney) or [high precision](ctp:api:type:HighPrecisionMoney) of different currencies.
 	Money []TypedMoney `json:"money"`
+	// Indicates how the discount is applied on [CartDiscountLineItemTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemTarget](ctp:api:type:CartDiscountCustomLineItemsTarget).
+	//
+	// For [CartDiscountPatternTarget](ctp:api:type:CartDiscountPatternTarget), the mode can also be `ProportionateDistribution` or `EvenDistribution`.
+	ApplicationMode *DiscountApplicationMode `json:"applicationMode,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -721,10 +822,14 @@ func (obj CartDiscountValueFixed) MarshalJSON() ([]byte, error) {
  */
 type CartDiscountValueFixedDraft struct {
 	// Money values provided either in [cent precision](ctp:api:type:Money) or [high precision](ctp:api:type:HighPrecisionMoneyDraft) for different currencies.
-	// A fixed Cart Discount will match a price only if the array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be discounted by 10€ and the matching $ price will be discounted to 15$. If the array has multiple values of the same currency, the API returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// A fixed Cart Discount will match a price only if the array contains a value with the same currency. For example, if it contains 10€ and 15$, the matching € price will be discounted by 10€ and the matching $ price will be discounted to 15$.
 	//
-	// If the array is empty, the discount does not apply.
+	// If the array is empty or has multiple values of the same currency, the API returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	Money []TypedMoneyDraft `json:"money"`
+	// Determines how the discount applies on [CartDiscountLineItemTarget](ctp:api:type:CartDiscountLineItemsTarget) or [CartDiscountCustomLineItemTarget](ctp:api:type:CartDiscountCustomLineItemsTarget).
+	//
+	// For [CartDiscountPatternTarget](ctp:api:type:CartDiscountPatternTarget), you can also set the mode to `ProportionateDistribution` or `EvenDistribution`.
+	ApplicationMode *DiscountApplicationMode `json:"applicationMode,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -904,6 +1009,102 @@ func (obj MultiBuyLineItemsTarget) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "multiBuyLineItems", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The pattern component it used to define a set of units based on some criteria. The criteria depends on the type of component used.
+*
+ */
+type PatternComponent interface{}
+
+func mapDiscriminatorPatternComponent(input interface{}) (PatternComponent, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "CountOnCustomLineItemUnits":
+		obj := CountOnCustomLineItemUnits{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "CountOnLineItemUnits":
+		obj := CountOnLineItemUnits{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type CountOnCustomLineItemUnits struct {
+	// Valid [CustomLineItem predicate](/../api/projects/predicates#customlineitem-field-identifiers) that determines the units participating in the Discount.
+	Predicate string `json:"predicate"`
+	// Minimum number of units of a Custom Line Item that match the predicate.
+	MinCount *int `json:"minCount,omitempty"`
+	// Maximum number of units of a Custom Line Item that match the predicate.
+	// There might be more units matching the predicate, but they will not be participating to the resulting set.
+	//
+	// The value must be greater than or equal to `minCount`.
+	// If not provided, the component will match all units that satisfy the predicate.
+	MaxCount *int `json:"maxCount,omitempty"`
+	// Number of units of a Custom Line Item to exclude on every application of the Discount.
+	//
+	// Set only when configuring the `targetPattern`.
+	//
+	// The units matched first (satisfying the pattern component) will be excluded from the resulting set.
+	// The `minCount`and `maxCount` are considered only after the exclusion. Pattern components are matched only if any further units satisfying the pattern component exist.
+	// For example, if 5 jeans are required but only 3 should be discounted, the `excludeCount` value must be 2.
+	ExcludeCount *int `json:"excludeCount,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CountOnCustomLineItemUnits) MarshalJSON() ([]byte, error) {
+	type Alias CountOnCustomLineItemUnits
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CountOnCustomLineItemUnits", Alias: (*Alias)(&obj)})
+}
+
+type CountOnLineItemUnits struct {
+	// Valid [LineItem predicate](/../api/projects/predicates#lineitem-field-identifiers) that determines the units participating in the Discount.
+	Predicate string `json:"predicate"`
+	// Minimum number of units of a Line Item that match the predicate.
+	MinCount *int `json:"minCount,omitempty"`
+	// Maximum number of units of a Line Item that match the predicate.
+	// There might be more units matching the predicate, but they will not be participating to the resulting set.
+	//
+	// The value must be greater than or equal to `minCount`.
+	// If not provided, the component will match all units that satisfy the predicate.
+	MaxCount *int `json:"maxCount,omitempty"`
+	// Number of units of a Line Item to exclude on every application of the Discount.
+	//
+	// Set only when configuring the `targetPattern`.
+	//
+	// The units matched first (satisfying the pattern component) will be excluded from the resulting set.
+	// The `minCount`and `maxCount` are considered only after the exclusion. Pattern components are matched only if any further units satisfying the pattern component exist.
+	// For example, if 5 jeans are required but only 3 should be discounted, the `excludeCount` value must be 2.
+	ExcludeCount *int `json:"excludeCount,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CountOnLineItemUnits) MarshalJSON() ([]byte, error) {
+	type Alias CountOnLineItemUnits
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CountOnLineItemUnits", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1192,6 +1393,26 @@ func (obj CartDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+type CartDiscountSetDiscountGroupAction struct {
+	// Reference to a DiscountGroup that the Cart Discount must belong to.
+	// If empty, any existing value will be removed.
+	DiscountGroup *DiscountGroupResourceIdentifier `json:"discountGroup,omitempty"`
+	// New value to set (between `0` and `1`) that determines the order in which the CartDiscounts are applied; a CartDiscount with a higher value is prioritized.
+	//
+	// Required if `discountGroup` is absent. If `discountGroup` is set, the CartDiscount will use the sort order of the DiscountGroup.
+	SortOrder *string `json:"sortOrder,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartDiscountSetDiscountGroupAction) MarshalJSON() ([]byte, error) {
+	type Alias CartDiscountSetDiscountGroupAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDiscountGroup", Alias: (*Alias)(&obj)})
 }
 
 type CartDiscountSetKeyAction struct {

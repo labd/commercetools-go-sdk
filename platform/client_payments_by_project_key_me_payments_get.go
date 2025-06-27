@@ -134,7 +134,7 @@ func (rb *ByProjectKeyMePaymentsRequestMethodGet) WithHeaders(headers http.Heade
 }
 
 /**
-*	Returns all [Payments](/projects/me-payments#mypayment) that match a given Query Predicate.
+*	Retrieves [Payments](/projects/me-payments#mypayment) for the authenticated Customer or anonymous user.
  */
 func (rb *ByProjectKeyMePaymentsRequestMethodGet) Execute(ctx context.Context) (result *MyPaymentPagedQueryResponse, err error) {
 	var queryParams url.Values

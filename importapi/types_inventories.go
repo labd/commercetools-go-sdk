@@ -7,22 +7,22 @@ import (
 )
 
 /**
-*	The data representation for an Inventory to be imported that is persisted as a [Inventory](/../api/projects/inventory#top) in the Project.
+*	Represents the data used to import an InventoryEntry. Once imported, this data is persisted as a [InventoryEntry](ctp:api:type:InventoryEntry) in the Project.
 *
  */
 type InventoryImport struct {
-	// User-defined unique identifier. If an [InventoryEntry](/../api/projects/inventory#inventoryentry) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If an [InventoryEntry](ctp:api:type:InventoryEntry) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
-	// Maps to `Inventory.sku`
+	// Maps to `InventoryEntry.sku`
 	Sku string `json:"sku"`
-	// Maps to `Inventory.quantityOnStock`
+	// Maps to `InventoryEntry.quantityOnStock`
 	QuantityOnStock int `json:"quantityOnStock"`
-	// Maps to `Inventory.restockableInDays`
+	// Maps to `InventoryEntry.restockableInDays`
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
-	// Maps to `Inventory.expectedDelivery`
+	// Maps to `InventoryEntry.expectedDelivery`
 	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
-	// Maps to `Inventory.supplyChannel`
+	// Maps to `InventoryEntry.supplyChannel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	SupplyChannel *ChannelKeyReference `json:"supplyChannel,omitempty"`
-	// Maps to `Inventory.custom`.
+	// Maps to `InventoryEntry.custom`.
 	Custom *Custom `json:"custom,omitempty"`
 }

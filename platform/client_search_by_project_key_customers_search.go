@@ -12,7 +12,8 @@ type ByProjectKeyCustomersSearchRequestBuilder struct {
 }
 
 /**
-*	A [SearchNotReady](ctp:api:type:SearchNotReadyError) error is returned if the indexing is in progress or the feature is deactivated. If deactivated, you can [reactivate](/../api/projects/customer-search#reactivate) it.
+*	If the initial indexing is in progress or the feature is inactive, a [SearchNotReady](ctp:api:type:SearchNotReadyError) error is returned.
+*	If inactive, you can [reactivate](/../api/projects/customer-search#reactivate) it.
 *
  */
 func (rb *ByProjectKeyCustomersSearchRequestBuilder) Post(body CustomerSearchRequest) *ByProjectKeyCustomersSearchRequestMethodPost {
@@ -25,7 +26,7 @@ func (rb *ByProjectKeyCustomersSearchRequestBuilder) Post(body CustomerSearchReq
 
 /**
 *	Checks whether a search index of Customers exists for a Project.
-*	If an index exists, a `200 OK` is returned; otherwise, a `409 Conflict`.
+*	Returns a `200 OK` if an index exists; otherwise, returns a `409 Conflict`.
 *
  */
 func (rb *ByProjectKeyCustomersSearchRequestBuilder) Head() *ByProjectKeyCustomersSearchRequestMethodHead {

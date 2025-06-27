@@ -28,7 +28,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodGet) With
 }
 
 /**
-*	Retrieves the import container given by the key.
+*	Retrieves an [ImportContainer](ctp:import:type:ImportContainer) with the provided `importContainerKey`.
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodGet) Execute(ctx context.Context) (result *ImportContainer, err error) {
 	queryParams := url.Values{}

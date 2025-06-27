@@ -167,6 +167,21 @@ const (
 )
 
 /**
+*	Information about all roles and permissions of an Associate in a [BusinessUnit](ctp:api:type:BusinessUnit).
+*
+ */
+type BusinessUnitAssociateResponse struct {
+	// The Customer that acts as an Associate in the Business Unit.
+	Customer CustomerReference `json:"customer"`
+	// Roles assigned to Associates in the Business Unit.
+	AssociateRoles []AssociateRole `json:"associateRoles"`
+	// Roles inherited by Associates from the parent Business Unit.
+	InheritedAssociateRoles []AssociateRole `json:"inheritedAssociateRoles"`
+	// Permissions the Associate has in the Business Unit.
+	Permissions []Permission `json:"permissions"`
+}
+
+/**
 *	Generic draft type to model those fields all Business Units have in common. The additional fields required for creating a [Company](ctp:api:type:Company) or [Division](ctp:api:type:Division) are represented on [CompanyDraft](ctp:api:type:CompanyDraft) and [DivisionDraft](ctp:api:type:DivisionDraft).
 *
  */
@@ -553,6 +568,12 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 			return nil, err
 		}
 		return obj, nil
+	case "setUnitType":
+		obj := BusinessUnitSetUnitTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -581,10 +602,12 @@ type Company struct {
 	Status BusinessUnitStatus `json:"status"`
 	// References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Only present when `storeMode` is `Explicit`.
 	//
-	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must belong to one of the Business Unit's Stores.
+	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must belong to one of the Business Unit's Stores.
 	//
-	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
+	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must not belong to any Store.
 	Stores []StoreKeyReference `json:"stores"`
+	// Stores that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `storeMode` is set to `FromParent`.
+	InheritedStores []StoreKeyReference `json:"inheritedStores"`
 	// The value of this field is always `Explicit` because a Company cannot have a parent Business Unit that Stores can be inherited from.
 	StoreMode BusinessUnitStoreMode `json:"storeMode"`
 	// Name of the Business Unit.
@@ -638,6 +661,10 @@ func (obj Company) MarshalJSON() ([]byte, error) {
 		delete(raw, "stores")
 	}
 
+	if raw["inheritedStores"] == nil {
+		delete(raw, "inheritedStores")
+	}
+
 	if raw["shippingAddressIds"] == nil {
 		delete(raw, "shippingAddressIds")
 	}
@@ -666,9 +693,9 @@ type CompanyDraft struct {
 	// Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
 	// Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
 	//
-	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must belong to one of the Business Unit's Stores.
+	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must belong to one of the Business Unit's Stores.
 	//
-	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
+	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must not belong to any Store.
 	Stores []StoreResourceIdentifier `json:"stores"`
 	// Defines whether the Stores of the Business Unit are set directly on the Business Unit or are inherited from a parent.
 	// `storeMode` is always `Explicit` for [Companies](ctp:api:type:BusinessUnitType) and defaults to `FromParent` for [Divisions](ctp:api:type:BusinessUnitType).
@@ -767,10 +794,12 @@ type Division struct {
 	Status BusinessUnitStatus `json:"status"`
 	// References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Only present when `storeMode` is `Explicit`.
 	//
-	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must belong to one of the Business Unit's Stores.
+	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must belong to one of the Business Unit's Stores.
 	//
-	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
+	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must not belong to any Store.
 	Stores []StoreKeyReference `json:"stores"`
+	// Stores that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `storeMode` is set to `FromParent`.
+	InheritedStores []StoreKeyReference `json:"inheritedStores"`
 	// Defines whether the Stores of the Division are set explicitly or inherited from a parent Business Unit.
 	StoreMode BusinessUnitStoreMode `json:"storeMode"`
 	// Name of the Business Unit.
@@ -824,6 +853,10 @@ func (obj Division) MarshalJSON() ([]byte, error) {
 		delete(raw, "stores")
 	}
 
+	if raw["inheritedStores"] == nil {
+		delete(raw, "inheritedStores")
+	}
+
 	if raw["shippingAddressIds"] == nil {
 		delete(raw, "shippingAddressIds")
 	}
@@ -853,9 +886,9 @@ type DivisionDraft struct {
 	// Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
 	// Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
 	//
-	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must belong to one of the Business Unit's Stores.
+	// If the Business Unit has Stores defined, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must belong to one of the Business Unit's Stores.
 	//
-	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), or [Quote Requests](ctp:api:type:QuoteRequest) must not belong to any Store.
+	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must not belong to any Store.
 	Stores []StoreResourceIdentifier `json:"stores"`
 	// If not set, the Division inherits the [Stores](ctp:api:type:Store) from a parent unit.
 	// Set this to `Explicit` if you want to set the Stores explicitly in the `stores` field instead.
@@ -1116,6 +1149,8 @@ func (obj BusinessUnitChangeAssociateAction) MarshalJSON() ([]byte, error) {
 type BusinessUnitChangeAssociateModeAction struct {
 	// The new value for `associateMode`.
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
+	// If set to `true` during a change to `associateMode="Explicit"`, all inherited Associates will be converted to explicit Associates.
+	MakeInheritedAssociatesExplicit bool `json:"makeInheritedAssociatesExplicit"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1148,11 +1183,14 @@ func (obj BusinessUnitChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the parent of a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitParentChanged](ctp:api:type:BusinessUnitParentChangedMessage) Message.
+*	This action generates a [BusinessUnitParentChanged](ctp:api:type:BusinessUnitParentChangedMessage) Message.
 *
  */
 type BusinessUnitChangeParentUnitAction struct {
-	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit). The new parent unit must have the same top-level unit as the old parent unit.
+	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
+	// It must be associated with the same Stores, as the old parent unit.
+	//
+	// The Business Unit `inheritedAssociates` and `inheritedStores` field values will be [eventually consistent](/../api/general-concepts#eventual-consistency).
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
 }
 
@@ -1524,4 +1562,27 @@ func (obj BusinessUnitSetStoresAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setStores", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates a [BusinessUnitTypeSet](ctp:api:type:BusinessUnitTypeSetMessage) Message.
+*
+ */
+type BusinessUnitSetUnitTypeAction struct {
+	// New type of the [Business Unit](ctp:api:type:BusinessUnit).
+	//
+	// If `unitType="Company"`, the Business Unit `storeMode`, `associateMode`, and `approvalRuleMode` field values must be `Explicit`.
+	UnitType BusinessUnitType `json:"unitType"`
+	// New parent unit for the [Business Unit](ctp:api:type:BusinessUnit), if `unitType="Division"`.
+	ParentUnit *BusinessUnitResourceIdentifier `json:"parentUnit,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitSetUnitTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitSetUnitTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setUnitType", Alias: (*Alias)(&obj)})
 }

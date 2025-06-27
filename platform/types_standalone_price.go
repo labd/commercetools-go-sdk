@@ -105,6 +105,8 @@ type StandalonePrice struct {
 	// If set to `true`, the StandalonePrice is considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	// If set to `false`, the StandalonePrice is not considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) and any associated Line Items in a Cart cannot be ordered.
 	Active bool `json:"active"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) for which this Price is valid.
+	RecurrencePolicy *RecurrencePolicyReference `json:"recurrencePolicy,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -156,6 +158,8 @@ type StandalonePriceDraft struct {
 	// It is not validated to exist in product variants.
 	Sku string `json:"sku"`
 	// Sets the money value of this Price.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// Sets the country for which this Price is valid.
 	Country *string `json:"country,omitempty"`
@@ -175,6 +179,8 @@ type StandalonePriceDraft struct {
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) for which this Price is valid.
+	RecurrencePolicy *RecurrencePolicyResourceIdentifier `json:"recurrencePolicy,omitempty"`
 	// Staged changes for the StandalonePrice.
 	Staged *StagedPriceDraft `json:"staged,omitempty"`
 	// Set to `false`, if the StandalonePrice should not be considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
@@ -461,6 +467,8 @@ func (obj StandalonePriceChangeActiveAction) MarshalJSON() ([]byte, error) {
  */
 type StandalonePriceChangeValueAction struct {
 	// New value to set. Must not be empty.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// If set to `true` the update action applies to the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). If set to `false`, the update action applies to the current [StandalonePrice](ctp:api:type:StandalonePrice).
 	Staged *bool `json:"staged,omitempty"`

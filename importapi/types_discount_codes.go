@@ -8,37 +8,35 @@ import (
 )
 
 /**
-*	The data representation for a Discount Code to be imported that is persisted as a [Discount Code](/../api/projects/discountCodes#discountcode) in the Project.
+*	Represents the data used to import a DiscountCode. Once imported, this data is persisted as a [DiscountCode](ctp:api:type:DiscountCode) in the Project.
 *
  */
 type DiscountCodeImport struct {
-	// User-defined unique identifier. If a [Discount Code](/../api/projects/discountCodes#discountcode) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [DiscountCode](ctp:api:type:DiscountCode) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `DiscountCode.name`.
 	Name *LocalizedString `json:"name,omitempty"`
 	// Maps to `DiscountCode.description`.
 	Description *LocalizedString `json:"description,omitempty"`
-	// User-defined unique identifier of the DiscountCode that is used by the customer to apply the discount.
-	//
-	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
+	// Maps to `DiscountCode.code`. This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
 	Code string `json:"code"`
-	// Reference to CartDiscounts that can be applied to the Cart once the DiscountCode is applied.
+	// Maps to `DiscountCode.cartDiscounts`. If the referenced [CartDiscounts](ctp:api:type:CartDiscount) do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CartDiscounts are created.
 	CartDiscounts []CartDiscountKeyReference `json:"cartDiscounts"`
-	// DiscountCode can only be applied to Carts that match this predicate.
+	// Maps to `DiscountCode.cartPredicate`.
 	CartPredicate *string `json:"cartPredicate,omitempty"`
-	// Indicates if the DiscountCode is active and can be applied to the Cart.
+	// Maps to `DiscountCode.isActive`.
 	IsActive bool `json:"isActive"`
-	// Number of times the DiscountCode can be applied. DiscountCode application is counted at the time of Order creation or update. However, Order cancellation or deletion does not decrement the count.
+	// Maps to `DiscountCode.maxApplications`.
 	MaxApplications *int `json:"maxApplications,omitempty"`
-	// Number of times the DiscountCode can be applied per Customer (anonymous Carts are not supported). DiscountCode application is counted at the time of Order creation or update. However, Order cancellation or deletion does not decrement the count.
+	// Maps to `DiscountCode.maxApplicationsPerCustomer`.
 	MaxApplicationsPerCustomer *int `json:"maxApplicationsPerCustomer,omitempty"`
-	// Groups to which the DiscountCode belongs.
+	// Maps to `DiscountCode.groups`.
 	Groups []string `json:"groups"`
-	// Date and time (UTC) from which the DiscountCode is effective.
+	// Maps to `DiscountCode.validFrom`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Date and time (UTC) until which the DiscountCode is effective.
+	// Maps to `DiscountCode.validUntil`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Custom Fields of the DiscountCode.
+	// Maps to `DiscountCode.custom`.
 	Custom *Custom `json:"custom,omitempty"`
 }
 

@@ -23,7 +23,7 @@ func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Get() *ByProjectKeyDiscou
 }
 
 /**
-*	Checks if a DiscountCode exists for a given `id`. Returns a `200 OK` status if the DiscountCode exists or a `404 Not Found` otherwise.
+*	Checks if a DiscountCode exists with the provided `id`. Returns a `200 OK` status if the DiscountCode exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyDiscountCodesByIDRequestBuilder) Head() *ByProjectKeyDiscountCodesByIDRequestMethodHead {
 	return &ByProjectKeyDiscountCodesByIDRequestMethodHead{

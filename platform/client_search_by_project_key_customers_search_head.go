@@ -29,7 +29,7 @@ func (rb *ByProjectKeyCustomersSearchRequestMethodHead) WithHeaders(headers http
 
 /**
 *	Checks whether a search index of Customers exists for a Project.
-*	If an index exists, a `200 OK` is returned; otherwise, a `409 Conflict`.
+*	Returns a `200 OK` if an index exists; otherwise, returns a `409 Conflict`.
 *
  */
 func (rb *ByProjectKeyCustomersSearchRequestMethodHead) Execute(ctx context.Context) error {

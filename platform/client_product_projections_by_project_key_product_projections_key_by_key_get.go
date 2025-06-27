@@ -26,14 +26,16 @@ func (r *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) Dump() map[stri
 }
 
 type ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput struct {
-	Staged             *bool
-	PriceCurrency      *string
-	PriceCountry       *string
-	PriceCustomerGroup *string
-	PriceChannel       *string
-	LocaleProjection   []string
-	StoreProjection    *string
-	Expand             []string
+	Staged                        *bool
+	PriceCurrency                 *string
+	PriceCountry                  *string
+	PriceCustomerGroup            *string
+	PriceCustomerGroupAssignments []string
+	PriceChannel                  *string
+	PriceRecurrencePolicy         *string
+	LocaleProjection              []string
+	StoreProjection               *string
+	Expand                        []string
 }
 
 func (input *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput) Values() url.Values {
@@ -54,8 +56,14 @@ func (input *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput) Values
 	if input.PriceCustomerGroup != nil {
 		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
 	}
+	for _, v := range input.PriceCustomerGroupAssignments {
+		values.Add("priceCustomerGroupAssignments", fmt.Sprintf("%v", v))
+	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	if input.PriceRecurrencePolicy != nil {
+		values.Add("priceRecurrencePolicy", fmt.Sprintf("%v", *input.PriceRecurrencePolicy))
 	}
 	for _, v := range input.LocaleProjection {
 		values.Add("localeProjection", fmt.Sprintf("%v", v))
@@ -101,11 +109,27 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) PriceCustomerG
 	return rb
 }
 
+func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) PriceCustomerGroupAssignments(v []string) *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput{}
+	}
+	rb.params.PriceCustomerGroupAssignments = v
+	return rb
+}
+
 func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) PriceChannel(v string) *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput{}
 	}
 	rb.params.PriceChannel = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) PriceRecurrencePolicy(v string) *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsKeyByKeyRequestMethodGetInput{}
+	}
+	rb.params.PriceRecurrencePolicy = &v
 	return rb
 }
 

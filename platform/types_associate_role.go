@@ -239,7 +239,7 @@ func mapDiscriminatorAssociateRoleUpdateAction(input interface{}) (AssociateRole
 }
 
 /**
-*	Permissions grant granular access to [Approval Rules](ctp:api:type:ApprovalRule), [Approval Flows](ctp:api:type:ApprovalFlow), [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), and [Quote Requests](ctp:api:type:QuoteRequest).
+*	Permissions grant granular access to [Approval Rules](ctp:api:type:ApprovalRule), [Approval Flows](ctp:api:type:ApprovalFlow), [Business Units](ctp:api:type:BusinessUnit), [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), and [Shopping Lists](ctp:api:type:ShoppingList).
 *
  */
 type Permission string
@@ -284,6 +284,14 @@ const (
 	PermissionCreateApprovalRules                Permission = "CreateApprovalRules"
 	PermissionUpdateApprovalRules                Permission = "UpdateApprovalRules"
 	PermissionUpdateApprovalFlows                Permission = "UpdateApprovalFlows"
+	PermissionViewMyShoppingLists                Permission = "ViewMyShoppingLists"
+	PermissionViewOthersShoppingLists            Permission = "ViewOthersShoppingLists"
+	PermissionUpdateMyShoppingLists              Permission = "UpdateMyShoppingLists"
+	PermissionUpdateOthersShoppingLists          Permission = "UpdateOthersShoppingLists"
+	PermissionCreateMyShoppingLists              Permission = "CreateMyShoppingLists"
+	PermissionCreateOthersShoppingLists          Permission = "CreateOthersShoppingLists"
+	PermissionDeleteMyShoppingLists              Permission = "DeleteMyShoppingLists"
+	PermissionDeleteOthersShoppingLists          Permission = "DeleteOthersShoppingLists"
 )
 
 /**

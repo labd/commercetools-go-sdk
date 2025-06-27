@@ -13,7 +13,7 @@ type ByProjectKeyOrderPatchesImportContainersByImportContainerKeyRequestBuilder 
 }
 
 /**
-*	Creates a new import request for order patches
+*	Creates an Import Request for updating Orders.
  */
 func (rb *ByProjectKeyOrderPatchesImportContainersByImportContainerKeyRequestBuilder) Post(body OrderPatchImportRequest) *ByProjectKeyOrderPatchesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyOrderPatchesImportContainersByImportContainerKeyRequestMethodPost{

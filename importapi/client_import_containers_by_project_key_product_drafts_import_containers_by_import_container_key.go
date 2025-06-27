@@ -13,7 +13,7 @@ type ByProjectKeyProductDraftsImportContainersByImportContainerKeyRequestBuilder
 }
 
 /**
-*	Creates a request for creating new ProductDrafts or updating existing ones.
+*	Creates an Import Request for Products.
 *
  */
 func (rb *ByProjectKeyProductDraftsImportContainersByImportContainerKeyRequestBuilder) Post(body ProductDraftImportRequest) *ByProjectKeyProductDraftsImportContainersByImportContainerKeyRequestMethodPost {

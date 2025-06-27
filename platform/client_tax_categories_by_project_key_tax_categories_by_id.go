@@ -20,7 +20,7 @@ func (rb *ByProjectKeyTaxCategoriesByIDRequestBuilder) Get() *ByProjectKeyTaxCat
 }
 
 /**
-*	Checks if a TaxCategory exists for a given `id`. Returns a `200 OK` status if the TaxCategory exists or a `404 Not Found` otherwise.
+*	Checks if a TaxCategory exists with the provided `id`. Returns a `200 OK` status if the TaxCategory exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyTaxCategoriesByIDRequestBuilder) Head() *ByProjectKeyTaxCategoriesByIDRequestMethodHead {
 	return &ByProjectKeyTaxCategoriesByIDRequestMethodHead{

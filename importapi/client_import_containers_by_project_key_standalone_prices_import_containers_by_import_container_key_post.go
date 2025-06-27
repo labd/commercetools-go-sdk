@@ -29,7 +29,7 @@ func (rb *ByProjectKeyStandalonePricesImportContainersByImportContainerKeyReques
 }
 
 /**
-*	Creates a request for creating new Standalone Prices or updating existing ones.
+*	Creates an Import Request for Standalone Prices.
  */
 func (rb *ByProjectKeyStandalonePricesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)

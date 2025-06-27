@@ -37,7 +37,7 @@ type ByProjectKeyByResourceTypeByIDRequestMethodGetInput struct {
 	AssociateId                     *string
 	BusinessUnit                    *string
 	Type                            *string
-	Source                          *string
+	Source                          *Source
 	Changes                         []string
 	Stores                          []string
 	ExcludePlatformInitiatedChanges []PlatformInitiatedChange
@@ -178,7 +178,7 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Type(v string) *ByProj
 	return rb
 }
 
-func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Source(v string) *ByProjectKeyByResourceTypeByIDRequestMethodGet {
+func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Source(v Source) *ByProjectKeyByResourceTypeByIDRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
 	}

@@ -38,7 +38,7 @@ type Record struct {
 	Resource ResourceIdentifier `json:"resource"`
 	// References to the [Stores](ctp:api:type:Store) associated with the [Change](ctp:history:type:Change).
 	Stores []KeyReference `json:"stores"`
-	// Reference to the [Business Unit](ctp:api:type:BusinessUnit) associated with the [Change](ctp:history:type:Change).
+	// Reference to the [Business Unit](ctp:api:type:BusinessUnit) associated with the [Change](ctp:history:type:Change). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *KeyReference `json:"businessUnit,omitempty"`
 	// `true` if no change was detected.
 	//
@@ -97,8 +97,7 @@ type RecordPagedQueryResponse struct {
 }
 
 /**
-*	This data type represents the supported resource types.
-*	The value must be one of the following:
+*	Value of resource types supported in Change History.
 *
  */
 type ChangeHistoryResourceType string
@@ -198,10 +197,12 @@ func (obj ErrorResponse) Error() string {
 *
  */
 type ModifiedBy struct {
+	// `true` if the change was made using the Merchant Center.
+	IsPlatformClient bool `json:"isPlatformClient"`
 	// [ID](/general-concepts#identifier) of the Merchant Center user who made the change.
 	//
-	// Present only if the change was made in the Merchant Center.
-	ID string `json:"id"`
+	// Present only if `isPlatformClient` is `true`.
+	ID *string `json:"id,omitempty"`
 	// Indicates who performed the change.
 	//
 	// - If the change was made by a user, the value is `"user"`.
@@ -218,10 +219,8 @@ type ModifiedBy struct {
 	//
 	// Present only if the change was made using a token from the [password flow](/authorization#password-flow).
 	Customer *Reference `json:"customer,omitempty"`
-	// The [Associate](ctp:api:type:Associate) who made the change in the context of a [Business Unit](ctp:api:type:BusinessUnit). Present only if the Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// The [Associate](ctp:api:type:Associate) who made the change in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *Reference `json:"associate,omitempty"`
-	// `true` if the change was made using the Merchant Center or [ImpEx](https://impex.europe-west1.gcp.commercetools.com/).
-	IsPlatformClient bool `json:"isPlatformClient"`
 }
 
 /**
@@ -239,7 +238,7 @@ const (
 )
 
 /**
-*	Values for the Source enumeration.
+*	Source of change for the resource.
  */
 type Source string
 
@@ -387,7 +386,7 @@ const (
 	UpdateTypeSetAssetDescription                   UpdateType = "setAssetDescription"
 	UpdateTypeSetAssetSources                       UpdateType = "setAssetSources"
 	UpdateTypeSetAssetTags                          UpdateType = "setAssetTags"
-	UpdateTypeSetAsssetKey                          UpdateType = "setAsssetKey"
+	UpdateTypeSetAssetKey                           UpdateType = "setAssetKey"
 	UpdateTypeSetAttribute                          UpdateType = "setAttribute"
 	UpdateTypeSetAuthenticationMode                 UpdateType = "setAuthenticationMode"
 	UpdateTypeSetAuthorName                         UpdateType = "setAuthorName"

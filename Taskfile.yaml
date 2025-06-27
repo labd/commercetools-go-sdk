@@ -1,14 +1,16 @@
 version: 3
 vars:
-  codegenJar: "../rmf-codegen/rmf-codegen.jar"
   apiSpecsDir: "../commercetools-api-reference/api-specs"
   generatedDir: "./generated"
   versionId: 1.5.0
 
 tasks:
   install:
+    platform:
+      os: linux
+      arch: amd64
     cmds:
-      - go install golang.org/x/tools/cmd/goimports@latest
+      - bash install-script.sh
 
   test:
     cmds:
@@ -64,7 +66,7 @@ tasks:
 
   generate-api:
     cmds:
-      - java -jar {{ .codegenJar }} generate {{ .apiSpecsDir }}/{{ .path }}/api.raml -b {{ .apiName }} -o {{ .generatedDir }}/ -t GO_CLIENT
+      - rmf-codegen generate {{ .apiSpecsDir }}/{{ .path }}/api.raml -b {{ .apiName }} -o {{ .generatedDir }}/ -t GO_CLIENT
       - goimports -w {{ .generatedDir }}/{{ .apiName }}/
       - go fmt {{ .generatedDir }}/{{ .apiName }}/
       - rm -rf {{ .apiName }}/

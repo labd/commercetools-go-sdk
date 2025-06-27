@@ -8,29 +8,29 @@ import (
 	"time"
 )
 
-/**
-*	The item's state.
-*
- */
 type ItemState struct {
+	// Number of Line Items or Custom Line Items in this State.
 	Quantity int `json:"quantity"`
-	// Maps to `ItemState.state`.
+	// State of the Line Items or Custom Line Items in a custom workflow. If the referenced [State](ctp:api:type:State) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced State is created.
 	State StateKeyReference `json:"state"`
 }
 
 /**
-*	The item's shipping target.
+*	Determines the address (as a reference to an address in `itemShippingAddresses`) and the quantity shipped to the address.
 *
  */
 type ItemShippingTarget struct {
-	// Maps to `ItemShippingTarget.addressKey`.
+	// Key of the address in the [Cart](ctp:api:type:Cart) `itemShippingAddresses`. Duplicate address keys are not allowed.
 	AddressKey string `json:"addressKey"`
-	// Maps to `ItemShippingTarget.quantity`.
+	// Quantity of Line Items or Custom Line Items shipped to the address with the specified `addressKey`.
 	Quantity int `json:"quantity"`
 }
 
+/**
+*	The sum of the `targets` must match the quantity of the Line Items or Custom Line Items
+ */
 type ItemShippingDetailsDraft struct {
-	// Maps to `ItemShippingDetailsDraft.targets`.
+	// Holds information on the quantity of Line Items or Custom Line Items and the address it is shipped.
 	Targets []ItemShippingTarget `json:"targets"`
 }
 
@@ -43,13 +43,13 @@ type LineItemPrice struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Maps to `Price.validUntil`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// References a customer group by key.
+	// Maps to `Price.customerGroup`. References a customer group by key. If the referenced [CustomerGroup](ctp:api:type:CustomerGroup) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CustomerGroup is created.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
-	// References a channel by key.
+	// Maps to `Price.channel`. References a channel by key. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	Channel *ChannelKeyReference `json:"channel,omitempty"`
 	// Sets a discounted price from an external service.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// The tiered prices for this price.
+	// Maps to `Price.tiers`.
 	Tiers []PriceTier `json:"tiers"`
 	// Maps to `Price.custom`.
 	Custom *Custom `json:"custom,omitempty"`
@@ -98,7 +98,7 @@ func (obj LineItemPrice) MarshalJSON() ([]byte, error) {
 }
 
 type LineItemProductVariantImportDraft struct {
-	// Maps to `ProductVariant.product`.
+	// Maps to `ProductVariant.product`. If the referenced [ProductVariant](ctp:api:type:ProductVariant) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced ProductVariant is created.
 	ProductVariant *ProductVariantKeyReference `json:"productVariant,omitempty"`
 	// Maps to `ProductVariantImportDraft.sku`.
 	Sku *string `json:"sku,omitempty"`
@@ -165,10 +165,11 @@ func (obj LineItemProductVariantImportDraft) MarshalJSON() ([]byte, error) {
 *
 *	You cannot create an Order that includes line item operations that do not exist in the Project or have been deleted.
 *	Products and Product Variants referenced by a line item must already exist in the Project.
+*	Product Attributes are merged with Variant Attributes to ensure the full Attribute context of the Product Variant.
 *
  */
 type LineItemImportDraft struct {
-	// Maps to `LineItem.productId`.
+	// Maps to `LineItem.productId`. If the referenced [Product](ctp:api:type:Product) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Product is created.
 	Product *ProductKeyReference `json:"product,omitempty"`
 	// Maps to `LineItem.name`.
 	Name LocalizedString `json:"name"`
@@ -177,21 +178,18 @@ type LineItemImportDraft struct {
 	// Maps to `LineItem.price`.
 	Price LineItemPrice `json:"price"`
 	// Maps to `LineItem.quantity`.
-	Quantity int         `json:"quantity"`
-	State    []ItemState `json:"state"`
-	// Maps to `LineItem.supplyChannel`.
-	// The Reference to the Supply [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
-	// If referenced Supply Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Supply Channel is created.
+	Quantity int `json:"quantity"`
+	// Maps to `LineItem.state`.
+	State []ItemState `json:"state"`
+	// Maps to `LineItem.supplyChannel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	SupplyChannel *ChannelKeyReference `json:"supplyChannel,omitempty"`
-	// Maps to `LineItem.distributionChannel`.
-	// The Reference to the Distribution [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
-	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Distribution Channel is created.
+	// Maps to `LineItem.distributionChannel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	DistributionChannel *ChannelKeyReference `json:"distributionChannel,omitempty"`
 	// Maps to `LineItem.taxRate`.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
-	// Maps to LineItem.shippingDetails.
+	// Maps to `LineItem.shippingDetails`.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
-	// Custom Fields for this Line Item.
+	// Maps to `LineItem.custom`.
 	Custom *Custom `json:"custom,omitempty"`
 }
 
@@ -294,9 +292,12 @@ func (obj CartClassificationTier) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingRateDraft struct {
-	Price     Money                   `json:"price"`
-	FreeAbove *Money                  `json:"freeAbove,omitempty"`
-	Tiers     []ShippingRatePriceTier `json:"tiers"`
+	// Currency amount of the ShippingRate.
+	Price Money `json:"price"`
+	// Free shipping is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
+	FreeAbove *Money `json:"freeAbove,omitempty"`
+	// Price tiers for the ShippingRate.
+	Tiers []ShippingRatePriceTier `json:"tiers"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -342,32 +343,49 @@ func (obj ShippingRateDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ParcelMeasurements struct {
+	// Height of the Parcel.
 	HeightInMillimeter *int `json:"heightInMillimeter,omitempty"`
+	// Length of the Parcel.
 	LengthInMillimeter *int `json:"lengthInMillimeter,omitempty"`
-	WidthInMillimeter  *int `json:"widthInMillimeter,omitempty"`
-	WeightInGram       *int `json:"weightInGram,omitempty"`
+	// Width of the Parcel.
+	WidthInMillimeter *int `json:"widthInMillimeter,omitempty"`
+	// Weight of the Parcel.
+	WeightInGram *int `json:"weightInGram,omitempty"`
 }
 
 type TrackingData struct {
-	TrackingId          *string `json:"trackingId,omitempty"`
-	Carrier             *string `json:"carrier,omitempty"`
-	Provider            *string `json:"provider,omitempty"`
+	// Identifier to track the Parcel.
+	TrackingId *string `json:"trackingId,omitempty"`
+	// Name of the carrier that delivers the Parcel.
+	Carrier *string `json:"carrier,omitempty"`
+	// Name of the provider that serves as facade to several carriers.
+	Provider *string `json:"provider,omitempty"`
+	// Transaction identifier with the `provider`.
 	ProviderTransaction *string `json:"providerTransaction,omitempty"`
-	IsReturn            *bool   `json:"isReturn,omitempty"`
+	// - If `true`, the Parcel is being returned.
+	// - If `false`, the Parcel is being delivered to the customer.
+	IsReturn *bool `json:"isReturn,omitempty"`
 }
 
 type DeliveryItem struct {
-	ID       string `json:"id"`
-	Quantity int    `json:"quantity"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) or [CustomLineItem](ctp:api:type:CustomLineItem) delivered.
+	ID string `json:"id"`
+	// Number of Line Items or Custom Line Items delivered.
+	Quantity int `json:"quantity"`
 }
 
 type Parcel struct {
-	ID           string              `json:"id"`
-	CreatedAt    time.Time           `json:"createdAt"`
+	// Unique identifier of the Parcel.
+	ID string `json:"id"`
+	// Date and time (UTC) the Parcel was created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Information about the dimensions of the Parcel.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
-	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items"`
-	// The representation to be sent to the server when creating a resource with Custom Fields.
+	// Shipment tracking information of the Parcel.
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// Line Items or Custom Line Items delivered in this Parcel.
+	Items []DeliveryItem `json:"items"`
+	// Custom Fields of the Parcel.
 	Custom *Custom `json:"custom,omitempty"`
 }
 
@@ -396,21 +414,29 @@ func (obj Parcel) MarshalJSON() ([]byte, error) {
 }
 
 type Delivery struct {
-	ID        string         `json:"id"`
-	CreatedAt time.Time      `json:"createdAt"`
-	Items     []DeliveryItem `json:"items"`
-	Parcels   []Parcel       `json:"parcels"`
-	Address   *Address       `json:"address,omitempty"`
+	// Unique identifier of the Delivery.
+	ID string `json:"id"`
+	// Date and time (UTC) the Delivery was created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Line Items or Custom Line Items that are delivered.
+	Items []DeliveryItem `json:"items"`
+	// Information regarding the appearance, content, and shipment of a Parcel.
+	Parcels []Parcel `json:"parcels"`
+	// Address to which Parcels are delivered.
+	Address *Address `json:"address,omitempty"`
 }
 
 type DiscountedLineItemPortion struct {
-	// References a cart discount by key.
-	Discount         CartDiscountKeyReference `json:"discount"`
-	DiscountedAmount Money                    `json:"discountedAmount"`
+	// References a cart discount by key. If the referenced [CartDiscount](ctp:api:type:CartDiscount) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CartDiscount is created.
+	Discount CartDiscountKeyReference `json:"discount"`
+	// Money value for the discount applicable.
+	DiscountedAmount Money `json:"discountedAmount"`
 }
 
 type DiscountedLineItemPriceDraft struct {
-	Value             Money                       `json:"value"`
+	// Discounted money value.
+	Value Money `json:"value"`
+	// Discounts to be applied.
 	IncludedDiscounts []DiscountedLineItemPortion `json:"includedDiscounts"`
 }
 
@@ -422,23 +448,28 @@ const (
 )
 
 /**
-*	Maps to an order's `shippingInfo` property. This field is usually populated by the cart assosciated with
-*	the order, but when importing orders you must provide a draft representation as a part of the OrderImport.
+*	Maps to an Order's `shippingInfo` property. This field is usually populated by the Cart associated with the Order, but when importing Orders you must provide a draft representation as a part of the OrderImport.
 *
  */
 type ShippingInfoImportDraft struct {
-	ShippingMethodName string            `json:"shippingMethodName"`
-	Price              TypedMoney        `json:"price"`
-	ShippingRate       ShippingRateDraft `json:"shippingRate"`
-	TaxRate            *TaxRate          `json:"taxRate,omitempty"`
-	// References a tax category by key.
+	// Maps to `shippingInfo.shippingMethodName`.
+	ShippingMethodName string `json:"shippingMethodName"`
+	// Maps to `shippingInfo.price`.
+	Price TypedMoney `json:"price"`
+	// Used to determine the price.
+	ShippingRate ShippingRateDraft `json:"shippingRate"`
+	// Maps to `shippingInfo.taxRate`.
+	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Maps to `shippingInfo.taxCategory`. If the referenced [TaxCategory](ctp:api:type:TaxCategory) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced TaxCategory is created.
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
-	// References a shipping method by key.
+	// Maps to `shippingInfo.shippingMethod`. If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced ShippingMethod is created.
 	ShippingMethod *ShippingMethodKeyReference `json:"shippingMethod,omitempty"`
-	// Note that you can not add a `DeliveryItem` on import, as `LineItems` and `CustomLineItems` are not yet referencable by an `id`.
-	Deliveries          []Delivery                    `json:"deliveries"`
-	DiscountedPrice     *DiscountedLineItemPriceDraft `json:"discountedPrice,omitempty"`
-	ShippingMethodState *ShippingMethodState          `json:"shippingMethodState,omitempty"`
+	// Maps to `shippingInfo.deliveries`. You cannot add a `DeliveryItem` on import, as `LineItems` and `CustomLineItems` are not yet referenceable by an `id`.
+	Deliveries []Delivery `json:"deliveries"`
+	// Maps to `shippingInfo.discountedPrice`.
+	DiscountedPrice *DiscountedLineItemPriceDraft `json:"discountedPrice,omitempty"`
+	// Maps to `shippingInfo.shippingMethodState`.
+	ShippingMethodState *ShippingMethodState `json:"shippingMethodState,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -484,12 +515,23 @@ func (obj ShippingInfoImportDraft) MarshalJSON() ([]byte, error) {
 }
 
 type ExternalTaxRateDraft struct {
-	Name            string    `json:"name"`
-	Amount          *float64  `json:"amount,omitempty"`
-	Country         string    `json:"country"`
-	State           *string   `json:"state,omitempty"`
-	SubRates        []SubRate `json:"subRates"`
-	IncludedInPrice *bool     `json:"includedInPrice,omitempty"`
+	// Name of the Tax Rate.
+	Name string `json:"name"`
+	// Percentage in the range of 0-1.
+	//
+	// - If no `subRates` are specified, a value must be defined.
+	// - If `subRates` are specified, this can be omitted or its value must be the sum of all `subRates` amounts.
+	Amount *float64 `json:"amount,omitempty"`
+	// Country for which the tax applies.
+	Country string `json:"country"`
+	// State within the specified country.
+	State *string `json:"state,omitempty"`
+	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
+	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
+	SubRates []SubRate `json:"subRates"`
+	// - If set to `false`, the related price is considered the net price and the provided `amount` is applied to calculate the gross price.
+	// - If set to `true`, the related price is considered the gross price, and the provided `amount` is applied to calculate the net price.
+	IncludedInPrice *bool `json:"includedInPrice,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -547,26 +589,30 @@ func (obj *CustomLineItemTaxedPrice) UnmarshalJSON(data []byte) error {
 }
 
 type CustomLineItemDraft struct {
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
-	Name       LocalizedString           `json:"name"`
-	Money      TypedMoney                `json:"money"`
+	// Maps to `CustomLineItem.name`.
+	Name LocalizedString `json:"name"`
+	// Maps to `CustomLineItem.money`.
+	Money TypedMoney `json:"money"`
+	// Maps to `CustomLineItem.taxedPrice`.
 	TaxedPrice *CustomLineItemTaxedPrice `json:"taxedPrice,omitempty"`
-	TotalPrice TypedMoney                `json:"totalPrice"`
-	Slug       string                    `json:"slug"`
-	Quantity   int                       `json:"quantity"`
-	State      []ItemState               `json:"state"`
-	// References a tax category by key.
-	TaxCategory                *TaxCategoryKeyReference       `json:"taxCategory,omitempty"`
-	TaxRate                    *TaxRate                       `json:"taxRate,omitempty"`
-	ExternalTaxRate            *ExternalTaxRateDraft          `json:"externalTaxRate,omitempty"`
+	// Maps to `CustomLineItem.totalPrice`.
+	TotalPrice TypedMoney `json:"totalPrice"`
+	// Maps to `CustomLineItem.slug`.
+	Slug string `json:"slug"`
+	// Maps to `CustomLineItem.quantity`.
+	Quantity int `json:"quantity"`
+	// Maps to `CustomLineItem.state`.
+	State []ItemState `json:"state"`
+	// Maps to `CustomLineItem.taxCategory`. References a tax category by key. If the referenced [TaxCategory](ctp:api:type:TaxCategory) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced TaxCategory is created.
+	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
+	// Maps to `CustomLineItem.taxRate`.
+	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// External Tax Rate for the Custom Line Item if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
+	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// Maps to `CustomLineItem.discountedPricePerQuantity`.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceDraft `json:"discountedPricePerQuantity"`
-	ShippingDetails            *ItemShippingDetailsDraft      `json:"shippingDetails,omitempty"`
+	// Maps to `CustomLineItem.shippingDetails`.
+	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -623,8 +669,11 @@ func (obj CustomLineItemDraft) MarshalJSON() ([]byte, error) {
 }
 
 type TaxPortion struct {
-	Name   *string    `json:"name,omitempty"`
-	Rate   float64    `json:"rate"`
+	// Name of the tax portion.
+	Name *string `json:"name,omitempty"`
+	// A number in the range 0-1.
+	Rate float64 `json:"rate"`
+	// Money value of the tax portion.
 	Amount TypedMoney `json:"amount"`
 }
 
@@ -717,7 +766,7 @@ const (
 )
 
 /**
-*	Maps to `Order.taxRoundingMode`.
+*	The rounding mode representation used in `Order.priceRoundingMode` and `Order.taxRoundingMode`.
  */
 type RoundingMode string
 
@@ -748,7 +797,7 @@ const (
 )
 
 type SyncInfo struct {
-	// Maps to `SyncInfo.channel`
+	// Maps to `SyncInfo.channel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	Channel ChannelKeyReference `json:"channel"`
 	// Maps to `SyncInfo.externalId`
 	ExternalId *string `json:"externalId,omitempty"`
@@ -771,7 +820,7 @@ const (
 )
 
 type DiscountCodeInfo struct {
-	// References a discount code by key.
+	// References a DiscountCode by key. If the referenced [DiscountCode](ctp:api:type:DiscountCode) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced DiscountCode is created.
 	DiscountCode DiscountCodeKeyReference `json:"discountCode"`
 	// Maps to `DiscountCodeInfo.state`
 	State *DiscountCodeState `json:"state,omitempty"`
@@ -851,19 +900,16 @@ func (obj ScoreShippingRateInput) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The data representation for an Order to be imported that is persisted as an [Order](/../api/projects/orders#top) in the Project.
-*
-*	In commercetools, you can import an Order using the
-*	[Create Order by Import](ctp:import:endpoint:/{projectKey}/orders/import:POST)
-*	endpoint method instead of creating it from a Cart.
+*	Represents the data used to import an Order. Once imported, this data is persisted as an [Order](ctp:api:type:Order) in the Project.
 *
 *	An OrderImport is a snapshot of an order at the time it was imported.
 *
  */
 type OrderImport struct {
 	// Maps to `Order.orderNumber`, String that uniquely identifies an order. It should be unique across a project. Once it's set it cannot be changed.
-	OrderNumber string                `json:"orderNumber"`
-	Customer    *CustomerKeyReference `json:"customer,omitempty"`
+	OrderNumber string `json:"orderNumber"`
+	// `key` of the [Customer](ctp:api:type:Customer) that the Order belongs to. If the referenced Customer does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Customer is created.
+	Customer *CustomerKeyReference `json:"customer,omitempty"`
 	// Maps to `Order.customerEmail`.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// Maps to `Order.lineItems`.
@@ -878,7 +924,7 @@ type OrderImport struct {
 	ShippingAddress *Address `json:"shippingAddress,omitempty"`
 	// Maps to `Order.billingAddress`.
 	BillingAddress *Address `json:"billingAddress,omitempty"`
-	// Maps to `Order.customerGroup`.
+	// Maps to `Order.customerGroup`. If the referenced [CustomerGroup](ctp:api:type:CustomerGroup) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CustomerGroup is created.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
 	// Maps to `Order.country`.
 	Country *string `json:"country,omitempty"`
@@ -904,9 +950,9 @@ type OrderImport struct {
 	Origin *CartOrigin `json:"origin,omitempty"`
 	// Maps to `Order.itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
-	// Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Store exists.
+	// Maps to `Order.store`. If the referenced [Store](ctp:api:type:Store) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Store is created.
 	Store *StoreKeyReference `json:"store,omitempty"`
-	// Reference to a State in a custom workflow.
+	// Maps to `Order.state`. If the referenced [State](ctp:api:type:State) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced State is created.
 	State *StateKeyReference `json:"state,omitempty"`
 }
 

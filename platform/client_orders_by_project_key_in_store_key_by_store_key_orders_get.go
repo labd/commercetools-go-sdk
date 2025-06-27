@@ -132,6 +132,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodGet) WithHeaders(he
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves Orders in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodGet) Execute(ctx context.Context) (result *OrderPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

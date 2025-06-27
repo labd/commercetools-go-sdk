@@ -121,6 +121,16 @@ func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodes
 }
 
 /**
+*	Discount groups are used to group the discounts that are applied to a cart or an order.
+ */
+func (rb *ByProjectKeyRequestBuilder) DiscountGroups() *ByProjectKeyDiscountGroupsRequestBuilder {
+	return &ByProjectKeyDiscountGroupsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	commercetools Composable Commerce provides a GraphQL API
  */
 func (rb *ByProjectKeyRequestBuilder) Graphql() *ByProjectKeyGraphqlRequestBuilder {
@@ -165,6 +175,16 @@ func (rb *ByProjectKeyRequestBuilder) Messages() *ByProjectKeyMessagesRequestBui
  */
 func (rb *ByProjectKeyRequestBuilder) Orders() *ByProjectKeyOrdersRequestBuilder {
 	return &ByProjectKeyOrdersRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A PaymentMethod stores details about the method and the PSP
+ */
+func (rb *ByProjectKeyRequestBuilder) PaymentMethods() *ByProjectKeyPaymentMethodsRequestBuilder {
+	return &ByProjectKeyPaymentMethodsRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}
@@ -277,6 +297,27 @@ func (rb *ByProjectKeyRequestBuilder) QuoteRequests() *ByProjectKeyQuoteRequests
  */
 func (rb *ByProjectKeyRequestBuilder) StagedQuotes() *ByProjectKeyStagedQuotesRequestBuilder {
 	return &ByProjectKeyStagedQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A Recurring Order can be created from an Order, usually after a checkout process has been completed or directly via the Recurring Orders API.
+*
+ */
+func (rb *ByProjectKeyRequestBuilder) RecurringOrders() *ByProjectKeyRecurringOrdersRequestBuilder {
+	return &ByProjectKeyRecurringOrdersRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A Recurrence Policy is a configuration of a schedule.
+ */
+func (rb *ByProjectKeyRequestBuilder) RecurrencePolicies() *ByProjectKeyRecurrencePoliciesRequestBuilder {
+	return &ByProjectKeyRecurrencePoliciesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}

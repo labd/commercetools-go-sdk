@@ -8,31 +8,31 @@ import (
 )
 
 /**
-*	Import Operation describes the import status of a specific resource.
+*	Represents the import status of a resource.
 *
  */
 type ImportOperation struct {
-	// The version of the ImportOperation.
+	// Current version of the ImportOperation.
 	Version int `json:"version"`
-	// The key of the [importContainer](/import-container#importcontainer).
+	// `key` of the [ImportContainer](ctp:import:type:ImportContainer).
 	ImportContainerKey string `json:"importContainerKey"`
-	// The key of the resource.
+	// `key` of the resource being imported.
 	ResourceKey string `json:"resourceKey"`
-	// The ID of the ImportOperation.
+	// Unique identifier of the ImportOperation.
 	ID string `json:"id"`
-	// The import status of the resource. Set to `rejected` or `validationFailed` if the import of the resource was not successful.
+	// The import status of the resource. If `rejected` or `validationFailed`, the import was unsuccessful.
 	State ProcessingState `json:"state"`
-	// The version of the imported resource when the import was successful.
+	// The `version` of the imported resource when the import was successful.
 	ResourceVersion *int `json:"resourceVersion,omitempty"`
-	// Contains an error if the import of the resource was not successful. See [Errors](/error).
+	// Contains errors if the import was unsuccessful. See [Errors](/import-export/error).
 	Errors []ErrorObject `json:"errors"`
-	// In case of unresolved status this array will show the unresolved references
+	// If the resource being imported contains references to resources which do not exist, these references are contained within this array.
 	UnresolvedReferences []UnresolvedReferences `json:"unresolvedReferences"`
-	// The time when the ImportOperation was created.
+	// Date and time (UTC) the ImportOperation was created.
 	CreatedAt time.Time `json:"createdAt"`
-	// The last time When the ImportOperation was modified.
+	// Date and time (UTC) the ImportOperation was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// The expiration time of the ImportOperation.
+	// Date and time (UTC) the ImportOperation will be deleted.
 	ExpiresAt time.Time `json:"expiresAt"`
 }
 
@@ -110,13 +110,15 @@ const (
 	ImportOperationStateValidationFailed ImportOperationState = "validationFailed"
 )
 
+/**
+*	The status of a new [ImportOperation](#importoperation).
+ */
 type ImportOperationStatus struct {
-	// The ID of the [ImportOperation](#importoperation).
+	// `id` of the [ImportOperation](#importoperation).
 	OperationId *string `json:"operationId,omitempty"`
-	// The validation state of the [ImportOperation](#importoperation).
+	// Validation state of the [ImportOperation](#importoperation).
 	State ImportOperationState `json:"state"`
-	// The validation errors for the [ImportOperation](#importoperation).
-	// See [Errors](/error).
+	// [Errors](/import-export/error) for the [ImportOperation](#importoperation).
 	Errors []ErrorObject `json:"errors"`
 }
 

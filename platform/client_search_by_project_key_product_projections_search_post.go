@@ -29,7 +29,9 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodPost) WithHeaders(hea
 }
 
 /**
-*	Product Projection Search
+*	For implementing funnel search on Product Listing Pages where users select multiple filters, use this POST method.
+*	To avoid URL length restrictions, this method passes the same query parameters as defined in the [GET](ctp:api:endpoint:/{projectKey}/product-projections/search:GET) method, within the request body in URL-encoded format.
+*
  */
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodPost) Execute(ctx context.Context) (result *ProductProjectionPagedSearchResponse, err error) {
 	queryParams := url.Values{}

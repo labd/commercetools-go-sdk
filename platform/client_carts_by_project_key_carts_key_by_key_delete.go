@@ -80,6 +80,10 @@ func (rb *ByProjectKeyCartsKeyByKeyRequestMethodDelete) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a Cart in the Project.
+ */
 func (rb *ByProjectKeyCartsKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *Cart, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

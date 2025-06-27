@@ -19,6 +19,10 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Apply() *ByProjectKeyOrders
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves an OrderEdit with the provided `id`.
+ */
 func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Get() *ByProjectKeyOrdersEditsByIDRequestMethodGet {
 	return &ByProjectKeyOrdersEditsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/orders/edits/%s", rb.projectKey, rb.id),
@@ -27,7 +31,7 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Get() *ByProjectKeyOrdersEd
 }
 
 /**
-*	Checks if an OrderEdit exists for a given `id`. Returns a `200 OK` status if the OrderEdit exists or a `404 Not Found` otherwise.
+*	Checks if an OrderEdit exists with the provided `id`. Returns a `200 OK` status if the OrderEdit exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Head() *ByProjectKeyOrdersEditsByIDRequestMethodHead {
 	return &ByProjectKeyOrdersEditsByIDRequestMethodHead{
@@ -36,6 +40,9 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Head() *ByProjectKeyOrdersE
 	}
 }
 
+/**
+*	Updates an OrderEdit in the Project using one or more [update actions](/../api/projects/order-edits#update-actions).
+ */
 func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Post(body OrderEditUpdate) *ByProjectKeyOrdersEditsByIDRequestMethodPost {
 	return &ByProjectKeyOrdersEditsByIDRequestMethodPost{
 		body:   body,
@@ -44,6 +51,9 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Post(body OrderEditUpdate) 
 	}
 }
 
+/**
+*	Deletes an OrderEdit in the Project.
+ */
 func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Delete() *ByProjectKeyOrdersEditsByIDRequestMethodDelete {
 	return &ByProjectKeyOrdersEditsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/orders/edits/%s", rb.projectKey, rb.id),

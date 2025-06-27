@@ -55,13 +55,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestMethodGet) WithHead
 }
 
 /**
-*	Returns an Order for a given `id` in a Store. Returns a `200 OK` status if successful.
+*	Retrieves an Order with the provided `id` in a [Store](ctp:api:type:Store) for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no Order exists in the Store for the given `id`.
-*	- If the Order exists but does not have a `store` specified, or the `store` field references a different Store.
-*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If no Orders exists in the Store with the provided `id`.
+*	- If an Order exists but does not have a `store` specified, or the `store` field references a different Store.
+*	- If an Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersByIDRequestMethodGet) Execute(ctx context.Context) (result *Order, err error) {

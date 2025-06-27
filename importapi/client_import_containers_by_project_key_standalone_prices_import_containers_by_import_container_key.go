@@ -13,7 +13,7 @@ type ByProjectKeyStandalonePricesImportContainersByImportContainerKeyRequestBuil
 }
 
 /**
-*	Creates a request for creating new Standalone Prices or updating existing ones.
+*	Creates an Import Request for Standalone Prices.
  */
 func (rb *ByProjectKeyStandalonePricesImportContainersByImportContainerKeyRequestBuilder) Post(body StandalonePriceImportRequest) *ByProjectKeyStandalonePricesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyStandalonePricesImportContainersByImportContainerKeyRequestMethodPost{

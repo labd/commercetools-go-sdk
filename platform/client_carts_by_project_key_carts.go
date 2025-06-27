@@ -38,6 +38,10 @@ func (rb *ByProjectKeyCartsRequestBuilder) WithId(id string) *ByProjectKeyCartsB
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves Carts in the Project.
+ */
 func (rb *ByProjectKeyCartsRequestBuilder) Get() *ByProjectKeyCartsRequestMethodGet {
 	return &ByProjectKeyCartsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/carts", rb.projectKey),
@@ -46,7 +50,7 @@ func (rb *ByProjectKeyCartsRequestBuilder) Get() *ByProjectKeyCartsRequestMethod
 }
 
 /**
-*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Carts exist for the provided query predicate. Returns a `200 OK` status if any Carts match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyCartsRequestBuilder) Head() *ByProjectKeyCartsRequestMethodHead {
 	return &ByProjectKeyCartsRequestMethodHead{
@@ -56,6 +60,9 @@ func (rb *ByProjectKeyCartsRequestBuilder) Head() *ByProjectKeyCartsRequestMetho
 }
 
 /**
+*
+*	Creates a Cart in the Project.
+*
 *	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, or if the Shipping Method is not active, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 *
 *	Specific Error Codes:

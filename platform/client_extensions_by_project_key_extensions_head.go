@@ -55,7 +55,7 @@ func (rb *ByProjectKeyExtensionsRequestMethodHead) WithHeaders(headers http.Head
 }
 
 /**
-*	Checks if an Extension exists for a given Query Predicate. Returns a `200 OK` status if any Extensions match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Extensions exist for the provided query predicate. Returns a `200 OK` status if any Extensions match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyExtensionsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

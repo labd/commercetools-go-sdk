@@ -20,7 +20,7 @@ func (rb *ByProjectKeySubscriptionsKeyByKeyRequestBuilder) Get() *ByProjectKeySu
 }
 
 /**
-*	Checks if a Subscription exists for a given `key`. Returns a `200 OK` status if the Subscription exists or a `404 Not Found` otherwise.
+*	Checks if a Subscription exists with the provided `key`. Returns a `200 OK` status if the Subscription exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeySubscriptionsKeyByKeyRequestBuilder) Head() *ByProjectKeySubscriptionsKeyByKeyRequestMethodHead {
 	return &ByProjectKeySubscriptionsKeyByKeyRequestMethodHead{

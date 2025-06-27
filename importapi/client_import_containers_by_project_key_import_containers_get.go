@@ -80,7 +80,7 @@ func (rb *ByProjectKeyImportContainersRequestMethodGet) WithHeaders(headers http
 }
 
 /**
-*	Retrieves all import containers of a given project key.
+*	Retrieves all ImportContainers in the Project.
  */
 func (rb *ByProjectKeyImportContainersRequestMethodGet) Execute(ctx context.Context) (result *ImportContainerPagedResponse, err error) {
 	var queryParams url.Values

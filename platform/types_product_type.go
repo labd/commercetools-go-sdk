@@ -28,7 +28,7 @@ const (
 )
 
 /**
-*	Describes a Product Attribute and allows you to define meta-information associated with the Attribute (like whether it should be searchable, or its constraints).
+*	Describes an Attribute and allows you to define meta-information associated with the Attribute (like whether it should be searchable, or its constraints).
 *
  */
 type AttributeDefinition struct {
@@ -40,13 +40,15 @@ type AttributeDefinition struct {
 	Label LocalizedString `json:"label"`
 	// If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
+	// Specifies whether the Attribute is defined at the Product or Variant level.
+	Level AttributeLevelEnum `json:"level"`
 	// Specifies how Attributes are validated across all variants of a Product.
 	AttributeConstraint AttributeConstraintEnum `json:"attributeConstraint"`
 	// Provides additional Attribute information to aid content managers configure Product details.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint TextInputHint `json:"inputHint"`
-	// If `true`, the Attribute's values are available for the [Product Projections Search API](/../api/projects/products-search) for use in full-text search queries, filters, and facets.
+	// If `true`, the Attribute's values are available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
 	//
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
@@ -82,7 +84,7 @@ type AttributeDefinitionDraft struct {
 	//
 	// When the `type` is different for an AttributeDefinition using the same name in multiple ProductTypes, an [AttributeDefinitionTypeConflict](ctp:api:type:AttributeDefinitionTypeConflictError) error is returned.
 	Type AttributeType `json:"type"`
-	// User-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
+	// User-defined name of the Attribute that is unique to the [Project](ctp:api:type:Project).
 	//
 	// When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes, else an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
 	// An exception to this are the values of an `enum` or `lenum` Type and sets thereof.
@@ -91,13 +93,16 @@ type AttributeDefinitionDraft struct {
 	Label LocalizedString `json:"label"`
 	// Set to `true` if the Attribute is required to have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
+	// Specifies whether the Attribute is defined at the Product or Variant level.
+	Level *AttributeLevelEnum `json:"level,omitempty"`
 	// Specifies how an Attribute or a combination of Attributes should be validated across all variants of a Product.
+	// If the Attribute is defined at Product level, then `attributeConstraint` must be `None`. Otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	AttributeConstraint *AttributeConstraintEnum `json:"attributeConstraint,omitempty"`
 	// Provides additional information about the Attribute that aids content managers when setting Product details.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint *TextInputHint `json:"inputHint,omitempty"`
-	// Set to `true` if the Attribute's values should be available in the [Product Projections Search API](/../api/projects/products-search) and can be used in full-text search queries, filters, and facets.
+	// Set to `true` if the Attribute's values should be available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API and can be used in full-text search queries, filters, and facets.
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
 	// This constraint is enforced at both Product creation and Product update.
@@ -122,6 +127,13 @@ func (obj *AttributeDefinitionDraft) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+type AttributeLevelEnum string
+
+const (
+	AttributeLevelEnumProduct AttributeLevelEnum = "Product"
+	AttributeLevelEnumVariant AttributeLevelEnum = "Variant"
+)
 
 /**
 *	A localized enum value must be unique within the enum, else a [DuplicateEnumValues](ctp:api:type:DuplicateEnumValuesError) error is returned.
@@ -277,7 +289,7 @@ func mapDiscriminatorAttributeType(input interface{}) (AttributeType, error) {
 }
 
 /**
-*	Attribute type for Boolean values. Valid values for the Attribute are `true` and `false` (JSON Boolean).
+*	Attribute type for boolean values. Valid values for the Attribute are `true` and `false`.
 *
  */
 type AttributeBooleanType struct {
@@ -293,6 +305,10 @@ func (obj AttributeBooleanType) MarshalJSON() ([]byte, error) {
 	}{Action: "boolean", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for [DateTime](ctp:api:type:DateTime) type values.
+*
+ */
 type AttributeDateTimeType struct {
 }
 
@@ -306,6 +322,10 @@ func (obj AttributeDateTimeType) MarshalJSON() ([]byte, error) {
 	}{Action: "datetime", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for [Date](ctp:api:type:Date) type values.
+*
+ */
 type AttributeDateType struct {
 }
 
@@ -339,7 +359,7 @@ func (obj AttributeEnumType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Attribute type for [LocalizedString](ctp:api:type:LocalizedString) values.
+*	Attribute type for [LocalizedString](ctp:api:type:LocalizedString) type values.
 *
  */
 type AttributeLocalizableTextType struct {
@@ -374,6 +394,10 @@ func (obj AttributeLocalizedEnumType) MarshalJSON() ([]byte, error) {
 	}{Action: "lenum", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for [Money](ctp:api:type:Money) type values.
+*
+ */
 type AttributeMoneyType struct {
 }
 
@@ -406,6 +430,10 @@ func (obj AttributeNestedType) MarshalJSON() ([]byte, error) {
 	}{Action: "nested", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for numeric values.
+*
+ */
 type AttributeNumberType struct {
 }
 
@@ -419,6 +447,10 @@ func (obj AttributeNumberType) MarshalJSON() ([]byte, error) {
 	}{Action: "number", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for [Reference](ctp:api:type:Reference) type values.
+*
+ */
 type AttributeReferenceType struct {
 	// Name of the resource type that the value should reference.
 	ReferenceTypeId AttributeReferenceTypeId `json:"referenceTypeId"`
@@ -472,7 +504,7 @@ func (obj AttributeSetType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Attribute type for plain text values.
+*	Attribute type for plain text string values.
 *
  */
 type AttributeTextType struct {
@@ -488,6 +520,10 @@ func (obj AttributeTextType) MarshalJSON() ([]byte, error) {
 	}{Action: "text", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Attribute type for [Time](ctp:api:type:Time) type values.
+*
+ */
 type AttributeTimeType struct {
 }
 
@@ -914,7 +950,7 @@ func (obj ProductTypeChangeAttributeConstraintAction) MarshalJSON() ([]byte, err
 type ProductTypeChangeAttributeNameAction struct {
 	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// New user-defined name of the Attribute that is unique with the [Project](ctp:api:type:Project).
+	// New user-defined name of the Attribute that is unique to the [Project](ctp:api:type:Project).
 	//
 	// When using the same `name` for an Attribute in two or more ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. If not, an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
 	// An exception to this are the values of an `enum` or `lenum` type and sets thereof.
@@ -1024,7 +1060,7 @@ func (obj ProductTypeChangeInputHintAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Following this update the Products are reindexed asynchronously to reflect this change on the search endpoint. When enabling search on an existing Attribute type definition, the constraint regarding the maximum size of a searchable Attribute will not be enforced. Instead, Product AttributeDefinitions exceeding this limit will be treated as not searchable and will not be available for full-text search.
+*	Following this update the Products are reindexed asynchronously to reflect this change on the search endpoint. When enabling search on an existing Attribute type definition, the constraint regarding the maximum size of a searchable Attribute will not be enforced. Instead, AttributeDefinitions exceeding this limit will be treated as not searchable and will not be available for full-text search.
 *
  */
 type ProductTypeChangeIsSearchableAction struct {

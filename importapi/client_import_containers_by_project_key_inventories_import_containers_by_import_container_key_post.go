@@ -29,7 +29,7 @@ func (rb *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMeth
 }
 
 /**
-*	Creates a request for creating new Inventories or updating existing ones.
+*	Creates an Import Request for InventoryEntries.
  */
 func (rb *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)

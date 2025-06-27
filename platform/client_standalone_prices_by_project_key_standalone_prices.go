@@ -33,7 +33,7 @@ func (rb *ByProjectKeyStandalonePricesRequestBuilder) Get() *ByProjectKeyStandal
 }
 
 /**
-*	Checks if a StandalonePrice exists for a given Query Predicate. Returns a `200 OK` status if any StandalonePrices match the Query Predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more StandalonePrices exist for the provided query predicate. Returns a `200 OK` status if any StandalonePrices match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStandalonePricesRequestBuilder) Head() *ByProjectKeyStandalonePricesRequestMethodHead {
 	return &ByProjectKeyStandalonePricesRequestMethodHead{

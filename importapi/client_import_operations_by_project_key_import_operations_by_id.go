@@ -13,7 +13,7 @@ type ByProjectKeyImportOperationsByIdRequestBuilder struct {
 }
 
 /**
-*	Retrieves the [ImportOperation](ctp:import:type:ImportOperation) of a given ID.
+*	Retrieves an ImportOperation with the provided `id`.
 *
  */
 func (rb *ByProjectKeyImportOperationsByIdRequestBuilder) Get() *ByProjectKeyImportOperationsByIdRequestMethodGet {

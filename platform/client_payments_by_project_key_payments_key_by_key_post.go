@@ -54,6 +54,10 @@ func (rb *ByProjectKeyPaymentsKeyByKeyRequestMethodPost) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a Payment in the Project using one or more [update actions](/../api/projects/payments#update-actions).
+ */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Payment, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

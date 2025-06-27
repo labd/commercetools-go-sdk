@@ -63,6 +63,8 @@ const (
 	ChangeSubscriptionResourceTypeIdProductType           ChangeSubscriptionResourceTypeId = "product-type"
 	ChangeSubscriptionResourceTypeIdQuote                 ChangeSubscriptionResourceTypeId = "quote"
 	ChangeSubscriptionResourceTypeIdQuoteRequest          ChangeSubscriptionResourceTypeId = "quote-request"
+	ChangeSubscriptionResourceTypeIdRecurrencePolicy      ChangeSubscriptionResourceTypeId = "recurrence-policy"
+	ChangeSubscriptionResourceTypeIdRecurringOrder        ChangeSubscriptionResourceTypeId = "recurring-order"
 	ChangeSubscriptionResourceTypeIdReview                ChangeSubscriptionResourceTypeId = "review"
 	ChangeSubscriptionResourceTypeIdShippingMethod        ChangeSubscriptionResourceTypeId = "shipping-method"
 	ChangeSubscriptionResourceTypeIdShoppingList          ChangeSubscriptionResourceTypeId = "shopping-list"
@@ -100,7 +102,7 @@ type CloudEventsPayload struct {
 	Sequencetype *string `json:"sequencetype,omitempty"`
 	// The URI from which the message can be retrieved if messages are [enabled](/../api/projects/messages#enable-querying-messages-via-the-api). Only set for [MessageSubscriptions](ctp:api:type:MessageSubscription).
 	Dataref *string `json:"dataref,omitempty"`
-	// [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload), [ResourceCreatedDeliveryPayload](ctp:api:type:ResourceCreatedDeliveryPayload), [ResourceUpdatedDeliveryPayload](ctp:api:type:ResourceUpdatedDeliveryPayload), or [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload).
+	// [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload), [ResourceCreatedDeliveryPayload](ctp:api:type:ResourceCreatedDeliveryPayload), [ResourceUpdatedDeliveryPayload](ctp:api:type:ResourceUpdatedDeliveryPayload), or [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload), [EventDeliveryPayload](ctp:api:type:EventDeliveryPayload).
 	Data DeliveryPayload `json:"data"`
 }
 
@@ -163,7 +165,7 @@ func mapDiscriminatorDeliveryFormat(input interface{}) (DeliveryFormat, error) {
 }
 
 /**
-*	The CloudEventsFormat can be used with any [Destination](#destination), and the payload is delivered in the `JSON Event Format`. [AzureEventGridDestination](ctp:api:type:AzureEventGridDestination) offers native support to filter and route CloudEvents.
+*	The CloudEventsFormat can be used with any [Destination](#destination-1), and the payload is delivered in the `JSON Event Format`. [AzureEventGridDestination](ctp:api:type:AzureEventGridDestination) offers native support to filter and route CloudEvents.
 *
  */
 type CloudEventsFormat struct {
@@ -178,80 +180,6 @@ func (obj CloudEventsFormat) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "CloudEvents", Alias: (*Alias)(&obj)})
-}
-
-/**
-*	All payloads for the [PlatformFormat](ctp:api:type:PlatformFormat) share these common fields.
-*
- */
-type DeliveryPayload interface{}
-
-func mapDiscriminatorDeliveryPayload(input interface{}) (DeliveryPayload, error) {
-	var discriminator string
-	if data, ok := input.(map[string]interface{}); ok {
-		discriminator, ok = data["notificationType"].(string)
-		if !ok {
-			return nil, errors.New("error processing discriminator field 'notificationType'")
-		}
-	} else {
-		return nil, errors.New("invalid data")
-	}
-
-	switch discriminator {
-	case "Message":
-		obj := MessageDeliveryPayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ResourceCreated":
-		obj := ResourceCreatedDeliveryPayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ResourceDeleted":
-		obj := ResourceDeletedDeliveryPayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	case "ResourceUpdated":
-		obj := ResourceUpdatedDeliveryPayload{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		if obj.Resource != nil {
-			var err error
-			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return obj, nil
-	}
-	return nil, nil
 }
 
 type Destination interface{}
@@ -405,6 +333,8 @@ type EventBridgeDestination struct {
 	Region string `json:"region"`
 	// ID of the AWS account that receives the events.
 	AccountId string `json:"accountId"`
+	// URN for the EventBridge destination.
+	Source string `json:"source"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -416,6 +346,78 @@ func (obj EventBridgeDestination) MarshalJSON() ([]byte, error) {
 		*Alias
 	}{Action: "EventBridge", Alias: (*Alias)(&obj)})
 }
+
+/**
+*	For EventSubscription, the format of the payload is custom for each specific notification.
+*
+ */
+type EventSubscription struct {
+	// Unique identifier for the type of resource.
+	ResourceTypeId EventSubscriptionResourceTypeId `json:"resourceTypeId"`
+	// Must contain valid event types for the resource.
+	// For example, for resource type `import-api` the event type `ImportContainerCreated` is valid.
+	// If no `types` are given, the Subscription will receive all events for the defined resource type.
+	Types []EventType `json:"types"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj EventSubscription) MarshalJSON() ([]byte, error) {
+	type Alias EventSubscription
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["types"] == nil {
+		delete(raw, "types")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Resource types supported by [EventSubscriptions](ctp:api:type:EventSubscription).
+*
+ */
+type EventSubscriptionResourceTypeId string
+
+const (
+	EventSubscriptionResourceTypeIdCheckout  EventSubscriptionResourceTypeId = "checkout"
+	EventSubscriptionResourceTypeIdImportApi EventSubscriptionResourceTypeId = "import-api"
+)
+
+/**
+*	Type of events supported by [EventSubscriptions](ctp:api:type:EventSubscription).
+*
+ */
+type EventType string
+
+const (
+	EventTypeCheckoutOrderCreationFailed              EventType = "CheckoutOrderCreationFailed"
+	EventTypeCheckoutPaymentAuthorizationCancelled    EventType = "CheckoutPaymentAuthorizationCancelled"
+	EventTypeCheckoutPaymentAuthorizationFailed       EventType = "CheckoutPaymentAuthorizationFailed"
+	EventTypeCheckoutPaymentAuthorized                EventType = "CheckoutPaymentAuthorized"
+	EventTypeCheckoutPaymentCancelAuthorizationFailed EventType = "CheckoutPaymentCancelAuthorizationFailed"
+	EventTypeCheckoutPaymentCharged                   EventType = "CheckoutPaymentCharged"
+	EventTypeCheckoutPaymentChargeFailed              EventType = "CheckoutPaymentChargeFailed"
+	EventTypeCheckoutPaymentRefunded                  EventType = "CheckoutPaymentRefunded"
+	EventTypeCheckoutPaymentRefundFailed              EventType = "CheckoutPaymentRefundFailed"
+	EventTypeImportContainerCreated                   EventType = "ImportContainerCreated"
+	EventTypeImportContainerDeleted                   EventType = "ImportContainerDeleted"
+	EventTypeImportOperationRejected                  EventType = "ImportOperationRejected"
+	EventTypeImportUnresolved                         EventType = "ImportUnresolved"
+	EventTypeImportValidationFailed                   EventType = "ImportValidationFailed"
+	EventTypeImportWaitForMasterVariant               EventType = "ImportWaitForMasterVariant"
+)
 
 /**
 *	Destination for [Google Cloud Pub/Sub](https://cloud.google.com/pubsub/) that can be used
@@ -453,63 +455,6 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "IronMQ", Alias: (*Alias)(&obj)})
-}
-
-/**
-*	This payload is sent for a [MessageSubscription](ctp:api:type:MessageSubscription).
-*
- */
-type MessageDeliveryPayload struct {
-	// `key` of the [Project](ctp:api:type:Project).
-	// Useful for processing notifications if the Destination receives them from multiple Projects.
-	ProjectKey string `json:"projectKey"`
-	// Reference to the resource that triggered the notification.
-	Resource Reference `json:"resource"`
-	// User-defined unique identifiers of the resource.
-	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Unique ID of the message.
-	ID string `json:"id"`
-	// Last seen version of the resource.
-	Version int `json:"version"`
-	// Date and time (UTC) the resource was initially created.
-	CreatedAt time.Time `json:"createdAt"`
-	// Date and time (UTC) the resource was last modified.
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Used to ensure all messages of the resource are processed in correct order.
-	// The `sequenceNumber` of the next message of the resource is a successor of the `sequenceNumber` of the current message.
-	SequenceNumber int `json:"sequenceNumber"`
-	// Version of the resource on which the update was performed.
-	ResourceVersion int `json:"resourceVersion"`
-	// If the payload does not fit into the size limit or its format is not accepted by the messaging service, the `payloadNotIncluded` field is present.
-	PayloadNotIncluded *PayloadNotIncluded `json:"payloadNotIncluded,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *MessageDeliveryPayload) UnmarshalJSON(data []byte) error {
-	type Alias MessageDeliveryPayload
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Resource != nil {
-		var err error
-		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj MessageDeliveryPayload) MarshalJSON() ([]byte, error) {
-	type Alias MessageDeliveryPayload
-	return json.Marshal(struct {
-		Action string `json:"notificationType"`
-		*Alias
-	}{Action: "Message", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -575,6 +520,7 @@ const (
 	MessageSubscriptionResourceTypeIdQuote                 MessageSubscriptionResourceTypeId = "quote"
 	MessageSubscriptionResourceTypeIdQuoteRequest          MessageSubscriptionResourceTypeId = "quote-request"
 	MessageSubscriptionResourceTypeIdReview                MessageSubscriptionResourceTypeId = "review"
+	MessageSubscriptionResourceTypeIdShoppingList          MessageSubscriptionResourceTypeId = "shopping-list"
 	MessageSubscriptionResourceTypeIdStagedQuote           MessageSubscriptionResourceTypeId = "staged-quote"
 	MessageSubscriptionResourceTypeIdStandalonePrice       MessageSubscriptionResourceTypeId = "standalone-price"
 	MessageSubscriptionResourceTypeIdStore                 MessageSubscriptionResourceTypeId = "store"
@@ -602,6 +548,401 @@ func (obj PlatformFormat) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "Platform", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	[AWS SNS](https://aws.amazon.com/sns/) can be used to push messages to AWS Lambda, HTTP endpoints (webhooks), or fan-out messages to SQS queues. The SQS queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type.
+*
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test notification will not be sent.
+*
+*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+*
+*	The IAM user should only have the `sns:Publish` permission on this topic.
+*
+ */
+type SnsDestination struct {
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessSecret *string `json:"accessSecret,omitempty"`
+	// Amazon Resource Name (ARN) of the topic.
+	TopicArn string `json:"topicArn"`
+	// Defines the method of authentication for the SNS topic.
+	AuthenticationMode *AwsAuthenticationMode `json:"authenticationMode,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SnsDestination) MarshalJSON() ([]byte, error) {
+	type Alias SnsDestination
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SNS", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	[AWS SQS](https://aws.amazon.com/sqs/) is a pull-queue on AWS.
+*	The queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type with a `MaximumMessageSize` of `256 KB`.
+*
+*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test message will not be sent.
+*
+*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+*
+*	The IAM user should only have the `sqs:SendMessage` permission on this queue.
+*
+ */
+type SqsDestination struct {
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessKey *string `json:"accessKey,omitempty"`
+	// Only present if `authenticationMode` is set to `Credentials`.
+	AccessSecret *string `json:"accessSecret,omitempty"`
+	// URL of the Amazon SQS queue.
+	QueueUrl string `json:"queueUrl"`
+	// [AWS Region](https://docs.aws.amazon.com/general/latest/gr/rande-manage.html) the message queue is located in.
+	Region string `json:"region"`
+	// Defines the method of authentication for the SQS queue.
+	AuthenticationMode *AwsAuthenticationMode `json:"authenticationMode,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SqsDestination) MarshalJSON() ([]byte, error) {
+	type Alias SqsDestination
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SQS", Alias: (*Alias)(&obj)})
+}
+
+type Subscription struct {
+	// Unique identifier of the Subscription.
+	ID string `json:"id"`
+	// Current version of the Subscription.
+	Version int `json:"version"`
+	// Date and time (UTC) the Subscription was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Subscription was last modified.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Subscription.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Subscription.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Messaging service to which the notifications are sent.
+	Destination Destination `json:"destination"`
+	// User-defined unique identifier of the Subscription.
+	Key *string `json:"key,omitempty"`
+	// Messages subscribed to.
+	Messages []MessageSubscription `json:"messages"`
+	// Changes subscribed to.
+	Changes []ChangeSubscription `json:"changes"`
+	// Events subscribed to.
+	Events []EventSubscription `json:"events"`
+	// Format in which the payload is delivered.
+	Format DeliveryFormat `json:"format"`
+	// Status of the Subscription.
+	Status SubscriptionHealthStatus `json:"status"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *Subscription) UnmarshalJSON(data []byte) error {
+	type Alias Subscription
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Destination != nil {
+		var err error
+		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.Format != nil {
+		var err error
+		obj.Format, err = mapDiscriminatorDeliveryFormat(obj.Format)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+*	Either `messages`, `changes`, or `events` must be set.
+*
+ */
+type SubscriptionDraft struct {
+	// Messaging service to which the notifications are sent.
+	Destination Destination `json:"destination"`
+	// User-defined unique identifier for the Subscription.
+	Key *string `json:"key,omitempty"`
+	// Messages to be subscribed to.
+	Messages []MessageSubscription `json:"messages"`
+	// Changes to be subscribed to.
+	Changes []ChangeSubscription `json:"changes"`
+	// Events to be subscribed to.
+	Events []EventSubscription `json:"events"`
+	// Format in which the payload is delivered. When not provided, the [PlatformFormat](ctp:api:type:PlatformFormat) is selected by default.
+	Format DeliveryFormat `json:"format,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *SubscriptionDraft) UnmarshalJSON(data []byte) error {
+	type Alias SubscriptionDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Destination != nil {
+		var err error
+		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.Format != nil {
+		var err error
+		obj.Format, err = mapDiscriminatorDeliveryFormat(obj.Format)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SubscriptionDraft) MarshalJSON() ([]byte, error) {
+	type Alias SubscriptionDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["messages"] == nil {
+		delete(raw, "messages")
+	}
+
+	if raw["changes"] == nil {
+		delete(raw, "changes")
+	}
+
+	if raw["events"] == nil {
+		delete(raw, "events")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	The health status of the Subscription that indicates whether notifications are being delivered.
+*
+ */
+type SubscriptionHealthStatus string
+
+const (
+	SubscriptionHealthStatusHealthy                           SubscriptionHealthStatus = "Healthy"
+	SubscriptionHealthStatusConfigurationError                SubscriptionHealthStatus = "ConfigurationError"
+	SubscriptionHealthStatusConfigurationErrorDeliveryStopped SubscriptionHealthStatus = "ConfigurationErrorDeliveryStopped"
+	SubscriptionHealthStatusTemporaryError                    SubscriptionHealthStatus = "TemporaryError"
+	SubscriptionHealthStatusManuallySuspended                 SubscriptionHealthStatus = "ManuallySuspended"
+)
+
+/**
+*	All payloads for the [PlatformFormat](ctp:api:type:PlatformFormat) share these common fields.
+*
+ */
+type SubscriptionNotification interface{}
+
+func mapDiscriminatorSubscriptionNotification(input interface{}) (SubscriptionNotification, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["notificationType"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'notificationType'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "Event":
+		obj := EventDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	All payloads for the [PlatformFormat](ctp:api:type:PlatformFormat) share these common fields.
+*
+ */
+type DeliveryPayload interface{}
+
+func mapDiscriminatorDeliveryPayload(input interface{}) (DeliveryPayload, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["notificationType"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'notificationType'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "Message":
+		obj := MessageDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ResourceCreated":
+		obj := ResourceCreatedDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ResourceDeleted":
+		obj := ResourceDeletedDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ResourceUpdated":
+		obj := ResourceUpdatedDeliveryPayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	This payload is sent for an [EventSubscription](ctp:api:type:EventSubscription).
+*
+ */
+type EventDeliveryPayload struct {
+	// Unique identifier of the Event.
+	ID string `json:"id"`
+	// The type of Event that has occurred.
+	Type EventType `json:"type"`
+	// The type of resource targeted by the Event.
+	ResourceType string `json:"resourceType"`
+	// The data describing the event that has taken place.
+	Data interface{} `json:"data"`
+	// Date and time (UTC) the resource was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj EventDeliveryPayload) MarshalJSON() ([]byte, error) {
+	type Alias EventDeliveryPayload
+	return json.Marshal(struct {
+		Action string `json:"notificationType"`
+		*Alias
+	}{Action: "Event", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This payload is sent for a [MessageSubscription](ctp:api:type:MessageSubscription).
+*
+ */
+type MessageDeliveryPayload struct {
+	// `key` of the [Project](ctp:api:type:Project).
+	// Useful for processing notifications if the Destination receives them from multiple Projects.
+	ProjectKey string `json:"projectKey"`
+	// Reference to the resource that triggered the notification.
+	Resource Reference `json:"resource"`
+	// User-defined unique identifiers of the resource.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Unique ID of the message.
+	ID string `json:"id"`
+	// Last seen version of the resource.
+	Version int `json:"version"`
+	// Date and time (UTC) the resource was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the resource was last modified.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Used to ensure all messages of the resource are processed in correct order.
+	// The `sequenceNumber` of the next message of the resource is a successor of the `sequenceNumber` of the current message.
+	SequenceNumber int `json:"sequenceNumber"`
+	// Version of the resource on which the update was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// If the payload does not fit into the size limit or its format is not accepted by the messaging service, the `payloadNotIncluded` field is present.
+	PayloadNotIncluded *PayloadNotIncluded `json:"payloadNotIncluded,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MessageDeliveryPayload) UnmarshalJSON(data []byte) error {
+	type Alias MessageDeliveryPayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MessageDeliveryPayload) MarshalJSON() ([]byte, error) {
+	type Alias MessageDeliveryPayload
+	return json.Marshal(struct {
+		Action string `json:"notificationType"`
+		*Alias
+	}{Action: "Message", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -747,207 +1088,6 @@ func (obj ResourceUpdatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[AWS SNS](https://aws.amazon.com/sns/) can be used to push messages to AWS Lambda, HTTP endpoints (webhooks), or fan-out messages to SQS queues. The SQS queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type.
-*
-*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test notification will not be sent.
-*
-*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
-*
-*	The IAM user should only have the `sns:Publish` permission on this topic.
-*
- */
-type SnsDestination struct {
-	// Only present if `authenticationMode` is set to `Credentials`.
-	AccessKey *string `json:"accessKey,omitempty"`
-	// Only present if `authenticationMode` is set to `Credentials`.
-	AccessSecret *string `json:"accessSecret,omitempty"`
-	// Amazon Resource Name (ARN) of the topic.
-	TopicArn string `json:"topicArn"`
-	// Defines the method of authentication for the SNS topic.
-	AuthenticationMode *AwsAuthenticationMode `json:"authenticationMode,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj SnsDestination) MarshalJSON() ([]byte, error) {
-	type Alias SnsDestination
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "SNS", Alias: (*Alias)(&obj)})
-}
-
-/**
-*	[AWS SQS](https://aws.amazon.com/sqs/) is a pull-queue on AWS.
-*	The queue must be a [Standard](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html) queue type with a `MaximumMessageSize` of `256 KB`.
-*
-*	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test message will not be sent.
-*
-*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
-*
-*	The IAM user should only have the `sqs:SendMessage` permission on this queue.
-*
- */
-type SqsDestination struct {
-	// Only present if `authenticationMode` is set to `Credentials`.
-	AccessKey *string `json:"accessKey,omitempty"`
-	// Only present if `authenticationMode` is set to `Credentials`.
-	AccessSecret *string `json:"accessSecret,omitempty"`
-	// URL of the Amazon SQS queue.
-	QueueUrl string `json:"queueUrl"`
-	// [AWS Region](https://docs.aws.amazon.com/general/latest/gr/rande-manage.html) the message queue is located in.
-	Region string `json:"region"`
-	// Defines the method of authentication for the SQS queue.
-	AuthenticationMode *AwsAuthenticationMode `json:"authenticationMode,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj SqsDestination) MarshalJSON() ([]byte, error) {
-	type Alias SqsDestination
-	return json.Marshal(struct {
-		Action string `json:"type"`
-		*Alias
-	}{Action: "SQS", Alias: (*Alias)(&obj)})
-}
-
-type Subscription struct {
-	// Unique identifier of the Subscription.
-	ID string `json:"id"`
-	// Current version of the Subscription.
-	Version int `json:"version"`
-	// Date and time (UTC) the Subscription was initially created.
-	CreatedAt time.Time `json:"createdAt"`
-	// Date and time (UTC) the Subscription was last modified.
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// IDs and references that last modified the Subscription.
-	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// IDs and references that created the Subscription.
-	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Changes subscribed to.
-	Changes []ChangeSubscription `json:"changes"`
-	// Messaging service to which the notifications are sent.
-	Destination Destination `json:"destination"`
-	// User-defined unique identifier of the Subscription.
-	Key *string `json:"key,omitempty"`
-	// Messages subscribed to.
-	Messages []MessageSubscription `json:"messages"`
-	// Format in which the payload is delivered.
-	Format DeliveryFormat `json:"format"`
-	// Status of the Subscription.
-	Status SubscriptionHealthStatus `json:"status"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *Subscription) UnmarshalJSON(data []byte) error {
-	type Alias Subscription
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Destination != nil {
-		var err error
-		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
-		if err != nil {
-			return err
-		}
-	}
-	if obj.Format != nil {
-		var err error
-		obj.Format, err = mapDiscriminatorDeliveryFormat(obj.Format)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-/**
-*	Either `messages` or `changes` must be set.
-*
- */
-type SubscriptionDraft struct {
-	// Changes to be subscribed to.
-	Changes []ChangeSubscription `json:"changes"`
-	// Messaging service to which the notifications are sent.
-	Destination Destination `json:"destination"`
-	// User-defined unique identifier for the Subscription.
-	Key *string `json:"key,omitempty"`
-	// Messages to be subscribed to.
-	Messages []MessageSubscription `json:"messages"`
-	// Format in which the payload is delivered. When not provided, the [PlatformFormat](ctp:api:type:PlatformFormat) is selected by default.
-	Format DeliveryFormat `json:"format,omitempty"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *SubscriptionDraft) UnmarshalJSON(data []byte) error {
-	type Alias SubscriptionDraft
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	if obj.Destination != nil {
-		var err error
-		obj.Destination, err = mapDiscriminatorDestination(obj.Destination)
-		if err != nil {
-			return err
-		}
-	}
-	if obj.Format != nil {
-		var err error
-		obj.Format, err = mapDiscriminatorDeliveryFormat(obj.Format)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj SubscriptionDraft) MarshalJSON() ([]byte, error) {
-	type Alias SubscriptionDraft
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["changes"] == nil {
-		delete(raw, "changes")
-	}
-
-	if raw["messages"] == nil {
-		delete(raw, "messages")
-	}
-
-	return json.Marshal(raw)
-
-}
-
-/**
-*	The health status of the Subscription that indicates whether notifications are being delivered.
-*
- */
-type SubscriptionHealthStatus string
-
-const (
-	SubscriptionHealthStatusHealthy                           SubscriptionHealthStatus = "Healthy"
-	SubscriptionHealthStatusConfigurationError                SubscriptionHealthStatus = "ConfigurationError"
-	SubscriptionHealthStatusConfigurationErrorDeliveryStopped SubscriptionHealthStatus = "ConfigurationErrorDeliveryStopped"
-	SubscriptionHealthStatusTemporaryError                    SubscriptionHealthStatus = "TemporaryError"
-	SubscriptionHealthStatusManuallySuspended                 SubscriptionHealthStatus = "ManuallySuspended"
-)
-
-/**
 *	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Subscription](ctp:api:type:Subscription).
 *
  */
@@ -1027,6 +1167,12 @@ func mapDiscriminatorSubscriptionUpdateAction(input interface{}) (SubscriptionUp
 			return nil, err
 		}
 		return obj, nil
+	case "setEvents":
+		obj := SubscriptionSetEventsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setKey":
 		obj := SubscriptionSetKeyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1081,7 +1227,7 @@ func (obj SubscriptionChangeDestinationAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetChangesAction struct {
-	// Value to set. Can only be unset if `messages` is set.
+	// Value to set. Can only be unset if either `messages` or `events` is set.
 	Changes []ChangeSubscription `json:"changes"`
 }
 
@@ -1110,6 +1256,36 @@ func (obj SubscriptionSetChangesAction) MarshalJSON() ([]byte, error) {
 
 }
 
+type SubscriptionSetEventsAction struct {
+	// Value to set. Can only be unset if either `messages` or `changes` is set.
+	Events []EventSubscription `json:"events"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SubscriptionSetEventsAction) MarshalJSON() ([]byte, error) {
+	type Alias SubscriptionSetEventsAction
+	data, err := json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setEvents", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["events"] == nil {
+		delete(raw, "events")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type SubscriptionSetKeyAction struct {
 	// Value to set. If empty, any existing value will be removed.
 	Key *string `json:"key,omitempty"`
@@ -1126,7 +1302,7 @@ func (obj SubscriptionSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetMessagesAction struct {
-	// Value to set. Can only be unset if `changes` is set.
+	// Value to set. Can only be unset if either `changes` or `events` is set.
 	Messages []MessageSubscription `json:"messages"`
 }
 

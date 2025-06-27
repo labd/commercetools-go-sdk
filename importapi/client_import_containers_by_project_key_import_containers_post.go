@@ -29,7 +29,10 @@ func (rb *ByProjectKeyImportContainersRequestMethodPost) WithHeaders(headers htt
 }
 
 /**
-*	Creates a new import container.
+*	Creates an Import Container in the Project.
+*
+*	Generates the [ImportContainerCreated](/projects/events#import-container-created-event) Event.
+*
  */
 func (rb *ByProjectKeyImportContainersRequestMethodPost) Execute(ctx context.Context) (result *ImportContainer, err error) {
 	data, err := serializeInput(rb.body)

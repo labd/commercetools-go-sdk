@@ -25,6 +25,10 @@ func (rb *ByProjectKeyPaymentsRequestBuilder) WithId(id string) *ByProjectKeyPay
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves Payments in the Project.
+ */
 func (rb *ByProjectKeyPaymentsRequestBuilder) Get() *ByProjectKeyPaymentsRequestMethodGet {
 	return &ByProjectKeyPaymentsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/payments", rb.projectKey),
@@ -33,7 +37,7 @@ func (rb *ByProjectKeyPaymentsRequestBuilder) Get() *ByProjectKeyPaymentsRequest
 }
 
 /**
-*	Checks if a Payment exists for a given Query Predicate. Returns a `200 OK` status if any Payments match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Payments exist for the provided query predicate. Returns a `200 OK` status if any Payments match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyPaymentsRequestBuilder) Head() *ByProjectKeyPaymentsRequestMethodHead {
 	return &ByProjectKeyPaymentsRequestMethodHead{
@@ -43,6 +47,7 @@ func (rb *ByProjectKeyPaymentsRequestBuilder) Head() *ByProjectKeyPaymentsReques
 }
 
 /**
+*	Creates a Payment in the Project.
 *	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
 *
  */

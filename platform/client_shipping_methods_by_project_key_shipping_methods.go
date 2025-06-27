@@ -20,7 +20,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) WithKey(key string) *ByProj
 }
 
 /**
-*	Get ShippingMethods for a cart
+*	Get ShippingMethods for a Cart
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCart() *ByProjectKeyShippingMethodsMatchingCartRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingCartRequestBuilder{
@@ -30,7 +30,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCart() *ByProjectKe
 }
 
 /**
-*	Get ShippingMethods for a cart and location
+*	Get ShippingMethods for a Cart and Location
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCartLocation() *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder{
@@ -40,7 +40,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCartLocation() *ByP
 }
 
 /**
-*	Get ShippingMethods for an order edit
+*	Get ShippingMethods for an Order Edit
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingOrderedit() *ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder{
@@ -50,7 +50,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingOrderedit() *ByProj
 }
 
 /**
-*	Get ShippingMethods for a location
+*	Get ShippingMethods for a Location
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingLocation() *ByProjectKeyShippingMethodsMatchingLocationRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingLocationRequestBuilder{
@@ -73,7 +73,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) Get() *ByProjectKeyShipping
 }
 
 /**
-*	Checks if a ShippingMethod exists for a given Query Predicate. Returns a `200 OK` status if any ShippingMethods match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more ShippingMethods exist for the provided query predicate. Returns a `200 OK` status if any ShippingMethods match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) Head() *ByProjectKeyShippingMethodsRequestMethodHead {
 	return &ByProjectKeyShippingMethodsRequestMethodHead{

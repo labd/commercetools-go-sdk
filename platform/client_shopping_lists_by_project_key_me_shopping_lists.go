@@ -27,11 +27,11 @@ func (rb *ByProjectKeyMeShoppingListsRequestBuilder) WithKey(key string) *ByProj
 }
 
 /**
-*	Returns all ShoppingLists that match the given Query Predicate. Returns a `200 OK` status if successful.
+*	Retrieves ShoppingLists for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no ShoppingList exists for the given Query Predicate.
+*	- If no ShoppingList exists for the provided query predicate.
 *	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
@@ -43,11 +43,11 @@ func (rb *ByProjectKeyMeShoppingListsRequestBuilder) Get() *ByProjectKeyMeShoppi
 }
 
 /**
-*	Checks if a ShoppingList matches the given Query Predicate. Returns a `200 OK` status if successful.
+*	Checks if one or more ShoppingLists exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
-*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
 *
-*	- If no ShoppingList exists for the given Query Predicate.
+*	- If no ShoppingList exists for the provided query predicate.
 *	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
@@ -59,7 +59,7 @@ func (rb *ByProjectKeyMeShoppingListsRequestBuilder) Head() *ByProjectKeyMeShopp
 }
 
 /**
-*	Creates a ShoppingList for the Customer or anonymous user. The `customerId` or `anonymousId` on the ShoppingList is automatically set based on the given [customer:{id}](/scopes#composable-commerce-oauth) or [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	Creates a ShoppingList for the authenticated Customer or anonymous user. The `customerId` or `anonymousId` on the ShoppingList is automatically set based on the given [customer:{id}](/scopes#composable-commerce-oauth) or [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeShoppingListsRequestBuilder) Post(body MyShoppingListDraft) *ByProjectKeyMeShoppingListsRequestMethodPost {

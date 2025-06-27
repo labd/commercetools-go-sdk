@@ -20,7 +20,7 @@ func (rb *ByProjectKeyInventoryByIDRequestBuilder) Get() *ByProjectKeyInventoryB
 }
 
 /**
-*	Checks if an InventoryEntry exists for a given `id`. Returns a `200 OK` status if the InventoryEntry exists or a `404 Not Found` otherwise.
+*	Checks if an InventoryEntry exists with the provided `id`. Returns a `200 OK` status if the InventoryEntry exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyInventoryByIDRequestBuilder) Head() *ByProjectKeyInventoryByIDRequestMethodHead {
 	return &ByProjectKeyInventoryByIDRequestMethodHead{

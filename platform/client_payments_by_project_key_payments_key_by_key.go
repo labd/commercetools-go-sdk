@@ -12,6 +12,9 @@ type ByProjectKeyPaymentsKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a Payment with the provided `key`.
+ */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Get() *ByProjectKeyPaymentsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyPaymentsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/payments/key=%s", rb.projectKey, rb.key),
@@ -20,7 +23,7 @@ func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Get() *ByProjectKeyPayment
 }
 
 /**
-*	Checks if a Payment exists for a given `key`. Returns a `200 OK` status if the Payment exists or a `404 Not Found` otherwise.
+*	Checks if a Payment exists with the provided `key`. Returns a `200 OK` status if the Payment exists, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Head() *ByProjectKeyPaymentsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyPaymentsKeyByKeyRequestMethodHead{
@@ -29,6 +32,9 @@ func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Head() *ByProjectKeyPaymen
 	}
 }
 
+/**
+*	Updates a Payment in the Project using one or more [update actions](/../api/projects/payments#update-actions).
+ */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Post(body PaymentUpdate) *ByProjectKeyPaymentsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyPaymentsKeyByKeyRequestMethodPost{
 		body:   body,
@@ -37,6 +43,9 @@ func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Post(body PaymentUpdate) *
 	}
 }
 
+/**
+*	Deletes a Payment in the Project.
+ */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Delete() *ByProjectKeyPaymentsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyPaymentsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/payments/key=%s", rb.projectKey, rb.key),

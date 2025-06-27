@@ -28,7 +28,7 @@ func (rb *ByProjectKeyCustomerGroupsByIDRequestMethodHead) WithHeaders(headers h
 }
 
 /**
-*	Checks if a CustomerGroup exists for a given `id`. Returns a `200 OK` status if the CustomerGroup exists or a `404 Not Found` otherwise.
+*	Checks if a CustomerGroup exists with the provided `id`. Returns a `200 OK` status if the CustomerGroup exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyCustomerGroupsByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

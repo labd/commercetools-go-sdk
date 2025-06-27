@@ -25,6 +25,10 @@ func (rb *ByProjectKeyShoppingListsRequestBuilder) WithId(id string) *ByProjectK
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves ShoppingLists in the Project.
+ */
 func (rb *ByProjectKeyShoppingListsRequestBuilder) Get() *ByProjectKeyShoppingListsRequestMethodGet {
 	return &ByProjectKeyShoppingListsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/shopping-lists", rb.projectKey),
@@ -33,7 +37,7 @@ func (rb *ByProjectKeyShoppingListsRequestBuilder) Get() *ByProjectKeyShoppingLi
 }
 
 /**
-*	Checks if a ShoppingList exists for a given Query Predicate. Returns a `200 OK` status if any ShoppingLists match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more ShoppingLists exist for the provided query predicate. Returns a `200 OK` status if any ShoppingLists match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyShoppingListsRequestBuilder) Head() *ByProjectKeyShoppingListsRequestMethodHead {
 	return &ByProjectKeyShoppingListsRequestMethodHead{
@@ -42,6 +46,9 @@ func (rb *ByProjectKeyShoppingListsRequestBuilder) Head() *ByProjectKeyShoppingL
 	}
 }
 
+/**
+*	Create a ShoppingList in the Project.
+ */
 func (rb *ByProjectKeyShoppingListsRequestBuilder) Post(body ShoppingListDraft) *ByProjectKeyShoppingListsRequestMethodPost {
 	return &ByProjectKeyShoppingListsRequestMethodPost{
 		body:   body,

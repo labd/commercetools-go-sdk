@@ -27,21 +27,15 @@ func (r *ByProjectKeyDeploymentsRequestMethodGet) Dump() map[string]interface{} 
 }
 
 type ByProjectKeyDeploymentsRequestMethodGetInput struct {
-	IntegrationTypes []IntegrationType
-	DeploymentType   *DeploymentType
 	Limit            *int
 	Offset           *int
 	Sort             []string
+	IntegrationTypes []IntegrationType
+	DeploymentType   *DeploymentType
 }
 
 func (input *ByProjectKeyDeploymentsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	for _, v := range input.IntegrationTypes {
-		values.Add("integrationTypes", fmt.Sprintf("%v", v))
-	}
-	if input.DeploymentType != nil {
-		values.Add("deploymentType", fmt.Sprintf("%v", *input.DeploymentType))
-	}
 	if input.Limit != nil {
 		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
@@ -51,23 +45,13 @@ func (input *ByProjectKeyDeploymentsRequestMethodGetInput) Values() url.Values {
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
+	for _, v := range input.IntegrationTypes {
+		values.Add("integrationTypes", fmt.Sprintf("%v", v))
+	}
+	if input.DeploymentType != nil {
+		values.Add("deploymentType", fmt.Sprintf("%v", *input.DeploymentType))
+	}
 	return values
-}
-
-func (rb *ByProjectKeyDeploymentsRequestMethodGet) IntegrationTypes(v []IntegrationType) *ByProjectKeyDeploymentsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyDeploymentsRequestMethodGetInput{}
-	}
-	rb.params.IntegrationTypes = v
-	return rb
-}
-
-func (rb *ByProjectKeyDeploymentsRequestMethodGet) DeploymentType(v DeploymentType) *ByProjectKeyDeploymentsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyDeploymentsRequestMethodGetInput{}
-	}
-	rb.params.DeploymentType = &v
-	return rb
 }
 
 func (rb *ByProjectKeyDeploymentsRequestMethodGet) Limit(v int) *ByProjectKeyDeploymentsRequestMethodGet {
@@ -91,6 +75,22 @@ func (rb *ByProjectKeyDeploymentsRequestMethodGet) Sort(v []string) *ByProjectKe
 		rb.params = &ByProjectKeyDeploymentsRequestMethodGetInput{}
 	}
 	rb.params.Sort = v
+	return rb
+}
+
+func (rb *ByProjectKeyDeploymentsRequestMethodGet) IntegrationTypes(v []IntegrationType) *ByProjectKeyDeploymentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyDeploymentsRequestMethodGetInput{}
+	}
+	rb.params.IntegrationTypes = v
+	return rb
+}
+
+func (rb *ByProjectKeyDeploymentsRequestMethodGet) DeploymentType(v DeploymentType) *ByProjectKeyDeploymentsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyDeploymentsRequestMethodGetInput{}
+	}
+	rb.params.DeploymentType = &v
 	return rb
 }
 

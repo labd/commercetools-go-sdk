@@ -27,17 +27,19 @@ func (r *ByProjectKeyProductsRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ByProjectKeyProductsRequestMethodGetInput struct {
-	Where              []string
-	PriceCurrency      *string
-	PriceCountry       *string
-	PriceCustomerGroup *string
-	PriceChannel       *string
-	Expand             []string
-	Sort               []string
-	Limit              *int
-	Offset             *int
-	WithTotal          *bool
-	PredicateVar       map[string][]string
+	Where                         []string
+	PriceCurrency                 *string
+	PriceCountry                  *string
+	PriceCustomerGroup            *string
+	PriceCustomerGroupAssignments []string
+	PriceChannel                  *string
+	PriceRecurrencePolicy         *string
+	Expand                        []string
+	Sort                          []string
+	Limit                         *int
+	Offset                        *int
+	WithTotal                     *bool
+	PredicateVar                  map[string][]string
 }
 
 func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
@@ -54,8 +56,14 @@ func (input *ByProjectKeyProductsRequestMethodGetInput) Values() url.Values {
 	if input.PriceCustomerGroup != nil {
 		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
 	}
+	for _, v := range input.PriceCustomerGroupAssignments {
+		values.Add("priceCustomerGroupAssignments", fmt.Sprintf("%v", v))
+	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	if input.PriceRecurrencePolicy != nil {
+		values.Add("priceRecurrencePolicy", fmt.Sprintf("%v", *input.PriceRecurrencePolicy))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -116,11 +124,27 @@ func (rb *ByProjectKeyProductsRequestMethodGet) PriceCustomerGroup(v string) *By
 	return rb
 }
 
+func (rb *ByProjectKeyProductsRequestMethodGet) PriceCustomerGroupAssignments(v []string) *ByProjectKeyProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
+	}
+	rb.params.PriceCustomerGroupAssignments = v
+	return rb
+}
+
 func (rb *ByProjectKeyProductsRequestMethodGet) PriceChannel(v string) *ByProjectKeyProductsRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
 	}
 	rb.params.PriceChannel = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductsRequestMethodGet) PriceRecurrencePolicy(v string) *ByProjectKeyProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsRequestMethodGetInput{}
+	}
+	rb.params.PriceRecurrencePolicy = &v
 	return rb
 }
 

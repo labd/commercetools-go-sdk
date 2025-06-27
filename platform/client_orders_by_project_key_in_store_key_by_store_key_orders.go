@@ -35,6 +35,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) WithId(id string
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves Orders in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/orders", rb.projectKey, rb.storeKey),
@@ -43,7 +47,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Get() *ByProject
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Orders exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200 OK` status if any Orders match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyOrdersRequestMethodHead{
@@ -53,10 +57,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder) Head() *ByProjec
 }
 
 /**
-*	Before you create an Order, the Cart must have a [shipping address set](ctp:api:type:CartSetShippingAddressAction).
+*	Creates an Order from a Cart in a [Store](ctp:api:type:Store).
+*	The Cart must have a shipping address and an active Shipping Method set.
+*
 *	The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
 *
 *	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+*
 *	If a server-side problem occurs, indicated by a 500 Internal Server Error HTTP response, the Order creation may still successfully complete after the error is returned.
 *	If you receive this error, you should verify the status of the Order by querying a unique identifier supplied during the creation request, such as the Order number.
 *

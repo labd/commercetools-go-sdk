@@ -55,7 +55,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodGet)
 }
 
 /**
-*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different [Store](ctp:api:type:Store),
+*	Retrieves a ShoppingList with the provided `key` in a [Store](ctp:api:type:Store).
+*	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
 *	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
 *
  */

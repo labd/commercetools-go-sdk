@@ -38,6 +38,7 @@ type CustomFieldReferenceValue string
 
 const (
 	CustomFieldReferenceValueApprovalFlow     CustomFieldReferenceValue = "approval-flow"
+	CustomFieldReferenceValueApprovalRule     CustomFieldReferenceValue = "approval-rule"
 	CustomFieldReferenceValueAssociateRole    CustomFieldReferenceValue = "associate-role"
 	CustomFieldReferenceValueBusinessUnit     CustomFieldReferenceValue = "business-unit"
 	CustomFieldReferenceValueCart             CustomFieldReferenceValue = "cart"
@@ -63,18 +64,18 @@ const (
 type CustomFields struct {
 	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#list-of-customizable-data-types).
+	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#resourcetypeid).
 	Fields FieldContainer `json:"fields"`
 }
 
 /**
-*	The representation used when creating or updating a [customizable data type](/../api/projects/types#list-of-customizable-data-types) with Custom Fields.
+*	The representation used when creating or updating a [customizable data type](/../api/projects/types#resourcetypeid) with Custom Fields.
 *
  */
 type CustomFieldsDraft struct {
 	// `id` or `key` of the [Type](ctp:api:type:Type).
 	Type TypeResourceIdentifier `json:"type"`
-	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#list-of-customizable-data-types).
+	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#resourcetypeid).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -447,7 +448,7 @@ func (obj CustomFieldTimeType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	IDs indicating the [customizable resources and data types](/../api/projects/types#list-of-customizable-data-types).
+*	With Types, you can model your own Custom Fields on the following resources and data types.
 *
  */
 type ResourceTypeId string
@@ -456,6 +457,7 @@ const (
 	ResourceTypeIdAddress                     ResourceTypeId = "address"
 	ResourceTypeIdAsset                       ResourceTypeId = "asset"
 	ResourceTypeIdApprovalFlow                ResourceTypeId = "approval-flow"
+	ResourceTypeIdApprovalRule                ResourceTypeId = "approval-rule"
 	ResourceTypeIdAssociateRole               ResourceTypeId = "associate-role"
 	ResourceTypeIdBusinessUnit                ResourceTypeId = "business-unit"
 	ResourceTypeIdCartDiscount                ResourceTypeId = "cart-discount"
@@ -479,6 +481,7 @@ const (
 	ResourceTypeIdProductTailoring            ResourceTypeId = "product-tailoring"
 	ResourceTypeIdQuote                       ResourceTypeId = "quote"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
+	ResourceTypeIdRecurringOrder              ResourceTypeId = "recurring-order"
 	ResourceTypeIdShipping                    ResourceTypeId = "shipping"
 	ResourceTypeIdShippingMethod              ResourceTypeId = "shipping-method"
 	ResourceTypeIdShoppingList                ResourceTypeId = "shopping-list"

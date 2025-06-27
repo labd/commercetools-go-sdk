@@ -53,6 +53,10 @@ func (rb *ByProjectKeyShoppingListsByIDRequestMethodGet) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a ShoppingList with the provided `id`.
+ */
 func (rb *ByProjectKeyShoppingListsByIDRequestMethodGet) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

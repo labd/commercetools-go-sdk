@@ -24,10 +24,14 @@ type Connector struct {
 	Creator Creator `json:"creator"`
 	// GitHub repository details of the Connector.
 	Repository Repository `json:"repository"`
-	// Configurations needed by Connectors for hosting. Loaded as environment variables in the workload.
+	// Configurations needed by Connectors for hosting. Loaded as environment variables in the application.
 	Configurations []ConnectorConfigurationApplication `json:"configurations"`
+	// Configuration for the API Client used for automatically generating API Client credentials.
+	ApiClient *ConnectorApiClient `json:"apiClient,omitempty"`
 	// If `true`, only Composable Commerce Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
+	// Global configuration applied to all applications in the Deployment.
+	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
 	// If `true`, the Connector is certified.
@@ -130,8 +134,12 @@ type ConnectorStaged struct {
 	Creator Creator `json:"creator"`
 	// GitHub repository details of the Connector.
 	Repository Repository `json:"repository"`
-	// Configurations needed by Connectors for hosting. Loaded as environment variables in the workload.
+	// Configurations needed by Connectors for hosting. Loaded as environment variables in the application.
 	Configurations []ConnectorConfigurationApplication `json:"configurations"`
+	// Global configuration applied to all applications in the Deployment.
+	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
+	// Configuration for the API Client used for generating API Client credentials.
+	ApiClient *ConnectorApiClient `json:"apiClient,omitempty"`
 	// If `true`, only Composable Commerce Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
 	// If `private` is true, only these Composable Commerce Projects can access the Connector.

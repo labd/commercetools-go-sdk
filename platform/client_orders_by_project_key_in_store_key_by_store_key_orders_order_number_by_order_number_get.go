@@ -55,6 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersOrderNumberByOrderNumberRequestM
 }
 
 /**
+*	Retrieves an Order with the provided `orderNumber` in a [Store](ctp:api:type:Store).
 *	If the Order exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */

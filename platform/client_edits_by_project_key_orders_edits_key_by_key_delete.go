@@ -64,6 +64,10 @@ func (rb *ByProjectKeyOrdersEditsKeyByKeyRequestMethodDelete) WithHeaders(header
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes an OrderEdit in the Project.
+ */
 func (rb *ByProjectKeyOrdersEditsKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *OrderEdit, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -20,7 +20,7 @@ func (rb *ByProjectKeyBusinessUnitsByIDRequestBuilder) Get() *ByProjectKeyBusine
 }
 
 /**
-*	Checks if a BusinessUnit exists for a given `id`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
+*	Checks if a BusinessUnit exists with the provided `id`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyBusinessUnitsByIDRequestMethodHead {
 	return &ByProjectKeyBusinessUnitsByIDRequestMethodHead{

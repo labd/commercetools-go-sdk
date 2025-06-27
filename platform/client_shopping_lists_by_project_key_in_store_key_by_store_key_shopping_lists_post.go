@@ -56,6 +56,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodPost) WithHe
 }
 
 /**
+*	Creates a ShoppingList in a [Store](ctp:api:type:Store).
 *	When using this endpoint, the `store` field of a ShoppingList is always set to the [Store](ctp:api:type:Store) specified in the path parameter.
 *
  */

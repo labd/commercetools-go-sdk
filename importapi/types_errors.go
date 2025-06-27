@@ -76,6 +76,12 @@ func (obj ErrorResponse) Error() string {
 	return "unknown ErrorResponse: failed to parse error response"
 }
 
+/**
+*	Base representation of an error response containing common fields to all errors.
+*
+*	An error response may contain additional fields depending on the type of an error, for example, `attribute` in [DuplicateAttributeValueError](#duplicateattributevalueerror).
+*
+ */
 type ErrorObject interface{}
 
 func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
@@ -242,8 +248,8 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "ReferencedResourceNotFound":
-		obj := ReferencedResourceNotFound{}
+	case "NewMasterVariantAdditionNotAllowed":
+		obj := NewMasterVariantAdditionNotAllowedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -256,6 +262,7 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 *	This is the generic error code for access denied. In case of a wrong scope, an [InvalidScopeError](#invalidscopeerror) will be returned.
  */
 type AccessDeniedError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -281,6 +288,7 @@ func (obj AccessDeniedError) Error() string {
 *
  */
 type InvalidScopeError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -307,6 +315,7 @@ func (obj InvalidScopeError) Error() string {
 *
  */
 type InvalidOperation struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -321,9 +330,10 @@ func (obj InvalidOperation) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The `Unique` [AttributeConstraintEnum](/../api/projects/productTypes#attributeconstraintenum) was violated.
+*	The `Unique` [AttributeConstraintEnum](ctp:api:type:AttributeConstraintEnum) was violated.
  */
 type DuplicateAttributeValueError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 	// The attribute in conflict.
 	Attribute Attribute `json:"attribute"`
@@ -365,9 +375,10 @@ func (obj DuplicateAttributeValueError) Error() string {
 }
 
 /**
-*	The `CombinationUnique` [AttributeConstraintEnum](/../api/projects/productTypes#attributeconstraintenum) was violated.
+*	The `CombinationUnique` [AttributeConstraintEnum](ctp:api:type:AttributeConstraintEnum) was violated.
  */
 type DuplicateAttributeValuesError struct {
+	// A plain language description of the cause of an error.
 	Message    string      `json:"message"`
 	Attributes []Attribute `json:"attributes"`
 }
@@ -411,6 +422,7 @@ func (obj DuplicateAttributeValuesError) Error() string {
 *	The given value already exists for a field that is checked for unique values.
  */
 type DuplicateFieldError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 	// The name of the field.
 	Field *string `json:"field,omitempty"`
@@ -436,11 +448,12 @@ func (obj DuplicateFieldError) Error() string {
 }
 
 /**
-*	The given combination of values of a [Product Variant](/../api/projects/products#productvariant) conflicts with an existing one.
-*	Every [Product Variant](/../api/projects/products#productvariant) must have a distinct combination of SKU, prices, and custom attribute values.
+*	The given combination of values of a [Product Variant](ctp:api:type:ProductVariant) conflicts with an existing one.
+*	Every [Product Variant](ctp:api:type:ProductVariant) must have a distinct combination of SKU, prices, and custom attribute values.
 *
  */
 type DuplicateVariantValuesError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 	// The offending variant values.
 	VariantValues VariantValues `json:"variantValues"`
@@ -464,6 +477,7 @@ func (obj DuplicateVariantValuesError) Error() string {
 }
 
 type VariantValues struct {
+	// The SKU of the Product Variant.
 	Sku        *string       `json:"sku,omitempty"`
 	Prices     []PriceImport `json:"prices"`
 	Attributes []Attribute   `json:"attributes"`
@@ -488,6 +502,7 @@ func (obj *VariantValues) UnmarshalJSON(data []byte) error {
 }
 
 type InsufficientScopeError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -509,6 +524,7 @@ func (obj InsufficientScopeError) Error() string {
 }
 
 type InvalidCredentialsError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -530,6 +546,7 @@ func (obj InvalidCredentialsError) Error() string {
 }
 
 type InvalidTokenError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -552,10 +569,11 @@ func (obj InvalidTokenError) Error() string {
 
 /**
 *	A given field is not supported.
-*	This error occurs, for example, if the field `variants`, which is not supported by [Product Import](/product#productimport), is sent to the Product Import endpoint.
+*	This error occurs, for example, if the field `variants`, which is not supported by [Product Import](ctp:import:type:ProductImport), is sent to the Product Import endpoint.
 *
  */
 type InvalidFieldError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 	// The name of the field.
 	Field string `json:"field"`
@@ -563,7 +581,8 @@ type InvalidFieldError struct {
 	InvalidValue interface{} `json:"invalidValue"`
 	// The set of allowed values for the field, if any.
 	AllowedValues []interface{} `json:"allowedValues"`
-	ResourceIndex *int          `json:"resourceIndex,omitempty"`
+	// The index of the resource in the import request that contains the invalid field.
+	ResourceIndex *int `json:"resourceIndex,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -633,6 +652,7 @@ func (obj InvalidFieldsUpdateError) Error() string {
 *
  */
 type InvalidJsonInput struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -652,6 +672,7 @@ func (obj InvalidJsonInput) MarshalJSON() ([]byte, error) {
 *
  */
 type InvalidInput struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -666,7 +687,9 @@ func (obj InvalidInput) MarshalJSON() ([]byte, error) {
 }
 
 type ResourceNotFoundError struct {
-	Message  string      `json:"message"`
+	// A plain language description of the cause of an error.
+	Message string `json:"message"`
+	// The resource that was not found.
 	Resource interface{} `json:"resource,omitempty"`
 }
 
@@ -688,7 +711,9 @@ func (obj ResourceNotFoundError) Error() string {
 }
 
 type ResourceCreationError struct {
-	Message  string      `json:"message"`
+	// A plain language description of the cause of an error.
+	Message string `json:"message"`
+	// The resource that was created.
 	Resource interface{} `json:"resource,omitempty"`
 }
 
@@ -710,7 +735,9 @@ func (obj ResourceCreationError) Error() string {
 }
 
 type ResourceUpdateError struct {
-	Message  string      `json:"message"`
+	// A plain language description of the cause of an error.
+	Message string `json:"message"`
+	// The resource that was updated.
 	Resource interface{} `json:"resource,omitempty"`
 }
 
@@ -732,7 +759,9 @@ func (obj ResourceUpdateError) Error() string {
 }
 
 type ResourceDeletionError struct {
-	Message  string      `json:"message"`
+	// A plain language description of the cause of an error.
+	Message string `json:"message"`
+	// The resource that was deleted.
 	Resource interface{} `json:"resource,omitempty"`
 }
 
@@ -757,6 +786,7 @@ func (obj ResourceDeletionError) Error() string {
 *	A required field is missing a value.
  */
 type RequiredFieldError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 	// The name of the field.
 	Field string `json:"field"`
@@ -780,10 +810,11 @@ func (obj RequiredFieldError) Error() string {
 }
 
 type InvalidStateTransitionError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
-	// Every [Import Operation](/import-operation) is assigned one of the following states.
+	// Every [Import Operation](ctp:import:type:ImportOperation) is assigned one of the following states.
 	CurrentState ProcessingState `json:"currentState"`
-	// Every [Import Operation](/import-operation) is assigned one of the following states.
+	// Every [Import Operation](ctp:import:type:ImportOperation) is assigned one of the following states.
 	NewState ProcessingState `json:"newState"`
 }
 
@@ -811,6 +842,7 @@ func (obj InvalidStateTransitionError) Error() string {
 *
  */
 type ConcurrentModificationError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 	// The version specified in the failed request.
 	SpecifiedVersion *int `json:"specifiedVersion,omitempty"`
@@ -838,6 +870,7 @@ func (obj ConcurrentModificationError) Error() string {
 }
 
 type ContentionError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -859,6 +892,7 @@ func (obj ContentionError) Error() string {
 }
 
 type GenericError struct {
+	// A plain language description of the cause of an error.
 	Message string `json:"message"`
 }
 
@@ -880,26 +914,27 @@ func (obj GenericError) Error() string {
 }
 
 /**
-*	Returned when a resource referenced by a [Reference](/../api/types#reference) or a [ResourceIdentifier](/../api/types#resourceidentifier) could not be found.
+*	Returned when attempting to create a ProductVariant and set it as the Master Variant in the same [ProductVariantImport](ctp:import:type:ProductVariantImport).
 *
  */
-type ReferencedResourceNotFound struct {
-	// `"The referenced object of type $typeId $predicate was not found. It either doesn't exist, or it can't be accessed from this endpoint (e.g., if the endpoint filters by store or customer account)."`
+type NewMasterVariantAdditionNotAllowedError struct {
+	// `"Adding a new variant as master variant is not allowed."`
 	Message string `json:"message"`
-	// Type of referenced resource.
-	TypeId ReferenceType `json:"typeId"`
-	// Unique identifier of the referenced resource, if known.
-	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the referenced resource, if known.
-	Key *string `json:"key,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj ReferencedResourceNotFound) MarshalJSON() ([]byte, error) {
-	type Alias ReferencedResourceNotFound
+func (obj NewMasterVariantAdditionNotAllowedError) MarshalJSON() ([]byte, error) {
+	type Alias NewMasterVariantAdditionNotAllowedError
 	return json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
-	}{Action: "ReferencedResourceNotFound", Alias: (*Alias)(&obj)})
+	}{Action: "NewMasterVariantAdditionNotAllowed", Alias: (*Alias)(&obj)})
+}
+
+func (obj NewMasterVariantAdditionNotAllowedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown NewMasterVariantAdditionNotAllowedError: failed to parse error response"
 }

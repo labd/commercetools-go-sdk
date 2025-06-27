@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInventoryKeyByKeyRequestMethodHead) WithHeaders(headers ht
 }
 
 /**
-*	Checks if an InventoryEntry exists for a given `key`. Returns a `200 OK` status if the InventoryEntry exists or a `404 Not Found` otherwise.
+*	Checks if an InventoryEntry exists with the provided `key`. Returns a `200 OK` status if the InventoryEntry exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyInventoryKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

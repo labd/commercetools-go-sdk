@@ -29,7 +29,7 @@ func (rb *ByProjectKeyDiscountCodesImportContainersByImportContainerKeyRequestMe
 }
 
 /**
-*	Creates a request for creating new Discount Codes or updating existing ones.
+*	Creates an Import Request for Discount Codes.
  */
 func (rb *ByProjectKeyDiscountCodesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)

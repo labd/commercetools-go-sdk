@@ -8,37 +8,35 @@ import (
 )
 
 /**
-*	The data representation for a Standalone Price to be imported that is persisted as a [Standalone Price](/../api/projects/standalone-prices#standaloneprice) in the Project.
+*	Represents the data used to import a StandalonePrice. Once imported, this data is persisted as a [StandalonePrice](ctp:api:type:StandalonePrice)) in the Project.
 *
  */
 type StandalonePriceImport struct {
-	// User-defined unique identifier for the Standalone Price. If a [StandalonePrice](/../api/projects/standalone-prices#standaloneprice) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier for the StandalonePrice. If a [StandalonePrice](ctp:api:type:StandalonePrice)) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
-	// Identifies the ProductVariant to which this Standalone Price is associated. This value is not validated to exist in Product Variants.
+	// Maps to `StandalonePrice.sku`. This value is not validated to exist in Product Variants.
 	Sku string `json:"sku"`
-	// Sets the money value of this Price.
+	// Maps to `StandalonePrice.value`.
 	Value TypedMoney `json:"value"`
-	// Sets the country for which this Price is valid.
-	//
-	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
+	// Maps to `StandalonePrice.country`. This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
 	Country *string `json:"country,omitempty"`
-	// Sets the CustomerGroup for which this Price is valid.
+	// Maps to `StandalonePrice.customerGroup`. If the referenced [CustomerGroup](ctp:api:type:CustomerGroup) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CustomerGroup is created.
 	//
-	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
+	// This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
-	// Sets the product distribution Channel for which this Price is valid.
+	// Maps to `StandalonePrice.channel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	//
-	// The value cannot be updated. Attempting to update the value will result in an [InvalidFieldsUpdate](/error#invalidfieldsupdateerror) error.
+	// This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
 	Channel *ChannelKeyReference `json:"channel,omitempty"`
-	// Sets the date from which the Price is valid.
+	// Maps to `StandalonePrice.validFrom`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Sets the date until the Price is valid.
+	// Maps to `StandalonePrice.validUntil`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Sets price tiers.
+	// Maps to `StandalonePrice.tiers`.
 	Tiers []PriceTier `json:"tiers"`
 	// Sets a discounted price for this Price that is different from the base price with value.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// Custom Fields for the StandalonePrice.
+	// Maps to `StandalonePrice.custom`.
 	Custom *Custom `json:"custom,omitempty"`
 }
 

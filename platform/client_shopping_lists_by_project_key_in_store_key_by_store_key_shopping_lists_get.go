@@ -132,6 +132,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodGet) WithHea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves ShoppingLists in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestMethodGet) Execute(ctx context.Context) (result *ShoppingListPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

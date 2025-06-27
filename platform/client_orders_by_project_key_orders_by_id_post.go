@@ -54,6 +54,10 @@ func (rb *ByProjectKeyOrdersByIDRequestMethodPost) WithHeaders(headers http.Head
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates an Order in the Project using one or more [update actions](/../api/projects/orders#update-actions).
+ */
 func (rb *ByProjectKeyOrdersByIDRequestMethodPost) Execute(ctx context.Context) (result *Order, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
