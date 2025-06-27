@@ -1,12 +1,13 @@
 module github.com/labd/commercetools-go-sdk
 
-go 1.21
+go 1.23.0
+
 toolchain go1.23.6
 
 require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/oauth2 v0.27.0
+	golang.org/x/oauth2 v0.30.0
 )
 
 require (
