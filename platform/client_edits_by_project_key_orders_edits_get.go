@@ -132,6 +132,10 @@ func (rb *ByProjectKeyOrdersEditsRequestMethodGet) WithHeaders(headers http.Head
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves OrderEdits in the Project.
+ */
 func (rb *ByProjectKeyOrdersEditsRequestMethodGet) Execute(ctx context.Context) (result *OrderEditPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

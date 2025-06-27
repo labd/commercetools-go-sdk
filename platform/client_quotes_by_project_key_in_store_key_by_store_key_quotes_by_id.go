@@ -21,7 +21,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesByIDRequestBuilder) Get() *ByPro
 }
 
 /**
-*	Checks if a Quote exists for a given `id`. Returns a `200 OK` status if the Quote exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Quote exists with the provided `id`. Returns a `200 OK` status if the Quote exists or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyQuotesByIDRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuotesByIDRequestMethodHead{

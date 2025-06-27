@@ -134,7 +134,7 @@ func (rb *ByProjectKeyMeQuoteRequestsRequestMethodGet) WithHeaders(headers http.
 }
 
 /**
-*	Returns all Quote Requests that match a given Query Predicate. Returns a `200 OK` status if successful.
+*	Retrieves Quote Requests for the authenticated Customer. Returns a `200 OK` status if successful.
 *
  */
 func (rb *ByProjectKeyMeQuoteRequestsRequestMethodGet) Execute(ctx context.Context) (result *QuoteRequestPagedQueryResponse, err error) {

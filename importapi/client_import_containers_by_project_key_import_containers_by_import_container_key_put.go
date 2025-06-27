@@ -29,7 +29,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodPut) With
 }
 
 /**
-*	Updates the import container given by the key.
+*	Updates the Import Container given by the key.
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodPut) Execute(ctx context.Context) (result *ImportContainer, err error) {
 	data, err := serializeInput(rb.body)

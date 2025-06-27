@@ -55,7 +55,7 @@ func (rb *ByProjectKeyCustomObjectsRequestMethodHead) WithHeaders(headers http.H
 }
 
 /**
-*	Checks if a CustomObject exists for a given Query Predicate. Returns a `200 OK` status if any CustomObjects match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more CustomObjects exist for the provided query predicate. Returns a `200 OK` status if any CustomObjects match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyCustomObjectsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -202,6 +202,12 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			return nil, err
 		}
 		return obj, nil
+	case "setBusinessUnit":
+		obj := StagedOrderSetBusinessUnitAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCountry":
 		obj := StagedOrderSetCountryAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -594,7 +600,7 @@ type OrderPagedSearchResponse struct {
 }
 
 /**
-*	Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+*	Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
  */
 type OrderSearchCustomType string
 
@@ -628,14 +634,14 @@ const (
 type OrderSearchQueryExpressionValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 }
 
 type OrderSearchAnyValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType      *OrderSearchCustomType `json:"customType,omitempty"`
 	Value           interface{}            `json:"value"`
 	Language        *string                `json:"language,omitempty"`
@@ -645,7 +651,7 @@ type OrderSearchAnyValue struct {
 type OrderSearchDateRangeValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Gte        *time.Time             `json:"gte,omitempty"`
 	Lte        *time.Time             `json:"lte,omitempty"`
@@ -654,7 +660,7 @@ type OrderSearchDateRangeValue struct {
 type OrderSearchFullTextValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Value      string                 `json:"value"`
 	Language   *string                `json:"language,omitempty"`
@@ -664,7 +670,7 @@ type OrderSearchFullTextValue struct {
 type OrderSearchLongRangeValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Gte        *int                   `json:"gte,omitempty"`
 	Lte        *int                   `json:"lte,omitempty"`
@@ -673,7 +679,7 @@ type OrderSearchLongRangeValue struct {
 type OrderSearchNumberRangeValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Gte        *float64               `json:"gte,omitempty"`
 	Lte        *float64               `json:"lte,omitempty"`
@@ -698,7 +704,7 @@ const (
 type OrderSearchStringValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [query expressions](/../api/projects/order-search#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType      *OrderSearchCustomType `json:"customType,omitempty"`
 	Value           string                 `json:"value"`
 	Language        *string                `json:"language,omitempty"`
@@ -724,8 +730,7 @@ type CustomLineItemImportDraft struct {
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
 	// Include a value to associate a Tax Category with the Custom Line Item.
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
-	// are applied to the Custom Line Item.
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget), [MultiBuyCustomLineItemsTarget](ctp:api:type:MultiBuyCustomLineItemsTarget), or [CartDiscountPatternTarget](ctp:api:type:CartDiscountPatternTarget) are applied to the Custom Line Item.
 	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
 	PriceMode *CustomLineItemPriceMode `json:"priceMode,omitempty"`
 	// Container for Custom Line Item-specific addresses.
@@ -931,7 +936,7 @@ type Order struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to.
+	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// [Reference](ctp:api:type:Reference) to a Store the Order belongs to.
 	Store *StoreKeyReference `json:"store,omitempty"`
@@ -943,7 +948,7 @@ type Order struct {
 	// If a discount applies on `totalPrice`, this field holds the discounted value.
 	//
 	// Taxes are included if [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true` for each price.
-	TotalPrice TypedMoney `json:"totalPrice"`
+	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// - For `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:OrderSetShippingAddressAction).
 	// - For `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
 	//
@@ -1024,6 +1029,8 @@ type Order struct {
 	SyncInfo []SyncInfo `json:"syncInfo"`
 	// Contains information regarding the returns associated with the Order.
 	ReturnInfo []ReturnInfo `json:"returnInfo"`
+	// Indicates if a combination of discount types can apply on an Order.
+	DiscountTypeCombination DiscountTypeCombination `json:"discountTypeCombination,omitempty"`
 	// Internal-only field.
 	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
 	// Custom Fields of the Order.
@@ -1044,16 +1051,16 @@ func (obj *Order) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-	if obj.TotalPrice != nil {
+	if obj.ShippingRateInput != nil {
 		var err error
-		obj.TotalPrice, err = mapDiscriminatorTypedMoney(obj.TotalPrice)
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
 		if err != nil {
 			return err
 		}
 	}
-	if obj.ShippingRateInput != nil {
+	if obj.DiscountTypeCombination != nil {
 		var err error
-		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
+		obj.DiscountTypeCombination, err = mapDiscriminatorDiscountTypeCombination(obj.DiscountTypeCombination)
 		if err != nil {
 			return err
 		}
@@ -1132,7 +1139,8 @@ type OrderFromCartDraft struct {
 
 type OrderFromQuoteDraft struct {
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Quote from which the Order is created.
-	// If the referenced [Quote](ctp:api:type:Quote) has expired (`validTo` check) or its `quoteState` is `Accepted`, `Declined`, or `Withdrawn`, the Order creation will fail.
+	//
+	// The [Quote](ctp:api:type:Quote) must have the `Pending` [state](ctp:api:type:QuoteState) and must be valid (not past the `validTo` date).
 	Quote QuoteResourceIdentifier `json:"quote"`
 	// `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
 	Version int `json:"version"`
@@ -1168,7 +1176,7 @@ type OrderImportDraft struct {
 	// The Customer Group of the Customer the Order belongs to.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Order should belong to.
-	// When the `customerId` of the Order is also set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit.
+	// When the `customerId` of the Order is also set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// The Store the Order belongs to.
 	// Used for [filtering](#filtering).
@@ -1541,6 +1549,12 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 		return obj, nil
 	case "setBillingAddressCustomType":
 		obj := OrderSetBillingAddressCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setBusinessUnit":
+		obj := OrderSetBusinessUnitAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2163,6 +2177,7 @@ const (
 	ShipmentStateDelayed   ShipmentState = "Delayed"
 	ShipmentStatePartial   ShipmentState = "Partial"
 	ShipmentStateBackorder ShipmentState = "Backorder"
+	ShipmentStateCanceled  ShipmentState = "Canceled"
 )
 
 /**
@@ -2665,6 +2680,29 @@ func (obj OrderSetBillingAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setBillingAddressCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Updates the Business Unit on the Order. Setting the Order's `businessUnit` does not recalculate prices or discounts on the Order.
+*
+*	Produces the [OrderBusinessUnitSet](ctp:api:type:OrderBusinessUnitSetMessage) Message.
+*
+ */
+type OrderSetBusinessUnitAction struct {
+	// New Business Unit to assign to the Order. If empty, any existing value is removed.
+	//
+	// If the referenced Business Unit does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
+	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderSetBusinessUnitAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBusinessUnit", Alias: (*Alias)(&obj)})
 }
 
 type OrderSetCustomFieldAction struct {

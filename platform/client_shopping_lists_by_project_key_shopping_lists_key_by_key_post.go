@@ -54,6 +54,10 @@ func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodPost) WithHeaders(header
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a ShoppingList in the Project using one or more [update actions](/../api/projects/shoppingLists#update-actions).
+ */
 func (rb *ByProjectKeyShoppingListsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

@@ -53,6 +53,10 @@ func (rb *ByProjectKeyOrdersEditsKeyByKeyRequestMethodGet) WithHeaders(headers h
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves an OrderEdit with the provided `key`.
+ */
 func (rb *ByProjectKeyOrdersEditsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *OrderEdit, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

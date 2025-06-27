@@ -27,11 +27,12 @@ func (r *ByProjectKeyProductsRequestMethodPost) Dump() map[string]interface{} {
 }
 
 type ByProjectKeyProductsRequestMethodPostInput struct {
-	PriceCurrency      *string
-	PriceCountry       *string
-	PriceCustomerGroup *string
-	PriceChannel       *string
-	Expand             []string
+	PriceCurrency                 *string
+	PriceCountry                  *string
+	PriceCustomerGroup            *string
+	PriceCustomerGroupAssignments []string
+	PriceChannel                  *string
+	Expand                        []string
 }
 
 func (input *ByProjectKeyProductsRequestMethodPostInput) Values() url.Values {
@@ -44,6 +45,9 @@ func (input *ByProjectKeyProductsRequestMethodPostInput) Values() url.Values {
 	}
 	if input.PriceCustomerGroup != nil {
 		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
+	}
+	for _, v := range input.PriceCustomerGroupAssignments {
+		values.Add("priceCustomerGroupAssignments", fmt.Sprintf("%v", v))
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
@@ -75,6 +79,14 @@ func (rb *ByProjectKeyProductsRequestMethodPost) PriceCustomerGroup(v string) *B
 		rb.params = &ByProjectKeyProductsRequestMethodPostInput{}
 	}
 	rb.params.PriceCustomerGroup = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductsRequestMethodPost) PriceCustomerGroupAssignments(v []string) *ByProjectKeyProductsRequestMethodPost {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsRequestMethodPostInput{}
+	}
+	rb.params.PriceCustomerGroupAssignments = v
 	return rb
 }
 

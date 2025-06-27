@@ -27,15 +27,26 @@ func (r *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) Dump() m
 }
 
 type ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput struct {
+	Where     []string
+	WithTotal *bool
 	Expand    []string
 	Limit     *int
 	Offset    *int
-	WithTotal *bool
 	Sort      []string
 }
 
 func (input *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.Where {
+		values.Add("where", fmt.Sprintf("%v", v))
+	}
+	if input.WithTotal != nil {
+		if *input.WithTotal {
+			values.Add("withTotal", "true")
+		} else {
+			values.Add("withTotal", "false")
+		}
+	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
@@ -45,17 +56,26 @@ func (input *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput)
 	if input.Offset != nil {
 		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
-	if input.WithTotal != nil {
-		if *input.WithTotal {
-			values.Add("withTotal", "true")
-		} else {
-			values.Add("withTotal", "false")
-		}
-	}
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) Where(v []string) *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput{}
+	}
+	rb.params.Where = v
+	return rb
+}
+
+func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput{}
+	}
+	rb.params.WithTotal = &v
+	return rb
 }
 
 func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) Expand(v []string) *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet {
@@ -79,14 +99,6 @@ func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) Offset(
 		rb.params = &ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput{}
 	}
 	rb.params.Offset = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductSelectionsKeyByKeyProductsRequestMethodGetInput{}
-	}
-	rb.params.WithTotal = &v
 	return rb
 }
 

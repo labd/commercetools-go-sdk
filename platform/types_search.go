@@ -3,11 +3,12 @@ package platform
 // Generated file, please do not change!!!
 
 import (
+	"encoding/json"
 	"time"
 )
 
 /**
-*	Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+*	Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
  */
 type SearchFieldType string
 
@@ -78,7 +79,7 @@ type SearchDateTimeRangeExpression struct {
 }
 
 type SearchExactExpression struct {
-	Exact SearchAnyValue `json:"exact"`
+	Exact SearchExactValue `json:"exact"`
 }
 
 type SearchExistsExpression struct {
@@ -108,14 +109,14 @@ type SearchPrefixExpression struct {
 type SearchQueryExpressionValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 }
 
 type SearchAnyValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Value     interface{}      `json:"value"`
 	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
@@ -126,7 +127,7 @@ type SearchAnyValue struct {
 type SearchDateRangeValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Gte       *Date            `json:"gte,omitempty"`
 	Gt        *Date            `json:"gt,omitempty"`
@@ -137,7 +138,7 @@ type SearchDateRangeValue struct {
 type SearchDateTimeRangeValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Gte       *time.Time       `json:"gte,omitempty"`
 	Gt        *time.Time       `json:"gt,omitempty"`
@@ -145,10 +146,46 @@ type SearchDateTimeRangeValue struct {
 	Lt        *time.Time       `json:"lt,omitempty"`
 }
 
+type SearchExactValue struct {
+	Field string   `json:"field"`
+	Boost *float64 `json:"boost,omitempty"`
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
+	FieldType *SearchFieldType `json:"fieldType,omitempty"`
+	Value     interface{}      `json:"value,omitempty"`
+	Values    []interface{}    `json:"values"`
+	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
+	Language        *string `json:"language,omitempty"`
+	CaseInsensitive *bool   `json:"caseInsensitive,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SearchExactValue) MarshalJSON() ([]byte, error) {
+	type Alias SearchExactValue
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["values"] == nil {
+		delete(raw, "values")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type SearchExistsValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
 	Language *string `json:"language,omitempty"`
@@ -157,7 +194,7 @@ type SearchExistsValue struct {
 type SearchFullTextPrefixValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Value     interface{}      `json:"value"`
 	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
@@ -168,7 +205,7 @@ type SearchFullTextPrefixValue struct {
 type SearchFullTextValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Value     interface{}      `json:"value"`
 	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
@@ -179,7 +216,7 @@ type SearchFullTextValue struct {
 type SearchLongRangeValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Gte       *int             `json:"gte,omitempty"`
 	Gt        *int             `json:"gt,omitempty"`
@@ -190,7 +227,7 @@ type SearchLongRangeValue struct {
 type SearchNumberRangeValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Gte       *float64         `json:"gte,omitempty"`
 	Gt        *float64         `json:"gt,omitempty"`
@@ -236,7 +273,7 @@ type SearchSorting struct {
 	// Provide the data type of the given `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	// Allows you to apply a [sort filter](/../api/search-query-language#sort-filter).
-	Filter *SearchQueryExpression `json:"filter,omitempty"`
+	Filter *SearchQuery `json:"filter,omitempty"`
 }
 
 type SearchTimeRangeExpression struct {
@@ -246,7 +283,7 @@ type SearchTimeRangeExpression struct {
 type SearchTimeRangeValue struct {
 	Field string   `json:"field"`
 	Boost *float64 `json:"boost,omitempty"`
-	// Possible values for the `fieldType` property on [query expressions](/../api/search-query-language#query-expressions) indicating the data type of the `field`.
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
 	FieldType *SearchFieldType `json:"fieldType,omitempty"`
 	Gte       *time.Time       `json:"gte,omitempty"`
 	Gt        *time.Time       `json:"gt,omitempty"`

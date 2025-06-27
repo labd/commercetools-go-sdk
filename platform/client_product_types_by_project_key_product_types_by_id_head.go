@@ -28,7 +28,7 @@ func (rb *ByProjectKeyProductTypesByIDRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if a ProductType exists for a given `id`. Returns a `200 OK` status if the ProductType exists or a `404 Not Found` otherwise.
+*	Checks if a ProductType exists with the provided `id`. Returns a `200 OK` status if the ProductType exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductTypesByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

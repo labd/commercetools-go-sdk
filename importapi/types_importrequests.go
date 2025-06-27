@@ -8,7 +8,7 @@ import (
 )
 
 /**
-*	An import request batches multiple import resources of the same import resource type for processing by an import container.
+*	An import request batches multiple import resources of the same import resource type for processing by an Import Container.
 *
  */
 type ImportRequest interface{}
@@ -114,16 +114,16 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 }
 
 /**
-*	A list of the ID's and validation statuses of newly created [ImportOperations](#importoperation).
-*	Used as a response at each resource-specific import endpoint, for example, at [Import Categories](/category#import-categories) and [Import ProductTypes](/product-type#import-producttypes).
+*	The response of each resource import endpoint, such as [Import Categories](ctp:import:type:CategoryImport) and [Import ProductTypes](ctp:import:type:ProductTypeImport).
 *
  */
 type ImportResponse struct {
+	// A list of the ID's and validation statuses of new [ImportOperations](#importoperation).
 	OperationStatus []ImportOperationStatus `json:"operationStatus"`
 }
 
 /**
-*	The request body to [import Categories](#import-categories). Contains data for [Categories](/../api/projects/categories#category) to be created or updated in a Project.
+*	The request body to [import Categories](#import-categories). Contains data for [Categories](ctp:api:type:Category) to be created or updated in a Project.
 *
  */
 type CategoryImportRequest struct {
@@ -142,7 +142,7 @@ func (obj CategoryImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Products](#import-products). Contains data for [Products](/../api/projects/products#product) to be created or updated in a Project.
+*	The request body to [import Products](#import-products). Contains data for [Products](ctp:api:type:Product) to be created or updated in a Project.
 *
  */
 type ProductImportRequest struct {
@@ -161,7 +161,7 @@ func (obj ProductImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](/../api/projects/products#productdraft) to be created or updated in a Project.
+*	The request body to [import ProductDrafts](#import-productdrafts). Contains data for [Products](ctp:api:type:Product) to be created or updated in a Project.
 *
  */
 type ProductDraftImportRequest struct {
@@ -180,7 +180,7 @@ func (obj ProductDraftImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](/../api/projects/productTypes#producttype) to be created or updated in a Project.
+*	The request body to [import ProductTypes](#import-producttypes). Contains data for [ProductTypes](ctp:api:type:ProductType) to be created or updated in a Project.
 *
  */
 type ProductTypeImportRequest struct {
@@ -199,7 +199,7 @@ func (obj ProductTypeImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](/../api/projects/products#productvariant) to be created or updated in a Project.
+*	The request body to [import ProductVariants](#import-productvariants). Contains data for [ProductVariants](ctp:api:type:ProductVariant) to be created or updated in a Project.
 *
  */
 type ProductVariantImportRequest struct {
@@ -237,7 +237,7 @@ func (obj PriceImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Standalone Prices](#import-standalone-prices). Contains data for [Standalone Prices](/../api/projects/standalone-prices#standaloneprice) to be created or updated in a Project.
+*	The request body to [import Standalone Prices](#import-standalone-prices). Contains data for [Standalone Prices](ctp:api:type:StandalonePrice) to be created or updated in a Project.
 *
  */
 type StandalonePriceImportRequest struct {
@@ -256,7 +256,7 @@ func (obj StandalonePriceImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Orders](#import-orders). Contains data for [Orders](/../api/projects/orders#order) to be created in a Project.
+*	The request body to [import Orders](#import-orders). Contains data for [Orders](ctp:api:type:Order) to be created in a Project.
 *
  */
 type OrderImportRequest struct {
@@ -313,7 +313,7 @@ func (obj ProductVariantPatchRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Customers](#import-customers). Contains data for [Customers](/../api/projects/customers#customer) to be created or updated in a Project.
+*	The request body to [import Customers](#import-customers). Contains data for [Customers](ctp:api:type:Customer) to be created or updated in a Project.
 *
  */
 type CustomerImportRequest struct {
@@ -332,7 +332,7 @@ func (obj CustomerImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Inventories](#import-inventory). Contains data for [InventoryEntries](/../api/projects/inventory#inventoryentry) to be created or updated in a commercetools Project.
+*	The request body to [import Inventories](#import-inventory). Contains data for [InventoryEntries](ctp:api:type:InventoryEntry) to be created or updated in a commercetools Project.
 *
  */
 type InventoryImportRequest struct {
@@ -351,7 +351,7 @@ func (obj InventoryImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Types](#import-types). Contains data for [Types](/../api/projects/types#type) to be created or updated in a Project.
+*	The request body to [import Types](#import-types). Contains data for [Types](ctp:api:type:Type) to be created or updated in a Project.
 *
  */
 type TypeImportRequest struct {

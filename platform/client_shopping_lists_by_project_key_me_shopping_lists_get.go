@@ -134,11 +134,11 @@ func (rb *ByProjectKeyMeShoppingListsRequestMethodGet) WithHeaders(headers http.
 }
 
 /**
-*	Returns all ShoppingLists that match the given Query Predicate. Returns a `200 OK` status if successful.
+*	Retrieves ShoppingLists for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no ShoppingList exists for the given Query Predicate.
+*	- If no ShoppingList exists for the provided query predicate.
 *	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */

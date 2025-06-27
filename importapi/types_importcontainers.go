@@ -40,7 +40,7 @@ type ImportContainerDraft struct {
 }
 
 /**
-*	The representation sent to the server when updating an import container.
+*	The representation sent to the server when updating an Import Container.
 *
  */
 type ImportContainerUpdateDraft struct {

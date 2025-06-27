@@ -77,6 +77,8 @@ func (obj *DiscountCode) UnmarshalJSON(data []byte) error {
 
 type DiscountCodeDraft struct {
 	// User-defined unique identifier for the DiscountCode.
+	//
+	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Discount Codes with the [Import API](/../api/import-export/overview) and the [Merchant Center](/../merchant-center/import-data).
 	Key *string `json:"key,omitempty"`
 	// Name of the DiscountCode.
 	Name *LocalizedString `json:"name,omitempty"`

@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodHead) Wi
 }
 
 /**
-*	Checks if a Customer exists for a given `key`. Returns a `200 OK` status if the Customer exists or a `404 Not Found` otherwise.
+*	Checks if a Customer exists with the provided `key`. Returns a `200 OK` status if the Customer exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

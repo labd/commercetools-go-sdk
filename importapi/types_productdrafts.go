@@ -12,12 +12,12 @@ import (
 *
  */
 type ProductDraftImport struct {
-	// User-defined unique identifier. If a [Product](/../api/projects/products#product) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [Product](ctp:api:type:Product) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
-	// The `productType` of a [Product](/../api/projects/products#product).
+	// The `productType` of a [Product](ctp:api:type:Product).
 	// Maps to `Product.productType`.
-	// The Reference to the [ProductType](/../api/projects/productTypes#producttype) with which the ProductDraft is associated.
-	// If referenced ProductType does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductType is created.
+	// The Reference to the [ProductType](ctp:api:type:ProductType) with which the ProductDraft is associated.
+	// If referenced ProductType does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary ProductType is created.
 	ProductType ProductTypeKeyReference `json:"productType"`
 	Name        LocalizedString         `json:"name"`
 	// Human-readable identifiers usually used as deep-link URL to the related product. Each slug must be unique across a project,
@@ -25,9 +25,10 @@ type ProductDraftImport struct {
 	Slug LocalizedString `json:"slug"`
 	// Maps to `Product.description`.
 	Description *LocalizedString `json:"description,omitempty"`
-	// The Reference to the [Categories](/../api/projects/categories#category) with which the ProductDraft is associated.
-	// If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
+	// The Reference to the [Categories](ctp:api:type:Category) with which the ProductDraft is associated.
+	// If referenced Categories do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary Categories are created.
 	Categories []CategoryKeyReference `json:"categories"`
+	Attributes []Attribute            `json:"attributes"`
 	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
 	// ```json
 	// {
@@ -57,8 +58,8 @@ type ProductDraftImport struct {
 	MasterVariant *ProductVariantDraftImport `json:"masterVariant,omitempty"`
 	// An array of related Product Variants.
 	Variants []ProductVariantDraftImport `json:"variants"`
-	// The Reference to the [TaxCategory](/../api/projects/taxCategories#taxcategory) with which the ProductDraft is associated.
-	// If referenced TaxCategory does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary TaxCategory is created.
+	// The Reference to the [TaxCategory](/projects/taxCategories#taxcategory) with which the ProductDraft is associated.
+	// If referenced TaxCategory does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary TaxCategory is created.
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
 	// Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
 	// ```json
@@ -79,13 +80,31 @@ type ProductDraftImport struct {
 	// }
 	// ```
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
-	// The Reference to the [State](/../api/projects/states#state) with which the ProductDraft is associated.
-	// If referenced State does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary State is created.
+	// The Reference to the [State](/projects/states#state) with which the ProductDraft is associated.
+	// If referenced State does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary State is created.
 	State *StateKeyReference `json:"state,omitempty"`
-	// Determines the published status and current/staged projection of the Product. For more information, see [Managing the published state of Products](/best-practices#managing-the-published-state-of-products).
+	// Determines the published status and current/staged projection of the Product. For more information, see [Managing the published state of Products](/import-export/best-practices#manage-published-state-of-products).
 	Publish *bool `json:"publish,omitempty"`
-	// Determines the type of Prices the API uses. See [ProductPriceMode](/../api/projects/products#productpricemode) for more details. If not provided, the existing `Product.priceMode` is not changed.
+	// Determines the type of Prices the API uses. If not provided, the existing `Product.priceMode` is not changed.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductDraftImport) UnmarshalJSON(data []byte) error {
+	type Alias ProductDraftImport
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Attributes {
+		var err error
+		obj.Attributes[i], err = mapDiscriminatorAttribute(obj.Attributes[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -106,6 +125,10 @@ func (obj ProductDraftImport) MarshalJSON() ([]byte, error) {
 
 	if raw["categories"] == nil {
 		delete(raw, "categories")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	if raw["variants"] == nil {

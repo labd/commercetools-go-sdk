@@ -29,6 +29,7 @@ func (rb *ByProjectKeyOrdersImportRequestMethodPost) WithHeaders(headers http.He
 }
 
 /**
+*	Creates an Order without needing to create a Cart first.
 *	Importing an Order produces the [Order Imported](ctp:api:type:OrderImportedMessage) Message.
 *
 *	Specific Error Codes:

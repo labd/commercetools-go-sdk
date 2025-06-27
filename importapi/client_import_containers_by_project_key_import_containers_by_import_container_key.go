@@ -28,7 +28,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Import
 }
 
 /**
-*	Updates the import container given by the key.
+*	Updates the Import Container given by the key.
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Put(body ImportContainerUpdateDraft) *ByProjectKeyImportContainersByImportContainerKeyRequestMethodPut {
 	return &ByProjectKeyImportContainersByImportContainerKeyRequestMethodPut{
@@ -39,7 +39,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Put(bo
 }
 
 /**
-*	Retrieves the import container given by the key.
+*	Retrieves the Import Container given by the key.
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Get() *ByProjectKeyImportContainersByImportContainerKeyRequestMethodGet {
 	return &ByProjectKeyImportContainersByImportContainerKeyRequestMethodGet{
@@ -49,7 +49,10 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Get() 
 }
 
 /**
-*	Deletes the import container given by the key.
+*	Deletes the Import Container specified by the `importContainerKey`.
+*
+*	Generates the [ImportContainerDeleted](/projects/events#import-container-deleted-event) Event.
+*
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Delete() *ByProjectKeyImportContainersByImportContainerKeyRequestMethodDelete {
 	return &ByProjectKeyImportContainersByImportContainerKeyRequestMethodDelete{

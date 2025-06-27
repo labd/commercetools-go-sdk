@@ -186,8 +186,32 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
-	case "DeploymentMustIncludeApplication":
-		obj := DeploymentMustIncludeApplicationError{}
+	case "DeploymentUnknownGlobalConfigurationKey":
+		obj := DeploymentUnknownGlobalConfigurationKeyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentMissingGlobalConfigurationKey":
+		obj := DeploymentMissingGlobalConfigurationKeyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentEmptyRequiredGlobalConfigurationKey":
+		obj := DeploymentEmptyRequiredGlobalConfigurationKeyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentInvalidType":
+		obj := DeploymentInvalidTypeError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentProductionDeactivated":
+		obj := DeploymentProductionDeactivatedError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -265,7 +289,7 @@ func (obj ErrorResponse) Error() string {
 *
  */
 type AuthenticationError struct {
-	// `"Bad credientals or Client ID is not defined"`
+	// `"Bad credentials or Client ID is not defined"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
@@ -1766,7 +1790,7 @@ func (obj ConnectorReferenceNotFoundError) Error() string {
 }
 
 /**
-*	Returned when updating a Connector fails during [redeployment](ctp:connect:type:DeploymentRedeploy).
+*	Returned when updating a Connector fails during [redeployment](ctp:connect:type:DeploymentRedeployAction).
 *
  */
 type DeploymentConnectorUpdateFailureError struct {
@@ -1841,7 +1865,7 @@ func (obj DeploymentConnectorUpdateFailureError) Error() string {
 /**
 *	Returned when the Deployment operation results in a invalid status transition.
 *
-*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action.
+*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeployAction) update action.
 *
 *	The message will contain `Already queued`, `Already deploying`, or `Already undeploying` based on the [DeploymentStatus](ctp:connect:type:DeploymentStatus) of the Deployment.
 *
@@ -1918,7 +1942,7 @@ func (obj DeploymentInvalidStatusTransitionError) Error() string {
 /**
 *	Returned when the Deployment contains configuration values that are not defined in the Connect application's connect.yaml file.
 *
-*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action and [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
+*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeployAction) update action and [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
 *
  */
 type DeploymentUnknownApplicationConfigurationError struct {
@@ -1993,7 +2017,7 @@ func (obj DeploymentUnknownApplicationConfigurationError) Error() string {
 /**
 *	Returned when the Deployment contains a configuration key that is not defined in the Connect application's connect.yaml file.
 *
-*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeploy) update action and [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
+*	The error is returned as a failed response to the [Redeploy](ctp:connect:type:DeploymentRedeployAction) update action and [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
 *
  */
 type DeploymentUnknownApplicationConfigurationKeyError struct {
@@ -2287,11 +2311,11 @@ func (obj DeploymentApplicationRequiredError) Error() string {
 }
 
 /**
-*	Returned when attempting to remove an application that belongs to the Deployment.
+*	Returned when attempting to provide a nonexistent global configuration.
 *
  */
-type DeploymentMustIncludeApplicationError struct {
-	// `"Deployment with id=$resourceId or key=$resourceKey must include application: $applicationName"`
+type DeploymentUnknownGlobalConfigurationKeyError struct {
+	// `"Deployment global configuration does not require (secret|standard) with key $configurationKey."`
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
@@ -2299,8 +2323,8 @@ type DeploymentMustIncludeApplicationError struct {
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *DeploymentMustIncludeApplicationError) UnmarshalJSON(data []byte) error {
-	type Alias DeploymentMustIncludeApplicationError
+func (obj *DeploymentUnknownGlobalConfigurationKeyError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentUnknownGlobalConfigurationKeyError
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -2316,12 +2340,12 @@ func (obj *DeploymentMustIncludeApplicationError) UnmarshalJSON(data []byte) err
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj DeploymentMustIncludeApplicationError) MarshalJSON() ([]byte, error) {
-	type Alias DeploymentMustIncludeApplicationError
+func (obj DeploymentUnknownGlobalConfigurationKeyError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentUnknownGlobalConfigurationKeyError
 	data, err := json.Marshal(struct {
 		Action string `json:"code"`
 		*Alias
-	}{Action: "DeploymentMustIncludeApplication", Alias: (*Alias)(&obj)})
+	}{Action: "DeploymentUnknownGlobalConfigurationKey", Alias: (*Alias)(&obj)})
 	if err != nil {
 		return nil, err
 	}
@@ -2339,7 +2363,7 @@ func (obj DeploymentMustIncludeApplicationError) MarshalJSON() ([]byte, error) {
 
 }
 
-func (obj *DeploymentMustIncludeApplicationError) DecodeStruct(src map[string]interface{}) error {
+func (obj *DeploymentUnknownGlobalConfigurationKeyError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -2352,9 +2376,303 @@ func (obj *DeploymentMustIncludeApplicationError) DecodeStruct(src map[string]in
 	return nil
 }
 
-func (obj DeploymentMustIncludeApplicationError) Error() string {
+func (obj DeploymentUnknownGlobalConfigurationKeyError) Error() string {
 	if obj.Message != "" {
 		return obj.Message
 	}
-	return "unknown DeploymentMustIncludeApplicationError: failed to parse error response"
+	return "unknown DeploymentUnknownGlobalConfigurationKeyError: failed to parse error response"
+}
+
+/**
+*	Returned when a required global configuration key is missing.
+*
+ */
+type DeploymentMissingGlobalConfigurationKeyError struct {
+	// `"Deployment global configuration requires (secret|standard) with key $configurationKey."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentMissingGlobalConfigurationKeyError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentMissingGlobalConfigurationKeyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentMissingGlobalConfigurationKeyError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentMissingGlobalConfigurationKeyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentMissingGlobalConfigurationKey", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentMissingGlobalConfigurationKeyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentMissingGlobalConfigurationKeyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentMissingGlobalConfigurationKeyError: failed to parse error response"
+}
+
+/**
+*	Returned when a required global configuration key has an empty value.
+*
+ */
+type DeploymentEmptyRequiredGlobalConfigurationKeyError struct {
+	// `"Deployment requires a non empty value for (secret|standard) global configuration with key $configurationKey."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentEmptyRequiredGlobalConfigurationKeyError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentEmptyRequiredGlobalConfigurationKeyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentEmptyRequiredGlobalConfigurationKeyError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentEmptyRequiredGlobalConfigurationKeyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentEmptyRequiredGlobalConfigurationKey", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentEmptyRequiredGlobalConfigurationKeyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentEmptyRequiredGlobalConfigurationKeyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentEmptyRequiredGlobalConfigurationKeyError: failed to parse error response"
+}
+
+/**
+*	Returned when the provided [deployment type](ctp:connect:type:DeploymentType) is not valid for the referenced [Connector](ctp:connect:type:Connector).
+*
+*	The error is returned as a failed response to the [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request.
+*
+ */
+type DeploymentInvalidTypeError struct {
+	// `"The Connector id=$resourceId or key=$resourceKey cannot be deployed as a '(preview|sandbox|production)' type. Only '(preview|sandbox|production)' types are allowed."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentInvalidTypeError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentInvalidTypeError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentInvalidTypeError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentInvalidTypeError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentInvalidType", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentInvalidTypeError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentInvalidTypeError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentInvalidTypeError: failed to parse error response"
+}
+
+/**
+*	Returned as a failed response to the [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request when deployments to production are disabled for the Project.
+*
+ */
+type DeploymentProductionDeactivatedError struct {
+	// `"Deployments to production are disabled for this Project. Please contact support to enable production deployments."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentProductionDeactivatedError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentProductionDeactivatedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentProductionDeactivatedError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentProductionDeactivatedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentProductionDeactivated", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentProductionDeactivatedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentProductionDeactivatedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentProductionDeactivatedError: failed to parse error response"
 }

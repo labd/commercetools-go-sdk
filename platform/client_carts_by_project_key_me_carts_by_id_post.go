@@ -60,7 +60,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestMethodPost) WithHeaders(headers http.Hea
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no Cart exists for a given `id`.
+*	- If no Cart exists with the provided `id`.
 *	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */

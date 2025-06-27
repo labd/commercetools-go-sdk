@@ -28,7 +28,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsKeyByKeyRequestMethod
 }
 
 /**
-*	Checks if a BusinessUnit exists for a given `key`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
+*	Checks if a BusinessUnit exists with the provided `key`. Returns a `200 OK` status if the BusinessUnit exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdBusinessUnitsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

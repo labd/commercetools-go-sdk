@@ -132,6 +132,10 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves Orders in a [BusinessUnit](ctp:api:type:BusinessUnit).
+ */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestMethodGet) Execute(ctx context.Context) (result *OrderPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -13,6 +13,7 @@ type ByProjectKeyCartsKeyByKeyRequestBuilder struct {
 }
 
 /**
+*	Retrieves a Cart with the provided `key`.
 *	To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.
 *
  */
@@ -24,7 +25,7 @@ func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Get() *ByProjectKeyCartsKeyBy
 }
 
 /**
-*	Checks if a Cart exists for a given `key`. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise.
+*	Checks if a Cart exists with the provided `key`. Returns a `200 OK` status if the Cart exists or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Head() *ByProjectKeyCartsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyCartsKeyByKeyRequestMethodHead{
@@ -33,6 +34,9 @@ func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Head() *ByProjectKeyCartsKeyB
 	}
 }
 
+/**
+*	Updates a Cart in the Project using one or more [update actions](/../api/projects/carts#update-actions).
+ */
 func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Post(body CartUpdate) *ByProjectKeyCartsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyCartsKeyByKeyRequestMethodPost{
 		body:   body,
@@ -41,6 +45,9 @@ func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Post(body CartUpdate) *ByProj
 	}
 }
 
+/**
+*	Deletes a Cart in the Project.
+ */
 func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Delete() *ByProjectKeyCartsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyCartsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/carts/key=%s", rb.projectKey, rb.key),

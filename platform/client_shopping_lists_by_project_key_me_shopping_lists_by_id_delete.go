@@ -66,11 +66,11 @@ func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) WithHeaders(header
 }
 
 /**
-*	Deletes the ShoppingList for a given `id`. Returns a `200 OK` status if successful.
+*	Deletes a ShoppingList for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no ShoppingList exists for the given `id`.
+*	- If no ShoppingList exists with the provided `id`.
 *	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */

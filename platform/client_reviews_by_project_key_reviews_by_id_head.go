@@ -28,7 +28,7 @@ func (rb *ByProjectKeyReviewsByIDRequestMethodHead) WithHeaders(headers http.Hea
 }
 
 /**
-*	Checks if a Review exists for a given `id`. Returns a `200 OK` status if the Review exists or a `404 Not Found` otherwise.
+*	Checks if a Review exists with the provided `id`. Returns a `200 OK` status if the Review exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyReviewsByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

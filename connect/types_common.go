@@ -3,6 +3,7 @@ package connect
 // Generated file, please do not change!!!
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -37,7 +38,7 @@ type CertificationInfoComment struct {
 *	The name, description, and default value of a standard environment variable.
 *
  */
-type ConfigurationKeyStandard struct {
+type StandardConfigurationKey struct {
 	// Name of the environment variable.
 	Key string `json:"key"`
 	// Description of the environment variable.
@@ -52,7 +53,7 @@ type ConfigurationKeyStandard struct {
 *	The name and description of a secret environment variable.
 *
  */
-type ConfigurationKeySecured struct {
+type SecuredConfigurationKey struct {
 	// Name of the environment variable.
 	Key string `json:"key"`
 	// Description of the environment variable.
@@ -78,9 +79,67 @@ type ConnectorConfigurationApplication struct {
 	// The Connect application type.
 	ApplicationType string `json:"applicationType"`
 	// Contains the name, description, and default values of standard environment variables.
-	StandardConfiguration []ConfigurationKeyStandard `json:"standardConfiguration"`
+	StandardConfiguration []StandardConfigurationKey `json:"standardConfiguration"`
 	// Contains the name and description of secret environment variables.
-	SecuredConfiguration []ConfigurationKeySecured `json:"securedConfiguration"`
+	SecuredConfiguration []SecuredConfigurationKey `json:"securedConfiguration"`
+}
+
+/**
+*	Global configuration applied to all applications in the deployment.
+ */
+type ConnectorGlobalConfiguration struct {
+	// Contains the name and description of standard environment variables.
+	StandardConfiguration []StandardConfigurationKey `json:"standardConfiguration"`
+	// Contains the name and description of secret environment variables.
+	SecuredConfiguration []SecuredConfigurationKey `json:"securedConfiguration"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConnectorGlobalConfiguration) MarshalJSON() ([]byte, error) {
+	type Alias ConnectorGlobalConfiguration
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["standardConfiguration"] == nil {
+		delete(raw, "standardConfiguration")
+	}
+
+	if raw["securedConfiguration"] == nil {
+		delete(raw, "securedConfiguration")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Configuration for generating API Client credentials.
+*
+ */
+type ConnectorApiClient struct {
+	// List of [scopes](/hosts-and-authorization#authorization) assigned to the API Client.
+	Scopes []string `json:"scopes"`
+}
+
+/**
+*	API Client credentials used for deployment.
+*
+ */
+type DeploymentApiClient struct {
+	// Client ID of the API Client.
+	Name string `json:"name"`
+	// List of [scopes](/hosts-and-authorization#authorization) assigned to the API Client.
+	Scopes []string `json:"scopes"`
 }
 
 /**
@@ -113,8 +172,6 @@ type ApplicationDeployment struct {
 	Url *string `json:"url,omitempty"`
 	// Google Cloud Pub/Sub Topic generated after deployment of event applications.
 	Topic *string `json:"topic,omitempty"`
-	// Azure Service Bus connection string generated after deployment of event applications.
-	ConnectionString *string `json:"connectionString,omitempty"`
 	// Cron schedule for job applications.
 	Schedule *string `json:"schedule,omitempty"`
 }
@@ -223,8 +280,82 @@ type DeploymentConnector struct {
 	Creator DeploymentCreator `json:"creator"`
 	// Details of the GitHub repository that contains the Connect applications.
 	Repository Repository `json:"repository"`
+	// Configurations needed by Connectors for hosting. Loaded as environment variables in the application.
+	Configurations []ConnectorConfigurationApplication `json:"configurations"`
+	// Global configuration applied to all applications in the deployment.
+	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// If `true`, the Connector is certified.
 	Certified bool `json:"certified"`
+	// If not empty, Connectors can only be deployed in these Regions. If empty, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts).
+	SupportedRegions []Region `json:"supportedRegions"`
+	// URL to the documentation of the Connector.
+	DocumentationUrl *string `json:"documentationUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentConnector) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentConnector
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["configurations"] == nil {
+		delete(raw, "configurations")
+	}
+
+	if raw["supportedRegions"] == nil {
+		delete(raw, "supportedRegions")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Global configuration applied to all applications in the deployment.
+ */
+type DeploymentGlobalConfiguration struct {
+	// List of standard environment variables.
+	StandardConfiguration []ConfigurationValue `json:"standardConfiguration"`
+	// List of secured environment variables.
+	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentGlobalConfiguration) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentGlobalConfiguration
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["standardConfiguration"] == nil {
+		delete(raw, "standardConfiguration")
+	}
+
+	if raw["securedConfiguration"] == nil {
+		delete(raw, "securedConfiguration")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -241,6 +372,10 @@ type DeploymentCreator struct {
 	Company *string `json:"company,omitempty"`
 	// Number of contributors currently working for the company.
 	NoOfContributors *int `json:"noOfContributors,omitempty"`
+	// URL to an image used as the company logo.
+	LogoUrl *string `json:"logoUrl,omitempty"`
+	// Url to support website of the company.
+	SupportUrl *string `json:"supportUrl,omitempty"`
 }
 
 /**
@@ -275,7 +410,7 @@ type DeploymentReportEntry struct {
 *	Describes a report of the Connector deployment process.
  */
 type DeploymentReport struct {
-	// Contains informations, errors and warnings about the Connector deployment.
+	// Contains information, errors and warnings about the Connector deployment.
 	Entries []DeploymentReportEntry `json:"entries"`
 }
 
@@ -337,7 +472,6 @@ const (
 	RegionEuropeWest1Gcp         Region = "europe-west1.gcp"
 	RegionUsCentral1Gcp          Region = "us-central1.gcp"
 	RegionAustraliaSoutheast1Gcp Region = "australia-southeast1.gcp"
-	RegionEastusAzure            Region = "eastus.azure"
 )
 
 /**
@@ -359,6 +493,7 @@ const (
 	IntegrationTypeEmail       IntegrationType = "email"
 	IntegrationTypeAnalytics   IntegrationType = "analytics"
 	IntegrationTypeShipping    IntegrationType = "shipping"
+	IntegrationTypeGiftcard    IntegrationType = "giftcard"
 	IntegrationTypeOther       IntegrationType = "other"
 )
 
@@ -370,6 +505,7 @@ type DeploymentType string
 
 const (
 	DeploymentTypePreview    DeploymentType = "preview"
+	DeploymentTypeSandbox    DeploymentType = "sandbox"
 	DeploymentTypeProduction DeploymentType = "production"
 )
 

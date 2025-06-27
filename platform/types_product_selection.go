@@ -86,10 +86,9 @@ type AssignedProductSelectionPagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/general-concepts#strong-consistency).
-	// Unlike other endpoints, the Product Selection endpoint does not return this field by default.
-	// To get `total`, pass the query parameter `withTotal` set to `true`.
-	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
+	// Present only when the `withTotal` query parameter is set to `true`.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// References to ProductSelection that are assigned to the Product.
 	Results []AssignedProductSelection `json:"results"`
@@ -136,12 +135,14 @@ type ProductSelectionAssignment struct {
 	Product ProductReference `json:"product"`
 	// Reference to the Product Selection that this assignment is part of.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
-	// Define which Variants of the added Product will be included in the Product Selection.
+	// Defines which particular Variants of the Product are included in the Product Selection.
+	// If undefined all Variants of the referenced Product are included.
 	//
 	// This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
-	// Defines which Variants of the Product will be excluded from the Product Selection.
+	// Defines which particular Variants of the Product are excluded from the Product Selection.
+	// If undefined all Variants of the referenced Product are excluded.
 	//
 	// This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
@@ -203,8 +204,8 @@ type ProductSelectionPagedQueryResponse struct {
 	Count int `json:"count"`
 	// Total number of results matching the query.
 	// This number is an estimation that is not [strongly consistent](/general-concepts#strong-consistency).
-	// Unlike other endpoints, the Product Selection endpoint does not return this field by default.
-	// To get `total`, pass the query parameter `withTotal` set to `true`.
+	// This field is returned by default.
+	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
 	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [ProductSelections](ctp:api:type:ProductSelection) matching the query.
@@ -223,10 +224,9 @@ type ProductSelectionProductPagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/general-concepts#strong-consistency).
-	// Unlike other endpoints, the Product Selection endpoint does not return this field by default.
-	// To get `total`, pass the query parameter `withTotal` set to `true`.
-	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
+	// Present only when the `withTotal` query parameter is set to `true`.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// References to Products that are assigned to the ProductSelection.
 	Results []AssignedProductReference `json:"results"`
@@ -606,10 +606,9 @@ type ProductsInStorePagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/general-concepts#strong-consistency).
-	// Unlike other endpoints, the Product Selection endpoint does not return this field by default.
-	// To get `total`, pass the query parameter `withTotal` set to `true`.
-	// When the results are filtered with a [Query Predicate](/predicates/query), `total` is subject to a [limit](/limits#queries).
+	// Present only when the `withTotal` query parameter is set to `true`.
+	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// ProductSelectionAssignments matching the query.
 	Results []ProductSelectionAssignment `json:"results"`

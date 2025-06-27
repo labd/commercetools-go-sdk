@@ -613,9 +613,13 @@ func (obj CustomObjectKeyReference) MarshalJSON() ([]byte, error) {
 	}{Action: "key-value-document", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	References a resource which could not be resolved.
+ */
 type UnresolvedReferences struct {
+	// The `key` of the resource.
 	Key string `json:"key"`
-	// The type of the referenced resource.
+	// The type of resource.
 	TypeId ReferenceType `json:"typeId"`
 }
 
@@ -692,6 +696,7 @@ func (obj Money) MarshalJSON() ([]byte, error) {
 }
 
 type DiscountedPrice struct {
+	// Money value of the discounted price.
 	Value TypedMoney `json:"value"`
 	// Reference to a ProductDiscount.
 	Discount ProductDiscountKeyReference `json:"discount"`
@@ -797,7 +802,7 @@ const (
 )
 
 /**
-*	Every [Import Operation](/import-operation) is assigned one of the following states.
+*	Every [Import Operation](ctp:import:type:ImportOperation) is assigned one of the following states.
 *
  */
 type ProcessingState string

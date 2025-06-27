@@ -55,7 +55,7 @@ func (rb *ByProjectKeyApiClientsRequestMethodHead) WithHeaders(headers http.Head
 }
 
 /**
-*	Checks if an API Client exists for a given Query Predicate. Returns a `200 OK` status if any API Clients match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if an API Client exists for the provided query predicate. Returns a `200 OK` status if any API Clients match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyApiClientsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

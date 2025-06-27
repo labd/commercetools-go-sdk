@@ -33,7 +33,7 @@ func (rb *ByProjectKeyStoresRequestBuilder) Get() *ByProjectKeyStoresRequestMeth
 }
 
 /**
-*	Checks if a Store exists for a given Query Predicate. Returns a `200 OK` status if any Stores match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Stores exist for the provided query predicate. Returns a `200 OK` status if any Stores match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStoresRequestBuilder) Head() *ByProjectKeyStoresRequestMethodHead {
 	return &ByProjectKeyStoresRequestMethodHead{

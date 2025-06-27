@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMeQuoteRequestsRequestMethodHead) WithHeaders(headers http
 }
 
 /**
-*	Checks if a QuoteRequest exists for a given Query Predicate. Returns a `200 OK` status if any QuoteRequests match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more QuoteRequests exist for the provided query predicate. Returns a `200 OK` status if any QuoteRequests match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeQuoteRequestsRequestMethodHead) Execute(ctx context.Context) error {

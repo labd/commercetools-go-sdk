@@ -80,6 +80,10 @@ type Customer struct {
 	IsEmailVerified bool `json:"isEmailVerified"`
 	// [CustomerGroup](ctp:api:type:CustomerGroup) to which the Customer belongs.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
+	// Customer Groups that the Customer belongs to.
+	//
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Custom Fields for the Customer.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Preferred language of the Customer.
@@ -119,6 +123,10 @@ func (obj Customer) MarshalJSON() ([]byte, error) {
 		delete(raw, "billingAddressIds")
 	}
 
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
+	}
+
 	return json.Marshal(raw)
 
 }
@@ -143,6 +151,8 @@ type CustomerCreateEmailToken struct {
 	Version *int `json:"version,omitempty"`
 	// Validity period of the generated token in minutes.
 	TtlMinutes int `json:"ttlMinutes"`
+	// If set to `true`, all email tokens issued previously for the Customer will be invalidated.
+	InvalidateOlderTokens *bool `json:"invalidateOlderTokens,omitempty"`
 }
 
 type CustomerCreatePasswordResetToken struct {
@@ -150,11 +160,15 @@ type CustomerCreatePasswordResetToken struct {
 	Email string `json:"email"`
 	// Validity period of the generated token in minutes.
 	TtlMinutes *int `json:"ttlMinutes,omitempty"`
+	// If set to `true`, all password tokens issued previously for the Customer will be invalidated.
+	InvalidateOlderTokens *bool `json:"invalidateOlderTokens,omitempty"`
 }
 
 type CustomerDraft struct {
 	// User-defined unique identifier for the Customer.
 	// The `key` field is preferred over `customerNumber` as it is mutable and provides more flexibility.
+	//
+	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Customers with the [Import API](/../api/import-export/overview).
 	Key *string `json:"key,omitempty"`
 	// User-defined unique identifier for a Customer.
 	// Once set, it cannot be changed.
@@ -185,7 +199,7 @@ type CustomerDraft struct {
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Date of birth of the Customer.
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
-	// Company name of the Customer. When representing a company as a Customer, [Business Units](ctp:api:type:BusinessUnit) provide extended funtionality.
+	// Company name of the Customer. When representing a company as a Customer, [Business Units](ctp:api:type:BusinessUnit) provide extended functionality.
 	CompanyName *string `json:"companyName,omitempty"`
 	// Individual VAT ID of the Customer.
 	VatId *string `json:"vatId,omitempty"`
@@ -207,7 +221,13 @@ type CustomerDraft struct {
 	// The intended use is to leave this field unset upon sign-up of the Customer and initiate the [email verification](#email-verification-of-customer) afterwards.
 	IsEmailVerified *bool `json:"isEmailVerified,omitempty"`
 	// Sets the [CustomerGroup](ctp:api:type:CustomerGroup) for the Customer.
+	//
+	// For new projects, use `customerGroupAssignments` instead. It supports assigning Customers to multiple Customer Groups and provides greater flexibility in complex pricing scenarios.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// Customer Groups to assign the Customer to.
+	//
+	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 	// Custom Fields for the Customer.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Preferred language of the Customer.
@@ -253,6 +273,10 @@ func (obj CustomerDraft) MarshalJSON() ([]byte, error) {
 		delete(raw, "billingAddresses")
 	}
 
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
+	}
+
 	if raw["stores"] == nil {
 		delete(raw, "stores")
 	}
@@ -285,6 +309,16 @@ type CustomerEmailVerify struct {
 	Version *int `json:"version,omitempty"`
 	// Value of the token to verify Customer email.
 	TokenValue string `json:"tokenValue"`
+}
+
+type CustomerGroupAssignment struct {
+	// Reference to a Customer Group.
+	CustomerGroup CustomerGroupReference `json:"customerGroup"`
+}
+
+type CustomerGroupAssignmentDraft struct {
+	// ResourceIdentifier of a Customer Group.
+	CustomerGroup CustomerGroupResourceIdentifier `json:"customerGroup"`
 }
 
 /**
@@ -416,6 +450,8 @@ type CustomerToken struct {
 	Value string `json:"value"`
 	// Date and time (UTC) the token expires.
 	ExpiresAt time.Time `json:"expiresAt"`
+	// If `true`, all tokens issued previously for the Customer will be invalidated.
+	InvalidateOlderTokens bool `json:"invalidateOlderTokens"`
 	// Date and time (UTC) the token was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// When the token is created, `lastModifiedAt` is set to `createdAt`.
@@ -474,6 +510,12 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 			return nil, err
 		}
 		return obj, nil
+	case "addCustomerGroupAssignment":
+		obj := CustomerAddCustomerGroupAssignmentAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "addShippingAddressId":
 		obj := CustomerAddShippingAddressIdAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -506,6 +548,12 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 		return obj, nil
 	case "removeBillingAddressId":
 		obj := CustomerRemoveBillingAddressIdAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeCustomerGroupAssignment":
+		obj := CustomerRemoveCustomerGroupAssignmentAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -560,6 +608,12 @@ func mapDiscriminatorCustomerUpdateAction(input interface{}) (CustomerUpdateActi
 		return obj, nil
 	case "setCustomerGroup":
 		obj := CustomerSetCustomerGroupAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomerGroupAssignments":
+		obj := CustomerSetCustomerGroupAssignmentsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -729,6 +783,25 @@ func (obj CustomerAddBillingAddressIdAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Assigns a Customer Group to a Customer. This action generates the [CustomerGroupAssignmentAdded](ctp:api:type:CustomerGroupAssignmentAddedMessage) Message.
+*
+ */
+type CustomerAddCustomerGroupAssignmentAction struct {
+	// Customer Group to assign the Customer to.
+	CustomerGroupAssignment CustomerGroupAssignmentDraft `json:"customerGroupAssignment"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerAddCustomerGroupAssignmentAction) MarshalJSON() ([]byte, error) {
+	type Alias CustomerAddCustomerGroupAssignmentAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addCustomerGroupAssignment", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Adds an Address from the `addresses` array to `shippingAddressIds`. Either `addressId` or `addressKey` is required.
 *
  */
@@ -855,6 +928,25 @@ func (obj CustomerRemoveBillingAddressIdAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeBillingAddressId", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Unassigns a Customer Group from a Customer. This action generates the [CustomerGroupAssignmentRemoved](ctp:api:type:CustomerGroupAssignmentRemovedMessage) Message.
+*
+ */
+type CustomerRemoveCustomerGroupAssignmentAction struct {
+	// Customer Group to unassign the Customer from.
+	CustomerGroup CustomerGroupResourceIdentifier `json:"customerGroup"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerRemoveCustomerGroupAssignmentAction) MarshalJSON() ([]byte, error) {
+	type Alias CustomerRemoveCustomerGroupAssignmentAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeCustomerGroupAssignment", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1034,7 +1126,7 @@ func (obj CustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 /**
 *	Setting the Customer Group of the Customer produces the [CustomerGroupSet](ctp:api:type:CustomerGroupSetMessage) Message.
 *
-*	To reflect the new Customer Group, this update action can result in [updates](/api/carts-orders-overview#cart-updates) to the most recently modified active Cart. When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
+*	To reflect the new Customer Group, this update action can result in [updates](/api/carts-orders-overview#update-a-cart) to the most recently modified active Cart. When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
 *
  */
 type CustomerSetCustomerGroupAction struct {
@@ -1051,6 +1143,25 @@ func (obj CustomerSetCustomerGroupAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomerGroup", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Assigns multiple Customer Groups to a Customer. This action generates the [CustomerGroupAssignmentsSetMessage](ctp:api:type:CustomerGroupAssignmentsSetMessage) Message.
+*
+ */
+type CustomerSetCustomerGroupAssignmentsAction struct {
+	// Customer Groups to assign the Customer to.
+	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerSetCustomerGroupAssignmentsAction) MarshalJSON() ([]byte, error) {
+	type Alias CustomerSetCustomerGroupAssignmentsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomerGroupAssignments", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1154,7 +1265,7 @@ func (obj CustomerSetExternalIdAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting the first name of the Customer produces the [CustomeFirstNameSet](ctp:api:type:CustomerFirstNameSetMessage) Message.
+*	Setting the first name of the Customer produces the [CustomerFirstNameSet](ctp:api:type:CustomerFirstNameSetMessage) Message.
 *
  */
 type CustomerSetFirstNameAction struct {

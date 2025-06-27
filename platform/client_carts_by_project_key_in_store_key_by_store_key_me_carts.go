@@ -22,7 +22,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder) WithId(id strin
 }
 
 /**
-*	Returns all Carts that match a given Query Predicate and contain either a matching `customerId` or `anonymousId` in a Store.
+*	Retrieves Carts for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store).
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodGet {
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder) Get() *ByProjec
 }
 
 /**
-*	Checks if a Cart exists for a Store that matches the given Query Predicate, and contains a matching `customerId` or `anonymousId`. Returns a `200 OK` status if any Carts match these conditions, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Cart exists for a Store that matches the given Query Predicate, and contains a matching `customerId` or `anonymousId`. Returns a `200 OK` status if any Carts match these conditions, or [Not Found](/../api/errors#404-not-found) otherwise.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyMeCartsRequestMethodHead {

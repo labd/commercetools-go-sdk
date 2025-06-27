@@ -28,7 +28,7 @@ func (rb *ByProjectKeyProductDiscountsKeyByKeyRequestMethodHead) WithHeaders(hea
 }
 
 /**
-*	Checks if a ProductDiscount exists for a given `key`. Returns a `200 OK` status if the ProductDiscount exists or a `404 Not Found` otherwise.
+*	Checks if a ProductDiscount exists with the provided `key`. Returns a `200 OK` status if the ProductDiscount exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductDiscountsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

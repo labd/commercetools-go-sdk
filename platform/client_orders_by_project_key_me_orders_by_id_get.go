@@ -55,11 +55,11 @@ func (rb *ByProjectKeyMeOrdersByIDRequestMethodGet) WithHeaders(headers http.Hea
 }
 
 /**
-*	Returns an Order for a given `id`. Returns a `200 OK` status if successful.
+*	Retrieves an Order with the provided `id` for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no Order exists for the given `id`.
+*	- If no Order exists for the provided `id`.
 *	- If the Order exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */

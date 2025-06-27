@@ -165,6 +165,7 @@ func (obj LineItemProductVariantImportDraft) MarshalJSON() ([]byte, error) {
 *
 *	You cannot create an Order that includes line item operations that do not exist in the Project or have been deleted.
 *	Products and Product Variants referenced by a line item must already exist in the Project.
+*	Product Attributes are merged with Variant Attributes to ensure the full Attribute context of the Product Variant.
 *
  */
 type LineItemImportDraft struct {
@@ -180,12 +181,12 @@ type LineItemImportDraft struct {
 	Quantity int         `json:"quantity"`
 	State    []ItemState `json:"state"`
 	// Maps to `LineItem.supplyChannel`.
-	// The Reference to the Supply [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
-	// If referenced Supply Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Supply Channel is created.
+	// The Reference to the Supply [Channel](ctp:api:type:Channel) with which the LineItem is associated.
+	// If referenced Supply Channel does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary Supply Channel is created.
 	SupplyChannel *ChannelKeyReference `json:"supplyChannel,omitempty"`
 	// Maps to `LineItem.distributionChannel`.
-	// The Reference to the Distribution [Channel](/../api/projects/channels#channel) with which the LineItem is associated.
-	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Distribution Channel is created.
+	// The Reference to the Distribution [Channel](ctp:api:type:Channel) with which the LineItem is associated.
+	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary Distribution Channel is created.
 	DistributionChannel *ChannelKeyReference `json:"distributionChannel,omitempty"`
 	// Maps to `LineItem.taxRate`.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
@@ -422,7 +423,7 @@ const (
 )
 
 /**
-*	Maps to an order's `shippingInfo` property. This field is usually populated by the cart assosciated with
+*	Maps to an order's `shippingInfo` property. This field is usually populated by the cart associated with
 *	the order, but when importing orders you must provide a draft representation as a part of the OrderImport.
 *
  */
@@ -435,7 +436,7 @@ type ShippingInfoImportDraft struct {
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
 	// References a shipping method by key.
 	ShippingMethod *ShippingMethodKeyReference `json:"shippingMethod,omitempty"`
-	// Note that you can not add a `DeliveryItem` on import, as `LineItems` and `CustomLineItems` are not yet referencable by an `id`.
+	// Note that you can not add a `DeliveryItem` on import, as `LineItems` and `CustomLineItems` are not yet referenceable by an `id`.
 	Deliveries          []Delivery                    `json:"deliveries"`
 	DiscountedPrice     *DiscountedLineItemPriceDraft `json:"discountedPrice,omitempty"`
 	ShippingMethodState *ShippingMethodState          `json:"shippingMethodState,omitempty"`
@@ -851,11 +852,9 @@ func (obj ScoreShippingRateInput) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The data representation for an Order to be imported that is persisted as an [Order](/../api/projects/orders#top) in the Project.
+*	The data representation for an Order to be imported that is persisted as an [Order](ctp:api:type:Order) in the Project.
 *
-*	In commercetools, you can import an Order using the
-*	[Create Order by Import](ctp:import:endpoint:/{projectKey}/orders/import:POST)
-*	endpoint method instead of creating it from a Cart.
+*	In commercetools, you can import an Order using the [Create Order by Import](/projects/orders-import#create-order-by-import) endpoint method instead of creating it from a Cart.
 *
 *	An OrderImport is a snapshot of an order at the time it was imported.
 *
@@ -904,7 +903,7 @@ type OrderImport struct {
 	Origin *CartOrigin `json:"origin,omitempty"`
 	// Maps to `Order.itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
-	// Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Store exists.
+	// Reference to the Store in which the Order is associated. If referenced Store does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary Store exists.
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// Reference to a State in a custom workflow.
 	State *StateKeyReference `json:"state,omitempty"`

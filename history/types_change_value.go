@@ -45,6 +45,12 @@ func mapDiscriminatorChangeTargetChangeValue(input interface{}) (ChangeTargetCha
 			return nil, err
 		}
 		return obj, nil
+	case "pattern":
+		obj := ChangeTargetPatternChangeValue{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "shipping":
 		obj := ChangeTargetShippingChangeValue{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -193,6 +199,29 @@ func (obj ChangeTargetMultiBuyLineItemsChangeValue) MarshalJSON() ([]byte, error
 		Action string `json:"type"`
 		*Alias
 	}{Action: "multiBuyLineItems", Alias: (*Alias)(&obj)})
+}
+
+type ChangeTargetPatternChangeValue struct {
+	// Defines the set of units of (Custom) Line Items in a Cart that triggered the discount application.
+	TriggerPattern []PatternComponent `json:"triggerPattern"`
+	// Defines the set of units of (Custom) Line Items in a Cart on which the Discount is applied.
+	TargetPattern []PatternComponent `json:"targetPattern"`
+	// Maximum number of times the Discount applies on a Cart.
+	//
+	// If empty, the Discount applies indefinitely.
+	MaxOccurrence *int `json:"maxOccurrence,omitempty"`
+	// Indicates which of the matching units of (Custom) Line Items were discounted.
+	SelectionMode SelectionMode `json:"selectionMode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeTargetPatternChangeValue) MarshalJSON() ([]byte, error) {
+	type Alias ChangeTargetPatternChangeValue
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "pattern", Alias: (*Alias)(&obj)})
 }
 
 type ChangeTargetShippingChangeValue struct {

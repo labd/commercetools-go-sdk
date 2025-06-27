@@ -28,7 +28,7 @@ func (rb *ByProjectKeyStagedQuotesByIDRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if a StagedQuote exists for a given `id`. Returns a `200 OK` status if the StagedQuote exists or a `404 Not Found` otherwise.
+*	Checks if a StagedQuote exists with the provided `id`. Returns a `200 OK` status if the StagedQuote exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStagedQuotesByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

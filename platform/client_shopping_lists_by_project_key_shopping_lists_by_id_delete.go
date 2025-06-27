@@ -80,6 +80,10 @@ func (rb *ByProjectKeyShoppingListsByIDRequestMethodDelete) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a ShoppingList in the Project.
+ */
 func (rb *ByProjectKeyShoppingListsByIDRequestMethodDelete) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

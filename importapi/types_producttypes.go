@@ -30,6 +30,7 @@ type AttributeDefinition struct {
 	InputTip     *LocalizedString `json:"inputTip,omitempty"`
 	InputHint    *TextInputHint   `json:"inputHint,omitempty"`
 	IsSearchable *bool            `json:"isSearchable,omitempty"`
+	Level        *AttributeLevel  `json:"level,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -49,6 +50,13 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+type AttributeLevel string
+
+const (
+	AttributeLevelVariant AttributeLevel = "Variant"
+	AttributeLevelProduct AttributeLevel = "Product"
+)
 
 type AttributeType interface{}
 
@@ -381,17 +389,17 @@ const (
 )
 
 /**
-*	The data representation for a ProductType to be imported that is persisted as a [ProductType](/../api/projects/productTypes#producttype) in the Project.
+*	The data representation for a ProductType to be imported that is persisted as a [ProductType](ctp:api:type:ProductType) in the Project.
 *
  */
 type ProductTypeImport struct {
-	// User-defined unique identifier. If a [ProductType](/../api/projects/productTypes#producttype) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [ProductType](ctp:api:type:ProductType) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `ProductType.name`.
 	Name string `json:"name"`
 	// Maps to `ProductType.description`.
 	Description string `json:"description"`
-	// The `attributes` of [ProductType](/../api/projects/productTypes#producttype).
+	// The `attributes` of [ProductType](ctp:api:type:ProductType).
 	Attributes []AttributeDefinition `json:"attributes"`
 }
 

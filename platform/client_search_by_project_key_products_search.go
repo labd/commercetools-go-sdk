@@ -11,6 +11,11 @@ type ByProjectKeyProductsSearchRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	If indexing is in progress or if Product Search is inactive, an [ObjectNotFound](ctp:api:type:ObjectNotFoundError) error is returned.
+*	If inactive, you can [reactivate](/../api/projects/product-search#activate-the-product-search-api) it.
+*
+ */
 func (rb *ByProjectKeyProductsSearchRequestBuilder) Post(body ProductSearchRequest) *ByProjectKeyProductsSearchRequestMethodPost {
 	return &ByProjectKeyProductsSearchRequestMethodPost{
 		body:   body,

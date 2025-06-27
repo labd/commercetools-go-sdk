@@ -7,11 +7,11 @@ import (
 )
 
 /**
-*	The data representation for a Category to be imported that is persisted as a [Category](/../api/projects/categories#category) in the Project.
+*	The data representation for a Category to be imported that is persisted as a [Category](ctp:api:type:Category) in the Project.
 *
  */
 type CategoryImport struct {
-	// User-defined unique identifier. If a [Category](/../api/projects/categories#category) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [Category](ctp:api:type:Category) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Category.name`.
 	Name LocalizedString `json:"name"`
@@ -21,8 +21,8 @@ type CategoryImport struct {
 	// Maps to `Category.description`.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Maps to `Category.parent`.
-	// The Reference to the parent [Category](/../api/projects/categories#category) with which the Category is associated.
-	// If referenced Category does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Category is created.
+	// The Reference to the parent [Category](ctp:api:type:Category) with which the Category is associated.
+	// If referenced Category does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary Category is created.
 	Parent *CategoryKeyReference `json:"parent,omitempty"`
 	// Maps to `Category.orderHint`.
 	OrderHint *string `json:"orderHint,omitempty"`
@@ -34,7 +34,8 @@ type CategoryImport struct {
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 	// Maps to `Category.metaKeywords`.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	Assets       []Asset          `json:"assets"`
+	// Maps to `Category.assets`.
+	Assets []Asset `json:"assets"`
 	// The custom fields for this Category.
 	Custom *Custom `json:"custom,omitempty"`
 }

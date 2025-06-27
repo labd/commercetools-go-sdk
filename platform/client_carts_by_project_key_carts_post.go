@@ -56,6 +56,9 @@ func (rb *ByProjectKeyCartsRequestMethodPost) WithHeaders(headers http.Header) *
 }
 
 /**
+*
+*	Creates a Cart in the Project.
+*
 *	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, or if the Shipping Method is not active, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 *
 *	Specific Error Codes:

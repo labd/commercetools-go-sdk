@@ -80,6 +80,10 @@ func (rb *ByProjectKeyPaymentsByIDRequestMethodDelete) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a Payment in the Project.
+ */
 func (rb *ByProjectKeyPaymentsByIDRequestMethodDelete) Execute(ctx context.Context) (result *Payment, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -29,7 +29,7 @@ func (rb *ByProjectKeyGraphqlRequestMethodPost) WithHeaders(headers http.Header)
 }
 
 /**
-*	Execute a GraphQL query
+*	Execute a GraphQL request.
  */
 func (rb *ByProjectKeyGraphqlRequestMethodPost) Execute(ctx context.Context) (result *GraphQLResponse, err error) {
 	data, err := serializeInput(rb.body)

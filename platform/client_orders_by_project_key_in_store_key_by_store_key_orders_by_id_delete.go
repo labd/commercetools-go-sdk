@@ -82,6 +82,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodDelete) WithHea
 }
 
 /**
+*	Deletes an Order in a [Store](ctp:api:type:Store).
 *	If the Order exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
 *	Deleting an Order produces the [OrderDeleted](ctp:api:type:OrderDeletedMessage) Message.

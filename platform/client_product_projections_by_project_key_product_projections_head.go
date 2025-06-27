@@ -55,7 +55,7 @@ func (rb *ByProjectKeyProductProjectionsRequestMethodHead) WithHeaders(headers h
 }
 
 /**
-*	Checks if the current or staged representation of a Product exists for a given Query Predicate. Returns a `200 OK` status if any ProductProjections match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if the current or staged representation of a Product exists for the provided query predicate. Returns a `200 OK` status if any ProductProjections match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductProjectionsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

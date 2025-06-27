@@ -55,13 +55,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodGe
 }
 
 /**
-*	Returns a ShoppingList for a given `key` in a Store. Returns `200 OK` status if successful.
+*	Retrieves a ShoppingList with the provided `key` for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store). Returns `200 OK` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no ShoppingList matches the given `key` in a Store.
-*	- If a ShoppingList matches the given `key` but does not have a `store` specified, or the `store` field references a different Store.
-*	- If a ShoppingList matches the given `key` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope,
+*	- If no ShoppingList matches the provided `key` in a Store.
+*	- If a ShoppingList matches the provided `key` but does not have a `store` specified, or the `store` field references a different Store.
+*	- If a ShoppingList matches the provided `key` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope,
 *	   or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */

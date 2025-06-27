@@ -28,7 +28,7 @@ func (rb *ByProjectKeyTypesByIDRequestMethodHead) WithHeaders(headers http.Heade
 }
 
 /**
-*	Checks if a Type exists for a given `id`. Returns a `200 OK` status if the Type exists or a `404 Not Found` otherwise.
+*	Checks if a Type exists with the provided `id`. Returns a `200 OK` status if the Type exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyTypesByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

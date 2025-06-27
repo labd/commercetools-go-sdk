@@ -27,17 +27,15 @@ func (r *ConnectorsDraftsRequestMethodGet) Dump() map[string]interface{} {
 }
 
 type ConnectorsDraftsRequestMethodGetInput struct {
-	IntegrationTypes []IntegrationType
 	Limit            *int
 	Offset           *int
 	Sort             []string
+	IsPrivate        *bool
+	IntegrationTypes []IntegrationType
 }
 
 func (input *ConnectorsDraftsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
-	for _, v := range input.IntegrationTypes {
-		values.Add("integrationTypes", fmt.Sprintf("%v", v))
-	}
 	if input.Limit != nil {
 		values.Add("limit", strconv.Itoa(*input.Limit))
 	}
@@ -47,15 +45,17 @@ func (input *ConnectorsDraftsRequestMethodGetInput) Values() url.Values {
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
-	return values
-}
-
-func (rb *ConnectorsDraftsRequestMethodGet) IntegrationTypes(v []IntegrationType) *ConnectorsDraftsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ConnectorsDraftsRequestMethodGetInput{}
+	if input.IsPrivate != nil {
+		if *input.IsPrivate {
+			values.Add("isPrivate", "true")
+		} else {
+			values.Add("isPrivate", "false")
+		}
 	}
-	rb.params.IntegrationTypes = v
-	return rb
+	for _, v := range input.IntegrationTypes {
+		values.Add("integrationTypes", fmt.Sprintf("%v", v))
+	}
+	return values
 }
 
 func (rb *ConnectorsDraftsRequestMethodGet) Limit(v int) *ConnectorsDraftsRequestMethodGet {
@@ -79,6 +79,22 @@ func (rb *ConnectorsDraftsRequestMethodGet) Sort(v []string) *ConnectorsDraftsRe
 		rb.params = &ConnectorsDraftsRequestMethodGetInput{}
 	}
 	rb.params.Sort = v
+	return rb
+}
+
+func (rb *ConnectorsDraftsRequestMethodGet) IsPrivate(v bool) *ConnectorsDraftsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ConnectorsDraftsRequestMethodGetInput{}
+	}
+	rb.params.IsPrivate = &v
+	return rb
+}
+
+func (rb *ConnectorsDraftsRequestMethodGet) IntegrationTypes(v []IntegrationType) *ConnectorsDraftsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ConnectorsDraftsRequestMethodGetInput{}
+	}
+	rb.params.IntegrationTypes = v
 	return rb
 }
 

@@ -28,11 +28,11 @@ func (rb *ByProjectKeyMeCartsByIDRequestMethodHead) WithHeaders(headers http.Hea
 }
 
 /**
-*	Checks if a Cart exists for a given `id`. Returns a `200 OK` status if the Cart exists.
+*	Checks if a Cart exists with the provided `id`. Returns a `200 OK` status if the Cart exists.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no Cart exists for a given `id`.
+*	- If no Cart exists with the provided `id`.
 *	- If the Cart exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
