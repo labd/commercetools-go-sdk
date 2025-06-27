@@ -11,6 +11,12 @@ type ByProjectKeyRequestBuilder struct {
 	client     *Client
 }
 
+func (rb *ByProjectKeyRequestBuilder) Graphql() *ByProjectKeyGraphqlRequestBuilder {
+	return &ByProjectKeyGraphqlRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) WithResourceTypeValue(resourceType string) *ByProjectKeyByResourceTypeRequestBuilder {
 	return &ByProjectKeyByResourceTypeRequestBuilder{
 		resourceType: resourceType,

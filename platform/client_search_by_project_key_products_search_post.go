@@ -27,6 +27,12 @@ func (rb *ByProjectKeyProductsSearchRequestMethodPost) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If indexing is in progress or if Product Search is inactive, an [ObjectNotFound](ctp:api:type:ObjectNotFoundError) error is returned.
+*	If inactive, you can [reactivate](/../api/projects/product-search#activate-the-product-search-api) it.
+*
+ */
 func (rb *ByProjectKeyProductsSearchRequestMethodPost) Execute(ctx context.Context) (result *ProductPagedSearchResponse, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

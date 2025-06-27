@@ -13,7 +13,7 @@ type ByProjectKeyMePaymentsByIDRequestBuilder struct {
 }
 
 /**
-*	Returns a [Payment](/projects/me-payments#mypayment) for a given `id`.
+*	Retrieves a [Payment](/projects/me-payments#mypayment) with the provided `id` for the authenticated Customer or anonymous user.
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Get() *ByProjectKeyMePaymentsByIDRequestMethodGet {
 	return &ByProjectKeyMePaymentsByIDRequestMethodGet{
@@ -23,7 +23,7 @@ func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Get() *ByProjectKeyMePayment
 }
 
 /**
-*	Checks if a [Payment](/projects/me-payments#mypayment) exists for a given `id`. Returns a `200 OK` status if the Payment exists or a `404 Not Found` otherwise.
+*	Checks if a [Payment](/projects/me-payments#mypayment) exists with the provided `id` for the authenticated Customer or anonymous user. Returns a `200 OK` status if the Payment exists, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Head() *ByProjectKeyMePaymentsByIDRequestMethodHead {
 	return &ByProjectKeyMePaymentsByIDRequestMethodHead{
@@ -33,8 +33,8 @@ func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Head() *ByProjectKeyMePaymen
 }
 
 /**
-*	Updates a [Payment](/projects/me-payments#mypayment) for a given `id`.
-*	You can only update a [Payment](/projects/me-payments#mypayment) if it has no [Transactions](ctp:api:type:Transaction).
+*	Updates a [Payment](/projects/me-payments#mypayment) for the authenticated Customer or anonymous user using one or more [update actions](/../api/projects/me-payments#update-actions).
+*	You can only update a Payment if it has no [Transactions](ctp:api:type:Transaction).
 *
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Post(body MyPaymentUpdate) *ByProjectKeyMePaymentsByIDRequestMethodPost {
@@ -46,8 +46,8 @@ func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Post(body MyPaymentUpdate) *
 }
 
 /**
-*	Deletes the [Payment](/projects/me-payments#mypayment) for a given `id`.
-*	You can only delete a [Payment](/projects/me-payments#mypayment) if it has no [Transactions](ctp:api:type:Transaction).
+*	Deletes a [Payment](/projects/me-payments#mypayment) with the provided `id` for the authenticated Customer or anonymous user.
+*	You can only delete a Payment if it has no [Transactions](ctp:api:type:Transaction).
 *
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestBuilder) Delete() *ByProjectKeyMePaymentsByIDRequestMethodDelete {

@@ -53,6 +53,11 @@ func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet) WithHeade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Use this method to retrieve a global Customer's details by using the email token during their [email verification process](/../api/customers-overview#customer-email-verification).
+*
+ */
 func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
@@ -89,6 +94,8 @@ func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet) Execute(c
 			return nil, err
 		}
 		return nil, errorObj
+	case 404:
+		return nil, ErrNotFound
 	case 401:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -103,8 +110,6 @@ func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet) Execute(c
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

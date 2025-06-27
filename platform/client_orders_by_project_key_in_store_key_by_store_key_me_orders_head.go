@@ -55,9 +55,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestMethodHead) WithHeaders
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate in a Store. Returns a `200 OK` status if successful.
+*	Checks if one or more Orders exist for the provided query predicate in a [Store](ctp:api:type:Store) for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
-*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
 *
 *	- If no Orders exist in the Store that match the Query Predicate.
 *	- If an Order matches the Query Predicate, but no `store` is specified, or the `store` field references a different Store.

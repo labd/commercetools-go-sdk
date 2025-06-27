@@ -37,6 +37,8 @@ type ApprovalRule struct {
 	Requesters []RuleRequester `json:"requesters"`
 	// The [Business Unit](ctp:api:type:BusinessUnit) the Approval Rule belongs to.
 	BusinessUnit BusinessUnitKeyReference `json:"businessUnit"`
+	// Custom Fields on the Approval Rule.
+	Custom *CustomFields `json:"custom,omitempty"`
 }
 
 type ApprovalRuleDraft struct {
@@ -134,6 +136,18 @@ func mapDiscriminatorApprovalRuleUpdateAction(input interface{}) (ApprovalRuleUp
 			return nil, err
 		}
 		return obj, nil
+	case "setCustomField":
+		obj := ApprovalRuleSetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomType":
+		obj := ApprovalRuleSetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setDescription":
 		obj := ApprovalRuleSetDescriptionAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -191,6 +205,43 @@ func (obj ApprovalRuleSetApproversAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setApprovers", Alias: (*Alias)(&obj)})
+}
+
+type ApprovalRuleSetCustomFieldAction struct {
+	// Name of the [Custom Field](ctp:api:type:CustomFields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	// If `value` is provided, it is set for the field defined by `name`.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ApprovalRuleSetCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias ApprovalRuleSetCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
+}
+
+type ApprovalRuleSetCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the ApprovalRule with [Custom Fields](ctp:api:type:CustomFields).
+	// If absent, any existing Type and Custom Fields are removed from the ApprovalRule.
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](ctp:api:type:CustomFields) fields for the ApprovalRule.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ApprovalRuleSetCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias ApprovalRuleSetCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
 /**

@@ -15,8 +15,14 @@ type Deployment struct {
 	Key *string `json:"key,omitempty"`
 	// Current version of the Deployment.
 	Version int `json:"version"`
+	// Deployment type. If a [ConnectorStaged](ctp:connect:type:ConnectorStaged) is referenced in the `connector` field, then the field can only be `preview`. If a [Connector](ctp:connect:type:Connector) is referenced in the `connector` field, then the field can either be `sandbox` or `production`.
+	Type string `json:"type"`
 	// Details of the [Connector](ctp:connect:type:Connector) being deployed.
 	Connector DeploymentConnector `json:"connector"`
+	// Global configuration applied to all applications in the deployment.
+	GlobalConfiguration *DeploymentGlobalConfiguration `json:"globalConfiguration,omitempty"`
+	// API Client credentials used for deployment.
+	ApiClient *DeploymentApiClient `json:"apiClient,omitempty"`
 	// Build reference id and outcome of the Deployment.
 	Details DeploymentDetails `json:"details"`
 	// Region of the Deployment.
@@ -49,10 +55,14 @@ type DeploymentPagedQueryResponse struct {
 type DeploymentDraft struct {
 	// User-defined unique identifier for the Deployment.
 	Key *string `json:"key,omitempty"`
+	// Deployment type. If a [ConnectorStaged](ctp:connect:type:ConnectorStaged) is referenced in the `connector` field, you can send only `preview`. If a [Connector](ctp:connect:type:Connector) is referenced in the `connector` field, the value defaults to `sandbox`. However, you can send `production` when you are ready to deploy the Connector to your production environment.
+	Type *string `json:"type,omitempty"`
 	// Reference to the [Connector](ctp:connect:type:Connector) or [ConnectorStaged](ctp:connect:type:ConnectorStaged) being deployed.
 	Connector ConnectorReference `json:"connector"`
 	// Configuration values needed by the [Connector](ctp:connect:type:Connector) for hosting. Keys should match those in the Connector's `configurations` field.
 	Configurations []DeploymentConfigurationApplication `json:"configurations"`
+	// Global configuration values needed by the [Connector](ctp:connect:type:Connector) for hosting. Keys should match those in the Connector's `globalConfiguration` field.
+	GlobalConfiguration *DeploymentGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// Region of Deployment.
 	Region string `json:"region"`
 }
@@ -138,8 +148,10 @@ func mapDiscriminatorDeploymentUpdateAction(input interface{}) (DeploymentUpdate
 *	- [DeploymentUnknownApplicationConfigurationKey](ctp:connect:type:DeploymentUnknownApplicationConfigurationKeyError)
 *	- [DeploymentInvalidStatusTransition](ctp:connect:type:DeploymentInvalidStatusTransitionError)
 *	- [DeploymentApplicationDoNotBelong](ctp:connect:type:DeploymentApplicationDoNotBelongError)
-*	- [DeploymentMustIncludeApplication](ctp:connect:type:DeploymentMustIncludeApplicationError)
+*	- [DeploymentApplicationRequiredError](ctp:connect:type:DeploymentApplicationRequiredError)
 *	- [DeploymentConnectorUpdateFailure](ctp:connect:type:DeploymentConnectorUpdateFailureError)
+*	- [DeploymentUnknownGlobalConfigurationKeyError](ctp:connect:type:DeploymentUnknownGlobalConfigurationKeyError)
+*	- [DeploymentEmptyRequiredGlobalConfigurationKeyError](ctp:connect:type:DeploymentEmptyRequiredGlobalConfigurationKeyError)
 *
  */
 type DeploymentRedeployAction struct {

@@ -28,7 +28,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Checks if an Order exists for a given `orderNumber`. Returns a `200 OK` status if the Order exists or a `404 Not Found` otherwise.
+*	Checks if an Order exists with the provided `orderNumber` in a [BusinessUnit](ctp:api:type:BusinessUnit). Returns a `200 OK` status if the Order exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersOrderNumberByOrderNumberRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

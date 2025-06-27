@@ -82,6 +82,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodDelete) WithHead
 }
 
 /**
+*	Deletes a Cart in a [Store](ctp:api:type:Store).
+*
 *	If the Cart exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */

@@ -45,7 +45,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) WithId(id string)
 }
 
 /**
-*	Queries Carts in a specific [Store](ctp:api:type:Store).
+*	Retrieves Carts in a [Store](ctp:api:type:Store).
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet{
@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectK
 }
 
 /**
-*	Checks if a Cart exists for a given Query Predicate. Returns a `200 OK` status if any Carts match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Carts exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200 OK` status if any Carts match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead{
@@ -65,7 +65,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Head() *ByProject
 }
 
 /**
-*	Creates a [Cart](ctp:api:type:Cart) in the [Store](ctp:api:type:Store) specified by `storeKey`.
+*	Creates a Cart in a [Store](ctp:api:type:Store).
 *
 *	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, or if the Shipping Method is not active, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 *

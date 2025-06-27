@@ -56,8 +56,8 @@ func (rb *ByProjectKeyMePaymentsByIDRequestMethodPost) WithHeaders(headers http.
 }
 
 /**
-*	Updates a [Payment](/projects/me-payments#mypayment) for a given `id`.
-*	You can only update a [Payment](/projects/me-payments#mypayment) if it has no [Transactions](ctp:api:type:Transaction).
+*	Updates a [Payment](/projects/me-payments#mypayment) for the authenticated Customer or anonymous user using one or more [update actions](/../api/projects/me-payments#update-actions).
+*	You can only update a Payment if it has no [Transactions](ctp:api:type:Transaction).
 *
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestMethodPost) Execute(ctx context.Context) (result *MyPayment, err error) {

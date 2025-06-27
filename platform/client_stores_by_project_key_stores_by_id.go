@@ -20,7 +20,7 @@ func (rb *ByProjectKeyStoresByIDRequestBuilder) Get() *ByProjectKeyStoresByIDReq
 }
 
 /**
-*	Checks if a Store exists for a given `id`. Returns a `200 OK` status if the Store exists or a `404 Not Found` otherwise.
+*	Checks if a Store exists with the provided `id`. Returns a `200 OK` status if the Store exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStoresByIDRequestBuilder) Head() *ByProjectKeyStoresByIDRequestMethodHead {
 	return &ByProjectKeyStoresByIDRequestMethodHead{

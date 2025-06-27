@@ -46,6 +46,19 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 		client:          rb.client,
 	}
 }
+
+/**
+*	shopping-lists e.g. for wishlist support
+*
+ */
+func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyRequestBuilder) ShoppingLists() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyShoppingListsRequestBuilder {
+	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyShoppingListsRequestBuilder{
+		projectKey:      rb.projectKey,
+		associateId:     rb.associateId,
+		businessUnitKey: rb.businessUnitKey,
+		client:          rb.client,
+	}
+}
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyRequestBuilder) Orders() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestBuilder {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestBuilder{
 		projectKey:      rb.projectKey,

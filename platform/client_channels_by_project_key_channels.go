@@ -18,6 +18,13 @@ func (rb *ByProjectKeyChannelsRequestBuilder) WithId(id string) *ByProjectKeyCha
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyChannelsRequestBuilder) WithKey(key string) *ByProjectKeyChannelsKeyByKeyRequestBuilder {
+	return &ByProjectKeyChannelsKeyByKeyRequestBuilder{
+		key:        key,
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyChannelsRequestBuilder) Get() *ByProjectKeyChannelsRequestMethodGet {
 	return &ByProjectKeyChannelsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/channels", rb.projectKey),
@@ -26,7 +33,7 @@ func (rb *ByProjectKeyChannelsRequestBuilder) Get() *ByProjectKeyChannelsRequest
 }
 
 /**
-*	Checks if a Channel exists for a given Query Predicate. Returns a `200 OK` status if any Channels match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Channels exist for the provided query predicate. Returns a `200 OK` status if any Channels match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyChannelsRequestBuilder) Head() *ByProjectKeyChannelsRequestMethodHead {
 	return &ByProjectKeyChannelsRequestMethodHead{

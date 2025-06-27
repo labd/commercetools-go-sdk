@@ -55,7 +55,7 @@ func (rb *ByProjectKeySubscriptionsRequestMethodHead) WithHeaders(headers http.H
 }
 
 /**
-*	Checks if a Subscription exists for a given Query Predicate. Returns a `200 OK` status if any Subscriptions match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Subscriptions exist for the provided query predicate. Returns a `200 OK` status if any Subscriptions match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeySubscriptionsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

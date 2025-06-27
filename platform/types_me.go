@@ -53,7 +53,7 @@ type MyBusinessUnitUpdate struct {
 	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the BusinessUnit.
-	Actions []BusinessUnitUpdateAction `json:"actions"`
+	Actions []MyBusinessUnitUpdateAction `json:"actions"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -65,7 +65,7 @@ func (obj *MyBusinessUnitUpdate) UnmarshalJSON(data []byte) error {
 	}
 	for i := range obj.Actions {
 		var err error
-		obj.Actions[i], err = mapDiscriminatorBusinessUnitUpdateAction(obj.Actions[i])
+		obj.Actions[i], err = mapDiscriminatorMyBusinessUnitUpdateAction(obj.Actions[i])
 		if err != nil {
 			return err
 		}
@@ -212,7 +212,7 @@ type MyCartDraft struct {
 	Currency string `json:"currency"`
 	// Email address of the Customer the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Store the Cart should belong to. Once set, it cannot be updated.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -244,7 +244,7 @@ type MyCartDraft struct {
 	// Languages of the Cart.
 	// Can only contain languages supported by the [Project](ctp:api:type:Project).
 	Locale *string `json:"locale,omitempty"`
-	// Number of days after which a Cart with `Active` [CartState](ctp:api:type:CartState) is deleted since its last modification.
+	// Number of days after the last modification before a Cart is deleted.
 	// If not provided, the default value for this field configured in [Project settings](ctp:api:type:CartsConfiguration) is assigned.
 	//
 	// Create a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts to receive a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) upon deletion of the Cart.
@@ -1191,7 +1191,7 @@ type MyShoppingListDraft struct {
 	TextLineItems []TextLineItemDraft `json:"textLineItems"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
+	// Number of days after the last modification before a ShoppingList is deleted. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Assigns the new ShoppingList to the [Store](ctp:api:type:Store). The Store assignment can not be modified.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -1814,7 +1814,7 @@ func (obj MyCartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 type MyCartAddItemShippingAddressAction struct {
 	// Address to append to `itemShippingAddresses`.
 	//
-	// The new address must have a key that is unique accross this Cart.
+	// The new address must have a key that is unique across this Cart.
 	Address BaseAddress `json:"address"`
 }
 
@@ -2001,7 +2001,7 @@ func (obj MyCartChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action does not set any Cart field in particular, but it triggers several [Cart updates](/../api/carts-orders-overview#cart-updates)
+*	This update action does not set any Cart field in particular, but it triggers several [Cart updates](/../api/carts-orders-overview#update-a-cart)
 *	to bring prices and discounts to the latest state. Those can become stale over time when no Cart updates have been performed for a while and
 *	prices on related Products have changed in the meanwhile.
 *
@@ -2217,7 +2217,7 @@ func (obj MyCartSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Number of days after which a Cart with `Active` [CartState](ctp:api:type:CartState) is deleted since its last modification.
+*	Number of days after the last modification before a Cart is deleted.
 *
 *	If a [ChangeSubscription](ctp:api:type:ChangeSubscription) exists for Carts, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent.
 *
@@ -2329,7 +2329,7 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Performing this action has no impact on inventory that should be reserved.
+*	Performing this action does not reserve stock. Stock is only reserved at Order creation if the [InventoryMode](ctp:api:type:InventoryMode) of the Cart is `TrackOnly` or `ReserveOnOrder`.
 *
  */
 type MyCartSetLineItemSupplyChannelAction struct {
@@ -3254,8 +3254,12 @@ func (obj MyShoppingListSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Number of days after the last modification before a Shopping List is deleted.
+*
+ */
 type MyShoppingListSetDeleteDaysAfterLastModificationAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If not provided, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 

@@ -55,7 +55,7 @@ func (rb *ByProjectKeyShoppingListsRequestMethodHead) WithHeaders(headers http.H
 }
 
 /**
-*	Checks if a ShoppingList exists for a given Query Predicate. Returns a `200 OK` status if any ShoppingLists match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more ShoppingLists exist for the provided query predicate. Returns a `200 OK` status if any ShoppingLists match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyShoppingListsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -121,6 +121,16 @@ func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodes
 }
 
 /**
+*	Discount groups are used to group the discounts that are applied to a cart or an order.
+ */
+func (rb *ByProjectKeyRequestBuilder) DiscountGroups() *ByProjectKeyDiscountGroupsRequestBuilder {
+	return &ByProjectKeyDiscountGroupsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	commercetools Composable Commerce provides a GraphQL API
  */
 func (rb *ByProjectKeyRequestBuilder) Graphql() *ByProjectKeyGraphqlRequestBuilder {

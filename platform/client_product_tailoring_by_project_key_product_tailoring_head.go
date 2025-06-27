@@ -55,7 +55,7 @@ func (rb *ByProjectKeyProductTailoringRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if a ProductTailoring exists for a given Query Predicate. Returns a `200 OK` status if any ProductTailoring match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more ProductTailorings exist for the provided query predicate. Returns a `200 OK` status if any ProductTailoring match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductTailoringRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

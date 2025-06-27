@@ -21,7 +21,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) G
 }
 
 /**
-*	Checks if a QuoteRequest exists for a given `key`. Returns a `200 OK` status if the QuoteRequest exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a QuoteRequest exists with the provided `key`. Returns a `200 OK` status if the QuoteRequest exists or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodHead{

@@ -33,7 +33,7 @@ type Quote struct {
 	// Not updated if Customer is changed after Quote creation.
 	// Used for Product Variant price selection.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// Expiration date for the Quote.
+	// Expiration date for the Quote. Once a Quote expires, it cannot be ordered.
 	ValidTo *time.Time `json:"validTo,omitempty"`
 	// Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
 	SellerComment *string `json:"sellerComment,omitempty"`
@@ -90,7 +90,7 @@ type Quote struct {
 	// The Purchase Order Number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
 	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
@@ -347,7 +347,7 @@ func (obj QuoteChangeCustomerAction) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteChangeQuoteStateAction struct {
-	// New state to be set for the Quote.
+	// New state to be set for the Quote, except `DeclinedForRenegotiation`. The `DeclinedForRenegotiation` state can be set only when performing a [renegotiation request](ctp:api:type:QuoteRequestQuoteRenegotiationAction).
 	QuoteState QuoteState `json:"quoteState"`
 }
 

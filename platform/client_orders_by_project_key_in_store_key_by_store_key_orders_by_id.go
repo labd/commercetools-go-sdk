@@ -14,6 +14,7 @@ type ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder struct {
 }
 
 /**
+*	Retrieves an Order with the provided `id` in a [Store](ctp:api:type:Store).
 *	If the Order exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
@@ -25,7 +26,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Get() *ByPro
 }
 
 /**
-*	Checks if an Order exists for a given `id`. Returns a `200 OK` status if the Order exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if an Order exists with the provided `id` in a [Store](ctp:api:type:Store). Returns a `200 OK` status if the Order exists or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestMethodHead{
@@ -35,6 +36,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Head() *ByPr
 }
 
 /**
+*	Updates an Order in a [Store](ctp:api:type:Store) using one or more [update actions](/../api/projects/orders#update-actions).
 *	If the Order exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */
@@ -47,6 +49,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyOrdersByIDRequestBuilder) Post(body Or
 }
 
 /**
+*	Deletes an Order in a [Store](ctp:api:type:Store).
 *	If the Order exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
 *	Deleting an Order produces the [OrderDeleted](ctp:api:type:OrderDeletedMessage) Message.

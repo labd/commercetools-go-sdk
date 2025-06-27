@@ -54,6 +54,10 @@ func (rb *ByProjectKeyShoppingListsRequestMethodPost) WithHeaders(headers http.H
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Create a ShoppingList in the Project.
+ */
 func (rb *ByProjectKeyShoppingListsRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

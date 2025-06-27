@@ -134,12 +134,12 @@ func (rb *ByProjectKeyMeOrdersRequestMethodGet) WithHeaders(headers http.Header)
 }
 
 /**
-*	Returns all Orders that match a given Query Predicate.
+*	Retrieves Orders for the authenticated Customer or anonymous user.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
-*	- If no Orders exist for a given Query Predicate.
-*	- If the Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If no Orders exist for the provided query predicate.
+*	- If an Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeOrdersRequestMethodGet) Execute(ctx context.Context) (result *OrderPagedQueryResponse, err error) {

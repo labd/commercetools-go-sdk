@@ -156,6 +156,8 @@ type StandalonePriceDraft struct {
 	// It is not validated to exist in product variants.
 	Sku string `json:"sku"`
 	// Sets the money value of this Price.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// Sets the country for which this Price is valid.
 	Country *string `json:"country,omitempty"`
@@ -461,6 +463,8 @@ func (obj StandalonePriceChangeActiveAction) MarshalJSON() ([]byte, error) {
  */
 type StandalonePriceChangeValueAction struct {
 	// New value to set. Must not be empty.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// If set to `true` the update action applies to the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). If set to `false`, the update action applies to the current [StandalonePrice](ctp:api:type:StandalonePrice).
 	Staged *bool `json:"staged,omitempty"`

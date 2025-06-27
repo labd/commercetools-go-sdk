@@ -27,6 +27,14 @@ func (rb *ByProjectKeyCustomersPasswordTokenRequestMethodPost) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Use this method to create a password reset token for a global Customer during their [password reset process](/../api/customers-overview#customer-password-reset).
+*
+*	Creating a password reset token for the Customer produces the [CustomerPasswordTokenCreated](ctp:api:type:CustomerPasswordTokenCreatedMessage) Message.
+*	The Message will include the token's value, if the token's validity is 60 minutes or less.
+*
+ */
 func (rb *ByProjectKeyCustomersPasswordTokenRequestMethodPost) Execute(ctx context.Context) (result *CustomerToken, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

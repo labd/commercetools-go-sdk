@@ -132,6 +132,10 @@ func (rb *ByProjectKeyCartsRequestMethodGet) WithHeaders(headers http.Header) *B
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves Carts in the Project.
+ */
 func (rb *ByProjectKeyCartsRequestMethodGet) Execute(ctx context.Context) (result *CartPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

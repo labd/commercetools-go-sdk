@@ -223,6 +223,7 @@ const (
 	DiscountCodeStateMatchesCart                          DiscountCodeState = "MatchesCart"
 	DiscountCodeStateMaxApplicationReached                DiscountCodeState = "MaxApplicationReached"
 	DiscountCodeStateApplicationStoppedByPreviousDiscount DiscountCodeState = "ApplicationStoppedByPreviousDiscount"
+	DiscountCodeStateApplicationStoppedByGroupBestDeal    DiscountCodeState = "ApplicationStoppedByGroupBestDeal"
 	DiscountCodeStateNotValid                             DiscountCodeState = "NotValid"
 )
 

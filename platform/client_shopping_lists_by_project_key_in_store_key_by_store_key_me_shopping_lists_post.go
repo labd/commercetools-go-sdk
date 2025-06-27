@@ -57,9 +57,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodPost) With
 
 /**
 *
-*	Creates a ShoppingList in a Store for a Customer or anonymous user. The `customer` or `anonymousId` field on the ShoppingList is automatically set based on the given [customer:{id}](/scopes#composable-commerce-oauth) or [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	Creates a ShoppingList for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store). The `customer` or `anonymousId` field on the ShoppingList is automatically set based on the given [customer:{id}](/scopes#composable-commerce-oauth) or [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
-*	When using this endpoint, the `store` field of a ShoppingList is always set to the [Store](ctp:api:type:Store) specified in the path parameter.
+*	When using this endpoint, the `store` field of a ShoppingList is always set to the Store specified in the path parameter.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {

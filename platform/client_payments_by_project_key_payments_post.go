@@ -56,6 +56,7 @@ func (rb *ByProjectKeyPaymentsRequestMethodPost) WithHeaders(headers http.Header
 }
 
 /**
+*	Creates a Payment in the Project.
 *	Creating a Payment produces the [PaymentCreated](ctp:api:type:PaymentCreatedMessage) Message.
 *
  */

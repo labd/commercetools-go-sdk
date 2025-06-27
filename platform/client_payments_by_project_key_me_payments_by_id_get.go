@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMePaymentsByIDRequestMethodGet) WithHeaders(headers http.H
 }
 
 /**
-*	Returns a [Payment](/projects/me-payments#mypayment) for a given `id`.
+*	Retrieves a [Payment](/projects/me-payments#mypayment) with the provided `id` for the authenticated Customer or anonymous user.
  */
 func (rb *ByProjectKeyMePaymentsByIDRequestMethodGet) Execute(ctx context.Context) (result *MyPayment, err error) {
 	var queryParams url.Values

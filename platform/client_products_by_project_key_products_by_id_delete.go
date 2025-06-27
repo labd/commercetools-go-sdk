@@ -27,12 +27,13 @@ func (r *ByProjectKeyProductsByIDRequestMethodDelete) Dump() map[string]interfac
 }
 
 type ByProjectKeyProductsByIDRequestMethodDeleteInput struct {
-	PriceCurrency      *string
-	PriceCountry       *string
-	PriceCustomerGroup *string
-	PriceChannel       *string
-	Version            int
-	Expand             []string
+	PriceCurrency                 *string
+	PriceCountry                  *string
+	PriceCustomerGroup            *string
+	PriceCustomerGroupAssignments []string
+	PriceChannel                  *string
+	Version                       int
+	Expand                        []string
 }
 
 func (input *ByProjectKeyProductsByIDRequestMethodDeleteInput) Values() url.Values {
@@ -45,6 +46,9 @@ func (input *ByProjectKeyProductsByIDRequestMethodDeleteInput) Values() url.Valu
 	}
 	if input.PriceCustomerGroup != nil {
 		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
+	}
+	for _, v := range input.PriceCustomerGroupAssignments {
+		values.Add("priceCustomerGroupAssignments", fmt.Sprintf("%v", v))
 	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
@@ -77,6 +81,14 @@ func (rb *ByProjectKeyProductsByIDRequestMethodDelete) PriceCustomerGroup(v stri
 		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
 	}
 	rb.params.PriceCustomerGroup = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductsByIDRequestMethodDelete) PriceCustomerGroupAssignments(v []string) *ByProjectKeyProductsByIDRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsByIDRequestMethodDeleteInput{}
+	}
+	rb.params.PriceCustomerGroupAssignments = v
 	return rb
 }
 

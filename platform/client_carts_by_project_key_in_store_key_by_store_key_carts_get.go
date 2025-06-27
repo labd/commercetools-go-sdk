@@ -134,7 +134,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) WithHeaders(hea
 }
 
 /**
-*	Queries Carts in a specific [Store](ctp:api:type:Store).
+*	Retrieves Carts in a [Store](ctp:api:type:Store).
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodGet) Execute(ctx context.Context) (result *CartPagedQueryResponse, err error) {
 	var queryParams url.Values

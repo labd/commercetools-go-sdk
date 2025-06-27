@@ -55,7 +55,7 @@ func (rb *ByProjectKeyProductSelectionsRequestMethodHead) WithHeaders(headers ht
 }
 
 /**
-*	Checks if a ProductSelection exists for a given Query Predicate. Returns a `200 OK` status if any ProductSelections match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more ProductSelections exist for the provided query predicate. Returns a `200 OK` status if any ProductSelections match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductSelectionsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -31,6 +31,8 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) WithHeaders(headers http.
 /**
 *	This is the last step in the [email verification process of a Customer](/../api/projects/customers#email-verification-of-customer).
 *
+*	After the email is verified, all email tokens issued previously through the [email verification flow](/../api/projects/customers#email-verification-of-customer) are invalidated. This invalidation of tokens is [eventually consistent](/../api/general-concepts#eventual-consistency).
+*
  */
 func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
 	data, err := serializeInput(rb.body)
@@ -68,6 +70,8 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Conte
 			return nil, err
 		}
 		return nil, errorObj
+	case 404:
+		return nil, ErrNotFound
 	case 401:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -82,8 +86,6 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Conte
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

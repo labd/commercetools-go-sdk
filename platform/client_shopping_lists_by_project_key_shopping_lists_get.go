@@ -132,6 +132,10 @@ func (rb *ByProjectKeyShoppingListsRequestMethodGet) WithHeaders(headers http.He
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves ShoppingLists in the Project.
+ */
 func (rb *ByProjectKeyShoppingListsRequestMethodGet) Execute(ctx context.Context) (result *ShoppingListPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

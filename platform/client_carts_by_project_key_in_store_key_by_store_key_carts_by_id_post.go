@@ -56,7 +56,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodPost) WithHeader
 }
 
 /**
-*	Updates a [Cart](ctp:api:type:Cart) in the [Store](ctp:api:type:Store) specified by `storeKey`.
+*	Updates a Cart in a [Store](ctp:api:type:Store) using one or more [update actions](/../api/projects/carts#update-actions).
+*
 *	If the Cart exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
  */

@@ -14,7 +14,7 @@ import (
 type ImportOperation struct {
 	// The version of the ImportOperation.
 	Version int `json:"version"`
-	// The key of the [importContainer](/import-container#importcontainer).
+	// The key of the [ImportContainer](ctp:import:type:ImportContainer).
 	ImportContainerKey string `json:"importContainerKey"`
 	// The key of the resource.
 	ResourceKey string `json:"resourceKey"`
@@ -24,7 +24,7 @@ type ImportOperation struct {
 	State ProcessingState `json:"state"`
 	// The version of the imported resource when the import was successful.
 	ResourceVersion *int `json:"resourceVersion,omitempty"`
-	// Contains an error if the import of the resource was not successful. See [Errors](/error).
+	// Contains an error if the import of the resource was not successful. See [Errors](/import-export/error).
 	Errors []ErrorObject `json:"errors"`
 	// In case of unresolved status this array will show the unresolved references
 	UnresolvedReferences []UnresolvedReferences `json:"unresolvedReferences"`
@@ -110,13 +110,16 @@ const (
 	ImportOperationStateValidationFailed ImportOperationState = "validationFailed"
 )
 
+/**
+*	The ID and validation status of a new [ImportOperation](#importoperation).
+ */
 type ImportOperationStatus struct {
 	// The ID of the [ImportOperation](#importoperation).
 	OperationId *string `json:"operationId,omitempty"`
 	// The validation state of the [ImportOperation](#importoperation).
 	State ImportOperationState `json:"state"`
 	// The validation errors for the [ImportOperation](#importoperation).
-	// See [Errors](/error).
+	// See [Errors](/import-export/error).
 	Errors []ErrorObject `json:"errors"`
 }
 

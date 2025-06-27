@@ -55,7 +55,7 @@ func (rb *ByProjectKeyStagedQuotesRequestMethodHead) WithHeaders(headers http.He
 }
 
 /**
-*	Checks if a StagedQuote exists for a given Query Predicate. Returns a `200 OK` status if any StagedQuotes match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more StagedQuotes exist for the provided query predicate. Returns a `200 OK` status if any StagedQuotes match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStagedQuotesRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodHead) WithHe
 }
 
 /**
-*	Checks if a QuoteRequest exists for a given Query Predicate. Returns a `200 OK` status if any QuoteRequests match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more QuoteRequests exist for the provided query predicate. Returns a `200 OK` status if any QuoteRequests match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

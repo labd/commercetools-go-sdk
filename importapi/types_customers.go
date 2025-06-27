@@ -14,47 +14,69 @@ const (
 )
 
 /**
-*	Different from Address in that `key` is required and `id` is not supported.
+*	Different from [Address](/types#address) in that `key` is required and `id` is not supported.
 *
  */
 type CustomerAddress struct {
 	// User-defined identifier for the address.
 	// Must follow the pattern `[a-zA-Z0-9_\-]{2,256}` and must be unique per customer.
-	Key                  string  `json:"key"`
-	Title                *string `json:"title,omitempty"`
-	Salutation           *string `json:"salutation,omitempty"`
-	FirstName            *string `json:"firstName,omitempty"`
-	LastName             *string `json:"lastName,omitempty"`
-	StreetName           *string `json:"streetName,omitempty"`
-	StreetNumber         *string `json:"streetNumber,omitempty"`
+	Key string `json:"key"`
+	// Name of the country.
+	Country string `json:"country"`
+	// Title of the contact, for example 'Dr.'
+	Title *string `json:"title,omitempty"`
+	// Salutation of the contact, for example 'Mr.' or 'Ms.'
+	Salutation *string `json:"salutation,omitempty"`
+	// Given name (first name) of the contact.
+	FirstName *string `json:"firstName,omitempty"`
+	// Family name (last name) of the contact.
+	LastName *string `json:"lastName,omitempty"`
+	// Name of the street.
+	StreetName *string `json:"streetName,omitempty"`
+	// Street number.
+	StreetNumber *string `json:"streetNumber,omitempty"`
+	// Further information on the street address.
 	AdditionalStreetInfo *string `json:"additionalStreetInfo,omitempty"`
-	PostalCode           *string `json:"postalCode,omitempty"`
-	City                 *string `json:"city,omitempty"`
-	Region               *string `json:"region,omitempty"`
-	State                *string `json:"state,omitempty"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
-	Country               string  `json:"country"`
-	Company               *string `json:"company,omitempty"`
-	Department            *string `json:"department,omitempty"`
-	Building              *string `json:"building,omitempty"`
-	Apartment             *string `json:"apartment,omitempty"`
-	POBox                 *string `json:"pOBox,omitempty"`
-	Phone                 *string `json:"phone,omitempty"`
-	Mobile                *string `json:"mobile,omitempty"`
-	Email                 *string `json:"email,omitempty"`
-	Fax                   *string `json:"fax,omitempty"`
+	// Postal code.
+	PostalCode *string `json:"postalCode,omitempty"`
+	// Name of the city.
+	City *string `json:"city,omitempty"`
+	// Name of the region.
+	Region *string `json:"region,omitempty"`
+	// Name of the state, for example, Colorado.
+	State *string `json:"state,omitempty"`
+	// Name of the company.
+	Company *string `json:"company,omitempty"`
+	// Name of the department.
+	Department *string `json:"department,omitempty"`
+	// Number or name of the building.
+	Building *string `json:"building,omitempty"`
+	// Number or name of the apartment.
+	Apartment *string `json:"apartment,omitempty"`
+	// Post office box number.
+	POBox *string `json:"pOBox,omitempty"`
+	// Phone number of the contact.
+	Phone *string `json:"phone,omitempty"`
+	// Mobile phone number of the contact.
+	Mobile *string `json:"mobile,omitempty"`
+	// Email address of the contact.
+	Email *string `json:"email,omitempty"`
+	// Fax number of the contact.
+	Fax *string `json:"fax,omitempty"`
+	// Further information on the Address.
 	AdditionalAddressInfo *string `json:"additionalAddressInfo,omitempty"`
-	ExternalId            *string `json:"externalId,omitempty"`
+	// ID for the contact used in an external system.
+	ExternalId *string `json:"externalId,omitempty"`
 	// Custom Fields for the address.
 	Custom *Custom `json:"custom,omitempty"`
 }
 
 /**
-*	The data representation for a Customer to be imported that is persisted as a [Customer](/../api/projects/customers#top) in the Project.
+*	The data representation for a Customer to be imported that is persisted as a [Customer](ctp:api:type:Customer) in the Project.
 *
  */
 type CustomerImport struct {
-	// User-defined unique identifier. If a [Customer](/../api/projects/customers#customer) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [Customer](ctp:api:type:Customer) with this `key` exists, it will be updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Customer.customerNumber`.
 	CustomerNumber *string `json:"customerNumber,omitempty"`
@@ -62,7 +84,7 @@ type CustomerImport struct {
 	Email string `json:"email"`
 	// Required when `authenticationMode` is set to `Password`. Maps to `Customer.password`.
 	Password *string `json:"password,omitempty"`
-	// The References to the Stores with which the Customer is associated. If referenced Stores do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Stores are created.
+	// The References to the Stores with which the Customer is associated. If referenced Stores do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary Stores are created.
 	Stores []StoreKeyReference `json:"stores"`
 	// Maps to `Customer.firstName`.
 	FirstName *string `json:"firstName,omitempty"`
@@ -84,8 +106,8 @@ type CustomerImport struct {
 	VatId *string `json:"vatId,omitempty"`
 	// Maps to `Customer.isEmailVerified`.
 	IsEmailVerified *bool `json:"isEmailVerified,omitempty"`
-	// The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the Customer is associated.
-	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
+	// The Reference to the [CustomerGroup](ctp:api:type:CustomerGroup) with which the Customer is associated.
+	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the necessary CustomerGroup is created.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
 	// Maps to `Customer.addresses`.
 	Addresses []CustomerAddress `json:"addresses"`

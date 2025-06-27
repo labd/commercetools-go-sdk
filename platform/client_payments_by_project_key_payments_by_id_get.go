@@ -53,6 +53,10 @@ func (rb *ByProjectKeyPaymentsByIDRequestMethodGet) WithHeaders(headers http.Hea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a Payment with the provided `id`.
+ */
 func (rb *ByProjectKeyPaymentsByIDRequestMethodGet) Execute(ctx context.Context) (result *Payment, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
