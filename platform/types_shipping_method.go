@@ -48,7 +48,7 @@ type ShippingMethod struct {
 	//
 	// If `true`, the ShippingMethod can be used during the creation or update of a Cart or Order.
 	Active bool `json:"active"`
-	// If `true`, this ShippingMethod is the [Project](ctp:api:type:Project)'s default ShippingMethod.
+	// If `true`, this ShippingMethod is the [Project](ctp:api:type:Project)'s default ShippingMethod. When retrieving [matching Shipping Methods](/projects/shippingMethods#get-matching-shipping-methods), it is returned as the first item in the array. This flag does not automatically apply the Shipping Method to Carts.
 	IsDefault bool `json:"isDefault"`
 	// Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
 	Predicate *string `json:"predicate,omitempty"`
@@ -73,7 +73,7 @@ type ShippingMethodDraft struct {
 	ZoneRates []ZoneRateDraft `json:"zoneRates"`
 	// If set to `true`, the ShippingMethod can be used during the creation or update of a Cart or Order.
 	Active *bool `json:"active,omitempty"`
-	// If set to `true`, the ShippingMethod will be the [Project](ctp:api:type:Project)'s default ShippingMethod.
+	// If set to `true`, the ShippingMethod will be the [Project](ctp:api:type:Project)'s default ShippingMethod. When retrieving [matching Shipping Methods](/projects/shippingMethods#get-matching-shipping-methods), it is returned as the first item in the array. This flag does not automatically apply the Shipping Method to Carts.
 	IsDefault bool `json:"isDefault"`
 	// Valid [Cart predicate](/projects/predicates#cart-predicates) to select a ShippingMethod for a Cart.
 	Predicate *string `json:"predicate,omitempty"`

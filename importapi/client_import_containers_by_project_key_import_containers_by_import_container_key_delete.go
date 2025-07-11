@@ -28,7 +28,10 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodDelete) W
 }
 
 /**
-*	Deletes the import container given by the key.
+*	Deletes an Import Container in the Project.
+*
+*	Generates the [ImportContainerDeleted](/projects/events#import-container-deleted-event) Event.
+*
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestMethodDelete) Execute(ctx context.Context) (result *ImportContainer, err error) {
 	queryParams := url.Values{}

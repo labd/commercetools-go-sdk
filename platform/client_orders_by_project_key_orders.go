@@ -58,6 +58,10 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Search() *ByProjectKeyOrdersSearchRe
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves Orders in the Project.
+ */
 func (rb *ByProjectKeyOrdersRequestBuilder) Get() *ByProjectKeyOrdersRequestMethodGet {
 	return &ByProjectKeyOrdersRequestMethodGet{
 		url:    fmt.Sprintf("/%s/orders", rb.projectKey),
@@ -66,7 +70,7 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Get() *ByProjectKeyOrdersRequestMeth
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Orders exist for the provided query predicate. Returns a `200 OK` status if any Orders match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyOrdersRequestBuilder) Head() *ByProjectKeyOrdersRequestMethodHead {
 	return &ByProjectKeyOrdersRequestMethodHead{
@@ -76,13 +80,16 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Head() *ByProjectKeyOrdersRequestMet
 }
 
 /**
-*	Before you create an Order, the Cart must have a [shipping address set](ctp:api:type:CartSetShippingAddressAction).
+*	Creates an Order from a Cart.
+*
+*	The Cart must have a shipping address and an active Shipping Method set.
+*
 *	The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
 *
-*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
+*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message. If the Order is created from a Recurring Order schedule, the [OrderCreatedFromRecurringOrder](ctp:api:type:OrderCreatedFromRecurringOrderMessage) Message is generated.
 *
-*	  If a server-side problem occurs, indicated by a 500 Internal Server Error HTTP response, the Order creation may still successfully complete after the error is returned.
-*	  If you receive this error, you should verify the status of the Order by querying a unique identifier supplied during the creation request, such as the Order number.
+*	If a server-side problem occurs, indicated by a 500 Internal Server Error HTTP response, the Order creation may still successfully complete after the error is returned.
+*	If you receive this error, you should verify the status of the Order by querying a unique identifier supplied during the creation request, such as the Order number.
 *
 *	Specific Error Codes:
 *

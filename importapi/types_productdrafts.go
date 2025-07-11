@@ -12,80 +12,58 @@ import (
 *
  */
 type ProductDraftImport struct {
-	// User-defined unique identifier. If a [Product](/../api/projects/products#product) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [Product](ctp:api:type:Product) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
-	// The `productType` of a [Product](/../api/projects/products#product).
-	// Maps to `Product.productType`.
-	// The Reference to the [ProductType](/../api/projects/productTypes#producttype) with which the ProductDraft is associated.
-	// If referenced ProductType does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductType is created.
+	// Maps to `Product.productType`. If the referenced [ProductType](ctp:api:type:ProductType) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced ProductType is created.
 	ProductType ProductTypeKeyReference `json:"productType"`
-	Name        LocalizedString         `json:"name"`
-	// Human-readable identifiers usually used as deep-link URL to the related product. Each slug must be unique across a project,
-	// but a product can have the same slug for different languages. Allowed are alphabetic, numeric, underscore (_) and hyphen (-) characters.
+	// Maps to `ProductData.name`.
+	Name LocalizedString `json:"name"`
+	// Maps to `ProductData.slug`.
 	Slug LocalizedString `json:"slug"`
-	// Maps to `Product.description`.
+	// Maps to `ProductData.description`.
 	Description *LocalizedString `json:"description,omitempty"`
-	// The Reference to the [Categories](/../api/projects/categories#category) with which the ProductDraft is associated.
-	// If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
+	// Maps to `ProductData.categories`. If the referenced [Categories](ctp:api:type:Category) do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Categories are created.
 	Categories []CategoryKeyReference `json:"categories"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	Attributes []Attribute            `json:"attributes"`
+	// Maps to `ProductData.metaTitle`.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// Maps to `ProductData.metaDescription`.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// Maps to `ProductData.metaKeywords`.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	// The master Product variant.
-	// Required if the `variants` array contains a Product Variant.
+	// The master ProductVariant.
+	// Required if `variants` contains at least one ProductVariant.
 	MasterVariant *ProductVariantDraftImport `json:"masterVariant,omitempty"`
-	// An array of related Product Variants.
+	// An array of related ProductVariants.
 	Variants []ProductVariantDraftImport `json:"variants"`
-	// The Reference to the [TaxCategory](/../api/projects/taxCategories#taxcategory) with which the ProductDraft is associated.
-	// If referenced TaxCategory does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary TaxCategory is created.
+	// Maps to `Product.taxCategory`. If the referenced [TaxCategory](ctp:api:type:TaxCategory) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced TaxCategory is created.
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
-	// Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
-	// ```json
-	// {
-	//   "en": [
-	//     { "text": "Multi tool" },
-	//     { "text": "Swiss Army Knife", "suggestTokenizer": { "type": "whitespace" } }
-	//   ],
-	//   "de": [
-	//     {
-	//       "text": "Schweizer Messer",
-	//       "suggestTokenizer": {
-	//         "type": "custom",
-	//         "inputs": ["schweizer messer", "offiziersmesser", "sackmesser"]
-	//       }
-	//     }
-	//   ]
-	// }
-	// ```
+	// Maps to `ProductData.searchKeywords`.
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
-	// The Reference to the [State](/../api/projects/states#state) with which the ProductDraft is associated.
-	// If referenced State does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary State is created.
+	// Maps to `Product.state`. If the referenced [State](ctp:api:type:State) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced State is created.
 	State *StateKeyReference `json:"state,omitempty"`
-	// Determines the published status and current/staged projection of the Product. For more information, see [Managing the published state of Products](/best-practices#managing-the-published-state-of-products).
+	// Determines the published status and current/staged projection of the Product. For more information, see [Managing the published state of Products](/import-export/best-practices#manage-published-state-of-products).
 	Publish *bool `json:"publish,omitempty"`
-	// Determines the type of Prices the API uses. See [ProductPriceMode](/../api/projects/products#productpricemode) for more details. If not provided, the existing `Product.priceMode` is not changed.
+	// Maps to `Product.priceMode`. If not provided, the existing `Product.priceMode` is not changed.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductDraftImport) UnmarshalJSON(data []byte) error {
+	type Alias ProductDraftImport
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Attributes {
+		var err error
+		obj.Attributes[i], err = mapDiscriminatorAttribute(obj.Attributes[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -108,6 +86,10 @@ func (obj ProductDraftImport) MarshalJSON() ([]byte, error) {
 		delete(raw, "categories")
 	}
 
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
+	}
+
 	if raw["variants"] == nil {
 		delete(raw, "variants")
 	}
@@ -121,12 +103,19 @@ func (obj ProductDraftImport) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductVariantDraftImport struct {
-	Sku        *string            `json:"sku,omitempty"`
-	Key        string             `json:"key"`
-	Prices     []PriceDraftImport `json:"prices"`
-	Attributes []Attribute        `json:"attributes"`
-	Images     []Image            `json:"images"`
-	Assets     []Asset            `json:"assets"`
+	// User-defined unique SKU of the Product Variant.
+	Sku *string `json:"sku,omitempty"`
+	// User-defined unique identifier for the ProductVariant.
+	Key string `json:"key"`
+	// The Embedded Prices for the Product Variant.
+	// Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
+	Prices []PriceDraftImport `json:"prices"`
+	// Attributes according to the respective AttributeDefinition.
+	Attributes []Attribute `json:"attributes"`
+	// Images for the Product Variant.
+	Images []Image `json:"images"`
+	// Media assets for the Product Variant.
+	Assets []Asset `json:"assets"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -188,18 +177,21 @@ func (obj ProductVariantDraftImport) MarshalJSON() ([]byte, error) {
 *
  */
 type PriceDraftImport struct {
+	// Money value of this Price.
 	Value TypedMoney `json:"value"`
-	// A two-digit country code as per [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2).
+	// Set this field if this Price is only valid for the specified country.
 	Country *string `json:"country,omitempty"`
-	// References a customer group by key.
+	// Set this field if this Price is only valid for the referenced [CustomerGroup](ctp:api:type:CustomerGroup). If the referenced CustomerGroup does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CustomerGroup is created.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
-	// References a channel by key.
-	Channel    *ChannelKeyReference `json:"channel,omitempty"`
-	ValidFrom  *time.Time           `json:"validFrom,omitempty"`
-	ValidUntil *time.Time           `json:"validUntil,omitempty"`
-	// The custom fields for this category.
+	// Set this field if this Price is only valid for the referenced `ProductDistribution` [Channel](ctp:api:type:Channel). If the referenced Channel does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
+	Channel *ChannelKeyReference `json:"channel,omitempty"`
+	// Set this field if this Price is only valid from the specified date and time. Must be at least 1 ms earlier than `validUntil`.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Set this field if this Price is only valid until the specified date and time. Must be at least 1 ms later than `validFrom`.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Custom Fields for the Embedded Price.
 	Custom *Custom `json:"custom,omitempty"`
-	// Sets a discounted price from an external service.
+	// Set this field to add a DiscountedPrice from an **external service**.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// The tiered prices for this price.
 	Tiers []PriceTier `json:"tiers"`

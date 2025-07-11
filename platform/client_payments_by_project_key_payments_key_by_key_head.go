@@ -28,7 +28,7 @@ func (rb *ByProjectKeyPaymentsKeyByKeyRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if a Payment exists for a given `key`. Returns a `200 OK` status if the Payment exists or a `404 Not Found` otherwise.
+*	Checks if a Payment exists with the provided `key`. Returns a `200 OK` status if the Payment exists, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

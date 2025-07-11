@@ -27,7 +27,7 @@ func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Get() *ByProjectK
 }
 
 /**
-*	Checks if a ProductSelection exists for a given `key`. Returns a `200 OK` status if the ProductSelection exists or a `404 Not Found` otherwise.
+*	Checks if a ProductSelection exists with the provided `key`. Returns a `200 OK` status if the ProductSelection exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductSelectionsKeyByKeyRequestBuilder) Head() *ByProjectKeyProductSelectionsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyProductSelectionsKeyByKeyRequestMethodHead{

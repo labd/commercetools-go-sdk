@@ -28,7 +28,7 @@ func (rb *ByProjectKeyImportOperationsByIdRequestMethodGet) WithHeaders(headers 
 }
 
 /**
-*	Retrieves the [ImportOperation](ctp:import:type:ImportOperation) of a given ID.
+*	Retrieves an ImportOperation with the provided `id`.
 *
  */
 func (rb *ByProjectKeyImportOperationsByIdRequestMethodGet) Execute(ctx context.Context) (result *ImportOperation, err error) {

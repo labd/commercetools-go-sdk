@@ -9,8 +9,7 @@ import (
 )
 
 /**
-*	This type represents the value of an attribute of a product variant.
-*	The name and type property must match the name and type property of an attribute definition of the product type.
+*	Represents the value of an Attribute of a Product Variant.
 *
  */
 type Attribute interface{}
@@ -196,11 +195,13 @@ func mapDiscriminatorAttribute(input interface{}) (Attribute, error) {
 *
  */
 type BooleanAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value bool    `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// `true` or `false`
+	Value bool `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -218,11 +219,13 @@ func (obj BooleanAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type BooleanSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value []bool  `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of boolean values.
+	Value []bool `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -240,11 +243,13 @@ func (obj BooleanSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type DateAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value Date    `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A date in the format `YYYY-MM-DD`.
+	Value Date `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -262,11 +267,13 @@ func (obj DateAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type DateSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value []Date  `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of dates in the format `YYYY-MM-DD`.
+	Value []Date `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -284,10 +291,14 @@ func (obj DateSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type DateTimeAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string   `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A date with time in the format `YYYY-MM-DDTHH:mm:ss.SSSZ`.
+	// The time zone is optional and defaults to UTC if not specified.
+	// If the time zone is specified, it must be in the format `±HH:mm` or `Z` for UTC.
 	Value time.Time `json:"value"`
 }
 
@@ -306,10 +317,14 @@ func (obj DateTimeAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type DateTimeSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string     `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of dates with time in the format `YYYY-MM-DDTHH:mm:ss.SSSZ`.
+	// The time zone is optional and defaults to UTC if not specified.
+	// If the time zone is specified, it must be in the format `±HH:mm` or `Z` for UTC.
 	Value []time.Time `json:"value"`
 }
 
@@ -329,11 +344,14 @@ func (obj DateTimeSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type EnumAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// The key of the enum value.
+	// Must match the key of an [AttributePlainEnumValue](ctp:api:type:AttributePlainEnumValue) in the Product Type.
+	Value string `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -352,10 +370,13 @@ func (obj EnumAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type EnumSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string  `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of enum values, each represented by its key.
+	// Each key must match the key of an [AttributePlainEnumValue](ctp:api:type:AttributePlainEnumValue) in the Product Type.
 	Value []string `json:"value"`
 }
 
@@ -375,11 +396,14 @@ func (obj EnumSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type LocalizableEnumAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// The key of the localized enum value.
+	// Must match the key of an [AttributeLocalizedEnumValue](ctp:api:type:AttributeLocalizedEnumValue) in the Product Type.
+	Value string `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -398,10 +422,13 @@ func (obj LocalizableEnumAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type LocalizableEnumSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string  `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of localized enum values, each represented by its key.
+	// Each key must match the key of an [AttributeLocalizedEnumValue](ctp:api:type:AttributeLocalizedEnumValue) in the Product Type.
 	Value []string `json:"value"`
 }
 
@@ -420,17 +447,12 @@ func (obj LocalizableEnumSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type LocalizableTextAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
 	Name *string `json:"name,omitempty"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// A localized string.
 	Value LocalizedString `json:"value"`
 }
 
@@ -449,10 +471,12 @@ func (obj LocalizableTextAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type LocalizableTextSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string           `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of localized strings.
 	Value []LocalizedString `json:"value"`
 }
 
@@ -471,10 +495,12 @@ func (obj LocalizableTextSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type MoneyAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string    `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A money value in cent precision format.
 	Value TypedMoney `json:"value"`
 }
 
@@ -511,10 +537,12 @@ func (obj MoneyAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type MoneySetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string      `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of money values in cent precision format.
 	Value []TypedMoney `json:"value"`
 }
 
@@ -551,10 +579,13 @@ func (obj MoneySetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type NumberAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A number value.
+	// Can be an integer or a floating-point number.
 	Value float64 `json:"value"`
 }
 
@@ -573,10 +604,13 @@ func (obj NumberAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type NumberSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string   `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of number values.
+	// Each value can be an integer or a floating-point number.
 	Value []float64 `json:"value"`
 }
 
@@ -595,9 +629,10 @@ func (obj NumberSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type ReferenceAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
 	Name *string `json:"name,omitempty"`
 	// References a resource by key.
 	Value KeyReference `json:"value"`
@@ -636,10 +671,13 @@ func (obj ReferenceAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type ReferenceSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string        `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of references, each referencing a resource by key.
+	// Each reference must match the key of an existing resource in the project.
 	Value []KeyReference `json:"value"`
 }
 
@@ -676,11 +714,13 @@ func (obj ReferenceSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type TextAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string `json:"name,omitempty"`
-	Value string  `json:"value"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A text value.
+	Value string `json:"value"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -698,10 +738,12 @@ func (obj TextAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type TextSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string  `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of text values.
 	Value []string `json:"value"`
 }
 
@@ -720,10 +762,14 @@ func (obj TextSetAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type TimeAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string   `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A time value in the format `HH:mm:ss.SSS`.
+	// The time zone is optional and defaults to UTC if not specified.
+	// If the time zone is specified, it must be in the format `±HH:mm` or `Z` for UTC.
 	Value time.Time `json:"value"`
 }
 
@@ -742,10 +788,14 @@ func (obj TimeAttribute) MarshalJSON() ([]byte, error) {
 *
  */
 type TimeSetAttribute struct {
-	// The name of this attribute must match a name of the product types attribute definitions.
-	// The name is required if this type is used in a product variant and must not be set when
-	// used in a product variant patch.
-	Name  *string     `json:"name,omitempty"`
+	// Required if used for [ProductVariantImport](ctp:import:type:ProductVariantImport).
+	// Must not be set if used for [ProductVariantPatch](ctp:import:type:ProductVariantPatch).
+	//
+	// Must match `name` of an [AttributeDefinition](ctp:api:type:AttributeDefinition) of the Product Type.
+	Name *string `json:"name,omitempty"`
+	// A set of time values in the format `HH:mm:ss.SSS`.
+	// The time zone is optional and defaults to UTC if not specified.
+	// If the time zone is specified, it must be in the format `±HH:mm` or `Z` for UTC.
 	Value []time.Time `json:"value"`
 }
 
@@ -760,18 +810,19 @@ func (obj TimeSetAttribute) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The data representation for a ProductVariant to be imported that is persisted as a [ProductVariant](/../api/projects/products#productvariant) in the Project.
+*	Represents the data used to import a ProductVariant. Once imported, this data is persisted as a [ProductVariant](ctp:api:type:ProductVariant) in the Project.
 *
  */
 type ProductVariantImport struct {
-	// User-defined unique identifier. If a [ProductVariant](/../api/projects/products#productvariant) with this `key` exists on the specified `product`, it will be updated with the imported data.
+	// User-defined unique identifier. If a [ProductVariant](ctp:api:type:ProductVariant) with this `key` exists on the specified `product`, it is updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `ProductVariant.sku`.
 	Sku *string `json:"sku,omitempty"`
-	// Maps to `ProductVariant.isMasterVariant`.
+	// - When creating a new ProductVariant, set to `false`; otherwise, the import operation will fail with a [NewMasterVariantAdditionNotAllowed](ctp:import:type:NewMasterVariantAdditionNotAllowedError) error.
+	// - Set to `true` if the ProductVariant exists and you want to set this ProductVariant as the Master Variant.
 	IsMasterVariant bool `json:"isMasterVariant"`
 	// Maps to `ProductVariant.attributes`.
-	// The referenced attribute must be defined in an already existing ProductType in the project, or the `state` of the [ImportOperation](/import-operation#importoperation) will be `unresolved`.
+	// The referenced attribute must be defined in an already existing ProductType in the project, or the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be `unresolved`.
 	Attributes []Attribute `json:"attributes"`
 	// Maps to `ProductVariant.images`.
 	Images []Image `json:"images"`
@@ -781,12 +832,10 @@ type ProductVariantImport struct {
 	// If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
 	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product, the import induces no change in the existing Product whether `publish` is set or not.
 	Publish *bool `json:"publish,omitempty"`
-	// - Set to `false` to update both the [current and staged projections](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product) with the new Product Variant data.
+	// - Set to `false` to update both the [current and staged projections](/../api/projects/productProjections#current--staged) of the [Product](ctp:api:type:Product) with the new Product Variant data.
 	// - Leave empty or set to `true` to only update the staged projection.
 	Staged *bool `json:"staged,omitempty"`
-	// The [Product](/../api/projects/products#productvariant) to which this Product Variant belongs. Maps to `ProductVariant.product`.
-	// The Reference to the [Product](/../api/projects/products#product) with which the ProductVariant is associated.
-	// If referenced Product does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Product is created.
+	// The [Product](ctp:api:type:ProductVariant) containing this ProductVariant. If the referenced Product does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Product is created.
 	Product ProductKeyReference `json:"product"`
 }
 
@@ -841,23 +890,26 @@ func (obj ProductVariantImport) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Representation for an update of a [ProductVariant](/../api/projects/products#productvariant). Use this type to import updates for existing
-*	[ProductVariants](/../api/projects/products#productvariant) in a Project.
+*	Represents the data used to update a [ProductVariant](ctp:api:type:ProductVariant).
 *
  */
 type ProductVariantPatch struct {
-	// Reference to the [ProductVariant](/../api/projects/products#productvariant) to update.
-	// If the referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
+	// Reference to the [ProductVariant](ctp:api:type:ProductVariant) to update.
 	ProductVariant ProductVariantKeyReference `json:"productVariant"`
 	// Maps to `ProductVariant.attributes`.
-	// - The referenced Attribute must be defined in an existing [ProductType](/../api/projects/productTypes#producttype), or the `state` of the [ImportOperation](/import-operation#importoperation) will be `validationFailed`.
+	// - The referenced Attribute must be defined in an existing [ProductType](ctp:api:type:ProductType), or the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be `validationFailed`.
 	// - Setting the value of a non-required Attribute to `null` will remove the Attribute.
-	// - Attempting to set a `null` value to a required Attribute will make the import operation fail with an [InvalidOperation](/error#invalidoperation) error.
-	// - Importing [LocalizableTextAttributes](/product-variant#localizabletextattribute) or [LocalizableTextSetAttributes](/product-variant#localizabletextsetattribute) follows an override pattern, meaning that omitted localized fields will be deleted, new fields will be created, and existing fields will be updated. You can also delete localized fields by setting their value to `null`.
+	// - Attempting to set a `null` value to a required Attribute will make the import operation fail with an [InvalidOperation](ctp:import:type:InvalidOperation) error.
+	// - Importing [LocalizableTextAttributes](ctp:import:type:LocalizableTextAttribute) or [LocalizableTextSetAttributes](ctp:import:type:LocalizableTextSetAttribute) follows an override pattern, meaning that omitted localized fields will be deleted, new fields will be created, and existing fields will be updated. You can delete localized fields by setting their value to `null`.
 	Attributes *Attributes `json:"attributes,omitempty"`
-	// If `false`, the attribute changes are applied to both [current and staged projected representations](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product).
+	// If `false`, the attribute changes are applied to both [current and staged projected representations](/projects/productProjections#current--staged) of the [Product](ctp:api:type:Product).
 	Staged *bool `json:"staged,omitempty"`
-	// Reference to the [Product](/../api/projects/products#product) which contains the ProductVariant. Setting a value will batch process the import operations to minimize concurrency errors. If set, this field is required for every ProductVariantPatch in the [ProductVariantPatchRequest](ctp:import:type:ProductVariantPatchRequest).
+	// Reference to the [Product](ctp:api:type:Product) that contains the ProductVariant.
+	//
+	// We recommend to set this value to minimize concurrency errors.
+	// If set, this field is required for every ProductVariantPatch in the [ProductVariantPatchRequest](ctp:import:type:ProductVariantPatchRequest).
+	//
+	// If the referenced Product does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Product is created.
 	Product *ProductKeyReference `json:"product,omitempty"`
 }
 

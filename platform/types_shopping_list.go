@@ -33,12 +33,14 @@ type ShoppingList struct {
 	LineItems []ShoppingListLineItem `json:"lineItems"`
 	// Line Items (containing text values) of the ShoppingList.
 	TextLineItems []TextLineItem `json:"textLineItems"`
-	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified.
+	// Number of days after the last modification before a ShoppingList is deleted. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Identifies ShoppingLists belonging to an [anonymous session](ctp:api:type:AnonymousSession).
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Store to which the ShoppingList is assigned.
 	Store *StoreKeyReference `json:"store,omitempty"`
+	// [Reference](ctp:api:type:Reference) to the Business Unit the Shopping List belongs to. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// IDs and references that last modified the ShoppingList.
@@ -62,7 +64,7 @@ type ShoppingListDraft struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// Identifies ShoppingLists belonging to an [anonymous session](ctp:api:type:AnonymousSession).
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
+	// Number of days after the last modification before a ShoppingList is deleted. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Line Items (containing Products) to add to the ShoppingList.
 	LineItems []ShoppingListLineItemDraft `json:"lineItems"`
@@ -70,6 +72,8 @@ type ShoppingListDraft struct {
 	TextLineItems []TextLineItemDraft `json:"textLineItems"`
 	// Assigns the new ShoppingList to the [Store](ctp:api:type:Store).
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of the Business Unit the Shopping List should belong to. When the `customer` of the Shopping List is set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
@@ -129,11 +133,15 @@ type ShoppingListLineItem struct {
 	ProductId string `json:"productId"`
 	// The Product Type defining the Attributes of the [Product](ctp:api:type:Product).
 	ProductType ProductTypeReference `json:"productType"`
+	// Whether the related [Product](ctp:api:type:Product) is published or not.
+	//
+	// This data is updated in an [eventual consistent manner](/general-concepts#eventual-consistency) when the Product's published status changes.
+	Published bool `json:"published"`
 	// Number of Products in the ShoppingListLineItem.
 	Quantity int `json:"quantity"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) the ShoppingListLineItem refers to. If not set, the ShoppingListLineItem refers to the Master Variant.
 	VariantId *int `json:"variantId,omitempty"`
-	// Data of the [ProductVariant](ctp:api:type:ProductVariant).
+	// Data of the [ProductVariant](ctp:api:type:ProductVariant).  This data includes all the Product Attributes and Variant Attributes to ensure the full Attribute context of the Product Variant.
 	//
 	// Returned when expanded using `expand=lineItems[*].variant`. You cannot expand only a single element of the array.
 	Variant *ProductVariant `json:"variant,omitempty"`
@@ -329,6 +337,12 @@ func mapDiscriminatorShoppingListUpdateAction(input interface{}) (ShoppingListUp
 			return nil, err
 		}
 		return obj, nil
+	case "setBusinessUnit":
+		obj := ShoppingListSetBusinessUnitAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCustomField":
 		obj := ShoppingListSetCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -451,6 +465,10 @@ type TextLineItemDraft struct {
 *	The [ProductVariant](ctp:api:type:ProductVariant) to be included in the ShoppingListLineItem must be specified using the `productID` and `variantID`, or by the `sku`.
 *	If the ShoppingList already contains a ShoppingListLineItem for the same Product Variant with the same Custom Fields, then only the quantity of the existing ShoppingListLineItem is increased.
 *	A ShoppingListLineItem with an empty `variantId` is not considered the same as a ShoppingListLineItem with a `variantId` currently referring to the Master Variant.
+*
+*	Product Attributes are merged with Variant Attributes to ensure the full Attribute context of the Product Variant.
+*
+*	Produces the [Shopping List Line Item Added](ctp:api:type:ShoppingListLineItemAddedMessage) Message.
 *
  */
 type ShoppingListAddLineItemAction struct {
@@ -607,6 +625,10 @@ func (obj ShoppingListChangeTextLineItemsOrderAction) MarshalJSON() ([]byte, err
 	}{Action: "changeTextLineItemsOrder", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Shopping List Line Item Removed](ctp:api:type:ShoppingListLineItemRemovedMessage) Message.
+*
+ */
 type ShoppingListRemoveLineItemAction struct {
 	// The `id` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemId *string `json:"lineItemId,omitempty"`
@@ -664,6 +686,25 @@ func (obj ShoppingListSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAnonymousId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Updates the Business Unit on the Shopping List. The Shopping List must have an existing Business Unit assigned already.
+*
+ */
+type ShoppingListSetBusinessUnitAction struct {
+	// The Business Unit to assign to the Shopping List, which must have access to the [Store](/../api/projects/stores) that is set on the Shopping List.
+	BusinessUnit BusinessUnitResourceIdentifier `json:"businessUnit"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShoppingListSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListSetBusinessUnitAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBusinessUnit", Alias: (*Alias)(&obj)})
+}
+
 type ShoppingListSetCustomFieldAction struct {
 	// Name of the [Custom Field](/../api/projects/custom-fields).
 	Name string `json:"name"`
@@ -716,8 +757,12 @@ func (obj ShoppingListSetCustomerAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomer", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Number of days after the last modification before a Shopping List is deleted.
+*
+ */
 type ShoppingListSetDeleteDaysAfterLastModificationAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If not provided, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 

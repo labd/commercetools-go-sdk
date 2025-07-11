@@ -13,7 +13,7 @@ type ByProjectKeyDiscountCodesImportContainersByImportContainerKeyRequestBuilder
 }
 
 /**
-*	Creates a request for creating new Discount Codes or updating existing ones.
+*	Creates an Import Request for Discount Codes.
  */
 func (rb *ByProjectKeyDiscountCodesImportContainersByImportContainerKeyRequestBuilder) Post(body DiscountCodeImportRequest) *ByProjectKeyDiscountCodesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyDiscountCodesImportContainersByImportContainerKeyRequestMethodPost{

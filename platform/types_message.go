@@ -233,7 +233,7 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		}
 		return obj, nil
 	case "AssociateRoleNameSet":
-		obj := AssociateRoleNameChangedMessage{}
+		obj := AssociateRoleNameSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -746,6 +746,32 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "BusinessUnitTopLevelUnitSet":
+		obj := BusinessUnitTopLevelUnitSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "BusinessUnitTypeSet":
+		obj := BusinessUnitTypeSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "CartDiscountCreated":
 		obj := CartDiscountCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1110,6 +1136,45 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "CustomerGroupAssignmentAdded":
+		obj := CustomerGroupAssignmentAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "CustomerGroupAssignmentRemoved":
+		obj := CustomerGroupAssignmentRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "CustomerGroupAssignmentsSet":
+		obj := CustomerGroupAssignmentsSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "CustomerGroupCustomFieldAdded":
 		obj := CustomerGroupCustomFieldAddedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1279,6 +1344,58 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "DiscountGroupCreated":
+		obj := DiscountGroupCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DiscountGroupDeleted":
+		obj := DiscountGroupDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DiscountGroupKeySet":
+		obj := DiscountGroupKeySetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "DiscountGroupSortOrderSet":
+		obj := DiscountGroupSortOrderSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "InventoryEntryCreated":
 		obj := InventoryEntryCreatedMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1346,6 +1463,331 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return obj, nil
 	case "PaymentInteractionAdded":
 		obj := PaymentInteractionAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentInterfaceIdSet":
+		obj := PaymentInterfaceIdSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodCreated":
+		obj := PaymentMethodCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodCustomFieldAdded":
+		obj := PaymentMethodCustomFieldAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodCustomFieldChanged":
+		obj := PaymentMethodCustomFieldChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodCustomFieldRemoved":
+		obj := PaymentMethodCustomFieldRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodCustomTypeRemoved":
+		obj := PaymentMethodCustomTypeRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodCustomTypeSet":
+		obj := PaymentMethodCustomTypeSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodDefaultSet":
+		obj := PaymentMethodDefaultSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodDeleted":
+		obj := PaymentMethodDeletedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomFieldAdded":
+		obj := PaymentMethodInfoCustomFieldAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomFieldChanged":
+		obj := PaymentMethodInfoCustomFieldChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomFieldRemoved":
+		obj := PaymentMethodInfoCustomFieldRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomTypeRemoved":
+		obj := PaymentMethodInfoCustomTypeRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomTypeSet":
+		obj := PaymentMethodInfoCustomTypeSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoInterfaceAccountSet":
+		obj := PaymentMethodInfoInterfaceAccountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoInterfaceSet":
+		obj := PaymentMethodInfoInterfaceSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoMethodSet":
+		obj := PaymentMethodInfoMethodSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoNameSet":
+		obj := PaymentMethodInfoNameSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInfoTokenSet":
+		obj := PaymentMethodInfoTokenSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodInterfaceAccountSet":
+		obj := PaymentMethodInterfaceAccountSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodKeySet":
+		obj := PaymentMethodKeySetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodMethodSet":
+		obj := PaymentMethodMethodSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodNameSet":
+		obj := PaymentMethodNameSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodPaymentInterfaceSet":
+		obj := PaymentMethodPaymentInterfaceSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "PaymentMethodPaymentMethodStatusSet":
+		obj := PaymentMethodPaymentMethodStatusSetMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2121,6 +2563,163 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 		return obj, nil
 	case "QuoteStateTransition":
 		obj := QuoteStateTransitionMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderCreated":
+		obj := RecurringOrderCreatedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderCustomFieldAdded":
+		obj := RecurringOrderCustomFieldAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderCustomFieldChanged":
+		obj := RecurringOrderCustomFieldChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderCustomFieldRemoved":
+		obj := RecurringOrderCustomFieldRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderCustomTypeRemoved":
+		obj := RecurringOrderCustomTypeRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderCustomTypeSet":
+		obj := RecurringOrderCustomTypeSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderKeySet":
+		obj := RecurringOrderKeySetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderScheduleSet":
+		obj := RecurringOrderScheduleSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.RecurrencePolicySchedule != nil {
+			var err error
+			obj.RecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.RecurrencePolicySchedule)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.OldRecurrencePolicySchedule != nil {
+			var err error
+			obj.OldRecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.OldRecurrencePolicySchedule)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderStartsAtSet":
+		obj := RecurringOrderStartsAtSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderStateChanged":
+		obj := RecurringOrderStateChangedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderStateTransition":
+		obj := RecurringOrderStateTransitionMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -3024,9 +3623,9 @@ type ApprovalRuleKeySetMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Description of the [ApprovalRule](ctp:api:type:ApprovalRule) after the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
+	// `key` value of the [ApprovalRule](ctp:api:type:ApprovalRule) after the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
 	Key *string `json:"key,omitempty"`
-	// Description of the [ApprovalRule](ctp:api:type:ApprovalRule) before the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
+	// `key` value of the [ApprovalRule](ctp:api:type:ApprovalRule) before the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
 	OldKey *string `json:"oldKey,omitempty"`
 }
 
@@ -3474,7 +4073,7 @@ func (obj AssociateRoleDeletedMessage) MarshalJSON() ([]byte, error) {
 *	Generated after a successful [Set Name](ctp:api:type:AssociateRoleSetNameAction) update action.
 *
  */
-type AssociateRoleNameChangedMessage struct {
+type AssociateRoleNameSetMessage struct {
 	// Unique identifier of the Message. Can be used to track which Messages have been processed.
 	ID string `json:"id"`
 	// Version of a resource. In case of Messages, this is always `1`.
@@ -3502,8 +4101,8 @@ type AssociateRoleNameChangedMessage struct {
 
 // UnmarshalJSON override to deserialize correct attribute types based
 // on the discriminator value
-func (obj *AssociateRoleNameChangedMessage) UnmarshalJSON(data []byte) error {
-	type Alias AssociateRoleNameChangedMessage
+func (obj *AssociateRoleNameSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias AssociateRoleNameSetMessage
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
@@ -3520,8 +4119,8 @@ func (obj *AssociateRoleNameChangedMessage) UnmarshalJSON(data []byte) error {
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj AssociateRoleNameChangedMessage) MarshalJSON() ([]byte, error) {
-	type Alias AssociateRoleNameChangedMessage
+func (obj AssociateRoleNameSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias AssociateRoleNameSetMessage
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
@@ -5776,6 +6375,130 @@ func (obj BusinessUnitStoresSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated when a [Business Unit](ctp:api:type:BusinessUnit) `topLevelUnit` is modified due to a hierarchy change after a successful [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) or [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+*
+ */
+type BusinessUnitTopLevelUnitSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Top-level unit of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) or [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	TopLevelUnit BusinessUnitKeyReference `json:"topLevelUnit"`
+	// Top-level unit of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) or [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	OldTopLevelUnit BusinessUnitKeyReference `json:"oldTopLevelUnit"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitTopLevelUnitSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitTopLevelUnitSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitTopLevelUnitSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitTopLevelUnitSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitTopLevelUnitSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+*
+ */
+type BusinessUnitTypeSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	ParentUnit *BusinessUnitKeyReference `json:"parentUnit,omitempty"`
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	OldParentUnit *BusinessUnitKeyReference `json:"oldParentUnit,omitempty"`
+	// Type of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	UnitType BusinessUnitType `json:"unitType"`
+	// Type of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	OldUnitType BusinessUnitType `json:"oldUnitType"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitTypeSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitTypeSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitTypeSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitTypeSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) request.
 *
  */
@@ -7254,7 +7977,7 @@ func (obj CustomerEmailChangedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create email token for Customer](ctp:api:endpoint:/{projectKey}/customers/email-token:POST) request. The `resource` property of the Message is a [CustomerEmailTokenReference](ctp:api:type:CustomerEmailTokenReference).
+*	Generated after a successful [Create email token for Customer](ctp:api:endpoint:/{projectKey}/customers/email-token:POST) or [Create email token for Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/email-token:POST) request. The `resource` property of the Message is a [CustomerEmailTokenReference](ctp:api:type:CustomerEmailTokenReference).
 *
  */
 type CustomerEmailTokenCreatedMessage struct {
@@ -7283,6 +8006,10 @@ type CustomerEmailTokenCreatedMessage struct {
 	CustomerId string `json:"customerId"`
 	// Date and time (UTC) the email token expires.
 	ExpiresAt time.Time `json:"expiresAt"`
+	// Value of the token, present only if the token's validity is 60 minutes or less.
+	Value *string `json:"value,omitempty"`
+	// If `true`, all email tokens issued previously for the Customer are invalidated.
+	InvalidateOlderTokens bool `json:"invalidateOlderTokens"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -7425,6 +8152,195 @@ func (obj CustomerFirstNameSetMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "CustomerFirstNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add CustomerGroupAssignment](ctp:api:type:CustomerAddCustomerGroupAssignmentAction) update action.
+*
+ */
+type CustomerGroupAssignmentAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Customer Group assigned to the Customer during the [Add CustomerGroupAssignment](ctp:api:type:CustomerAddCustomerGroupAssignmentAction) update action.
+	CustomerGroupAssignment CustomerGroupAssignment `json:"customerGroupAssignment"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CustomerGroupAssignmentAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias CustomerGroupAssignmentAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupAssignmentAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupAssignmentAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupAssignmentAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove CustomerGroupAssignment](ctp:api:type:CustomerRemoveCustomerGroupAssignmentAction) update action.
+*
+ */
+type CustomerGroupAssignmentRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Customer Group removed during the [Remove CustomerGroupAssignment](ctp:api:type:CustomerRemoveCustomerGroupAssignmentAction) update action.
+	CustomerGroupAssignment CustomerGroupAssignment `json:"customerGroupAssignment"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CustomerGroupAssignmentRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias CustomerGroupAssignmentRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupAssignmentRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupAssignmentRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupAssignmentRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set CustomerGroupAssignments](ctp:api:type:CustomerSetCustomerGroupAssignmentsAction) update action.
+*
+ */
+type CustomerGroupAssignmentsSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Customer Groups assigned to the Customer during the [Set CustomerGroupAssignments](ctp:api:type:CustomerSetCustomerGroupAssignmentsAction) update action.
+	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CustomerGroupAssignmentsSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias CustomerGroupAssignmentsSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupAssignmentsSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupAssignmentsSetMessage
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupAssignmentsSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -7843,7 +8759,7 @@ func (obj CustomerLastNameSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create password reset token for Customer](ctp:api:endpoint:/{projectKey}/customers/password-token:POST) request. The `resource` property of the Message is a [CustomerPasswordTokenReference](ctp:api:type:CustomerPasswordTokenReference).
+*	Generated after a successful [Create password reset token for Customer](ctp:api:endpoint:/{projectKey}/customers/password-token:POST) or [Create password reset token for Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password-token:POST) request. The `resource` property of the Message is a [CustomerPasswordTokenReference](ctp:api:type:CustomerPasswordTokenReference).
 *
  */
 type CustomerPasswordTokenCreatedMessage struct {
@@ -7872,6 +8788,10 @@ type CustomerPasswordTokenCreatedMessage struct {
 	CustomerId string `json:"customerId"`
 	// Date and time (UTC) the password token expires.
 	ExpiresAt time.Time `json:"expiresAt"`
+	// Value of the token, present only if the token's validity is 60 minutes or less.
+	Value *string `json:"value,omitempty"`
+	// If `true`, all password tokens issued previously for the Customer are invalidated.
+	InvalidateOlderTokens bool `json:"invalidateOlderTokens"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -8190,6 +9110,240 @@ func (obj DiscountCodeKeySetMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "DiscountCodeKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups:POST) request.
+*
+ */
+type DiscountGroupCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The DiscountGroup that was created.
+	DiscountGroup DiscountGroup `json:"discountGroup"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountGroupCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias DiscountGroupCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups/{id}:DELETE) request.
+*
+ */
+type DiscountGroupDeletedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountGroupDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias DiscountGroupDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:DiscountGroupSetKeyAction) update action.
+*
+ */
+type DiscountGroupKeySetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `key` value of the [DiscountGroup](ctp:api:type:DiscountGroup) after the [Set Key](ctp:api:type:DiscountGroupSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [DiscountGroup](ctp:api:type:DiscountGroup) before the [Set Key](ctp:api:type:DiscountGroupSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountGroupKeySetMessage) UnmarshalJSON(data []byte) error {
+	type Alias DiscountGroupKeySetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupKeySetMessage) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupKeySetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set SortOrder](ctp:api:type:DiscountGroupSetSortOrderAction) update action.
+*
+ */
+type DiscountGroupSortOrderSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `sortOrder` value of the [DiscountGroup](ctp:api:type:DiscountGroup) after the [Set SortOrder](ctp:api:type:DiscountGroupSetSortOrderAction) update action.
+	SortOrder *string `json:"sortOrder,omitempty"`
+	// `sortOrder` value of the [DiscountGroup](ctp:api:type:DiscountGroup) before the [Set SortOrder](ctp:api:type:DiscountGroupSetSortOrderAction) update action.
+	OldSortOrder *string `json:"oldSortOrder,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DiscountGroupSortOrderSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias DiscountGroupSortOrderSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupSortOrderSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupSortOrderSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupSortOrderSet", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -8597,6 +9751,32 @@ func mapDiscriminatorOrderMessage(input interface{}) (OrderMessage, error) {
 		return obj, nil
 	case "OrderBillingAddressSet":
 		obj := OrderBillingAddressSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderBusinessUnitSet":
+		obj := OrderBusinessUnitSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "OrderCreatedFromRecurringOrder":
+		obj := OrderCreatedFromRecurringOrderMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -9897,6 +11077,126 @@ func (obj OrderBillingAddressSetMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "OrderBillingAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Business Unit](ctp:api:type:OrderSetBusinessUnitAction) update action on Orders or [Set Business Unit](ctp:api:type:StagedOrderSetBusinessUnitAction) update action on Order Edits.
+*
+ */
+type OrderBusinessUnitSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [BusinessUnit](ctp:api:type:BusinessUnit) on the [Order](ctp:api:type:Order) after the [Set Business Unit](ctp:api:type:OrderSetBusinessUnitAction) update action on Orders or [Set Business Unit](ctp:api:type:StagedOrderSetBusinessUnitAction) update action on Order Edits.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	// [BusinessUnit](ctp:api:type:BusinessUnit) on the [Order](ctp:api:type:Order) before the [Set Business Unit](ctp:api:type:OrderSetBusinessUnitAction) update action on Orders or [Set Business Unit](ctp:api:type:StagedOrderSetBusinessUnitAction) update action on Order Edits.
+	OldbusinessUnit *BusinessUnitKeyReference `json:"oldbusinessUnit,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderBusinessUnitSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderBusinessUnitSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderBusinessUnitSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderBusinessUnitSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderBusinessUnitSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after an Order is successfully created according to the defined schedule of a Recurring Order.
+*
+ */
+type OrderCreatedFromRecurringOrderMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Order](ctp:api:type:Order) that was created.
+	Order Order `json:"order"`
+	// Reference to the origin [Recurring Order](ctp:api:type:RecurringOrder).
+	RecurringOrderRef RecurringOrderReference `json:"recurringOrderRef"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OrderCreatedFromRecurringOrderMessage) UnmarshalJSON(data []byte) error {
+	type Alias OrderCreatedFromRecurringOrderMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCreatedFromRecurringOrderMessage) MarshalJSON() ([]byte, error) {
+	type Alias OrderCreatedFromRecurringOrderMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCreatedFromRecurringOrder", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -12414,6 +13714,1496 @@ func (obj PaymentInteractionAddedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Set InterfaceId](ctp:api:type:PaymentSetInterfaceIdAction) update action.
+*
+ */
+type PaymentInterfaceIdSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Interface ID of the Payment after the [Set InterfaceId](ctp:api:type:PaymentSetInterfaceIdAction) update action.
+	InterfaceId *string `json:"interfaceId,omitempty"`
+	// Interface ID of the Payment before the [Set InterfaceId](ctp:api:type:PaymentSetInterfaceIdAction) update action.
+	OldInterfaceId *string `json:"oldInterfaceId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentInterfaceIdSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentInterfaceIdSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentInterfaceIdSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentInterfaceIdSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentInterfaceIdSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create PaymentMethod](ctp:api:endpoint:/{projectKey}/payment-methods:POST) request.
+*
+ */
+type PaymentMethodCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [PaymentMethod](ctp:api:type:PaymentMethod) that was created.
+	PaymentMethod PaymentMethod `json:"paymentMethod"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field to a Payment Method using the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action. If a Custom Field already exists with the same name, a [PaymentMethodCustomFieldChanged](ctp:api:type:PaymentMethodCustomFieldChangedMessage) Message is generated instead.
+*
+ */
+type PaymentMethodCustomFieldAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodCustomFieldAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodCustomFieldAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomFieldAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomFieldAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after changing an existing Custom Field on a Payment Method using the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+*
+ */
+type PaymentMethodCustomFieldChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+	OldValue interface{} `json:"oldValue,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodCustomFieldChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodCustomFieldChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomFieldChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomFieldChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Field from a Payment Method using the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+*
+ */
+type PaymentMethodCustomFieldRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodCustomFieldRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodCustomFieldRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomFieldRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomFieldRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Type from a Payment Method using the [Set Custom Type](ctp:api:type:PaymentMethodSetCustomTypeAction) update action.
+*
+ */
+type PaymentMethodCustomTypeRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodCustomTypeRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodCustomTypeRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomTypeRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomTypeRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Type to a Payment Method using the [Set Custom Type](ctp:api:type:PaymentMethodSetCustomTypeAction) update action.
+*
+ */
+type PaymentMethodCustomTypeSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Custom Fields that were set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodCustomTypeSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodCustomTypeSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomTypeSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomTypeSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Default](ctp:api:type:PaymentMethodSetDefaultAction) update action.
+*
+ */
+type PaymentMethodDefaultSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Default Payment Method after the [Set Default](ctp:api:type:PaymentMethodSetDefaultAction) update action.
+	Default bool `json:"default"`
+	// Default Payment Method before the [Set Default](ctp:api:type:PaymentMethodSetDefaultAction) update action.
+	OldDefault bool `json:"oldDefault"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodDefaultSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodDefaultSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodDefaultSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodDefaultSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodDefaultSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete PaymentMethod](/projects/payment-methods#delete-paymentmethod) request.
+*
+ */
+type PaymentMethodDeletedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The [PaymentMethod](ctp:api:type:PaymentMethod) that was deleted.
+	PaymentMethod PaymentMethod `json:"paymentMethod"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodDeletedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodDeletedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodDeletedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodDeletedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field to a PaymentMethodInfo using the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action on Payments and the [Set MethodInfo CustomField](ctp:api:type:MyPaymentSetMethodInfoCustomFieldAction) update action on My Payments. If a Custom Field already exists with the same name, a [PaymentMethodInfoCustomFieldChanged](ctp:api:type:PaymentMethodInfoCustomFieldChangedMessage) Message is generated instead.
+*
+ */
+type PaymentMethodInfoCustomFieldAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoCustomFieldAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoCustomFieldAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomFieldAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomFieldAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after changing an existing Custom Field on a PaymentMethodInfo using the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action on Payments and the [Set MethodInfo CustomField](ctp:api:type:MyPaymentSetMethodInfoCustomFieldAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomFieldChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoCustomFieldChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoCustomFieldChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomFieldChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomFieldChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Field from a PaymentMethodInfo using the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action on Payments and the [Set MethodInfo CustomField](ctp:api:type:MyPaymentSetMethodInfoCustomFieldAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomFieldRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoCustomFieldRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoCustomFieldRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomFieldRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomFieldRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing Custom Fields from a PaymentMethodInfo using the [Set MethodInfo Custom Type](ctp:api:type:PaymentSetMethodInfoCustomTypeAction) update action on Payments and the [Set MethodInfo Custom Type](ctp:api:type:MyPaymentSetMethodInfoCustomTypeAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomTypeRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `id` of the [Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoCustomTypeRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoCustomTypeRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomTypeRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomTypeRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding Custom Fields to a PaymentMethodInfo using the [Set MethodInfo Custom Type](ctp:api:type:PaymentSetMethodInfoCustomTypeAction) update action on Payments and the [Set MethodInfo Custom Type](ctp:api:type:MyPaymentSetMethodInfoCustomTypeAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomTypeSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Custom Fields that were set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoCustomTypeSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoCustomTypeSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomTypeSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomTypeSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo InterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action on Payments and [Set MethodInfo InterfaceAccount](ctp:api:type:MyPaymentSetMethodInfoInterfaceAccountAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoInterfaceAccountSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Interface account of the Payment Method after the [Set MethodInfo InterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Interface account of the Payment Method before the [Set MethodInfo InterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action.
+	OldInterfaceAccount *string `json:"oldInterfaceAccount,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoInterfaceAccountSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoInterfaceAccountSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoInterfaceAccountSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoInterfaceAccountSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoInterfaceAccountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Interface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
+*
+ */
+type PaymentMethodInfoInterfaceSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Payment interface of the Payment Method after the [Set MethodInfo Interface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
+	Interface *string `json:"interface,omitempty"`
+	// Payment interface of the Payment Method before the [Set MethodInfo Interface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
+	OldInterface *string `json:"oldInterface,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoInterfaceSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoInterfaceSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoInterfaceSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoInterfaceSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoInterfaceSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Method](ctp:api:type:PaymentSetMethodInfoMethodAction) update action.
+*
+ */
+type PaymentMethodInfoMethodSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Payment Method after the [Set MethodInfo Method](ctp:api:type:PaymentSetMethodInfoMethodAction) update action.
+	Method *string `json:"method,omitempty"`
+	// Payment Method before the [Set MethodInfo Method](ctp:api:type:PaymentSetMethodInfoMethodAction) update action.
+	OldMethod *string `json:"oldMethod,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoMethodSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoMethodSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoMethodSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoMethodSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoMethodSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Name](ctp:api:type:PaymentSetMethodInfoNameAction) update action.
+*
+ */
+type PaymentMethodInfoNameSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Payment Method after the [Set MethodInfo Name](ctp:api:type:PaymentSetMethodInfoNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Name of the Payment Method before the [Set MethodInfo Name](ctp:api:type:PaymentSetMethodInfoNameAction) update action.
+	OldName *LocalizedString `json:"oldName,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoNameSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoNameSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoNameSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoNameSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Token](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+*
+ */
+type PaymentMethodInfoTokenSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Token of the Payment Method after the [Set MethodInfo Token](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+	Token *PaymentMethodToken `json:"token,omitempty"`
+	// Token of the Payment Method before the [Set MethodInfo Token](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+	OldToken *PaymentMethodToken `json:"oldToken,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInfoTokenSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInfoTokenSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoTokenSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoTokenSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoTokenSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set InterfaceAccount](ctp:api:type:PaymentMethodSetInterfaceAccountAction) update action.
+*
+ */
+type PaymentMethodInterfaceAccountSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Interface account of the Payment Method after the [Set InterfaceAccount](ctp:api:type:PaymentMethodSetInterfaceAccountAction) update action.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Interface account of the Payment Method before the [Set InterfaceAccount](ctp:api:type:PaymentMethodSetInterfaceAccountAction) update action.
+	OldInterfaceAccount *string `json:"oldInterfaceAccount,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodInterfaceAccountSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodInterfaceAccountSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInterfaceAccountSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInterfaceAccountSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInterfaceAccountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:PaymentMethodSetKeyAction) update action.
+*
+ */
+type PaymentMethodKeySetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `key` value of the [PaymentMethod](ctp:api:type:PaymentMethod) after the [Set Key](ctp:api:type:PaymentMethodSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [PaymentMethod](ctp:api:type:PaymentMethod) before the [Set Key](ctp:api:type:PaymentMethodSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodKeySetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodKeySetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodKeySetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodKeySetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Method](ctp:api:type:PaymentMethodSetMethodAction) update action.
+*
+ */
+type PaymentMethodMethodSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Payment Method after the [Set Method](ctp:api:type:PaymentMethodSetMethodAction) update action.
+	Method *string `json:"method,omitempty"`
+	// Payment Method before the [Set Method](ctp:api:type:PaymentMethodSetMethodAction) update action.
+	OldMethod *string `json:"oldMethod,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodMethodSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodMethodSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodMethodSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodMethodSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodMethodSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Name](ctp:api:type:PaymentMethodSetNameAction) update action.
+*
+ */
+type PaymentMethodNameSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Payment Method after the [Set Name](ctp:api:type:PaymentMethodSetNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Name of the Payment Method before the [Set Name](ctp:api:type:PaymentMethodSetNameAction) update action.
+	OldName *LocalizedString `json:"oldName,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodNameSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodNameSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodNameSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodNameSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set PaymentInterface](ctp:api:type:PaymentMethodSetPaymentInterfaceAction) update action.
+*
+ */
+type PaymentMethodPaymentInterfaceSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Payment interface of the Payment Method after the [Set PaymentInterface](ctp:api:type:PaymentMethodSetPaymentInterfaceAction) update action.
+	PaymentInterface *string `json:"paymentInterface,omitempty"`
+	// Payment interface of the Payment Method before the [Set PaymentInterface](ctp:api:type:PaymentMethodSetPaymentInterfaceAction) update action.
+	OldPaymentInterface *string `json:"oldPaymentInterface,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodPaymentInterfaceSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodPaymentInterfaceSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodPaymentInterfaceSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodPaymentInterfaceSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodPaymentInterfaceSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set PaymentMethodStatus](ctp:api:type:PaymentMethodSetPaymentMethodStatusAction) update action.
+*
+ */
+type PaymentMethodPaymentMethodStatusSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Status of the Payment Method after the [Set PaymentMethodStatus](ctp:api:type:PaymentMethodSetPaymentMethodStatusAction) update action.
+	Status *PaymentMethodStatus `json:"status,omitempty"`
+	// Status of the Payment Method before the [Set PaymentMethodStatus](ctp:api:type:PaymentMethodSetPaymentMethodStatusAction) update action.
+	OldStatus *PaymentMethodStatus `json:"oldStatus,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentMethodPaymentMethodStatusSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias PaymentMethodPaymentMethodStatusSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodPaymentMethodStatusSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodPaymentMethodStatusSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodPaymentMethodStatusSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action.
 *
  */
@@ -14521,6 +17311,9 @@ type ProductTailoringCreatedMessage struct {
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 	// The variants of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
 	Variants []ProductVariantTailoring `json:"variants"`
+	// Attributes of the tailored Product.
+	// If available, these Attributes are selectively merged into the `attributes` of the corresponding [Product](ctp:api:type:Product). If the Product contains an Attribute with the same `name`, then its `value` is overwritten. Otherwise, the Attribute and its `value` are added to the Product.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 	// `true` if the ProductTailoring is published.
 	Published bool `json:"published"`
 }
@@ -14562,6 +17355,10 @@ func (obj ProductTailoringCreatedMessage) MarshalJSON() ([]byte, error) {
 
 	if raw["variants"] == nil {
 		delete(raw, "variants")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	return json.Marshal(raw)
@@ -16069,6 +18866,679 @@ func (obj QuoteStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Create RecurringOrder](ctp:api:endpoint:/{projectKey}/recurring-orders:POST) request.
+*
+ */
+type RecurringOrderCreatedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [RecurringOrder](ctp:api:type:RecurringOrder) that was created.
+	Order RecurringOrder `json:"order"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderCreatedMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderCreatedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCreatedMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCreatedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field using the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction).
+*
+ */
+type RecurringOrderCustomFieldAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderCustomFieldAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderCustomFieldAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomFieldAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomFieldAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when an existing Custom Field has been changed using the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) action.
+*
+ */
+type RecurringOrderCustomFieldChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) update action.
+	// When there has not been a Custom Field with the `name` on the Order before, an [Order Custom Field Added](ctp:api:type:RecurringOrderCustomFieldAddedMessage) Message is generated instead.
+	PreviousValue interface{} `json:"previousValue,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderCustomFieldChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderCustomFieldChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomFieldChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomFieldChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when a Custom Field has been removed from the Order using the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) action.
+*
+ */
+type RecurringOrderCustomFieldRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderCustomFieldRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderCustomFieldRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomFieldRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomFieldRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Custom Type](ctp:api:type:RecurringOrderSetCustomTypeAction) with empty parameters.
+*
+ */
+type RecurringOrderCustomTypeRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderCustomTypeRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderCustomTypeRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomTypeRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomTypeRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Custom Type](ctp:api:type:RecurringOrderSetCustomTypeAction).
+*
+ */
+type RecurringOrderCustomTypeSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The Custom Fields that have been set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderCustomTypeSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderCustomTypeSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomTypeSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomTypeSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:RecurringOrderSetKeyAction) update action.
+*
+ */
+type RecurringOrderKeySetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `key` value of the [RecurringOrder](ctp:api:type:RecurringOrder) after the [Set Key](ctp:api:type:RecurringOrderSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [RecurringOrder](ctp:api:type:RecurringOrder) before the [Set Key](ctp:api:type:RecurringOrderSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderKeySetMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderKeySetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderKeySetMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderKeySetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Schedule](ctp:api:type:RecurringOrderSetScheduleAction) update action.
+*
+ */
+type RecurringOrderScheduleSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Schedule](ctp:api:type:RecurrencePolicySchedule) of the Recurring Order after the [Set Schedule](ctp:api:type:RecurringOrderSetScheduleAction) update action.
+	RecurrencePolicySchedule RecurrencePolicySchedule `json:"recurrencePolicySchedule"`
+	// [Schedule](ctp:api:type:RecurrencePolicySchedule) of the Recurring Order before the [Set Schedule](ctp:api:type:RecurringOrderSetScheduleAction) update action.
+	OldRecurrencePolicySchedule RecurrencePolicySchedule `json:"oldRecurrencePolicySchedule"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderScheduleSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderScheduleSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.RecurrencePolicySchedule != nil {
+		var err error
+		obj.RecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.RecurrencePolicySchedule)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.OldRecurrencePolicySchedule != nil {
+		var err error
+		obj.OldRecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.OldRecurrencePolicySchedule)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderScheduleSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderScheduleSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderScheduleSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Starts At](ctp:api:type:RecurringOrderSetStartsAtAction) update action.
+*
+ */
+type RecurringOrderStartsAtSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Start date and time of the Recurring Order after the [Set Starts At](ctp:api:type:RecurringOrderSetStartsAtAction) update action.
+	StartsAt time.Time `json:"startsAt"`
+	// Start date and time of the Recurring Order before the [Set Starts At](ctp:api:type:RecurringOrderSetStartsAtAction) update action.
+	OldStartsAt time.Time `json:"oldStartsAt"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderStartsAtSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderStartsAtSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderStartsAtSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderStartsAtSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderStartsAtSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set RecurringOrderState](ctp:api:type:RecurringOrderSetStateAction) update action.
+*
+ */
+type RecurringOrderStateChangedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) after the [Set RecurringOrderState](ctp:api:type:RecurringOrderSetStateAction) update action.
+	State RecurringOrderState `json:"state"`
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) before the [Set RecurringOrderState](ctp:api:type:RecurringOrderSetStateAction) update action.
+	OldState *RecurringOrderState `json:"oldState,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderStateChangedMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderStateChangedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderStateChangedMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderStateChangedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderStateChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+*
+ */
+type RecurringOrderStateTransitionMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) after the [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) before the [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderStateTransitionMessage) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderStateTransitionMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderStateTransitionMessage) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderStateTransitionMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderStateTransition", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Add ReturnInfo](ctp:api:type:OrderAddReturnInfoAction) update action.
 *
  */
@@ -16401,6 +19871,166 @@ func (obj ReviewStateTransitionMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ReviewStateTransition", Alias: (*Alias)(&obj)})
+}
+
+type ShoppingListMessage interface{}
+
+func mapDiscriminatorShoppingListMessage(input interface{}) (ShoppingListMessage, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "ShoppingListLineItemAdded":
+		obj := ShoppingListLineItemAddedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "ShoppingListLineItemRemoved":
+		obj := ShoppingListLineItemRemovedMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Generated after a successful [Add ShoppingListLineItem](ctp:api:type:ShoppingListAddLineItemAction) update action.
+*
+ */
+type ShoppingListLineItemAddedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Line Item](ctp:api:type:ShoppingListLineItem) that was added to the [ShoppingList](ctp:api:type:ShoppingList).
+	LineItem ShoppingListLineItem `json:"lineItem"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ShoppingListLineItemAddedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ShoppingListLineItemAddedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShoppingListLineItemAddedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListLineItemAddedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ShoppingListLineItemAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove ShoppingListLineItem](ctp:api:type:ShoppingListRemoveLineItemAction) update action.
+*
+ */
+type ShoppingListLineItemRemovedMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// [Line Item](ctp:api:type:ShoppingListLineItem) that was removed from the [ShoppingList](ctp:api:type:ShoppingList).
+	LineItem ShoppingListLineItem `json:"lineItem"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ShoppingListLineItemRemovedMessage) UnmarshalJSON(data []byte) error {
+	type Alias ShoppingListLineItemRemovedMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShoppingListLineItemRemovedMessage) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListLineItemRemovedMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ShoppingListLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -18416,7 +22046,7 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		}
 		return obj, nil
 	case "AssociateRoleNameSet":
-		obj := AssociateRoleNameChangedMessagePayload{}
+		obj := AssociateRoleNameSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -18656,6 +22286,18 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "BusinessUnitTopLevelUnitSet":
+		obj := BusinessUnitTopLevelUnitSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "BusinessUnitTypeSet":
+		obj := BusinessUnitTypeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "CartDiscountCreated":
 		obj := CartDiscountCreatedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -18824,6 +22466,24 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "CustomerGroupAssignmentAdded":
+		obj := CustomerGroupAssignmentAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "CustomerGroupAssignmentRemoved":
+		obj := CustomerGroupAssignmentRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "CustomerGroupAssignmentsSet":
+		obj := CustomerGroupAssignmentsSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "CustomerGroupCustomFieldAdded":
 		obj := CustomerGroupCustomFieldAddedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -18902,6 +22562,30 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "DiscountGroupCreated":
+		obj := DiscountGroupCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DiscountGroupDeleted":
+		obj := DiscountGroupDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DiscountGroupKeySet":
+		obj := DiscountGroupKeySetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DiscountGroupSortOrderSet":
+		obj := DiscountGroupSortOrderSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "InventoryEntryCreated":
 		obj := InventoryEntryCreatedMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -18934,6 +22618,156 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "PaymentInteractionAdded":
 		obj := PaymentInteractionAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentInterfaceIdSet":
+		obj := PaymentInterfaceIdSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodCreated":
+		obj := PaymentMethodCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodCustomFieldAdded":
+		obj := PaymentMethodCustomFieldAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodCustomFieldChanged":
+		obj := PaymentMethodCustomFieldChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodCustomFieldRemoved":
+		obj := PaymentMethodCustomFieldRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodCustomTypeRemoved":
+		obj := PaymentMethodCustomTypeRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodCustomTypeSet":
+		obj := PaymentMethodCustomTypeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodDefaultSet":
+		obj := PaymentMethodDefaultSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodDeleted":
+		obj := PaymentMethodDeletedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomFieldAdded":
+		obj := PaymentMethodInfoCustomFieldAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomFieldChanged":
+		obj := PaymentMethodInfoCustomFieldChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomFieldRemoved":
+		obj := PaymentMethodInfoCustomFieldRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomTypeRemoved":
+		obj := PaymentMethodInfoCustomTypeRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoCustomTypeSet":
+		obj := PaymentMethodInfoCustomTypeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoInterfaceAccountSet":
+		obj := PaymentMethodInfoInterfaceAccountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoInterfaceSet":
+		obj := PaymentMethodInfoInterfaceSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoMethodSet":
+		obj := PaymentMethodInfoMethodSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoNameSet":
+		obj := PaymentMethodInfoNameSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInfoTokenSet":
+		obj := PaymentMethodInfoTokenSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodInterfaceAccountSet":
+		obj := PaymentMethodInterfaceAccountSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodKeySet":
+		obj := PaymentMethodKeySetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodMethodSet":
+		obj := PaymentMethodMethodSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodNameSet":
+		obj := PaymentMethodNameSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodPaymentInterfaceSet":
+		obj := PaymentMethodPaymentInterfaceSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "PaymentMethodPaymentMethodStatusSet":
+		obj := PaymentMethodPaymentMethodStatusSetMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -19303,6 +23137,86 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 		return obj, nil
 	case "QuoteStateTransition":
 		obj := QuoteStateTransitionMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderCreated":
+		obj := RecurringOrderCreatedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderCustomFieldAdded":
+		obj := RecurringOrderCustomFieldAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderCustomFieldChanged":
+		obj := RecurringOrderCustomFieldChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderCustomFieldRemoved":
+		obj := RecurringOrderCustomFieldRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderCustomTypeRemoved":
+		obj := RecurringOrderCustomTypeRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderCustomTypeSet":
+		obj := RecurringOrderCustomTypeSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderKeySet":
+		obj := RecurringOrderKeySetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderScheduleSet":
+		obj := RecurringOrderScheduleSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.RecurrencePolicySchedule != nil {
+			var err error
+			obj.RecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.RecurrencePolicySchedule)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.OldRecurrencePolicySchedule != nil {
+			var err error
+			obj.OldRecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.OldRecurrencePolicySchedule)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "RecurringOrderStartsAtSet":
+		obj := RecurringOrderStartsAtSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderStateChanged":
+		obj := RecurringOrderStateChangedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderStateTransition":
+		obj := RecurringOrderStateTransitionMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -19687,9 +23601,9 @@ func (obj ApprovalRuleDescriptionSetMessagePayload) MarshalJSON() ([]byte, error
 *
  */
 type ApprovalRuleKeySetMessagePayload struct {
-	// Description of the [ApprovalRule](ctp:api:type:ApprovalRule) after the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
+	// `key` value of the [ApprovalRule](ctp:api:type:ApprovalRule) after the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
 	Key *string `json:"key,omitempty"`
-	// Description of the [ApprovalRule](ctp:api:type:ApprovalRule) before the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
+	// `key` value of the [ApprovalRule](ctp:api:type:ApprovalRule) before the [Set Key](ctp:api:type:ApprovalRuleSetKeyAction) update action.
 	OldKey *string `json:"oldKey,omitempty"`
 }
 
@@ -19846,15 +23760,15 @@ func (obj AssociateRoleDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 *	Generated after a successful [Set Name](ctp:api:type:AssociateRoleSetNameAction) update action.
 *
  */
-type AssociateRoleNameChangedMessagePayload struct {
+type AssociateRoleNameSetMessagePayload struct {
 	// Updated name of the [AssociateRole](ctp:api:type:AssociateRole).
 	Name string `json:"name"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
-func (obj AssociateRoleNameChangedMessagePayload) MarshalJSON() ([]byte, error) {
-	type Alias AssociateRoleNameChangedMessagePayload
+func (obj AssociateRoleNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias AssociateRoleNameSetMessagePayload
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
@@ -20638,6 +24552,52 @@ func (obj BusinessUnitStoresSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated when a [Business Unit](ctp:api:type:BusinessUnit) `topLevelUnit` is modified due to a hierarchy change after a successful [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) or [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+*
+ */
+type BusinessUnitTopLevelUnitSetMessagePayload struct {
+	// Top-level unit of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) or [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	TopLevelUnit BusinessUnitKeyReference `json:"topLevelUnit"`
+	// Top-level unit of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) or [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) update action.
+	OldTopLevelUnit BusinessUnitKeyReference `json:"oldTopLevelUnit"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitTopLevelUnitSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitTopLevelUnitSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitTopLevelUnitSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+*
+ */
+type BusinessUnitTypeSetMessagePayload struct {
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	ParentUnit *BusinessUnitKeyReference `json:"parentUnit,omitempty"`
+	// Parent unit of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	OldParentUnit *BusinessUnitKeyReference `json:"oldParentUnit,omitempty"`
+	// Type of the [Business Unit](ctp:api:type:BusinessUnit) after the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	UnitType BusinessUnitType `json:"unitType"`
+	// Type of the [Business Unit](ctp:api:type:BusinessUnit) before the [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action.
+	OldUnitType BusinessUnitType `json:"oldUnitType"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitTypeSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitTypeSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "BusinessUnitTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) request.
 *
  */
@@ -21141,7 +25101,7 @@ func (obj CustomerEmailChangedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create email token for Customer](ctp:api:endpoint:/{projectKey}/customers/email-token:POST) request. The `resource` property of the Message is a [CustomerEmailTokenReference](ctp:api:type:CustomerEmailTokenReference).
+*	Generated after a successful [Create email token for Customer](ctp:api:endpoint:/{projectKey}/customers/email-token:POST) or [Create email token for Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/email-token:POST) request. The `resource` property of the Message is a [CustomerEmailTokenReference](ctp:api:type:CustomerEmailTokenReference).
 *
  */
 type CustomerEmailTokenCreatedMessagePayload struct {
@@ -21149,6 +25109,10 @@ type CustomerEmailTokenCreatedMessagePayload struct {
 	CustomerId string `json:"customerId"`
 	// Date and time (UTC) the email token expires.
 	ExpiresAt time.Time `json:"expiresAt"`
+	// Value of the token, present only if the token's validity is 60 minutes or less.
+	Value *string `json:"value,omitempty"`
+	// If `true`, all email tokens issued previously for the Customer are invalidated.
+	InvalidateOlderTokens bool `json:"invalidateOlderTokens"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -21195,6 +25159,78 @@ func (obj CustomerFirstNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "CustomerFirstNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Add CustomerGroupAssignment](ctp:api:type:CustomerAddCustomerGroupAssignmentAction) update action.
+*
+ */
+type CustomerGroupAssignmentAddedMessagePayload struct {
+	// Customer Group assigned to the Customer during the [Add CustomerGroupAssignment](ctp:api:type:CustomerAddCustomerGroupAssignmentAction) update action.
+	CustomerGroupAssignment CustomerGroupAssignment `json:"customerGroupAssignment"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupAssignmentAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupAssignmentAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupAssignmentAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove CustomerGroupAssignment](ctp:api:type:CustomerRemoveCustomerGroupAssignmentAction) update action.
+*
+ */
+type CustomerGroupAssignmentRemovedMessagePayload struct {
+	// Customer Group removed during the [Remove CustomerGroupAssignment](ctp:api:type:CustomerRemoveCustomerGroupAssignmentAction) update action.
+	CustomerGroupAssignment CustomerGroupAssignment `json:"customerGroupAssignment"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupAssignmentRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupAssignmentRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupAssignmentRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set CustomerGroupAssignments](ctp:api:type:CustomerSetCustomerGroupAssignmentsAction) update action.
+*
+ */
+type CustomerGroupAssignmentsSetMessagePayload struct {
+	// Customer Groups assigned to the Customer during the [Set CustomerGroupAssignments](ctp:api:type:CustomerSetCustomerGroupAssignmentsAction) update action.
+	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CustomerGroupAssignmentsSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias CustomerGroupAssignmentsSetMessagePayload
+	data, err := json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "CustomerGroupAssignmentsSet", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -21340,7 +25376,7 @@ func (obj CustomerLastNameSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create password reset token for Customer](ctp:api:endpoint:/{projectKey}/customers/password-token:POST) request. The `resource` property of the Message is a [CustomerPasswordTokenReference](ctp:api:type:CustomerPasswordTokenReference).
+*	Generated after a successful [Create password reset token for Customer](ctp:api:endpoint:/{projectKey}/customers/password-token:POST) or [Create password reset token for Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password-token:POST) request. The `resource` property of the Message is a [CustomerPasswordTokenReference](ctp:api:type:CustomerPasswordTokenReference).
 *
  */
 type CustomerPasswordTokenCreatedMessagePayload struct {
@@ -21348,6 +25384,10 @@ type CustomerPasswordTokenCreatedMessagePayload struct {
 	CustomerId string `json:"customerId"`
 	// Date and time (UTC) the password token expires.
 	ExpiresAt time.Time `json:"expiresAt"`
+	// Value of the token, present only if the token's validity is 60 minutes or less.
+	Value *string `json:"value,omitempty"`
+	// If `true`, all password tokens issued previously for the Customer are invalidated.
+	InvalidateOlderTokens bool `json:"invalidateOlderTokens"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -21453,6 +25493,84 @@ func (obj DiscountCodeKeySetMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "DiscountCodeKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups:POST) request.
+*
+ */
+type DiscountGroupCreatedMessagePayload struct {
+	// The DiscountGroup that was created.
+	DiscountGroup DiscountGroup `json:"discountGroup"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups/{id}:DELETE) request.
+*
+ */
+type DiscountGroupDeletedMessagePayload struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:DiscountGroupSetKeyAction) update action.
+*
+ */
+type DiscountGroupKeySetMessagePayload struct {
+	// `key` value of the [DiscountGroup](ctp:api:type:DiscountGroup) after the [Set Key](ctp:api:type:DiscountGroupSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [DiscountGroup](ctp:api:type:DiscountGroup) before the [Set Key](ctp:api:type:DiscountGroupSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupKeySetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupKeySetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set SortOrder](ctp:api:type:DiscountGroupSetSortOrderAction) update action.
+*
+ */
+type DiscountGroupSortOrderSetMessagePayload struct {
+	// `sortOrder` value of the [DiscountGroup](ctp:api:type:DiscountGroup) after the [Set SortOrder](ctp:api:type:DiscountGroupSetSortOrderAction) update action.
+	SortOrder *string `json:"sortOrder,omitempty"`
+	// `sortOrder` value of the [DiscountGroup](ctp:api:type:DiscountGroup) before the [Set SortOrder](ctp:api:type:DiscountGroupSetSortOrderAction) update action.
+	OldSortOrder *string `json:"oldSortOrder,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupSortOrderSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupSortOrderSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "DiscountGroupSortOrderSet", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -21605,6 +25723,18 @@ func mapDiscriminatorOrderMessagePayload(input interface{}) (OrderMessagePayload
 		return obj, nil
 	case "OrderBillingAddressSet":
 		obj := OrderBillingAddressSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OrderBusinessUnitSet":
+		obj := OrderBusinessUnitSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OrderCreatedFromRecurringOrder":
+		obj := OrderCreatedFromRecurringOrderMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -22150,6 +26280,48 @@ func (obj OrderBillingAddressSetMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "OrderBillingAddressSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Business Unit](ctp:api:type:OrderSetBusinessUnitAction) update action on Orders or [Set Business Unit](ctp:api:type:StagedOrderSetBusinessUnitAction) update action on Order Edits.
+*
+ */
+type OrderBusinessUnitSetMessagePayload struct {
+	// [BusinessUnit](ctp:api:type:BusinessUnit) on the [Order](ctp:api:type:Order) after the [Set Business Unit](ctp:api:type:OrderSetBusinessUnitAction) update action on Orders or [Set Business Unit](ctp:api:type:StagedOrderSetBusinessUnitAction) update action on Order Edits.
+	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
+	// [BusinessUnit](ctp:api:type:BusinessUnit) on the [Order](ctp:api:type:Order) before the [Set Business Unit](ctp:api:type:OrderSetBusinessUnitAction) update action on Orders or [Set Business Unit](ctp:api:type:StagedOrderSetBusinessUnitAction) update action on Order Edits.
+	OldbusinessUnit *BusinessUnitKeyReference `json:"oldbusinessUnit,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderBusinessUnitSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderBusinessUnitSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderBusinessUnitSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after an Order is successfully created according to the defined schedule of a Recurring Order.
+*
+ */
+type OrderCreatedFromRecurringOrderMessagePayload struct {
+	// [Order](ctp:api:type:Order) that was created.
+	Order Order `json:"order"`
+	// Reference to the origin [Recurring Order](ctp:api:type:RecurringOrder).
+	RecurringOrderRef RecurringOrderReference `json:"recurringOrderRef"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderCreatedFromRecurringOrderMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias OrderCreatedFromRecurringOrderMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OrderCreatedFromRecurringOrder", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -23079,6 +27251,521 @@ func (obj PaymentInteractionAddedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Set InterfaceId](ctp:api:type:PaymentSetInterfaceIdAction) update action.
+*
+ */
+type PaymentInterfaceIdSetMessagePayload struct {
+	// Interface ID of the Payment after the [Set InterfaceId](ctp:api:type:PaymentSetInterfaceIdAction) update action.
+	InterfaceId *string `json:"interfaceId,omitempty"`
+	// Interface ID of the Payment before the [Set InterfaceId](ctp:api:type:PaymentSetInterfaceIdAction) update action.
+	OldInterfaceId *string `json:"oldInterfaceId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentInterfaceIdSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentInterfaceIdSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentInterfaceIdSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Create PaymentMethod](ctp:api:endpoint:/{projectKey}/payment-methods:POST) request.
+*
+ */
+type PaymentMethodCreatedMessagePayload struct {
+	// [PaymentMethod](ctp:api:type:PaymentMethod) that was created.
+	PaymentMethod PaymentMethod `json:"paymentMethod"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field to a Payment Method using the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action. If a Custom Field already exists with the same name, a [PaymentMethodCustomFieldChanged](ctp:api:type:PaymentMethodCustomFieldChangedMessage) Message is generated instead.
+*
+ */
+type PaymentMethodCustomFieldAddedMessagePayload struct {
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomFieldAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomFieldAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after changing an existing Custom Field on a Payment Method using the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+*
+ */
+type PaymentMethodCustomFieldChangedMessagePayload struct {
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+	OldValue interface{} `json:"oldValue,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomFieldChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomFieldChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Field from a Payment Method using the [Set CustomField](ctp:api:type:PaymentMethodSetCustomFieldAction) update action.
+*
+ */
+type PaymentMethodCustomFieldRemovedMessagePayload struct {
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomFieldRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomFieldRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Type from a Payment Method using the [Set Custom Type](ctp:api:type:PaymentMethodSetCustomTypeAction) update action.
+*
+ */
+type PaymentMethodCustomTypeRemovedMessagePayload struct {
+	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomTypeRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomTypeRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Type to a Payment Method using the [Set Custom Type](ctp:api:type:PaymentMethodSetCustomTypeAction) update action.
+*
+ */
+type PaymentMethodCustomTypeSetMessagePayload struct {
+	// The Custom Fields that were set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodCustomTypeSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodCustomTypeSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Default](ctp:api:type:PaymentMethodSetDefaultAction) update action.
+*
+ */
+type PaymentMethodDefaultSetMessagePayload struct {
+	// Default Payment Method after the [Set Default](ctp:api:type:PaymentMethodSetDefaultAction) update action.
+	Default bool `json:"default"`
+	// Default Payment Method before the [Set Default](ctp:api:type:PaymentMethodSetDefaultAction) update action.
+	OldDefault bool `json:"oldDefault"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodDefaultSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodDefaultSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodDefaultSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Delete PaymentMethod](/projects/payment-methods#delete-paymentmethod) request.
+*
+ */
+type PaymentMethodDeletedMessagePayload struct {
+	// The [PaymentMethod](ctp:api:type:PaymentMethod) that was deleted.
+	PaymentMethod PaymentMethod `json:"paymentMethod"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodDeletedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodDeletedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodDeleted", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field to a PaymentMethodInfo using the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action on Payments and the [Set MethodInfo CustomField](ctp:api:type:MyPaymentSetMethodInfoCustomFieldAction) update action on My Payments. If a Custom Field already exists with the same name, a [PaymentMethodInfoCustomFieldChanged](ctp:api:type:PaymentMethodInfoCustomFieldChangedMessage) Message is generated instead.
+*
+ */
+type PaymentMethodInfoCustomFieldAddedMessagePayload struct {
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomFieldAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomFieldAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after changing an existing Custom Field on a PaymentMethodInfo using the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action on Payments and the [Set MethodInfo CustomField](ctp:api:type:MyPaymentSetMethodInfoCustomFieldAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomFieldChangedMessagePayload struct {
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomFieldChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomFieldChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing a Custom Field from a PaymentMethodInfo using the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action on Payments and the [Set MethodInfo CustomField](ctp:api:type:MyPaymentSetMethodInfoCustomFieldAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomFieldRemovedMessagePayload struct {
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomFieldRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomFieldRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after removing Custom Fields from a PaymentMethodInfo using the [Set MethodInfo Custom Type](ctp:api:type:PaymentSetMethodInfoCustomTypeAction) update action on Payments and the [Set MethodInfo Custom Type](ctp:api:type:MyPaymentSetMethodInfoCustomTypeAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomTypeRemovedMessagePayload struct {
+	// `id` of the [Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomTypeRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomTypeRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding Custom Fields to a PaymentMethodInfo using the [Set MethodInfo Custom Type](ctp:api:type:PaymentSetMethodInfoCustomTypeAction) update action on Payments and the [Set MethodInfo Custom Type](ctp:api:type:MyPaymentSetMethodInfoCustomTypeAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoCustomTypeSetMessagePayload struct {
+	// The Custom Fields that were set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	OldTypeId *string `json:"oldTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoCustomTypeSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoCustomTypeSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo InterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action on Payments and [Set MethodInfo InterfaceAccount](ctp:api:type:MyPaymentSetMethodInfoInterfaceAccountAction) update action on My Payments.
+*
+ */
+type PaymentMethodInfoInterfaceAccountSetMessagePayload struct {
+	// Interface account of the Payment Method after the [Set MethodInfo InterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Interface account of the Payment Method before the [Set MethodInfo InterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action.
+	OldInterfaceAccount *string `json:"oldInterfaceAccount,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoInterfaceAccountSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoInterfaceAccountSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoInterfaceAccountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Interface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
+*
+ */
+type PaymentMethodInfoInterfaceSetMessagePayload struct {
+	// Payment interface of the Payment Method after the [Set MethodInfo Interface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
+	Interface *string `json:"interface,omitempty"`
+	// Payment interface of the Payment Method before the [Set MethodInfo Interface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
+	OldInterface *string `json:"oldInterface,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoInterfaceSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoInterfaceSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoInterfaceSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Method](ctp:api:type:PaymentSetMethodInfoMethodAction) update action.
+*
+ */
+type PaymentMethodInfoMethodSetMessagePayload struct {
+	// Payment Method after the [Set MethodInfo Method](ctp:api:type:PaymentSetMethodInfoMethodAction) update action.
+	Method *string `json:"method,omitempty"`
+	// Payment Method before the [Set MethodInfo Method](ctp:api:type:PaymentSetMethodInfoMethodAction) update action.
+	OldMethod *string `json:"oldMethod,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoMethodSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoMethodSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoMethodSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Name](ctp:api:type:PaymentSetMethodInfoNameAction) update action.
+*
+ */
+type PaymentMethodInfoNameSetMessagePayload struct {
+	// Name of the Payment Method after the [Set MethodInfo Name](ctp:api:type:PaymentSetMethodInfoNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Name of the Payment Method before the [Set MethodInfo Name](ctp:api:type:PaymentSetMethodInfoNameAction) update action.
+	OldName *LocalizedString `json:"oldName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoNameSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set MethodInfo Token](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+*
+ */
+type PaymentMethodInfoTokenSetMessagePayload struct {
+	// Token of the Payment Method after the [Set MethodInfo Token](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+	Token *PaymentMethodToken `json:"token,omitempty"`
+	// Token of the Payment Method before the [Set MethodInfo Token](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+	OldToken *PaymentMethodToken `json:"oldToken,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInfoTokenSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInfoTokenSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInfoTokenSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set InterfaceAccount](ctp:api:type:PaymentMethodSetInterfaceAccountAction) update action.
+*
+ */
+type PaymentMethodInterfaceAccountSetMessagePayload struct {
+	// Interface account of the Payment Method after the [Set InterfaceAccount](ctp:api:type:PaymentMethodSetInterfaceAccountAction) update action.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Interface account of the Payment Method before the [Set InterfaceAccount](ctp:api:type:PaymentMethodSetInterfaceAccountAction) update action.
+	OldInterfaceAccount *string `json:"oldInterfaceAccount,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodInterfaceAccountSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodInterfaceAccountSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodInterfaceAccountSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:PaymentMethodSetKeyAction) update action.
+*
+ */
+type PaymentMethodKeySetMessagePayload struct {
+	// `key` value of the [PaymentMethod](ctp:api:type:PaymentMethod) after the [Set Key](ctp:api:type:PaymentMethodSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [PaymentMethod](ctp:api:type:PaymentMethod) before the [Set Key](ctp:api:type:PaymentMethodSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodKeySetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodKeySetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodKeySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Method](ctp:api:type:PaymentMethodSetMethodAction) update action.
+*
+ */
+type PaymentMethodMethodSetMessagePayload struct {
+	// Payment Method after the [Set Method](ctp:api:type:PaymentMethodSetMethodAction) update action.
+	Method *string `json:"method,omitempty"`
+	// Payment Method before the [Set Method](ctp:api:type:PaymentMethodSetMethodAction) update action.
+	OldMethod *string `json:"oldMethod,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodMethodSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodMethodSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodMethodSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Name](ctp:api:type:PaymentMethodSetNameAction) update action.
+*
+ */
+type PaymentMethodNameSetMessagePayload struct {
+	// Name of the Payment Method after the [Set Name](ctp:api:type:PaymentMethodSetNameAction) update action.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Name of the Payment Method before the [Set Name](ctp:api:type:PaymentMethodSetNameAction) update action.
+	OldName *LocalizedString `json:"oldName,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodNameSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodNameSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodNameSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set PaymentInterface](ctp:api:type:PaymentMethodSetPaymentInterfaceAction) update action.
+*
+ */
+type PaymentMethodPaymentInterfaceSetMessagePayload struct {
+	// Payment interface of the Payment Method after the [Set PaymentInterface](ctp:api:type:PaymentMethodSetPaymentInterfaceAction) update action.
+	PaymentInterface *string `json:"paymentInterface,omitempty"`
+	// Payment interface of the Payment Method before the [Set PaymentInterface](ctp:api:type:PaymentMethodSetPaymentInterfaceAction) update action.
+	OldPaymentInterface *string `json:"oldPaymentInterface,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodPaymentInterfaceSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodPaymentInterfaceSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodPaymentInterfaceSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set PaymentMethodStatus](ctp:api:type:PaymentMethodSetPaymentMethodStatusAction) update action.
+*
+ */
+type PaymentMethodPaymentMethodStatusSetMessagePayload struct {
+	// Status of the Payment Method after the [Set PaymentMethodStatus](ctp:api:type:PaymentMethodSetPaymentMethodStatusAction) update action.
+	Status *PaymentMethodStatus `json:"status,omitempty"`
+	// Status of the Payment Method before the [Set PaymentMethodStatus](ctp:api:type:PaymentMethodSetPaymentMethodStatusAction) update action.
+	OldStatus *PaymentMethodStatus `json:"oldStatus,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentMethodPaymentMethodStatusSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias PaymentMethodPaymentMethodStatusSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "PaymentMethodPaymentMethodStatusSet", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Set StatusInterfaceCode](ctp:api:type:PaymentSetStatusInterfaceCodeAction) update action.
 *
  */
@@ -23881,6 +28568,9 @@ type ProductTailoringCreatedMessagePayload struct {
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 	// The variants of the [Product Tailoring](ctp:api:type:ProductTailoring) at the time of creation.
 	Variants []ProductVariantTailoring `json:"variants"`
+	// Attributes of the tailored Product.
+	// If available, these Attributes are selectively merged into the `attributes` of the corresponding [Product](ctp:api:type:Product). If the Product contains an Attribute with the same `name`, then its `value` is overwritten. Otherwise, the Attribute and its `value` are added to the Product.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 	// `true` if the ProductTailoring is published.
 	Published bool `json:"published"`
 }
@@ -23904,6 +28594,10 @@ func (obj ProductTailoringCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 
 	if raw["variants"] == nil {
 		delete(raw, "variants")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	return json.Marshal(raw)
@@ -24475,6 +29169,280 @@ func (obj QuoteStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after a successful [Create RecurringOrder](ctp:api:endpoint:/{projectKey}/recurring-orders:POST) request.
+*
+ */
+type RecurringOrderCreatedMessagePayload struct {
+	// [RecurringOrder](ctp:api:type:RecurringOrder) that was created.
+	Order RecurringOrder `json:"order"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCreatedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCreatedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCreated", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after adding a Custom Field using the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction).
+*
+ */
+type RecurringOrderCustomFieldAddedMessagePayload struct {
+	// Name of the Custom Field that was added.
+	Name string `json:"name"`
+	// The added [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType).
+	Value interface{} `json:"value"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomFieldAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomFieldAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomFieldAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when an existing Custom Field has been changed using the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) action.
+*
+ */
+type RecurringOrderCustomFieldChangedMessagePayload struct {
+	// Name of the Custom Field that changed.
+	Name string `json:"name"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) after the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) update action.
+	Value interface{} `json:"value"`
+	// [CustomFieldValue](ctp:api:type:CustomFieldValue) based on the [FieldType](ctp:api:type:FieldType) before the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) update action.
+	// When there has not been a Custom Field with the `name` on the Order before, an [Order Custom Field Added](ctp:api:type:RecurringOrderCustomFieldAddedMessage) Message is generated instead.
+	PreviousValue interface{} `json:"previousValue,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomFieldChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomFieldChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomFieldChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated when a Custom Field has been removed from the Order using the [Set CustomField](ctp:api:type:RecurringOrderSetCustomFieldAction) action.
+*
+ */
+type RecurringOrderCustomFieldRemovedMessagePayload struct {
+	// Name of the Custom Field that was removed.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomFieldRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomFieldRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomFieldRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Custom Type](ctp:api:type:RecurringOrderSetCustomTypeAction) with empty parameters.
+*
+ */
+type RecurringOrderCustomTypeRemovedMessagePayload struct {
+	// `id` of the [Custom Type](ctp:api:type:Type) that was removed. Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomTypeRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomTypeRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomTypeRemoved", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Custom Type](ctp:api:type:RecurringOrderSetCustomTypeAction).
+*
+ */
+type RecurringOrderCustomTypeSetMessagePayload struct {
+	// The Custom Fields that have been set.
+	CustomFields CustomFields `json:"customFields"`
+	// `id` of the previous [Custom Type](ctp:api:type:Type). Absent if there was no previous Custom Type present.
+	PreviousTypeId *string `json:"previousTypeId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderCustomTypeSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderCustomTypeSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderCustomTypeSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Key](ctp:api:type:RecurringOrderSetKeyAction) update action.
+*
+ */
+type RecurringOrderKeySetMessagePayload struct {
+	// `key` value of the [RecurringOrder](ctp:api:type:RecurringOrder) after the [Set Key](ctp:api:type:RecurringOrderSetKeyAction) update action.
+	Key *string `json:"key,omitempty"`
+	// `key` value of the [RecurringOrder](ctp:api:type:RecurringOrder) before the [Set Key](ctp:api:type:RecurringOrderSetKeyAction) update action.
+	OldKey *string `json:"oldKey,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderKeySetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderKeySetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderKeySet", Alias: (*Alias)(&obj)})
+}
+
+type RecurringOrderMessagePayload interface{}
+
+func mapDiscriminatorRecurringOrderMessagePayload(input interface{}) (RecurringOrderMessagePayload, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+
+	}
+	return nil, nil
+}
+
+/**
+*	Generated after a successful [Set Schedule](ctp:api:type:RecurringOrderSetScheduleAction) update action.
+*
+ */
+type RecurringOrderScheduleSetMessagePayload struct {
+	// [Schedule](ctp:api:type:RecurrencePolicySchedule) of the Recurring Order after the [Set Schedule](ctp:api:type:RecurringOrderSetScheduleAction) update action.
+	RecurrencePolicySchedule RecurrencePolicySchedule `json:"recurrencePolicySchedule"`
+	// [Schedule](ctp:api:type:RecurrencePolicySchedule) of the Recurring Order before the [Set Schedule](ctp:api:type:RecurringOrderSetScheduleAction) update action.
+	OldRecurrencePolicySchedule RecurrencePolicySchedule `json:"oldRecurrencePolicySchedule"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderScheduleSetMessagePayload) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderScheduleSetMessagePayload
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.RecurrencePolicySchedule != nil {
+		var err error
+		obj.RecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.RecurrencePolicySchedule)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.OldRecurrencePolicySchedule != nil {
+		var err error
+		obj.OldRecurrencePolicySchedule, err = mapDiscriminatorRecurrencePolicySchedule(obj.OldRecurrencePolicySchedule)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderScheduleSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderScheduleSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderScheduleSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Starts At](ctp:api:type:RecurringOrderSetStartsAtAction) update action.
+*
+ */
+type RecurringOrderStartsAtSetMessagePayload struct {
+	// Start date and time of the Recurring Order after the [Set Starts At](ctp:api:type:RecurringOrderSetStartsAtAction) update action.
+	StartsAt time.Time `json:"startsAt"`
+	// Start date and time of the Recurring Order before the [Set Starts At](ctp:api:type:RecurringOrderSetStartsAtAction) update action.
+	OldStartsAt time.Time `json:"oldStartsAt"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderStartsAtSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderStartsAtSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderStartsAtSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set RecurringOrderState](ctp:api:type:RecurringOrderSetStateAction) update action.
+*
+ */
+type RecurringOrderStateChangedMessagePayload struct {
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) after the [Set RecurringOrderState](ctp:api:type:RecurringOrderSetStateAction) update action.
+	State RecurringOrderState `json:"state"`
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) before the [Set RecurringOrderState](ctp:api:type:RecurringOrderSetStateAction) update action.
+	OldState *RecurringOrderState `json:"oldState,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderStateChangedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderStateChangedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderStateChanged", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+*
+ */
+type RecurringOrderStateTransitionMessagePayload struct {
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) after the [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+	State StateReference `json:"state"`
+	// [RecurringOrderState](ctp:api:type:RecurringOrderState) before the [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+	OldState *StateReference `json:"oldState,omitempty"`
+	// Whether [State](ctp:api:type:State) transition validations were turned off during the [Transition State](ctp:api:type:RecurringOrderTransitionStateAction) update action.
+	Force bool `json:"force"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderStateTransitionMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrderStateTransition", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Add ReturnInfo](ctp:api:type:OrderAddReturnInfoAction) update action.
 *
  */
@@ -24634,6 +29602,74 @@ func (obj ReviewStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ReviewStateTransition", Alias: (*Alias)(&obj)})
+}
+
+type ShoppingListMessagePayload interface{}
+
+func mapDiscriminatorShoppingListMessagePayload(input interface{}) (ShoppingListMessagePayload, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "ShoppingListLineItemAdded":
+		obj := ShoppingListLineItemAddedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ShoppingListLineItemRemoved":
+		obj := ShoppingListLineItemRemovedMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Generated after a successful [Add ShoppingListLineItem](ctp:api:type:ShoppingListAddLineItemAction) update action.
+*
+ */
+type ShoppingListLineItemAddedMessagePayload struct {
+	// [Line Item](ctp:api:type:ShoppingListLineItem) that was added to the [ShoppingList](ctp:api:type:ShoppingList).
+	LineItem ShoppingListLineItem `json:"lineItem"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShoppingListLineItemAddedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListLineItemAddedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ShoppingListLineItemAdded", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Remove ShoppingListLineItem](ctp:api:type:ShoppingListRemoveLineItemAction) update action.
+*
+ */
+type ShoppingListLineItemRemovedMessagePayload struct {
+	// [Line Item](ctp:api:type:ShoppingListLineItem) that was removed from the [ShoppingList](ctp:api:type:ShoppingList).
+	LineItem ShoppingListLineItem `json:"lineItem"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShoppingListLineItemRemovedMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias ShoppingListLineItemRemovedMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ShoppingListLineItemRemoved", Alias: (*Alias)(&obj)})
 }
 
 type ShoppingListStoreSetMessagePayload struct {

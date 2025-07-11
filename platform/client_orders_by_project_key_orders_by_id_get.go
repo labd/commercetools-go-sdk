@@ -53,6 +53,10 @@ func (rb *ByProjectKeyOrdersByIDRequestMethodGet) WithHeaders(headers http.Heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves an Order with the provided `id`.
+ */
 func (rb *ByProjectKeyOrdersByIDRequestMethodGet) Execute(ctx context.Context) (result *Order, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

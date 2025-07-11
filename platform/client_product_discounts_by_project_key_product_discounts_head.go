@@ -55,7 +55,7 @@ func (rb *ByProjectKeyProductDiscountsRequestMethodHead) WithHeaders(headers htt
 }
 
 /**
-*	Checks if a ProductDiscount exists for a given Query Predicate. Returns a `200 OK` status if any ProductDiscounts match the Query Predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more ProductDiscounts exist for the provided query predicate. Returns a `200 OK` status if any ProductDiscounts match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyProductDiscountsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

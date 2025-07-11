@@ -55,6 +55,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsByIDRequestMethodGet) WithHeaders
 }
 
 /**
+*	Retrieves a Cart with the provided `id` in a [Store](ctp:api:type:Store).
+*
 *	If the Cart exists in the Project but does not have a `store` specified, or the `store` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *
 *	To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.

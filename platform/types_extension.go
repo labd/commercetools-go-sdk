@@ -28,7 +28,7 @@ type Extension struct {
 	// Describes what triggers the Extension.
 	Triggers []ExtensionTrigger `json:"triggers"`
 	// Maximum time (in milliseconds) that the Extension can respond within.
-	// If no timeout is provided, the default value is used for all types of Extensions.
+	// If no timeout is provided, the [default value](#time-limits) is used for all types of Extensions, including `payment` Extensions.
 	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
@@ -139,7 +139,7 @@ type ExtensionDraft struct {
 	// Describes what triggers the Extension.
 	Triggers []ExtensionTrigger `json:"triggers"`
 	// Maximum time (in milliseconds) the Extension can respond within.
-	// If no timeout is provided, the default value is used for all types of Extensions.
+	// If no timeout is provided, the [default value](/#time-limits) is used for all types of Extensions, including `payment` Extensions.
 	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
 	//
 	// This limit can be increased per Project after we review the performance impact.
@@ -221,6 +221,7 @@ const (
 	ExtensionResourceTypeIdCart          ExtensionResourceTypeId = "cart"
 	ExtensionResourceTypeIdOrder         ExtensionResourceTypeId = "order"
 	ExtensionResourceTypeIdPayment       ExtensionResourceTypeId = "payment"
+	ExtensionResourceTypeIdPaymentMethod ExtensionResourceTypeId = "payment-method"
 	ExtensionResourceTypeIdCustomer      ExtensionResourceTypeId = "customer"
 	ExtensionResourceTypeIdCustomerGroup ExtensionResourceTypeId = "customer-group"
 	ExtensionResourceTypeIdQuoteRequest  ExtensionResourceTypeId = "quote-request"
@@ -231,7 +232,7 @@ const (
 )
 
 type ExtensionTrigger struct {
-	// `cart`, `order`, `payment`, `customer`, `quote-request`, `staged-quote`, `quote`, `business-unit`, and `shopping-list` are supported.
+	// The resource that triggers the Extension.
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
 	// `Create` and `Update` requests are supported.
 	Actions []ExtensionAction `json:"actions"`
@@ -510,7 +511,7 @@ func (obj ExtensionSetKeyAction) MarshalJSON() ([]byte, error) {
 
 type ExtensionSetTimeoutInMsAction struct {
 	// Value to set. If not defined, the maximum value is used.
-	// If no timeout is provided, the default value is used for all types of Extensions.
+	// If no timeout is provided, the [default value](#time-limits) is used for all types of Extensions, including `payment` Extensions.
 	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
 	//
 	// This limit can be increased per Project after we review the performance impact.

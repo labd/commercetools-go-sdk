@@ -29,14 +29,15 @@ func (rb *ByProjectKeyDeploymentsRequestMethodPost) WithHeaders(headers http.Hea
 }
 
 /**
-*	Specific error codes:
+*	Specific Error Codes:
 *	- [ConnectorStagedNotPreviewable](ctp:connect:type:ConnectorStagedNotPreviewableError)
 *	- [DeploymentUnsupportedRegion](ctp:connect:type:DeploymentUnsupportedRegionError)
 *	- [DeploymentUnknownApplicationConfiguration](ctp:connect:type:DeploymentUnknownApplicationConfigurationError)
 *	- [DeploymentUnknownApplicationConfigurationKey](ctp:connect:type:DeploymentUnknownApplicationConfigurationKeyError)
-*	- [DeploymentApplicationDoNotBelong](ctp:connect:type:DeploymentApplicationDoNotBelongError)
-*	- [DeploymentMustIncludeApplication](ctp:connect:type:DeploymentMustIncludeApplicationError)
-*	- [DeploymentApplicationRequired](ctp:connect:type:DeploymentApplicationRequiredError)
+*	- [DeploymentInvalidType](ctp:connect:type:DeploymentInvalidTypeError)
+*	- [DeploymentProductionDeactivated](ctp:connect:type:DeploymentProductionDeactivatedError)
+*	|
+*	The `manage_api_clients:{projectKey}` scope is required if you use automatically generated API Client credentials.
 *
  */
 func (rb *ByProjectKeyDeploymentsRequestMethodPost) Execute(ctx context.Context) (result *Deployment, err error) {

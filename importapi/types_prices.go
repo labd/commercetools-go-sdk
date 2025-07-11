@@ -8,6 +8,7 @@ import (
 )
 
 type SubRate struct {
+	// Name of the SubRate.
 	Name   string  `json:"name"`
 	Amount float64 `json:"amount"`
 }
@@ -48,11 +49,11 @@ func (obj TaxRate) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The data representation for a price to be imported that is persisted as a [Price](/../api/types#price) in the Project.
+*	Represents the data used to import an [Embedded Price](/../api/pricing-and-discounts-overview#embedded-prices) . Once imported, this data is persisted as a [Price](/../api/types#price) in a Product Variant.
 *
  */
 type PriceImport struct {
-	// User-defined unique identifier for the Embedded Price. If a [Price](/../api/types#price) with this `key` exists on the specified `productVariant`, it will be updated with the imported data.
+	// User-defined unique identifier for the Embedded Price. If a [Price](/../api/types#price) with this `key` exists on the specified `productVariant`, it is updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Price.value`.
 	Value TypedMoney `json:"value"`
@@ -62,30 +63,24 @@ type PriceImport struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Maps to `Price.validUntil`.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// The Reference to the [CustomerGroup](/../api/projects/customerGroups#customergroup) with which the [Price](/../api/types#price) is associated.
-	// If referenced CustomerGroup does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary CustomerGroup is created.
+	// Maps to `Price.customerGroup`. If the referenced [CustomerGroup](ctp:api:type:CustomerGroup) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CustomerGroup is created.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
-	// The Reference to the [Channel](/../api/projects/channels#channel) with which the [Price](/../api/types#price) is associated.
-	// If referenced Channel does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Channel is created.
+	// Maps to `Price.channel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	Channel *ChannelKeyReference `json:"channel,omitempty"`
 	// Sets a discounted price from an external service.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// Only the [Embedded Price](/../api/types#price) updates will be published to `staged` and `current` projection.
+	// Only the [Embedded Price](/types#price) updates will be published to `staged` and `current` projection.
 	Publish *bool `json:"publish,omitempty"`
-	// - Set to `false` to update both the [current and staged projections](/../api/projects/productProjections#current--staged) of the [Product](/../api/projects/products#product) with the new Price data.
+	// - Set to `false` to update both the [current and staged projections](/../api/projects/productProjections#current--staged) of the [Product](ctp:api:type:Product) with the new Price data.
 	// - Leave empty or set to `true` to only update the staged projection.
 	Staged *bool `json:"staged,omitempty"`
 	// The tiered prices for this price.
 	Tiers []PriceTier `json:"tiers"`
-	// The custom fields for this price.
+	// Maps to `Price.custom`.
 	Custom *Custom `json:"custom,omitempty"`
-	// The ProductVariant in which this [Embedded Price](/../api/types#price) is contained.
-	// The Reference to the [ProductVariant](/../api/projects/products#productvariant) with which the [Price](/../api/types#price) is associated.
-	// If referenced ProductVariant does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductVariant is created.
+	// The [ProductVariant](ctp:api:type:ProductVariant) which contains this Embedded Price. If the referenced ProductVariant does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced ProductVariant is created.
 	ProductVariant ProductVariantKeyReference `json:"productVariant"`
-	// The Product in which the Product Variant containing this [Embedded Price](/../api/types#price) is contained. Maps to `ProductVariant.product`.
-	// The Reference to the [Product](/../api/projects/products#product) with which the [Price](/../api/types#price) is associated.
-	// If referenced Product does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Product is created.
+	// The [Product](ctp:api:type:Product) which contains the `productVariant`. If the referenced Product does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Product is created.
 	Product ProductKeyReference `json:"product"`
 }
 

@@ -25,6 +25,39 @@ func (rb *ByProjectKeyBusinessUnitsRequestBuilder) WithId(id string) *ByProjectK
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyBusinessUnitsRequestBuilder) KeyWithKeyValueAssociatesWithAssociateIdValue(key string, associateId string) *ByProjectKeyBusinessUnitsKeyByKeyAssociatesByAssociateIdRequestBuilder {
+	return &ByProjectKeyBusinessUnitsKeyByKeyAssociatesByAssociateIdRequestBuilder{
+		key:         key,
+		associateId: associateId,
+		projectKey:  rb.projectKey,
+		client:      rb.client,
+	}
+}
+func (rb *ByProjectKeyBusinessUnitsRequestBuilder) WithBusinessUnitIdValueAssociatesWithAssociateIdValue(businessUnitId string, associateId string) *ByProjectKeyBusinessUnitsByBusinessUnitIdAssociatesByAssociateIdRequestBuilder {
+	return &ByProjectKeyBusinessUnitsByBusinessUnitIdAssociatesByAssociateIdRequestBuilder{
+		businessUnitId: businessUnitId,
+		associateId:    associateId,
+		projectKey:     rb.projectKey,
+		client:         rb.client,
+	}
+}
+
+/**
+*	This endpoint provides high-performance search queries over Business Units.
+*
+ */
+func (rb *ByProjectKeyBusinessUnitsRequestBuilder) Search() *ByProjectKeyBusinessUnitsSearchRequestBuilder {
+	return &ByProjectKeyBusinessUnitsSearchRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyBusinessUnitsRequestBuilder) SearchIndexingStatus() *ByProjectKeyBusinessUnitsSearchIndexingStatusRequestBuilder {
+	return &ByProjectKeyBusinessUnitsSearchIndexingStatusRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyBusinessUnitsRequestBuilder) Get() *ByProjectKeyBusinessUnitsRequestMethodGet {
 	return &ByProjectKeyBusinessUnitsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/business-units", rb.projectKey),
@@ -33,7 +66,7 @@ func (rb *ByProjectKeyBusinessUnitsRequestBuilder) Get() *ByProjectKeyBusinessUn
 }
 
 /**
-*	Checks if a BusinessUnit exists for a given Query Predicate. Returns a `200 OK` status if any BusinessUnits match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more BusinessUnits exist for the provided query predicate. Returns a `200 OK` status if any BusinessUnits match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyBusinessUnitsRequestBuilder) Head() *ByProjectKeyBusinessUnitsRequestMethodHead {
 	return &ByProjectKeyBusinessUnitsRequestMethodHead{

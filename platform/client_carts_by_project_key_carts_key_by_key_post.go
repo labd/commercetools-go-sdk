@@ -54,6 +54,10 @@ func (rb *ByProjectKeyCartsKeyByKeyRequestMethodPost) WithHeaders(headers http.H
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a Cart in the Project using one or more [update actions](/../api/projects/carts#update-actions).
+ */
 func (rb *ByProjectKeyCartsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

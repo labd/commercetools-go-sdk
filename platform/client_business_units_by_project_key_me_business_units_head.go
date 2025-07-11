@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMeBusinessUnitsRequestMethodHead) WithHeaders(headers http
 }
 
 /**
-*	Checks if a BusinessUnit exists for a given Query Predicate. Returns a `200 OK` status if any BusinessUnits match the Query Predicate and the Customer has access to them, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more BusinessUnits exist for the provided query predicate. Returns a `200 OK` status if any BusinessUnits match the Query Predicate and the Customer has access to them, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeBusinessUnitsRequestMethodHead) Execute(ctx context.Context) error {

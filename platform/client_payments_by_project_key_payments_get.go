@@ -132,6 +132,10 @@ func (rb *ByProjectKeyPaymentsRequestMethodGet) WithHeaders(headers http.Header)
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves Payments in the Project.
+ */
 func (rb *ByProjectKeyPaymentsRequestMethodGet) Execute(ctx context.Context) (result *PaymentPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

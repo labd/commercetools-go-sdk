@@ -132,6 +132,10 @@ func (rb *ByProjectKeyOrdersRequestMethodGet) WithHeaders(headers http.Header) *
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves Orders in the Project.
+ */
 func (rb *ByProjectKeyOrdersRequestMethodGet) Execute(ctx context.Context) (result *OrderPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

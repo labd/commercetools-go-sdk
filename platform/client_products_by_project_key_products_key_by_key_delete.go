@@ -27,12 +27,14 @@ func (r *ByProjectKeyProductsKeyByKeyRequestMethodDelete) Dump() map[string]inte
 }
 
 type ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput struct {
-	PriceCurrency      *string
-	PriceCountry       *string
-	PriceCustomerGroup *string
-	PriceChannel       *string
-	Version            int
-	Expand             []string
+	PriceCurrency                 *string
+	PriceCountry                  *string
+	PriceCustomerGroup            *string
+	PriceCustomerGroupAssignments []string
+	PriceChannel                  *string
+	PriceRecurrencePolicy         *string
+	Version                       int
+	Expand                        []string
 }
 
 func (input *ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput) Values() url.Values {
@@ -46,8 +48,14 @@ func (input *ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput) Values() url.
 	if input.PriceCustomerGroup != nil {
 		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
 	}
+	for _, v := range input.PriceCustomerGroupAssignments {
+		values.Add("priceCustomerGroupAssignments", fmt.Sprintf("%v", v))
+	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	if input.PriceRecurrencePolicy != nil {
+		values.Add("priceRecurrencePolicy", fmt.Sprintf("%v", *input.PriceRecurrencePolicy))
 	}
 	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
@@ -80,11 +88,27 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) PriceCustomerGroup(v 
 	return rb
 }
 
+func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) PriceCustomerGroupAssignments(v []string) *ByProjectKeyProductsKeyByKeyRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput{}
+	}
+	rb.params.PriceCustomerGroupAssignments = v
+	return rb
+}
+
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) PriceChannel(v string) *ByProjectKeyProductsKeyByKeyRequestMethodDelete {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput{}
 	}
 	rb.params.PriceChannel = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductsKeyByKeyRequestMethodDelete) PriceRecurrencePolicy(v string) *ByProjectKeyProductsKeyByKeyRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsKeyByKeyRequestMethodDeleteInput{}
+	}
+	rb.params.PriceRecurrencePolicy = &v
 	return rb
 }
 

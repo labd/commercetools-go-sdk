@@ -13,7 +13,9 @@ type ByProjectKeyProductVariantPatchesImportContainersByImportContainerKeyReques
 }
 
 /**
-*	Creates a new import request for product variant patches
+*	Creates an Import Request for updating Product Variants.
+*	Returns an [InvalidField](ctp:import:type:InvalidFieldError) error if the [ProductVariantPatchRequest](ctp:import:type:ProductVariantPatchRequest) contains patches with and without the `product` field set.
+*
  */
 func (rb *ByProjectKeyProductVariantPatchesImportContainersByImportContainerKeyRequestBuilder) Post(body ProductVariantPatchRequest) *ByProjectKeyProductVariantPatchesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyProductVariantPatchesImportContainersByImportContainerKeyRequestMethodPost{

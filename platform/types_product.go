@@ -25,22 +25,40 @@ type Attribute struct {
 }
 
 /**
-*	JSON object where the key is a [Category](ctp:api:type:Category) `id` and the value is an order hint.
-*	Allows controlling the order of Products and how they appear in Categories. Products with no order hint have an order score below `0`. Order hints are non-unique.
-*	If a subset of Products have the same value for order hint in a specific category, the behavior is undetermined.
+*	JSON object where the keys are [Category](ctp:api:type:Category) `id`, and the values are order hint values: strings representing a number between `0` and `1`, but not ending in `0`. Order hints allow controlling the order of Products and how they appear in Categories. Products without order hints have an order score below `0`. Order hints are not unique. If a subset of Products have the same value for order hint in a specific category, the behavior is undetermined.
  */
 type CategoryOrderHints map[string]string
 type FacetRange struct {
-	From         float64 `json:"from"`
-	FromStr      string  `json:"fromStr"`
-	To           float64 `json:"to"`
-	ToStr        string  `json:"toStr"`
-	Count        int     `json:"count"`
-	ProductCount *int    `json:"productCount,omitempty"`
-	Total        float64 `json:"total"`
-	Min          float64 `json:"min"`
-	Max          float64 `json:"max"`
-	Mean         float64 `json:"mean"`
+	// The range's lower endpoint.
+	//
+	// `0` represents -∞.
+	From float64 `json:"from"`
+	// The range's lower endpoint.
+	//
+	// An empty string represents -∞.
+	FromStr string `json:"fromStr"`
+	// The range's upper endpoint.
+	//
+	// `0` represents +∞.
+	To float64 `json:"to"`
+	// The range's upper endpoint.
+	//
+	// An empty string represents +∞.
+	ToStr string `json:"toStr"`
+	// Number of [ProductVariants](ctp:api:type:ProductVariant) for which the values in a field fall into the specified range.
+	Count int `json:"count"`
+	// Number of [Products](ctp:api:type:Product) for which the values in a field fall into the specified range.
+	//
+	// Present only if the `counting products` [extension](/projects/product-projection-search#counting-products) is enabled.
+	ProductCount *int `json:"productCount,omitempty"`
+	// Sum of all values contained in the range.
+	Total float64 `json:"total"`
+	// Minimum value within the range.
+	Min float64 `json:"min"`
+	// Maximum value within the range.
+	Max float64 `json:"max"`
+	// Arithmetic mean of the values within the range.
+	Mean float64 `json:"mean"`
 }
 
 type FacetResult interface{}
@@ -81,9 +99,13 @@ func mapDiscriminatorFacetResult(input interface{}) (FacetResult, error) {
 
 type FacetResults map[string]FacetResult
 type FacetTerm struct {
-	Term         interface{} `json:"term"`
-	Count        int         `json:"count"`
-	ProductCount *int        `json:"productCount,omitempty"`
+	// Value for the field specified in the [term facet expression](/../api/projects/product-projection-search#term-facet-expression) for which at least one [ProductVariant](ctp:api:type:ProductVariant) could be found.
+	Term interface{} `json:"term"`
+	// Number of [ProductVariants](ctp:api:type:ProductVariant) for which the `term` applies.
+	Count int `json:"count"`
+	// Number of [Products](ctp:api:type:Product) for which the `term` applies.
+	// Only available if the `counting products` [extension](/../api/projects/product-projection-search#counting-products) is enabled.
+	ProductCount *int `json:"productCount,omitempty"`
 }
 
 type FacetTypes string
@@ -95,7 +117,11 @@ const (
 )
 
 type FilteredFacetResult struct {
-	Count        int  `json:"count"`
+	// Number of [ProductVariants](ctp:api:type:ProductVariant) matching the value specified in [filtered facet expression](/../api/projects/product-projection-search#filtered-facet-expression).
+	Count int `json:"count"`
+	// Number of [Products](ctp:api:type:Product) matching the value specified in [filtered facet expression](/../api/projects/product-projection-search#filtered-facet-expression).
+	//
+	// Present only if the `counting products` [extension](/projects/product-projection-search#counting-products) is enabled.
 	ProductCount *int `json:"productCount,omitempty"`
 }
 
@@ -224,9 +250,9 @@ type ProductData struct {
 	// Must be unique across a Project, but can be the same for Products in different [Locales](ctp:api:type:Locale).
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug LocalizedString `json:"slug"`
-	// Title of the Product displayed in search results.
+	// Title of the Product as used by search engines.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// Description of the Product displayed in search results below the meta title.
+	// Description of the Product as used by search engines.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 	// Keywords that give additional information about the Product to search engines.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
@@ -234,8 +260,10 @@ type ProductData struct {
 	MasterVariant ProductVariant `json:"masterVariant"`
 	// Additional Product Variants.
 	Variants []ProductVariant `json:"variants"`
-	// Used by [Product Suggestions](/projects/products-suggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
+	// Used by [Search Term Suggestions](/projects/search-term-suggestions), but is also considered for a [full text search](/projects/product-projection-search#full-text-search) in the Product Projection Search API.
 	SearchKeywords SearchKeywords `json:"searchKeywords"`
+	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	Attributes []Attribute `json:"attributes"`
 }
 
 type ProductDraft struct {
@@ -249,17 +277,19 @@ type ProductDraft struct {
 	Slug LocalizedString `json:"slug"`
 	// User-defined unique identifier for the Product.
 	//
-	// To update a Product using the [Import API](/../import-export/product), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
+	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Products with the [Import API](/../api/import-export/overview) and the [Merchant Center](/../merchant-center/import-data).
+	//
+	// To update a Product using the Import API or Merchant Center, the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
 	Key *string `json:"key,omitempty"`
 	// Description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Categories assigned to the Product.
 	Categories []CategoryResourceIdentifier `json:"categories"`
-	// Numerical values to allow ordering of Products within a specified Category.
+	// Numerical values to allow ordering of Products within specified Categories. If the referenced Categories are not also assigned in the `categories` field, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	CategoryOrderHints *CategoryOrderHints `json:"categoryOrderHints,omitempty"`
-	// Title of the Product displayed in search results.
+	// Title of the Product as used by search engines.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// Description of the Product displayed in search results.
+	// Description of the Product as used by search engines.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 	// Keywords that give additional information about the Product to search engines.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
@@ -269,7 +299,7 @@ type ProductDraft struct {
 	Variants []ProductVariantDraft `json:"variants"`
 	// The Tax Category to be assigned to the Product.
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
-	// Used by [Product Suggestions](/projects/products-suggestions), but is also considered for a [full text search](/projects/products-search#full-text-search).
+	// Used by [Search Term Suggestions](/projects/search-term-suggestions), but is also considered for a [full text search](/projects/product-projection-search#full-text-search) in the Product Projection Search API.
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
 	// State to be assigned to the Product.
 	State *StateResourceIdentifier `json:"state,omitempty"`
@@ -277,6 +307,8 @@ type ProductDraft struct {
 	Publish *bool `json:"publish,omitempty"`
 	// Specifies the type of prices used when looking up a price for the Product.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinitionDraft).
+	Attributes []Attribute `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -301,6 +333,10 @@ func (obj ProductDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["variants"] == nil {
 		delete(raw, "variants")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	return json.Marshal(raw)
@@ -372,7 +408,7 @@ type ProductProjection struct {
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 	// Keywords that give additional information about the [Product](ctp:api:type:Product) to search engines.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	// Used by [Product Suggestions](/../api/projects/products-suggestions), but is also considered for a [full text search](ctp:api:type:FullTextSearch).
+	// Used by [Search Term Suggestions](/../api/projects/search-term-suggestions), but is also considered for a [full text search](/projects/product-projection-search#full-text-search) in the Product Projection Search API.
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
 	// `true` if the staged data is different from the current data.
 	HasStagedChanges *bool `json:"hasStagedChanges,omitempty"`
@@ -390,6 +426,8 @@ type ProductProjection struct {
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
 	// Indicates whether the Prices of the Product Projection are [embedded](ctp:api:type:Price) or [standalone](ctp:api:type:StandalonePrice). [Projecting Prices](#prices) only works with `Embedded`, there is currently no support for `Standalone`.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinitionDraft).
+	Attributes []Attribute `json:"attributes"`
 }
 
 type ProductProjectionPagedQueryResponse struct {
@@ -409,15 +447,27 @@ type ProductProjectionPagedQueryResponse struct {
 	Results []ProductProjection `json:"results"`
 }
 
+/**
+*	The response returned to a [Product Projection Search](/../api/projects/product-projection-search#product-projection-search) request.
+*	The object contains the [query results](/../api/projects/product-projection-search#query-results) with Product Projections where at least one ProductVariant matches the search query, as well as the [facet results](/../api/projects/product-projection-search#facet-results), if requested.
+*
+ */
 type ProductProjectionPagedSearchResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
-	Limit int  `json:"limit"`
-	Count int  `json:"count"`
+	// The maximum number of results returned on a [page](/../api/projects/product-projection-search#pagination).
+	Limit int `json:"limit"`
+	// The starting point for the retrieved [paginated](/../api/projects/product-projection-search#pagination) result.
+	Offset int `json:"offset"`
+	// Actual number of results returned.
+	Count int `json:"count"`
+	// Total number of results matching the query.
 	Total *int `json:"total,omitempty"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
-	Offset  int                 `json:"offset"`
+	// [ProductProjections](ctp:api:type:ProductProjection) where at least one [ProductVariant](ctp:api:type:ProductVariant) matches the search query, provided with the `text.{language}` and/or `filter.query` or `filter` query parameter.
+	// If the query parameter `markMatchingVariants=true` was provided with the request, the [matching variants](/../api/projects/product-projection-search#matching-variants) are marked as such.
 	Results []ProductProjection `json:"results"`
-	Facets  FacetResults        `json:"facets"`
+	// Facet results for each [facet expression](/../api/projects/product-projection-search#facets) specified in the search request.
+	//
+	// Only present if at least one `facet` parameter was provided with the search request.
+	Facets *FacetResults `json:"facets,omitempty"`
 }
 
 /**
@@ -742,6 +792,12 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setProductAttribute":
+		obj := ProductSetProductAttributeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setProductPriceCustomField":
 		obj := ProductSetProductPriceCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -833,6 +889,9 @@ type ProductVariant struct {
 	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
 	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
+	// Only available when [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) is used.
+	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	RecurrencePrices []Price `json:"recurrencePrices"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -867,12 +926,16 @@ func (obj ProductVariant) MarshalJSON() ([]byte, error) {
 		delete(raw, "assets")
 	}
 
+	if raw["recurrencePrices"] == nil {
+		delete(raw, "recurrencePrices")
+	}
+
 	return json.Marshal(raw)
 
 }
 
 /**
-*	The [InventoryEntry](ctp:api:type:InventoryEntry) information of the Product Variant. If there is a supply [Channel](ctp:api:type:Channel) for the InventoryEntry, then `channels` is returned. If not, then `isOnStock`, `restockableInDays`, and `quantityOnStock` are returned.
+*	The [InventoryEntry](ctp:api:type:InventoryEntry) information of the Product Variant. If there is a supply [Channel](ctp:api:type:Channel) for the InventoryEntry, then `channels` is returned. If not, then `isOnStock`, `restockableInDays`, and `availableQuantity` are returned.
 *
  */
 type ProductVariantAvailability struct {
@@ -904,7 +967,7 @@ type ProductVariantChannelAvailability struct {
 }
 
 /**
-*	JSON object where the key is a supply [Channel](ctp:api:type:Channel) `id` and the value is the [ProductVariantChannelAvailability](ctp:api:type:ProductVariantChannelAvailability) of the [InventoryEntry](ctp:api:type:InventoryEntry).
+*	JSON object where the keys are supply [Channel](/projects/channels) `id`, and the values are [ProductVariantChannelAvailability](/projects/products#productvariantchannelavailability).
 *
  */
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
@@ -966,6 +1029,7 @@ func (obj ProductVariantDraft) MarshalJSON() ([]byte, error) {
 }
 
 type RangeFacetResult struct {
+	// Statistical data over values for `date`, `time`, `datetime`, `number`, and `money` type fields.
 	Ranges []FacetRange `json:"ranges"`
 }
 
@@ -1005,7 +1069,7 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	Search keywords are JSON objects primarily used by [Product Suggestions](/projects/products-suggestions), but are also considered for a [full text search](/projects/products-search#full-text-search).
+*	Search keywords are JSON objects primarily used by [Search Term Suggestions](/projects/search-term-suggestions), but are also considered for a [full text search](/projects/product-projection-search#full-text-search) in the Product Projection Search API.
 *	The keys are of type [Locale](ctp:api:type:Locale), and the values are an array of [SearchKeyword](ctp:api:type:SearchKeyword).
 *
  */
@@ -1066,11 +1130,23 @@ type Suggestion struct {
 
 type SuggestionResult map[string][]Suggestion
 type TermFacetResult struct {
+	// Data type to which the facet is applied.
 	DataType TermFacetResultType `json:"dataType"`
-	Missing  int                 `json:"missing"`
-	Total    int                 `json:"total"`
-	Other    int                 `json:"other"`
-	Terms    []FacetTerm         `json:"terms"`
+	// Number of [ProductVariants](ctp:api:type:ProductVariant) that have no value for the specified [term facet expression](/../api/projects/product-projection-search#term-facet-expression).
+	Missing int `json:"missing"`
+	// Number of terms matching the [term facet expression](/../api/projects/product-projection-search#term-facet-expression).
+	//
+	// - If the expression refers to Product fields like `categories.id` and `reviewRatingStatistics.count`, the value represents the number of Products.
+	// - If the expression is defined for fields specific to Product Variants, for example, `variants.attributes.{name}`, the value represents the number of Product Variants matching the expression.
+	Total int `json:"total"`
+	// Number of terms not represented in this object (such as the number of terms beyond the [limit](/limits#product-projection-search)).
+	Other int `json:"other"`
+	// Values for the field specified in [term facet expression](/../api/projects/product-projection-search#term-facet-expression) for which at least one [ProductVariant](ctp:api:type:ProductVariant) could be found.
+	//
+	// By default, facet terms are returned in a descending order of their `count`.
+	//
+	// If the term facet expression specifies to count [Products](ctp:api:type:Product) through the `counting products` [extension](/projects/product-projection-search#counting-products), then facet terms are returned in a descending order of their `productCount`.
+	Terms []FacetTerm `json:"terms"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1083,6 +1159,10 @@ func (obj TermFacetResult) MarshalJSON() ([]byte, error) {
 	}{Action: "terms", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Data type to which the facet is applied.
+*
+ */
 type TermFacetResultType string
 
 const (
@@ -1508,7 +1588,10 @@ func (obj ProductRemoveFromCategoryAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes a Product image and deletes it from the Content Delivery Network (external images are not deleted). Deletion from the CDN is not instant, which means the image file itself will stay available for some time after the deletion. Either `variantId` or `sku` is required.
+*	Removes a Product image and deletes it from the Content Delivery Network (CDN) if it had been [uploaded to our CDN](/../api/projects/products#upload-product-image).
+*	External images will not be deleted.
+*	The API deletes the removed image from the CDN in an [eventual consistent](/../api/general-concepts#eventual-consistency) way.
+*	Either `variantId` or `sku` is required.
 *
  */
 type ProductRemoveImageAction struct {
@@ -1825,22 +1908,20 @@ type ProductSetAttributeAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// The name of the Attribute to set.
+	// Name of the Attribute to set.
 	Name string `json:"name"`
 	// Value to set for the Attribute. If empty, any existing value will be removed.
 	//
 	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
 	//
-	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
-	//   use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) objects,
-	//   or the complete objects as `value`.
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType), use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) object or the complete object as `value`.
 	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
 	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
 	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
 	// - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
 	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
 	Value interface{} `json:"value,omitempty"`
-	// If `true`, only the staged Attribute is set. If `false`, both current and staged Attribute is set.
+	// If `true`, only the staged Attribute is set. If `false`, both the current and staged Attributes are set.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1855,11 +1936,11 @@ func (obj ProductSetAttributeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds, removes, or changes a Product Attribute in all Product Variants at the same time.
+*	Adds, removes, or changes a Variant Attribute in all Product Variants at the same time.
 *	This action is useful for setting values for Attributes with the [Constraint](ctp:api:type:AttributeConstraintEnum) `SameForAll`.
  */
 type ProductSetAttributeInAllVariantsAction struct {
-	// The name of the Attribute to set.
+	// Name of the Attribute to set.
 	Name string `json:"name"`
 	// Value to set for the Attributes. If empty, any existing value will be removed.
 	//
@@ -1889,7 +1970,7 @@ func (obj ProductSetAttributeInAllVariantsAction) MarshalJSON() ([]byte, error) 
 }
 
 type ProductSetCategoryOrderHintAction struct {
-	// The `id` of the Category to add the `orderHint`.
+	// The `id` of the Category to add the `orderHint`. If this Category is not assigned to the Product, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	CategoryId string `json:"categoryId"`
 	// A string representing a number between 0 and 1. Must start with `0.` and cannot end with `0`. If empty, any existing value will be removed.
 	OrderHint *string `json:"orderHint,omitempty"`
@@ -1978,7 +2059,7 @@ func (obj ProductSetImageLabelAction) MarshalJSON() ([]byte, error) {
 type ProductSetKeyAction struct {
 	// Value to set. If empty, any existing value will be removed.
 	//
-	// To update a Product using the [Import API](/../import-export/product), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
+	// To update a Product using the [Import API](/../api/import-export/overview) and the [Merchant Center](/../merchant-center/import-data), the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -2109,6 +2190,34 @@ func (obj ProductSetPricesAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setPrices", Alias: (*Alias)(&obj)})
+}
+
+type ProductSetProductAttributeAction struct {
+	// Name of the Product Attribute to set.
+	Name string `json:"name"`
+	// Value to set for the Attribute. If empty, any existing value will be removed.
+	//
+	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType), use the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) object or the complete object as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Nested Type](ctp:api:type:AttributeNestedType) Attributes, use the list of values of all Attributes of the nested Product as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	Value interface{} `json:"value,omitempty"`
+	// If `true`, only the staged Attribute is set. If `false`, both the current and staged Attributes are set.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductSetProductAttributeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductSetProductAttributeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setProductAttribute", Alias: (*Alias)(&obj)})
 }
 
 type ProductSetProductPriceCustomFieldAction struct {
@@ -2264,7 +2373,7 @@ func (obj ProductTransitionStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](ctp:api:endpoint:/{projectKey}/product-projections:GET)/[searching](/projects/products-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
+*	Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](ctp:api:endpoint:/{projectKey}/product-projections:GET)/[searching](/projects/product-projection-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
 *
 *	When a Product is unpublished, any associated Line Items already present in a Cart remain unaffected and can still be ordered. To prevent this, do the following:
 *

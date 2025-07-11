@@ -13,7 +13,7 @@ type ByProjectKeyProductVariantsImportContainersByImportContainerKeyRequestBuild
 }
 
 /**
-*	Creates a request for creating new ProductVariants or updating existing ones.
+*	Creates an Import Request for ProductVariants.
  */
 func (rb *ByProjectKeyProductVariantsImportContainersByImportContainerKeyRequestBuilder) Post(body ProductVariantImportRequest) *ByProjectKeyProductVariantsImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyProductVariantsImportContainersByImportContainerKeyRequestMethodPost{

@@ -13,7 +13,7 @@ type ByProjectKeyCustomersImportContainersByImportContainerKeyRequestBuilder str
 }
 
 /**
-*	Creates a request for creating new Customers or updating existing ones.
+*	Creates an Import Request for Customers.
  */
 func (rb *ByProjectKeyCustomersImportContainersByImportContainerKeyRequestBuilder) Post(body CustomerImportRequest) *ByProjectKeyCustomersImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyCustomersImportContainersByImportContainerKeyRequestMethodPost{

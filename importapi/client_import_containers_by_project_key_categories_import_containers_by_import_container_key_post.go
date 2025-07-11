@@ -29,7 +29,7 @@ func (rb *ByProjectKeyCategoriesImportContainersByImportContainerKeyRequestMetho
 }
 
 /**
-*	Creates a request for creating new Categories or updating existing ones.
+*	Creates an Import Request for Categories.
  */
 func (rb *ByProjectKeyCategoriesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)

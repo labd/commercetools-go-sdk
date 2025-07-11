@@ -53,6 +53,10 @@ func (rb *ByProjectKeyOrdersOrderNumberByOrderNumberRequestMethodGet) WithHeader
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves an Order with the provided `orderNumber`.
+ */
 func (rb *ByProjectKeyOrdersOrderNumberByOrderNumberRequestMethodGet) Execute(ctx context.Context) (result *Order, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

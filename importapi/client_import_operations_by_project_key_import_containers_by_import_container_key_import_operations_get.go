@@ -120,7 +120,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsReques
 }
 
 /**
-*	Retrieves all [ImportOperations](ctp:import:type:ImportOperation) of a given ImportContainer key.
+*	Retrieves all ImportOperations within an [ImportContainer](ctp:import:type:ImportContainer).
 *
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyImportOperationsRequestMethodGet) Execute(ctx context.Context) (result *ImportOperationPagedResponse, err error) {

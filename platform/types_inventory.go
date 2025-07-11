@@ -43,6 +43,8 @@ type InventoryEntryDraft struct {
 	// [ProductVariant](ctp:api:type:ProductVariant) `sku` of the InventoryEntry.
 	Sku string `json:"sku"`
 	// User-defined unique identifier for the InventoryEntry.
+	//
+	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing InventoryEntries with the [Import API](/../api/import-export/overview) and the [Merchant Center](/../merchant-center/import-data).
 	Key *string `json:"key,omitempty"`
 	// [Channel](ctp:api:type:Channel) that supplies this InventoryEntry.
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`

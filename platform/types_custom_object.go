@@ -24,9 +24,9 @@ type CustomObject struct {
 	Container string `json:"container"`
 	// User-defined unique identifier of the CustomObject within the defined `container`.
 	Key string `json:"key"`
-	// JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
-	// For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
-	// If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
+	// Can be any JSON standard type, such as number, string, boolean, array, object, or a [common API data type](/../api/types).
+	//
+	// - For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed. If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
 	Value interface{} `json:"value"`
 }
 
@@ -35,9 +35,10 @@ type CustomObjectDraft struct {
 	Container string `json:"container"`
 	// User-defined unique identifier of the CustomObject within the defined `container`.
 	Key string `json:"key"`
-	// JSON standard types Number, String, Boolean, Array, Object, and [common API data types](/../api/types).
-	// For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed.
-	// If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
+	// Can be any JSON standard type, such as number, string, boolean, array, object, or a [common API data type](/../api/types).
+	//
+	// - Fields within `value` that have `null` values **are not saved**.
+	// - For values of type [Reference](ctp:api:type:Reference) the integrity of the data is not guaranteed. If the referenced object is deleted, the API does not delete the corresponding reference to it and the `value` points to a non-existing object in such case.
 	Value interface{} `json:"value"`
 	// Current version of the CustomObject.
 	Version *int `json:"version,omitempty"`

@@ -31,6 +31,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestMethodPost) WithH
 /**
 *	This is the last step in the [email verification process of a Customer](/../api/projects/customers#email-verification-of-customer-in-store). Returns a `200 OK` status if successful.
 *
+*	After the email is verified, all email tokens issued previously through the [email verification flow](/../api/projects/customers#email-verification-of-customer) are invalidated. This invalidation of tokens is [eventually consistent](/../api/general-concepts#eventual-consistency).
+*
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Customer exists with the `id` specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope.
@@ -73,6 +75,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestMethodPost) Execu
 			return nil, err
 		}
 		return nil, errorObj
+	case 404:
+		return nil, ErrNotFound
 	case 401:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -87,8 +91,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeEmailConfirmRequestMethodPost) Execu
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

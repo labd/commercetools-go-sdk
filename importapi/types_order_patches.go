@@ -20,27 +20,40 @@ const (
 )
 
 type ReturnItemDraft struct {
-	Quantity         int     `json:"quantity"`
-	LineItemId       *string `json:"lineItemId,omitempty"`
+	// Number of Line Items or Custom Line Items to return.
+	Quantity int `json:"quantity"`
+	// `id` of the [LineItem](ctp:api:type:LineItem) to return.
+	//
+	// Required if Line Items are returned, to create a [LineItemReturnItem](ctp:api:type:LineItemReturnItem).
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to return.
+	//
+	// Required if Custom Line Items are returned, to create a [CustomLineItemReturnItem](ctp:api:type:CustomLineItemReturnItem).
 	CustomLineItemId *string `json:"customLineItemId,omitempty"`
-	Comment          *string `json:"comment,omitempty"`
-	// Maps to `ReturnItem.shipmentState`
+	// User-defined description for the return.
+	Comment *string `json:"comment,omitempty"`
+	// Shipment status of the item to be returned.
 	ShipmentState ReturnShipmentState `json:"shipmentState"`
 }
 
 type ReturnInfo struct {
+	// Information on the Line Items or Custom Line Items returned.
 	Items []ReturnItemDraft `json:"items"`
-	// Maps to `ReturnInfo.returnTrackingId`
+	// User-defined identifier to track the return.
 	ReturnTrackingId *string `json:"returnTrackingId,omitempty"`
-	// Maps to `ReturnInfo.returnDate`
+	// Date and time (UTC) the return is initiated.
 	ReturnDate *time.Time `json:"returnDate,omitempty"`
 }
 
 type DeliveryParcel struct {
-	DeliveryId   string              `json:"deliveryId"`
+	// Unique identifier of the Delivery.
+	DeliveryId string `json:"deliveryId"`
+	// Information about the dimensions of the Parcel.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
-	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items"`
+	// Shipment tracking information of the Parcel.
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// Line Items or Custom Line Items delivered in this Parcel.
+	Items []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -68,9 +81,12 @@ func (obj DeliveryParcel) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryParcelDraft struct {
+	// Information about the dimensions for the Parcel.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
-	TrackingData *TrackingData       `json:"trackingData,omitempty"`
-	Items        []DeliveryItem      `json:"items"`
+	// Shipment tracking information for the Parcel.
+	TrackingData *TrackingData `json:"trackingData,omitempty"`
+	// Line Items or Custom Line Items delivered in this Parcel.
+	Items []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -98,29 +114,40 @@ func (obj DeliveryParcelDraft) MarshalJSON() ([]byte, error) {
 }
 
 type DeliveryDraft struct {
-	Items   []DeliveryItem        `json:"items"`
-	Address *Address              `json:"address,omitempty"`
+	// Line Items or Custom Line Items to deliver. It can also be specified individually for each [Parcel](ctp:api:type:Parcel).
+	Items []DeliveryItem `json:"items"`
+	// Address to which the Parcels are delivered.
+	Address *Address `json:"address,omitempty"`
+	// Information regarding the appearance, content, and shipment of a parcel.
 	Parcels []DeliveryParcelDraft `json:"parcels"`
 }
 
 type DeliveryAddressDraft struct {
-	DeliveryId string   `json:"deliveryId"`
-	Address    *Address `json:"address,omitempty"`
+	// Unique identifier of the Delivery.
+	DeliveryId string `json:"deliveryId"`
+	// Address to which Parcels are delivered.
+	Address *Address `json:"address,omitempty"`
 }
 
 type ParcelMeasurementDraft struct {
-	ParcelId     string              `json:"parcelId"`
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// Information about the dimensions of the Parcel.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 }
 
 type ParcelTrackingData struct {
-	ParcelId     string        `json:"parcelId"`
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// Information that helps track a Parcel.
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
 }
 
 type ParcelItems struct {
-	ParcelId string         `json:"parcelId"`
-	Items    []DeliveryItem `json:"items"`
+	// `id` of an existing [Parcel](ctp:api:type:Parcel).
+	ParcelId string `json:"parcelId"`
+	// Items in the Parcel.
+	Items []DeliveryItem `json:"items"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -152,6 +179,7 @@ type RemoveDeliveryDraft struct {
 }
 
 type RemoveParcelFromDeliveryDraft struct {
+	// `id` of the [Parcel](ctp:api:type:Parcel) to be removed from the Delivery.
 	ParcelId string `json:"parcelId"`
 }
 
@@ -209,13 +237,12 @@ func (obj OrderField) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Representation for an update of an [Order](/../api/projects/orders#order). Use this type to import updates for existing
-*	[Orders](/../api/projects/orders#order) in a Project.
+*	Represents the data used to update an [Order](ctp:api:type:Order) in a Project.
 *
  */
 type OrderPatchImport struct {
-	// Maps to `Order.orderNumber`, String that uniquely identifies an order, unique across a project.
+	// User-defined unique identifier. If an [Order](ctp:api:type:Order) with this `orderNumber` exists, it is updated with the imported data.
 	OrderNumber string `json:"orderNumber"`
-	// Each field referenced must be defined in an already existing order in the project or the import operation state is set to `validationFailed`.
+	// Each field referenced must be defined in an existing [Order](ctp:api:type:Order) or the [ImportOperationState](ctp:import:type:ImportOperationState) is set to `validationFailed`.
 	Fields OrderField `json:"fields"`
 }

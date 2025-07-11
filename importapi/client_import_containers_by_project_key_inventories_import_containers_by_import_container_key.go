@@ -13,7 +13,7 @@ type ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestBuilder s
 }
 
 /**
-*	Creates a request for creating new Inventories or updating existing ones.
+*	Creates an Import Request for InventoryEntries.
  */
 func (rb *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestBuilder) Post(body InventoryImportRequest) *ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyInventoriesImportContainersByImportContainerKeyRequestMethodPost{

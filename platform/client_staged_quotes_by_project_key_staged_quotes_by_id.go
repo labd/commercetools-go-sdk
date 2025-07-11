@@ -20,7 +20,7 @@ func (rb *ByProjectKeyStagedQuotesByIDRequestBuilder) Get() *ByProjectKeyStagedQ
 }
 
 /**
-*	Checks if a StagedQuote exists for a given `id`. Returns a `200 OK` status if the StagedQuote exists or a `404 Not Found` otherwise.
+*	Checks if a StagedQuote exists with the provided `id`. Returns a `200 OK` status if the StagedQuote exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStagedQuotesByIDRequestBuilder) Head() *ByProjectKeyStagedQuotesByIDRequestMethodHead {
 	return &ByProjectKeyStagedQuotesByIDRequestMethodHead{

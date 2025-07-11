@@ -13,7 +13,7 @@ type ByProjectKeyTypesImportContainersByImportContainerKeyRequestBuilder struct 
 }
 
 /**
-*	Creates a request for creating new Type or updating existing ones.
+*	Creates an Import Request for Types.
  */
 func (rb *ByProjectKeyTypesImportContainersByImportContainerKeyRequestBuilder) Post(body TypeImportRequest) *ByProjectKeyTypesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyTypesImportContainersByImportContainerKeyRequestMethodPost{

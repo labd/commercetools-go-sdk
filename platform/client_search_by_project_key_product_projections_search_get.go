@@ -27,30 +27,43 @@ func (r *ByProjectKeyProductProjectionsSearchRequestMethodGet) Dump() map[string
 }
 
 type ByProjectKeyProductProjectionsSearchRequestMethodGetInput struct {
-	Fuzzy                *bool
-	FuzzyLevel           *int
-	MarkMatchingVariants *bool
-	Filter               []string
-	FilterFacets         []string
-	FilterQuery          []string
-	Facet                []string
-	Text                 map[string][]string
-	Sort                 []string
-	Limit                *int
-	Offset               *int
-	WithTotal            *bool
-	Staged               *bool
-	PriceCurrency        *string
-	PriceCountry         *string
-	PriceCustomerGroup   *string
-	PriceChannel         *string
-	LocaleProjection     []string
-	StoreProjection      *string
-	Expand               []string
+	MarkMatchingVariants          *bool
+	Text                          map[string][]string
+	Fuzzy                         *bool
+	FuzzyLevel                    *int
+	FilterQuery                   []string
+	Filter                        []string
+	Facet                         []string
+	FilterFacets                  []string
+	Expand                        []string
+	Sort                          []string
+	Limit                         *int
+	Offset                        *int
+	Staged                        *bool
+	PriceCurrency                 *string
+	PriceCountry                  *string
+	PriceCustomerGroup            *string
+	PriceCustomerGroupAssignments []string
+	PriceChannel                  *string
+	PriceRecurrencePolicy         *string
+	LocaleProjection              []string
+	StoreProjection               *string
 }
 
 func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	if input.MarkMatchingVariants != nil {
+		if *input.MarkMatchingVariants {
+			values.Add("markMatchingVariants", "true")
+		} else {
+			values.Add("markMatchingVariants", "false")
+		}
+	}
+	for k, v := range input.Text {
+		for _, x := range v {
+			values.Add(k, x)
+		}
+	}
 	if input.Fuzzy != nil {
 		if *input.Fuzzy {
 			values.Add("fuzzy", "true")
@@ -61,29 +74,20 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 	if input.FuzzyLevel != nil {
 		values.Add("fuzzyLevel", strconv.Itoa(*input.FuzzyLevel))
 	}
-	if input.MarkMatchingVariants != nil {
-		if *input.MarkMatchingVariants {
-			values.Add("markMatchingVariants", "true")
-		} else {
-			values.Add("markMatchingVariants", "false")
-		}
+	for _, v := range input.FilterQuery {
+		values.Add("filter.query", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Filter {
 		values.Add("filter", fmt.Sprintf("%v", v))
 	}
-	for _, v := range input.FilterFacets {
-		values.Add("filter.facets", fmt.Sprintf("%v", v))
-	}
-	for _, v := range input.FilterQuery {
-		values.Add("filter.query", fmt.Sprintf("%v", v))
-	}
 	for _, v := range input.Facet {
 		values.Add("facet", fmt.Sprintf("%v", v))
 	}
-	for k, v := range input.Text {
-		for _, x := range v {
-			values.Add(k, x)
-		}
+	for _, v := range input.FilterFacets {
+		values.Add("filter.facets", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.Expand {
+		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
@@ -93,13 +97,6 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 	}
 	if input.Offset != nil {
 		values.Add("offset", strconv.Itoa(*input.Offset))
-	}
-	if input.WithTotal != nil {
-		if *input.WithTotal {
-			values.Add("withTotal", "true")
-		} else {
-			values.Add("withTotal", "false")
-		}
 	}
 	if input.Staged != nil {
 		if *input.Staged {
@@ -117,8 +114,14 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 	if input.PriceCustomerGroup != nil {
 		values.Add("priceCustomerGroup", fmt.Sprintf("%v", *input.PriceCustomerGroup))
 	}
+	for _, v := range input.PriceCustomerGroupAssignments {
+		values.Add("priceCustomerGroupAssignments", fmt.Sprintf("%v", v))
+	}
 	if input.PriceChannel != nil {
 		values.Add("priceChannel", fmt.Sprintf("%v", *input.PriceChannel))
+	}
+	if input.PriceRecurrencePolicy != nil {
+		values.Add("priceRecurrencePolicy", fmt.Sprintf("%v", *input.PriceRecurrencePolicy))
 	}
 	for _, v := range input.LocaleProjection {
 		values.Add("localeProjection", fmt.Sprintf("%v", v))
@@ -126,10 +129,23 @@ func (input *ByProjectKeyProductProjectionsSearchRequestMethodGetInput) Values()
 	if input.StoreProjection != nil {
 		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
 	}
-	for _, v := range input.Expand {
-		values.Add("expand", fmt.Sprintf("%v", v))
-	}
 	return values
+}
+
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) MarkMatchingVariants(v bool) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
+	}
+	rb.params.MarkMatchingVariants = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Text(v map[string][]string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
+	}
+	rb.params.Text = v
+	return rb
 }
 
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Fuzzy(v bool) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
@@ -148,11 +164,11 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) FuzzyLevel(v int
 	return rb
 }
 
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) MarkMatchingVariants(v bool) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) FilterQuery(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
 	}
-	rb.params.MarkMatchingVariants = &v
+	rb.params.FilterQuery = v
 	return rb
 }
 
@@ -164,22 +180,6 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Filter(v []strin
 	return rb
 }
 
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) FilterFacets(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
-	}
-	rb.params.FilterFacets = v
-	return rb
-}
-
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) FilterQuery(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
-	}
-	rb.params.FilterQuery = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Facet(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
@@ -188,11 +188,19 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Facet(v []string
 	return rb
 }
 
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Text(v map[string][]string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) FilterFacets(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
 	}
-	rb.params.Text = v
+	rb.params.FilterFacets = v
+	return rb
+}
+
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Expand(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
+	}
+	rb.params.Expand = v
 	return rb
 }
 
@@ -217,14 +225,6 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Offset(v int) *B
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
 	}
 	rb.params.Offset = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
-	}
-	rb.params.WithTotal = &v
 	return rb
 }
 
@@ -260,11 +260,27 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) PriceCustomerGro
 	return rb
 }
 
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) PriceCustomerGroupAssignments(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
+	}
+	rb.params.PriceCustomerGroupAssignments = v
+	return rb
+}
+
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) PriceChannel(v string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
 	}
 	rb.params.PriceChannel = &v
+	return rb
+}
+
+func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) PriceRecurrencePolicy(v string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
+	}
+	rb.params.PriceRecurrencePolicy = &v
 	return rb
 }
 
@@ -284,14 +300,6 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) StoreProjection(
 	return rb
 }
 
-func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Expand(v []string) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductProjectionsSearchRequestMethodGetInput{}
-	}
-	rb.params.Expand = v
-	return rb
-}
-
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) WithQueryParams(input ByProjectKeyProductProjectionsSearchRequestMethodGetInput) *ByProjectKeyProductProjectionsSearchRequestMethodGet {
 	rb.params = &input
 	return rb
@@ -302,7 +310,11 @@ func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) WithHeaders(head
 }
 
 /**
-*	Product Projection Search
+*	This method appends query parameters to the URL.
+*	The maximum allowed URL length is 8192 characters.
+*	Exceeding this limit will result in URL truncation, potentially leading to unexpected results.
+*	For funnel searches on Product Listing Pages, where users select multiple filters, we recommend the [POST](ctp:api:endpoint:/{projectKey}/product-projections/search:POST) method which passes the query parameters within the request body, avoiding URL length restrictions.
+*
  */
 func (rb *ByProjectKeyProductProjectionsSearchRequestMethodGet) Execute(ctx context.Context) (result *ProductProjectionPagedSearchResponse, err error) {
 	var queryParams url.Values

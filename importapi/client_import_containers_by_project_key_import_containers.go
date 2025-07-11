@@ -20,7 +20,10 @@ func (rb *ByProjectKeyImportContainersRequestBuilder) WithImportContainerKeyValu
 }
 
 /**
-*	Creates a new import container.
+*	Creates an Import Container in the Project.
+*
+*	Generates the [ImportContainerCreated](/projects/events#import-container-created-event) Event.
+*
  */
 func (rb *ByProjectKeyImportContainersRequestBuilder) Post(body ImportContainerDraft) *ByProjectKeyImportContainersRequestMethodPost {
 	return &ByProjectKeyImportContainersRequestMethodPost{
@@ -31,7 +34,7 @@ func (rb *ByProjectKeyImportContainersRequestBuilder) Post(body ImportContainerD
 }
 
 /**
-*	Retrieves all import containers of a given project key.
+*	Retrieves all ImportContainers in the Project.
  */
 func (rb *ByProjectKeyImportContainersRequestBuilder) Get() *ByProjectKeyImportContainersRequestMethodGet {
 	return &ByProjectKeyImportContainersRequestMethodGet{

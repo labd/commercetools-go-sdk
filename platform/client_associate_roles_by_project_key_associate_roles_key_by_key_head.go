@@ -28,7 +28,7 @@ func (rb *ByProjectKeyAssociateRolesKeyByKeyRequestMethodHead) WithHeaders(heade
 }
 
 /**
-*	Checks if an AssociateRole exists for a given `key`. Returns a `200 OK` status if the AssociateRole exists or a `404 Not Found` otherwise.
+*	Checks if an AssociateRole exists with the provided `key`. Returns a `200 OK` status if the AssociateRole exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyAssociateRolesKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

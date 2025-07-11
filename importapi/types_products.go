@@ -31,7 +31,7 @@ import (
 type SearchKeywords map[string][]SearchKeyword
 type SearchKeyword struct {
 	Text string `json:"text"`
-	// The tokenizer defines the tokens that are used to match against the [Suggest Query](/../products-suggestions#query-suggestions) input.
+	// The tokenizer defines the tokens that are used for [search term suggestions](/projects/search-term-suggestions).
 	SuggestTokenizer SuggestTokenizer `json:"suggestTokenizer,omitempty"`
 }
 
@@ -54,7 +54,7 @@ func (obj *SearchKeyword) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	The tokenizer defines the tokens that are used to match against the [Suggest Query](/../products-suggestions#query-suggestions) input.
+*	The tokenizer defines the tokens that are used for [search term suggestions](/projects/search-term-suggestions).
 *
  */
 type SuggestTokenizer interface{}
@@ -115,83 +115,59 @@ func (obj WhitespaceTokenizer) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The data representation for a Product to be imported that is persisted as a [Product](/../api/projects/products#product) in the Project.
+*	Represents the data used to import a Product. Once imported, this data is persisted as a [Product](ctp:api:type:Product) in the Project.
 *
-*	This is the minimal representation required for creating a [Product](/../api/projects/products#product) in commercetools.
+*	This is the minimal representation required for creating a Product in Composable Commerce.
 *
  */
 type ProductImport struct {
-	// User-defined unique identifier. If a [Product](/../api/projects/products#product) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [Product](ctp:api:type:Product) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
-	// Maps to `Product.name`.
+	// Maps to `ProductData.name`.
 	Name LocalizedString `json:"name"`
-	// The `productType` of a [Product](/../api/projects/products#product).
-	// Maps to `Product.productType`.
-	// The Reference to the [ProductType](/../api/projects/productTypes#producttype) with which the Product is associated.
-	// If referenced ProductType does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary ProductType is created.
+	// Maps to `Product.productType`. If the referenced [ProductType](ctp:api:type:ProductType) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced ProductType is created.
 	ProductType ProductTypeKeyReference `json:"productType"`
-	// Human-readable identifiers usually used as deep-link URL to the related product. Each slug must be unique across a Project,
-	// but a product can have the same slug for different languages. Allowed are alphabetic, numeric, underscore (_) and hyphen (-) characters.
+	// Maps to `ProductData.slug`.
 	Slug LocalizedString `json:"slug"`
-	// Maps to `Product.description`.
+	// Maps to `ProductData.description`.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Maps to `Product.categories`.
-	// The References to the [Categories](/../api/projects/categories#category) with which the Product is associated.
-	// If referenced Categories do not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary Categories are created.
+	// Maps to `ProductData.categories`. If the referenced [Categories](ctp:api:type:Category) do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Categories are created.
 	Categories []CategoryKeyReference `json:"categories"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	Attributes []Attribute            `json:"attributes"`
+	// Maps to `ProductData.metaTitle`.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// Maps to `ProductData.metaDescription`.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
+	// Maps to `ProductData.metaKeywords`.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	// The Reference to the [TaxCategory](/../api/projects/taxCategories#taxcategory) with which the Product is associated.
-	// If referenced TaxCategory does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary TaxCategory is created.
+	// Maps to `Product.taxCategory`. If the referenced [TaxCategory](ctp:api:type:TaxCategory) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced TaxCategory is created.
 	TaxCategory *TaxCategoryKeyReference `json:"taxCategory,omitempty"`
-	// Search keywords are primarily used by the suggester but are also considered for the full-text search. SearchKeywords is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag). The value to a language tag key is an array of SearchKeyword for the specific language.
-	// ```json
-	// {
-	//   "en": [
-	//     { "text": "Multi tool" },
-	//     { "text": "Swiss Army Knife", "suggestTokenizer": { "type": "whitespace" } }
-	//   ],
-	//   "de": [
-	//     {
-	//       "text": "Schweizer Messer",
-	//       "suggestTokenizer": {
-	//         "type": "custom",
-	//         "inputs": ["schweizer messer", "offiziersmesser", "sackmesser"]
-	//       }
-	//     }
-	//   ]
-	// }
-	// ```
+	// Maps to `ProductData.searchKeywords`.
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
-	// The Reference to the [State](/../api/projects/states#state) with which the Product is associated.
-	// If referenced State does not exist, the `state` of the [ImportOperation](/import-operation#importoperation) will be set to `unresolved` until the necessary State is created.
+	// Maps to `Product.state`. If the referenced [State](ctp:api:type:State) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced State is created.
 	State *StateKeyReference `json:"state,omitempty"`
-	// Determines the published status and current/staged projection of the Product. For more information, see [Managing the published state of Products](/best-practices#managing-the-published-state-of-products).
+	// Determines the published status and current/staged projection of the Product. For more information, see [Managing the published state of Products](/import-export/best-practices#manage-published-state-of-products).
 	Publish *bool `json:"publish,omitempty"`
-	// Determines the type of Prices the API uses. See [ProductPriceMode](/../api/projects/products#productpricemode) for more details. If not provided, the existing `Product.priceMode` is not changed.
+	// Maps to `Product.priceMode`.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ProductImport) UnmarshalJSON(data []byte) error {
+	type Alias ProductImport
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Attributes {
+		var err error
+		obj.Attributes[i], err = mapDiscriminatorAttribute(obj.Attributes[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -212,6 +188,10 @@ func (obj ProductImport) MarshalJSON() ([]byte, error) {
 
 	if raw["categories"] == nil {
 		delete(raw, "categories")
+	}
+
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
 	}
 
 	return json.Marshal(raw)

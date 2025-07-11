@@ -55,6 +55,8 @@ type QuoteRequest struct {
 	InventoryMode *InventoryMode `json:"inventoryMode,omitempty"`
 	// Tax mode of the Cart referenced in the [QuoteRequestDraft](ctp:api:type:QuoteRequestDraft).
 	TaxMode TaxMode `json:"taxMode"`
+	// When calculating total prices on [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem), the selected mode is used for rounding.
+	PriceRoundingMode RoundingMode `json:"priceRoundingMode"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for rounding.
 	TaxRoundingMode RoundingMode `json:"taxRoundingMode"`
 	// When calculating taxes for `taxedPrice`, the selected mode is used for calculating the price with `LineItemLevel` (horizontally) or `UnitPriceLevel` (vertically) calculation mode.
@@ -84,7 +86,7 @@ type QuoteRequest struct {
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// The [Cart](ctp:api:type:Cart) from which a Quote is requested.
 	Cart *CartReference `json:"cart,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 

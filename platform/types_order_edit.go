@@ -84,7 +84,7 @@ type OrderEditDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// User-defined description regarding the Order Edit.
 	Comment *string `json:"comment,omitempty"`
-	// Set to `true` if you want to [peview](ctp:api:type:OrderEditPreviewSuccess) the edited Order first without persisting it (dry run).
+	// Set to `true` if you want to [preview](ctp:api:type:OrderEditPreviewSuccess) the edited Order first without persisting it (dry run).
 	// A dry run allows checking for potential [errors](ctp:api:type:OrderEditPreviewFailure) when trying to apply the `stagedActions`.
 	//
 	// Order [API Extensions](/../api/projects/api-extensions), if any, are also called in dry runs.
@@ -253,7 +253,7 @@ func mapDiscriminatorOrderEditResult(input interface{}) (OrderEditResult, error)
 }
 
 /**
-*	Result of a succesful application of `stagedActions` to the Order.
+*	Result of a successful application of `stagedActions` to the Order.
 *
  */
 type OrderEditApplied struct {
@@ -519,7 +519,7 @@ type StagedOrder struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to.
+	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// [Reference](ctp:api:type:Reference) to a Store the Order belongs to.
 	Store *StoreKeyReference `json:"store,omitempty"`
@@ -531,16 +531,20 @@ type StagedOrder struct {
 	// If a discount applies on `totalPrice`, this field holds the discounted value.
 	//
 	// Taxes are included if [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true` for each price.
-	TotalPrice TypedMoney `json:"totalPrice"`
+	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// - For `Platform` [TaxMode](ctp:api:type:TaxMode), it is automatically set when a [shipping address is set](ctp:api:type:OrderSetShippingAddressAction).
 	// - For `External` [TaxMode](ctp:api:type:TaxMode), it is automatically set when `shippingAddress` and external Tax Rates for all Line Items, Custom Line Items, and Shipping Methods in the Cart are set.
 	//
-	// If a discount applies on `totalPrice`, this field holds the discounted values.
+	// If a discount applies on `totalPrice`, this field holds the proportionally discounted value.
 	TaxedPrice *TaxedPrice `json:"taxedPrice,omitempty"`
 	// Sum of the `taxedPrice` field of [ShippingInfo](ctp:api:type:ShippingInfo) across all Shipping Methods.
+	//
+	// If a discount applies on `totalPrice`, this field holds the proportionally discounted value.
 	TaxedShippingPrice *TaxedPrice `json:"taxedShippingPrice,omitempty"`
 	// Discounts that apply on the total price of the Order.
 	DiscountOnTotalPrice *DiscountOnTotalPrice `json:"discountOnTotalPrice,omitempty"`
+	// Indicates how the total prices on [LineItems](ctp:api:type:LineItem) and [CustomLineItems](ctp:api:type:CustomLineItem) are rounded when calculated.
+	PriceRoundingMode *RoundingMode `json:"priceRoundingMode,omitempty"`
 	// Indicates how Tax Rates are set.
 	TaxMode *TaxMode `json:"taxMode,omitempty"`
 	// Indicates how monetary values are rounded when calculating taxes for `taxedPrice`.
@@ -598,6 +602,8 @@ type StagedOrder struct {
 	Cart *CartReference `json:"cart,omitempty"`
 	// [Reference](ctp:api:type:Reference) to the Quote for an [Order created from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST).
 	Quote *QuoteReference `json:"quote,omitempty"`
+	// [Reference](ctp:api:type:Reference) to the RecurringOrder that generated this Order.
+	RecurringOrder *RecurringOrderReference `json:"recurringOrder,omitempty"`
 	// Current status of the Order.
 	OrderState OrderState `json:"orderState"`
 	// Shipment status of the Order.
@@ -612,6 +618,8 @@ type StagedOrder struct {
 	SyncInfo []SyncInfo `json:"syncInfo"`
 	// Contains information regarding the returns associated with the Order.
 	ReturnInfo []ReturnInfo `json:"returnInfo"`
+	// Indicates if a combination of discount types can apply on an Order.
+	DiscountTypeCombination DiscountTypeCombination `json:"discountTypeCombination,omitempty"`
 	// Internal-only field.
 	LastMessageSequenceNumber *int `json:"lastMessageSequenceNumber,omitempty"`
 	// Custom Fields of the Order.
@@ -632,16 +640,16 @@ func (obj *StagedOrder) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-	if obj.TotalPrice != nil {
+	if obj.ShippingRateInput != nil {
 		var err error
-		obj.TotalPrice, err = mapDiscriminatorTypedMoney(obj.TotalPrice)
+		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
 		if err != nil {
 			return err
 		}
 	}
-	if obj.ShippingRateInput != nil {
+	if obj.DiscountTypeCombination != nil {
 		var err error
-		obj.ShippingRateInput, err = mapDiscriminatorShippingRateInput(obj.ShippingRateInput)
+		obj.DiscountTypeCombination, err = mapDiscriminatorDiscountTypeCombination(obj.DiscountTypeCombination)
 		if err != nil {
 			return err
 		}
@@ -859,12 +867,13 @@ type StagedOrderAddCustomLineItemAction struct {
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
 	// Container for Custom Line Item-specific addresses.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
-	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget)
-	// are applied to the Custom Line Item.
+	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget), [MultiBuyCustomLineItemsTarget](ctp:api:type:MultiBuyCustomLineItemsTarget), or [CartDiscountPatternTarget](ctp:api:type:CartDiscountPatternTarget) are applied to the Custom Line Item.
 	// - If `External`, Cart Discounts are not considered on the Custom Line Item.
 	PriceMode *CustomLineItemPriceMode `json:"priceMode,omitempty"`
 	// Custom Fields for the Custom Line Item.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Recurring Order and frequency data.
+	RecurrenceInfo *CustomLineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1028,6 +1037,8 @@ type StagedOrderAddLineItemAction struct {
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 	// Custom Fields for the Line Item.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Recurring Order and frequency data.
+	RecurrenceInfo *LineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1280,6 +1291,25 @@ func (obj StagedOrderChangePaymentStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Changing the price rounding mode leads to [recalculation of taxes](/../api/carts-orders-overview#taxes).
+*
+ */
+type StagedOrderChangePriceRoundingModeAction struct {
+	// New value to set.
+	PriceRoundingMode RoundingMode `json:"priceRoundingMode"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderChangePriceRoundingModeAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderChangePriceRoundingModeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "changePriceRoundingMode", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Produces the [Order Shipment State Changed](ctp:api:type:OrderShipmentStateChangedMessage) Message.
 *
  */
@@ -1299,7 +1329,7 @@ func (obj StagedOrderChangeShipmentStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the tax calculation mode leads to [recalculation of taxes](/../api/carts-orders-overview#cart-tax-calculation).
+*	Changing the tax calculation mode leads to [recalculation of taxes](/../api/carts-orders-overview#taxes).
 *
  */
 type StagedOrderChangeTaxCalculationModeAction struct {
@@ -1338,7 +1368,7 @@ func (obj StagedOrderChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Changing the tax rounding mode leads to [recalculation of taxes](/../api/carts-orders-overview#cart-tax-calculation).
+*	Changing the tax rounding mode leads to [recalculation of taxes](/../api/carts-orders-overview#taxes).
 *
  */
 type StagedOrderChangeTaxRoundingModeAction struct {
@@ -1616,6 +1646,29 @@ func (obj StagedOrderSetBillingAddressCustomTypeAction) MarshalJSON() ([]byte, e
 }
 
 /**
+*	Updates the Business Unit on the Order. Setting the Order's `businessUnit` does not recalculate prices or discounts on the Order.
+*
+*	Produces the [OrderBusinessUnitSet](ctp:api:type:OrderBusinessUnitSetMessage) Message.
+*
+ */
+type StagedOrderSetBusinessUnitAction struct {
+	// New Business Unit to assign to the Order. If empty, any existing value is removed.
+	//
+	// If the referenced Business Unit does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
+	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetBusinessUnitAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setBusinessUnit", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Setting the country can lead to changes in the [LineItem](ctp:api:type:LineItem) prices.
 *
  */
@@ -1791,6 +1844,8 @@ type StagedOrderSetCustomShippingMethodAction struct {
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	// External Tax Rate for the `shippingRate` to be set if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// Custom Fields for the custom Shipping Method.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1847,7 +1902,7 @@ func (obj StagedOrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 *	This update action can only be used if a Customer is not assigned to a Cart.
 *	If a Customer is already assigned, the Cart uses the Customer Group of the assigned Customer.
 *
-*	To reflect the new Customer Group, this update action can result in [updates to the Cart](/../carts-orders-overview#cart-updates). When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
+*	To reflect the new Customer Group, this update action can result in [updates to the Cart](/../api/carts-orders-overview#update-a-cart). When this occurs, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
 *
  */
 type StagedOrderSetCustomerGroupAction struct {
@@ -2699,6 +2754,8 @@ type StagedOrderSetShippingAddressAndCustomShippingMethodAction struct {
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	// An external Tax Rate can be set if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
+	// Custom Fields for the custom Shipping Method.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

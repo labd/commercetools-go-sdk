@@ -80,7 +80,7 @@ type StateDraft struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// Set to `false` if the State is not the first step in a workflow.
 	Initial *bool `json:"initial,omitempty"`
-	// If suitable, assign predifined roles the State can fulfill in case the State's `type` is `LineItemState` or `ReviewState`.
+	// If suitable, assign predefined roles the State can fulfill in case the State's `type` is `LineItemState` or `ReviewState`.
 	Roles []StateRoleEnum `json:"roles"`
 	// Define the list of States of the same `type` to which the current State can be transitioned to.
 	//
@@ -199,14 +199,15 @@ const (
 type StateTypeEnum string
 
 const (
-	StateTypeEnumOrderState        StateTypeEnum = "OrderState"
-	StateTypeEnumLineItemState     StateTypeEnum = "LineItemState"
-	StateTypeEnumProductState      StateTypeEnum = "ProductState"
-	StateTypeEnumReviewState       StateTypeEnum = "ReviewState"
-	StateTypeEnumPaymentState      StateTypeEnum = "PaymentState"
-	StateTypeEnumQuoteRequestState StateTypeEnum = "QuoteRequestState"
-	StateTypeEnumStagedQuoteState  StateTypeEnum = "StagedQuoteState"
-	StateTypeEnumQuoteState        StateTypeEnum = "QuoteState"
+	StateTypeEnumOrderState          StateTypeEnum = "OrderState"
+	StateTypeEnumRecurringOrderState StateTypeEnum = "RecurringOrderState"
+	StateTypeEnumLineItemState       StateTypeEnum = "LineItemState"
+	StateTypeEnumProductState        StateTypeEnum = "ProductState"
+	StateTypeEnumReviewState         StateTypeEnum = "ReviewState"
+	StateTypeEnumPaymentState        StateTypeEnum = "PaymentState"
+	StateTypeEnumQuoteRequestState   StateTypeEnum = "QuoteRequestState"
+	StateTypeEnumStagedQuoteState    StateTypeEnum = "StagedQuoteState"
+	StateTypeEnumQuoteState          StateTypeEnum = "QuoteState"
 )
 
 type StateUpdate struct {

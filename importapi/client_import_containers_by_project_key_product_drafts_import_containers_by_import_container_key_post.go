@@ -29,7 +29,7 @@ func (rb *ByProjectKeyProductDraftsImportContainersByImportContainerKeyRequestMe
 }
 
 /**
-*	Creates a request for creating new ProductDrafts or updating existing ones.
+*	Creates an Import Request for Products.
 *
  */
 func (rb *ByProjectKeyProductDraftsImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {

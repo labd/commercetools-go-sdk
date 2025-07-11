@@ -87,7 +87,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder) Get() *ByProj
 }
 
 /**
-*	Checks if a Customer exists for a given Query Predicate. Returns a `200 OK` status if any Customers match the Query Predicate or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Customers exist for the provided query predicate. Returns a `200 OK` status if any Customers match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCustomersRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyCustomersRequestMethodHead{

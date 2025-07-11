@@ -26,7 +26,7 @@ func (rb *ByProjectKeyCartsCustomerIdByCustomerIdRequestBuilder) Get() *ByProjec
 }
 
 /**
-*	Checks if a Cart of a Customer exists. Returns a `200 OK` status if the Cart exists or a `404 Not Found` otherwise.
+*	Checks if a Cart exists for a Customer. Returns a `200 OK` status if the Cart exists or [Not Found](/../api/errors#404-not-found) otherwise.
  */
 func (rb *ByProjectKeyCartsCustomerIdByCustomerIdRequestBuilder) Head() *ByProjectKeyCartsCustomerIdByCustomerIdRequestMethodHead {
 	return &ByProjectKeyCartsCustomerIdByCustomerIdRequestMethodHead{

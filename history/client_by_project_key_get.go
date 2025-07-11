@@ -40,7 +40,7 @@ type ByProjectKeyRequestMethodGetInput struct {
 	Type                            *string
 	ResourceId                      *string
 	ResourceKey                     *string
-	Source                          *string
+	Source                          *Source
 	Changes                         []string
 	Stores                          []string
 	ExcludePlatformInitiatedChanges []PlatformInitiatedChange
@@ -214,7 +214,7 @@ func (rb *ByProjectKeyRequestMethodGet) ResourceKey(v string) *ByProjectKeyReque
 	return rb
 }
 
-func (rb *ByProjectKeyRequestMethodGet) Source(v string) *ByProjectKeyRequestMethodGet {
+func (rb *ByProjectKeyRequestMethodGet) Source(v Source) *ByProjectKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
 	}

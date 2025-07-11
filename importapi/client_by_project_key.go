@@ -103,3 +103,9 @@ func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodes
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) ProductSelections() *ByProjectKeyProductSelectionsRequestBuilder {
+	return &ByProjectKeyProductSelectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}

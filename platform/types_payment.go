@@ -110,7 +110,7 @@ type PaymentDraft struct {
 	// Deprecated because the value can be calculated from the total amounts saved in the [Transactions](ctp:api:type:Transaction).
 	AmountRefunded *Money `json:"amountRefunded,omitempty"`
 	// Information regarding the payment interface (for example, a PSP), and the specific payment method used.
-	PaymentMethodInfo *PaymentMethodInfo `json:"paymentMethodInfo,omitempty"`
+	PaymentMethodInfo *PaymentMethodInfoDraft `json:"paymentMethodInfo,omitempty"`
 	// Current status of the Payment.
 	PaymentStatus *PaymentStatusDraft `json:"paymentStatus,omitempty"`
 	// Financial transactions of the Payment. Each Transaction has a [TransactionType](ctp:api:type:TransactionType) and a [TransactionState](ctp:api:type:TransactionState).
@@ -151,15 +151,42 @@ func (obj PaymentDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Represents a snapshot of the PaymentMethod data used for a Payment.
+*
+ */
 type PaymentMethodInfo struct {
-	// Payment service that processes the Payment (for example, a PSP).
-	// Once set, it cannot be changed.
-	// The combination of `paymentInterface` and the `interfaceId` of a [Payment](ctp:api:type:Payment) must be unique.
+	// Payment service that processes the Payment—for example, a PSP.
+	// The combination of `paymentInterface` and the `interfaceId` of a Payment is unique.
 	PaymentInterface *string `json:"paymentInterface,omitempty"`
-	// Payment method used, for example, credit card, or cash advance.
+	// Payment method used—for example, a credit card or direct debit.
 	Method *string `json:"method,omitempty"`
-	// Localizable name of the payment method.
+	// Name of the Payment Method.
 	Name *LocalizedString `json:"name,omitempty"`
+	// Tokenized representation of the Payment Method used by the payment interface.
+	Token *PaymentMethodToken `json:"token,omitempty"`
+	// Account or instance of the payment interface when multiple accounts are used (per interface).
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Custom Fields of the PaymentMethodInfo.
+	Custom *CustomFields `json:"custom,omitempty"`
+}
+
+type PaymentMethodInfoDraft struct {
+	// Payment service that processes the Payment—for example, a PSP.
+	// The combination of `paymentInterface` and the `interfaceId` of a Payment must be unique.
+	//
+	// The value cannot be modified after it is set.
+	PaymentInterface *string `json:"paymentInterface,omitempty"`
+	// Payment method to use—for example, a credit card or direct debit.
+	Method *string `json:"method,omitempty"`
+	// Name of the Payment Method.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Tokenized representation of the Payment Method used by the payment interface.
+	Token *PaymentMethodToken `json:"token,omitempty"`
+	// Account or instance of the payment interface when multiple accounts are used (per interface).
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Custom fields for the PaymentMethodInfo.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 /**
@@ -379,6 +406,30 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setMethodInfo":
+		obj := PaymentSetMethodInfoAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoCustomField":
+		obj := PaymentSetMethodInfoCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoCustomType":
+		obj := PaymentSetMethodInfoCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoInterfaceAccount":
+		obj := PaymentSetMethodInfoInterfaceAccountAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setMethodInfoInterface":
 		obj := PaymentSetMethodInfoInterfaceAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -393,6 +444,12 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 		return obj, nil
 	case "setMethodInfoName":
 		obj := PaymentSetMethodInfoNameAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoToken":
+		obj := PaymentSetMethodInfoTokenAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -738,9 +795,15 @@ func (obj PaymentSetExternalIdAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setExternalId", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action generates the [PaymentInterfaceIdSet](ctp:api:type:PaymentInterfaceIdSetMessage) Message.
+*
+ */
 type PaymentSetInterfaceIdAction struct {
 	// Value to set.
-	// Once set, the `interfaceId` cannot be changed.
+	// The combination of `interfaceId` and `paymentInterface` of a PaymentMethodInfo must be unique.
+	//
+	// The value cannot be modified after it is set.
 	InterfaceId string `json:"interfaceId"`
 }
 
@@ -770,6 +833,125 @@ func (obj PaymentSetKeyAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action lets you update multiple fields of a PaymentMethodInfo in one operation. Only fields with explicitly provided values will be updated.
+*
+ */
+type PaymentSetMethodInfoAction struct {
+	// Payment service that processes the Payment—for example, a PSP.
+	// The combination of `paymentInterface` and the `interfaceId` of a Payment must be unique.
+	// The value cannot be modified after it is set.
+	//
+	// Setting this field is equivalent to the `setMethodInfoInterface` action and will generate the [PaymentMethodInfoInterfaceSet](ctp:api:type:PaymentMethodInfoInterfaceSetMessage) Message.
+	PaymentInterface *string `json:"paymentInterface,omitempty"`
+	// Payment method to use—for example, a credit card or direct debit.
+	// If empty, any existing value will be removed.
+	//
+	// Setting this field is equivalent to the `setMethodInfoMethod` action and will generate the [PaymentMethodInfoMethodSet](ctp:api:type:PaymentMethodInfoMethodSetMessage) Message.
+	Method *string `json:"method,omitempty"`
+	// Name of the Payment Method.
+	// If empty, any existing value will be removed.
+	//
+	// Setting this field is equivalent to the `setMethodInfoName` action and will generate the [PaymentMethodInfoNameSet](ctp:api:type:PaymentMethodInfoNameSetMessage) Message.
+	Name *LocalizedString `json:"name,omitempty"`
+	// Tokenized payment method information of the Payment Method.
+	// If empty, any existing value will be removed.
+	//
+	// Setting this field is equivalent to the `setMethodInfoToken` action and will generate the [PaymentMethodInfoTokenSet](ctp:api:type:PaymentMethodInfoTokenSetMessage) Message.
+	Token *PaymentMethodToken `json:"token,omitempty"`
+	// Account or instance of the payment interface when multiple accounts are used (per interface).
+	// If empty, any existing value will be removed.
+	//
+	// Setting this field is equivalent to the `setMethodInfoInterfaceAccount` action and will generate the [PaymentMethodInfoInterfaceAccountSet](ctp:api:type:PaymentMethodInfoInterfaceAccountSetMessage) Message.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+	// Custom Fields for the PaymentMethodInfo.
+	// If not provided, any existing Custom Fields will be removed, including the Custom Type.
+	//
+	// Setting this field is equivalent to the `setMethodInfoCustomType` and `setMethodInfoCustomField` actions, and will generate the following Messages:
+	//
+	// - Adding or updating a Custom Type on a Payment Method Info generates the [PaymentMethodInfoCustomTypeSet](ctp:api:type:PaymentMethodInfoCustomTypeSetMessage) Message, removing one generates the [PaymentMethodInfoCustomTypeRemoved](ctp:api:type:PaymentMethodInfoCustomTypeRemovedMessage) Message.
+	// - Adding a Custom Field to a Payment generates the [PaymentMethodInfoCustomFieldAdded](ctp:api:type:PaymentMethodInfoCustomFieldAddedMessage) Message, removing one generates the [PaymentMethodInfoCustomFieldRemoved](ctp:api:type:PaymentMethodInfoCustomFieldRemovedMessage) Message, and updating an existing one generates the [PaymentMethodInfoCustomFieldChanged](ctp:api:type:PaymentMethodInfoCustomFieldChangedMessage) Message.
+	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentSetMethodInfoAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetMethodInfoAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfo", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adding a Custom Field to a PaymentMethodInfo generates the [PaymentMethodInfoCustomFieldAdded](ctp:api:type:PaymentMethodInfoCustomFieldAddedMessage) Message, removing one generates the [PaymentMethodInfoCustomFieldRemoved](ctp:api:type:PaymentMethodInfoCustomFieldRemovedMessage) Message, and updating an existing one generates the [PaymentMethodInfoCustomFieldChanged](ctp:api:type:PaymentMethodInfoCustomFieldChangedMessage) Message.
+*
+ */
+type PaymentSetMethodInfoCustomFieldAction struct {
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// If `value` is provided, it is set for the field defined by `name`.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentSetMethodInfoCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetMethodInfoCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoCustomField", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adding or updating a Custom Type on a PaymentMethodInfo generates the [PaymentMethodInfoCustomTypeSet](ctp:api:type:PaymentMethodInfoCustomTypeSetMessage) Message, removing one generates the [PaymentMethodInfoCustomTypeRemoved](ctp:api:type:PaymentMethodInfoCustomTypeRemovedMessage) Message.
+*
+ */
+type PaymentSetMethodInfoCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](/../api/projects/custom-fields).
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `paymentMethodInfo`.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentSetMethodInfoCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetMethodInfoCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates the [PaymentMethodInfoInterfaceAccountSet](ctp:api:type:PaymentMethodInfoInterfaceAccountSetMessage) Message.
+*
+ */
+type PaymentSetMethodInfoInterfaceAccountAction struct {
+	// New account or instance of the payment interface.
+	// If empty, any existing value will be removed.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentSetMethodInfoInterfaceAccountAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetMethodInfoInterfaceAccountAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoInterfaceAccount", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates the [PaymentMethodInfoInterfaceSet](ctp:api:type:PaymentMethodInfoInterfaceSetMessage) Message.
+*
+ */
 type PaymentSetMethodInfoInterfaceAction struct {
 	// Value to set.
 	// Once set, the `paymentInterface` of the `paymentMethodInfo` cannot be changed.
@@ -786,6 +968,10 @@ func (obj PaymentSetMethodInfoInterfaceAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setMethodInfoInterface", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action generates the [PaymentMethodInfoMethodSet](ctp:api:type:PaymentMethodInfoMethodSetMessage) Message.
+*
+ */
 type PaymentSetMethodInfoMethodAction struct {
 	// Value to set.
 	// If empty, any existing value will be removed.
@@ -802,6 +988,10 @@ func (obj PaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setMethodInfoMethod", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action generates the [PaymentMethodInfoNameSet](ctp:api:type:PaymentMethodInfoNameSetMessage) Message.
+*
+ */
 type PaymentSetMethodInfoNameAction struct {
 	// Value to set.
 	// If empty, any existing value will be removed.
@@ -816,6 +1006,26 @@ func (obj PaymentSetMethodInfoNameAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMethodInfoName", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates the [PaymentMethodInfoTokenSet](ctp:api:type:PaymentMethodInfoTokenSetMessage) Message.
+*
+ */
+type PaymentSetMethodInfoTokenAction struct {
+	// Value to set.
+	// If empty, any existing value will be removed.
+	Token *PaymentMethodToken `json:"token,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentSetMethodInfoTokenAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetMethodInfoTokenAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoToken", Alias: (*Alias)(&obj)})
 }
 
 /**

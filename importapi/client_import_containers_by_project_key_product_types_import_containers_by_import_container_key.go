@@ -13,7 +13,7 @@ type ByProjectKeyProductTypesImportContainersByImportContainerKeyRequestBuilder 
 }
 
 /**
-*	Creates a request for creating new ProductTypes or updating existing ones.
+*	Creates an Import Request for ProductTypes.
  */
 func (rb *ByProjectKeyProductTypesImportContainersByImportContainerKeyRequestBuilder) Post(body ProductTypeImportRequest) *ByProjectKeyProductTypesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyProductTypesImportContainersByImportContainerKeyRequestMethodPost{

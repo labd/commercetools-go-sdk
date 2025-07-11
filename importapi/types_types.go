@@ -8,7 +8,7 @@ import (
 )
 
 /**
-*	Provides a visual representation type for this field. It is only relevant for string-based field types like [CustomFieldStringType](ctp:import:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:import:type:CustomFieldLocalizedStringType).
+*	Provides a visual representation type for this field. It is only relevant for string-based field types like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType).
 *
  */
 type TypeTextInputHint string
@@ -19,7 +19,7 @@ const (
 )
 
 /**
-*	IDs indicating the [customizable resources and data types](/../api/projects/types#list-of-customizable-data-types). Maps to `Type.resourceTypeId`.
+*	IDs indicating the [type of resource](ctp:api:type:ResourceTypeId). Maps to `Type.resourceTypeIds`.
 *
  */
 type ResourceTypeId string
@@ -57,6 +57,11 @@ const (
 	ResourceTypeIdTransaction                 ResourceTypeId = "transaction"
 )
 
+/**
+*	Defines the data type of a Custom Field. Maps to `Type.FieldDefinition.type`.
+*	The `discriminator` is used to determine the type of the field.
+*
+ */
 type FieldType interface{}
 
 func mapDiscriminatorFieldType(input interface{}) (FieldType, error) {
@@ -171,7 +176,7 @@ func (obj CustomFieldBooleanType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Field type for [DateTime](ctp:import:type:DateTime) values.
+*	Field type for [DateTime](ctp:api:type:DateTime) values.
  */
 type CustomFieldDateTimeType struct {
 }
@@ -187,7 +192,7 @@ func (obj CustomFieldDateTimeType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Field type for [Date](ctp:import:type:Date) values.
+*	Field type for [Date](ctp:api:type:Date) values.
  */
 type CustomFieldDateType struct {
 }
@@ -259,7 +264,7 @@ type CustomFieldLocalizedEnumValue struct {
 }
 
 /**
-*	Field type for [LocalizedString](ctp:import:type:LocalizedString) values.
+*	Field type for [LocalizedString](ctp:api:type:LocalizedString) values.
  */
 type CustomFieldLocalizedStringType struct {
 }
@@ -275,7 +280,7 @@ func (obj CustomFieldLocalizedStringType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Field type for [CentPrecisionMoney](ctp:import:type:CentPrecisionMoney) values.
+*	Field type for [CentPrecisionMoney](ctp:api:type:CentPrecisionMoney) values.
  */
 type CustomFieldMoneyType struct {
 }
@@ -307,7 +312,7 @@ func (obj CustomFieldNumberType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Field type for [Reference](ctp:import:type:Reference) values.
+*	Field type for [Reference](ctp:api:type:Reference) values.
  */
 type CustomFieldReferenceType struct {
 	// Resource type the Custom Field can reference.
@@ -400,7 +405,7 @@ func (obj CustomFieldStringType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Field type for [Time](ctp:import:type:Time) values.
+*	Field type for [Time](ctp:api:type:Time) values.
  */
 type CustomFieldTimeType struct {
 }
@@ -416,7 +421,7 @@ func (obj CustomFieldTimeType) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Defines a [Custom Field](/../api/projects/custom-fields) and its meta-information. Maps to `Type.FieldDefinition`.
+*	Defines a [Custom Field](/projects/custom-fields) and its meta-information. Maps to `Type.FieldDefinition`.
 *
  */
 type FieldDefinition struct {
@@ -428,7 +433,7 @@ type FieldDefinition struct {
 	Label LocalizedString `json:"label"`
 	// Defines whether the field is required to have a value. This value cannot be changed after the Type is imported.
 	Required bool `json:"required"`
-	// Provides a visual representation type for this field. It is only relevant for string-based field types like [CustomFieldStringType](ctp:import:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:import:type:CustomFieldLocalizedStringType).
+	// Provides a visual representation type for this field. It is only relevant for string-based field types like [CustomFieldStringType](ctp:api:type:CustomFieldStringType) and [CustomFieldLocalizedStringType](ctp:api:type:CustomFieldLocalizedStringType).
 	InputHint *TypeTextInputHint `json:"inputHint,omitempty"`
 }
 
@@ -451,11 +456,11 @@ func (obj *FieldDefinition) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	The data representation for a Type to be imported that is persisted as a [Type](/../api/projects/types#type) in the Project.
+*	Represents the data used to import a Type. Once imported, this data is persisted as a [Type](ctp:api:type:Type) in the Project.
 *
  */
 type TypeImport struct {
-	// User-defined unique identifier for the Type. If a [Type](/../api/projects/types#type) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier for the Type. If a [Type](ctp:api:type:Type) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `Type.name`.
 	Name LocalizedString `json:"name"`

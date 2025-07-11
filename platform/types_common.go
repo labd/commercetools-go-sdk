@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+/**
+*	Each query endpoint returns a paged query response containing the actual resources matching the query predicate plus information about [pagination](#pagination).
+*	This documents the fields all query responses have in common, for specific response types, see the respective API reference pages.
+*
+ */
 type PagedQueryResponse struct {
 	// Number of [results requested](/../api/general-concepts#limit).
 	Limit int `json:"limit"`
@@ -20,9 +25,12 @@ type PagedQueryResponse struct {
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
 	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
-	Total   *int           `json:"total,omitempty"`
+	Total *int `json:"total,omitempty"`
+	// The resources matching the query predicate.
+	// Each query endpoint returns resources of its specific type.
 	Results []BaseResource `json:"results"`
-	Meta    *interface{}   `json:"meta,omitempty"`
+	// Object containing supplementary information about the results.
+	Meta *interface{} `json:"meta,omitempty"`
 }
 
 type Update struct {
@@ -35,7 +43,7 @@ type UpdateAction struct {
 }
 
 type Asset struct {
-	// Unique identifier of the Asset.
+	// Unique identifier of the Asset. Not required when importing Assets using the [Import API](/import-export/import-resources).
 	ID      string        `json:"id"`
 	Sources []AssetSource `json:"sources"`
 	// Name of the Asset.
@@ -363,7 +371,7 @@ type ClientLogging struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
@@ -379,7 +387,7 @@ type CreatedBy struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was created.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Project when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 	// Indicates if the resource was created indirectly.
 	AttributedTo *Attribution `json:"attributedTo,omitempty"`
@@ -412,6 +420,8 @@ func (obj *DiscountedPrice) UnmarshalJSON(data []byte) error {
 
 type DiscountedPriceDraft struct {
 	// Sets the money value for the discounted price.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// Relates the referenced [ProductDiscount](ctp:api:type:ProductDiscount) to the discounted price.
 	Discount ProductDiscountReference `json:"discount"`
@@ -528,7 +538,7 @@ type LastModifiedBy struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was modified.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only present when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 	// Indicates if the resource was modified indirectly.
 	AttributedTo *Attribution `json:"attributedTo,omitempty"`
@@ -594,6 +604,8 @@ type Price struct {
 	Tiers []PriceTier `json:"tiers"`
 	// Custom Fields defined for the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// [Recurrence Policy](ctp:api:type:RecurrencePolicy) for which this Price is valid.
+	RecurrencePolicy *RecurrencePolicyReference `json:"recurrencePolicy,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -645,6 +657,8 @@ type PriceDraft struct {
 	// User-defined identifier for the Price. It must be unique per [ProductVariant](ctp:api:type:ProductVariant).
 	Key *string `json:"key,omitempty"`
 	// Money value of this Price.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// Set this field if this Price is only valid for the specified country.
 	Country *string `json:"country,omitempty"`
@@ -671,6 +685,8 @@ type PriceDraft struct {
 	Tiers []PriceTierDraft `json:"tiers"`
 	// Custom Fields for the Price.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) for which this Price is valid.
+	RecurrencePolicy *RecurrencePolicyResourceIdentifier `json:"recurrencePolicy,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -747,6 +763,7 @@ type PriceTierDraft struct {
 	// In the case one of the constraint is not met an [InvalidField](ctp:api:type:InvalidFieldError) is returned.
 	MinimumQuantity int `json:"minimumQuantity"`
 	// Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	//
 	// The `currencyCode` of a Price tier must be the same as the `currencyCode` in the `value` of the related Price.
 	Value Money `json:"value"`
@@ -910,6 +927,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "discount-group":
+		obj := DiscountGroupReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "inventory-entry":
 		obj := InventoryEntryReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -924,6 +947,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return obj, nil
 	case "order":
 		obj := OrderReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "payment-method":
+		obj := PaymentMethodReference{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -972,6 +1001,18 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return obj, nil
 	case "quote":
 		obj := QuoteReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "recurrence-policy":
+		obj := RecurrencePolicyReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "recurring-order":
+		obj := RecurringOrderReference{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1062,11 +1103,13 @@ const (
 	ReferenceTypeIdCustomerPasswordToken ReferenceTypeId = "customer-password-token"
 	ReferenceTypeIdDirectDiscount        ReferenceTypeId = "direct-discount"
 	ReferenceTypeIdDiscountCode          ReferenceTypeId = "discount-code"
+	ReferenceTypeIdDiscountGroup         ReferenceTypeId = "discount-group"
 	ReferenceTypeIdExtension             ReferenceTypeId = "extension"
 	ReferenceTypeIdInventoryEntry        ReferenceTypeId = "inventory-entry"
 	ReferenceTypeIdKeyValueDocument      ReferenceTypeId = "key-value-document"
 	ReferenceTypeIdOrder                 ReferenceTypeId = "order"
 	ReferenceTypeIdOrderEdit             ReferenceTypeId = "order-edit"
+	ReferenceTypeIdPaymentMethod         ReferenceTypeId = "payment-method"
 	ReferenceTypeIdPayment               ReferenceTypeId = "payment"
 	ReferenceTypeIdProduct               ReferenceTypeId = "product"
 	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
@@ -1076,6 +1119,8 @@ const (
 	ReferenceTypeIdProductType           ReferenceTypeId = "product-type"
 	ReferenceTypeIdQuote                 ReferenceTypeId = "quote"
 	ReferenceTypeIdQuoteRequest          ReferenceTypeId = "quote-request"
+	ReferenceTypeIdRecurrencePolicy      ReferenceTypeId = "recurrence-policy"
+	ReferenceTypeIdRecurringOrder        ReferenceTypeId = "recurring-order"
 	ReferenceTypeIdReview                ReferenceTypeId = "review"
 	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
 	ReferenceTypeIdShoppingList          ReferenceTypeId = "shopping-list"
@@ -1169,6 +1214,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 			return nil, err
 		}
 		return obj, nil
+	case "discount-group":
+		obj := DiscountGroupResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "inventory-entry":
 		obj := InventoryEntryResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1225,6 +1276,18 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 		return obj, nil
 	case "quote":
 		obj := QuoteResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "recurrence-policy":
+		obj := RecurrencePolicyResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "recurring-order":
+		obj := RecurringOrderResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}

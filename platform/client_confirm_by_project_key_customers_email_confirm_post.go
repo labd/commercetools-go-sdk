@@ -29,7 +29,11 @@ func (rb *ByProjectKeyCustomersEmailConfirmRequestMethodPost) WithHeaders(header
 }
 
 /**
+*	Use this method to verify a global Customer's email during their [email verification process](/../api/customers-overview#customer-email-verification).
+*
 *	Verifying the email of the Customer produces the [CustomerEmailVerified](ctp:api:type:CustomerEmailVerifiedMessage) Message.
+*
+*	After the email is verified, all email tokens issued previously through the [email verification flow](/../api/projects/customers#email-verification-of-customer) are invalidated. This invalidation of tokens is [eventually consistent](/../api/general-concepts#eventual-consistency).
 *
  */
 func (rb *ByProjectKeyCustomersEmailConfirmRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {
@@ -68,6 +72,8 @@ func (rb *ByProjectKeyCustomersEmailConfirmRequestMethodPost) Execute(ctx contex
 			return nil, err
 		}
 		return nil, errorObj
+	case 404:
+		return nil, ErrNotFound
 	case 401:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -82,8 +88,6 @@ func (rb *ByProjectKeyCustomersEmailConfirmRequestMethodPost) Execute(ctx contex
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

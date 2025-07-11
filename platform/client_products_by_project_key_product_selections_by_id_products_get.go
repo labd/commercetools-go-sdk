@@ -27,15 +27,26 @@ func (r *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet) Dump() map[s
 }
 
 type ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput struct {
+	Where     []string
+	WithTotal *bool
 	Expand    []string
 	Limit     *int
 	Offset    *int
-	WithTotal *bool
 	Sort      []string
 }
 
 func (input *ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	for _, v := range input.Where {
+		values.Add("where", fmt.Sprintf("%v", v))
+	}
+	if input.WithTotal != nil {
+		if *input.WithTotal {
+			values.Add("withTotal", "true")
+		} else {
+			values.Add("withTotal", "false")
+		}
+	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
@@ -45,17 +56,26 @@ func (input *ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput) Val
 	if input.Offset != nil {
 		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
-	if input.WithTotal != nil {
-		if *input.WithTotal {
-			values.Add("withTotal", "true")
-		} else {
-			values.Add("withTotal", "false")
-		}
-	}
 	for _, v := range input.Sort {
 		values.Add("sort", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet) Where(v []string) *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput{}
+	}
+	rb.params.Where = v
+	return rb
+}
+
+func (rb *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput{}
+	}
+	rb.params.WithTotal = &v
+	return rb
 }
 
 func (rb *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet) Expand(v []string) *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet {
@@ -79,14 +99,6 @@ func (rb *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet) Offset(v in
 		rb.params = &ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput{}
 	}
 	rb.params.Offset = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductSelectionsByIDProductsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductSelectionsByIDProductsRequestMethodGetInput{}
-	}
-	rb.params.WithTotal = &v
 	return rb
 }
 

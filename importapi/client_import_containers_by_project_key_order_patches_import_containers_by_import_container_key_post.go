@@ -29,7 +29,7 @@ func (rb *ByProjectKeyOrderPatchesImportContainersByImportContainerKeyRequestMet
 }
 
 /**
-*	Creates a new import request for order patches
+*	Creates an Import Request for updating Orders.
  */
 func (rb *ByProjectKeyOrderPatchesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)

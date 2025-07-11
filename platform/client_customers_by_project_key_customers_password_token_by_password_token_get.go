@@ -53,6 +53,11 @@ func (rb *ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestMethodGet) Wit
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Use this method to retrieve the details of a global Customer by using the password token during their [password reset process](/../api/customers-overview#customer-password-reset).
+*
+ */
 func (rb *ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestMethodGet) Execute(ctx context.Context) (result *Customer, err error) {
 	var queryParams url.Values
 	if rb.params != nil {
@@ -89,6 +94,8 @@ func (rb *ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestMethodGet) Exe
 			return nil, err
 		}
 		return nil, errorObj
+	case 404:
+		return nil, ErrNotFound
 	case 401:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
@@ -103,8 +110,6 @@ func (rb *ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestMethodGet) Exe
 			return nil, err
 		}
 		return nil, errorObj
-	case 404:
-		return nil, ErrNotFound
 	case 500:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

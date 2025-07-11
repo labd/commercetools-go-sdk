@@ -55,6 +55,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
+*	Retrieves an Order with the provided `orderNumber` in a [BusinessUnit](ctp:api:type:BusinessUnit).
 *	If the Order exists in the [Project](ctp:api:type:Project) but does not reference the requested [BusinessUnit](ctp:api:type:BusinessUnit), this method returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 *
  */

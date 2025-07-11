@@ -28,7 +28,7 @@ func (rb *ByProjectKeyStoresKeyByKeyRequestMethodHead) WithHeaders(headers http.
 }
 
 /**
-*	Checks if a Store exists for a given `key`. Returns a `200 OK` status if the Store exists or a `404 Not Found` otherwise.
+*	Checks if a Store exists with the provided `key`. Returns a `200 OK` status if the Store exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyStoresKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

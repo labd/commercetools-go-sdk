@@ -29,7 +29,7 @@ func (rb *ByProjectKeyProductTypesImportContainersByImportContainerKeyRequestMet
 }
 
 /**
-*	Creates a request for creating new ProductTypes or updating existing ones.
+*	Creates an Import Request for ProductTypes.
  */
 func (rb *ByProjectKeyProductTypesImportContainersByImportContainerKeyRequestMethodPost) Execute(ctx context.Context) (result *ImportResponse, err error) {
 	data, err := serializeInput(rb.body)

@@ -55,7 +55,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if any Orders match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Orders exist with provided query predicate in a [BusinessUnit](ctp:api:type:BusinessUnit). Returns a `200 OK` status if any Orders match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyOrdersRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

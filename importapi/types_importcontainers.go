@@ -3,57 +3,155 @@ package importapi
 // Generated file, please do not change!!!
 
 import (
+	"encoding/json"
+	"errors"
 	"time"
 )
 
 /**
-*	Serves as the entry point of resources.
-*	An Import Container is not resource type-specific.
-*
+*	The strategy of the retention policy. Used to determine how the ImportContainer should be retained.
  */
-type ImportContainer struct {
-	// User-defined unique identifier for the ImportContainer.
-	// Keys can only contain alphanumeric characters (a-Z, 0-9), underscores and hyphens (_, -).
-	Key string `json:"key"`
-	// The [resource type](#importresourcetype) the ImportContainer is able to handle.
-	// If not present, the ImportContainer is able to import all of the supported [ImportResourceTypes](#importresourcetype).
-	ResourceType *ImportResourceType `json:"resourceType,omitempty"`
-	// The version of the ImportContainer.
-	Version int `json:"version"`
-	// The time when the ImportContainer was created.
-	CreatedAt time.Time `json:"createdAt"`
-	// The last time when the ImportContainer was modified.
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
+type StrategyEnum string
+
+const (
+	StrategyEnumTtl StrategyEnum = "ttl"
+)
+
+/**
+*	The retention policy of the ImportContainer. If not set, the ImportContainer does not expire.
+ */
+type RetentionPolicy interface{}
+
+func mapDiscriminatorRetentionPolicy(input interface{}) (RetentionPolicy, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["strategy"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'strategy'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "ttl":
+		obj := TimeToLiveRetentionPolicy{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+type TimeToLiveConfig struct {
+	// The time to live of the ImportContainer. Used to generate the `expiresAt` value of the ImportContainer. The lowest accepted value is `1h` and the highest accepted value is `30d`.
+	TimeToLive string `json:"timeToLive"`
 }
 
 /**
-*	The representation sent to the server when creating an [ImportContainer](#importcontainer).
+*	Set a time to live retention policy for the ImportContainer.
+ */
+type TimeToLiveRetentionPolicy struct {
+	// The configuration of the time to live retention policy.
+	Config TimeToLiveConfig `json:"config"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TimeToLiveRetentionPolicy) MarshalJSON() ([]byte, error) {
+	type Alias TimeToLiveRetentionPolicy
+	return json.Marshal(struct {
+		Action string `json:"strategy"`
+		*Alias
+	}{Action: "ttl", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Contains the resources to be imported. Unless `resourceType` is specified, the ImportContainer can import all of the supported [ImportResourceTypes](ctp:import:type:ImportResourceType).
+*
+ */
+type ImportContainer struct {
+	// User-defined unique identifier of the ImportContainer.
+	Key string `json:"key"`
+	// The [resource type](ctp:import:type:ImportResourceType) the ImportContainer supports. If not present, the ImportContainer can import all of the supported [ImportResourceTypes](ctp:import:type:ImportResourceType).
+	ResourceType *ImportResourceType `json:"resourceType,omitempty"`
+	// Current version of the ImportContainer.
+	Version int `json:"version"`
+	// The retention policy of the ImportContainer.
+	RetentionPolicy RetentionPolicy `json:"retentionPolicy,omitempty"`
+	// Date and time (UTC) the ImportContainer was initially created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the ImportContainer was last updated.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// Date and time (UTC) the ImportContainer is automatically deleted. Only present if a `retentionPolicy` is set. ImportContainers without `expiresAt` are permanent until [manually deleted](#delete-importcontainer).
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ImportContainer) UnmarshalJSON(data []byte) error {
+	type Alias ImportContainer
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.RetentionPolicy != nil {
+		var err error
+		obj.RetentionPolicy, err = mapDiscriminatorRetentionPolicy(obj.RetentionPolicy)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+*	The representation sent to the server to create an [ImportContainer](#importcontainer).
 *
  */
 type ImportContainerDraft struct {
 	// User-defined unique identifier of the ImportContainer.
-	// Keys can only contain alphanumeric characters (a-Z, 0-9), underscores and hyphens (_, -).
 	Key string `json:"key"`
-	// The [resource type](#importresourcetype) to be imported.
-	// If not given, the ImportContainer is able to import all of the supported [ImportResourceTypes](#importresourcetype).
+	// The resource type the ImportContainer will accept.
+	// If not specified, the ImportContainer can import all of the supported ImportResourceTypes.
 	ResourceType *ImportResourceType `json:"resourceType,omitempty"`
+	// Set a retention policy to automatically delete the ImportContainer after a defined period.
+	RetentionPolicy RetentionPolicy `json:"retentionPolicy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ImportContainerDraft) UnmarshalJSON(data []byte) error {
+	type Alias ImportContainerDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.RetentionPolicy != nil {
+		var err error
+		obj.RetentionPolicy, err = mapDiscriminatorRetentionPolicy(obj.RetentionPolicy)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 /**
-*	The representation sent to the server when updating an import container.
+*	The representation sent to the server when updating an ImportContainer.
 *
  */
 type ImportContainerUpdateDraft struct {
 	// Current version of the ImportContainer.
 	Version int `json:"version"`
-	// The [resource type](#importresourcetype) to be imported.
-	// If not given, the ImportContainer is able to import all of the supported [ImportResourceTypes](#importresourcetype).
+	// The [resource type](ctp:import:type:ImportResourceType) to be imported.
+	// If not given, the ImportContainer is able to import all of the supported [ImportResourceTypes](ctp:import:type:ImportResourceType).
 	ResourceType *ImportResourceType `json:"resourceType,omitempty"`
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) for [ImportContainers](#importcontainer).
-*	Used as a response to a query request for [ImportContainers](#importcontainer).
+*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ImportContainer](ctp:import:type:ImportContainer).
 *
  */
 type ImportContainerPagedResponse struct {
@@ -61,10 +159,10 @@ type ImportContainerPagedResponse struct {
 	Limit int `json:"limit"`
 	// Number of [elements skipped](/../api/general-concepts#offset).
 	Offset int `json:"offset"`
-	// The actual number of results returned.
+	// Actual number of results returned.
 	Count int `json:"count"`
-	// The total number of results matching the query.
+	// Total number of results matching the query.
 	Total int `json:"total"`
-	// The array of Import Containers matching the query.
+	// [ImportContainers](ctp:import:type:ImportContainer) matching the query.
 	Results []ImportContainer `json:"results"`
 }

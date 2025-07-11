@@ -151,3 +151,14 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Quotes() *ByProjectKey
 		client:     rb.client,
 	}
 }
+
+/**
+*	A Business Unit can represent a Company or a Division.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) BusinessUnits() *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}

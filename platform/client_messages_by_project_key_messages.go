@@ -30,7 +30,7 @@ func (rb *ByProjectKeyMessagesRequestBuilder) Get() *ByProjectKeyMessagesRequest
 }
 
 /**
-*	Checks if a Message exists for a given Query Predicate. Returns a `200 OK` status if any Messages match the Query Predicate or a `404 Not Found` otherwise.
+*	Checks if one or more Messages exist for the provided query predicate. Returns a `200 OK` status if any Messages match the query predicate, or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyMessagesRequestBuilder) Head() *ByProjectKeyMessagesRequestMethodHead {
 	return &ByProjectKeyMessagesRequestMethodHead{

@@ -55,11 +55,11 @@ func (rb *ByProjectKeyMeOrdersRequestMethodHead) WithHeaders(headers http.Header
 }
 
 /**
-*	Checks if an Order exists for a given Query Predicate. Returns a `200 OK` status if successful.
+*	Checks if one or more Orders exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
 *
-*	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
+*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
 *
-*	- If no Order exists that matches the Query Predicate.
+*	- If no Orders exist that match the provided query predicate.
 *	- If one or more Orders exist but don't have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */

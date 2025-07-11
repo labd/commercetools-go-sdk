@@ -28,7 +28,7 @@ func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestMethodHead) WithHeaders(head
 }
 
 /**
-*	Checks if a ShippingMethod exists for a given `key`. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+*	Checks if a ShippingMethod exists with the provided `key`. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

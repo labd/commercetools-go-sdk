@@ -28,7 +28,7 @@ func (rb *ByProjectKeySubscriptionsKeyByKeyRequestMethodHead) WithHeaders(header
 }
 
 /**
-*	Checks if a Subscription exists for a given `key`. Returns a `200 OK` status if the Subscription exists or a `404 Not Found` otherwise.
+*	Checks if a Subscription exists with the provided `key`. Returns a `200 OK` status if the Subscription exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeySubscriptionsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

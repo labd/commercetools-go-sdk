@@ -12,7 +12,7 @@ type ByProjectKeyGraphqlRequestBuilder struct {
 }
 
 /**
-*	Execute a GraphQL query
+*	Execute a GraphQL request.
  */
 func (rb *ByProjectKeyGraphqlRequestBuilder) Post(body GraphQLRequest) *ByProjectKeyGraphqlRequestMethodPost {
 	return &ByProjectKeyGraphqlRequestMethodPost{

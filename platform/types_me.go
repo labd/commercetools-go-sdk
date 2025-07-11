@@ -53,7 +53,7 @@ type MyBusinessUnitUpdate struct {
 	// If the expected version does not match the actual version, a [ConcurrentModification](ctp:api:type:ConcurrentModificationError) error will be returned.
 	Version int `json:"version"`
 	// Update actions to be performed on the BusinessUnit.
-	Actions []BusinessUnitUpdateAction `json:"actions"`
+	Actions []MyBusinessUnitUpdateAction `json:"actions"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -65,7 +65,7 @@ func (obj *MyBusinessUnitUpdate) UnmarshalJSON(data []byte) error {
 	}
 	for i := range obj.Actions {
 		var err error
-		obj.Actions[i], err = mapDiscriminatorBusinessUnitUpdateAction(obj.Actions[i])
+		obj.Actions[i], err = mapDiscriminatorMyBusinessUnitUpdateAction(obj.Actions[i])
 		if err != nil {
 			return err
 		}
@@ -212,7 +212,7 @@ type MyCartDraft struct {
 	Currency string `json:"currency"`
 	// Email address of the Customer the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Store the Cart should belong to. Once set, it cannot be updated.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -244,7 +244,7 @@ type MyCartDraft struct {
 	// Languages of the Cart.
 	// Can only contain languages supported by the [Project](ctp:api:type:Project).
 	Locale *string `json:"locale,omitempty"`
-	// Number of days after which a Cart with `Active` [CartState](ctp:api:type:CartState) is deleted since its last modification.
+	// Number of days after the last modification before a Cart is deleted.
 	// If not provided, the default value for this field configured in [Project settings](ctp:api:type:CartsConfiguration) is assigned.
 	//
 	// Create a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts to receive a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) upon deletion of the Cart.
@@ -427,6 +427,12 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 			return nil, err
 		}
 		return obj, nil
+	case "setCustomLineItemRecurrenceInfo":
+		obj := MyCartSetCustomLineItemRecurrenceInfoAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCustomType":
 		obj := MyCartSetCustomTypeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -459,6 +465,12 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 		return obj, nil
 	case "setLineItemDistributionChannel":
 		obj := MyCartSetLineItemDistributionChannelAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setLineItemRecurrenceInfo":
+		obj := MyCartSetLineItemRecurrenceInfoAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -895,6 +907,8 @@ type MyLineItemDraft struct {
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	// Container for Line Item-specific addresses.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// Recurring Order and frequency data.
+	RecurrenceInfo *LineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
 	// Custom Fields for the Cart.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
@@ -940,7 +954,7 @@ type MyPaymentDraft struct {
 	// The value usually matches the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) gross total.
 	AmountPlanned Money `json:"amountPlanned"`
 	// Information regarding the payment interface (for example, a PSP), and the specific payment method used.
-	PaymentMethodInfo *PaymentMethodInfo `json:"paymentMethodInfo,omitempty"`
+	PaymentMethodInfo *PaymentMethodInfoDraft `json:"paymentMethodInfo,omitempty"`
 	// Custom Fields for the Payment.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Financial transactions of the [TransactionTypes](ctp:api:type:TransactionType) `Authorization` or `Charge`.
@@ -1022,6 +1036,24 @@ func mapDiscriminatorMyPaymentUpdateAction(input interface{}) (MyPaymentUpdateAc
 		return obj, nil
 	case "setCustomField":
 		obj := MyPaymentSetCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoCustomField":
+		obj := MyPaymentSetMethodInfoCustomFieldAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoCustomType":
+		obj := MyPaymentSetMethodInfoCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setMethodInfoInterfaceAccount":
+		obj := MyPaymentSetMethodInfoInterfaceAccountAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1191,7 +1223,7 @@ type MyShoppingListDraft struct {
 	TextLineItems []TextLineItemDraft `json:"textLineItems"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
-	// Number of days after which the ShoppingList will be automatically deleted if it has not been modified. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
+	// Number of days after the last modification before a ShoppingList is deleted. If not set, the [default value](ctp:api:type:ShoppingListsConfiguration) configured in the [Project](ctp:api:type:Project) is used.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Assigns the new ShoppingList to the [Store](ctp:api:type:Store). The Store assignment can not be modified.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -1814,7 +1846,7 @@ func (obj MyCartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 type MyCartAddItemShippingAddressAction struct {
 	// Address to append to `itemShippingAddresses`.
 	//
-	// The new address must have a key that is unique accross this Cart.
+	// The new address must have a key that is unique across this Cart.
 	Address BaseAddress `json:"address"`
 }
 
@@ -1871,6 +1903,8 @@ type MyCartAddLineItemAction struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Container for Line Item-specific addresses.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
+	// Recurring Order and frequency data.
+	RecurrenceInfo *LineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
 	// Custom Fields for the Line Item.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
@@ -2001,7 +2035,7 @@ func (obj MyCartChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action does not set any Cart field in particular, but it triggers several [Cart updates](/../api/carts-orders-overview#cart-updates)
+*	This update action does not set any Cart field in particular, but it triggers several [Cart updates](/../api/carts-orders-overview#update-a-cart)
 *	to bring prices and discounts to the latest state. Those can become stale over time when no Cart updates have been performed for a while and
 *	prices on related Products have changed in the meanwhile.
 *
@@ -2182,6 +2216,31 @@ func (obj MyCartSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the recurrence information on the [CustomLineItem](ctp:api:type:CustomLineItem).
+*	If the Cart is already associated with a Recurring Order, this action will fail.
+*
+ */
+type MyCartSetCustomLineItemRecurrenceInfoAction struct {
+	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemId *string `json:"customLineItemId,omitempty"`
+	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
+	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value will be removed.
+	RecurrenceInfo *CustomLineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyCartSetCustomLineItemRecurrenceInfoAction) MarshalJSON() ([]byte, error) {
+	type Alias MyCartSetCustomLineItemRecurrenceInfoAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomLineItemRecurrenceInfo", Alias: (*Alias)(&obj)})
+}
+
 type MyCartSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the Cart with [Custom Fields](/../api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Cart.
@@ -2217,7 +2276,7 @@ func (obj MyCartSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Number of days after which a Cart with `Active` [CartState](ctp:api:type:CartState) is deleted since its last modification.
+*	Number of days after the last modification before a Cart is deleted.
 *
 *	If a [ChangeSubscription](ctp:api:type:ChangeSubscription) exists for Carts, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent.
 *
@@ -2308,6 +2367,31 @@ func (obj MyCartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, err
 	}{Action: "setLineItemDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the recurrence information on the [LineItem](ctp:api:type:LineItem).
+*	If the Cart is already associated with a Recurring Order, this action will fail.
+*
+ */
+type MyCartSetLineItemRecurrenceInfoAction struct {
+	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemId *string `json:"lineItemId,omitempty"`
+	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
+	LineItemKey *string `json:"lineItemKey,omitempty"`
+	// Value to set.
+	// If empty, any existing value will be removed.
+	RecurrenceInfo *LineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyCartSetLineItemRecurrenceInfoAction) MarshalJSON() ([]byte, error) {
+	type Alias MyCartSetLineItemRecurrenceInfoAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setLineItemRecurrenceInfo", Alias: (*Alias)(&obj)})
+}
+
 type MyCartSetLineItemShippingDetailsAction struct {
 	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemId *string `json:"lineItemId,omitempty"`
@@ -2329,7 +2413,7 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Performing this action has no impact on inventory that should be reserved.
+*	Performing this action does not reserve stock. Stock is only reserved at Order creation if the [InventoryMode](ctp:api:type:InventoryMode) of the Cart is `TrackOnly` or `ReserveOnOrder`.
 *
  */
 type MyCartSetLineItemSupplyChannelAction struct {
@@ -2923,6 +3007,70 @@ func (obj MyPaymentSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Adding a Custom Field to a PaymentMethodInfo generates the [PaymentMethodInfoCustomFieldAdded](ctp:api:type:PaymentMethodInfoCustomFieldAddedMessage) Message, removing one generates the [PaymentMethodInfoCustomFieldRemoved](ctp:api:type:PaymentMethodInfoCustomFieldRemovedMessage) Message, and updating an existing one generates the [PaymentMethodInfoCustomFieldChanged](ctp:api:type:PaymentMethodInfoCustomFieldChangedMessage) Message.
+*
+ */
+type MyPaymentSetMethodInfoCustomFieldAction struct {
+	// Name of the [Custom Field](/../api/projects/custom-fields).
+	Name string `json:"name"`
+	// If `value` is absent or `null`, this field will be removed if it exists.
+	// If `value` is provided, it is set for the field defined by `name`.
+	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+	Value interface{} `json:"value,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyPaymentSetMethodInfoCustomFieldAction) MarshalJSON() ([]byte, error) {
+	type Alias MyPaymentSetMethodInfoCustomFieldAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoCustomField", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adding or updating a Custom Type on a PaymentMethodInfo generates the [PaymentMethodInfoCustomTypeSet](ctp:api:type:PaymentMethodInfoCustomTypeSetMessage) Message, removing one generates the [PaymentMethodInfoCustomTypeRemoved](ctp:api:type:PaymentMethodInfoCustomTypeRemovedMessage) Message.
+*
+ */
+type MyPaymentSetMethodInfoCustomTypeAction struct {
+	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](/../api/projects/custom-fields).
+	Type *TypeResourceIdentifier `json:"type,omitempty"`
+	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `paymentMethodInfo`.
+	Fields *FieldContainer `json:"fields,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyPaymentSetMethodInfoCustomTypeAction) MarshalJSON() ([]byte, error) {
+	type Alias MyPaymentSetMethodInfoCustomTypeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates the [PaymentMethodInfoInterfaceAccountSet](ctp:api:type:PaymentMethodInfoInterfaceAccountSetMessage) Message.
+*
+ */
+type MyPaymentSetMethodInfoInterfaceAccountAction struct {
+	// New account or instance of the payment interface.
+	// If empty, any existing value will be removed.
+	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MyPaymentSetMethodInfoInterfaceAccountAction) MarshalJSON() ([]byte, error) {
+	type Alias MyPaymentSetMethodInfoInterfaceAccountAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMethodInfoInterfaceAccount", Alias: (*Alias)(&obj)})
+}
+
 type MyPaymentSetMethodInfoInterfaceAction struct {
 	// Value to set.
 	// Once set, the `paymentInterface` of the `paymentMethodInfo` cannot be changed.
@@ -3254,8 +3402,12 @@ func (obj MyShoppingListSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Number of days after the last modification before a Shopping List is deleted.
+*
+ */
 type MyShoppingListSetDeleteDaysAfterLastModificationAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If not provided, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 

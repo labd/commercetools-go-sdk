@@ -223,6 +223,7 @@ const (
 	DiscountCodeStateMatchesCart                          DiscountCodeState = "MatchesCart"
 	DiscountCodeStateMaxApplicationReached                DiscountCodeState = "MaxApplicationReached"
 	DiscountCodeStateApplicationStoppedByPreviousDiscount DiscountCodeState = "ApplicationStoppedByPreviousDiscount"
+	DiscountCodeStateApplicationStoppedByGroupBestDeal    DiscountCodeState = "ApplicationStoppedByGroupBestDeal"
 	DiscountCodeStateNotValid                             DiscountCodeState = "NotValid"
 )
 
@@ -502,6 +503,7 @@ const (
 	ReferenceTypeIdKeyValueDocument      ReferenceTypeId = "key-value-document"
 	ReferenceTypeIdOrder                 ReferenceTypeId = "order"
 	ReferenceTypeIdOrderEdit             ReferenceTypeId = "order-edit"
+	ReferenceTypeIdPaymentMethod         ReferenceTypeId = "payment-method"
 	ReferenceTypeIdPayment               ReferenceTypeId = "payment"
 	ReferenceTypeIdProduct               ReferenceTypeId = "product"
 	ReferenceTypeIdProductDiscount       ReferenceTypeId = "product-discount"
@@ -668,14 +670,15 @@ const (
 type StateTypeEnum string
 
 const (
-	StateTypeEnumOrderState        StateTypeEnum = "OrderState"
-	StateTypeEnumLineItemState     StateTypeEnum = "LineItemState"
-	StateTypeEnumProductState      StateTypeEnum = "ProductState"
-	StateTypeEnumReviewState       StateTypeEnum = "ReviewState"
-	StateTypeEnumPaymentState      StateTypeEnum = "PaymentState"
-	StateTypeEnumQuoteRequestState StateTypeEnum = "QuoteRequestState"
-	StateTypeEnumStagedQuoteState  StateTypeEnum = "StagedQuoteState"
-	StateTypeEnumQuoteState        StateTypeEnum = "QuoteState"
+	StateTypeEnumOrderState          StateTypeEnum = "OrderState"
+	StateTypeEnumRecurringOrderState StateTypeEnum = "RecurringOrderState"
+	StateTypeEnumLineItemState       StateTypeEnum = "LineItemState"
+	StateTypeEnumProductState        StateTypeEnum = "ProductState"
+	StateTypeEnumReviewState         StateTypeEnum = "ReviewState"
+	StateTypeEnumPaymentState        StateTypeEnum = "PaymentState"
+	StateTypeEnumQuoteRequestState   StateTypeEnum = "QuoteRequestState"
+	StateTypeEnumStagedQuoteState    StateTypeEnum = "StagedQuoteState"
+	StateTypeEnumQuoteState          StateTypeEnum = "QuoteState"
 )
 
 type StoreCountry struct {

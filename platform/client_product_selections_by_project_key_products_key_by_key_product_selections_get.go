@@ -27,17 +27,24 @@ func (r *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet) Dump() m
 }
 
 type ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput struct {
+	WithTotal    *bool
 	Expand       []string
 	Sort         []string
 	Limit        *int
 	Offset       *int
-	WithTotal    *bool
 	Where        []string
 	PredicateVar map[string][]string
 }
 
 func (input *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput) Values() url.Values {
 	values := url.Values{}
+	if input.WithTotal != nil {
+		if *input.WithTotal {
+			values.Add("withTotal", "true")
+		} else {
+			values.Add("withTotal", "false")
+		}
+	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
@@ -50,13 +57,6 @@ func (input *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput)
 	if input.Offset != nil {
 		values.Add("offset", strconv.Itoa(*input.Offset))
 	}
-	if input.WithTotal != nil {
-		if *input.WithTotal {
-			values.Add("withTotal", "true")
-		} else {
-			values.Add("withTotal", "false")
-		}
-	}
 	for _, v := range input.Where {
 		values.Add("where", fmt.Sprintf("%v", v))
 	}
@@ -66,6 +66,14 @@ func (input *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput)
 		}
 	}
 	return values
+}
+
+func (rb *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput{}
+	}
+	rb.params.WithTotal = &v
+	return rb
 }
 
 func (rb *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet) Expand(v []string) *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet {
@@ -97,14 +105,6 @@ func (rb *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet) Offset(
 		rb.params = &ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput{}
 	}
 	rb.params.Offset = &v
-	return rb
-}
-
-func (rb *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet) WithTotal(v bool) *ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGet {
-	if rb.params == nil {
-		rb.params = &ByProjectKeyProductsKeyByKeyProductSelectionsRequestMethodGetInput{}
-	}
-	rb.params.WithTotal = &v
 	return rb
 }
 

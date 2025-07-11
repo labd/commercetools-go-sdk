@@ -8,28 +8,23 @@ import (
 )
 
 type AttributeDefinition struct {
+	// Describes the Type of the Attribute.
 	Type AttributeType `json:"type"`
-	Name string        `json:"name"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
-	Label               LocalizedString          `json:"label"`
-	IsRequired          bool                     `json:"isRequired"`
+	// User-defined name of the Attribute that is unique within the [Project](ctp:api:type:Project).
+	Name string `json:"name"`
+	// Human-readable label for the Attribute.
+	Label LocalizedString `json:"label"`
+	// If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
+	IsRequired bool `json:"isRequired"`
+	// Specifies how Attributes are validated across all variants of a Product.
 	AttributeConstraint *AttributeConstraintEnum `json:"attributeConstraint,omitempty"`
-	// A localized string is a JSON object where the keys are of [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag), and the values the corresponding strings used for that language.
-	// ```json
-	// {
-	//   "de": "Hundefutter",
-	//   "en": "dog food"
-	// }
-	// ```
-	InputTip     *LocalizedString `json:"inputTip,omitempty"`
-	InputHint    *TextInputHint   `json:"inputHint,omitempty"`
-	IsSearchable *bool            `json:"isSearchable,omitempty"`
+	// Provides additional Attribute information to aid content managers configure Product details.
+	InputTip *LocalizedString `json:"inputTip,omitempty"`
+	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
+	InputHint *TextInputHint `json:"inputHint,omitempty"`
+	// If `true`, the Attribute's values are available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
+	IsSearchable *bool           `json:"isSearchable,omitempty"`
+	Level        *AttributeLevel `json:"level,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -49,6 +44,13 @@ func (obj *AttributeDefinition) UnmarshalJSON(data []byte) error {
 
 	return nil
 }
+
+type AttributeLevel string
+
+const (
+	AttributeLevelVariant AttributeLevel = "Variant"
+	AttributeLevelProduct AttributeLevel = "Product"
+)
 
 type AttributeType interface{}
 
@@ -264,7 +266,7 @@ func (obj AttributeMoneyType) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeNestedType struct {
-	// References a product type by key.
+	// References a ProductType by `key`.
 	TypeReference ProductTypeKeyReference `json:"typeReference"`
 }
 
@@ -292,7 +294,7 @@ func (obj AttributeNumberType) MarshalJSON() ([]byte, error) {
 }
 
 type AttributeReferenceType struct {
-	// The type of the referenced resource.
+	// Type of referenced resource.
 	ReferenceTypeId ReferenceType `json:"referenceTypeId"`
 }
 
@@ -381,17 +383,17 @@ const (
 )
 
 /**
-*	The data representation for a ProductType to be imported that is persisted as a [ProductType](/../api/projects/productTypes#producttype) in the Project.
+*	Represents the data used to import a ProductType. Once imported, this data is persisted as a [ProductType](ctp:api:type:ProductType) in the Project.
 *
  */
 type ProductTypeImport struct {
-	// User-defined unique identifier. If a [ProductType](/../api/projects/productTypes#producttype) with this `key` exists, it will be updated with the imported data.
+	// User-defined unique identifier. If a [ProductType](ctp:api:type:ProductType) with this `key` exists, it is updated with the imported data.
 	Key string `json:"key"`
 	// Maps to `ProductType.name`.
 	Name string `json:"name"`
 	// Maps to `ProductType.description`.
 	Description string `json:"description"`
-	// The `attributes` of [ProductType](/../api/projects/productTypes#producttype).
+	// The `attributes` of [ProductType](ctp:api:type:ProductType).
 	Attributes []AttributeDefinition `json:"attributes"`
 }
 

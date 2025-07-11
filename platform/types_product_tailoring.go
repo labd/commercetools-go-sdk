@@ -9,7 +9,7 @@ import (
 )
 
 /**
-*	A single ProductTailoring representation contains the _current_ and the _staged_ representation of its product data tailored per Store.
+*	A single ProductTailoring representation contains the _current_ and the _staged_ representation of its product information tailored per Store.
 *
  */
 type ProductTailoring struct {
@@ -31,7 +31,9 @@ type ProductTailoring struct {
 	Store StoreKeyReference `json:"store"`
 	// Reference to the Product the ProductTailoring belongs to.
 	Product ProductReference `json:"product"`
-	// `true` if the ProductTailoring is published.
+	// If `true`, the tailored information contained in the `current` [ProductTailoringData](ctp:api:type:ProductTailoringData) is provided when [retrieving the ProductProjection in Store](/../api/projects/product-tailoring#retrieve-product-projection-with-tailored-information).
+	// For information not part of the ProductTailoringData, the original information contained in the [ProductData](ctp:api:type:ProductData) is provided.
+	// If `false`, only the original information contained in the ProductData is provided.
 	Published bool `json:"published"`
 	// Current (published) data of the ProductTailoring.
 	Current ProductTailoringData `json:"current"`
@@ -108,7 +110,7 @@ type ProductTailoringAttribute struct {
 }
 
 /**
-*	Contains all the tailored data of a Product.
+*	Contains all the tailored information of a Product.
 *
  */
 type ProductTailoringData struct {
@@ -116,17 +118,20 @@ type ProductTailoringData struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Tailored description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Tailored title of the Product used by external search engines for improved search engine performance.
+	// Tailored title of the Product that is used by search engines.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// Tailored description of the Product used by external search engines for improved search engine performance.
+	// Tailored description of the Product that is used by search engines.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// Tailored keywords related to the Product used by external search engines for improved search engine performance.
+	// Tailored keywords related to the Product that are used by search engines.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 	// User-defined identifier used in a deep-link URL for the ProductTailoring.
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug *LocalizedString `json:"slug,omitempty"`
 	// Tailored Variants of the Product.
 	Variants []ProductVariantTailoring `json:"variants"`
+	// Attributes of the tailored Product.
+	// If available, these Attributes are selectively merged into the `attributes` of the corresponding [Product](ctp:api:type:Product). If the Product contains an Attribute with the same `name`, then its `value` is overwritten. Otherwise, the Attribute and its `value` are added to the Product.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -149,12 +154,16 @@ func (obj ProductTailoringData) MarshalJSON() ([]byte, error) {
 		delete(raw, "variants")
 	}
 
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
+	}
+
 	return json.Marshal(raw)
 
 }
 
 /**
-*	Contains all the tailored data of a Product.
+*	Contains the information to be tailored for a Product.
 *
  */
 type ProductTailoringDraft struct {
@@ -168,19 +177,23 @@ type ProductTailoringDraft struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Tailored description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Tailored title of the Product used by external search engines for improved search engine performance.
+	// Tailored title of the Product that is used by search engines.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// Tailored description of the Product used by external search engines for improved search engine performance.
+	// Tailored description of the Product that is used by search engines.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// Tailored keywords related to the Product used by external search engines for improved search engine performance.
+	// Tailored keywords related to the Product that are used by search engines.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 	// User-defined identifier used in a deep-link URL for the ProductTailoring.
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug *LocalizedString `json:"slug,omitempty"`
-	// If `true`, the ProductTailoring is published immediately.
+	// Set to `true` to [publish](/../api/projects/product-tailoring#stage-and-publish-tailored-product-information) the ProductTailoring immediately.
+	// Otherwise, the tailored product information is just staged.
 	Publish *bool `json:"publish,omitempty"`
 	// Tailored Variants of the Product.
 	Variants []ProductVariantTailoringDraft `json:"variants"`
+	// Attributes of the tailored Product.
+	// If provided, these Attributes are selectively merged into the `attributes` of the corresponding [Product](ctp:api:type:Product). If the Product contains an Attribute with the same `name`, then its `value` is overwritten. Otherwise, the Attribute and its `value` are added to the Product.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -203,12 +216,16 @@ func (obj ProductTailoringDraft) MarshalJSON() ([]byte, error) {
 		delete(raw, "variants")
 	}
 
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
+	}
+
 	return json.Marshal(raw)
 
 }
 
 /**
-*	Contains all the tailored data of a Product for a specific Store.
+*	Contains all the tailored information of a Product for a specific Store.
 *
  */
 type ProductTailoringInStoreDraft struct {
@@ -220,11 +237,11 @@ type ProductTailoringInStoreDraft struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Tailored description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Tailored title of the Product used by external search engines for improved search engine performance.
+	// Tailored title of the Product that is used by search engines.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// Tailored description of the Product used by external search engines for improved search engine performance.
+	// Tailored description of the Product that is used in search engine.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// Tailored keywords related to the Product used by external search engines for improved search engine performance.
+	// Tailored keywords related to the Product that are used by search engines.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
 	// User-defined identifier used in a deep-link URL for the ProductTailoring.
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
@@ -233,6 +250,9 @@ type ProductTailoringInStoreDraft struct {
 	Publish *bool `json:"publish,omitempty"`
 	// Tailored Variants of the Product.
 	Variants []ProductVariantTailoringDraft `json:"variants"`
+	// Attributes of the tailored Product.
+	// If provided, these Attributes are selectively merged into the `attributes` of the corresponding [Product](ctp:api:type:Product). If the Product contains an Attribute with the same `name`, then its `value` is overwritten. Otherwise, the Attribute and its `value` are added to the Product.
+	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -255,6 +275,10 @@ func (obj ProductTailoringInStoreDraft) MarshalJSON() ([]byte, error) {
 		delete(raw, "variants")
 	}
 
+	if raw["attributes"] == nil {
+		delete(raw, "attributes")
+	}
+
 	return json.Marshal(raw)
 
 }
@@ -271,9 +295,8 @@ type ProductTailoringPagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
+	// Present only when the `withTotal` query parameter is set to `true`.
 	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
-	// This field is returned by default.
-	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
 	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [ProductTailoring](ctp:api:type:ProductTailoring) list matching the query.
@@ -488,6 +511,12 @@ func mapDiscriminatorProductTailoringUpdateAction(input interface{}) (ProductTai
 		return obj, nil
 	case "setName":
 		obj := ProductTailoringSetNameAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setProductAttribute":
+		obj := ProductTailoringSetProductAttributeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1201,7 +1230,10 @@ type ProductTailoringSetExternalImagesAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// Value to set to `images`.
+	// Images of the tailored ProductVariant.
+	//
+	// Don't provide this field if you want to remove all images from the tailored Product Variant.
+	// Set to `[]` (empty) if you want to hide all images of the original ProductVariant on the tailored ProductVariant.
 	Images []Image `json:"images"`
 	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
 	Staged *bool `json:"staged,omitempty"`
@@ -1211,10 +1243,25 @@ type ProductTailoringSetExternalImagesAction struct {
 // optional nil slices
 func (obj ProductTailoringSetExternalImagesAction) MarshalJSON() ([]byte, error) {
 	type Alias ProductTailoringSetExternalImagesAction
-	return json.Marshal(struct {
+	data, err := json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setImages", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["images"] == nil {
+		delete(raw, "images")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**
@@ -1338,6 +1385,36 @@ func (obj ProductTailoringSetNameAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setName", Alias: (*Alias)(&obj)})
+}
+
+type ProductTailoringSetProductAttributeAction struct {
+	// Name of the Attribute to set.
+	Name string `json:"name"`
+	// Value to set for the Attribute. If empty, then any existing value will be removed.
+	//
+	// [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
+	//
+	// - For [Enum Type](ctp:api:type:AttributeEnumType) and [Localized Enum Type](ctp:api:type:AttributeLocalizedEnumType),
+	//   use either the `key` of the [Plain Enum Value](ctp:api:type:AttributePlainEnumValue) or [Localized Enum Value](ctp:api:type:AttributeLocalizedEnumValue) object or the complete object as `value`.
+	// - For [Localizable Text Type](ctp:api:type:AttributeLocalizableTextType), use the [LocalizedString](ctp:api:type:LocalizedString) object as `value`.
+	// - For [Money Type](ctp:api:type:AttributeMoneyType) Attributes, use the [Money](ctp:api:type:Money) object as `value`.
+	// - For [Set Type](ctp:api:type:AttributeSetType) Attributes, use the entire `set` object  as `value`.
+	// - For [Reference Type](ctp:api:type:AttributeReferenceType) Attributes, use the [Reference](ctp:api:type:Reference) object as `value`.
+	//
+	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is **not supported**.
+	Value interface{} `json:"value,omitempty"`
+	// If `true`, then only the staged Attribute is set. If `false`, then both the current and staged Attributes are set.
+	Staged *bool `json:"staged,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetProductAttributeAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetProductAttributeAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setProductAttribute", Alias: (*Alias)(&obj)})
 }
 
 /**

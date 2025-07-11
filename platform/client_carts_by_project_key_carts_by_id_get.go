@@ -55,6 +55,7 @@ func (rb *ByProjectKeyCartsByIDRequestMethodGet) WithHeaders(headers http.Header
 }
 
 /**
+*	Retrieves a Cart with the provided `id`.
 *	To ensure the Cart is up-to-date with current values (such as Prices and Discounts), use the [Recalculate](ctp:api:type:CartRecalculateAction) update action.
 *
  */

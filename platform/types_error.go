@@ -183,6 +183,18 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ExpiredCustomerEmailToken":
+		obj := ExpiredCustomerEmailTokenError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExpiredCustomerPasswordToken":
+		obj := ExpiredCustomerPasswordTokenError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ExtensionBadResponse":
 		obj := ExtensionBadResponseError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -593,7 +605,7 @@ func (obj AnonymousIdAlreadyInUseError) Error() string {
  */
 type AssociateMissingPermissionError struct {
 	// - When an action is performed by an Associate: `"Associate '$idOfAssociate' has no rights to $action in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredPermission'."`
-	// - When an action is performed for another Associate, like [viewing their Cart](/projects/associate-carts#get-cart-in-businessunit): `"Associate '$idOfAssociate' has no rights to $action for customer '$idOfCustomer' in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredPermission'."`
+	// - When an action is performed for another Associate, like [viewing their Cart](/projects/associate-carts#get-cart-in-businessunit-as-associate): `"Associate '$idOfAssociate' has no rights to $action for customer '$idOfCustomer' in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredPermission'."`
 	// - When viewing an entity: `"Associate '$idOfAssociate' has no rights to $action in business-unit '$idOrKeyOfBusinessUnit'. Needs '$requiredViewMyPermission' or '$requiredViewOthersPermission'."`
 	Message string `json:"message"`
 	// Error-specific additional fields.
@@ -1234,7 +1246,7 @@ func (obj CountryNotConfiguredInStoreError) Error() string {
 }
 
 /**
-*	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
+*	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart` or `ApplicationStoppedByGroupBestDeal`.
 *
 *	The error is returned as a failed response to:
 *
@@ -2557,6 +2569,162 @@ func (obj AuthErrorResponse) Error() string {
 }
 
 /**
+*	Returned when the provided email token of the Customer has expired.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Get Customer by email token](ctp:api:endpoint:/{projectKey}/customers/email-token={emailToken}:GET) and [Get Customer in Store by email token](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/email-token={emailToken}:GET) requests
+*	- [Verify email of Customer](ctp:api:endpoint:/{projectKey}/customers/email/confirm:POST) and [Verify email of Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/email/confirm:POST) requests
+*
+ */
+type ExpiredCustomerEmailTokenError struct {
+	// `"The given email token has expired."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExpiredCustomerEmailTokenError) UnmarshalJSON(data []byte) error {
+	type Alias ExpiredCustomerEmailTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExpiredCustomerEmailTokenError) MarshalJSON() ([]byte, error) {
+	type Alias ExpiredCustomerEmailTokenError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExpiredCustomerEmailToken", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExpiredCustomerEmailTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExpiredCustomerEmailTokenError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExpiredCustomerEmailTokenError: failed to parse error response"
+}
+
+/**
+*	Returned when the provided password token of the Customer has expired.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Get Customer by password token](ctp:api:endpoint:/{projectKey}/customers/password-token={passwordToken}:GET) and [Get Customer in Store by password token](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password-token={passwordToken}:GET) requests
+*	- [Reset password of Customer](ctp:api:endpoint:/{projectKey}/customers/password/reset:POST) and [Reset password of Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password/reset:POST) requests
+*
+ */
+type ExpiredCustomerPasswordTokenError struct {
+	// `"The given password token has expired."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExpiredCustomerPasswordTokenError) UnmarshalJSON(data []byte) error {
+	type Alias ExpiredCustomerPasswordTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExpiredCustomerPasswordTokenError) MarshalJSON() ([]byte, error) {
+	type Alias ExpiredCustomerPasswordTokenError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExpiredCustomerPasswordToken", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExpiredCustomerPasswordTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExpiredCustomerPasswordTokenError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExpiredCustomerPasswordTokenError: failed to parse error response"
+}
+
+/**
 *	Returned when the response from the API Extension could not be parsed successfully (such as a `500` HTTP status code, or an invalid JSON response).
 *
  */
@@ -2952,7 +3120,7 @@ func (obj ExtensionUpdateActionsFailedError) Error() string {
 }
 
 /**
-*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
+*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#request-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
 *
  */
 type ExternalOAuthFailedError struct {
@@ -3172,8 +3340,13 @@ func (obj GeneralError) Error() string {
 	return "unknown GeneralError: failed to parse error response"
 }
 
+/**
+*	This error occurs when your [API Client](/../api/projects/api-clients) does not have the [OAuth scope](/../api/scopes) required for the endpoint.
+*	Use an API Client with the required permissions for this endpoint instead.
+*
+ */
 type InsufficientScopeError struct {
-	// Plain text description of the cause of the error.
+	// `"Insufficient scope. One of the following scopes is missing:"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
@@ -4836,11 +5009,13 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 }
 
 /**
-*	Returned when the requested resource was not found.
+*	Returned if the requested resource was not found or the Product Search index is [inactive](/../api/projects/product-search#activate-the-product-search-api).
 *
  */
 type ObjectNotFoundError struct {
-	// `"A $resourceType with identifier $id was unexpectedly not found."`
+	// `"A $resourceType with identifier $id was unexpectedly not found."` or
+	//
+	// `"No index found for project"`
 	Message string `json:"message"`
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
@@ -5257,8 +5432,8 @@ func (obj PendingOperationError) Error() string {
 *
 *	The error is also returned as a failed response to:
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
@@ -6478,7 +6653,7 @@ func (obj SearchNotReadyError) Error() string {
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct.
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions) is not semantically correct.
 *
  */
 type SemanticErrorError struct {
@@ -6713,7 +6888,7 @@ func (obj StoreCartDiscountsLimitReachedError) Error() string {
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax.
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions), or [search query](/../api/projects/product-projection-search) does not have the correct syntax.
 *
  */
 type SyntaxErrorError struct {
@@ -6958,6 +7133,18 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "EnumValuesMustMatch":
 		obj := GraphQLEnumValuesMustMatchError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExpiredCustomerEmailToken":
+		obj := GraphQLExpiredCustomerEmailTokenError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExpiredCustomerPasswordToken":
+		obj := GraphQLExpiredCustomerPasswordTokenError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7921,7 +8108,7 @@ func (obj *GraphQLCountryNotConfiguredInStoreError) DecodeStruct(src map[string]
 }
 
 /**
-*	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart`.
+*	Returned when the Cart contains a Discount Code with a [DiscountCodeState](ctp:api:type:DiscountCodeState) other than `MatchesCart` or `ApplicationStoppedByGroupBestDeal`.
 *
 *	The error is returned as a failed response to:
 *
@@ -8988,6 +9175,142 @@ func (obj *GraphQLEnumValuesMustMatchError) DecodeStruct(src map[string]interfac
 }
 
 /**
+*	Returned when the provided email token of the Customer has expired.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Get Customer by email token](ctp:api:endpoint:/{projectKey}/customers/email-token={emailToken}:GET) and [Get Customer in Store by email token](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/email-token={emailToken}:GET) requests
+*	- [Verify email of Customer](ctp:api:endpoint:/{projectKey}/customers/email/confirm:POST) and [Verify email of Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/email/confirm:POST) requests
+*
+ */
+type GraphQLExpiredCustomerEmailTokenError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExpiredCustomerEmailTokenError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExpiredCustomerEmailTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExpiredCustomerEmailTokenError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExpiredCustomerEmailTokenError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExpiredCustomerEmailToken", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExpiredCustomerEmailTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the provided password token of the Customer has expired.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Get Customer by password token](ctp:api:endpoint:/{projectKey}/customers/password-token={passwordToken}:GET) and [Get Customer in Store by password token](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password-token={passwordToken}:GET) requests
+*	- [Reset password of Customer](ctp:api:endpoint:/{projectKey}/customers/password/reset:POST) and [Reset password of Customer in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/customers/password/reset:POST) requests
+*
+ */
+type GraphQLExpiredCustomerPasswordTokenError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExpiredCustomerPasswordTokenError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExpiredCustomerPasswordTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExpiredCustomerPasswordTokenError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExpiredCustomerPasswordTokenError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExpiredCustomerPasswordToken", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExpiredCustomerPasswordTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when the response from the API Extension could not be parsed successfully (such as a `500` HTTP status code, or an invalid JSON response).
 *
  */
@@ -9280,7 +9603,7 @@ func (obj *GraphQLExtensionUpdateActionsFailedError) DecodeStruct(src map[string
 }
 
 /**
-*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#requesting-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
+*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#request-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
 *
  */
 type GraphQLExternalOAuthFailedError struct {
@@ -9470,6 +9793,11 @@ func (obj *GraphQLGeneralError) DecodeStruct(src map[string]interface{}) error {
 	return nil
 }
 
+/**
+*	This error occurs when your [API Client](/../api/projects/api-clients) does not have the [OAuth scope](/../api/scopes) required for the endpoint.
+*	Use an API Client with the required permissions for this endpoint instead.
+*
+ */
 type GraphQLInsufficientScopeError struct {
 	// Error-specific additional fields.
 	ExtraValues map[string]interface{} `json:"-"`
@@ -10924,7 +11252,7 @@ func (obj *GraphQLNoMatchingProductDiscountFoundError) DecodeStruct(src map[stri
 }
 
 /**
-*	Returned when the requested resource was not found.
+*	Returned if the requested resource was not found or the Product Search index is [inactive](/../api/projects/product-search#activate-the-product-search-api).
 *
  */
 type GraphQLObjectNotFoundError struct {
@@ -11295,8 +11623,8 @@ func (obj *GraphQLPendingOperationError) DecodeStruct(src map[string]interface{}
 *
 *	The error is also returned as a failed response to:
 *
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/orders/quotes:POST) requests on Orders.
-*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST), [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST), and [Create Order from Quote](ctp:api:endpoint:/{projectKey}/me/orders/quotes:POST) requests on My Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
+*	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
 *	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
@@ -12354,7 +12682,7 @@ func (obj *GraphQLSearchNotReadyError) DecodeStruct(src map[string]interface{}) 
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions) is not semantically correct.
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions) is not semantically correct.
 *
  */
 type GraphQLSemanticErrorError struct {
@@ -12559,7 +12887,7 @@ func (obj *GraphQLStoreCartDiscountsLimitReachedError) DecodeStruct(src map[stri
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#using-predicates-in-conditional-api-extensions), or [search query](/../api/projects/products-search) does not have the correct syntax.
+*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions), or [search query](/../api/projects/product-projection-search) does not have the correct syntax.
 *
  */
 type GraphQLSyntaxErrorError struct {

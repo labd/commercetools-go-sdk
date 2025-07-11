@@ -78,16 +78,22 @@ func (obj ProductSearchErrorResponse) Error() string {
 }
 
 type ProductSearchMatchingVariantEntry struct {
-	// Unique identifier of the variant.
+	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) that matches the search query.
 	ID int `json:"id"`
-	// SKU of the matching variant.
+	// `sku` of the ProductVariant that matches the search query.
 	Sku *string `json:"sku,omitempty"`
 }
 
 type ProductSearchMatchingVariants struct {
-	// Whether the search criteria definitely matches all Variants of the returned Product, like for Product-level fields. Is always `false` for search expressions on Variant-level fields.
+	// `true` if all Variants of the returned Product match the search query, or if search query does not specify any expression for a [Product Variant field](/../api/projects/product-search#field-levels).
+	//
+	// `false` if only a subset of the Product Variants match the search query.
+	//
+	// Is always `false` for query expressions on Product Variant fields.
 	AllMatched bool `json:"allMatched"`
-	// The variants matching the search criteria or empty if all matched.
+	// Identifiers of the Product Variants that match the search query.
+	//
+	// Empty if all Product Variants of the returned Product match.
 	MatchedVariants []ProductSearchMatchingVariantEntry `json:"matchedVariants"`
 }
 
@@ -103,19 +109,22 @@ type ProductSearchProjectionParams struct {
 	Staged *bool `json:"staged,omitempty"`
 	// The currency used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	PriceCurrency *string `json:"priceCurrency,omitempty"`
-	// The country used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). Can only be used **in conjunction with** the `priceCurrency` parameter.
+	// The country used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceCountry *string `json:"priceCountry,omitempty"`
-	// `id` of an existing [CustomerGroup](ctp:api:type:CustomerGroup) used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). Can only be used **in conjunction with** the `priceCurrency` parameter.
+	// `id` of an existing [CustomerGroup](ctp:api:type:CustomerGroup) used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceCustomerGroup *string `json:"priceCustomerGroup,omitempty"`
-	// `id` of an existing [Channel](ctp:api:type:Channel) used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). Can only be used **in conjunction with** the `priceCurrency` parameter.
+	// IDs of existing [CustomerGroups](ctp:api:type:CustomerGroup) used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection), when using [multiple Customer Groups](/../api/customers-overview#customer-groups). It can be used only *in conjunction with* the `priceCurrency` parameter.
+	PriceCustomerGroupAssignments []string `json:"priceCustomerGroupAssignments"`
+	// `id` of an existing [Channel](ctp:api:type:Channel) used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceChannel *string `json:"priceChannel,omitempty"`
 	// Used for [locale-based projection](ctp:api:type:ProductProjectionLocales).
 	LocaleProjection []string `json:"localeProjection"`
 	// `key` of an existing [Store](ctp:api:type:Store).
-	// If the Store has defined some languages, countries, distribution or supply Channels,
+	// If the Store has defined `languages`, `countries`, `distributionChannels`, or `supplyChannels`,
 	// they are used for projections based on [locale](ctp:api:type:ProductProjectionLocales), [price](ctp:api:type:ProductProjectionPrices),
 	// and [inventory](ctp:api:type:ProductProjectionInventoryEntries).
-	// If the Store has defined [Product Selections](ctp:api:type:ProductSelection) or [Product Tailoring](ctp:api:type:ProductTailoring), they have no effect on the results of this query.
+	// For Projects with active [Product Selections](/../api/projects/product-selections), the API does not take the [availability of the Product in the specified Store](/../api/projects/stores#products-available-in-store) into account.
+	// [Product Tailoring](/../api/projects/product-tailoring) modifies the product information returned in API responses, but evaluating [query expressions](/../api/search-query-language#simple-expressions) is restricted to the original product information.
 	StoreProjection *string `json:"storeProjection,omitempty"`
 }
 
@@ -139,6 +148,10 @@ func (obj ProductSearchProjectionParams) MarshalJSON() ([]byte, error) {
 		delete(raw, "expand")
 	}
 
+	if raw["priceCustomerGroupAssignments"] == nil {
+		delete(raw, "priceCustomerGroupAssignments")
+	}
+
 	if raw["localeProjection"] == nil {
 		delete(raw, "localeProjection")
 	}
@@ -157,7 +170,9 @@ type ProductSearchRequest struct {
 	Limit *int `json:"limit,omitempty"`
 	// The number of search results to be skipped in the response for [pagination](/../api/projects/product-search#pagination).
 	Offset *int `json:"offset,omitempty"`
-	// The search can return Products where not all Product Variants match the search criteria. If `true`, the response will include a field called `matchingVariants` that contains the `sku` of Product Variants that match the search query. If the query does not specify any variant-level criteria, `matchingVariants` will be null signifying that all Product Variants are a match.
+	// If `query` specifies an expression for a Product Variant field,
+	// set this to `true` to get additional information for each returned Product about which Product Variants match the search query.
+	// For details, see [matching variants](/../api/projects/product-search#matching-variants).
 	MarkMatchingVariants *bool `json:"markMatchingVariants,omitempty"`
 	// Controls data integration [with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters).
 	// If not set, the result does not include the Product Projection.
@@ -198,12 +213,14 @@ func (obj ProductSearchRequest) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSearchResult struct {
-	// Unique identifier of the Product.
+	// `id` of the [Product](ctp:api:type:Product) that matches the search query.
 	ID string `json:"id"`
-	// Contains Product Projection data for Products matching the `projection` field in the Search Products request.
-	ProductProjection *ProductProjection `json:"productProjection,omitempty"`
-	// Describes the variants that matched the search criteria.
+	// Information about which Product Variants match the search query.
+	// Only present if `markMatchingVariants` is set to `true` in the [ProductSearchRequest](ctp:api:type:ProductSearchRequest).
 	MatchingVariants *ProductSearchMatchingVariants `json:"matchingVariants,omitempty"`
+	// Projected data of the Product with `id`.
+	// Only present if data integration [with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters) is requested.
+	ProductProjection *ProductProjection `json:"productProjection,omitempty"`
 }
 
 type ProductSearchFacetCountLevelEnum string
@@ -218,7 +235,7 @@ type ProductSearchFacetCountValue struct {
 	Name string `json:"name"`
 	// Whether the facet must consider only the Products resulting from the search (`query`) or all the Products (`all`).
 	Scope *ProductSearchFacetScopeEnum `json:"scope,omitempty"`
-	// Additional filtering expression to apply to the search result before calculating the facet.
+	// Additional filtering expression to apply to the facet result before calculating the facet.
 	Filter *SearchQuery `json:"filter,omitempty"`
 	// Specify whether to count Products (`products`) or Product Variants (`variants`).
 	Level *ProductSearchFacetCountLevelEnum `json:"level,omitempty"`
@@ -243,7 +260,7 @@ type ProductSearchFacetDistinctValue struct {
 	Name string `json:"name"`
 	// Whether the facet must consider only the Products resulting from the search (`query`) or all the Products (`all`).
 	Scope *ProductSearchFacetScopeEnum `json:"scope,omitempty"`
-	// Additional filtering expression to apply to the search result before calculating the facet.
+	// Additional filtering expression to apply to the facet result before calculating the facet.
 	Filter *SearchQuery `json:"filter,omitempty"`
 	// Specify whether to count Products (`products`) or Product Variants (`variants`).
 	Level *ProductSearchFacetCountLevelEnum `json:"level,omitempty"`
@@ -320,7 +337,7 @@ type ProductSearchFacetRangesValue struct {
 	Name string `json:"name"`
 	// Whether the facet must consider only the Products resulting from the search (`query`) or all the Products (`all`).
 	Scope *ProductSearchFacetScopeEnum `json:"scope,omitempty"`
-	// Additional filtering expression to apply to the search result before calculating the facet.
+	// Additional filtering expression to apply to the facet result before calculating the facet.
 	Filter *SearchQuery `json:"filter,omitempty"`
 	// Specify whether to count Products (`products`) or Product Variants (`variants`).
 	Level *ProductSearchFacetCountLevelEnum `json:"level,omitempty"`
@@ -367,13 +384,6 @@ type ProductSearchFacetResultCount struct {
 	// Number of Products (or Product Variants) matching the query.
 	Value int `json:"value"`
 }
-
-type ProductSearchFacetScope string
-
-const (
-	ProductSearchFacetScopeAll   ProductSearchFacetScope = "all"
-	ProductSearchFacetScopeQuery ProductSearchFacetScope = "query"
-)
 
 type ProductSearchFacetScopeEnum string
 

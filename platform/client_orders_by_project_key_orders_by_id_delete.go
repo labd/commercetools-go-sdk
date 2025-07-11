@@ -82,6 +82,7 @@ func (rb *ByProjectKeyOrdersByIDRequestMethodDelete) WithHeaders(headers http.He
 }
 
 /**
+*	Deletes an Order in the Project.
 *	Deleting an Order produces the [OrderDeleted](ctp:api:type:OrderDeletedMessage) Message.
 *
  */

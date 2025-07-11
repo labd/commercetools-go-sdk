@@ -28,7 +28,7 @@ func (rb *ByProjectKeyZonesByIDRequestMethodHead) WithHeaders(headers http.Heade
 }
 
 /**
-*	Checks if a Zone exists for a given `id`. Returns a `200 OK` status if the Zone exists or a `404 Not Found` otherwise.
+*	Checks if a Zone exists with the provided `id`. Returns a `200 OK` status if the Zone exists or a `404 Not Found` otherwise.
  */
 func (rb *ByProjectKeyZonesByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}
