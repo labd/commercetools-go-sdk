@@ -25,6 +25,10 @@ func (rb *ByProjectKeyZonesRequestBuilder) WithId(id string) *ByProjectKeyZonesB
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves all Zones in the Project.
+ */
 func (rb *ByProjectKeyZonesRequestBuilder) Get() *ByProjectKeyZonesRequestMethodGet {
 	return &ByProjectKeyZonesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/zones", rb.projectKey),
@@ -33,7 +37,7 @@ func (rb *ByProjectKeyZonesRequestBuilder) Get() *ByProjectKeyZonesRequestMethod
 }
 
 /**
-*	Checks if one or more Zones exist for the provided query predicate. Returns a `200 OK` status if any Zones match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Zones exist for the provided query predicate. Returns a `200 OK` status if any Zones match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyZonesRequestBuilder) Head() *ByProjectKeyZonesRequestMethodHead {
 	return &ByProjectKeyZonesRequestMethodHead{
@@ -42,6 +46,9 @@ func (rb *ByProjectKeyZonesRequestBuilder) Head() *ByProjectKeyZonesRequestMetho
 	}
 }
 
+/**
+*	Creates a Zone in the Project.
+ */
 func (rb *ByProjectKeyZonesRequestBuilder) Post(body ZoneDraft) *ByProjectKeyZonesRequestMethodPost {
 	return &ByProjectKeyZonesRequestMethodPost{
 		body:   body,

@@ -20,7 +20,7 @@ func (rb *ByProjectKeyStatesKeyByKeyRequestBuilder) Get() *ByProjectKeyStatesKey
 }
 
 /**
-*	Checks if a State exists with the provided `key`. Returns a `200 OK` status if the State exists or a `404 Not Found` otherwise.
+*	Checks if a State exists with the provided `key`. Returns a `200` status if the State exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyStatesKeyByKeyRequestBuilder) Head() *ByProjectKeyStatesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyStatesKeyByKeyRequestMethodHead{

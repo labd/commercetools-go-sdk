@@ -54,6 +54,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodPost
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a QuoteRequest in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

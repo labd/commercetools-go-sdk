@@ -19,8 +19,26 @@ func (rb *ByProjectKeyRequestBuilder) ImportOperations() *ByProjectKeyImportOper
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) BusinessUnits() *ByProjectKeyBusinessUnitsRequestBuilder {
+	return &ByProjectKeyBusinessUnitsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) Categories() *ByProjectKeyCategoriesRequestBuilder {
 	return &ByProjectKeyCategoriesRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyRequestBuilder) Customers() *ByProjectKeyCustomersRequestBuilder {
+	return &ByProjectKeyCustomersRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodesRequestBuilder {
+	return &ByProjectKeyDiscountCodesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}
@@ -31,8 +49,8 @@ func (rb *ByProjectKeyRequestBuilder) Prices() *ByProjectKeyPricesRequestBuilder
 		client:     rb.client,
 	}
 }
-func (rb *ByProjectKeyRequestBuilder) StandalonePrices() *ByProjectKeyStandalonePricesRequestBuilder {
-	return &ByProjectKeyStandalonePricesRequestBuilder{
+func (rb *ByProjectKeyRequestBuilder) Inventories() *ByProjectKeyInventoriesRequestBuilder {
+	return &ByProjectKeyInventoriesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}
@@ -67,6 +85,12 @@ func (rb *ByProjectKeyRequestBuilder) ProductVariantPatches() *ByProjectKeyProdu
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) ProductSelections() *ByProjectKeyProductSelectionsRequestBuilder {
+	return &ByProjectKeyProductSelectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) Orders() *ByProjectKeyOrdersRequestBuilder {
 	return &ByProjectKeyOrdersRequestBuilder{
 		projectKey: rb.projectKey,
@@ -79,32 +103,14 @@ func (rb *ByProjectKeyRequestBuilder) OrderPatches() *ByProjectKeyOrderPatchesRe
 		client:     rb.client,
 	}
 }
-func (rb *ByProjectKeyRequestBuilder) Customers() *ByProjectKeyCustomersRequestBuilder {
-	return &ByProjectKeyCustomersRequestBuilder{
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyRequestBuilder) Inventories() *ByProjectKeyInventoriesRequestBuilder {
-	return &ByProjectKeyInventoriesRequestBuilder{
+func (rb *ByProjectKeyRequestBuilder) StandalonePrices() *ByProjectKeyStandalonePricesRequestBuilder {
+	return &ByProjectKeyStandalonePricesRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}
 }
 func (rb *ByProjectKeyRequestBuilder) Types() *ByProjectKeyTypesRequestBuilder {
 	return &ByProjectKeyTypesRequestBuilder{
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyRequestBuilder) DiscountCodes() *ByProjectKeyDiscountCodesRequestBuilder {
-	return &ByProjectKeyDiscountCodesRequestBuilder{
-		projectKey: rb.projectKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyRequestBuilder) ProductSelections() *ByProjectKeyProductSelectionsRequestBuilder {
-	return &ByProjectKeyProductSelectionsRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}

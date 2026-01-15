@@ -53,6 +53,10 @@ func (rb *ByProjectKeyQuoteRequestsByIDRequestMethodGet) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a QuoteRequest with the provided `id`.
+ */
 func (rb *ByProjectKeyQuoteRequestsByIDRequestMethodGet) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

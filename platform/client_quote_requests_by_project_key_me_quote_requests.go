@@ -27,7 +27,8 @@ func (rb *ByProjectKeyMeQuoteRequestsRequestBuilder) WithKey(key string) *ByProj
 }
 
 /**
-*	Retrieves Quote Requests for the authenticated Customer. Returns a `200 OK` status if successful.
+*	Retrieves all QuoteRequests for the authenticated Customer.
+*	Returns a `200 OK` status if successful.
 *
  */
 func (rb *ByProjectKeyMeQuoteRequestsRequestBuilder) Get() *ByProjectKeyMeQuoteRequestsRequestMethodGet {
@@ -38,7 +39,8 @@ func (rb *ByProjectKeyMeQuoteRequestsRequestBuilder) Get() *ByProjectKeyMeQuoteR
 }
 
 /**
-*	Checks if one or more QuoteRequests exist for the provided query predicate. Returns a `200 OK` status if any QuoteRequests match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more QuoteRequests exist for the provided query predicate for the authenticated Customer.
+*	Returns a `200 OK` status if any QuoteRequests match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeQuoteRequestsRequestBuilder) Head() *ByProjectKeyMeQuoteRequestsRequestMethodHead {
@@ -48,6 +50,10 @@ func (rb *ByProjectKeyMeQuoteRequestsRequestBuilder) Head() *ByProjectKeyMeQuote
 	}
 }
 
+/**
+*	Creates a QuoteRequest for the authenticated Customer.
+*
+ */
 func (rb *ByProjectKeyMeQuoteRequestsRequestBuilder) Post(body MyQuoteRequestDraft) *ByProjectKeyMeQuoteRequestsRequestMethodPost {
 	return &ByProjectKeyMeQuoteRequestsRequestMethodPost{
 		body:   body,

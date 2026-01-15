@@ -134,7 +134,7 @@ func (rb *ByProjectKeyMeRequestMethodGet) WithHeaders(headers http.Header) *ByPr
 }
 
 /**
-*	Returns a Customer for a given Query Predicate. Returns a `200 OK` status if successful.
+*	Returns a Customer for a given Query Predicate. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

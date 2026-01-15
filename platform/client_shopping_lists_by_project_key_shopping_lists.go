@@ -37,7 +37,7 @@ func (rb *ByProjectKeyShoppingListsRequestBuilder) Get() *ByProjectKeyShoppingLi
 }
 
 /**
-*	Checks if one or more ShoppingLists exist for the provided query predicate. Returns a `200 OK` status if any ShoppingLists match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more ShoppingLists exist for the provided query predicate. Returns a `200` status if any ShoppingLists match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyShoppingListsRequestBuilder) Head() *ByProjectKeyShoppingListsRequestMethodHead {
 	return &ByProjectKeyShoppingListsRequestMethodHead{

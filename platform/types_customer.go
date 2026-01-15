@@ -99,38 +99,6 @@ type Customer struct {
 	AuthenticationMode AuthenticationMode `json:"authenticationMode"`
 }
 
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj Customer) MarshalJSON() ([]byte, error) {
-	type Alias Customer
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["shippingAddressIds"] == nil {
-		delete(raw, "shippingAddressIds")
-	}
-
-	if raw["billingAddressIds"] == nil {
-		delete(raw, "billingAddressIds")
-	}
-
-	if raw["customerGroupAssignments"] == nil {
-		delete(raw, "customerGroupAssignments")
-	}
-
-	return json.Marshal(raw)
-
-}
-
 type CustomerChangePassword struct {
 	// Unique identifier of the Customer.
 	ID string `json:"id"`
@@ -193,9 +161,11 @@ type CustomerDraft struct {
 	Title *string `json:"title,omitempty"`
 	// Deprecated since an anonymous [Cart](ctp:api:type:Cart) can be identified by its `id` or external `key`.
 	AnonymousCartId *string `json:"anonymousCartId,omitempty"`
-	// Identifies a [Cart](ctp:api:type:Cart) that will be assigned to the new Customer.
+	// Assigns the Customer to the specified Cart.
 	AnonymousCart *CartResourceIdentifier `json:"anonymousCart,omitempty"`
-	// Identifies Carts and Orders belonging to an anonymous session that will be assigned to the new Customer.
+	// Assigns the Customer to all [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [ShoppingLists](ctp:api:type:ShoppingList), and [Payments](ctp:api:type:Payment) with the same `anonymousId`.
+	//
+	// If `anonymousCart` is provided, this value must match the `anonymousId` of the anonymous [Cart](ctp:api:type:Cart); otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Date of birth of the Customer.
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
@@ -416,7 +386,11 @@ type CustomerSignInResult struct {
 	// Customer [signed up](ctp:api:endpoint:/{projectKey}/customers:POST) or [signed in](ctp:api:endpoint:/{projectKey}/login:POST) after authentication.
 	Customer Customer `json:"customer"`
 	// Cart associated with the Customer.
-	// If empty, the Customer does not have a Cart assigned.
+	//
+	// The Cart is recalculated to remove invalid Line Items and apply the latest prices, taxes, and discounts.
+	// During these updates, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
+	//
+	// For more information, see [Cart updates](/../api/carts-orders-overview#update-a-cart).
 	Cart *Cart `json:"cart,omitempty"`
 }
 
@@ -427,14 +401,14 @@ type CustomerSignin struct {
 	Password string `json:"password"`
 	// Deprecated since it is now possible to identify an anonymous cart by using its `id` or external `key`.
 	AnonymousCartId *string `json:"anonymousCartId,omitempty"`
-	// Identifies a [Cart](ctp:api:type:Cart) that will be assigned to the Customer.
+	// Assigns the Customer to the specified Cart.
 	AnonymousCart *CartResourceIdentifier `json:"anonymousCart,omitempty"`
 	// - Set to `MergeWithExistingCustomerCart` if [LineItems](ctp:api:type:LineItem) of the anonymous Cart should be merged with the active Customer Cart that has been modified most recently.
 	// - Set to `UseAsNewActiveCustomerCart` if the anonymous Cart should be used as the new active Customer Cart and no [LineItems](ctp:api:type:LineItem) are to be merged.
 	AnonymousCartSignInMode *AnonymousCartSignInMode `json:"anonymousCartSignInMode,omitempty"`
-	// If both `anonymousCart` and `anonymousId` are provided, the `anonymousId` on the CustomerSignin must match that of the anonymous [Cart](ctp:api:type:Cart).
-	// Otherwise a [400 Bad Request](ctp:api:type:InvalidOperationError) `Invalid Operation` error is returned with the message:
-	// "Cart with the ID cart-id does not have the expected anonymousId.".
+	// Assigns the Customer to all [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [ShoppingLists](ctp:api:type:ShoppingList), and [Payments](ctp:api:type:Payment) with the same `anonymousId`.
+	//
+	// If `anonymousCart` is provided, this value must match the `anonymousId` of the anonymous [Cart](ctp:api:type:Cart); otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// - If `true`, the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart will be updated.
 	// - If `false`, only the prices, discounts, and tax rates will be updated.
@@ -909,14 +883,14 @@ func (obj CustomerRemoveAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes a billing address from `billingAddressesIds`.
+*	Removes a billing address from `billingAddressIds`.
 *	If the billing address is the default billing address, the `defaultBillingAddressId` is unset. Either `addressId` or `addressKey` is required.
 *
  */
 type CustomerRemoveBillingAddressIdAction struct {
-	// `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
+	// `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressIds`.
 	AddressId *string `json:"addressId,omitempty"`
-	// `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
+	// `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressIds`.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -950,14 +924,14 @@ func (obj CustomerRemoveCustomerGroupAssignmentAction) MarshalJSON() ([]byte, er
 }
 
 /**
-*	Removes a shipping address from `shippingAddressesIds`.
+*	Removes a shipping address from `shippingAddressIds`.
 *	If the shipping address is the default shipping address, the `defaultShippingAddressId` is unset. Either `addressId` or `addressKey` is required.
 *
  */
 type CustomerRemoveShippingAddressIdAction struct {
-	// `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
+	// `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressIds`.
 	AddressId *string `json:"addressId,omitempty"`
-	// `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
+	// `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressIds`.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -1208,6 +1182,8 @@ func (obj CustomerSetDateOfBirthAction) MarshalJSON() ([]byte, error) {
 *	Sets the default billing address from `addresses`.
 *	The action adds the `id` of the specified Address to the `billingAddressIds` if not contained already. Either `addressId` or `addressKey` is required.
 *
+*	This action generates the [CustomerDefaultBillingAddressSet](ctp:api:type:CustomerDefaultBillingAddressSetMessage) Message.
+*
  */
 type CustomerSetDefaultBillingAddressAction struct {
 	// `id` of the [Address](ctp:api:type:Address) to become the default billing address.
@@ -1230,6 +1206,8 @@ func (obj CustomerSetDefaultBillingAddressAction) MarshalJSON() ([]byte, error) 
 *	Sets the default shipping address from `addresses`.
 *	The action adds the `id` of the specified address to the `shippingAddressIds` if not contained already. Either `addressId` or `addressKey` is required.
 *
+*	This action generates the [CustomerDefaultShippingAddressSet](ctp:api:type:CustomerDefaultShippingAddressSetMessage) Message.
+*
  */
 type CustomerSetDefaultShippingAddressAction struct {
 	// `id` of the [Address](ctp:api:type:Address) to become the default shipping address.
@@ -1248,6 +1226,10 @@ func (obj CustomerSetDefaultShippingAddressAction) MarshalJSON() ([]byte, error)
 	}{Action: "setDefaultShippingAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action generates the [CustomerExternalIdSet](ctp:api:type:CustomerExternalIdSetMessage) Message.
+*
+ */
 type CustomerSetExternalIdAction struct {
 	// Value to set.
 	// If empty, any existing value is removed.
@@ -1366,6 +1348,8 @@ func (obj CustomerSetSalutationAction) MarshalJSON() ([]byte, error) {
 /**
 *	Sets the Stores the Customer account is associated with.
 *	If no Stores are specified, the Customer becomes a [global Customer](/../api/customers-overview#global-versus-store-specific-customers).
+*
+*	This action generates the [CustomerStoresSet](ctp:api:type:CustomerStoresSetMessage) Message.
 *
  */
 type CustomerSetStoresAction struct {

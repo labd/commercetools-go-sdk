@@ -57,6 +57,7 @@ func (rb *ByProjectKeyCartDiscountsRequestMethodPost) WithHeaders(headers http.H
 
 /**
 *	Creating a Cart Discount produces the [CartDiscountCreated](ctp:api:type:CartDiscountCreatedMessage) Message.
+*
  */
 func (rb *ByProjectKeyCartDiscountsRequestMethodPost) Execute(ctx context.Context) (result *CartDiscount, err error) {
 	data, err := serializeInput(rb.body)

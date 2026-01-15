@@ -56,7 +56,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestMethodPost) WithHeaders(headers http.Hea
 }
 
 /**
-*	Updates the Cart for a given `id`. Returns a `200 OK` status if successful.
+*	Updates the Cart for a given `id`. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

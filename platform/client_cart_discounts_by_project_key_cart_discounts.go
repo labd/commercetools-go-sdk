@@ -33,7 +33,7 @@ func (rb *ByProjectKeyCartDiscountsRequestBuilder) Get() *ByProjectKeyCartDiscou
 }
 
 /**
-*	Checks if one or more CartDiscounts exist for the provided query predicate. Returns a `200 OK` status if any CartDiscounts match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more CartDiscounts exist for the provided query predicate. Returns a `200` status if any CartDiscounts match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyCartDiscountsRequestBuilder) Head() *ByProjectKeyCartDiscountsRequestMethodHead {
 	return &ByProjectKeyCartDiscountsRequestMethodHead{
@@ -44,6 +44,7 @@ func (rb *ByProjectKeyCartDiscountsRequestBuilder) Head() *ByProjectKeyCartDisco
 
 /**
 *	Creating a Cart Discount produces the [CartDiscountCreated](ctp:api:type:CartDiscountCreatedMessage) Message.
+*
  */
 func (rb *ByProjectKeyCartDiscountsRequestBuilder) Post(body CartDiscountDraft) *ByProjectKeyCartDiscountsRequestMethodPost {
 	return &ByProjectKeyCartDiscountsRequestMethodPost{

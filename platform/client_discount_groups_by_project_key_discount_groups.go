@@ -39,7 +39,7 @@ func (rb *ByProjectKeyDiscountGroupsRequestBuilder) Get() *ByProjectKeyDiscountG
 
 /**
 *	Checks if one or more DiscountGroups exist for the provided query predicate.
-*	Returns a `200 OK` status if any DiscountGroups match the query predicate; otherwise, returns a [Not Found](/../api/errors#404-not-found).
+*	Returns a `200` status if any DiscountGroups match the query predicate, or a `404` status otherwise.
 *
  */
 func (rb *ByProjectKeyDiscountGroupsRequestBuilder) Head() *ByProjectKeyDiscountGroupsRequestMethodHead {
@@ -52,6 +52,8 @@ func (rb *ByProjectKeyDiscountGroupsRequestBuilder) Head() *ByProjectKeyDiscount
 /**
 *	Creates a DiscountGroup in the Project.
 *	This request generates the [DiscountGroupCreated](ctp:api:type:DiscountGroupCreatedMessage) Message.
+*
+*	If the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached, a [MaxDiscountGroupsReached](ctp:api:type:MaxDiscountGroupsReachedError) error is returned.
 *
  */
 func (rb *ByProjectKeyDiscountGroupsRequestBuilder) Post(body DiscountGroupDraft) *ByProjectKeyDiscountGroupsRequestMethodPost {

@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodHead) Wit
 }
 
 /**
-*	Checks if a StagedQuote exists with the provided `id`. Returns a `200 OK` status if the StagedQuote exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a StagedQuote exists with the provided `id` in a [Store](ctp:api:type:Store). Returns a `200` status if the StagedQuote exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

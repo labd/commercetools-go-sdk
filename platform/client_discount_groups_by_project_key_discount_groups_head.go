@@ -56,7 +56,7 @@ func (rb *ByProjectKeyDiscountGroupsRequestMethodHead) WithHeaders(headers http.
 
 /**
 *	Checks if one or more DiscountGroups exist for the provided query predicate.
-*	Returns a `200 OK` status if any DiscountGroups match the query predicate; otherwise, returns a [Not Found](/../api/errors#404-not-found).
+*	Returns a `200` status if any DiscountGroups match the query predicate, or a `404` status otherwise.
 *
  */
 func (rb *ByProjectKeyDiscountGroupsRequestMethodHead) Execute(ctx context.Context) error {

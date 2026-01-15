@@ -55,7 +55,7 @@ func (rb *ByProjectKeyZonesRequestMethodHead) WithHeaders(headers http.Header) *
 }
 
 /**
-*	Checks if one or more Zones exist for the provided query predicate. Returns a `200 OK` status if any Zones match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Zones exist for the provided query predicate. Returns a `200 OK` status if any Zones match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyZonesRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -92,6 +92,27 @@ func mapDiscriminatorChangeValueChangeValue(input interface{}) (ChangeValueChang
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.Product != nil {
+			var err error
+			obj.Product, err = mapDiscriminatorReference(obj.Product)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.SupplyChannel != nil {
+			var err error
+			obj.SupplyChannel, err = mapDiscriminatorReference(obj.SupplyChannel)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.DistributionChannel != nil {
+			var err error
+			obj.DistributionChannel, err = mapDiscriminatorReference(obj.DistributionChannel)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "relative":
 		obj := ChangeValueRelativeChangeValue{}
@@ -271,9 +292,41 @@ type ChangeValueGiftLineItemChangeValue struct {
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant).
 	VariantId int `json:"variantId"`
 	// Channel with [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) `InventorySupply`.
-	SupplyChannel *Reference `json:"supplyChannel,omitempty"`
+	SupplyChannel Reference `json:"supplyChannel,omitempty"`
 	// Channel with [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum) `ProductDistribution`.
 	DistributionChannel Reference `json:"distributionChannel"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ChangeValueGiftLineItemChangeValue) UnmarshalJSON(data []byte) error {
+	type Alias ChangeValueGiftLineItemChangeValue
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Product != nil {
+		var err error
+		obj.Product, err = mapDiscriminatorReference(obj.Product)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.SupplyChannel != nil {
+		var err error
+		obj.SupplyChannel, err = mapDiscriminatorReference(obj.SupplyChannel)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.DistributionChannel != nil {
+		var err error
+		obj.DistributionChannel, err = mapDiscriminatorReference(obj.DistributionChannel)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove

@@ -23,7 +23,7 @@ func (rb *ByProjectKeyMessagesByIDRequestBuilder) Get() *ByProjectKeyMessagesByI
 }
 
 /**
-*	Checks if a Message exists with the provided `id`. Returns a `200 OK` status if the Message exists or a `404 Not Found` otherwise.
+*	Checks if a Message exists with the provided `id`. Returns a `200` status if the Message exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyMessagesByIDRequestBuilder) Head() *ByProjectKeyMessagesByIDRequestMethodHead {
 	return &ByProjectKeyMessagesByIDRequestMethodHead{

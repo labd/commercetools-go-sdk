@@ -13,6 +13,9 @@ type ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder struct 
 	client     *Client
 }
 
+/**
+*	Retrieves a QuoteRequest with the provided `key` in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quote-requests/key=%s", rb.projectKey, rb.storeKey, rb.key),
@@ -21,7 +24,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) G
 }
 
 /**
-*	Checks if a QuoteRequest exists with the provided `key`. Returns a `200 OK` status if the QuoteRequest exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a QuoteRequest exists with the provided `key` in a [Store](ctp:api:type:Store). Returns a `200` status if the QuoteRequest exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodHead{
@@ -30,6 +33,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) H
 	}
 }
 
+/**
+*	Updates a QuoteRequest in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) Post(body QuoteRequestUpdate) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodPost{
 		body:   body,
@@ -38,6 +44,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) P
 	}
 }
 
+/**
+*	Deletes a QuoteRequest in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quote-requests/key=%s", rb.projectKey, rb.storeKey, rb.key),

@@ -216,6 +216,30 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "DeploymentApplicationDoesNotExist":
+		obj := DeploymentApplicationDoesNotExistError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentLogInvalidDate":
+		obj := DeploymentLogInvalidDateError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentLogInvalidPageToken":
+		obj := DeploymentLogInvalidPageTokenError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentLogMissingApplicationName":
+		obj := DeploymentLogMissingApplicationNameError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -2675,4 +2699,296 @@ func (obj DeploymentProductionDeactivatedError) Error() string {
 		return obj.Message
 	}
 	return "unknown DeploymentProductionDeactivatedError: failed to parse error response"
+}
+
+/**
+*	Returned when trying to get a log by application name, and the application does not exist on the Connector.
+*
+ */
+type DeploymentApplicationDoesNotExistError struct {
+	// `"Deployment does not have an application named $resourceName."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentApplicationDoesNotExistError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentApplicationDoesNotExistError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentApplicationDoesNotExistError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentApplicationDoesNotExistError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentApplicationDoesNotExist", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentApplicationDoesNotExistError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentApplicationDoesNotExistError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentApplicationDoesNotExistError: failed to parse error response"
+}
+
+/**
+*	Returned when trying to get a log with invalid start date or end date.
+*
+ */
+type DeploymentLogInvalidDateError struct {
+	// `"Invalid start/end date"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentLogInvalidDateError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentLogInvalidDateError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentLogInvalidDateError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentLogInvalidDateError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentLogInvalidDate", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentLogInvalidDateError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentLogInvalidDateError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentLogInvalidDateError: failed to parse error response"
+}
+
+/**
+*	Returned when trying to get a log with invalid page token.
+*
+ */
+type DeploymentLogInvalidPageTokenError struct {
+	// `"Invalid page token: $pageToken"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentLogInvalidPageTokenError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentLogInvalidPageTokenError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentLogInvalidPageTokenError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentLogInvalidPageTokenError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentLogInvalidPageToken", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentLogInvalidPageTokenError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentLogInvalidPageTokenError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentLogInvalidPageTokenError: failed to parse error response"
+}
+
+/**
+*	Returned when trying to get a log from an AWS deployment and an application name was not provided.
+*
+ */
+type DeploymentLogMissingApplicationNameError struct {
+	// `"Missing application name when fetching deployment logs"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentLogMissingApplicationNameError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentLogMissingApplicationNameError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentLogMissingApplicationNameError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentLogMissingApplicationNameError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentLogMissingApplicationName", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentLogMissingApplicationNameError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentLogMissingApplicationNameError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentLogMissingApplicationNameError: failed to parse error response"
 }

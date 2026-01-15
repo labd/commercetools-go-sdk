@@ -327,6 +327,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "MaxDiscountGroupsReached":
+		obj := MaxDiscountGroupsReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MaxResourceLimitExceeded":
 		obj := MaxResourceLimitExceededError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -432,6 +438,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "QueryTimedOut":
 		obj := QueryTimedOutError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderFailure":
+		obj := RecurringOrderFailureError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1250,12 +1262,14 @@ func (obj CountryNotConfiguredInStoreError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts.
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests and [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests.
 *	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
-*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits.
+*	- [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Order.
 *	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
@@ -4521,6 +4535,84 @@ func (obj MaxCartDiscountsReachedError) Error() string {
 }
 
 /**
+*	Returned when a Discount Group cannot be created or activated as the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups:POST) request
+*	- [Set IsActive](ctp:api:type:DiscountGroupSetIsActiveAction) update action
+*
+ */
+type MaxDiscountGroupsReachedError struct {
+	// `"Maximum number of active discount groups reached ($max)."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MaxDiscountGroupsReachedError) UnmarshalJSON(data []byte) error {
+	type Alias MaxDiscountGroupsReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MaxDiscountGroupsReachedError) MarshalJSON() ([]byte, error) {
+	type Alias MaxDiscountGroupsReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxDiscountGroupsReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *MaxDiscountGroupsReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj MaxDiscountGroupsReachedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MaxDiscountGroupsReachedError: failed to parse error response"
+}
+
+/**
 *	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
@@ -4860,8 +4952,7 @@ func (obj MissingTaxRateForCountryError) Error() string {
 }
 
 /**
-*	Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
-*	See [Money usage](/types#usage) for more information.
+*	Returned when a money operation overflows the 64-bit integer range.
 *
  */
 type MoneyOverflowError struct {
@@ -5903,6 +5994,82 @@ func (obj QueryTimedOutError) Error() string {
 		return obj.Message
 	}
 	return "unknown QueryTimedOutError: failed to parse error response"
+}
+
+/**
+*	Returned when a subsequent Order for a [Recurring Order](ctp:api:type:RecurringOrder) could not be processed.
+*
+ */
+type RecurringOrderFailureError struct {
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Details about the error's cause and the entities involved.
+	Details interface{} `json:"details"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderFailureError) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "details")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderFailureError) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderFailureError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "RecurringOrderFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *RecurringOrderFailureError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj RecurringOrderFailureError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown RecurringOrderFailureError: failed to parse error response"
 }
 
 /**
@@ -7281,6 +7448,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "MaxDiscountGroupsReached":
+		obj := GraphQLMaxDiscountGroupsReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MaxResourceLimitExceeded":
 		obj := GraphQLMaxResourceLimitExceededError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7386,6 +7559,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "QueryTimedOut":
 		obj := GraphQLQueryTimedOutError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrderFailure":
+		obj := GraphQLRecurringOrderFailureError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -8112,12 +8291,14 @@ func (obj *GraphQLCountryNotConfiguredInStoreError) DecodeStruct(src map[string]
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts.
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests and [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests.
 *	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
-*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits.
+*	- [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Order.
 *	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
@@ -10824,6 +11005,74 @@ func (obj *GraphQLMaxCartDiscountsReachedError) DecodeStruct(src map[string]inte
 }
 
 /**
+*	Returned when a Discount Group cannot be created or activated as the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups:POST) request
+*	- [Set IsActive](ctp:api:type:DiscountGroupSetIsActiveAction) update action
+*
+ */
+type GraphQLMaxDiscountGroupsReachedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMaxDiscountGroupsReachedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMaxDiscountGroupsReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMaxDiscountGroupsReachedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMaxDiscountGroupsReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxDiscountGroupsReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMaxDiscountGroupsReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
@@ -11123,8 +11372,7 @@ func (obj *GraphQLMissingTaxRateForCountryError) DecodeStruct(src map[string]int
 }
 
 /**
-*	Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
-*	See [Money usage](/types#usage) for more information.
+*	Returned when a money operation overflows the 64-bit integer range.
 *
  */
 type GraphQLMoneyOverflowError struct {
@@ -12022,6 +12270,72 @@ func (obj GraphQLQueryTimedOutError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLQueryTimedOutError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a subsequent Order for a [Recurring Order](ctp:api:type:RecurringOrder) could not be processed.
+*
+ */
+type GraphQLRecurringOrderFailureError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Details about the error's cause and the entities involved.
+	Details interface{} `json:"details"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLRecurringOrderFailureError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLRecurringOrderFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "details")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLRecurringOrderFailureError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLRecurringOrderFailureError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "RecurringOrderFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLRecurringOrderFailureError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {

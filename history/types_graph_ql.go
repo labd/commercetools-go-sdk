@@ -64,7 +64,25 @@ type GraphQLError struct {
 	// Query fields listed in order from the root of the query response up to the field in which the error occurred. `path` is displayed in the response only if an error is associated with a particular field in the query result.
 	Path []interface{} `json:"path"`
 	// Dictionary with additional information where applicable.
-	Extensions interface{} `json:"extensions"`
+	Extensions GraphQLErrorObject `json:"extensions"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Extensions != nil {
+		var err error
+		obj.Extensions, err = mapDiscriminatorGraphQLErrorObject(obj.Extensions)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove

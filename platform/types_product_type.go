@@ -27,10 +27,6 @@ const (
 	AttributeConstraintEnumDraftNone AttributeConstraintEnumDraft = "None"
 )
 
-/**
-*	Describes an Attribute and allows you to define meta-information associated with the Attribute (like whether it should be searchable, or its constraints).
-*
- */
 type AttributeDefinition struct {
 	// Describes the Type of the Attribute.
 	Type AttributeType `json:"type"`
@@ -49,8 +45,9 @@ type AttributeDefinition struct {
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint TextInputHint `json:"inputHint"`
 	// If `true`, the Attribute's values are available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
+	// However, if an Attribute's `level` is set as `Product`, then Product Projection Search does **not support** the Attribute.
 	//
-	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
+	// The exact features that are available with this flag depend on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
 	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/../api/projects/products#update-product).
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
@@ -102,11 +99,14 @@ type AttributeDefinitionDraft struct {
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint *TextInputHint `json:"inputHint,omitempty"`
-	// Set to `true` if the Attribute's values should be available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API and can be used in full-text search queries, filters, and facets.
+	// Set as `true` if you want the Attribute's values to be available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API and can be used in full-text search queries, filters, and facets.
+	// If an Attribute's `level` is set as `Product`, then Product Projection Search does **not support** the Attribute.
+	//
+	//
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
 	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
 	// This constraint is enforced at both Product creation and Product update.
-	// If the length of the input exceeds the maximum size, an InvalidField error is returned.
+	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable *bool `json:"isSearchable,omitempty"`
 }
 

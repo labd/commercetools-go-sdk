@@ -20,7 +20,7 @@ func (rb *ByProjectKeyTypesByIDRequestBuilder) Get() *ByProjectKeyTypesByIDReque
 }
 
 /**
-*	Checks if a Type exists with the provided `id`. Returns a `200 OK` status if the Type exists or a `404 Not Found` otherwise.
+*	Checks if a Type exists with the provided `id`. Returns a `200` status if the Type exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyTypesByIDRequestBuilder) Head() *ByProjectKeyTypesByIDRequestMethodHead {
 	return &ByProjectKeyTypesByIDRequestMethodHead{

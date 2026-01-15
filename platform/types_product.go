@@ -135,13 +135,6 @@ func (obj FilteredFacetResult) MarshalJSON() ([]byte, error) {
 	}{Action: "filter", Alias: (*Alias)(&obj)})
 }
 
-/**
-*	An abstract sellable good with a set of Attributes defined by a Product Type.
-*	Products themselves are not sellable. Instead, they act as a parent structure for Product Variants.
-*	Each Product must have at least one Product Variant, which is called the Master Variant.
-*	A single Product representation contains the _current_ and the _staged_ representation of its product data.
-*
- */
 type Product struct {
 	// Unique identifier of the Product.
 	ID string `json:"id"`
@@ -218,12 +211,8 @@ func (obj Product) MarshalJSON() ([]byte, error) {
 
 }
 
-/**
-*	Contains the `current` and `staged` [ProductData](ctp:api:type:ProductData).
-*
- */
 type ProductCatalogData struct {
-	// `true` if the Product is published.
+	// If `true`, the `current` representation of the Product is retrievable in the [Product Projection](/projects/productProjections) endpoints and indexed for [Product Search](/../api/projects/product-search).
 	Published bool `json:"published"`
 	// Current (published) data of the Product.
 	Current ProductData `json:"current"`
@@ -233,10 +222,6 @@ type ProductCatalogData struct {
 	HasStagedChanges bool `json:"hasStagedChanges"`
 }
 
-/**
-*	Contains all the data of a Product and its Product Variants.
-*
- */
 type ProductData struct {
 	// Name of the Product.
 	Name LocalizedString `json:"name"`
@@ -262,7 +247,8 @@ type ProductData struct {
 	Variants []ProductVariant `json:"variants"`
 	// Used by [Search Term Suggestions](/projects/search-term-suggestions), but is also considered for a [full text search](/projects/product-projection-search#full-text-search) in the Product Projection Search API.
 	SearchKeywords SearchKeywords `json:"searchKeywords"`
-	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	// Product Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	// **Not supported** by [Product Projection Search](/projects/product-projection-search).
 	Attributes []Attribute `json:"attributes"`
 }
 
@@ -278,8 +264,6 @@ type ProductDraft struct {
 	// User-defined unique identifier for the Product.
 	//
 	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Products with the [Import API](/../api/import-export/overview) and the [Merchant Center](/../merchant-center/import-data).
-	//
-	// To update a Product using the Import API or Merchant Center, the Product `key` must match the pattern `^[A-Za-z0-9_-]{2,256}$`.
 	Key *string `json:"key,omitempty"`
 	// Description of the Product.
 	Description *LocalizedString `json:"description,omitempty"`
@@ -303,11 +287,14 @@ type ProductDraft struct {
 	SearchKeywords *SearchKeywords `json:"searchKeywords,omitempty"`
 	// State to be assigned to the Product.
 	State *StateResourceIdentifier `json:"state,omitempty"`
-	// If `true`, the Product is published immediately to the current projection.
+	// If `true`, the platform sets the `published` flag on the resulting [ProductCatalogData](ctp:api:type:ProductCatalogData) to `true`.
+	// This makes the current representation retrievable in [Product Projection](/projects/productProjections) endpoints and indexes it for [Product Search](/../api/projects/product-search).
+	// You can also set this flag later using the [Publish](/projects/products#publish) update action.
 	Publish *bool `json:"publish,omitempty"`
 	// Specifies the type of prices used when looking up a price for the Product.
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
-	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinitionDraft).
+	// Product Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinitionDraft).
+	// **Not supported** by [Product Projection Search](/projects/product-projection-search).
 	Attributes []Attribute `json:"attributes"`
 }
 
@@ -618,7 +605,7 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 			return nil, err
 		}
 		return obj, nil
-	case "legacySetSku":
+	case "setSKU":
 		obj := ProductLegacySetSkuAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
@@ -850,10 +837,6 @@ func mapDiscriminatorProductUpdateAction(input interface{}) (ProductUpdateAction
 	return nil, nil
 }
 
-/**
-*	A concrete sellable good for which inventory can be tracked. Product Variants are generally mapped to specific SKUs.
-*
- */
 type ProductVariant struct {
 	// A unique, sequential identifier of the Product Variant within the Product.
 	ID int `json:"id"`
@@ -866,7 +849,7 @@ type ProductVariant struct {
 	// The Embedded Prices of the Product Variant.
 	// Cannot contain two Prices of the same Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
 	Prices []Price `json:"prices"`
-	// Attributes of the Product Variant.
+	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
 	// Only available when [price selection](/../api/pricing-and-discounts-overview#price-selection) is used.
 	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
@@ -971,11 +954,6 @@ type ProductVariantChannelAvailability struct {
 *
  */
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
-
-/**
-*	Creates a Product Variant when included in the `masterVariant` and `variants` fields of the [ProductDraft](ctp:api:type:ProductDraft).
-*
- */
 type ProductVariantDraft struct {
 	// User-defined unique SKU of the Product Variant.
 	Sku *string `json:"sku,omitempty"`
@@ -984,7 +962,7 @@ type ProductVariantDraft struct {
 	// The Embedded Prices for the Product Variant.
 	// Each Price must have its unique Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
 	Prices []PriceDraft `json:"prices"`
-	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
 	// Images for the Product Variant.
 	Images []Image `json:"images"`
@@ -1491,7 +1469,7 @@ func (obj ProductLegacySetSkuAction) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Action string `json:"action"`
 		*Alias
-	}{Action: "legacySetSku", Alias: (*Alias)(&obj)})
+	}{Action: "setSKU", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1522,7 +1500,9 @@ func (obj ProductMoveImageToPositionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Publishes product data from the Product's staged projection to its current projection.
+*	Copies the product data from the Product's staged representation to its current representation and sets the `published` flag on the resulting [ProductCatalogData](ctp:api:type:ProductCatalogData) to `true`.
+*	This makes the current representation retrievable in [Product Projection](/projects/productProjections) endpoints and indexes it for [Product Search](/../api/projects/product-search).
+*
 *	Produces the [ProductPublished](ctp:api:type:ProductPublishedMessage) Message.
  */
 type ProductPublishAction struct {
@@ -2373,7 +2353,11 @@ func (obj ProductTransitionStateAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes the current [projection](/../api/projects/productProjections#current--staged) of the Product. The staged projection is unaffected. To retrieve unpublished Products, the `staged` parameter must be set to `false` when [querying](ctp:api:endpoint:/{projectKey}/product-projections:GET)/[searching](/projects/product-projection-search#product-projection-search) Product Projections. Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
+*	Sets the `published` flag on the [ProductCatalogData](ctp:api:type:ProductCatalogData) to `false`.
+*	This makes the [current](/../api/projects/productProjections#current--staged) representation of a Product unavailable in [Product Projection](/projects/productProjections) endpoints by default, and excludes it from [Product Search](/../api/projects/product-search).
+*	To retrieve unpublished Products on Product Projection endpoints, set parameter `staged=true`.
+*
+*	Produces the [ProductUnpublished](ctp:api:type:ProductUnpublishedMessage) Message.
 *
 *	When a Product is unpublished, any associated Line Items already present in a Cart remain unaffected and can still be ordered. To prevent this, do the following:
 *

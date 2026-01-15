@@ -53,6 +53,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodGet)
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a QuoteRequest with the provided `key` in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

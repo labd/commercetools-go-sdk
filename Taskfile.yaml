@@ -67,6 +67,7 @@ tasks:
   generate-api:
     cmds:
       - rmf-codegen generate {{ .apiSpecsDir }}/{{ .path }}/api.raml -b {{ .apiName }} -o {{ .generatedDir }}/ -t GO_CLIENT
+      - perl -pi -e 's/Filter\[attributes\]/FilterAttributes/g' {{ .generatedDir }}/{{ .apiName }}/*.go
       - goimports -w {{ .generatedDir }}/{{ .apiName }}/
       - go fmt {{ .generatedDir }}/{{ .apiName }}/
       - rm -rf {{ .apiName }}/

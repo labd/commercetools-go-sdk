@@ -23,6 +23,9 @@ func (rb *ByProjectKeyByResourceTypeRequestBuilder) WithIdValue(id string) *ByPr
 
 /**
 *	The `view_audit_log:{projectKey}` scope is required, and depending on the [resource type](ctp:history:type:ChangeHistoryResourceType) queried, their respective scopes must be granted.
+*
+*	If the request exceeds the rate limit, a [TooManyRequests](ctp:history:type:TooManyRequestsError) error is returned.
+*
  */
 func (rb *ByProjectKeyByResourceTypeRequestBuilder) Get() *ByProjectKeyByResourceTypeRequestMethodGet {
 	return &ByProjectKeyByResourceTypeRequestMethodGet{

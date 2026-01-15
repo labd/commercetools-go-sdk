@@ -55,7 +55,7 @@ func (rb *ByProjectKeyQuotesRequestMethodHead) WithHeaders(headers http.Header) 
 }
 
 /**
-*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyQuotesRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

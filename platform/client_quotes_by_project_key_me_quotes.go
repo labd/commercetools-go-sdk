@@ -25,6 +25,11 @@ func (rb *ByProjectKeyMeQuotesRequestBuilder) WithKey(key string) *ByProjectKeyM
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves all Quotes for the authenticated Customer.
+*
+ */
 func (rb *ByProjectKeyMeQuotesRequestBuilder) Get() *ByProjectKeyMeQuotesRequestMethodGet {
 	return &ByProjectKeyMeQuotesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/quotes", rb.projectKey),
@@ -33,7 +38,9 @@ func (rb *ByProjectKeyMeQuotesRequestBuilder) Get() *ByProjectKeyMeQuotesRequest
 }
 
 /**
-*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Quotes exist for the provided query predicate for the authenticated Customer.
+*	Returns a `200 OK` status if any Quotes match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
  */
 func (rb *ByProjectKeyMeQuotesRequestBuilder) Head() *ByProjectKeyMeQuotesRequestMethodHead {
 	return &ByProjectKeyMeQuotesRequestMethodHead{

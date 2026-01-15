@@ -98,14 +98,14 @@ type ProductSearchMatchingVariants struct {
 }
 
 /**
-*	The query parameters used for [data integration with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters).
+*	The query parameters used for the deprecated [data integration with Product Projection parameters](/../api/deprecations-and-removals#product-projection-parameters) in Product Search.
 *
  */
 type ProductSearchProjectionParams struct {
 	// Expands a `value` of type [Reference](ctp:api:type:Reference) in a [ProductProjection](ctp:api:type:ProductProjection).
 	// In case the referenced object does not exist, the API returns the non-expanded reference.
 	Expand []string `json:"expand"`
-	// Set to `true` to retrieve the [staged](ctp:api:type:CurrentStaged) Product Projection
+	// Set to `true` to retrieve the [staged](/../api/projects/productProjections#current--staged) Product Projection
 	Staged *bool `json:"staged,omitempty"`
 	// The currency used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	PriceCurrency *string `json:"priceCurrency,omitempty"`
@@ -117,14 +117,16 @@ type ProductSearchProjectionParams struct {
 	PriceCustomerGroupAssignments []string `json:"priceCustomerGroupAssignments"`
 	// `id` of an existing [Channel](ctp:api:type:Channel) used for [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceChannel *string `json:"priceChannel,omitempty"`
-	// Used for [locale-based projection](ctp:api:type:ProductProjectionLocales).
+	// Used for [locale-based projection](/../api/projects/productProjections#locales).
 	LocaleProjection []string `json:"localeProjection"`
 	// `key` of an existing [Store](ctp:api:type:Store).
 	// If the Store has defined `languages`, `countries`, `distributionChannels`, or `supplyChannels`,
-	// they are used for projections based on [locale](ctp:api:type:ProductProjectionLocales), [price](ctp:api:type:ProductProjectionPrices),
-	// and [inventory](ctp:api:type:ProductProjectionInventoryEntries).
-	// For Projects with active [Product Selections](/../api/projects/product-selections), the API does not take the [availability of the Product in the specified Store](/../api/projects/stores#products-available-in-store) into account.
-	// [Product Tailoring](/../api/projects/product-tailoring) modifies the product information returned in API responses, but evaluating [query expressions](/../api/search-query-language#simple-expressions) is restricted to the original product information.
+	// they are used for projections based on [locale](/../api/projects/productProjections#locales), [price](/../api/projects/productProjections#prices),
+	// and [inventory](/../api/projects/productProjections#inventory-entries).
+	//
+	// For Projects with active [Product Selections](/../api/projects/product-selections), the API does not take the [availability of the Product in the specified Store](/../api/project-configuration-overview#products-available-in-store) into account.
+	//
+	// [Product Tailoring](/../api/projects/product-tailoring) modifies the product information returned in API responses. However, you can only specify [query expressions](/../api/search-query-language#simple-expressions) for the original Product data, not for tailored data.
 	StoreProjection *string `json:"storeProjection,omitempty"`
 }
 
@@ -174,7 +176,7 @@ type ProductSearchRequest struct {
 	// set this to `true` to get additional information for each returned Product about which Product Variants match the search query.
 	// For details, see [matching variants](/../api/projects/product-search#matching-variants).
 	MarkMatchingVariants *bool `json:"markMatchingVariants,omitempty"`
-	// Controls data integration [with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters).
+	// Controls deprecated data integration [with Product Projection parameters](/../api/deprecations-and-removals#product-projection-parameters).
 	// If not set, the result does not include the Product Projection.
 	ProductProjectionParameters *ProductSearchProjectionParams `json:"productProjectionParameters,omitempty"`
 	// Set this field to request [facets](/../api/projects/product-search#facets).
@@ -219,7 +221,7 @@ type ProductSearchResult struct {
 	// Only present if `markMatchingVariants` is set to `true` in the [ProductSearchRequest](ctp:api:type:ProductSearchRequest).
 	MatchingVariants *ProductSearchMatchingVariants `json:"matchingVariants,omitempty"`
 	// Projected data of the Product with `id`.
-	// Only present if data integration [with Product Projection parameters](/../api/projects/product-search#with-product-projection-parameters) is requested.
+	// Only present if deprecated data integration [with Product Projection parameters](/../api/deprecations-and-removals#product-projection-parameters) is requested.
 	ProductProjection *ProductProjection `json:"productProjection,omitempty"`
 }
 
@@ -385,9 +387,51 @@ type ProductSearchFacetResultCount struct {
 	Value int `json:"value"`
 }
 
+/**
+*	Result of a [stats facet](/../api/projects/product-search#stats-facets).
+*	The data type of `min` `max`, `mean`, and `sum` matches the data type of the `field` in the [facet expression](ctp:api:type:ProductSearchFacetStatsExpression).
+*
+ */
+type ProductSearchFacetResultStats struct {
+	// Name of the facet.
+	Name string `json:"name"`
+	// The minimum value of the field, scoped to the faceted results.
+	Min interface{} `json:"min"`
+	// The maximum value of the field, scoped to the faceted results.
+	Max interface{} `json:"max"`
+	// The average value of the field calculated as `sum` / `count`.
+	//
+	// Only returned for number fields.
+	Mean interface{} `json:"mean,omitempty"`
+	// The sum of values of the field that match the [facet expression](ctp:api:type:ProductSearchFacetStatsExpression).
+	//
+	// Only returned for number fields.
+	Sum interface{} `json:"sum,omitempty"`
+	// The total number of values counted that match the facet expression.
+	Count int `json:"count"`
+}
+
 type ProductSearchFacetScopeEnum string
 
 const (
 	ProductSearchFacetScopeEnumAll   ProductSearchFacetScopeEnum = "all"
 	ProductSearchFacetScopeEnumQuery ProductSearchFacetScopeEnum = "query"
 )
+
+type ProductSearchFacetStatsExpression struct {
+	// Definition of the stats facet.
+	Stats ProductSearchFacetStatsValue `json:"stats"`
+}
+
+type ProductSearchFacetStatsValue struct {
+	// Name of the stats facet to appear in the [ProductSearchFacetResultStats](ctp:api:type:ProductSearchFacetResultStats).
+	Name string `json:"name"`
+	// Whether the facet must consider only the Products resulting from the search (`query`) or all the Products (`all`).
+	Scope *ProductSearchFacetScopeEnum `json:"scope,omitempty"`
+	// Additional filtering expression to apply to the search result before calculating the facet.
+	Filter *SearchQuery `json:"filter,omitempty"`
+	// The [searchable Product field](/api/projects/product-search#searchable-product-fields) to facet on.
+	Field string `json:"field"`
+	// If the `field` is not standard, this must be the Attribute type.
+	FieldType *SearchFieldType `json:"fieldType,omitempty"`
+}

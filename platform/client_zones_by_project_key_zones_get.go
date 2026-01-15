@@ -132,6 +132,10 @@ func (rb *ByProjectKeyZonesRequestMethodGet) WithHeaders(headers http.Header) *B
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all Zones in the Project.
+ */
 func (rb *ByProjectKeyZonesRequestMethodGet) Execute(ctx context.Context) (result *ZonePagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

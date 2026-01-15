@@ -11,7 +11,7 @@ import (
 )
 
 type ConnectorsDraftsRequestMethodPost struct {
-	body    ConnectorDraft
+	body    ConnectorStagedDraft
 	url     string
 	client  *Client
 	headers http.Header

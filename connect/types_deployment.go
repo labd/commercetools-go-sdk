@@ -67,30 +67,6 @@ type DeploymentDraft struct {
 	Region string `json:"region"`
 }
 
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj DeploymentDraft) MarshalJSON() ([]byte, error) {
-	type Alias DeploymentDraft
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["configurations"] == nil {
-		delete(raw, "configurations")
-	}
-
-	return json.Marshal(raw)
-
-}
-
 type DeploymentUpdate struct {
 	// Expected version of the Deployment on which the changes apply.
 	Version int `json:"version"`

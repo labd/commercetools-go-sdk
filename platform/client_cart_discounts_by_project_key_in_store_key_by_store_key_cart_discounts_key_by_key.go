@@ -21,7 +21,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestBuilder) G
 }
 
 /**
-*	Checks if a CartDiscount exists with the provided `key`. Returns a `200 OK` status if the CartDiscount exists or a `404 Not Found` otherwise.
+*	Checks if a CartDiscount exists with the provided `key`. Returns a `200` status if the CartDiscount exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartDiscountsKeyByKeyRequestMethodHead{

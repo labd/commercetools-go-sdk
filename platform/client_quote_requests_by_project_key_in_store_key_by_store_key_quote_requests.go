@@ -28,6 +28,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder) WithId(id
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves QuoteRequests in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quote-requests", rb.projectKey, rb.storeKey),
@@ -36,7 +40,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder) Get() *By
 }
 
 /**
-*	Checks if one or more QuoteRequests exist for the provided query predicate. Returns a `200 OK` status if any QuoteRequests match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if one or more QuoteRequests exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200` status if any QuoteRequests match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodHead{
@@ -45,6 +49,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder) Head() *B
 	}
 }
 
+/**
+*	Creates a QuoteRequest in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestBuilder) Post(body QuoteRequestDraft) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodPost{
 		body:   body,

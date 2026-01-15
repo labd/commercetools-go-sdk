@@ -28,7 +28,7 @@ func (rb *ByProjectKeyShoppingListsByIDRequestMethodHead) WithHeaders(headers ht
 }
 
 /**
-*	Checks if a ShoppingList exists with the provided `id`. Returns a `200 OK` status if the ShoppingList exists, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a ShoppingList exists with the provided `id`. Returns a `200` status if the ShoppingList exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyShoppingListsByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

@@ -82,7 +82,7 @@ type CustomerImport struct {
 	CustomerNumber *string `json:"customerNumber,omitempty"`
 	// Maps to `Customer.email`.
 	Email string `json:"email"`
-	// Maps to `Customer.password`. Required when `authenticationMode` is set to `Password`.
+	// Maps to `Customer.password`. Required when `authenticationMode` is set to `Password`. This field is only used when creating new Customers, and is ignored when updating Customers. However, due to the Import API's [upsert behavior](/../import-export/overview#how-are-resources-created-or-updated), a non-empty value must still be provided when updating Customers.
 	Password *string `json:"password,omitempty"`
 	// Maps to `Customer.stores`. If the referenced [Stores](ctp:api:type:Store) do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Stores are created.
 	Stores []StoreKeyReference `json:"stores"`

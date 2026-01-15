@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodGet) WithHeaders(headers h
 }
 
 /**
-*	Returns a Business Unit for a given `id`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Returns a Business Unit for a given `id`. Returns a `200` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestMethodGet) Execute(ctx context.Context) (result *BusinessUnit, err error) {

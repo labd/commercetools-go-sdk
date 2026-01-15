@@ -62,7 +62,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodGe
 *	- If no ShoppingList matches the provided `key` in a Store.
 *	- If a ShoppingList matches the provided `key` but does not have a `store` specified, or the `store` field references a different Store.
 *	- If a ShoppingList matches the provided `key` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope,
-*	   or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
+*	    or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *ShoppingList, err error) {

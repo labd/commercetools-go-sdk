@@ -13,7 +13,7 @@ type ByProjectKeyMeBusinessUnitsByIDRequestBuilder struct {
 }
 
 /**
-*	Returns a Business Unit for a given `id`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Returns a Business Unit for a given `id`. Returns a `200` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Get() *ByProjectKeyMeBusinessUnitsByIDRequestMethodGet {
@@ -24,7 +24,7 @@ func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Get() *ByProjectKeyMeBu
 }
 
 /**
-*	Checks if a BusinessUnit exists with the provided `id`. Returns a `200 OK` status if the BusinessUnit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a BusinessUnit exists with the provided `id`. Returns a `200` status if the BusinessUnit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
  */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyMeBusinessUnitsByIDRequestMethodHead {
 	return &ByProjectKeyMeBusinessUnitsByIDRequestMethodHead{
@@ -34,7 +34,7 @@ func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Head() *ByProjectKeyMeB
 }
 
 /**
-*	Updates a Business Unit for a given `id`. Returns a `200 OK` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Updates a Business Unit for a given `id`. Returns a `200` status if the Business Unit exists and the Customer has access to it, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeBusinessUnitsByIDRequestBuilder) Post(body MyBusinessUnitUpdate) *ByProjectKeyMeBusinessUnitsByIDRequestMethodPost {

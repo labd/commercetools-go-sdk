@@ -9,7 +9,7 @@ type ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder struct {
 }
 
 /**
-*	Get ShippingMethods for a cart in a store
+*	Get matching ShippingMethods for a Cart in a Store
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder) MatchingCart() *ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyShippingMethodsMatchingCartRequestBuilder{

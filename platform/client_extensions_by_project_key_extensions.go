@@ -33,7 +33,7 @@ func (rb *ByProjectKeyExtensionsRequestBuilder) Get() *ByProjectKeyExtensionsReq
 }
 
 /**
-*	Checks if one or more Extensions exist for the provided query predicate. Returns a `200 OK` status if any Extensions match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Extensions exist for the provided query predicate. Returns a `200` status if any Extensions match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyExtensionsRequestBuilder) Head() *ByProjectKeyExtensionsRequestMethodHead {
 	return &ByProjectKeyExtensionsRequestMethodHead{

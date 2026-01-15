@@ -145,8 +145,10 @@ type RecurringOrderDraft struct {
 	Cart CartResourceIdentifier `json:"cart"`
 	// Current version of the referenced [Cart](ctp:api:type:Cart).
 	CartVersion int `json:"cartVersion"`
-	// Date and time (UTC) when the RecurringOrder will start.
-	StartsAt time.Time `json:"startsAt"`
+	// Date and time (UTC) when the RecurringOrder will start. When specified, the date and time must be in the future. If not specified, the recurring order will start immediately.
+	StartsAt *time.Time `json:"startsAt,omitempty"`
+	// Date and time (UTC) when the RecurringOrder will expire.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// State for the RecurringOrder in a custom workflow.
 	State *StateResourceIdentifier `json:"state,omitempty"`
 	// Custom Fields for the RecurringOrder.
@@ -401,6 +403,12 @@ func mapDiscriminatorRecurringOrderUpdateAction(input interface{}) (RecurringOrd
 			return nil, err
 		}
 		return obj, nil
+	case "setExpiresAt":
+		obj := RecurringOrderSetExpiresAtAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setKey":
 		obj := RecurringOrderSetKeyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -412,9 +420,9 @@ func mapDiscriminatorRecurringOrderUpdateAction(input interface{}) (RecurringOrd
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		if obj.SkipConfiguration != nil {
+		if obj.SkipConfigurationInputDraft != nil {
 			var err error
-			obj.SkipConfiguration, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfiguration)
+			obj.SkipConfigurationInputDraft, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfigurationInputDraft)
 			if err != nil {
 				return nil, err
 			}
@@ -473,7 +481,7 @@ func mapDiscriminatorSkipConfiguration(input interface{}) (SkipConfiguration, er
 	}
 
 	switch discriminator {
-	case "counter":
+	case "Counter":
 		obj := Counter{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
@@ -503,7 +511,7 @@ func (obj Counter) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
-	}{Action: "counter", Alias: (*Alias)(&obj)})
+	}{Action: "Counter", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -524,7 +532,7 @@ func mapDiscriminatorSkipConfigurationDraft(input interface{}) (SkipConfiguratio
 	}
 
 	switch discriminator {
-	case "counter":
+	case "Counter":
 		obj := CounterDraft{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
@@ -550,7 +558,7 @@ func (obj CounterDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
-	}{Action: "counter", Alias: (*Alias)(&obj)})
+	}{Action: "Counter", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -599,6 +607,27 @@ func (obj RecurringOrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Setting the expiration date and time generates the [RecurringOrderExpiresAtSet](ctp:api:type:RecurringOrderExpiresAtSetMessage) Message.
+*
+ */
+type RecurringOrderSetExpiresAtAction struct {
+	// Date and time (UTC) the Recurring Order should expire. If empty, any existing value will be removed.
+	//
+	// If the date or time is extended or removed when the [RecurringOrderState](ctp:api:type:RecurringOrderState) is `Expired`, the state will be updated to `Active`.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderSetExpiresAtAction) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderSetExpiresAtAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setExpiresAt", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	This update action generates the [RecurringOrderKeySet](ctp:api:type:RecurringOrderKeySetMessage) Message.
 *
  */
@@ -619,9 +648,9 @@ func (obj RecurringOrderSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type RecurringOrderSetOrderSkipConfigurationAction struct {
-	// Configuration for skipping the next orders of the [Recurring Order](ctp:api:type:RecurringOrder).
-	SkipConfiguration SkipConfigurationDraft `json:"skipConfiguration,omitempty"`
-	// Date and time (UTC) the Recurring Order will resume and start to generate new orders.
+	// Configuration for skipping future orders of the [Recurring Order](ctp:api:type:RecurringOrder).
+	SkipConfigurationInputDraft SkipConfigurationDraft `json:"skipConfigurationInputDraft,omitempty"`
+	// Date and time (UTC) the Recurring Order will expire and stop generating new orders.
 	UpdatedExpiresAt *time.Time `json:"updatedExpiresAt,omitempty"`
 }
 
@@ -632,9 +661,9 @@ func (obj *RecurringOrderSetOrderSkipConfigurationAction) UnmarshalJSON(data []b
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-	if obj.SkipConfiguration != nil {
+	if obj.SkipConfigurationInputDraft != nil {
 		var err error
-		obj.SkipConfiguration, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfiguration)
+		obj.SkipConfigurationInputDraft, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfigurationInputDraft)
 		if err != nil {
 			return err
 		}

@@ -26,7 +26,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Checks if a Cart exists with the provided `id`. Returns a `200 OK` status if the Cart exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a Cart exists with the provided `id`. Returns a `200` status if the Cart exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsByIDRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsByIDRequestMethodHead {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyCartsByIDRequestMethodHead{

@@ -33,7 +33,7 @@ func (rb *ByProjectKeyAttributeGroupsRequestBuilder) Get() *ByProjectKeyAttribut
 }
 
 /**
-*	Checks if one or more AttributeGroups exist for the provided query predicate. Returns `200 OK` status if any AttributeGroups match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more AttributeGroups exist for the provided query predicate. Returns `200` status if any AttributeGroups match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyAttributeGroupsRequestBuilder) Head() *ByProjectKeyAttributeGroupsRequestMethodHead {
 	return &ByProjectKeyAttributeGroupsRequestMethodHead{

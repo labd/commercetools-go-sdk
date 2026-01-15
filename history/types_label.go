@@ -77,15 +77,49 @@ func mapDiscriminatorLabel(input interface{}) (Label, error) {
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.Customer != nil {
+			var err error
+			obj.Customer, err = mapDiscriminatorReference(obj.Customer)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.StagedQuote != nil {
+			var err error
+			obj.StagedQuote, err = mapDiscriminatorReference(obj.StagedQuote)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.QuoteRequest != nil {
+			var err error
+			obj.QuoteRequest, err = mapDiscriminatorReference(obj.QuoteRequest)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "QuoteRequestLabel":
 		obj := QuoteRequestLabel{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.Customer != nil {
+			var err error
+			obj.Customer, err = mapDiscriminatorReference(obj.Customer)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "ReviewLabel":
 		obj := ReviewLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ShippingMethodLabel":
+		obj := ShippingMethodLabel{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -95,9 +129,29 @@ func mapDiscriminatorLabel(input interface{}) (Label, error) {
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.Customer != nil {
+			var err error
+			obj.Customer, err = mapDiscriminatorReference(obj.Customer)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if obj.QuoteRequest != nil {
+			var err error
+			obj.QuoteRequest, err = mapDiscriminatorReference(obj.QuoteRequest)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "StringLabel":
 		obj := StringLabel{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StandalonePriceLabel":
+		obj := StandalonePriceLabel{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -253,6 +307,38 @@ type QuoteLabel struct {
 	QuoteRequest Reference `json:"quoteRequest"`
 }
 
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *QuoteLabel) UnmarshalJSON(data []byte) error {
+	type Alias QuoteLabel
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Customer != nil {
+		var err error
+		obj.Customer, err = mapDiscriminatorReference(obj.Customer)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.StagedQuote != nil {
+		var err error
+		obj.StagedQuote, err = mapDiscriminatorReference(obj.StagedQuote)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.QuoteRequest != nil {
+		var err error
+		obj.QuoteRequest, err = mapDiscriminatorReference(obj.QuoteRequest)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 // MarshalJSON override to set the discriminator value or remove
 // optional nil slices
 func (obj QuoteLabel) MarshalJSON() ([]byte, error) {
@@ -268,6 +354,24 @@ type QuoteRequestLabel struct {
 	Key string `json:"key"`
 	// The [Buyer](/../api/quotes-overview#buyer) who raised the Quote Request.
 	Customer Reference `json:"customer"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *QuoteRequestLabel) UnmarshalJSON(data []byte) error {
+	type Alias QuoteRequestLabel
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Customer != nil {
+		var err error
+		obj.Customer, err = mapDiscriminatorReference(obj.Customer)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -297,6 +401,23 @@ func (obj ReviewLabel) MarshalJSON() ([]byte, error) {
 	}{Action: "ReviewLabel", Alias: (*Alias)(&obj)})
 }
 
+type ShippingMethodLabel struct {
+	// User-defined unique identifier of the Shipping Method.
+	Key *string `json:"key,omitempty"`
+	// Unique name identifier of the Shipping Method.
+	Name string `json:"name"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ShippingMethodLabel) MarshalJSON() ([]byte, error) {
+	type Alias ShippingMethodLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ShippingMethodLabel", Alias: (*Alias)(&obj)})
+}
+
 type StagedQuoteLabel struct {
 	// User-defined unique identifier of the Staged Quote.
 	Key string `json:"key"`
@@ -304,6 +425,31 @@ type StagedQuoteLabel struct {
 	Customer Reference `json:"customer"`
 	// Quote Request related to the Staged Quote.
 	QuoteRequest Reference `json:"quoteRequest"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *StagedQuoteLabel) UnmarshalJSON(data []byte) error {
+	type Alias StagedQuoteLabel
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Customer != nil {
+		var err error
+		obj.Customer, err = mapDiscriminatorReference(obj.Customer)
+		if err != nil {
+			return err
+		}
+	}
+	if obj.QuoteRequest != nil {
+		var err error
+		obj.QuoteRequest, err = mapDiscriminatorReference(obj.QuoteRequest)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -329,4 +475,21 @@ func (obj StringLabel) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "StringLabel", Alias: (*Alias)(&obj)})
+}
+
+type StandalonePriceLabel struct {
+	// User-defined unique identifier of the Standalone Price.
+	Key *string `json:"key,omitempty"`
+	// Unique Product SKU variant identifier to which the Standalone Price is associated.
+	Sku string `json:"sku"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StandalonePriceLabel) MarshalJSON() ([]byte, error) {
+	type Alias StandalonePriceLabel
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "StandalonePriceLabel", Alias: (*Alias)(&obj)})
 }

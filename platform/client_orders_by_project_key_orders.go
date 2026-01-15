@@ -70,7 +70,7 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Get() *ByProjectKeyOrdersRequestMeth
 }
 
 /**
-*	Checks if one or more Orders exist for the provided query predicate. Returns a `200 OK` status if any Orders match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Orders exist for the provided query predicate. Returns a `200` status if any Orders match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyOrdersRequestBuilder) Head() *ByProjectKeyOrdersRequestMethodHead {
 	return &ByProjectKeyOrdersRequestMethodHead{

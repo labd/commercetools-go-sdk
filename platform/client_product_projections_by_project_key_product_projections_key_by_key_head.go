@@ -28,7 +28,7 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodHead) WithHeaders(h
 }
 
 /**
-*	Checks if the current or staged representation of a Product exists with the provided `key`. Returns a `200 OK` status if the ProductProjection exists or a `404 Not Found` otherwise.
+*	Checks if the current or staged representation of a Product exists with the provided `key`. Returns a `200` status if the ProductProjection exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

@@ -55,7 +55,7 @@ func (rb *ByProjectKeyOrdersEditsRequestMethodHead) WithHeaders(headers http.Hea
 }
 
 /**
-*	Checks if one or more OrderEdits exist for the provided query predicate. Returns a `200 OK` status if any OrderEdits match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more OrderEdits exist for the provided query predicate. Returns a `200` status if any OrderEdits match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyOrdersEditsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -64,59 +64,6 @@ func (obj Connector) MarshalJSON() ([]byte, error) {
 
 }
 
-type ConnectorDraft struct {
-	// User-defined unique identifier of the Connector.
-	Key *string `json:"key,omitempty"`
-	// Name of the Connector.
-	Name string `json:"name"`
-	// Description of the Connector.
-	Description *string `json:"description,omitempty"`
-	// Integration types of the Connector. Can be used to filter search and query results.
-	IntegrationTypes []IntegrationType `json:"integrationTypes"`
-	// Owner of the Connector.
-	Creator Creator `json:"creator"`
-	// GitHub repository details of the Connector.
-	Repository Repository `json:"repository"`
-	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
-	SupportedRegions []Region `json:"supportedRegions"`
-	// Composable Commerce Projects that can access the Connector. If empty, only the creator can access this Connector.
-	PrivateProjects []string `json:"privateProjects"`
-	// URL to the documentation of the Connector.
-	DocumentationUrl *string `json:"documentationUrl,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj ConnectorDraft) MarshalJSON() ([]byte, error) {
-	type Alias ConnectorDraft
-	data, err := json.Marshal(struct {
-		*Alias
-	}{Alias: (*Alias)(&obj)})
-	if err != nil {
-		return nil, err
-	}
-
-	raw := make(map[string]interface{})
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return nil, err
-	}
-
-	if raw["integrationTypes"] == nil {
-		delete(raw, "integrationTypes")
-	}
-
-	if raw["supportedRegions"] == nil {
-		delete(raw, "supportedRegions")
-	}
-
-	if raw["privateProjects"] == nil {
-		delete(raw, "privateProjects")
-	}
-
-	return json.Marshal(raw)
-
-}
-
 type ConnectorStaged struct {
 	// Unique identifier of the Connector.
 	ID string `json:"id"`
@@ -162,6 +109,59 @@ type ConnectorStaged struct {
 	PreviewableReport *ConnectorReport `json:"previewableReport,omitempty"`
 	// URL to the documentation of the Connector.
 	DocumentationUrl *string `json:"documentationUrl,omitempty"`
+}
+
+type ConnectorStagedDraft struct {
+	// User-defined unique identifier of the Connector.
+	Key *string `json:"key,omitempty"`
+	// Name of the Connector.
+	Name string `json:"name"`
+	// Description of the Connector.
+	Description *string `json:"description,omitempty"`
+	// Integration types of the Connector. Can be used to filter search and query results.
+	IntegrationTypes []IntegrationType `json:"integrationTypes"`
+	// Owner of the Connector.
+	Creator Creator `json:"creator"`
+	// GitHub repository details of the Connector.
+	Repository Repository `json:"repository"`
+	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
+	SupportedRegions []Region `json:"supportedRegions"`
+	// Composable Commerce Projects that can access the Connector. If empty, only the creator can access this Connector.
+	PrivateProjects []string `json:"privateProjects"`
+	// URL to the documentation of the Connector.
+	DocumentationUrl *string `json:"documentationUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ConnectorStagedDraft) MarshalJSON() ([]byte, error) {
+	type Alias ConnectorStagedDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["integrationTypes"] == nil {
+		delete(raw, "integrationTypes")
+	}
+
+	if raw["supportedRegions"] == nil {
+		delete(raw, "supportedRegions")
+	}
+
+	if raw["privateProjects"] == nil {
+		delete(raw, "privateProjects")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**

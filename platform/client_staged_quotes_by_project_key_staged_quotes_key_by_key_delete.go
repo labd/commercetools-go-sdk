@@ -80,6 +80,10 @@ func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestMethodDelete) WithHeaders(heade
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a StagedQuote in the Project.
+ */
 func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

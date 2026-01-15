@@ -42,6 +42,17 @@ type UpdateAction struct {
 	Action string `json:"action"`
 }
 
+/**
+*	Indicates the role of an address.
+*
+ */
+type AddressRole string
+
+const (
+	AddressRoleShipping AddressRole = "Shipping"
+	AddressRoleBilling  AddressRole = "Billing"
+)
+
 type Asset struct {
 	// Unique identifier of the Asset. Not required when importing Assets using the [Import API](/import-export/import-resources).
 	ID      string        `json:"id"`
@@ -420,7 +431,6 @@ func (obj *DiscountedPrice) UnmarshalJSON(data []byte) error {
 
 type DiscountedPriceDraft struct {
 	// Sets the money value for the discounted price.
-	//
 	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
 	// Relates the referenced [ProductDiscount](ctp:api:type:ProductDiscount) to the discounted price.
@@ -558,6 +568,8 @@ type Money struct {
 	//
 	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
 	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
+	//
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	CentAmount int `json:"centAmount"`
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
@@ -594,9 +606,11 @@ type Price struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
+	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists.
 	// If set, the API uses the DiscountedPrice value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
-	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
+	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
+	//
+	// If an [absolute discount](ctp:api:type:ProductDiscountValueAbsolute) value exceeds the price of the Product Variant, the discounted price is a negative value.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
 	//
@@ -763,6 +777,7 @@ type PriceTierDraft struct {
 	// In the case one of the constraint is not met an [InvalidField](ctp:api:type:InvalidFieldError) is returned.
 	MinimumQuantity int `json:"minimumQuantity"`
 	// Money value that applies when the `minimumQuantity` is greater than or equal to the [LineItem](ctp:api:type:LineItem) `quantity`.
+	//
 	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	//
 	// The `currencyCode` of a Price tier must be the same as the `currencyCode` in the `value` of the related Price.
@@ -1380,7 +1395,7 @@ type ScopedPrice struct {
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Is set when a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItemAction).
 	//
-	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Round_half_down) in favor of the Customer.
+	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down) in favor of the Customer.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -1453,6 +1468,8 @@ type CentPrecisionMoney struct {
 	//
 	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
 	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
+	//
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	CentAmount int `json:"centAmount"`
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
@@ -1478,6 +1495,8 @@ type HighPrecisionMoney struct {
 	//
 	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
 	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
+	//
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	CentAmount int `json:"centAmount"`
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
 	CurrencyCode string `json:"currencyCode"`
@@ -1565,6 +1584,8 @@ type HighPrecisionMoneyDraft struct {
 	//
 	// A Price of 1.015 USD can be rounded either to 1.01 USD or 1.02 USD. If it lies outside of this range, an error message stating that centAmount must be rounded correctly will be returned.
 	//
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
+	//
 	// If `centAmount` is not provided, the API calculates the value automatically using the default rounding mode half even.
 	CentAmount *int `json:"centAmount,omitempty"`
 	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
@@ -1572,6 +1593,8 @@ type HighPrecisionMoneyDraft struct {
 	// Number of fraction digits for a specified high precision money. It must be greater than the default number of fraction digits for the specified currency.
 	FractionDigits int `json:"fractionDigits"`
 	// Amount in 1 / (10 ^ `fractionDigits`) of a currency.
+	//
+	// `preciseAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	PreciseAmount int `json:"preciseAmount"`
 }
 

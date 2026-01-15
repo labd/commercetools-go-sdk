@@ -54,6 +54,10 @@ func (rb *ByProjectKeyQuoteRequestsRequestMethodPost) WithHeaders(headers http.H
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Creates a QuoteRequest in the Project.
+ */
 func (rb *ByProjectKeyQuoteRequestsRequestMethodPost) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

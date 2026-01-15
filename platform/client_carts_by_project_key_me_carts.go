@@ -37,7 +37,7 @@ func (rb *ByProjectKeyMeCartsRequestBuilder) Get() *ByProjectKeyMeCartsRequestMe
 }
 
 /**
-*	Checks if a Cart exists that matches a given Query Predicate and contains either a matching `customerId` or `anonymousId`. Returns a `200 OK` status if the Cart exists, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Cart exists that matches a given Query Predicate and contains either a matching `customerId` or `anonymousId`. Returns a `200` status if the Cart exists, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyMeCartsRequestBuilder) Head() *ByProjectKeyMeCartsRequestMethodHead {

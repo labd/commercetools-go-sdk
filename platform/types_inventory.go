@@ -31,6 +31,10 @@ type InventoryEntry struct {
 	QuantityOnStock int `json:"quantityOnStock"`
 	// Available amount of stock (`quantityOnStock` - reserved).
 	AvailableQuantity int `json:"availableQuantity"`
+	// Minimum quantity that can be added to a Cart. See [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+	MinCartQuantity *int `json:"minCartQuantity,omitempty"`
+	// Maximum quantity that can be added to a Cart. See [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+	MaxCartQuantity *int `json:"maxCartQuantity,omitempty"`
 	// How often the InventoryEntry is restocked (in days).
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Date and time of the next restock.
@@ -50,6 +54,10 @@ type InventoryEntryDraft struct {
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Overall amount of stock.
 	QuantityOnStock int `json:"quantityOnStock"`
+	// Minimum quantity that can be added to a Cart. See [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+	MinCartQuantity *int `json:"minCartQuantity,omitempty"`
+	// Maximum quantity that can be added to a Cart. See [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+	MaxCartQuantity *int `json:"maxCartQuantity,omitempty"`
 	// How often the InventoryEntry is restocked (in days).
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Date and time of the next restock.
@@ -172,6 +180,12 @@ func mapDiscriminatorInventoryEntryUpdateAction(input interface{}) (InventoryEnt
 		return obj, nil
 	case "setExpectedDelivery":
 		obj := InventoryEntrySetExpectedDeliveryAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setInventoryLimits":
+		obj := InventoryEntrySetInventoryLimitsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -319,6 +333,30 @@ func (obj InventoryEntrySetExpectedDeliveryAction) MarshalJSON() ([]byte, error)
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setExpectedDelivery", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Sets the inventory limits for a specific InventoryEntry. This action allows you to define minimum and maximum
+*	quantities that can be added to a Cart. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*
+ */
+type InventoryEntrySetInventoryLimitsAction struct {
+	// Sets the minimum quantity that can be added to a Cart. If the value is absent or `null`
+	// the inventory limit is removed.
+	MinCartQuantity *int `json:"minCartQuantity,omitempty"`
+	// Sets the maximum quantity that can be added to a Cart. If the value is absent or `null`
+	// the inventory limit is removed.
+	MaxCartQuantity *int `json:"maxCartQuantity,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntrySetInventoryLimitsAction) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySetInventoryLimitsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setInventoryLimits", Alias: (*Alias)(&obj)})
 }
 
 type InventoryEntrySetKeyAction struct {

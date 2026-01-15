@@ -25,7 +25,7 @@ func (rb *ByProjectKeyDiscountGroupsKeyByKeyRequestBuilder) Get() *ByProjectKeyD
 
 /**
 *	Checks if a DiscountGroup exists with the provided `key`.
-*	Returns a `200 OK` status if a DiscountGroup exists; otherwise, returns a [Not Found](/../api/errors#404-not-found).
+*	Returns a `200` status if a DiscountGroup exists, or a `404` status otherwise.
 *
  */
 func (rb *ByProjectKeyDiscountGroupsKeyByKeyRequestBuilder) Head() *ByProjectKeyDiscountGroupsKeyByKeyRequestMethodHead {

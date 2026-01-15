@@ -23,7 +23,7 @@ func (rb *ByProjectKeyPaymentsByIDRequestBuilder) Get() *ByProjectKeyPaymentsByI
 }
 
 /**
-*	Checks if a Payment exists with the provided `id`. Returns a `200 OK` status if the Payment exists, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a Payment exists with the provided `id`. Returns a `200` status if the Payment exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyPaymentsByIDRequestBuilder) Head() *ByProjectKeyPaymentsByIDRequestMethodHead {
 	return &ByProjectKeyPaymentsByIDRequestMethodHead{
