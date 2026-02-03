@@ -54,6 +54,10 @@ func (rb *ByProjectKeyStagedQuotesRequestMethodPost) WithHeaders(headers http.He
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Creates a StagedQuote in the Project.
+ */
 func (rb *ByProjectKeyStagedQuotesRequestMethodPost) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

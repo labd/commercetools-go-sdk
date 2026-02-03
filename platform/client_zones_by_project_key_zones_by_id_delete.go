@@ -64,6 +64,10 @@ func (rb *ByProjectKeyZonesByIDRequestMethodDelete) WithHeaders(headers http.Hea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a Zone in the Project.
+ */
 func (rb *ByProjectKeyZonesByIDRequestMethodDelete) Execute(ctx context.Context) (result *Zone, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

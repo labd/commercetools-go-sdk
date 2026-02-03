@@ -219,6 +219,12 @@ func mapDiscriminatorRecurrencePolicyScheduleDraft(input interface{}) (Recurrenc
 	}
 
 	switch discriminator {
+	case "dayOfMonth":
+		obj := DayOfMonthScheduleDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "standard":
 		obj := StandardScheduleDraft{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -236,23 +242,20 @@ func mapDiscriminatorRecurrencePolicyScheduleDraft(input interface{}) (Recurrenc
 *	- To place orders on different dates within the same month (for example, the 1st and 15th), create separate [Recurring Orders](ctp:api:type:RecurringOrder)—each with its own schedule.
 *
  */
-type DayOfMonthScheduleDraft interface{}
+type DayOfMonthScheduleDraft struct {
+	// The day of the month when the [Recurring Order](ctp:api:type:RecurringOrder) should be created.
+	// If the value is greater than the number of days in a given month, the order will be created on the last day of the month.
+	Day int `json:"day"`
+}
 
-func mapDiscriminatorDayOfMonthScheduleDraft(input interface{}) (DayOfMonthScheduleDraft, error) {
-	var discriminator string
-	if data, ok := input.(map[string]interface{}); ok {
-		discriminator, ok = data["type"].(string)
-		if !ok {
-			return nil, errors.New("error processing discriminator field 'type'")
-		}
-	} else {
-		return nil, errors.New("invalid data")
-	}
-
-	switch discriminator {
-
-	}
-	return nil, nil
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DayOfMonthScheduleDraft) MarshalJSON() ([]byte, error) {
+	type Alias DayOfMonthScheduleDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "dayOfMonth", Alias: (*Alias)(&obj)})
 }
 
 type RecurrencePolicyUpdate struct {

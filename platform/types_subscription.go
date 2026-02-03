@@ -25,7 +25,7 @@ const (
 *
  */
 type ChangeSubscription struct {
-	// Unique identifier for the type of resource, for example, `cart`.
+	// Unique identifier for the type of resource, for example, `order`.
 	ResourceTypeId ChangeSubscriptionResourceTypeId `json:"resourceTypeId"`
 }
 
@@ -50,6 +50,7 @@ const (
 	ChangeSubscriptionResourceTypeIdCustomerGroup         ChangeSubscriptionResourceTypeId = "customer-group"
 	ChangeSubscriptionResourceTypeIdCustomerPasswordToken ChangeSubscriptionResourceTypeId = "customer-password-token"
 	ChangeSubscriptionResourceTypeIdDiscountCode          ChangeSubscriptionResourceTypeId = "discount-code"
+	ChangeSubscriptionResourceTypeIdDiscountGroup         ChangeSubscriptionResourceTypeId = "discount-group"
 	ChangeSubscriptionResourceTypeIdExtension             ChangeSubscriptionResourceTypeId = "extension"
 	ChangeSubscriptionResourceTypeIdInventoryEntry        ChangeSubscriptionResourceTypeId = "inventory-entry"
 	ChangeSubscriptionResourceTypeIdKeyValueDocument      ChangeSubscriptionResourceTypeId = "key-value-document"
@@ -555,7 +556,7 @@ func (obj PlatformFormat) MarshalJSON() ([]byte, error) {
 *
 *	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test notification will not be sent.
 *
-*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
 *
 *	The IAM user should only have the `sns:Publish` permission on this topic.
 *
@@ -587,7 +588,7 @@ func (obj SnsDestination) MarshalJSON() ([]byte, error) {
 *
 *	We recommend setting `authenticationMode` to `IAM`, to avoid unnecessary key management. For IAM authentication and before creating the Subscription, give permissions to the following user account: `arn:aws:iam::362576667341:user/subscriptions`. Otherwise, a test message will not be sent.
 *
-*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html#create-iam-user) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
+*	If you prefer to use `Credentials` for authentication, we recommend [creating an IAM user](https://docs.aws.amazon.com/sns/latest/dg/sns-setting-up.html) with an `accessKey` and `accessSecret` pair specifically for each Subscription.
 *
 *	The IAM user should only have the `sqs:SendMessage` permission on this queue.
 *

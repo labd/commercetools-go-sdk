@@ -12,9 +12,10 @@ type ByProjectKeyShippingMethodsMatchingCartRequestBuilder struct {
 }
 
 /**
-*	Retrieves the active ShippingMethods that can ship to the shipping address of the given Cart.
-*	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`.
-*	This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+*	Retrieves the active ShippingMethods that can ship to the shipping address of the provided Cart.
+*
+*	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`. This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+*
 *	If a matching ShippingMethod has `isDefault` set to `true`, it is returned as the first item in the array.
 *
  */
@@ -26,7 +27,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartRequestBuilder) Get() *ByProjec
 }
 
 /**
-*	Checks if an active ShippingMethod exists for the given Cart. If a matching ShippingMethod has `isDefault` set to `true`, it is returned as the first item in the array. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+*	Checks if an active ShippingMethod exists for the provided Cart. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsMatchingCartRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingCartRequestMethodHead {
 	return &ByProjectKeyShippingMethodsMatchingCartRequestMethodHead{

@@ -478,6 +478,12 @@ func mapDiscriminatorPaymentUpdateAction(input interface{}) (PaymentUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setTransactionInterfaceId":
+		obj := PaymentSetTransactionInterfaceIdAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "transitionState":
 		obj := PaymentTransitionStateAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -508,6 +514,8 @@ type Transaction struct {
 	State TransactionState `json:"state"`
 	// Custom Fields defined for the Transaction.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Identifier used by the payment service that processes the Payment (for example, a PSP) in the current transaction.
+	InterfaceId *string `json:"interfaceId,omitempty"`
 }
 
 type TransactionDraft struct {
@@ -524,6 +532,8 @@ type TransactionDraft struct {
 	State *TransactionState `json:"state,omitempty"`
 	// Custom Fields of the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Identifier used by the payment service that processes the Payment (for example, a PSP) in the current transaction.
+	InterfaceId *string `json:"interfaceId,omitempty"`
 }
 
 /**
@@ -1100,6 +1110,28 @@ func (obj PaymentSetTransactionCustomTypeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setTransactionCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Setting the transaction interface ID produces the [PaymentTransactionInterfaceIdSet](ctp:api:type:PaymentTransactionInterfaceIdSetMessage) Message.
+*
+ */
+type PaymentSetTransactionInterfaceIdAction struct {
+	// Unique identifier of the [Transaction](ctp:api:type:Transaction).
+	TransactionId string `json:"transactionId"`
+	// Identifier used by the payment service that processes the Payment (for example, a PSP) in the current transaction. It must be unique across all transactions.
+	// If `interfaceId` is absent, this field will be removed from the specified Transaction, if it exists.
+	InterfaceId *string `json:"interfaceId,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj PaymentSetTransactionInterfaceIdAction) MarshalJSON() ([]byte, error) {
+	type Alias PaymentSetTransactionInterfaceIdAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setTransactionInterfaceId", Alias: (*Alias)(&obj)})
 }
 
 /**

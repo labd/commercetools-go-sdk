@@ -80,6 +80,10 @@ func (rb *ByProjectKeyQuotesKeyByKeyRequestMethodDelete) WithHeaders(headers htt
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a Quote in the Project.
+ */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *Quote, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

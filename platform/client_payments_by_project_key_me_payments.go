@@ -30,7 +30,7 @@ func (rb *ByProjectKeyMePaymentsRequestBuilder) Get() *ByProjectKeyMePaymentsReq
 }
 
 /**
-*	Checks if one or more [Payments](/projects/me-payments#mypayment) exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200 OK` status if any Payments match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if one or more [Payments](/projects/me-payments#mypayment) exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200` status if any Payments match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyMePaymentsRequestBuilder) Head() *ByProjectKeyMePaymentsRequestMethodHead {
 	return &ByProjectKeyMePaymentsRequestMethodHead{

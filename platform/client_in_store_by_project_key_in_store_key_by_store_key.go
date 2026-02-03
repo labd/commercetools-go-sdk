@@ -9,10 +9,17 @@ type ByProjectKeyInStoreKeyByStoreKeyRequestBuilder struct {
 }
 
 /**
-*	A shopping cart holds product variants and can be ordered.
+*	A Business Unit can represent a Company or a Division.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Carts() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder{
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) BusinessUnits() *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) CartDiscounts() *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,
@@ -20,17 +27,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Carts() *ByProjectKeyI
 }
 
 /**
-*	An order can be created from a cart, usually after a checkout process has been completed.
+*	A shopping cart holds product variants and can be ordered.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Orders() *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder{
-		projectKey: rb.projectKey,
-		storeKey:   rb.storeKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Me() *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder{
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Carts() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,
@@ -49,19 +49,8 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Customers() *ByProject
 		client:     rb.client,
 	}
 }
-
-/**
-*	Retrieves the authenticated customer.
- */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Login() *ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder{
-		projectKey: rb.projectKey,
-		storeKey:   rb.storeKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShippingMethods() *ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder{
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Me() *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,
@@ -69,11 +58,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShippingMethods() *ByP
 }
 
 /**
-*	shopping-lists e.g. for wishlist support
-*
+*	An order can be created from a cart, usually after a checkout process has been completed.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShoppingLists() *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder{
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Orders() *ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyOrdersRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,
@@ -88,13 +76,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ProductProjections() *
 }
 func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ProductSelectionAssignments() *ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyProductSelectionAssignmentsRequestBuilder{
-		projectKey: rb.projectKey,
-		storeKey:   rb.storeKey,
-		client:     rb.client,
-	}
-}
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) CartDiscounts() *ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyCartDiscountsRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,
@@ -131,6 +112,36 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) QuoteRequests() *ByPro
 }
 
 /**
+*	A quote holds the negotiated offer.
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Quotes() *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShippingMethods() *ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyShippingMethodsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	shopping-lists e.g. for wishlist support
+*
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShoppingLists() *ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyShoppingListsRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	A staged quote holds the negotiation between the [Buyer](/../api/quotes-overview#buyer) and the [Seller](/../api/quotes-overview#seller).
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) StagedQuotes() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder {
@@ -142,21 +153,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) StagedQuotes() *ByProj
 }
 
 /**
-*	A quote holds the negotiated offer.
+*	Retrieves the authenticated customer.
  */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Quotes() *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyQuotesRequestBuilder{
-		projectKey: rb.projectKey,
-		storeKey:   rb.storeKey,
-		client:     rb.client,
-	}
-}
-
-/**
-*	A Business Unit can represent a Company or a Division.
- */
-func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) BusinessUnits() *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsRequestBuilder {
-	return &ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsRequestBuilder{
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Login() *ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyLoginRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,

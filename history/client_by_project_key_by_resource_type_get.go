@@ -241,6 +241,9 @@ func (rb *ByProjectKeyByResourceTypeRequestMethodGet) WithHeaders(headers http.H
 
 /**
 *	The `view_audit_log:{projectKey}` scope is required, and depending on the [resource type](ctp:history:type:ChangeHistoryResourceType) queried, their respective scopes must be granted.
+*
+*	If the request exceeds the rate limit, a [TooManyRequests](ctp:history:type:TooManyRequestsError) error is returned.
+*
  */
 func (rb *ByProjectKeyByResourceTypeRequestMethodGet) Execute(ctx context.Context) (result *RecordPagedQueryResponse, err error) {
 	var queryParams url.Values
@@ -286,6 +289,13 @@ func (rb *ByProjectKeyByResourceTypeRequestMethodGet) Execute(ctx context.Contex
 		}
 		return nil, errorObj
 	case 403:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 429:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)
 		if err != nil {

@@ -29,7 +29,7 @@ func (rb *ByProjectKeyPaymentMethodsByIDRequestMethodHead) WithHeaders(headers h
 
 /**
 *	Checks if a PaymentMethod exists with the provided `id`.
-*	Returns a `200 OK` status if the PaymentMethod exists; otherwise, returns a [Not Found](/../api/errors#404-not-found).
+*	Returns a `200` status if the PaymentMethod exists, or a `404` status otherwise.
 *
  */
 func (rb *ByProjectKeyPaymentMethodsByIDRequestMethodHead) Execute(ctx context.Context) error {

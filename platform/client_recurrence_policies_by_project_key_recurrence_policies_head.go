@@ -55,7 +55,9 @@ func (rb *ByProjectKeyRecurrencePoliciesRequestMethodHead) WithHeaders(headers h
 }
 
 /**
-*	Checks if one or more Recurrence Policies exist for the provided query predicate. Returns a `200 OK` status if any Recurrence Policies match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Recurrence Policies exist for the provided query predicate. Returns a `200` status if any Recurrence Policies match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
+*	The `view_recurring_orders:{projectKey}` scope is deprecated for use on this endpoint. Update your clients to use the `view_recurrence_policies:{projectKey}` scope instead. For more information, see the [Deprecations and removals](/api/deprecations-and-removals#recurrence-policies) list.
 *
  */
 func (rb *ByProjectKeyRecurrencePoliciesRequestMethodHead) Execute(ctx context.Context) error {

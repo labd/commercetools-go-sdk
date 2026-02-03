@@ -64,6 +64,10 @@ func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestMethodDelete) WithHeaders(he
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a ShippingMethod in the Project.
+ */
 func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *ShippingMethod, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

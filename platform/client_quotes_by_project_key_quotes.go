@@ -25,6 +25,10 @@ func (rb *ByProjectKeyQuotesRequestBuilder) WithId(id string) *ByProjectKeyQuote
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves all Quotes in the Project.
+ */
 func (rb *ByProjectKeyQuotesRequestBuilder) Get() *ByProjectKeyQuotesRequestMethodGet {
 	return &ByProjectKeyQuotesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/quotes", rb.projectKey),
@@ -33,7 +37,7 @@ func (rb *ByProjectKeyQuotesRequestBuilder) Get() *ByProjectKeyQuotesRequestMeth
 }
 
 /**
-*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyQuotesRequestBuilder) Head() *ByProjectKeyQuotesRequestMethodHead {
 	return &ByProjectKeyQuotesRequestMethodHead{
@@ -42,6 +46,9 @@ func (rb *ByProjectKeyQuotesRequestBuilder) Head() *ByProjectKeyQuotesRequestMet
 	}
 }
 
+/**
+*	Creates a Quote in the Project.
+ */
 func (rb *ByProjectKeyQuotesRequestBuilder) Post(body QuoteDraft) *ByProjectKeyQuotesRequestMethodPost {
 	return &ByProjectKeyQuotesRequestMethodPost{
 		body:   body,

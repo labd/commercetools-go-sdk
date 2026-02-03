@@ -132,6 +132,11 @@ func (rb *ByProjectKeyMeQuotesRequestMethodGet) WithHeaders(headers http.Header)
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all Quotes for the authenticated Customer.
+*
+ */
 func (rb *ByProjectKeyMeQuotesRequestMethodGet) Execute(ctx context.Context) (result *QuotePagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

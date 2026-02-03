@@ -28,7 +28,7 @@ func (rb *ByProjectKeyMeActiveCartRequestMethodHead) WithHeaders(headers http.He
 }
 
 /**
-*	Checks if an active Cart exists. Returns a `200 OK` status if successful.
+*	Checks if an active Cart exists. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

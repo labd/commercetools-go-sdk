@@ -424,6 +424,12 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 			return nil, err
 		}
 		return obj, nil
+	case "addCustomerGroupAssignment":
+		obj := BusinessUnitAddCustomerGroupAssignmentAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "addShippingAddressId":
 		obj := BusinessUnitAddShippingAddressIdAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -496,6 +502,12 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 			return nil, err
 		}
 		return obj, nil
+	case "removeCustomerGroupAssignment":
+		obj := BusinessUnitRemoveCustomerGroupAssignmentAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "removeShippingAddressId":
 		obj := BusinessUnitRemoveShippingAddressIdAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -540,6 +552,12 @@ func mapDiscriminatorBusinessUnitUpdateAction(input interface{}) (BusinessUnitUp
 		return obj, nil
 	case "setCustomType":
 		obj := BusinessUnitSetCustomTypeAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCustomerGroupAssignments":
+		obj := BusinessUnitSetCustomerGroupAssignmentsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -616,6 +634,10 @@ type Company struct {
 	ContactEmail *string `json:"contactEmail,omitempty"`
 	// Custom Fields for the Business Unit.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Customer Groups assigned to the Business Unit.
+	//
+	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Addresses used by the Business Unit.
 	Addresses []Address `json:"addresses"`
 	// Unique identifiers of addresses used as shipping addresses.
@@ -665,12 +687,8 @@ func (obj Company) MarshalJSON() ([]byte, error) {
 		delete(raw, "inheritedStores")
 	}
 
-	if raw["shippingAddressIds"] == nil {
-		delete(raw, "shippingAddressIds")
-	}
-
-	if raw["billingAddressIds"] == nil {
-		delete(raw, "billingAddressIds")
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
 	}
 
 	if raw["inheritedAssociates"] == nil {
@@ -727,6 +745,10 @@ type CompanyDraft struct {
 	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
 	// Custom Fields for the Business Unit.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Customer Groups to assign the Business Unit to.
+	//
+	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -764,6 +786,10 @@ func (obj CompanyDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["billingAddresses"] == nil {
 		delete(raw, "billingAddresses")
+	}
+
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
 	}
 
 	return json.Marshal(raw)
@@ -808,6 +834,10 @@ type Division struct {
 	ContactEmail *string `json:"contactEmail,omitempty"`
 	// Custom Fields for the Business Unit.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Customer Groups assigned to the Business Unit.
+	//
+	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Addresses used by the Business Unit.
 	Addresses []Address `json:"addresses"`
 	// Unique identifiers of addresses used as shipping addresses.
@@ -857,12 +887,8 @@ func (obj Division) MarshalJSON() ([]byte, error) {
 		delete(raw, "inheritedStores")
 	}
 
-	if raw["shippingAddressIds"] == nil {
-		delete(raw, "shippingAddressIds")
-	}
-
-	if raw["billingAddressIds"] == nil {
-		delete(raw, "billingAddressIds")
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
 	}
 
 	if raw["inheritedAssociates"] == nil {
@@ -917,6 +943,10 @@ type DivisionDraft struct {
 	DefaultBillingAddress *int `json:"defaultBillingAddress,omitempty"`
 	// Custom Fields for the Business Unit.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Customer Groups to assign the Business Unit to.
+	//
+	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 	// The parent unit of this Division. Can be a Company or a Division.
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
 }
@@ -956,6 +986,10 @@ func (obj DivisionDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["billingAddresses"] == nil {
 		delete(raw, "billingAddresses")
+	}
+
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
 	}
 
 	return json.Marshal(raw)
@@ -1033,6 +1067,27 @@ func (obj BusinessUnitAddBillingAddressIdAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "addBillingAddressId", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Assigns a Customer Group to a Business Unit.
+*
+*	This action generates the [BusinessUnitCustomerGroupAssignmentAdded](ctp:api:type:BusinessUnitCustomerGroupAssignmentAddedMessage) Message.
+*
+ */
+type BusinessUnitAddCustomerGroupAssignmentAction struct {
+	// Customer Group to assign the Business Unit to.
+	CustomerGroupAssignment CustomerGroupAssignmentDraft `json:"customerGroupAssignment"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitAddCustomerGroupAssignmentAction) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitAddCustomerGroupAssignmentAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addCustomerGroupAssignment", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -1285,6 +1340,27 @@ func (obj BusinessUnitRemoveBillingAddressIdAction) MarshalJSON() ([]byte, error
 }
 
 /**
+*	Unassigns a Customer Group from a Business Unit.
+*
+*	This action generates the [BusinessUnitCustomerGroupAssignmentRemoved](ctp:api:type:BusinessUnitCustomerGroupAssignmentRemovedMessage) Message.
+*
+ */
+type BusinessUnitRemoveCustomerGroupAssignmentAction struct {
+	// Customer Group to unassign the Business Unit from.
+	CustomerGroup CustomerGroupResourceIdentifier `json:"customerGroup"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitRemoveCustomerGroupAssignmentAction) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitRemoveCustomerGroupAssignmentAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeCustomerGroupAssignment", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Removing a shipping address from a [Business Unit](ctp:api:type:BusinessUnit) generates a [BusinessUnitShippingAddressRemoved](ctp:api:type:BusinessUnitShippingAddressRemovedMessage) Message.
 *
  */
@@ -1460,6 +1536,42 @@ func (obj BusinessUnitSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomType", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Assigns multiple Customer Groups to a Business Unit.
+*
+*	This action generates the [BusinessUnitCustomerGroupAssignmentsSet](ctp:api:type:BusinessUnitCustomerGroupAssignmentsSetMessage) Message.
+*
+ */
+type BusinessUnitSetCustomerGroupAssignmentsAction struct {
+	// Customer Groups to assign the Business Unit to.
+	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitSetCustomerGroupAssignmentsAction) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitSetCustomerGroupAssignmentsAction
+	data, err := json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCustomerGroupAssignments", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["customerGroupAssignments"] == nil {
+		delete(raw, "customerGroupAssignments")
+	}
+
+	return json.Marshal(raw)
+
 }
 
 /**

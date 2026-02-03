@@ -53,6 +53,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodGet) With
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a StagedQuote with the provided `id` in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodGet) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

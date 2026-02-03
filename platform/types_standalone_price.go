@@ -96,7 +96,9 @@ type StandalonePrice struct {
 	// If `discounted` is present, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTier `json:"tiers"`
 	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
-	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_down).
+	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
+	//
+	// If an [absolute discount](ctp:api:type:ProductDiscountValueAbsolute) value exceeds the price of the Product Variant, the discounted price is a negative value.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields for the StandalonePrice.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -490,7 +492,7 @@ func (obj StandalonePriceChangeValueAction) MarshalJSON() ([]byte, error) {
  */
 type StandalonePriceRemovePriceTierAction struct {
 	// The `minimumQuantity` of the [PriceTier](ctp:api:type:PriceTier) to be removed from the `tiers` field of the [StandalonePrice](ctp:api:type:StandalonePrice).
-	TierMinimumQuantity int `json:"tierMinimumQuantity"`
+	MinimumQuantity int `json:"minimumQuantity"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

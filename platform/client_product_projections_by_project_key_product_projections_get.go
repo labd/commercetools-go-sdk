@@ -36,6 +36,7 @@ type ByProjectKeyProductProjectionsRequestMethodGetInput struct {
 	PriceRecurrencePolicy         *string
 	LocaleProjection              []string
 	StoreProjection               *string
+	FilterAttributes              []string
 	Expand                        []string
 	Sort                          []string
 	Limit                         *int
@@ -77,6 +78,9 @@ func (input *ByProjectKeyProductProjectionsRequestMethodGetInput) Values() url.V
 	}
 	if input.StoreProjection != nil {
 		values.Add("storeProjection", fmt.Sprintf("%v", *input.StoreProjection))
+	}
+	for _, v := range input.FilterAttributes {
+		values.Add("filter[attributes]", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -180,6 +184,14 @@ func (rb *ByProjectKeyProductProjectionsRequestMethodGet) StoreProjection(v stri
 	return rb
 }
 
+func (rb *ByProjectKeyProductProjectionsRequestMethodGet) FilterAttributes(v []string) *ByProjectKeyProductProjectionsRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyProductProjectionsRequestMethodGetInput{}
+	}
+	rb.params.FilterAttributes = v
+	return rb
+}
+
 func (rb *ByProjectKeyProductProjectionsRequestMethodGet) Expand(v []string) *ByProjectKeyProductProjectionsRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductProjectionsRequestMethodGetInput{}
@@ -246,9 +258,16 @@ func (rb *ByProjectKeyProductProjectionsRequestMethodGet) WithHeaders(headers ht
 }
 
 /**
-*	Use the Product Projections query endpoint to get the current or staged representations of Products.
-*	When used with an API Client that has the `view_published_products:{projectKey}` scope,
-*	this endpoint only returns published (current) Product Projections.
+*	Retrieves the [projected](/../api/projects/productProjections#projection-dimensions) representation of [Products](ctp:api:type:Product) by [query predicates](/../api/predicates/query).
+*
+*	By default, this endpoint returns the `current` representation of Products where the `published` flag is `true`.
+*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/../api/errors#404-not-found) error.
+*
+*	Required access scopes:
+*
+*	- To retrieve the current representation of published Products (published data), the `view_published_products:{projectKey}` scope is required.
+*
+*	- To retrieve the staged representation of Products (draft data) or access unpublished Products, the API Client must have the `view_products:{projectKey}` scope.
 *
  */
 func (rb *ByProjectKeyProductProjectionsRequestMethodGet) Execute(ctx context.Context) (result *ProductProjectionPagedQueryResponse, err error) {

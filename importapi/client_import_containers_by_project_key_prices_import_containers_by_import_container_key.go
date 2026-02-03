@@ -13,7 +13,7 @@ type ByProjectKeyPricesImportContainersByImportContainerKeyRequestBuilder struct
 }
 
 /**
-*	Creates an Import Request for Prices.
+*	Creates an Import Request for Embedded Prices.
  */
 func (rb *ByProjectKeyPricesImportContainersByImportContainerKeyRequestBuilder) Post(body PriceImportRequest) *ByProjectKeyPricesImportContainersByImportContainerKeyRequestMethodPost {
 	return &ByProjectKeyPricesImportContainersByImportContainerKeyRequestMethodPost{

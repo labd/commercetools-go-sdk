@@ -12,10 +12,11 @@ type ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder struct {
 }
 
 /**
-*	Retrieves the active ShippingMethods that can ship to the given [Location](ctp:api:type:Location)
-*	with a `predicate` that matches the given Cart.
-*	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`.
-*	This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+*	Retrieves the active ShippingMethods that can ship to the provided [Location](ctp:api:type:Location)
+*	with a `predicate` that matches the provided Cart.
+*
+*	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`. This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+*
 *	If a matching ShippingMethod has `isDefault` set to `true`, it is returned as the first item in the array.
 *
  */
@@ -27,7 +28,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder) Get() *
 }
 
 /**
-*	Checks if an active ShippingMethod that can ship to the given [Location](ctp:api:type:Location) exists for the given Cart. Returns a `200 OK` status if the ShippingMethod exists or a `404 Not Found` otherwise.
+*	Checks if an active ShippingMethod that can ship to the provided [Location](ctp:api:type:Location) exists for the provided Cart. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingCartLocationRequestMethodHead {
 	return &ByProjectKeyShippingMethodsMatchingCartLocationRequestMethodHead{

@@ -257,6 +257,18 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "associate-role":
+		obj := AssociateRoleKeyReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "business-unit":
+		obj := BusinessUnitKeyReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -625,6 +637,42 @@ func (obj TypeKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	References an Associate Role by its key.
+ */
+type AssociateRoleKeyReference struct {
+	// User-defined unique identifier of the referenced Type.
+	Key string `json:"key"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AssociateRoleKeyReference) MarshalJSON() ([]byte, error) {
+	type Alias AssociateRoleKeyReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "associate-role", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	References a business unit by its key.
+ */
+type BusinessUnitKeyReference struct {
+	// User-defined unique identifier of the referenced Type.
+	Key string `json:"key"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitKeyReference) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitKeyReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "business-unit", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Contains a reference to a resource which does not exist. For example, if a Category is imported with a parent Category that does not exist, the reference to the parent Category is an unresolved reference.
  */
 type UnresolvedReferences struct {
@@ -781,12 +829,13 @@ func (obj *PriceTier) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	The resource types that can be imported.
+*	The resource type that can be imported.
 *
  */
 type ImportResourceType string
 
 const (
+	ImportResourceTypeBusinessUnit        ImportResourceType = "business-unit"
 	ImportResourceTypeCategory            ImportResourceType = "category"
 	ImportResourceTypeCustomer            ImportResourceType = "customer"
 	ImportResourceTypeDiscountCode        ImportResourceType = "discount-code"
@@ -811,6 +860,8 @@ const (
 type ReferenceType string
 
 const (
+	ReferenceTypeAssociateRole    ReferenceType = "associate-role"
+	ReferenceTypeBusinessUnit     ReferenceType = "business-unit"
 	ReferenceTypeCart             ReferenceType = "cart"
 	ReferenceTypeCartDiscount     ReferenceType = "cart-discount"
 	ReferenceTypeCategory         ReferenceType = "category"

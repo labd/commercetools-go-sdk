@@ -54,6 +54,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) Wit
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a StagedQuote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

@@ -24,7 +24,7 @@ func (rb *ByProjectKeyRecurringOrdersByIDRequestBuilder) Get() *ByProjectKeyRecu
 }
 
 /**
-*	Checks if a Recurring Order exists with the provided `id`. Returns a `200 OK` status if the Recurring Order exists, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Recurring Order exists with the provided `id`. Returns a `200` status if the Recurring Order exists, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyRecurringOrdersByIDRequestBuilder) Head() *ByProjectKeyRecurringOrdersByIDRequestMethodHead {
@@ -37,10 +37,23 @@ func (rb *ByProjectKeyRecurringOrdersByIDRequestBuilder) Head() *ByProjectKeyRec
 /**
 *	Updates a Recurring Order using one or more [update actions](/../api/projects/recurring-orders#update-actions).
 *
+*	A Recurring Order can only be updated when it is not processing an Order. Otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
  */
 func (rb *ByProjectKeyRecurringOrdersByIDRequestBuilder) Post(body RecurringOrderUpdate) *ByProjectKeyRecurringOrdersByIDRequestMethodPost {
 	return &ByProjectKeyRecurringOrdersByIDRequestMethodPost{
 		body:   body,
+		url:    fmt.Sprintf("/%s/recurring-orders/%s", rb.projectKey, rb.id),
+		client: rb.client,
+	}
+}
+
+/**
+*	Deletes a Recurring Order in the Project.
+*
+ */
+func (rb *ByProjectKeyRecurringOrdersByIDRequestBuilder) Delete() *ByProjectKeyRecurringOrdersByIDRequestMethodDelete {
+	return &ByProjectKeyRecurringOrdersByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/recurring-orders/%s", rb.projectKey, rb.id),
 		client: rb.client,
 	}

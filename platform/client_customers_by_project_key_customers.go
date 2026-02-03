@@ -98,7 +98,7 @@ func (rb *ByProjectKeyCustomersRequestBuilder) Get() *ByProjectKeyCustomersReque
 }
 
 /**
-*	Checks if one or more Customers exist for the provided query predicate. Returns a `200 OK` status if any Customers match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Customers exist for the provided query predicate. Returns a `200` status if any Customers match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyCustomersRequestBuilder) Head() *ByProjectKeyCustomersRequestMethodHead {
 	return &ByProjectKeyCustomersRequestMethodHead{
@@ -108,8 +108,7 @@ func (rb *ByProjectKeyCustomersRequestBuilder) Head() *ByProjectKeyCustomersRequ
 }
 
 /**
-*	If the `anonymousCart` field is set on the [CustomerDraft](ctp:api:type:CustomerDraft), then the newly created Customer will be assigned to that [Cart](ctp:api:type:Cart).
-*	Similarly, if the `anonymousId` field is set, the Customer will be set on all [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [ShoppingLists](ctp:api:type:ShoppingList) and [Payments](ctp:api:type:Payment) with the same `anonymousId`.
+*	Allows converting an anonymous Cart to the active Cart of a Customer with [cart merge](/../api/customers-overview#cart-merge-during-sign-in-and-sign-up).
 *
 *	Creating a Customer produces the [CustomerCreated](ctp:api:type:CustomerCreatedMessage) Message. Simultaneously creating two Customers with the same email address can return a [LockedField](ctp:api:type:LockedFieldError) error.
 *

@@ -27,7 +27,7 @@ func (rb *ByProjectKeyRequestMethodHead) WithHeaders(headers http.Header) *ByPro
 }
 
 /**
-*	Checks if a Project exists for a given `projectKey`. Returns a `200 OK` status if the Project exists or a `404 Not Found` otherwise.
+*	Checks if a Project exists for a given `projectKey`. Returns a `200` status if the Project exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

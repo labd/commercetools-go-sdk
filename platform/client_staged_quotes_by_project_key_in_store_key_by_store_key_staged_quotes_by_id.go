@@ -13,6 +13,9 @@ type ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a StagedQuote with the provided `id` in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/staged-quotes/%s", rb.projectKey, rb.storeKey, rb.id),
@@ -21,7 +24,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Get() 
 }
 
 /**
-*	Checks if a StagedQuote exists with the provided `id`. Returns a `200 OK` status if the StagedQuote exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a StagedQuote exists with the provided `id` in a [Store](ctp:api:type:Store). Returns a `200` status if the StagedQuote exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodHead{
@@ -30,6 +33,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Head()
 	}
 }
 
+/**
+*	Updates a StagedQuote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Post(body StagedQuoteUpdate) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodPost{
 		body:   body,
@@ -38,6 +44,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Post(b
 	}
 }
 
+/**
+*	Deletes a StagedQuote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/staged-quotes/%s", rb.projectKey, rb.storeKey, rb.id),

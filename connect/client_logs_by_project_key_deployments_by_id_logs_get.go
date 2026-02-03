@@ -92,7 +92,11 @@ func (rb *ByProjectKeyDeploymentsByIDLogsRequestMethodGet) WithHeaders(headers h
 }
 
 /**
-*	Retrieves logs for the given deployment.
+*	Specific Error Codes:
+*	- [DeploymentApplicationDoesNotExist](ctp:connect:type:DeploymentApplicationDoesNotExistError)
+*	- [DeploymentLogInvalidDate](ctp:connect:type:DeploymentLogInvalidDateError)
+*	- [DeploymentLogInvalidPageToken](ctp:connect:type:DeploymentLogInvalidPageTokenError)
+*
  */
 func (rb *ByProjectKeyDeploymentsByIDLogsRequestMethodGet) Execute(ctx context.Context) (result *DeploymentLogCursorPagedQueryResponse, err error) {
 	var queryParams url.Values

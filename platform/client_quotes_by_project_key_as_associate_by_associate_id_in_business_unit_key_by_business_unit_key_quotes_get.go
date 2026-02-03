@@ -132,6 +132,10 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all Quotes in a BusinessUnit.
+ */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodGet) Execute(ctx context.Context) (result *QuotePagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

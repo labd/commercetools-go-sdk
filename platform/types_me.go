@@ -241,8 +241,7 @@ type MyCartDraft struct {
 	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	// If used for [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST), the provided country must be one of the [Store's](ctp:api:type:Store) `countries`.
 	Country *string `json:"country,omitempty"`
-	// Languages of the Cart.
-	// Can only contain languages supported by the [Project](ctp:api:type:Project).
+	// Language of the Cart. Must be one of the languages supported by the [Project](ctp:api:type:Project).
 	Locale *string `json:"locale,omitempty"`
 	// Number of days after the last modification before a Cart is deleted.
 	// If not provided, the default value for this field configured in [Project settings](ctp:api:type:CartsConfiguration) is assigned.
@@ -427,12 +426,6 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 			return nil, err
 		}
 		return obj, nil
-	case "setCustomLineItemRecurrenceInfo":
-		obj := MyCartSetCustomLineItemRecurrenceInfoAction{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
 	case "setCustomType":
 		obj := MyCartSetCustomTypeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -465,12 +458,6 @@ func mapDiscriminatorMyCartUpdateAction(input interface{}) (MyCartUpdateAction, 
 		return obj, nil
 	case "setLineItemDistributionChannel":
 		obj := MyCartSetLineItemDistributionChannelAction{}
-		if err := decodeStruct(input, &obj); err != nil {
-			return nil, err
-		}
-		return obj, nil
-	case "setLineItemRecurrenceInfo":
-		obj := MyCartSetLineItemRecurrenceInfoAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1428,6 +1415,8 @@ type MyTransactionDraft struct {
 	InteractionId *string `json:"interactionId,omitempty"`
 	// Custom Fields of the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Identifier used by the payment service that processes the Payment (for example, a PSP) in the current transaction.
+	InterfaceId *string `json:"interfaceId,omitempty"`
 }
 
 type ReplicaMyCartDraft struct {
@@ -1816,8 +1805,10 @@ func (obj MyBusinessUnitSetDefaultShippingAddressAction) MarshalJSON() ([]byte, 
 
 /**
 *	Adds a [DiscountCode](ctp:api:type:DiscountCode) to the Cart to activate the related [CartDiscounts](/../api/projects/cartDiscounts).
-*	Adding a Discount Code is only possible if no [DirectDiscount](ctp:api:type:DirectDiscount) has been applied to the Cart.
-*	Discount Codes can be added to [frozen Carts](ctp:api:type:FrozenCarts), but their [DiscountCodeState](ctp:api:type:DiscountCodeState) is then `DoesNotMatchCart`.
+*	If the related Cart Discounts are inactive or invalid, or belong to a different Store than the Cart, a [DiscountCodeNonApplicableError](ctp:api:type:DiscountCodeNonApplicableError) is returned.
+*
+*	A Discount Code can be added only if no [DirectDiscount](ctp:api:type:DirectDiscount) has been applied to the Cart.
+*	For [frozen Carts](ctp:api:type:FrozenCarts), the [DiscountCodeState](ctp:api:type:DiscountCodeState) must be `DoesNotMatchCart` when adding a Discount Code.
 *
 *	The maximum number of Discount Codes in a Cart is restricted by a [limit](/../api/limits#carts).
 *
@@ -1973,6 +1964,8 @@ func (obj MyCartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() 
 *	it will be changed to `ExternalPrice` and the existing `externalPrice` value, i.e. `LineItem.price`, will be retained.
 *	The LineItem total will be calculated by the system instead, so that the `externalTotalPrice` will be dropped.
 *
+*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*
  */
 type MyCartChangeLineItemQuantityAction struct {
 	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
@@ -2102,10 +2095,12 @@ type MyCartRemoveLineItemAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Amount to subtract from the LineItem's `quantity`.
-	// If absent, the LineItem is removed from the Cart.
+	// Amount to subtract from the LineItem quantity.
+	// If omitted, the LineItem is removed from the Cart.
 	Quantity *int `json:"quantity,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when decreasing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` to the given value when decreasing the quantity of a Line Item with the `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -2214,31 +2209,6 @@ func (obj MyCartSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setCustomField", Alias: (*Alias)(&obj)})
-}
-
-/**
-*	Sets the recurrence information on the [CustomLineItem](ctp:api:type:CustomLineItem).
-*	If the Cart is already associated with a Recurring Order, this action will fail.
-*
- */
-type MyCartSetCustomLineItemRecurrenceInfoAction struct {
-	// `id` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
-	CustomLineItemId *string `json:"customLineItemId,omitempty"`
-	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
-	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
-	// Value to set.
-	// If empty, any existing value will be removed.
-	RecurrenceInfo *CustomLineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj MyCartSetCustomLineItemRecurrenceInfoAction) MarshalJSON() ([]byte, error) {
-	type Alias MyCartSetCustomLineItemRecurrenceInfoAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setCustomLineItemRecurrenceInfo", Alias: (*Alias)(&obj)})
 }
 
 type MyCartSetCustomTypeAction struct {
@@ -2367,31 +2337,6 @@ func (obj MyCartSetLineItemDistributionChannelAction) MarshalJSON() ([]byte, err
 	}{Action: "setLineItemDistributionChannel", Alias: (*Alias)(&obj)})
 }
 
-/**
-*	Sets the recurrence information on the [LineItem](ctp:api:type:LineItem).
-*	If the Cart is already associated with a Recurring Order, this action will fail.
-*
- */
-type MyCartSetLineItemRecurrenceInfoAction struct {
-	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
-	LineItemId *string `json:"lineItemId,omitempty"`
-	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
-	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Value to set.
-	// If empty, any existing value will be removed.
-	RecurrenceInfo *LineItemRecurrenceInfoDraft `json:"recurrenceInfo,omitempty"`
-}
-
-// MarshalJSON override to set the discriminator value or remove
-// optional nil slices
-func (obj MyCartSetLineItemRecurrenceInfoAction) MarshalJSON() ([]byte, error) {
-	type Alias MyCartSetLineItemRecurrenceInfoAction
-	return json.Marshal(struct {
-		Action string `json:"action"`
-		*Alias
-	}{Action: "setLineItemRecurrenceInfo", Alias: (*Alias)(&obj)})
-}
-
 type MyCartSetLineItemShippingDetailsAction struct {
 	// `id` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemId *string `json:"lineItemId,omitempty"`
@@ -2414,6 +2359,8 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 
 /**
 *	Performing this action does not reserve stock. Stock is only reserved at Order creation if the [InventoryMode](ctp:api:type:InventoryMode) of the Cart is `TrackOnly` or `ReserveOnOrder`.
+*
+*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
 *
  */
 type MyCartSetLineItemSupplyChannelAction struct {
@@ -2653,14 +2600,14 @@ func (obj MyCustomerRemoveAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Removes an existing billing address from `billingAddressesIds`.
+*	Removes an existing billing address from `billingAddressIds`.
 *	If the billing address is the default billing address, the `defaultBillingAddressId` is unset. Either `addressId` or `addressKey` is required.
 *
  */
 type MyCustomerRemoveBillingAddressIdAction struct {
-	// `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
+	// `id` of the [Address](ctp:api:type:Address) to remove from `billingAddressIds`.
 	AddressId *string `json:"addressId,omitempty"`
-	// `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressesIds`.
+	// `key` of the [Address](ctp:api:type:Address) to remove from `billingAddressIds`.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 
@@ -2675,14 +2622,14 @@ func (obj MyCustomerRemoveBillingAddressIdAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Removes an existing shipping address from `shippingAddressesIds`.
+*	Removes an existing shipping address from `shippingAddressIds`.
 *	If the shipping address is the default shipping address, the `defaultShippingAddressId` is unset. Either `addressId` or `addressKey` is required.
 *
  */
 type MyCustomerRemoveShippingAddressIdAction struct {
-	// `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
+	// `id` of the [Address](ctp:api:type:Address) to remove from `shippingAddressIds`.
 	AddressId *string `json:"addressId,omitempty"`
-	// `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressesIds`.
+	// `key` of the [Address](ctp:api:type:Address) to remove from `shippingAddressIds`.
 	AddressKey *string `json:"addressKey,omitempty"`
 }
 

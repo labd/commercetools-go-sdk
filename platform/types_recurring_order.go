@@ -145,8 +145,10 @@ type RecurringOrderDraft struct {
 	Cart CartResourceIdentifier `json:"cart"`
 	// Current version of the referenced [Cart](ctp:api:type:Cart).
 	CartVersion int `json:"cartVersion"`
-	// Date and time (UTC) when the RecurringOrder will start.
-	StartsAt time.Time `json:"startsAt"`
+	// Date and time (UTC) when the RecurringOrder will start. When specified, the date and time must be in the future. If not specified, the recurring order will start immediately.
+	StartsAt *time.Time `json:"startsAt,omitempty"`
+	// Date and time (UTC) when the RecurringOrder will expire.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// State for the RecurringOrder in a custom workflow.
 	State *StateResourceIdentifier `json:"state,omitempty"`
 	// Custom Fields for the RecurringOrder.
@@ -401,6 +403,12 @@ func mapDiscriminatorRecurringOrderUpdateAction(input interface{}) (RecurringOrd
 			return nil, err
 		}
 		return obj, nil
+	case "setExpiresAt":
+		obj := RecurringOrderSetExpiresAtAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setKey":
 		obj := RecurringOrderSetKeyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -412,9 +420,9 @@ func mapDiscriminatorRecurringOrderUpdateAction(input interface{}) (RecurringOrd
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
-		if obj.SkipConfiguration != nil {
+		if obj.SkipConfigurationInputDraft != nil {
 			var err error
-			obj.SkipConfiguration, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfiguration)
+			obj.SkipConfigurationInputDraft, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfigurationInputDraft)
 			if err != nil {
 				return nil, err
 			}
@@ -473,7 +481,7 @@ func mapDiscriminatorSkipConfiguration(input interface{}) (SkipConfiguration, er
 	}
 
 	switch discriminator {
-	case "counter":
+	case "Counter":
 		obj := Counter{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
@@ -503,7 +511,7 @@ func (obj Counter) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
-	}{Action: "counter", Alias: (*Alias)(&obj)})
+	}{Action: "Counter", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -524,7 +532,7 @@ func mapDiscriminatorSkipConfigurationDraft(input interface{}) (SkipConfiguratio
 	}
 
 	switch discriminator {
-	case "counter":
+	case "Counter":
 		obj := CounterDraft{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
@@ -550,7 +558,243 @@ func (obj CounterDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Action string `json:"type"`
 		*Alias
-	}{Action: "counter", Alias: (*Alias)(&obj)})
+	}{Action: "Counter", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Indicates the scope of Cart Discounts for recurring Orders.
+*
+ */
+type RecurringOrderScope interface{}
+
+func mapDiscriminatorRecurringOrderScope(input interface{}) (RecurringOrderScope, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "AnyOrder":
+		obj := AnyOrder{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ApplicableRecurrencePolicies":
+		obj := ApplicableRecurrencePolicies{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "NonRecurringOrdersOnly":
+		obj := NonRecurringOrdersOnly{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrdersOnly":
+		obj := RecurringOrdersOnly{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Cart Discounts are applied to recurring and non-recurring Orders.
+*
+ */
+type AnyOrder struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AnyOrder) MarshalJSON() ([]byte, error) {
+	type Alias AnyOrder
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AnyOrder", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Cart Discounts are applied to recurring Orders that match the Recurrence Policies.
+*
+ */
+type ApplicableRecurrencePolicies struct {
+	// Recurrence Policies for which the Cart Discount is valid.
+	RecurrencePolicies []RecurrencePolicyReference `json:"recurrencePolicies"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ApplicableRecurrencePolicies) MarshalJSON() ([]byte, error) {
+	type Alias ApplicableRecurrencePolicies
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ApplicableRecurrencePolicies", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Cart Discounts are applied to non-recurring Orders.
+*
+ */
+type NonRecurringOrdersOnly struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj NonRecurringOrdersOnly) MarshalJSON() ([]byte, error) {
+	type Alias NonRecurringOrdersOnly
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "NonRecurringOrdersOnly", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Defines the scope of Cart Discounts for recurring Orders.
+*
+ */
+type RecurringOrderScopeDraft interface{}
+
+func mapDiscriminatorRecurringOrderScopeDraft(input interface{}) (RecurringOrderScopeDraft, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "AnyOrder":
+		obj := AnyOrderDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ApplicableRecurrencePolicies":
+		obj := ApplicableRecurrencePoliciesDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "NonRecurringOrdersOnly":
+		obj := NonRecurringOrdersOnlyDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "RecurringOrdersOnly":
+		obj := RecurringOrdersOnlyDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Applies Cart Discounts to recurring and non-recurring Orders.
+*
+ */
+type AnyOrderDraft struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AnyOrderDraft) MarshalJSON() ([]byte, error) {
+	type Alias AnyOrderDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "AnyOrder", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Applies Cart Discounts to recurring Orders that match the Recurrence Policies.
+*
+ */
+type ApplicableRecurrencePoliciesDraft struct {
+	// Recurrence Policies for which the Cart Discount is valid.
+	//
+	// If a Recurrence Policy does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error will be returned.
+	//
+	// If fewer or more Recurrence Policies are provided, an [InvalidOperation](ctp:api:type:InvalidOperationError) error will be returned.
+	RecurrencePolicies []RecurrencePolicyResourceIdentifier `json:"recurrencePolicies"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ApplicableRecurrencePoliciesDraft) MarshalJSON() ([]byte, error) {
+	type Alias ApplicableRecurrencePoliciesDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ApplicableRecurrencePolicies", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Applies Cart Discounts to non-recurring Orders.
+*
+ */
+type NonRecurringOrdersOnlyDraft struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj NonRecurringOrdersOnlyDraft) MarshalJSON() ([]byte, error) {
+	type Alias NonRecurringOrdersOnlyDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "NonRecurringOrdersOnly", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Cart Discounts are applied to recurring Orders.
+*
+ */
+type RecurringOrdersOnly struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrdersOnly) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrdersOnly
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrdersOnly", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Applies Cart Discounts to recurring Orders.
+*
+ */
+type RecurringOrdersOnlyDraft struct {
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrdersOnlyDraft) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrdersOnlyDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "RecurringOrdersOnly", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -599,6 +843,27 @@ func (obj RecurringOrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Setting the expiration date and time generates the [RecurringOrderExpiresAtSet](ctp:api:type:RecurringOrderExpiresAtSetMessage) Message.
+*
+ */
+type RecurringOrderSetExpiresAtAction struct {
+	// Date and time (UTC) the Recurring Order should expire. If empty, any existing value will be removed.
+	//
+	// If the date or time is extended or removed when the [RecurringOrderState](ctp:api:type:RecurringOrderState) is `Expired`, the state will be updated to `Active`.
+	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderSetExpiresAtAction) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderSetExpiresAtAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setExpiresAt", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	This update action generates the [RecurringOrderKeySet](ctp:api:type:RecurringOrderKeySetMessage) Message.
 *
  */
@@ -619,9 +884,9 @@ func (obj RecurringOrderSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type RecurringOrderSetOrderSkipConfigurationAction struct {
-	// Configuration for skipping the next orders of the [Recurring Order](ctp:api:type:RecurringOrder).
-	SkipConfiguration SkipConfigurationDraft `json:"skipConfiguration,omitempty"`
-	// Date and time (UTC) the Recurring Order will resume and start to generate new orders.
+	// Configuration for skipping future orders of the [Recurring Order](ctp:api:type:RecurringOrder).
+	SkipConfigurationInputDraft SkipConfigurationDraft `json:"skipConfigurationInputDraft,omitempty"`
+	// Date and time (UTC) the Recurring Order will expire and stop generating new orders.
 	UpdatedExpiresAt *time.Time `json:"updatedExpiresAt,omitempty"`
 }
 
@@ -632,9 +897,9 @@ func (obj *RecurringOrderSetOrderSkipConfigurationAction) UnmarshalJSON(data []b
 	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
 		return err
 	}
-	if obj.SkipConfiguration != nil {
+	if obj.SkipConfigurationInputDraft != nil {
 		var err error
-		obj.SkipConfiguration, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfiguration)
+		obj.SkipConfigurationInputDraft, err = mapDiscriminatorSkipConfigurationDraft(obj.SkipConfigurationInputDraft)
 		if err != nil {
 			return err
 		}

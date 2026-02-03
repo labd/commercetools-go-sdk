@@ -407,11 +407,11 @@ type RuleApproverDraft struct {
 }
 
 type RuleRequester struct {
-	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type) must hold for the Approval Rule to apply to the Orders they create.
+	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type:Associate) must hold for the Approval Rule to apply to the Orders they create.
 	AssociateRole AssociateRoleKeyReference `json:"associateRole"`
 }
 
 type RuleRequesterDraft struct {
-	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type) must hold for the Approval Rule to apply to the Orders they create.
+	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type:Associate) must hold for the Approval Rule to apply to the Orders they create.
 	AssociateRole AssociateRoleResourceIdentifier `json:"associateRole"`
 }

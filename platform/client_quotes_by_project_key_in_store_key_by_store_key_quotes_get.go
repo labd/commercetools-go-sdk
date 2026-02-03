@@ -132,6 +132,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodGet) WithHeaders(he
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves Quotes in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesRequestMethodGet) Execute(ctx context.Context) (result *QuotePagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

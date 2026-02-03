@@ -20,6 +20,14 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) WithCustomerId(cu
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) CustomerIdWithCustomerIdValueMerge(customerId string) *ByProjectKeyInStoreKeyByStoreKeyCartsCustomerIdByCustomerIdMergeRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyCartsCustomerIdByCustomerIdMergeRequestBuilder{
+		customerId: customerId,
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) WithKey(key string) *ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsKeyByKeyRequestBuilder{
 		key:        key,
@@ -55,7 +63,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Get() *ByProjectK
 }
 
 /**
-*	Checks if one or more Carts exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200 OK` status if any Carts match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if one or more Carts exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200` status if any Carts match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodHead{

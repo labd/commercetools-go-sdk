@@ -65,9 +65,10 @@ const (
 
 type CartsConfiguration struct {
 	// Default value for the `deleteDaysAfterLastModification` parameter of the [CartDraft](ctp:api:type:CartDraft) and [MyCartDraft](ctp:api:type:MyCartDraft).
-	// If a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts exists, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent upon deletion of a Cart.
 	//
-	// This field may not be present on Projects created before January 2020.
+	// - If a [ChangeSubscription](ctp:api:type:ChangeSubscription) for Carts exists, a [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload) is sent upon deletion of a Cart.
+	// - Carts with [CartOrigin](ctp:api:type:CartOrigin) `Quote` or `RecurringOrder` are not affected by this configuration value.
+	// - Changing this value doesn't affect the retention of existing Carts. To update an existing Cart's retention use [`setDeleteDaysAfterLastModification`](/projects/carts#set-deletedaysafterlastmodification) on the Carts API.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 	// Indicates if country _- no state_ Tax Rate fallback should be used when a shipping address state is not explicitly covered in the rates lists of all Tax Categories of a Cart Line Items. This field may not be present on Projects created before June 2020.
 	CountryTaxRateFallbackEnabled *bool `json:"countryTaxRateFallbackEnabled,omitempty"`
@@ -90,6 +91,26 @@ const (
 	CustomerSearchStatusActivated   CustomerSearchStatus = "Activated"
 	CustomerSearchStatusDeactivated CustomerSearchStatus = "Deactivated"
 )
+
+/**
+*	Defines how Product Discounts and Cart Discounts are combined for every Cart in a Project.
+*
+ */
+type DiscountCombinationMode string
+
+const (
+	DiscountCombinationModeBestDeal DiscountCombinationMode = "BestDeal"
+	DiscountCombinationModeStacking DiscountCombinationMode = "Stacking"
+)
+
+/**
+*	Holds the configuration for behavior of Product and Cart Discounts.
+*
+ */
+type DiscountsConfiguration struct {
+	// Indicates how Product Discounts and Cart Discounts should be combined. Default value is `Stacking`.
+	DiscountCombinationMode DiscountCombinationMode `json:"discountCombinationMode"`
+}
 
 /**
 *	Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#request-an-access-token-using-an-external-oauth-server).
@@ -142,7 +163,7 @@ type Project struct {
 	Messages MessagesConfiguration `json:"messages"`
 	// Holds the configuration for the [Carts](/../api/projects/carts) feature.
 	Carts CartsConfiguration `json:"carts"`
-	// Holds the configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature. This field may not be present on Projects created before January 2020.
+	// Holds the configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature.
 	ShoppingLists *ShoppingListsConfiguration `json:"shoppingLists,omitempty"`
 	// Holds the configuration for the [tiered shipping rates](ctp:api:type:ShippingRatePriceTier) feature.
 	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
@@ -152,6 +173,8 @@ type Project struct {
 	SearchIndexing *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
 	// Holds configuration specific to [Business Units](ctp:api:type:BusinessUnit).
 	BusinessUnits *BusinessUnitConfiguration `json:"businessUnits,omitempty"`
+	// Holds configuration specific to discounts, including how Product and Cart Discounts are combined in every Cart of the Project.
+	Discounts DiscountsConfiguration `json:"discounts"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -314,6 +337,12 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setDiscountsConfiguration":
+		obj := ProjectSetDiscountsConfigurationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setExternalOAuth":
 		obj := ProjectSetExternalOAuthAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -469,7 +498,6 @@ func (obj CartValueType) MarshalJSON() ([]byte, error) {
 
 type ShoppingListsConfiguration struct {
 	// Default value for the `deleteDaysAfterLastModification` parameter of the [ShoppingListDraft](ctp:api:type:ShoppingListDraft).
-	// This field may not be present on Projects created before January 2020.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
@@ -732,6 +760,21 @@ func (obj ProjectSetBusinessUnitAssociateRoleOnCreationAction) MarshalJSON() ([]
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMyBusinessUnitAssociateRoleOnCreation", Alias: (*Alias)(&obj)})
+}
+
+type ProjectSetDiscountsConfigurationAction struct {
+	// Configuration for the behavior of Cart and Product Discounts in the Project.
+	DiscountsConfiguration DiscountsConfiguration `json:"discountsConfiguration"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetDiscountsConfigurationAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetDiscountsConfigurationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDiscountsConfiguration", Alias: (*Alias)(&obj)})
 }
 
 type ProjectSetExternalOAuthAction struct {

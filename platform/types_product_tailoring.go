@@ -35,9 +35,9 @@ type ProductTailoring struct {
 	// For information not part of the ProductTailoringData, the original information contained in the [ProductData](ctp:api:type:ProductData) is provided.
 	// If `false`, only the original information contained in the ProductData is provided.
 	Published bool `json:"published"`
-	// Current (published) data of the ProductTailoring.
+	// Current data of the ProductTailoring returned in the [Product Projection](/projects/productProjections) response when the ProductTailoring is published.
 	Current ProductTailoringData `json:"current"`
-	// Staged (unpublished) data of the ProductTailoring.
+	// Staged data of the ProductTailoring. This data is not returned in the Product Projection response by default.
 	Staged ProductTailoringData `json:"staged"`
 	// `true` if the `staged` data is different from the `current` data.
 	HasStagedChanges bool `json:"hasStagedChanges"`

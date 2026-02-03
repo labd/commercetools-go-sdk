@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMeShoppingListsRequestMethodHead) WithHeaders(headers http
 }
 
 /**
-*	Checks if one or more ShoppingLists exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
+*	Checks if one or more ShoppingLists exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200` status if successful.
 *
 *	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
 *

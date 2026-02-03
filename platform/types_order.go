@@ -731,6 +731,8 @@ type CustomLineItemImportDraft struct {
 	// The number of items in the Custom Line Item. Can be a negative value.
 	Quantity int `json:"quantity"`
 	// The cost of individual items in the Custom Line Item. The amount can be negative.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Money Money `json:"money"`
 	// The tax rate used to calculate the `taxedPrice` of the Order.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
@@ -1129,9 +1131,11 @@ type OrderFromCartDraft struct {
 	// User-defined identifier for the Order that is unique across a Project.
 	// Once set, the value cannot be changed.
 	OrderNumber *string `json:"orderNumber,omitempty"`
-	// User-defined identifier for a purchase Order.
+	// User-defined identifier for a purchase order.
 	//
-	// It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	// It is typically set by the [Buyer](ctp:api:type:Buyer) or Merchant to track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	//
+	// If not provided, the `purchaseOrderNumber` from the referenced [Cart](ctp:api:type:Cart) is used.
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// Payment status for the Order.
 	PaymentState *PaymentState `json:"paymentState,omitempty"`
@@ -2085,7 +2089,7 @@ type CustomLineItemReturnItem struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Date and time (UTC) the Return Item was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Date and time (UTC) the Return Item was intitially created.
+	// Date and time (UTC) the Return Item was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// `id` of the returned [CustomLineItem](ctp:api:type:CustomLineItem).
 	CustomLineItemId string `json:"customLineItemId"`
@@ -2121,7 +2125,7 @@ type LineItemReturnItem struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Date and time (UTC) the Return Item was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Date and time (UTC) the Return Item was intitially created.
+	// Date and time (UTC) the Return Item was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// `id` of the returned [LineItem](ctp:api:type:LineItem).
 	LineItemId string `json:"lineItemId"`
@@ -2285,6 +2289,8 @@ type TrackingData struct {
 *	A [Delivery](ctp:api:type:Delivery) can only be added to an [Order](ctp:api:type:Order) if
 *	its `shippingInfo` (for `shippingMode` = `Single`), or its `shipping` (for `shippingMode` = `Multiple`) exists.
 *
+*	Multiple Deliveries can be added to the same Order to represent split or partial shipments. However, the API doesn't validate that the cumulative quantities of Line Items or Custom Line Items across all Deliveries match or stay within the originally ordered quantities. For more information, see [Multiple Deliveries](/../api/shipping-delivery-overview#multiple-deliveries) on the Shipping and Delivery overview page.
+*
 *	Produces the [Delivery Added](ctp:api:type:DeliveryAddedMessage) Message.
 *
  */
@@ -2406,6 +2412,10 @@ func (obj OrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Produces the [Order Payment Added](ctp:api:type:OrderPaymentAddedMessage) Message.
+*
+ */
 type OrderAddPaymentAction struct {
 	// Payment to add to the [PaymentInfo](ctp:api:type:PaymentInfo).
 	// Must not be assigned to another Order or active Cart already.
@@ -2622,6 +2632,10 @@ func (obj OrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, error) {
 	}{Action: "removeParcelFromDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Order Payment Removed](ctp:api:type:OrderPaymentRemovedMessage) Message.
+*
+ */
 type OrderRemovePaymentAction struct {
 	// Payment to remove from the [PaymentInfo](ctp:api:type:PaymentInfo).
 	Payment PaymentResourceIdentifier `json:"payment"`

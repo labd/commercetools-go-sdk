@@ -28,7 +28,7 @@ func (rb *ByProjectKeyApiClientsByIDRequestMethodHead) WithHeaders(headers http.
 }
 
 /**
-*	Checks if an API Client exists with the provided `id`. Returns a `200 OK` status if the API Client exists or a `404 Not Found` otherwise.
+*	Checks if an API Client exists with the provided `id`. Returns a `200` status if the API Client exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyApiClientsByIDRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

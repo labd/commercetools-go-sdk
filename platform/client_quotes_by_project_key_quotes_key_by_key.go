@@ -12,6 +12,9 @@ type ByProjectKeyQuotesKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a Quote with the provided `key`.
+ */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeyQuotesKeyByKeyRequestMethodGet {
 	return &ByProjectKeyQuotesKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/quotes/key=%s", rb.projectKey, rb.key),
@@ -20,7 +23,7 @@ func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeyQuotesKey
 }
 
 /**
-*	Checks if a Quote exists with the provided `key`. Returns a `200 OK` status if the Quote exists or a `404 Not Found` otherwise.
+*	Checks if a Quote exists with the provided `key`. Returns a `200 OK` status if the Quote exists, or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyQuotesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyQuotesKeyByKeyRequestMethodHead{
@@ -29,6 +32,9 @@ func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyQuotesKe
 	}
 }
 
+/**
+*	Updates a Quote in the Project using one or more [update actions](/../api/projects/quotes#update-actions).
+ */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Post(body QuoteUpdate) *ByProjectKeyQuotesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyQuotesKeyByKeyRequestMethodPost{
 		body:   body,
@@ -37,6 +43,9 @@ func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Post(body QuoteUpdate) *ByPr
 	}
 }
 
+/**
+*	Deletes a Quote in the Project.
+ */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Delete() *ByProjectKeyQuotesKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyQuotesKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/quotes/key=%s", rb.projectKey, rb.key),

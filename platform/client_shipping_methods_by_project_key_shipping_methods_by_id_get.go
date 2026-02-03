@@ -53,6 +53,10 @@ func (rb *ByProjectKeyShippingMethodsByIDRequestMethodGet) WithHeaders(headers h
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a ShippingMethod with the provided `id`.
+ */
 func (rb *ByProjectKeyShippingMethodsByIDRequestMethodGet) Execute(ctx context.Context) (result *ShippingMethod, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

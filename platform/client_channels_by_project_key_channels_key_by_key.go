@@ -20,7 +20,7 @@ func (rb *ByProjectKeyChannelsKeyByKeyRequestBuilder) Get() *ByProjectKeyChannel
 }
 
 /**
-*	Checks if a Channel exists with the provided `key`. Returns a `200 OK` status if the Channel exists or a `404 Not Found` otherwise.
+*	Checks if a Channel exists with the provided `key`. Returns a `200` status if the Channel exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyChannelsKeyByKeyRequestBuilder) Head() *ByProjectKeyChannelsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyChannelsKeyByKeyRequestMethodHead{

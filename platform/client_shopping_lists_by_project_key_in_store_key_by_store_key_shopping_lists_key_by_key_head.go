@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodHead
 }
 
 /**
-*	Checks if a ShoppingList exists with the provided `key` in a [Store](ctp:api:type:Store). Returns a `200 OK` status if the ShoppingList exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a ShoppingList exists with the provided `key` in a [Store](ctp:api:type:Store). Returns a `200` status if the ShoppingList exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {
 	queryParams := url.Values{}

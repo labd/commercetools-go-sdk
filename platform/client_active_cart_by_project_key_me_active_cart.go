@@ -12,7 +12,7 @@ type ByProjectKeyMeActiveCartRequestBuilder struct {
 }
 
 /**
-*	Retrieves the Customer's most recently modified [active Cart](ctp:api:type:CartState). Returns a `200 OK` status if successful.
+*	Retrieves the Customer's most recently modified [active Cart](ctp:api:type:CartState). Returns a `200` status if successful.
 *
 *	Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
 *
@@ -30,7 +30,7 @@ func (rb *ByProjectKeyMeActiveCartRequestBuilder) Get() *ByProjectKeyMeActiveCar
 }
 
 /**
-*	Checks if an active Cart exists. Returns a `200 OK` status if successful.
+*	Checks if an active Cart exists. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

@@ -54,6 +54,11 @@ func (rb *ByProjectKeyMeQuoteRequestsRequestMethodPost) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Creates a QuoteRequest for the authenticated Customer.
+*
+ */
 func (rb *ByProjectKeyMeQuoteRequestsRequestMethodPost) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

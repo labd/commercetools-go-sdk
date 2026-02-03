@@ -53,6 +53,10 @@ func (rb *ByProjectKeyStagedQuotesByIDRequestMethodGet) WithHeaders(headers http
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a StagedQuote with the provided `id`.
+ */
 func (rb *ByProjectKeyStagedQuotesByIDRequestMethodGet) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

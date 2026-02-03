@@ -20,7 +20,7 @@ func (rb *ByProjectKeyAttributeGroupsKeyByKeyRequestBuilder) Get() *ByProjectKey
 }
 
 /**
-*	Checks if an AttributeGroup exists with the provided `key`. Returns `200 OK` status if the AttributeGroup exists or a `404 Not Found` otherwise.
+*	Checks if an AttributeGroup exists with the provided `key`. Returns `200` status if the AttributeGroup exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyAttributeGroupsKeyByKeyRequestBuilder) Head() *ByProjectKeyAttributeGroupsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyAttributeGroupsKeyByKeyRequestMethodHead{
