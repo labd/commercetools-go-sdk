@@ -1404,6 +1404,8 @@ func (obj *DiscountedLineItemPortionDraft) UnmarshalJSON(data []byte) error {
 
 type DiscountedLineItemPrice struct {
 	// Money value of the discounted Line Item or Custom Line Item.
+	//
+	// When multiple discounts from `includedDiscounts` apply, they are applied sequentially based on the `sortOrder` of their associated [Cart Discounts](ctp:api:type:CartDiscount) (discounts with higher `sortOrder` values are applied first). The Cart's `priceRoundingMode` field ([RoundingMode](ctp:api:type:RoundingMode)) is applied after each discount calculation, so rounding occurs after each discount step rather than only once on the final cumulative amount.
 	Value TypedMoney `json:"value"`
 	// Discount applicable on the Line Item or Custom Line Item.
 	IncludedDiscounts []DiscountedLineItemPortion `json:"includedDiscounts"`
@@ -1431,6 +1433,8 @@ type DiscountedLineItemPriceForQuantity struct {
 	// Number of Line Items or Custom Line Items in the Cart.
 	Quantity int `json:"quantity"`
 	// Discounted price of the Line Item or Custom Line Item.
+	//
+	// When multiple [Cart Discounts](ctp:api:type:CartDiscount) apply to the same Line Item, the discounts are applied sequentially in the order determined by their `sortOrder` values (higher values are applied first). The [price rounding mode](ctp:api:type:RoundingMode) specified by the Cart's `priceRoundingMode` field is applied after each individual discount is calculated, not after all discounts have been applied cumulatively. This means that rounding occurs at each step of the discount calculation process.
 	DiscountedPrice DiscountedLineItemPrice `json:"discountedPrice"`
 }
 
@@ -2427,7 +2431,7 @@ func (obj CartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds an address to a Cart when shipping to multiple addresses is desired.
+*	Adds an address to the `itemShippingAddresses` of a Cart. Use this action when shipping is defined per item. For example, when shipping items to multiple addresses or when using different Shipping Methods, even if all items share the same address.
 *
  */
 type CartAddItemShippingAddressAction struct {

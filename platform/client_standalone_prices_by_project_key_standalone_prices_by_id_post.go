@@ -54,6 +54,11 @@ func (rb *ByProjectKeyStandalonePricesByIDRequestMethodPost) WithHeaders(headers
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) or [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
+*
+ */
 func (rb *ByProjectKeyStandalonePricesByIDRequestMethodPost) Execute(ctx context.Context) (result *StandalonePrice, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

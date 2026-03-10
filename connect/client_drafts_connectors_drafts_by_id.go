@@ -11,6 +11,13 @@ type ConnectorsDraftsByIDRequestBuilder struct {
 	client *Client
 }
 
+func (rb *ConnectorsDraftsByIDRequestBuilder) Delete() *ConnectorsDraftsByIDRequestMethodDelete {
+	return &ConnectorsDraftsByIDRequestMethodDelete{
+		url:    fmt.Sprintf("/connectors/drafts/%s", rb.id),
+		client: rb.client,
+	}
+}
+
 func (rb *ConnectorsDraftsByIDRequestBuilder) Get() *ConnectorsDraftsByIDRequestMethodGet {
 	return &ConnectorsDraftsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/connectors/drafts/%s", rb.id),

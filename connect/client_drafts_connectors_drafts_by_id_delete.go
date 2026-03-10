@@ -1,4 +1,4 @@
-package importapi
+package connect
 
 // Generated file, please do not change!!!
 
@@ -10,42 +10,30 @@ import (
 	"net/url"
 )
 
-type ByProjectKeyImportContainersRequestMethodPost struct {
-	body    ImportContainerDraft
+type ConnectorsDraftsByIDRequestMethodDelete struct {
 	url     string
 	client  *Client
 	headers http.Header
 }
 
-func (r *ByProjectKeyImportContainersRequestMethodPost) Dump() map[string]interface{} {
+func (r *ConnectorsDraftsByIDRequestMethodDelete) Dump() map[string]interface{} {
 	return map[string]interface{}{
 		"url": r.url,
 	}
 }
 
-func (rb *ByProjectKeyImportContainersRequestMethodPost) WithHeaders(headers http.Header) *ByProjectKeyImportContainersRequestMethodPost {
+func (rb *ConnectorsDraftsByIDRequestMethodDelete) WithHeaders(headers http.Header) *ConnectorsDraftsByIDRequestMethodDelete {
 	rb.headers = headers
 	return rb
 }
-
-/**
-*	Creates an Import Container in the Project.
-*
-*	Generates the [ImportContainerCreated](ctp:api:type:ImportContainerCreatedEvent) Event.
-*
- */
-func (rb *ByProjectKeyImportContainersRequestMethodPost) Execute(ctx context.Context) (result *ImportContainer, err error) {
-	data, err := serializeInput(rb.body)
-	if err != nil {
-		return nil, err
-	}
+func (rb *ConnectorsDraftsByIDRequestMethodDelete) Execute(ctx context.Context) (result *ConnectorStaged, err error) {
 	queryParams := url.Values{}
-	resp, err := rb.client.post(
+	resp, err := rb.client.delete(
 		ctx,
 		rb.url,
 		queryParams,
 		rb.headers,
-		data,
+		nil,
 	)
 
 	if err != nil {
@@ -57,12 +45,14 @@ func (rb *ByProjectKeyImportContainersRequestMethodPost) Execute(ctx context.Con
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
-	case 201:
+	case 200:
 		err = json.Unmarshal(content, &result)
 		if err != nil {
 			return nil, err
 		}
 		return result, nil
+	case 404:
+		return nil, ErrNotFound
 	case 400:
 		errorObj := ErrorResponse{}
 		err = json.Unmarshal(content, &errorObj)

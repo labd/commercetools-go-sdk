@@ -74,6 +74,8 @@ type RecurringOrder struct {
 	// The referenced Cart will have the `RecurringOrder` [CartOrigin](ctp:api:type:CartOrigin).
 	Cart CartReference `json:"cart"`
 	// [Reference](ctp:api:type:Reference) to the original [Order](ctp:api:type:Order) that generated this RecurringOrder.
+	// This field is automatically populated when the RecurringOrder is created via the [Create Order from Cart](/../api/projects/orders#create-order-from-cart) endpoint and the Cart contains Line Items with defined `recurrenceInfo`.
+	// When the RecurringOrder is created directly via the [Create RecurringOrder](/../api/projects/recurring-orders#create-recurringorder) endpoint, this field remains empty.
 	OriginOrder OrderReference `json:"originOrder"`
 	// Date and time (UTC) when the RecurringOrder starts creating new Orders.
 	StartsAt time.Time `json:"startsAt"`

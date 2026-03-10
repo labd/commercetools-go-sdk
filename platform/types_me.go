@@ -1413,7 +1413,7 @@ type MyTransactionDraft struct {
 	// Identifier used by the payment service that manages the Transaction.
 	// Can be used to correlate the Transaction to an interface interaction.
 	InteractionId *string `json:"interactionId,omitempty"`
-	// Custom Fields of the Transaction.
+	// Custom Fields for the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Identifier used by the payment service that processes the Payment (for example, a PSP) in the current transaction.
 	InterfaceId *string `json:"interfaceId,omitempty"`
@@ -1831,7 +1831,7 @@ func (obj MyCartAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds an address to a Cart when shipping to multiple addresses is desired.
+*	Adds an address to the `itemShippingAddresses` of a Cart. Use this action when shipping is defined per item. For example, when shipping items to multiple addresses or when using different Shipping Methods, even if all items share the same address.
 *
  */
 type MyCartAddItemShippingAddressAction struct {

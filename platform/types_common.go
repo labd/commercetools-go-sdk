@@ -801,7 +801,7 @@ type QueryPrice struct {
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// [DiscountedPrice](ctp:api:type:DiscountedPrice) you specify for the given Price.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
-	// Custom Fields for the Price.
+	// Custom Fields of the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Price tier applied when the minimum quantity for the [LineItem](ctp:api:type:LineItem) of a ProductVariant with the related Price is reached in a Cart.
 	//
@@ -1397,7 +1397,7 @@ type ScopedPrice struct {
 	//
 	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down) in favor of the Customer.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// Custom Fields for the Price.
+	// Custom Fields of the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 

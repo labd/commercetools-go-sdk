@@ -40,9 +40,11 @@ type DiscountCode struct {
 	References []Reference `json:"references"`
 	// Number of times the DiscountCode can be applied.
 	// DiscountCode application is counted at the time of Order creation or edit. However, Order cancellation or deletion does not decrement the count.
+	// This field does not limit discount applications for Orders created from a [Recurring Order](ctp:api:type:RecurringOrder).
 	MaxApplications *int `json:"maxApplications,omitempty"`
 	// Number of times the DiscountCode can be applied per Customer (anonymous Carts are not supported).
 	// DiscountCode application is counted at the time of Order creation or edit. However, Order cancellation or deletion does not decrement the count.
+	// This field does not limit discount applications for Orders created from a [Recurring Order](ctp:api:type:RecurringOrder).
 	MaxApplicationsPerCustomer *int `json:"maxApplicationsPerCustomer,omitempty"`
 	// Custom Fields of the DiscountCode.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -96,10 +98,12 @@ type DiscountCodeDraft struct {
 	// Number of times the DiscountCode can be applied.
 	//
 	// If not set, the DiscountCode can be applied any number of times.
+	// This field does not limit discount applications for Orders created from a [Recurring Order](ctp:api:type:RecurringOrder).
 	MaxApplications *int `json:"maxApplications,omitempty"`
 	// Number of times the DiscountCode can be applied per Customer.
 	//
 	// If not set, the DiscountCode can be applied any number of times.
+	// This field does not limit discount applications for Orders created from a [Recurring Order](ctp:api:type:RecurringOrder).
 	MaxApplicationsPerCustomer *int `json:"maxApplicationsPerCustomer,omitempty"`
 	// Custom Fields for the DiscountCode.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -462,6 +466,7 @@ type DiscountCodeSetMaxApplicationsAction struct {
 	// Value to set.
 	//
 	// If empty, any existing value will be removed and the DiscountCode can be applied any number of times.
+	// This field does not limit discount applications for Orders created from a [Recurring Order](ctp:api:type:RecurringOrder).
 	MaxApplications *int `json:"maxApplications,omitempty"`
 }
 
@@ -479,6 +484,7 @@ type DiscountCodeSetMaxApplicationsPerCustomerAction struct {
 	// Value to set.
 	//
 	// If empty, any existing value will be removed and the DiscountCode can be applied any number of times.
+	// This field does not limit discount applications for Orders created from a [Recurring Order](ctp:api:type:RecurringOrder).
 	MaxApplicationsPerCustomer *int `json:"maxApplicationsPerCustomer,omitempty"`
 }
 

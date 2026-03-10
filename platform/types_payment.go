@@ -49,7 +49,7 @@ type Payment struct {
 	Transactions []Transaction `json:"transactions"`
 	// Represents information exchange with the payment service, for example, a PSP. An interaction may be a request sent, or a response or notification received from the payment service.
 	InterfaceInteractions []CustomFields `json:"interfaceInteractions"`
-	// Custom Fields for the Payment.
+	// Custom Fields of the Payment.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// User-defined unique identifier of the Payment.
 	Key *string `json:"key,omitempty"`
@@ -530,7 +530,7 @@ type TransactionDraft struct {
 	InteractionId *string `json:"interactionId,omitempty"`
 	// State of the Transaction.
 	State *TransactionState `json:"state,omitempty"`
-	// Custom Fields of the Transaction.
+	// Custom Fields for the Transaction.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Identifier used by the payment service that processes the Payment (for example, a PSP) in the current transaction.
 	InterfaceId *string `json:"interfaceId,omitempty"`

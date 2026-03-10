@@ -632,7 +632,7 @@ type Company struct {
 	Name string `json:"name"`
 	// Email address of the Business Unit.
 	ContactEmail *string `json:"contactEmail,omitempty"`
-	// Custom Fields for the Business Unit.
+	// Custom Fields of the Business Unit.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Customer Groups assigned to the Business Unit.
 	//
@@ -832,7 +832,7 @@ type Division struct {
 	Name string `json:"name"`
 	// Email address of the Business Unit.
 	ContactEmail *string `json:"contactEmail,omitempty"`
-	// Custom Fields for the Business Unit.
+	// Custom Fields of the Business Unit.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Customer Groups assigned to the Business Unit.
 	//

@@ -62,7 +62,7 @@ type InventoryEntryDraft struct {
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Date and time of the next restock.
 	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
-	// Custom Fields of the InventoryEntry.
+	// Custom Fields for the InventoryEntry.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 

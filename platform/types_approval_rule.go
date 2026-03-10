@@ -188,6 +188,64 @@ func mapDiscriminatorApprovalRuleUpdateAction(input interface{}) (ApprovalRuleUp
 	return nil, nil
 }
 
+type ApproverConjunction struct {
+	// All of the nested disjunctions must be approved in order for the conjunction to be considered approved.
+	And []ApproverDisjunction `json:"and"`
+}
+
+type ApproverConjunctionDraft struct {
+	// All of the nested disjunctions must be approved in order for the conjunction to be considered approved.
+	And []ApproverDisjunctionDraft `json:"and"`
+}
+
+type ApproverDisjunction struct {
+	// Any of the nested approvers must approve in order for the disjunction to be considered approved.
+	Or []RuleApprover `json:"or"`
+}
+
+type ApproverDisjunctionDraft struct {
+	// Any of the nested approvers must approve in order for the disjunction to be considered approved.
+	Or []RuleApproverDraft `json:"or"`
+}
+
+/**
+*	Describes the order in which [Associates](ctp:api:type:Associate) can approve the matched [Order](ctp:api:type:Order).
+*
+ */
+type ApproverHierarchy struct {
+	// All of the nested conjunctions must be approved in order for the hierarchy to be considered approved.
+	Tiers []ApproverConjunction `json:"tiers"`
+}
+
+/**
+*	Describes the sequence in which [Associates](ctp:api:type:Associate) can approve an [Order](ctp:api:type:Order).
+*
+ */
+type ApproverHierarchyDraft struct {
+	// Nested conjunctions representing tiers of approvers in a hierarchy.
+	Tiers []ApproverConjunctionDraft `json:"tiers"`
+}
+
+type RuleApprover struct {
+	// The Associate Role that is allowed to approve at a given stage in the approval process.
+	AssociateRole AssociateRoleKeyReference `json:"associateRole"`
+}
+
+type RuleApproverDraft struct {
+	// Any Associate with this Role can approve.
+	AssociateRole AssociateRoleResourceIdentifier `json:"associateRole"`
+}
+
+type RuleRequester struct {
+	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type:Associate) must hold for the Approval Rule to apply to the Orders they create.
+	AssociateRole AssociateRoleKeyReference `json:"associateRole"`
+}
+
+type RuleRequesterDraft struct {
+	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type:Associate) must hold for the Approval Rule to apply to the Orders they create.
+	AssociateRole AssociateRoleResourceIdentifier `json:"associateRole"`
+}
+
 /**
 *	Setting the approvers for an [Approval Rule](ctp:api:type:ApprovalRule) generates an [ApprovalRuleApproversSet](ctp:api:type:ApprovalRuleApproversSetMessage) Message.
 *
@@ -356,62 +414,4 @@ func (obj ApprovalRuleSetStatusAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setStatus", Alias: (*Alias)(&obj)})
-}
-
-type ApproverConjunction struct {
-	// All of the nested disjunctions must be approved in order for the conjunction to be considered approved.
-	And []ApproverDisjunction `json:"and"`
-}
-
-type ApproverConjunctionDraft struct {
-	// All of the nested disjunctions must be approved in order for the conjunction to be considered approved.
-	And []ApproverDisjunctionDraft `json:"and"`
-}
-
-type ApproverDisjunction struct {
-	// Any of the nested approvers must approve in order for the disjunction to be considered approved.
-	Or []RuleApprover `json:"or"`
-}
-
-type ApproverDisjunctionDraft struct {
-	// Any of the nested approvers must approve in order for the disjunction to be considered approved.
-	Or []RuleApproverDraft `json:"or"`
-}
-
-/**
-*	Describes the order in which [Associates](ctp:api:type:Associate) can approve the matched [Order](ctp:api:type:Order).
-*
- */
-type ApproverHierarchy struct {
-	// All of the nested conjunctions must be approved in order for the hierarchy to be considered approved.
-	Tiers []ApproverConjunction `json:"tiers"`
-}
-
-/**
-*	Describes the sequence in which [Associates](ctp:api:type:Associate) can approve an [Order](ctp:api:type:Order).
-*
- */
-type ApproverHierarchyDraft struct {
-	// Nested conjunctions representing tiers of approvers in a hierarchy.
-	Tiers []ApproverConjunctionDraft `json:"tiers"`
-}
-
-type RuleApprover struct {
-	// The Associate Role that is allowed to approve at a given stage in the approval process.
-	AssociateRole AssociateRoleKeyReference `json:"associateRole"`
-}
-
-type RuleApproverDraft struct {
-	// Any Associate with this Role can approve.
-	AssociateRole AssociateRoleResourceIdentifier `json:"associateRole"`
-}
-
-type RuleRequester struct {
-	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type:Associate) must hold for the Approval Rule to apply to the Orders they create.
-	AssociateRole AssociateRoleKeyReference `json:"associateRole"`
-}
-
-type RuleRequesterDraft struct {
-	// The [Associate Role](ctp:api:type:AssociateRole) that an [Associate](ctp:api:type:Associate) must hold for the Approval Rule to apply to the Orders they create.
-	AssociateRole AssociateRoleResourceIdentifier `json:"associateRole"`
 }

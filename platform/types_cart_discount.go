@@ -145,7 +145,7 @@ type CartDiscountDraft struct {
 	RequiresDiscountCode *bool `json:"requiresDiscountCode,omitempty"`
 	// Specifies whether the application of this discount causes the following discounts to be ignored.
 	StackingMode *StackingMode `json:"stackingMode,omitempty"`
-	// Custom Fields of the CartDiscount.
+	// Custom Fields for the CartDiscount.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Reference to a DiscountGroup that the CartDiscount must belong to.
 	DiscountGroup *DiscountGroupResourceIdentifier `json:"discountGroup,omitempty"`

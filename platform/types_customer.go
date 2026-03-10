@@ -88,7 +88,7 @@ type Customer struct {
 	//
 	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
-	// Custom Fields for the Customer.
+	// Custom Fields of the Customer.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Preferred language of the Customer.
 	Locale *string `json:"locale,omitempty"`

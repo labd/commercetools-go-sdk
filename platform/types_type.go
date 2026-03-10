@@ -64,7 +64,7 @@ const (
 type CustomFields struct {
 	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#resourcetypeid).
+	// Object containing the Custom Fields of the [customized resource or data type](/../api/projects/types#resourcetypeid).
 	Fields FieldContainer `json:"fields"`
 }
 

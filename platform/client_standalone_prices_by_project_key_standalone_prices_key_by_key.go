@@ -29,6 +29,10 @@ func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestBuilder) Head() *ByProjectK
 	}
 }
 
+/**
+*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) or [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
+*
+ */
 func (rb *ByProjectKeyStandalonePricesKeyByKeyRequestBuilder) Post(body StandalonePriceUpdate) *ByProjectKeyStandalonePricesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyStandalonePricesKeyByKeyRequestMethodPost{
 		body:   body,

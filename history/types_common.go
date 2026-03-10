@@ -265,7 +265,7 @@ const (
 type CustomFields struct {
 	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#resourcetypeid).
+	// Object containing the Custom Fields of the [customized resource or data type](/../api/projects/types#resourcetypeid).
 	Fields FieldContainer `json:"fields"`
 }
 
@@ -2886,7 +2886,7 @@ type ScopedPrice struct {
 	//
 	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down) in favor of the Customer.
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
-	// Custom Fields for the Price.
+	// Custom Fields of the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 

@@ -745,7 +745,7 @@ type CustomLineItemImportDraft struct {
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 	// State of the Custom Line Items.
 	State []ItemState `json:"state"`
-	// Custom Fields of the CustomLineItem.
+	// Custom Fields for the CustomLineItem.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -892,7 +892,7 @@ type LineItemImportDraft struct {
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 	// States of the Line Item.
 	State []ItemState `json:"state"`
-	// Custom Fields of the LineItem.
+	// Custom Fields for the LineItem.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
@@ -2341,7 +2341,7 @@ func (obj OrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds an address to an Order when shipping to multiple addresses is desired.
+*	Adds an address to the `itemShippingAddresses` of an Order. Use this action when shipping is defined per item. For example, when shipping items to multiple addresses or when using different Shipping Methods, even if all items share the same address.
 *
  */
 type OrderAddItemShippingAddressAction struct {
