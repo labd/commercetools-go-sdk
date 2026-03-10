@@ -31,6 +31,10 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 		client:          rb.client,
 	}
 }
+
+/**
+*	Retrieves all Quotes in a BusinessUnit.
+ */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestBuilder) Get() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodGet {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/as-associate/%s/in-business-unit/key=%s/quotes", rb.projectKey, rb.associateId, rb.businessUnitKey),
@@ -39,7 +43,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more Quotes exist for the provided query predicate in a BusinessUnit. Returns a `200 OK` status if any Quotes match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodHead {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuotesRequestMethodHead{

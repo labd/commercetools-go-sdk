@@ -214,7 +214,7 @@ func (obj CheckoutPaymentAuthorizationFailedEvent) MarshalJSON() ([]byte, error)
 }
 
 /**
-*	Generated when a payment is successfully authorized in Checkout. This event indicates the payment has been validated and the amount has been reserved but not yet charged.
+*	Generated when a payment is successfully authorized in Checkout. This event indicates that the payment has been validated and the amount has been reserved but not yet charged.
 *
  */
 type CheckoutPaymentAuthorizedEvent struct {
@@ -364,6 +364,122 @@ func (obj CheckoutPaymentRefundedEvent) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	The `data` payload of all related order event messages.
+ */
+type CheckoutMessageOrderPayloadBaseData struct {
+	// `key` of the [Project](ctp:api:type:Project) where the order would belong to.
+	ProjectKey string `json:"projectKey"`
+	// The [Cart](ctp:api:type:Cart) on which the change or action was performed.
+	Cart CartReference `json:"cart"`
+	// The [Payments](ctp:api:type:Payment) on which the change or action was performed.
+	Payments []PaymentReference `json:"payments"`
+	// Errors associated with the order event.
+	Errors []ErrorObject `json:"errors"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CheckoutMessageOrderPayloadBaseData) UnmarshalJSON(data []byte) error {
+	type Alias CheckoutMessageOrderPayloadBaseData
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Errors {
+		var err error
+		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+*	The `data` payload of all payment related event messages.
+ */
+type CheckoutMessagePaymentsPayloadBaseData struct {
+	// `key` of the [Project](ctp:api:type:Project) where the payment was made.
+	ProjectKey string `json:"projectKey"`
+	// The [Payment](ctp:api:type:Payment) on which the change or action was performed.
+	Payment PaymentReference `json:"payment"`
+	// `id` of the [Transaction](/../api/projects/payments#transaction).
+	TransactionId string `json:"transactionId"`
+	// The [Cart](ctp:api:type:Cart) on which the change or action was performed.
+	Cart *CartReference `json:"cart,omitempty"`
+	// The [Order](ctp:api:type:Order) on which the change or action was performed.
+	Order *OrderReference `json:"order,omitempty"`
+}
+
+/**
+*	The `data` of the [Import Container Created Event](ctp:api:type:ImportContainerCreatedEvent).
+ */
+type ImportContainerCreatedEventData struct {
+	// The `key` of the created Import Container.
+	Key string `json:"key"`
+	// The `version` of the created Import Container.
+	Version int `json:"version"`
+	// Date and time (UTC) the Import Container was created.
+	CreatedAt time.Time `json:"createdAt"`
+	// Date and time (UTC) the Import Container was last updated.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+}
+
+/**
+*	The `data` of the [Import Container Deleted Event](ctp:api:type:ImportContainerDeletedEvent).
+ */
+type ImportContainerDeletedEventData struct {
+	// The `key` of the deleted Import Container.
+	Key string `json:"key"`
+	// The `version` of the deleted Import Container.
+	Version int `json:"version"`
+}
+
+/**
+*	The `data` of the [Import Operation Rejected Event](ctp:api:type:ImportOperationRejectedEvent).
+ */
+type ImportOperationRejectedEventData struct {
+	// The `id` of the Import Operation with the `rejected` state.
+	ID string `json:"id"`
+}
+
+/**
+*	The `data` of the [Import Unresolved Event](ctp:api:type:ImportUnresolvedEvent).
+ */
+type ImportUnresolvedEventData struct {
+	// The `id` of the Import Operation with the `unresolved` state.
+	ID string `json:"id"`
+	// The `version` of the Import Operation with the `unresolved` state.
+	Version int `json:"version"`
+	// The `key` of the Import Container.
+	ImportContainerKey string `json:"importContainerKey"`
+}
+
+/**
+*	The `data` of the [Import Validation Failed Event](ctp:api:type:ImportValidationFailedEvent).
+ */
+type ImportValidationFailedEventData struct {
+	// The `id` of the Import Operation with the `validationFailed` state.
+	ID string `json:"id"`
+	// The `version` of the Import Operation with the `validationFailed` state.
+	Version int `json:"version"`
+	// The `key` of the Import Container.
+	ImportContainerKey string `json:"importContainerKey"`
+}
+
+/**
+*	The `data` of the [Import Wait For Master Variant Event](ctp:api:type:ImportWaitForMasterVariantEvent).
+ */
+type ImportWaitForMasterVariantEventData struct {
+	// The `id` of the Import Operation with the `waitForMasterVariant` state.
+	ID string `json:"id"`
+	// The `version` of the Import Operation with the `waitForMasterVariant` state.
+	Version int `json:"version"`
+	// The `key` of the Import Container.
+	ImportContainerKey string `json:"importContainerKey"`
+}
+
+/**
 *	Generated when an [Import Container](ctp:import:type:ImportContainer) is created.
  */
 type ImportContainerCreatedEvent struct {
@@ -505,120 +621,4 @@ func (obj ImportWaitForMasterVariantEvent) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "ImportWaitForMasterVariant", Alias: (*Alias)(&obj)})
-}
-
-/**
-*	The `data` payload of all related order event messages.
- */
-type CheckoutMessageOrderPayloadBaseData struct {
-	// `key` of the [Project](ctp:api:type:Project) where the order would belong to.
-	ProjectKey string `json:"projectKey"`
-	// The [Cart](ctp:api:type:Cart) on which the change or action was performed.
-	Cart CartReference `json:"cart"`
-	// The [Payments](ctp:api:type:Payment) on which the change or action was performed.
-	Payments []PaymentReference `json:"payments"`
-	// Errors associated with the order event.
-	Errors []ErrorObject `json:"errors"`
-}
-
-// UnmarshalJSON override to deserialize correct attribute types based
-// on the discriminator value
-func (obj *CheckoutMessageOrderPayloadBaseData) UnmarshalJSON(data []byte) error {
-	type Alias CheckoutMessageOrderPayloadBaseData
-	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
-		return err
-	}
-	for i := range obj.Errors {
-		var err error
-		obj.Errors[i], err = mapDiscriminatorErrorObject(obj.Errors[i])
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-/**
-*	The `data` payload of all payment related event messages.
- */
-type CheckoutMessagePaymentsPayloadBaseData struct {
-	// `key` of the [Project](ctp:api:type:Project) where the payment was made.
-	ProjectKey string `json:"projectKey"`
-	// The [Payment](ctp:api:type:Payment) on which the change or action was performed.
-	Payment PaymentReference `json:"payment"`
-	// `id` of the [Transaction](/../api/projects/payments#transaction).
-	TransactionId string `json:"transactionId"`
-	// The [Cart](ctp:api:type:Cart) on which the change or action was performed.
-	Cart *CartReference `json:"cart,omitempty"`
-	// The [Order](ctp:api:type:Order) on which the change or action was performed.
-	Order *OrderReference `json:"order,omitempty"`
-}
-
-/**
-*	The `data` of the [Import Container Created Event](ctp:api:type:ImportContainerCreatedEvent).
- */
-type ImportContainerCreatedEventData struct {
-	// The `key` of the created Import Container.
-	Key string `json:"key"`
-	// The `version` of the created Import Container.
-	Version int `json:"version"`
-	// Date and time (UTC) the Import Container was created.
-	CreatedAt time.Time `json:"createdAt"`
-	// Date and time (UTC) the Import Container was last updated.
-	LastModifiedAt time.Time `json:"lastModifiedAt"`
-}
-
-/**
-*	The `data` of the [Import Container Deleted Event](ctp:api:type:ImportContainerDeletedEvent).
- */
-type ImportContainerDeletedEventData struct {
-	// The `key` of the deleted Import Container.
-	Key string `json:"key"`
-	// The `version` of the deleted Import Container.
-	Version int `json:"version"`
-}
-
-/**
-*	The `data` of the [Import Operation Rejected Event](ctp:api:type:ImportOperationRejectedEvent).
- */
-type ImportOperationRejectedEventData struct {
-	// The `id` of the Import Operation with the `rejected` state.
-	ID string `json:"id"`
-}
-
-/**
-*	The `data` of the [Import Unresolved Event](ctp:api:type:ImportUnresolvedEvent).
- */
-type ImportUnresolvedEventData struct {
-	// The `id` of the Import Operation with the `unresolved` state.
-	ID string `json:"id"`
-	// The `version` of the Import Operation with the `unresolved` state.
-	Version int `json:"version"`
-	// The `key` of the Import Container.
-	ImportContainerKey string `json:"importContainerKey"`
-}
-
-/**
-*	The `data` of the [Import Validation Failed Event](ctp:api:type:ImportValidationFailedEvent).
- */
-type ImportValidationFailedEventData struct {
-	// The `id` of the Import Operation with the `validationFailed` state.
-	ID string `json:"id"`
-	// The `version` of the Import Operation with the `validationFailed` state.
-	Version int `json:"version"`
-	// The `key` of the Import Container.
-	ImportContainerKey string `json:"importContainerKey"`
-}
-
-/**
-*	The `data` of the [Import Wait For Master Variant Event](ctp:api:type:ImportWaitForMasterVariantEvent).
- */
-type ImportWaitForMasterVariantEventData struct {
-	// The `id` of the Import Operation with the `waitForMasterVariant` state.
-	ID string `json:"id"`
-	// The `version` of the Import Operation with the `waitForMasterVariant` state.
-	Version int `json:"version"`
-	// The `key` of the Import Container.
-	ImportContainerKey string `json:"importContainerKey"`
 }

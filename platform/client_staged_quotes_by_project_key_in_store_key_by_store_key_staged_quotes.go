@@ -28,6 +28,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder) WithId(id 
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves StagedQuotes in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/staged-quotes", rb.projectKey, rb.storeKey),
@@ -36,7 +40,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder) Get() *ByP
 }
 
 /**
-*	Checks if one or more StagedQuotes exist for the provided query predicate. Returns a `200 OK` status if any StagedQuotes match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if one or more StagedQuotes exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200` status if any StagedQuotes match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestMethodHead{
@@ -45,6 +49,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder) Head() *By
 	}
 }
 
+/**
+*	Creates a StagedQuote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder) Post(body StagedQuoteDraft) *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestMethodPost{
 		body:   body,

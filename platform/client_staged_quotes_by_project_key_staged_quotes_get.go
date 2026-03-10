@@ -132,6 +132,10 @@ func (rb *ByProjectKeyStagedQuotesRequestMethodGet) WithHeaders(headers http.Hea
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all StagedQuotes in the Project.
+ */
 func (rb *ByProjectKeyStagedQuotesRequestMethodGet) Execute(ctx context.Context) (result *StagedQuotePagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -28,7 +28,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodHead) 
 }
 
 /**
-*	Checks if a ShoppingList exists with the provided `id` for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*	Checks if a ShoppingList exists with the provided `id` for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store). Returns a `200` status if successful.
 *
 *	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
 *

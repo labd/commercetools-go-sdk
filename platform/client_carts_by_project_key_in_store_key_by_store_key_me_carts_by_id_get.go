@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeCartsByIDRequestMethodGet) WithHeade
 }
 
 /**
-*	Returns a Cart for a given `id` in a Store. Returns a `200 OK` status if the Cart exists.
+*	Returns a Cart for a given `id` in a Store. Returns a `200` status if the Cart exists.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

@@ -54,6 +54,10 @@ func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestMethodPost) WithHeaders(head
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a ShippingMethod in the Project using one or more [update actions](/../api/projects/shippingMethods#update-actions).
+ */
 func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *ShippingMethod, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

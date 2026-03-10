@@ -183,6 +183,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ExactLockConflict":
+		obj := ExactLockConflictError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ExpiredCustomerEmailToken":
 		obj := ExpiredCustomerEmailTokenError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -327,6 +333,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "MaxDiscountGroupsReached":
+		obj := MaxDiscountGroupsReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MaxResourceLimitExceeded":
 		obj := MaxResourceLimitExceededError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -436,6 +448,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "RecurringOrderFailure":
+		obj := RecurringOrderFailureError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ReferenceExists":
 		obj := ReferenceExistsError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -516,6 +534,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "SyntaxError":
 		obj := SyntaxErrorError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ValidityLockConflict":
+		obj := ValidityLockConflictError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1250,12 +1274,14 @@ func (obj CountryNotConfiguredInStoreError) Error() string {
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts.
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests and [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests.
 *	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
-*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits.
+*	- [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Order.
 *	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
@@ -2566,6 +2592,109 @@ func (obj AuthErrorResponse) Error() string {
 		return obj.Message
 	}
 	return "unknown AuthErrorResponse: failed to parse error response"
+}
+
+/**
+*	Returned when a modification is already in progress for the exact combination of SKU and price scope fields for a Standalone Price.
+*	Retry the same request after 300 ms.
+*
+*	The error is returned as a failed response to:
+*	- [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST)
+*	- [Update StandalonePrice by ID](ctp:api:endpoint:/{projectKey}/standalone-prices/{id}:POST)
+*	- [Update StandalonePrice by Key](ctp:api:endpoint:/{projectKey}/standalone-prices/key={key}:POST)
+*
+ */
+type ExactLockConflictError struct {
+	// `"Modification already in progress for the combination of SKU and price scope fields."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// SKU for which the modification conflict occurred.
+	Sku string `json:"sku"`
+	// Currency code of the Standalone Price.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Standalone Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Standalone Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) that applies to the Standalone Price.
+	RecurrencePolicy *RecurrencePolicyReference `json:"recurrencePolicy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExactLockConflictError) UnmarshalJSON(data []byte) error {
+	type Alias ExactLockConflictError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "recurrencePolicy")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExactLockConflictError) MarshalJSON() ([]byte, error) {
+	type Alias ExactLockConflictError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExactLockConflict", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExactLockConflictError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExactLockConflictError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExactLockConflictError: failed to parse error response"
 }
 
 /**
@@ -4521,6 +4650,84 @@ func (obj MaxCartDiscountsReachedError) Error() string {
 }
 
 /**
+*	Returned when a Discount Group cannot be created or activated as the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups:POST) request
+*	- [Set IsActive](ctp:api:type:DiscountGroupSetIsActiveAction) update action
+*
+ */
+type MaxDiscountGroupsReachedError struct {
+	// `"Maximum number of active discount groups reached ($max)."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MaxDiscountGroupsReachedError) UnmarshalJSON(data []byte) error {
+	type Alias MaxDiscountGroupsReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MaxDiscountGroupsReachedError) MarshalJSON() ([]byte, error) {
+	type Alias MaxDiscountGroupsReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxDiscountGroupsReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *MaxDiscountGroupsReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj MaxDiscountGroupsReachedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MaxDiscountGroupsReachedError: failed to parse error response"
+}
+
+/**
 *	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
@@ -4860,8 +5067,7 @@ func (obj MissingTaxRateForCountryError) Error() string {
 }
 
 /**
-*	Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
-*	See [Money usage](/types#usage) for more information.
+*	Returned when a money operation overflows the 64-bit integer range.
 *
  */
 type MoneyOverflowError struct {
@@ -5903,6 +6109,82 @@ func (obj QueryTimedOutError) Error() string {
 		return obj.Message
 	}
 	return "unknown QueryTimedOutError: failed to parse error response"
+}
+
+/**
+*	Returned when a subsequent Order for a [Recurring Order](ctp:api:type:RecurringOrder) could not be processed.
+*
+ */
+type RecurringOrderFailureError struct {
+	// Plain text description of the error.
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Details about the error's cause and the entities involved.
+	Details interface{} `json:"details"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringOrderFailureError) UnmarshalJSON(data []byte) error {
+	type Alias RecurringOrderFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "details")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderFailureError) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderFailureError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "RecurringOrderFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *RecurringOrderFailureError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj RecurringOrderFailureError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown RecurringOrderFailureError: failed to parse error response"
 }
 
 /**
@@ -6960,6 +7242,103 @@ func (obj SyntaxErrorError) Error() string {
 	return "unknown SyntaxErrorError: failed to parse error response"
 }
 
+/**
+*	Returned when a modification is already in progress for the combination of SKU and price scope fields (but potentially different validity period) for a Standalone Price.
+*	Retry the same request after 300 ms.
+*
+*	The error is returned as a failed response to:
+*	- [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST)
+*	- [Update StandalonePrice by ID](ctp:api:endpoint:/{projectKey}/standalone-prices/{id}:POST)
+*	- [Update StandalonePrice by Key](ctp:api:endpoint:/{projectKey}/standalone-prices/key={key}:POST)
+*
+ */
+type ValidityLockConflictError struct {
+	// `"Modification already in progress for the combination of SKU, price scope fields (but potentially different validity period). Please retry after the current operation completes."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// SKU for which the modification conflict occurred.
+	Sku string `json:"sku"`
+	// Currency code of the Standalone Price.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) for which the Standalone Price is valid.
+	RecurrencePolicy *RecurrencePolicyResourceIdentifier `json:"recurrencePolicy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ValidityLockConflictError) UnmarshalJSON(data []byte) error {
+	type Alias ValidityLockConflictError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "recurrencePolicy")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ValidityLockConflictError) MarshalJSON() ([]byte, error) {
+	type Alias ValidityLockConflictError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ValidityLockConflict", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ValidityLockConflictError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ValidityLockConflictError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ValidityLockConflictError: failed to parse error response"
+}
+
 type VariantValues struct {
 	// SKU of the [ProductVariant](ctp:api:type:ProductVariant).
 	Sku *string `json:"sku,omitempty"`
@@ -7137,6 +7516,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "ExactLockConflict":
+		obj := GraphQLExactLockConflictError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ExpiredCustomerEmailToken":
 		obj := GraphQLExpiredCustomerEmailTokenError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7281,6 +7666,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "MaxDiscountGroupsReached":
+		obj := GraphQLMaxDiscountGroupsReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "MaxResourceLimitExceeded":
 		obj := GraphQLMaxResourceLimitExceededError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7390,6 +7781,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "RecurringOrderFailure":
+		obj := GraphQLRecurringOrderFailureError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ReferenceExists":
 		obj := GraphQLReferenceExistsError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7470,6 +7867,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "SyntaxError":
 		obj := GraphQLSyntaxErrorError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ValidityLockConflict":
+		obj := GraphQLValidityLockConflictError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -8112,12 +8515,14 @@ func (obj *GraphQLCountryNotConfiguredInStoreError) DecodeStruct(src map[string]
 *
 *	The error is returned as a failed response to:
 *
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests and [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts.
-*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests and [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/carts:POST) requests.
+*	- [Create Cart](ctp:api:endpoint:/{projectKey}/me/carts:POST) and [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/me/carts:POST) requests.
 *	- [Create Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/carts:POST) request on Associate Carts.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/orders:POST) requests on Orders.
 *	- [Create Order from Cart](ctp:api:endpoint:/{projectKey}/me/orders:POST) and [Create Order in Store from Cart](ctp:api:endpoint:/{projectKey}/in-store/me/orders:POST) requests on My Orders.
-*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits.
+*	- [Add DiscountCode](ctp:api:type:CartAddDiscountCodeAction) update action on Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:MyCartAddDiscountCodeAction) update action on My Carts, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Cart.
+*	- [Add DiscountCode](ctp:api:type:StagedOrderAddDiscountCodeAction) update action on Order Edits, if the associated Cart Discounts are inactive or invalid, or belongs to a different Store than the Order.
 *	- [Create Order from Cart in BusinessUnit](ctp:api:endpoint:/{projectKey}/as-associate/{associateId}/in-business-unit/key={businessUnitKey}/orders:POST) request on Associate Orders.
 *
  */
@@ -9162,6 +9567,99 @@ func (obj GraphQLEnumValuesMustMatchError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLEnumValuesMustMatchError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a modification is already in progress for the exact combination of SKU and price scope fields for a Standalone Price.
+*	Retry the same request after 300 ms.
+*
+*	The error is returned as a failed response to:
+*	- [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST)
+*	- [Update StandalonePrice by ID](ctp:api:endpoint:/{projectKey}/standalone-prices/{id}:POST)
+*	- [Update StandalonePrice by Key](ctp:api:endpoint:/{projectKey}/standalone-prices/key={key}:POST)
+*
+ */
+type GraphQLExactLockConflictError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// SKU for which the modification conflict occurred.
+	Sku string `json:"sku"`
+	// Currency code of the Standalone Price.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Standalone Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Standalone Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) that applies to the Standalone Price.
+	RecurrencePolicy *RecurrencePolicyReference `json:"recurrencePolicy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExactLockConflictError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExactLockConflictError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "recurrencePolicy")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExactLockConflictError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExactLockConflictError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExactLockConflict", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExactLockConflictError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -10824,6 +11322,74 @@ func (obj *GraphQLMaxCartDiscountsReachedError) DecodeStruct(src map[string]inte
 }
 
 /**
+*	Returned when a Discount Group cannot be created or activated as the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached.
+*
+*	The error is returned as a failed response to:
+*
+*	- [Create DiscountGroup](ctp:api:endpoint:/{projectKey}/discount-groups:POST) request
+*	- [Set IsActive](ctp:api:type:DiscountGroupSetIsActiveAction) update action
+*
+ */
+type GraphQLMaxDiscountGroupsReachedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMaxDiscountGroupsReachedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMaxDiscountGroupsReachedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMaxDiscountGroupsReachedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMaxDiscountGroupsReachedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MaxDiscountGroupsReached", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMaxDiscountGroupsReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
@@ -11123,8 +11689,7 @@ func (obj *GraphQLMissingTaxRateForCountryError) DecodeStruct(src map[string]int
 }
 
 /**
-*	Returned when a [Money](ctp:api:type:Money) operation overflows the 64-bit integer range.
-*	See [Money usage](/types#usage) for more information.
+*	Returned when a money operation overflows the 64-bit integer range.
 *
  */
 type GraphQLMoneyOverflowError struct {
@@ -12022,6 +12587,72 @@ func (obj GraphQLQueryTimedOutError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLQueryTimedOutError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a subsequent Order for a [Recurring Order](ctp:api:type:RecurringOrder) could not be processed.
+*
+ */
+type GraphQLRecurringOrderFailureError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Details about the error's cause and the entities involved.
+	Details interface{} `json:"details"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLRecurringOrderFailureError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLRecurringOrderFailureError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "details")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLRecurringOrderFailureError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLRecurringOrderFailureError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "RecurringOrderFailure", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLRecurringOrderFailureError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -12937,6 +13568,93 @@ func (obj GraphQLSyntaxErrorError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLSyntaxErrorError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a modification is already in progress for the combination of SKU and price scope fields (but potentially different validity period) for a Standalone Price.
+*	Retry the same request after 300 ms.
+*
+*	The error is returned as a failed response to:
+*	- [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST)
+*	- [Update StandalonePrice by ID](ctp:api:endpoint:/{projectKey}/standalone-prices/{id}:POST)
+*	- [Update StandalonePrice by Key](ctp:api:endpoint:/{projectKey}/standalone-prices/key={key}:POST)
+*
+ */
+type GraphQLValidityLockConflictError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// SKU for which the modification conflict occurred.
+	Sku string `json:"sku"`
+	// Currency code of the Standalone Price.
+	Currency string `json:"currency"`
+	// Country code of the geographic location.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Standalone Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Standalone Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) for which the Standalone Price is valid.
+	RecurrencePolicy *RecurrencePolicyResourceIdentifier `json:"recurrencePolicy,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLValidityLockConflictError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLValidityLockConflictError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "sku")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "recurrencePolicy")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLValidityLockConflictError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLValidityLockConflictError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ValidityLockConflict", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLValidityLockConflictError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {

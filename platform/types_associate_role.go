@@ -29,7 +29,7 @@ type AssociateRole struct {
 	Name *string `json:"name,omitempty"`
 	// List of Permissions for the AssociateRole.
 	Permissions []Permission `json:"permissions"`
-	// Custom Fields for the AssociateRole.
+	// Custom Fields of the AssociateRole.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 

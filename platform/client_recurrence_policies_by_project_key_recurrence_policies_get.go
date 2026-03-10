@@ -136,6 +136,8 @@ func (rb *ByProjectKeyRecurrencePoliciesRequestMethodGet) WithHeaders(headers ht
 /**
 *	Retrieves Recurrence Policies in the Project.
 *
+*	The `view_recurring_orders:{projectKey}` scope is deprecated for use on this endpoint. Update your clients to use the `view_recurrence_policies:{projectKey}` scope instead. For more information, see the [Deprecations and removals](/api/deprecations-and-removals#recurrence-policies) list.
+*
  */
 func (rb *ByProjectKeyRecurrencePoliciesRequestMethodGet) Execute(ctx context.Context) (result *RecurrencePolicyPagedQueryResponse, err error) {
 	var queryParams url.Values

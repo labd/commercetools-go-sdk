@@ -12,6 +12,9 @@ type ByProjectKeyZonesKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a Zone with the provided `key`.
+ */
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Get() *ByProjectKeyZonesKeyByKeyRequestMethodGet {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/zones/key=%s", rb.projectKey, rb.key),
@@ -20,7 +23,7 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Get() *ByProjectKeyZonesKeyBy
 }
 
 /**
-*	Checks if a Zone exists with the provided `key`. Returns a `200 OK` status if the Zone exists or a `404 Not Found` otherwise.
+*	Checks if a Zone exists with the provided `key`. Returns a `200 OK` status if the Zone exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Head() *ByProjectKeyZonesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodHead{
@@ -29,6 +32,9 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Head() *ByProjectKeyZonesKeyB
 	}
 }
 
+/**
+*	Updates a Zone in the Project using one or more [update actions](/../api/projects/zones#update-actions).
+ */
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Post(body ZoneUpdate) *ByProjectKeyZonesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodPost{
 		body:   body,
@@ -37,6 +43,9 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Post(body ZoneUpdate) *ByProj
 	}
 }
 
+/**
+*	Deletes a Zone in the Project.
+ */
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Delete() *ByProjectKeyZonesKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/zones/key=%s", rb.projectKey, rb.key),

@@ -13,6 +13,9 @@ type ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a QuoteRequest with the provided `id` in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quote-requests/%s", rb.projectKey, rb.storeKey, rb.id),
@@ -21,7 +24,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Get()
 }
 
 /**
-*	Checks if a QuoteRequest exists with the provided `id`. Returns a `200 OK` status if the QuoteRequest exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a QuoteRequest exists with the provided `id` in a [Store](ctp:api:type:Store). Returns a `200` status if the QuoteRequest exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodHead{
@@ -30,6 +33,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Head(
 	}
 }
 
+/**
+*	Updates a QuoteRequest in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Post(body QuoteRequestUpdate) *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodPost{
 		body:   body,
@@ -38,6 +44,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Post(
 	}
 }
 
+/**
+*	Deletes a QuoteRequest in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quote-requests/%s", rb.projectKey, rb.storeKey, rb.id),

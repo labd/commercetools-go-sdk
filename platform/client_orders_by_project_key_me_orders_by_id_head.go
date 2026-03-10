@@ -28,7 +28,7 @@ func (rb *ByProjectKeyMeOrdersByIDRequestMethodHead) WithHeaders(headers http.He
 }
 
 /**
-*	Checks if an Order exists with the provided `id` for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
+*	Checks if an Order exists with the provided `id` for the authenticated Customer or anonymous user. Returns a `200` status if successful.
 *
 *	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
 *

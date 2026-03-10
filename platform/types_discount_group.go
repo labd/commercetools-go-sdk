@@ -27,6 +27,8 @@ type DiscountGroup struct {
 	//
 	// The sort order is unique among all DiscountGroups and CartDiscounts.
 	SortOrder string `json:"sortOrder"`
+	// A DiscountGroup must be active for its CartDiscounts to be considered during discount application.
+	IsActive bool `json:"isActive"`
 	// IDs and references that last modified the DiscountGroup.
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// IDs and references that created the DiscountGroup.
@@ -44,6 +46,8 @@ type DiscountGroupDraft struct {
 	//
 	// The sort order must be unique among all DiscountGroups and CartDiscounts.
 	SortOrder string `json:"sortOrder"`
+	// A DiscountGroup must be active for its CartDiscounts to be considered during discount application.
+	IsActive *bool `json:"isActive,omitempty"`
 }
 
 /**
@@ -159,6 +163,12 @@ func mapDiscriminatorDiscountGroupUpdateAction(input interface{}) (DiscountGroup
 			return nil, err
 		}
 		return obj, nil
+	case "setIsActive":
+		obj := DiscountGroupSetIsActiveAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setKey":
 		obj := DiscountGroupSetKeyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -195,6 +205,29 @@ func (obj DiscountGroupSetDescriptionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDescription", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action generates the [DiscountGroupIsActiveSet](ctp:api:type:DiscountGroupIsActiveSetMessage) Message.
+*
+*	If the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached, a [MaxDiscountGroupsReached](ctp:api:type:MaxDiscountGroupsReachedError) error is returned.
+*
+ */
+type DiscountGroupSetIsActiveAction struct {
+	// New value to set.
+	//
+	// A DiscountGroup must be active for its CartDiscounts to be considered during discount application.
+	IsActive bool `json:"isActive"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DiscountGroupSetIsActiveAction) MarshalJSON() ([]byte, error) {
+	type Alias DiscountGroupSetIsActiveAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setIsActive", Alias: (*Alias)(&obj)})
 }
 
 /**

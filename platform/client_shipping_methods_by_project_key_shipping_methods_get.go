@@ -132,6 +132,10 @@ func (rb *ByProjectKeyShippingMethodsRequestMethodGet) WithHeaders(headers http.
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all ShippingMethods in the Project.
+ */
 func (rb *ByProjectKeyShippingMethodsRequestMethodGet) Execute(ctx context.Context) (result *ShippingMethodPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

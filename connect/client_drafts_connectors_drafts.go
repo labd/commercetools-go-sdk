@@ -22,7 +22,7 @@ func (rb *ConnectorsDraftsRequestBuilder) WithKey(key string) *ConnectorsDraftsK
 		client: rb.client,
 	}
 }
-func (rb *ConnectorsDraftsRequestBuilder) Post(body ConnectorDraft) *ConnectorsDraftsRequestMethodPost {
+func (rb *ConnectorsDraftsRequestBuilder) Post(body ConnectorStagedDraft) *ConnectorsDraftsRequestMethodPost {
 	return &ConnectorsDraftsRequestMethodPost{
 		body:   body,
 		url:    fmt.Sprintf("/connectors/drafts"),

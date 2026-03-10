@@ -54,6 +54,11 @@ func (rb *ByProjectKeyMeQuotesByIDRequestMethodPost) WithHeaders(headers http.He
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a Quote for the authenticated Customer using one or more [update actions](/../api/projects/quotes#update-actions).
+*
+ */
 func (rb *ByProjectKeyMeQuotesByIDRequestMethodPost) Execute(ctx context.Context) (result *Quote, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

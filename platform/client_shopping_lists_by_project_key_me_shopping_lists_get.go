@@ -134,7 +134,7 @@ func (rb *ByProjectKeyMeShoppingListsRequestMethodGet) WithHeaders(headers http.
 }
 
 /**
-*	Retrieves ShoppingLists for the authenticated Customer or anonymous user. Returns a `200 OK` status if successful.
+*	Retrieves ShoppingLists for the authenticated Customer or anonymous user. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

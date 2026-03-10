@@ -31,7 +31,7 @@ func (rb *ByProjectKeyImportContainersRequestMethodPost) WithHeaders(headers htt
 /**
 *	Creates an Import Container in the Project.
 *
-*	Generates the [ImportContainerCreated](/projects/events#import-container-created-event) Event.
+*	Generates the [ImportContainerCreated](ctp:api:type:ImportContainerCreatedEvent) Event.
 *
  */
 func (rb *ByProjectKeyImportContainersRequestMethodPost) Execute(ctx context.Context) (result *ImportContainer, err error) {

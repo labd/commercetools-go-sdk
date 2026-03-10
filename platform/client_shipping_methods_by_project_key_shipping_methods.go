@@ -20,7 +20,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) WithKey(key string) *ByProj
 }
 
 /**
-*	Get ShippingMethods for a Cart
+*	Get matching ShippingMethods for a Cart
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCart() *ByProjectKeyShippingMethodsMatchingCartRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingCartRequestBuilder{
@@ -30,7 +30,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCart() *ByProjectKe
 }
 
 /**
-*	Get ShippingMethods for a Cart and Location
+*	Get matching ShippingMethods for a Cart and Location
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCartLocation() *ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingCartLocationRequestBuilder{
@@ -40,7 +40,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingCartLocation() *ByP
 }
 
 /**
-*	Get ShippingMethods for an Order Edit
+*	Get matching ShippingMethods for an OrderEdit
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingOrderedit() *ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingOrdereditRequestBuilder{
@@ -50,7 +50,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingOrderedit() *ByProj
 }
 
 /**
-*	Get ShippingMethods for a Location
+*	Get matching ShippingMethods for a Location
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) MatchingLocation() *ByProjectKeyShippingMethodsMatchingLocationRequestBuilder {
 	return &ByProjectKeyShippingMethodsMatchingLocationRequestBuilder{
@@ -65,6 +65,10 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) WithId(id string) *ByProjec
 		client:     rb.client,
 	}
 }
+
+/**
+*	Retrieves all ShippingMethods in the Project.
+ */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) Get() *ByProjectKeyShippingMethodsRequestMethodGet {
 	return &ByProjectKeyShippingMethodsRequestMethodGet{
 		url:    fmt.Sprintf("/%s/shipping-methods", rb.projectKey),
@@ -73,7 +77,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) Get() *ByProjectKeyShipping
 }
 
 /**
-*	Checks if one or more ShippingMethods exist for the provided query predicate. Returns a `200 OK` status if any ShippingMethods match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more ShippingMethods exist for the provided query predicate. Returns a `200 OK` status if any ShippingMethods match the query predicate or a [Not Found](/../api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) Head() *ByProjectKeyShippingMethodsRequestMethodHead {
 	return &ByProjectKeyShippingMethodsRequestMethodHead{
@@ -82,6 +86,9 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) Head() *ByProjectKeyShippin
 	}
 }
 
+/**
+*	Creates a ShippingMethod in the Project.
+ */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) Post(body ShippingMethodDraft) *ByProjectKeyShippingMethodsRequestMethodPost {
 	return &ByProjectKeyShippingMethodsRequestMethodPost{
 		body:   body,

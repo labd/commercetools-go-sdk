@@ -25,7 +25,7 @@ type CustomerGroup struct {
 	Key *string `json:"key,omitempty"`
 	// Unique name of the CustomerGroup.
 	Name string `json:"name"`
-	// Custom Fields for the CustomerGroup.
+	// Custom Fields of the CustomerGroup.
 	Custom *CustomFields `json:"custom,omitempty"`
 }
 

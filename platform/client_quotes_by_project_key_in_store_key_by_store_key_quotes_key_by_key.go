@@ -13,6 +13,9 @@ type ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a Quote with the provided `key` in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodGet {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quotes/key=%s", rb.projectKey, rb.storeKey, rb.key),
@@ -21,7 +24,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Get() *B
 }
 
 /**
-*	Checks if a Quote exists with the provided `key`. Returns a `200 OK` status if the Quote exists or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if a Quote exists with the provided `key` in a [Store](ctp:api:type:Store). Returns a `200` status if the Quote exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodHead{
@@ -30,6 +33,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Head() *
 	}
 }
 
+/**
+*	Updates a Quote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Post(body QuoteUpdate) *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodPost{
 		body:   body,
@@ -38,6 +44,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Post(bod
 	}
 }
 
+/**
+*	Deletes a Quote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestBuilder) Delete() *ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodDelete {
 	return &ByProjectKeyInStoreKeyByStoreKeyQuotesKeyByKeyRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/in-store/key=%s/quotes/key=%s", rb.projectKey, rb.storeKey, rb.key),

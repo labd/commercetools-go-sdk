@@ -55,7 +55,7 @@ func (rb *ByProjectKeyAttributeGroupsRequestMethodHead) WithHeaders(headers http
 }
 
 /**
-*	Checks if one or more AttributeGroups exist for the provided query predicate. Returns `200 OK` status if any AttributeGroups match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more AttributeGroups exist for the provided query predicate. Returns `200` status if any AttributeGroups match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyAttributeGroupsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

@@ -44,7 +44,7 @@ type Category struct {
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
 	// Keywords related to the Category for improved search engine performance.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	// Custom Fields for the Category.
+	// Custom Fields of the Category.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Media related to the Category.
 	Assets []Asset `json:"assets"`

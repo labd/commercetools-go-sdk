@@ -51,7 +51,7 @@ func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Get() 
 /**
 *	Deletes an Import Container in the Project.
 *
-*	Generates the [ImportContainerDeleted](/projects/events#import-container-deleted-event) Event.
+*	Generates the [ImportContainerDeleted](ctp:api:type:ImportContainerDeletedEvent) Event.
 *
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyRequestBuilder) Delete() *ByProjectKeyImportContainersByImportContainerKeyRequestMethodDelete {

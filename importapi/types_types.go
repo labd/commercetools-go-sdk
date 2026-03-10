@@ -427,7 +427,10 @@ func (obj CustomFieldTimeType) MarshalJSON() ([]byte, error) {
 type FieldDefinition struct {
 	// Data type of the Custom Field to define.
 	Type FieldType `json:"type"`
-	// Name of the Custom Field to define. Must be unique for a given [ResourceTypeId](ctp:import:type:ResourceTypeId). In case there is a FieldDefinition with the same `name` in another Type, both FieldDefinitions must have the same `type`. This value cannot be changed after the Type is imported.
+	// Name of the Custom Field that you want to define.
+	// The name must be unique for a given [ResourceTypeId](ctp:import:type:ResourceTypeId).
+	// If a FieldDefinition with the same `name` is defined in another [Type](ctp:api:type:Type) for the same [ResourceTypeId](ctp:import:type:ResourceTypeId), then both FieldDefinitions must have the same `type`.
+	// This value can't be changed after you import the Type.
 	Name string `json:"name"`
 	// A human-readable label for the field.
 	Label LocalizedString `json:"label"`

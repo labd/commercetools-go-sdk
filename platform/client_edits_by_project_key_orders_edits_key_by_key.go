@@ -23,7 +23,7 @@ func (rb *ByProjectKeyOrdersEditsKeyByKeyRequestBuilder) Get() *ByProjectKeyOrde
 }
 
 /**
-*	Checks if an OrderEdit exists with the provided `key`. Returns a `200 OK` status if the OrderEdit exists or a `404 Not Found` otherwise.
+*	Checks if an OrderEdit exists with the provided `key`. Returns a `200` status if the OrderEdit exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyOrdersEditsKeyByKeyRequestBuilder) Head() *ByProjectKeyOrdersEditsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyOrdersEditsKeyByKeyRequestMethodHead{

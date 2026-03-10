@@ -166,7 +166,7 @@ type ShoppingListLineItemDraft struct {
 	Sku *string `json:"sku,omitempty"`
 	// Date and time the ShoppingListLineItem is added to the [ShoppingList](ctp:api:type:ShoppingList). If not set, the current date and time (UTC) is used.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Custom Fields of the ShoppingListLineItem.
+	// Custom Fields for the ShoppingListLineItem.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Number of Products in the ShoppingListLineItem.
 	Quantity *int `json:"quantity,omitempty"`

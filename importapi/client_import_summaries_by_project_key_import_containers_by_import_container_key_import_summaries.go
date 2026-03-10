@@ -13,7 +13,7 @@ type ByProjectKeyImportContainersByImportContainerKeyImportSummariesRequestBuild
 }
 
 /**
-*	Retrieves an [ImportSummary](ctp:import:type:ImportSummary) for the [ImportContainer](ctp:import:type:ImportContainer) with the provided `importContainerKey`.
+*	Retrieves an [ImportSummary](ctp:import:type:ImportSummary) for the [ImportContainer](ctp:import:type:ImportContainer) with the provided `importContainerKey`. The returned values are [eventually consistent](/general-concepts#eventual-consistency).
 *
  */
 func (rb *ByProjectKeyImportContainersByImportContainerKeyImportSummariesRequestBuilder) Get() *ByProjectKeyImportContainersByImportContainerKeyImportSummariesRequestMethodGet {

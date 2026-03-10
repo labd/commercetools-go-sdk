@@ -33,7 +33,7 @@ func (rb *ByProjectKeyCustomerGroupsRequestBuilder) Get() *ByProjectKeyCustomerG
 }
 
 /**
-*	Checks if one or more CustomerGroups exist for the provided query predicate. Returns a `200 OK` status if any CustomerGroup match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more CustomerGroups exist for the provided query predicate. Returns a `200` status if any CustomerGroup match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyCustomerGroupsRequestBuilder) Head() *ByProjectKeyCustomerGroupsRequestMethodHead {
 	return &ByProjectKeyCustomerGroupsRequestMethodHead{

@@ -115,6 +115,19 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "business-unit":
+		obj := BusinessUnitImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		for i := range obj.Resources {
+			var err error
+			obj.Resources[i], err = mapDiscriminatorBusinessUnitImport(obj.Resources[i])
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -411,4 +424,41 @@ func (obj ProductSelectionImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "product-selection", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Business Units](ctp:import:endpoint:/{projectKey}/business-units/import-containers/{importContainerKey}:POST). Contains data for [Business Units](ctp:api:type:BusinessUnit) to be created or updated in a Project.
+*
+ */
+type BusinessUnitImportRequest struct {
+	// The Business Unit import resources of this request. Can contain [CompanyBusinessUnitImport](ctp:import:type:CompanyBusinessUnitImport) or [DivisionBusinessUnitImport](ctp:import:type:DivisionBusinessUnitImport).
+	Resources []BusinessUnitImport `json:"resources"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BusinessUnitImportRequest) UnmarshalJSON(data []byte) error {
+	type Alias BusinessUnitImportRequest
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	for i := range obj.Resources {
+		var err error
+		obj.Resources[i], err = mapDiscriminatorBusinessUnitImport(obj.Resources[i])
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BusinessUnitImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias BusinessUnitImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "business-unit", Alias: (*Alias)(&obj)})
 }

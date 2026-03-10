@@ -29,7 +29,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestMethodPost) WithHeaders(heade
 }
 
 /**
-*	Updates the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*	Updates the Customer in a [Store](ctp:api:type:Store). Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

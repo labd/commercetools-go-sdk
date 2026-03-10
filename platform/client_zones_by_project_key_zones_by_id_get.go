@@ -53,6 +53,10 @@ func (rb *ByProjectKeyZonesByIDRequestMethodGet) WithHeaders(headers http.Header
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves a Zone with the provided `id`.
+ */
 func (rb *ByProjectKeyZonesByIDRequestMethodGet) Execute(ctx context.Context) (result *Zone, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -28,8 +28,10 @@ type Extension struct {
 	// Describes what triggers the Extension.
 	Triggers []ExtensionTrigger `json:"triggers"`
 	// Maximum time (in milliseconds) that the Extension can respond within.
-	// If no timeout is provided, the [default value](#time-limits) is used for all types of Extensions, including `payment` Extensions.
-	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+	// If no timeout is provided, the default value is used for all [types of Extensions](ctp:api:type:ExtensionResourceTypeId).
+	//
+	// The limit of 10000 ms (10 seconds) can be increased per Project after we review the performance impact.
+	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 
@@ -139,10 +141,10 @@ type ExtensionDraft struct {
 	// Describes what triggers the Extension.
 	Triggers []ExtensionTrigger `json:"triggers"`
 	// Maximum time (in milliseconds) the Extension can respond within.
-	// If no timeout is provided, the [default value](/#time-limits) is used for all types of Extensions, including `payment` Extensions.
-	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+	// If no timeout is provided, the default value is used for all [types of Extensions](ctp:api:type:ExtensionResourceTypeId).
+	// We recommend keeping the timeout as low as possible to avoid performance issues.
 	//
-	// This limit can be increased per Project after we review the performance impact.
+	// The limit of 10000 ms (10 seconds) can be increased per Project after we review the performance impact.
 	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
@@ -425,7 +427,7 @@ func (obj AuthorizationHeaderAuthentication) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	To protect your Azure Function, set its `authLevel` to `function` and provide the function's key to be used inside the `x-functions-key` header. For more information, see the [Azure Functions documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook#keys).
+*	To protect your Azure Function, set its `authLevel` to `function` and provide the function's key to be used inside the `x-functions-key` header. For more information, see the [Azure Functions documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-http-webhook).
 *
 *	To protect the secret key from being exposed, remove the code parameter and secret key from the URL. For example, use `https://foo.azurewebsites.net/api/bar` instead of
 *	`https://foo.azurewebsites.net/api/bar?code=secret`.
@@ -510,12 +512,12 @@ func (obj ExtensionSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ExtensionSetTimeoutInMsAction struct {
-	// Value to set. If not defined, the maximum value is used.
-	// If no timeout is provided, the [default value](#time-limits) is used for all types of Extensions, including `payment` Extensions.
-	// The maximum value is 10000 ms (10 seconds) for `payment` Extensions and 2000 ms (2 seconds) for all other Extensions.
+	// Value to set.
+	// If no timeout is provided, the default value is used for all [types of Extensions](ctp:api:type:ExtensionResourceTypeId).
+	// We recommend keeping the timeout as low as possible to avoid performance issues.
 	//
-	// This limit can be increased per Project after we review the performance impact.
-	// Please contact the [Composable Commerce support team](https://support.commercetools.com/) and provide the Region, Project key, and use case.
+	// The limit of 10000 ms (10 seconds) can be increased per Project after we review the performance impact.
+	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 

@@ -54,6 +54,10 @@ func (rb *ByProjectKeyQuoteRequestsKeyByKeyRequestMethodPost) WithHeaders(header
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Updates a QuoteRequest in the Project using one or more [update actions](/../api/projects/quote-requests#update-actions).
+ */
 func (rb *ByProjectKeyQuoteRequestsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *QuoteRequest, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {

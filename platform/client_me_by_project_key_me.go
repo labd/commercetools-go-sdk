@@ -113,7 +113,7 @@ func (rb *ByProjectKeyMeRequestBuilder) ShoppingLists() *ByProjectKeyMeShoppingL
 }
 
 /**
-*	Returns a Customer for a given Query Predicate. Returns a `200 OK` status if successful.
+*	Returns a Customer for a given Query Predicate. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
@@ -129,7 +129,7 @@ func (rb *ByProjectKeyMeRequestBuilder) Get() *ByProjectKeyMeRequestMethodGet {
 }
 
 /**
-*	Updates the Customer specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope. Returns a `200 OK` status if successful.
+*	Updates the Customer specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope. Returns a `200` status if successful.
 *
  */
 func (rb *ByProjectKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKeyMeRequestMethodPost {
@@ -141,7 +141,7 @@ func (rb *ByProjectKeyMeRequestBuilder) Post(body MyCustomerUpdate) *ByProjectKe
 }
 
 /**
-*	Deletes the Customer specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope. Returns a `200 OK` status if successful.
+*	Deletes the Customer specified in the [customer:{id}](/scopes#composable-commerce-oauth) scope. Returns a `200` status if successful.
  */
 func (rb *ByProjectKeyMeRequestBuilder) Delete() *ByProjectKeyMeRequestMethodDelete {
 	return &ByProjectKeyMeRequestMethodDelete{

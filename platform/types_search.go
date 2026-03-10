@@ -94,6 +94,10 @@ type SearchFullTextPrefixExpression struct {
 	FullTextPrefix SearchFullTextPrefixValue `json:"fullTextPrefix"`
 }
 
+type SearchFuzzyExpression struct {
+	Fuzzy SearchFuzzyValue `json:"fuzzy"`
+}
+
 type SearchLongRangeExpression struct {
 	Range SearchLongRangeValue `json:"range"`
 }
@@ -210,6 +214,25 @@ type SearchFullTextValue struct {
 	Value     interface{}      `json:"value"`
 	// String value specifying linguistic and regional preferences using the [IETF language tag format](https://en.wikipedia.org/wiki/IETF_language_tag), as described in [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt). The format combines language, script, and region using hyphen-separated subtags. For example: `en`, `en-US`, `zh-Hans-SG`.
 	Language  *string          `json:"language,omitempty"`
+	MustMatch *SearchMatchType `json:"mustMatch,omitempty"`
+}
+
+type SearchFuzzyValue struct {
+	Field string   `json:"field"`
+	Boost *float64 `json:"boost,omitempty"`
+	// Possible values for the `fieldType` property on [simple expressions](/../api/search-query-language#simple-expressions) indicating the data type of the `field`.
+	FieldType *SearchFieldType `json:"fieldType,omitempty"`
+	// The search term to find fuzzy matches for. If multiple terms are provided (separated by whitespace), the fuzziness level is applied to each term individually.
+	Value interface{} `json:"value"`
+	// The maximum fuzziness level desired for the search term. Allowed values are `0`, `1`, and `2`. The API automatically adjusts the effective fuzziness level based on the length of the search term if it exceeds the maximum allowed for the given string length according to the following rules:
+	//
+	// * Terms with 1-2 characters: 0 (exact match)
+	// * Terms with 3-5 characters: 1 (up to one difference is allowed)
+	// * Terms with more than 5 characters: 2 (up to two differences are allowed)
+	Level int `json:"level"`
+	// Language of the localized value. Must be provided when the field is of type `localizedTextField`. The provided Locale must be one of the Project's languages.
+	Language *string `json:"language,omitempty"`
+	// Controls whether all of the provided terms must match (`all`, default) or any of those (`any`).
 	MustMatch *SearchMatchType `json:"mustMatch,omitempty"`
 }
 

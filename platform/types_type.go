@@ -64,7 +64,7 @@ const (
 type CustomFields struct {
 	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#resourcetypeid).
+	// Object containing the Custom Fields of the [customized resource or data type](/../api/projects/types#resourcetypeid).
 	Fields FieldContainer `json:"fields"`
 }
 
@@ -91,7 +91,7 @@ type FieldDefinition struct {
 	Type FieldType `json:"type"`
 	// Name of the Custom Field to define.
 	// Must be unique for a given [ResourceTypeId](ctp:api:type:ResourceTypeId).
-	// In case there is a FieldDefinition with the same `name` in another [Type](ctp:api:type:Type), both FieldDefinitions must have the same `type`.
+	// If a FieldDefinition with the same `name` is defined in another [Type](ctp:api:type:Type) for the same [ResourceTypeId](ctp:api:type:ResourceTypeId), then both FieldDefinitions must have the same `type`.
 	Name string `json:"name"`
 	// A human-readable label for the field.
 	Label LocalizedString `json:"label"`
@@ -476,6 +476,8 @@ const (
 	ResourceTypeIdOrderReturnItem             ResourceTypeId = "order-return-item"
 	ResourceTypeIdPayment                     ResourceTypeId = "payment"
 	ResourceTypeIdPaymentInterfaceInteraction ResourceTypeId = "payment-interface-interaction"
+	ResourceTypeIdPaymentMethod               ResourceTypeId = "payment-method"
+	ResourceTypeIdPaymentMethodInfo           ResourceTypeId = "payment-method-info"
 	ResourceTypeIdProductPrice                ResourceTypeId = "product-price"
 	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
 	ResourceTypeIdProductTailoring            ResourceTypeId = "product-tailoring"

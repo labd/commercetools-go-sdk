@@ -82,7 +82,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Login() *ByProjectKe
 }
 
 /**
-*	Returns a Customer for a given Query Predicate in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*	Returns a Customer for a given Query Predicate in a [Store](ctp:api:type:Store). Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
@@ -99,7 +99,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Get() *ByProjectKeyI
 }
 
 /**
-*	Updates the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*	Updates the Customer in a [Store](ctp:api:type:Store). Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
@@ -116,7 +116,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder) Post(body MyCustomer
 }
 
 /**
-*	Deletes the Customer in a [Store](ctp:api:type:Store). Returns a `200 OK` status if successful.
+*	Deletes the Customer in a [Store](ctp:api:type:Store). Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

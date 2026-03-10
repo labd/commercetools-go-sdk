@@ -80,6 +80,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodDelet
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Deletes a StagedQuote in a [Store](ctp:api:type:Store).
+ */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesKeyByKeyRequestMethodDelete) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

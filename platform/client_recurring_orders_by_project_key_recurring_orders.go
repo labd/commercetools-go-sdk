@@ -38,7 +38,7 @@ func (rb *ByProjectKeyRecurringOrdersRequestBuilder) Get() *ByProjectKeyRecurrin
 }
 
 /**
-*	Checks if one or more Recurring Orders exist for the provided query predicate. Returns a `200 OK` status if any Recurring Orders match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Recurring Orders exist for the provided query predicate. Returns a `200` status if any Recurring Orders match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyRecurringOrdersRequestBuilder) Head() *ByProjectKeyRecurringOrdersRequestMethodHead {
@@ -50,9 +50,10 @@ func (rb *ByProjectKeyRecurringOrdersRequestBuilder) Head() *ByProjectKeyRecurri
 
 /**
 *	Creates a Recurring Order in the Project.
-*	The Cart is validated to ensure that it is convertible to an [Order](ctp:api:type:Order). If validation fails, an error is returned.
-*
 *	Produces the [RecurringOrderCreated](ctp:api:type:RecurringOrderCreatedMessage) message.
+*
+*	The Cart is validated to ensure that it is convertible to an [Order](ctp:api:type:Order). If the validation fails, an error is returned.
+*	If the expiration date has been reached when the [Recurring Order](ctp:api:type:RecurringOrder) is processed, its [RecurringOrderState](ctp:api:type:RecurringOrderState) will be updated to `Expired`, and no Order will be created.
 *
 *	If a server-side problem occurs, indicated by a 500 Internal Server Error HTTP response, the Recurring Order creation may still successfully complete after the error is returned.
 *	If you receive this error, you should verify the status of the Recurring Order by querying a unique identifier supplied during the creation request, such as the key.

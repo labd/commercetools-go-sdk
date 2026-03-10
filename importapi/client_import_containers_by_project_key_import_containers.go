@@ -22,7 +22,7 @@ func (rb *ByProjectKeyImportContainersRequestBuilder) WithImportContainerKeyValu
 /**
 *	Creates an Import Container in the Project.
 *
-*	Generates the [ImportContainerCreated](/projects/events#import-container-created-event) Event.
+*	Generates the [ImportContainerCreated](ctp:api:type:ImportContainerCreatedEvent) Event.
 *
  */
 func (rb *ByProjectKeyImportContainersRequestBuilder) Post(body ImportContainerDraft) *ByProjectKeyImportContainersRequestMethodPost {

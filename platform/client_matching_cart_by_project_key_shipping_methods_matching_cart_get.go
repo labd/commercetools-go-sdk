@@ -65,9 +65,10 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartRequestMethodGet) WithHeaders(h
 }
 
 /**
-*	Retrieves the active ShippingMethods that can ship to the shipping address of the given Cart.
-*	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`.
-*	This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+*	Retrieves the active ShippingMethods that can ship to the shipping address of the provided Cart.
+*
+*	Each ShippingMethod contains exactly one ShippingRate with the flag `isMatching` set to `true`. This ShippingRate is used when the ShippingMethod is [added to the Cart](ctp:api:type:CartSetShippingMethodAction).
+*
 *	If a matching ShippingMethod has `isDefault` set to `true`, it is returned as the first item in the array.
 *
  */

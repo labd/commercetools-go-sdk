@@ -55,7 +55,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodHead) WithHe
 }
 
 /**
-*	Checks if one or more QuoteRequests exist for the provided query predicate. Returns a `200 OK` status if any QuoteRequests match the query predicate, or [Not Found](/../api/errors#404-not-found) otherwise.
+*	Checks if one or more QuoteRequests exist for the provided query predicate in a [Store](ctp:api:type:Store). Returns a `200` status if any QuoteRequests match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyQuoteRequestsRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

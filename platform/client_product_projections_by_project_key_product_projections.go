@@ -43,9 +43,16 @@ func (rb *ByProjectKeyProductProjectionsRequestBuilder) WithId(id string) *ByPro
 }
 
 /**
-*	Use the Product Projections query endpoint to get the current or staged representations of Products.
-*	When used with an API Client that has the `view_published_products:{projectKey}` scope,
-*	this endpoint only returns published (current) Product Projections.
+*	Retrieves the [projected](/../api/projects/productProjections#projection-dimensions) representation of [Products](ctp:api:type:Product) by [query predicates](/../api/predicates/query).
+*
+*	By default, this endpoint returns the `current` representation of Products where the `published` flag is `true`.
+*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/../api/errors#404-not-found) error.
+*
+*	Required access scopes:
+*
+*	- To retrieve the current representation of published Products (published data), the `view_published_products:{projectKey}` scope is required.
+*
+*	- To retrieve the staged representation of Products (draft data) or access unpublished Products, the API Client must have the `view_products:{projectKey}` scope.
 *
  */
 func (rb *ByProjectKeyProductProjectionsRequestBuilder) Get() *ByProjectKeyProductProjectionsRequestMethodGet {
@@ -56,7 +63,7 @@ func (rb *ByProjectKeyProductProjectionsRequestBuilder) Get() *ByProjectKeyProdu
 }
 
 /**
-*	Checks if the current or staged representation of a Product exists for the provided query predicate. Returns a `200 OK` status if any ProductProjections match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if the current or staged representation of a Product exists for the provided query predicate. Returns a `200` status if any ProductProjections match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyProductProjectionsRequestBuilder) Head() *ByProjectKeyProductProjectionsRequestMethodHead {
 	return &ByProjectKeyProductProjectionsRequestMethodHead{

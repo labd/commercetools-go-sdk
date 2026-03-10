@@ -34,6 +34,7 @@ type ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGetI
 	PriceChannel                  *string
 	PriceRecurrencePolicy         *string
 	LocaleProjection              []string
+	FilterAttributes              []string
 	Expand                        []string
 }
 
@@ -66,6 +67,9 @@ func (input *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMe
 	}
 	for _, v := range input.LocaleProjection {
 		values.Add("localeProjection", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.FilterAttributes {
+		values.Add("filter[attributes]", fmt.Sprintf("%v", v))
 	}
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
@@ -137,6 +141,14 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMetho
 	return rb
 }
 
+func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet) FilterAttributes(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGetInput{}
+	}
+	rb.params.FilterAttributes = v
+	return rb
+}
+
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet) Expand(v []string) *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGetInput{}
@@ -155,16 +167,22 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMetho
 }
 
 /**
-*	Gets the current or staged representation of a [Product](ctp:api:type:Product) by its key in the specified [Store](ctp:api:type:Store).
+*	Retrieves the [projected](/../api/projects/productProjections#projection-dimensions) representation of a [Product](ctp:api:type:Product) by its Key in the specified [Store](ctp:api:type:Store).
+*
 *	If the Store has defined some languages, countries, distribution, supply Channels, and/or Product Selection,
 *	they are used for projections based on [locale](ctp:api:type:ProductProjectionLocales), [price](ctp:api:type:ProductProjectionPrices),
 *	and [inventory](ctp:api:type:ProductProjectionInventoryEntries).
-*
-*	If [ProductSelection](ctp:api:type:ProductSelection) is used, it affects the [availability of the Product](/projects/stores#products-available-in-store) in the specified Store.
-*
+*	If [ProductSelection](ctp:api:type:ProductSelection) is used, it affects the [availability of the Product](/api/project-configuration-overview#products-available-in-store) in the specified Store.
 *	If a [ProductTailoring](ctp:api:type:ProductTailoring) exists for the Product with the given `key` and the given Store, this endpoint returns the ProductProjection with tailored data.
 *
-*	When used with an API Client that has the `view_published_products:{projectKey}` scope, this endpoint only returns published (current) Product Projections.
+*	By default, this endpoint returns the `current` representation of Products where the `published` flag is `true`.
+*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/../api/errors#404-not-found) error.
+*
+*	Required access scopes:
+*
+*	- To retrieve the current representation of published Products (published data), the `view_published_products:{projectKey}` scope is required.
+*
+*	- To retrieve the staged representation of Products (draft data) or access unpublished Products, the API Client must have the `view_products:{projectKey}` scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyProductProjectionsKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *ProductProjection, err error) {

@@ -13,7 +13,7 @@ type ByProjectKeyMeCartsByIDRequestBuilder struct {
 }
 
 /**
-*	Returns a Cart for a given `id`. Returns a `200 OK` status if successful.
+*	Returns a Cart for a given `id`. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
@@ -29,7 +29,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Get() *ByProjectKeyMeCartsByIDR
 }
 
 /**
-*	Checks if a Cart exists with the provided `id`. Returns a `200 OK` status if the Cart exists.
+*	Checks if a Cart exists with the provided `id`. Returns a `200` status if the Cart exists.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
@@ -45,7 +45,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Head() *ByProjectKeyMeCartsByID
 }
 
 /**
-*	Updates the Cart for a given `id`. Returns a `200 OK` status if successful.
+*	Updates the Cart for a given `id`. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
@@ -62,7 +62,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestBuilder) Post(body MyCartUpdate) *ByProj
 }
 
 /**
-*	Deletes the Cart for a given `id`. Returns a `200 OK` status if successful.
+*	Deletes the Cart for a given `id`. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

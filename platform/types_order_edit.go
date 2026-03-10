@@ -851,6 +851,8 @@ func (obj OrderEditSetStagedActionsAction) MarshalJSON() ([]byte, error) {
  */
 type StagedOrderAddCustomLineItemAction struct {
 	// Money value of the Custom Line Item. The value can be negative.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Money Money `json:"money"`
 	// Name of the Custom Line Item.
 	Name LocalizedString `json:"name"`
@@ -889,6 +891,8 @@ func (obj StagedOrderAddCustomLineItemAction) MarshalJSON() ([]byte, error) {
 /**
 *	A [Delivery](ctp:api:type:Delivery) can only be added to an [Order](ctp:api:type:Order) if
 *	its `shippingInfo` (for `shippingMode` = `Single`), or its `shipping` (for `shippingMode` = `Multiple`) exists.
+*
+*	Multiple Deliveries can be added to the same Order to represent split or partial shipments. However, the API doesn't validate that the cumulative quantities of Line Items or Custom Line Items across all Deliveries match or stay within the originally ordered quantities. For more information, see [Multiple Deliveries](/../api/shipping-delivery-overview#multiple-deliveries) on the Shipping and Delivery overview page.
 *
 *	Produces the [Delivery Added](ctp:api:type:DeliveryAddedMessage) Message.
 *
@@ -940,8 +944,10 @@ func (obj StagedOrderAddDeliveryAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds a [DiscountCode](ctp:api:type:DiscountCode) to the Cart to activate the related [Cart Discounts](/../api/projects/cartDiscounts).
-*	Adding a Discount Code is only possible if no [DirectDiscount](ctp:api:type:DirectDiscount) has been applied to the Order.
+*	Adds a [DiscountCode](ctp:api:type:DiscountCode) to the Order to activate the related [Cart Discounts](/../api/projects/cartDiscounts).
+*	If the related Cart Discounts are inactive or invalid, or belong to a different Store than the Order, a [DiscountCodeNonApplicableError](ctp:api:type:DiscountCodeNonApplicableError) is returned.
+*
+*	A Discount Code can be added only if no [DirectDiscount](ctp:api:type:DirectDiscount) has been applied to the Order.
 *
 *	The maximum number of Discount Codes in a Cart is restricted by a [limit](/../api/limits#carts).
 *
@@ -964,7 +970,7 @@ func (obj StagedOrderAddDiscountCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds an address to an Order when shipping to multiple addresses is desired.
+*	Adds an address to the `itemShippingAddresses` of an Order. Use this action when shipping is defined per item. For example, when shipping items to multiple addresses or when using different Shipping Methods, even if all items share the same address.
 *
  */
 type StagedOrderAddItemShippingAddressAction struct {
@@ -1025,6 +1031,8 @@ type StagedOrderAddLineItemAction struct {
 	// The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` value, and the `priceMode` to `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` values, and the `priceMode` to `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1103,6 +1111,10 @@ func (obj StagedOrderAddParcelToDeliveryAction) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Produces the [Order Payment Added](ctp:api:type:OrderPaymentAddedMessage) Message.
+*
+ */
 type StagedOrderAddPaymentAction struct {
 	// Payment to add to the [PaymentInfo](ctp:api:type:PaymentInfo).
 	// Must not be assigned to another Order or active Cart already.
@@ -1177,6 +1189,8 @@ type StagedOrderChangeCustomLineItemMoneyAction struct {
 	// Value to set.
 	// Must not be empty.
 	// Can be a negative amount.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Money Money `json:"money"`
 }
 
@@ -1236,6 +1250,8 @@ type StagedOrderChangeLineItemQuantityAction struct {
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when changing the quantity of a Line Item.
 	//
 	// The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` to the given value when changing the quantity of a Line Item with the `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	// If `externalTotalPrice` is not given and the `priceMode` is `ExternalTotal`, the external price is unset and the `priceMode` is set to `Platform`.
@@ -1525,10 +1541,12 @@ type StagedOrderRemoveLineItemAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// New value to set.
-	// If absent or `0`, the Line Item is removed from the Cart.
+	// Amount to subtract from the LineItem quantity.
+	// If omitted, the LineItem is removed from the Order.
 	Quantity *int `json:"quantity,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` to the given value when decreasing the quantity of a Line Item with the `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 	// Sets the [LineItem](ctp:api:type:LineItem) `price` and `totalPrice` to the given value when decreasing the quantity of a Line Item with the `ExternalTotal` [LineItemPriceMode](ctp:api:type:LineItemPriceMode).
 	ExternalTotalPrice *ExternalLineItemTotalPrice `json:"externalTotalPrice,omitempty"`
@@ -1571,6 +1589,10 @@ func (obj StagedOrderRemoveParcelFromDeliveryAction) MarshalJSON() ([]byte, erro
 	}{Action: "removeParcelFromDelivery", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Produces the [Order Payment Removed](ctp:api:type:OrderPaymentRemovedMessage) Message.
+*
+ */
 type StagedOrderRemovePaymentAction struct {
 	// Payment to remove from the [PaymentInfo](ctp:api:type:PaymentInfo).
 	Payment PaymentResourceIdentifier `json:"payment"`
@@ -2252,6 +2274,8 @@ type StagedOrderSetLineItemPriceAction struct {
 	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
 	// If `externalPrice` is not given and the `priceMode` is `ExternalPrice`, the external price is unset and the `priceMode` is set to `Platform`.
+	//
+	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	ExternalPrice *Money `json:"externalPrice,omitempty"`
 }
 

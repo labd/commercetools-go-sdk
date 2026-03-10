@@ -132,6 +132,10 @@ func (rb *ByProjectKeyQuoteRequestsRequestMethodGet) WithHeaders(headers http.He
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	Retrieves all QuoteRequests in the Project.
+ */
 func (rb *ByProjectKeyQuoteRequestsRequestMethodGet) Execute(ctx context.Context) (result *QuoteRequestPagedQueryResponse, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

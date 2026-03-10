@@ -29,6 +29,8 @@ func (rb *ByProjectKeyRecurrencePoliciesRequestBuilder) WithId(id string) *ByPro
 /**
 *	Retrieves Recurrence Policies in the Project.
 *
+*	The `view_recurring_orders:{projectKey}` scope is deprecated for use on this endpoint. Update your clients to use the `view_recurrence_policies:{projectKey}` scope instead. For more information, see the [Deprecations and removals](/api/deprecations-and-removals#recurrence-policies) list.
+*
  */
 func (rb *ByProjectKeyRecurrencePoliciesRequestBuilder) Get() *ByProjectKeyRecurrencePoliciesRequestMethodGet {
 	return &ByProjectKeyRecurrencePoliciesRequestMethodGet{
@@ -38,7 +40,9 @@ func (rb *ByProjectKeyRecurrencePoliciesRequestBuilder) Get() *ByProjectKeyRecur
 }
 
 /**
-*	Checks if one or more Recurrence Policies exist for the provided query predicate. Returns a `200 OK` status if any Recurrence Policies match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Recurrence Policies exist for the provided query predicate. Returns a `200` status if any Recurrence Policies match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
+*	The `view_recurring_orders:{projectKey}` scope is deprecated for use on this endpoint. Update your clients to use the `view_recurrence_policies:{projectKey}` scope instead. For more information, see the [Deprecations and removals](/api/deprecations-and-removals#recurrence-policies) list.
 *
  */
 func (rb *ByProjectKeyRecurrencePoliciesRequestBuilder) Head() *ByProjectKeyRecurrencePoliciesRequestMethodHead {
@@ -50,6 +54,8 @@ func (rb *ByProjectKeyRecurrencePoliciesRequestBuilder) Head() *ByProjectKeyRecu
 
 /**
 *	Creates a Recurrence Policy in the Project.
+*
+*	The `manage_recurring_orders:{projectKey}` scope is deprecated for use on this endpoint. Update your clients to use the `manage_recurrence_policies:{projectKey}` scope instead. For more information, see the [Deprecations and removals](/api/deprecations-and-removals#recurrence-policies) list.
 *
  */
 func (rb *ByProjectKeyRecurrencePoliciesRequestBuilder) Post(body RecurrencePolicyDraft) *ByProjectKeyRecurrencePoliciesRequestMethodPost {

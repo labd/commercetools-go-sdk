@@ -13,7 +13,11 @@ type ByProjectKeyDeploymentsByIDLogsRequestBuilder struct {
 }
 
 /**
-*	Retrieves logs for the given deployment.
+*	Specific Error Codes:
+*	- [DeploymentApplicationDoesNotExist](ctp:connect:type:DeploymentApplicationDoesNotExistError)
+*	- [DeploymentLogInvalidDate](ctp:connect:type:DeploymentLogInvalidDateError)
+*	- [DeploymentLogInvalidPageToken](ctp:connect:type:DeploymentLogInvalidPageTokenError)
+*
  */
 func (rb *ByProjectKeyDeploymentsByIDLogsRequestBuilder) Get() *ByProjectKeyDeploymentsByIDLogsRequestMethodGet {
 	return &ByProjectKeyDeploymentsByIDLogsRequestMethodGet{

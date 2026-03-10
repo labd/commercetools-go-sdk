@@ -66,7 +66,7 @@ func (rb *ByProjectKeyMeCartsByIDRequestMethodDelete) WithHeaders(headers http.H
 }
 
 /**
-*	Deletes the Cart for a given `id`. Returns a `200 OK` status if successful.
+*	Deletes the Cart for a given `id`. Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *

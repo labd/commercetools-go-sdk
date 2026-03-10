@@ -20,7 +20,7 @@ func (rb *ByProjectKeyExtensionsKeyByKeyRequestBuilder) Get() *ByProjectKeyExten
 }
 
 /**
-*	Checks if an Extension exists with the provided `key`. Returns a `200 OK` status if the Extension exists or a `404 Not Found` otherwise.
+*	Checks if an Extension exists with the provided `key`. Returns a `200` status if the Extension exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyExtensionsKeyByKeyRequestBuilder) Head() *ByProjectKeyExtensionsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyExtensionsKeyByKeyRequestMethodHead{

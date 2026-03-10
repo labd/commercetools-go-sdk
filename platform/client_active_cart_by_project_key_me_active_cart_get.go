@@ -55,7 +55,7 @@ func (rb *ByProjectKeyMeActiveCartRequestMethodGet) WithHeaders(headers http.Hea
 }
 
 /**
-*	Retrieves the Customer's most recently modified [active Cart](ctp:api:type:CartState). Returns a `200 OK` status if successful.
+*	Retrieves the Customer's most recently modified [active Cart](ctp:api:type:CartState). Returns a `200` status if successful.
 *
 *	Carts with `Merchant` or `Quote` [CartOrigin](ctp:api:type:CartOrigin) are ignored.
 *

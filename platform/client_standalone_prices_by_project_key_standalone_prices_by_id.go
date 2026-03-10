@@ -20,7 +20,7 @@ func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Get() *ByProjectKeySta
 }
 
 /**
-*	Checks if a StandalonePrice exists with the provided `id`. Returns a `200 OK` status if the StandalonePrice exists or a `404 Not Found` otherwise.
+*	Checks if a StandalonePrice exists with the provided `id`. Returns a `200` status if the StandalonePrice exists, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Head() *ByProjectKeyStandalonePricesByIDRequestMethodHead {
 	return &ByProjectKeyStandalonePricesByIDRequestMethodHead{
@@ -29,6 +29,10 @@ func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Head() *ByProjectKeySt
 	}
 }
 
+/**
+*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) or [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
+*
+ */
 func (rb *ByProjectKeyStandalonePricesByIDRequestBuilder) Post(body StandalonePriceUpdate) *ByProjectKeyStandalonePricesByIDRequestMethodPost {
 	return &ByProjectKeyStandalonePricesByIDRequestMethodPost{
 		body:   body,

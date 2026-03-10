@@ -5,10 +5,12 @@ vars:
   versionId: 1.5.0
 
 tasks:
+  default:
+    cmd: task --list-all
+
   install:
-    platform:
-      os: linux
-      arch: amd64
+    platforms:
+      - linux/amd64
     cmds:
       - bash install-script.sh
 

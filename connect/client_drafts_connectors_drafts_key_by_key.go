@@ -11,6 +11,13 @@ type ConnectorsDraftsKeyByKeyRequestBuilder struct {
 	client *Client
 }
 
+func (rb *ConnectorsDraftsKeyByKeyRequestBuilder) Delete() *ConnectorsDraftsKeyByKeyRequestMethodDelete {
+	return &ConnectorsDraftsKeyByKeyRequestMethodDelete{
+		url:    fmt.Sprintf("/connectors/drafts/key=%s", rb.key),
+		client: rb.client,
+	}
+}
+
 func (rb *ConnectorsDraftsKeyByKeyRequestBuilder) Get() *ConnectorsDraftsKeyByKeyRequestMethodGet {
 	return &ConnectorsDraftsKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/connectors/drafts/key=%s", rb.key),

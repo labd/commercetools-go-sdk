@@ -12,6 +12,10 @@ type ByProjectKeyMeQuotesKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Retrieves a Quote with the provided `key` for the authenticated Customer.
+*
+ */
 func (rb *ByProjectKeyMeQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeyMeQuotesKeyByKeyRequestMethodGet {
 	return &ByProjectKeyMeQuotesKeyByKeyRequestMethodGet{
 		url:    fmt.Sprintf("/%s/me/quotes/key=%s", rb.projectKey, rb.key),
@@ -20,7 +24,9 @@ func (rb *ByProjectKeyMeQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeyMeQuote
 }
 
 /**
-*	Checks if a Quote exists with the provided `key`. Returns a `200 OK` status if the Quote exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Quote exists with the provided `key` for the authenticated Customer.
+*	Returns a `200 OK` status if the Quote exists or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
  */
 func (rb *ByProjectKeyMeQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyMeQuotesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyMeQuotesKeyByKeyRequestMethodHead{
@@ -29,6 +35,10 @@ func (rb *ByProjectKeyMeQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyMeQuot
 	}
 }
 
+/**
+*	Updates a Quote for the authenticated Customer using one or more [update actions](/../api/projects/quotes#update-actions).
+*
+ */
 func (rb *ByProjectKeyMeQuotesKeyByKeyRequestBuilder) Post(body MyQuoteUpdate) *ByProjectKeyMeQuotesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyMeQuotesKeyByKeyRequestMethodPost{
 		body:   body,

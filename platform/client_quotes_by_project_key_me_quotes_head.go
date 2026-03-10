@@ -55,7 +55,9 @@ func (rb *ByProjectKeyMeQuotesRequestMethodHead) WithHeaders(headers http.Header
 }
 
 /**
-*	Checks if one or more Quotes exist for the provided query predicate. Returns a `200 OK` status if any Quotes match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Quotes exist for the provided query predicate for the authenticated Customer.
+*	Returns a `200 OK` status if any Quotes match the query predicate, or a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*
  */
 func (rb *ByProjectKeyMeQuotesRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

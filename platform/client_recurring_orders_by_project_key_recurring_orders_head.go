@@ -55,7 +55,7 @@ func (rb *ByProjectKeyRecurringOrdersRequestMethodHead) WithHeaders(headers http
 }
 
 /**
-*	Checks if one or more Recurring Orders exist for the provided query predicate. Returns a `200 OK` status if any Recurring Orders match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if one or more Recurring Orders exist for the provided query predicate. Returns a `200` status if any Recurring Orders match the query predicate, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyRecurringOrdersRequestMethodHead) Execute(ctx context.Context) error {

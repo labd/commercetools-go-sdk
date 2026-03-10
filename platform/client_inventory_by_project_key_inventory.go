@@ -33,7 +33,7 @@ func (rb *ByProjectKeyInventoryRequestBuilder) Get() *ByProjectKeyInventoryReque
 }
 
 /**
-*	Checks if one or more InventoryEntries exist for the provided query predicate. Returns a `200 OK` status if any Inventory Entries match the Query Predicate, a `404 Not Found` otherwise.
+*	Checks if one or more InventoryEntries exist for the provided query predicate. Returns a `200` status if any Inventory Entries match the Query Predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyInventoryRequestBuilder) Head() *ByProjectKeyInventoryRequestMethodHead {
 	return &ByProjectKeyInventoryRequestMethodHead{
@@ -43,7 +43,12 @@ func (rb *ByProjectKeyInventoryRequestBuilder) Head() *ByProjectKeyInventoryRequ
 }
 
 /**
+*	Creates an InventoryEntry in the Project.
+*
+*	If quantity limits are provided, existing Line Items that reference a Product Variant with an SKU that matches the Inventory Entry can be affected. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*
 *	Produces the [InventoryEntryCreated](ctp:api:type:InventoryEntryCreatedMessage) Message.
+*
  */
 func (rb *ByProjectKeyInventoryRequestBuilder) Post(body InventoryEntryDraft) *ByProjectKeyInventoryRequestMethodPost {
 	return &ByProjectKeyInventoryRequestMethodPost{

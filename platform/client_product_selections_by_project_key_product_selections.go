@@ -33,7 +33,7 @@ func (rb *ByProjectKeyProductSelectionsRequestBuilder) Get() *ByProjectKeyProduc
 }
 
 /**
-*	Checks if one or more ProductSelections exist for the provided query predicate. Returns a `200 OK` status if any ProductSelections match the query predicate, or a `404 Not Found` otherwise.
+*	Checks if one or more ProductSelections exist for the provided query predicate. Returns a `200` status if any ProductSelections match the query predicate, or a `404` status otherwise.
  */
 func (rb *ByProjectKeyProductSelectionsRequestBuilder) Head() *ByProjectKeyProductSelectionsRequestMethodHead {
 	return &ByProjectKeyProductSelectionsRequestMethodHead{

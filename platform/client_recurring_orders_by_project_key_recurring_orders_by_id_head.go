@@ -28,7 +28,7 @@ func (rb *ByProjectKeyRecurringOrdersByIDRequestMethodHead) WithHeaders(headers 
 }
 
 /**
-*	Checks if a Recurring Order exists with the provided `id`. Returns a `200 OK` status if the Recurring Order exists, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
+*	Checks if a Recurring Order exists with the provided `id`. Returns a `200` status if the Recurring Order exists, or a [NotFound](ctp:api:type:ResourceNotFoundError) error otherwise.
 *
  */
 func (rb *ByProjectKeyRecurringOrdersByIDRequestMethodHead) Execute(ctx context.Context) error {
