@@ -18,7 +18,7 @@ jobs:
     steps:
       - name: get app token
         id: get-app-token
-        uses: labd/action-gh-app-token@main
+        uses: labd/action-gh-app-token@7ff980ba334a28226bad9c85412b4a84c23a3787 # main
         with:
           app-id: ${{ secrets.RD_APP_ID }}
           private-key: ${{ secrets.RD_APP_PRIVATE_KEY }}

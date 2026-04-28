@@ -11,8 +11,6 @@ updates:
       go:
         patterns:
           - "*"
-    cooldown:
-      default-days: 7
 
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -25,5 +23,3 @@ updates:
       github-actions:
         patterns:
           - "*"
-    cooldown:
-      default-days: 7
