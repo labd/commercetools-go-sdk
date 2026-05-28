@@ -153,6 +153,8 @@ type DeploymentConfigurationApplication struct {
 	StandardConfiguration []ConfigurationValue `json:"standardConfiguration"`
 	// Contains values of secret keys. Cannot be accessed after being set.
 	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
+	// Cron expression that overrides the default schedule defined in the `connect.yaml` file for `job` applications. If not set, the default schedule from the `connect.yaml` file is used.
+	Schedule *string `json:"schedule,omitempty"`
 }
 
 /**
@@ -472,6 +474,8 @@ const (
 	RegionEuropeWest1Gcp         Region = "europe-west1.gcp"
 	RegionUsCentral1Gcp          Region = "us-central1.gcp"
 	RegionAustraliaSoutheast1Gcp Region = "australia-southeast1.gcp"
+	RegionUsEast2Aws             Region = "us-east-2.aws"
+	RegionEuCentral1Aws          Region = "eu-central-1.aws"
 )
 
 /**

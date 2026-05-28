@@ -139,13 +139,13 @@ type ProductSelectionAssignment struct {
 	// If undefined all Variants of the referenced Product are included.
 	//
 	// This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
-	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
+	// The list of SKUs will be updated automatically on any published change of those performed on the respective Product itself. Staged changes do not affect this field.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
 	// Defines which particular Variants of the Product are excluded from the Product Selection.
 	// If undefined all Variants of the referenced Product are excluded.
 	//
 	// This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
-	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
+	// The list of SKUs will be updated automatically on any published change of those performed on the respective Product itself. Staged changes do not affect this field.
 	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
 }
 
@@ -730,10 +730,12 @@ func (obj ProductSelectionSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the ProductSelection with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ProductSelection with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ProductSelection.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ProductSelection.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ProductSelection.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

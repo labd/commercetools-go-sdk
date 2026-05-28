@@ -27,7 +27,7 @@ type PaymentMethod struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Reference to a BusinessUnit associated with the PaymentMethod.
 	//
-	// Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// Only available for [B2B](/../offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// Payment Method used for the Payment—for example, a credit card or direct debit.
 	Method *string `json:"method,omitempty"`
@@ -62,7 +62,7 @@ type PaymentMethodDraft struct {
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 	// Reference to a BusinessUnit the PaymentMethod should belong to.
 	//
-	// Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// Only available for [B2B](/../offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// Payment method to use for the Payment—for example, a credit card or direct debit.
 	Method *string `json:"method,omitempty"`
@@ -273,10 +273,12 @@ func (obj PaymentMethodSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentMethodSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the PaymentMethod with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the PaymentMethod with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the PaymentMethod.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the PaymentMethod.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the PaymentMethod.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

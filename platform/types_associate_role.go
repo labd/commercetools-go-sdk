@@ -374,7 +374,9 @@ type AssociateRoleSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the AssociateRole with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the AssociateRole.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](ctp:api:type:CustomFields) for the AssociateRole.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the AssociateRole.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

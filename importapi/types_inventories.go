@@ -21,6 +21,8 @@ type InventoryImport struct {
 	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Maps to `InventoryEntry.expectedDelivery`
 	ExpectedDelivery *time.Time `json:"expectedDelivery,omitempty"`
+	// Maps to `InventoryEntry.reservationExpirationInMinutes`
+	ReservationExpirationInMinutes *int `json:"reservationExpirationInMinutes,omitempty"`
 	// Maps to `InventoryEntry.supplyChannel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	SupplyChannel *ChannelKeyReference `json:"supplyChannel,omitempty"`
 	// Maps to `InventoryEntry.custom`.

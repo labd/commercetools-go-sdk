@@ -43,7 +43,7 @@ type StagedQuote struct {
 	// The purchase order number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
 	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Staged Quote. Only available for [B2B](/../offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
 	Store *StoreKeyReference `json:"store,omitempty"`
@@ -58,7 +58,7 @@ type StagedQuoteDraft struct {
 	QuoteRequestStateToAccepted *bool `json:"quoteRequestStateToAccepted,omitempty"`
 	// User-defined unique identifier for the StagedQuote.
 	Key *string `json:"key,omitempty"`
-	// [Custom Fields](/../api/projects/custom-fields) to be added to the StagedQuote.
+	// [Custom Fields](ctp:api:type:CustomFields) to be added to the StagedQuote.
 	//
 	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) and added to the StagedQuote.
 	// - If empty, the Custom Fields on the referenced [QuoteRequest](ctp:api:type:QuoteRequest) are added to the StagedQuote automatically.
@@ -259,10 +259,12 @@ func (obj StagedQuoteSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type StagedQuoteSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the StagedQuote with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the StagedQuote with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the StagedQuote.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the StagedQuote.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the StagedQuote.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

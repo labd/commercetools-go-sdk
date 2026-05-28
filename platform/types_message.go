@@ -1617,8 +1617,60 @@ func mapDiscriminatorMessage(input interface{}) (Message, error) {
 			}
 		}
 		return obj, nil
+	case "InventoryEntryOutOfStock":
+		obj := InventoryEntryOutOfStockMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "InventoryEntryQuantitySet":
 		obj := InventoryEntryQuantitySetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "InventoryEntryReorderPoint":
+		obj := InventoryEntryReorderPointMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "InventoryEntryReservationExpirationInMinutesSet":
+		obj := InventoryEntryReservationExpirationInMinutesSetMessage{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Resource != nil {
+			var err error
+			obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
+	case "InventoryEntrySafetyStock":
+		obj := InventoryEntrySafetyStockMessage{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -10617,6 +10669,66 @@ func (obj InventoryEntryDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` goes to 0.
+*
+ */
+type InventoryEntryOutOfStockMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) whose `quantityOnStock` went to 0.
+	Sku string `json:"sku"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) quantity on stock went to 0.
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntryOutOfStockMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryOutOfStockMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryOutOfStockMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryOutOfStockMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryOutOfStock", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Add Quantity](ctp:api:type:InventoryEntryAddQuantityAction), [Remove Quantity](ctp:api:type:InventoryEntryRemoveQuantityAction) or [Change Quantity](ctp:api:type:InventoryEntryChangeQuantityAction) update action.
 *	Inventory changes as a result of [Order creation](ctp:api:endpoint:/{projectKey}/orders:POST) do not trigger this message.
 *
@@ -10683,6 +10795,190 @@ func (obj InventoryEntryQuantitySetMessage) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reaches the configured reorder point level. For more information, see [InventoryEntryStockLevels](ctp:api:type:InventoryEntryStockLevels).
+*
+ */
+type InventoryEntryReorderPointMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) whose `quantityOnStock` reached the configured reorder point level.
+	Sku string `json:"sku"`
+	// The `quantityOnStock` of the [InventoryEntry](ctp:api:type:InventoryEntry) at the time the reorder point level was reached.
+	QuantityOnStock int `json:"quantityOnStock"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reached the configured reorder point level.
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntryReorderPointMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryReorderPointMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryReorderPointMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryReorderPointMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryReorderPoint", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action.
+*
+ */
+type InventoryEntryReservationExpirationInMinutesSetMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// `reservationExpirationInMinutes` value of the [Inventory Entry](ctp:api:type:InventoryEntry) after the [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action.
+	NewReservationExpirationInMinutes *int `json:"newReservationExpirationInMinutes,omitempty"`
+	// `reservationExpirationInMinutes` value of the [Inventory Entry](ctp:api:type:InventoryEntry) before the [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action.
+	OldReservationExpirationInMinutes *int `json:"oldReservationExpirationInMinutes,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntryReservationExpirationInMinutesSetMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntryReservationExpirationInMinutesSetMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryReservationExpirationInMinutesSetMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryReservationExpirationInMinutesSetMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryReservationExpirationInMinutesSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reaches the configured safety stock level. For more information, see [InventoryEntryStockLevels](ctp:api:type:InventoryEntryStockLevels).
+*
+ */
+type InventoryEntrySafetyStockMessage struct {
+	// Unique identifier of the Message. Can be used to track which Messages have been processed.
+	ID string `json:"id"`
+	// Version of a resource. In case of Messages, this is always `1`.
+	Version int `json:"version"`
+	// Date and time (UTC) the Message was generated.
+	CreatedAt time.Time `json:"createdAt"`
+	// Value of `createdAt`.
+	LastModifiedAt time.Time `json:"lastModifiedAt"`
+	// IDs and references that last modified the Message.
+	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
+	// IDs and references that created the Message.
+	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
+	// Message number in relation to other Messages for a given resource. The `sequenceNumber` of the next Message for the resource is the successor of the `sequenceNumber` of the current Message. Meaning, the `sequenceNumber` of the next Message equals the `sequenceNumber` of the current Message + 1.
+	// `sequenceNumber` can be used to ensure that Messages are processed in the correct order for a particular resource.
+	SequenceNumber int `json:"sequenceNumber"`
+	// [Reference](ctp:api:type:Reference) to the resource on which the change or action was performed.
+	Resource Reference `json:"resource"`
+	// Version of the resource on which the change or action was performed.
+	ResourceVersion int `json:"resourceVersion"`
+	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
+	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) whose `quantityOnStock` reached the configured safety stock level.
+	Sku string `json:"sku"`
+	// The `quantityOnStock` of the [InventoryEntry](ctp:api:type:InventoryEntry) at the time the safety stock level was reached.
+	QuantityOnStock int `json:"quantityOnStock"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reached the configured safety stock level.
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *InventoryEntrySafetyStockMessage) UnmarshalJSON(data []byte) error {
+	type Alias InventoryEntrySafetyStockMessage
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Resource != nil {
+		var err error
+		obj.Resource, err = mapDiscriminatorReference(obj.Resource)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntrySafetyStockMessage) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySafetyStockMessage
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntrySafetyStock", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -24163,8 +24459,32 @@ func mapDiscriminatorMessagePayload(input interface{}) (MessagePayload, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "InventoryEntryOutOfStock":
+		obj := InventoryEntryOutOfStockMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "InventoryEntryQuantitySet":
 		obj := InventoryEntryQuantitySetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InventoryEntryReorderPoint":
+		obj := InventoryEntryReorderPointMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InventoryEntryReservationExpirationInMinutesSet":
+		obj := InventoryEntryReservationExpirationInMinutesSetMessagePayload{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "InventoryEntrySafetyStock":
+		obj := InventoryEntrySafetyStockMessagePayload{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -27516,6 +27836,27 @@ func (obj InventoryEntryDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generated after [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` goes to 0.
+*
+ */
+type InventoryEntryOutOfStockMessagePayload struct {
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) whose `quantityOnStock` went to 0.
+	Sku string `json:"sku"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) quantity on stock went to 0.
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryOutOfStockMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryOutOfStockMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryOutOfStock", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Generated after a successful [Add Quantity](ctp:api:type:InventoryEntryAddQuantityAction), [Remove Quantity](ctp:api:type:InventoryEntryRemoveQuantityAction) or [Change Quantity](ctp:api:type:InventoryEntryChangeQuantityAction) update action.
 *	Inventory changes as a result of [Order creation](ctp:api:endpoint:/{projectKey}/orders:POST) do not trigger this message.
 *
@@ -27543,6 +27884,73 @@ func (obj InventoryEntryQuantitySetMessagePayload) MarshalJSON() ([]byte, error)
 		Action string `json:"type"`
 		*Alias
 	}{Action: "InventoryEntryQuantitySet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reaches the configured reorder point level. For more information, see [InventoryEntryStockLevels](ctp:api:type:InventoryEntryStockLevels).
+*
+ */
+type InventoryEntryReorderPointMessagePayload struct {
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) whose `quantityOnStock` reached the configured reorder point level.
+	Sku string `json:"sku"`
+	// The `quantityOnStock` of the [InventoryEntry](ctp:api:type:InventoryEntry) at the time the reorder point level was reached.
+	QuantityOnStock int `json:"quantityOnStock"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reached the configured reorder point level.
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryReorderPointMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryReorderPointMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryReorderPoint", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after a successful [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action.
+*
+ */
+type InventoryEntryReservationExpirationInMinutesSetMessagePayload struct {
+	// `reservationExpirationInMinutes` value of the [Inventory Entry](ctp:api:type:InventoryEntry) after the [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action.
+	NewReservationExpirationInMinutes *int `json:"newReservationExpirationInMinutes,omitempty"`
+	// `reservationExpirationInMinutes` value of the [Inventory Entry](ctp:api:type:InventoryEntry) before the [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action.
+	OldReservationExpirationInMinutes *int `json:"oldReservationExpirationInMinutes,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntryReservationExpirationInMinutesSetMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntryReservationExpirationInMinutesSetMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntryReservationExpirationInMinutesSet", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Generated after [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reaches the configured safety stock level. For more information, see [InventoryEntryStockLevels](ctp:api:type:InventoryEntryStockLevels).
+*
+ */
+type InventoryEntrySafetyStockMessagePayload struct {
+	// The `sku` of the [InventoryEntry](ctp:api:type:InventoryEntry) whose `quantityOnStock` reached the configured safety stock level.
+	Sku string `json:"sku"`
+	// The `quantityOnStock` of the [InventoryEntry](ctp:api:type:InventoryEntry) at the time the safety stock level was reached.
+	QuantityOnStock int `json:"quantityOnStock"`
+	// [Reference](ctp:api:type:Reference) to the [Channel](ctp:api:type:Channel) where the [InventoryEntry](ctp:api:type:InventoryEntry) `quantityOnStock` reached the configured safety stock level.
+	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj InventoryEntrySafetyStockMessagePayload) MarshalJSON() ([]byte, error) {
+	type Alias InventoryEntrySafetyStockMessagePayload
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "InventoryEntrySafetyStock", Alias: (*Alias)(&obj)})
 }
 
 type OrderMessagePayload interface{}

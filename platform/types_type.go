@@ -482,6 +482,7 @@ const (
 	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
 	ResourceTypeIdProductTailoring            ResourceTypeId = "product-tailoring"
 	ResourceTypeIdQuote                       ResourceTypeId = "quote"
+	ResourceTypeIdReservation                 ResourceTypeId = "reservation"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
 	ResourceTypeIdRecurringOrder              ResourceTypeId = "recurring-order"
 	ResourceTypeIdShipping                    ResourceTypeId = "shipping"

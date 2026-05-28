@@ -1413,10 +1413,12 @@ func (obj CartDiscountSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the CartDiscount with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the CartDiscount with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the CartDiscount.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CartDiscount.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the CartDiscount.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

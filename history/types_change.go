@@ -2661,6 +2661,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetTransactionInterfaceIdChange":
+		obj := SetTransactionInterfaceIdChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ShippingMethodAddShippingRateChange":
 		obj := ShippingMethodAddShippingRateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -4384,6 +4390,13 @@ type ChangeLocalizedNameChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 	// Value after the change.
 	NextValue LocalizedString `json:"nextValue"`
+	// Product data that was updated.
+	//
+	// - `staged`, if the staged [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	// - `current`, if the current [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	//
+	// This field is only present if the change is related to the Product entity.
+	CatalogData string `json:"catalogData"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8018,6 +8031,13 @@ type SetLocalizedDescriptionChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 	// Value after the change.
 	NextValue LocalizedString `json:"nextValue"`
+	// Product data that was updated.
+	//
+	// - `staged`, if the staged [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	// - `current`, if the current [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	//
+	// This field is only present if the change is related to the Product entity.
+	CatalogData string `json:"catalogData"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -11804,6 +11824,29 @@ func (obj SetTaxedShippingPriceChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetTaxedShippingPriceChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Transaction InterfaceId](ctp:api:type:PaymentSetTransactionInterfaceIdAction) update action.
+ */
+type SetTransactionInterfaceIdChange struct {
+	Change string `json:"change"`
+	// Holds information about the updated Transaction.
+	Transaction TransactionChangeValue `json:"transaction"`
+	// Value before the change.
+	PreviousValue string `json:"previousValue"`
+	// Value after the change.
+	NextValue string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetTransactionInterfaceIdChange) MarshalJSON() ([]byte, error) {
+	type Alias SetTransactionInterfaceIdChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetTransactionInterfaceIdChange", Alias: (*Alias)(&obj)})
 }
 
 /**
