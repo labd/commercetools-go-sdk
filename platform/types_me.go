@@ -212,7 +212,7 @@ type MyCartDraft struct {
 	Currency string `json:"currency"`
 	// Email address of the Customer the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Store the Cart should belong to. Once set, it cannot be updated.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -1677,10 +1677,12 @@ func (obj MyBusinessUnitSetAddressCustomFieldAction) MarshalJSON() ([]byte, erro
 *
  */
 type MyBusinessUnitSetAddressCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `address`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 	// ID of the `address` to be extended.
 	AddressId string `json:"addressId"`
@@ -1744,10 +1746,12 @@ func (obj MyBusinessUnitSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyBusinessUnitSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) for the BusinessUnit.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the BusinessUnit.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1852,7 +1856,7 @@ func (obj MyCartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](/../api/projects/custom-fields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
+*	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](ctp:api:type:CustomFields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
 *	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
 *
@@ -1964,7 +1968,10 @@ func (obj MyCartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() 
 *	it will be changed to `ExternalPrice` and the existing `externalPrice` value, i.e. `LineItem.price`, will be retained.
 *	The LineItem total will be calculated by the system instead, so that the `externalTotalPrice` will be dropped.
 *
-*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/inventory-overview#quantity-limits).
+*
+*	If using [InventoryMode](ctp:api:type:InventoryMode) `ReserveOnCart`:
+*	- If the requested quantity cannot be reserved, the Line Item quantity does not change and a reservation warning is returned in the Cart response.
 *
  */
 type MyCartChangeLineItemQuantityAction struct {
@@ -2212,10 +2219,12 @@ func (obj MyCartSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Cart with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Cart with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Cart.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Cart.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Cart.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2295,10 +2304,12 @@ type MyCartSetLineItemCustomTypeAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Line Item.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Line Item.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2360,7 +2371,7 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 /**
 *	Performing this action does not reserve stock. Stock is only reserved at Order creation if the [InventoryMode](ctp:api:type:InventoryMode) of the Cart is `TrackOnly` or `ReserveOnOrder`.
 *
-*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/inventory-overview#quantity-limits).
 *
  */
 type MyCartSetLineItemSupplyChannelAction struct {
@@ -2691,10 +2702,12 @@ func (obj MyCustomerSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCustomerSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the MyCustomer.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyCustomer.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the MyCustomer.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2982,9 +2995,11 @@ func (obj MyPaymentSetMethodInfoCustomFieldAction) MarshalJSON() ([]byte, error)
 *
  */
 type MyPaymentSetMethodInfoCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](ctp:api:type:CustomFields).
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `paymentMethodInfo`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `paymentMethodInfo`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3332,10 +3347,12 @@ func (obj MyShoppingListSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the MyShoppingList with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the MyShoppingList with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the MyShoppingList.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyShoppingList.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the MyShoppingList.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3409,10 +3426,12 @@ func (obj MyShoppingListSetLineItemCustomFieldAction) MarshalJSON() ([]byte, err
 type MyShoppingListSetLineItemCustomTypeAction struct {
 	// Unique identifier of an existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) in the [ShoppingList](ctp:api:type:ShoppingList).
 	LineItemId string `json:"lineItemId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ShoppingListLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingListLineItem.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ShoppingListLineItem.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3454,10 +3473,12 @@ type MyShoppingListSetTextLineItemCustomTypeAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the TextLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the TextLineItem.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the TextLineItem.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

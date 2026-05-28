@@ -411,7 +411,9 @@ type ProductProjection struct {
 	State *StateReference `json:"state,omitempty"`
 	// Review statistics of the [Product](ctp:api:type:Product).
 	ReviewRatingStatistics *ReviewRatingStatistics `json:"reviewRatingStatistics,omitempty"`
-	// Indicates whether the Prices of the Product Projection are [embedded](ctp:api:type:Price) or [standalone](ctp:api:type:StandalonePrice). [Projecting Prices](#prices) only works with `Embedded`, there is currently no support for `Standalone`.
+	// Indicates whether the Prices of the Product Projection are [embedded](ctp:api:type:Price) or [standalone](ctp:api:type:StandalonePrice).
+	//
+	// When [projecting Prices by Store](/../api/projects/productProjections#projection-by-store), the API supports only Embedded Prices (`Embedded`).
 	PriceMode *ProductPriceModeEnum `json:"priceMode,omitempty"`
 	// Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinitionDraft).
 	Attributes []Attribute `json:"attributes"`
@@ -846,12 +848,13 @@ type ProductVariant struct {
 	//
 	// This is different from [Product](ctp:api:type:Product) `key`.
 	Key *string `json:"key,omitempty"`
-	// The Embedded Prices of the Product Variant.
-	// Cannot contain two Prices of the same Price scope (with same currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
+	// If the Product is [projected by Store](/../api/projects/productProjections#projection-by-store), this field only contains Embedded Prices that are valid for that Store.
+	//
+	// Cannot contain two Embedded Prices with the same scopes (currency, country, Customer Group, Channel, `validFrom` and `validUntil`).
 	Prices []Price `json:"prices"`
 	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
-	// Only available when [price selection](/../api/pricing-and-discounts-overview#price-selection) is used.
+	// Only present when [price selection](/../api/pricing-and-discounts-overview#price-selection) is applied.
 	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
 	Price *Price `json:"price,omitempty"`
 	// Images of the Product Variant.
@@ -863,13 +866,13 @@ type ProductVariant struct {
 	// May not contain the latest Inventory State (it is [eventually consistent](/general-concepts#eventual-consistency)).
 	Availability *ProductVariantAvailability `json:"availability,omitempty"`
 	// `true` if the Product Variant matches the search query.
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request.
+	// Only available in response to a [Product Projection Search](/../api/projects/product-projection-search) request.
 	IsMatchingVariant *bool `json:"isMatchingVariant,omitempty"`
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request
+	// Only available in response to a [Product Projection Search](/../api/projects/product-projection-search) request
 	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	// Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
 	ScopedPrice *ScopedPrice `json:"scopedPrice,omitempty"`
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
+	// Only available in response to a [Product Projection Search](/../api/projects/product-projection-search) request
 	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
 	// Only available when [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) is used.
@@ -1418,6 +1421,10 @@ func (obj ProductChangeNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action produces the [ProductPriceChanged](ctp:api:type:ProductPriceChangedMessage) Message.
+*
+ */
 type ProductChangePriceAction struct {
 	// The `id` of the Embedded Price to update.
 	PriceId string `json:"priceId"`
@@ -1733,10 +1740,12 @@ type ProductSetAssetCustomTypeAction struct {
 	AssetId *string `json:"assetId,omitempty"`
 	// The `key` of the Asset to update.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Asset.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Asset.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2228,10 +2237,12 @@ type ProductSetProductPriceCustomTypeAction struct {
 	PriceId string `json:"priceId"`
 	// If `true`, only the staged Embedded Price is updated. If `false`, both the current and staged Embedded Price is updated.
 	Staged *bool `json:"staged,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Price with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Price with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Embedded Price.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Embedded Price.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Embedded Price.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

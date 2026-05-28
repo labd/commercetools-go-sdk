@@ -18,7 +18,7 @@ type DiscountCodeImport struct {
 	Name *LocalizedString `json:"name,omitempty"`
 	// Maps to `DiscountCode.description`.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Maps to `DiscountCode.code`. This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
+	// Maps to `DiscountCode.code`. This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](ctp:import:type:InvalidFieldsUpdateError) error.
 	Code string `json:"code"`
 	// Maps to `DiscountCode.cartDiscounts`. If the referenced [CartDiscounts](ctp:api:type:CartDiscount) do not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CartDiscounts are created.
 	CartDiscounts []CartDiscountKeyReference `json:"cartDiscounts"`

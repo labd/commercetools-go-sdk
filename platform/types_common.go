@@ -382,7 +382,7 @@ type ClientLogging struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
@@ -398,7 +398,7 @@ type CreatedBy struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was created.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Project when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/commerce-b2b)-enabled Project when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 	// Indicates if the resource was created indirectly.
 	AttributedTo *Attribution `json:"attributedTo,omitempty"`
@@ -548,7 +548,7 @@ type LastModifiedBy struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was modified.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 	// Indicates if the resource was modified indirectly.
 	AttributedTo *Attribution `json:"attributedTo,omitempty"`
@@ -571,7 +571,7 @@ type Money struct {
 	//
 	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	CentAmount int `json:"centAmount"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 }
 
@@ -583,6 +583,23 @@ type MoneyType string
 const (
 	MoneyTypeCentPrecision MoneyType = "centPrecision"
 	MoneyTypeHighPrecision MoneyType = "highPrecision"
+)
+
+/**
+*	Currencies whose fraction digits are not compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+*
+*	These currencies are treated separately (from their ISO equivalents); for example, a Product Discount for `HUF0` will not apply to a `HUF` price.
+*
+ */
+type NonStandardCurrency string
+
+const (
+	NonStandardCurrencyCZK0 NonStandardCurrency = "CZK0"
+	NonStandardCurrencyHUF0 NonStandardCurrency = "HUF0"
+	NonStandardCurrencyILS0 NonStandardCurrency = "ILS0"
+	NonStandardCurrencyKZT0 NonStandardCurrency = "KZT0"
+	NonStandardCurrencyTRY0 NonStandardCurrency = "TRY0"
+	NonStandardCurrencyTWD0 NonStandardCurrency = "TWD0"
 )
 
 /**
@@ -894,6 +911,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "reservation":
+		obj := ReservationReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "category":
 		obj := CategoryReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -944,6 +967,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return obj, nil
 	case "discount-group":
 		obj := DiscountGroupReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "extension":
+		obj := ExtensionReference{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1136,6 +1165,7 @@ const (
 	ReferenceTypeIdQuoteRequest          ReferenceTypeId = "quote-request"
 	ReferenceTypeIdRecurrencePolicy      ReferenceTypeId = "recurrence-policy"
 	ReferenceTypeIdRecurringOrder        ReferenceTypeId = "recurring-order"
+	ReferenceTypeIdReservation           ReferenceTypeId = "reservation"
 	ReferenceTypeIdReview                ReferenceTypeId = "review"
 	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
 	ReferenceTypeIdShoppingList          ReferenceTypeId = "shopping-list"
@@ -1231,6 +1261,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 		return obj, nil
 	case "discount-group":
 		obj := DiscountGroupResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "extension":
+		obj := ExtensionResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1471,7 +1507,7 @@ type CentPrecisionMoney struct {
 	//
 	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	CentAmount int `json:"centAmount"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// The number of default fraction digits for the given currency, like `2` for EUR or `0` for JPY.
 	FractionDigits int `json:"fractionDigits"`
@@ -1498,7 +1534,7 @@ type HighPrecisionMoney struct {
 	//
 	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
 	CentAmount int `json:"centAmount"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// Number of digits after the decimal separator, greater than the default number of fraction digits for a currency.
 	FractionDigits int `json:"fractionDigits"`
@@ -1560,7 +1596,7 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 type CentPrecisionMoneyDraft struct {
 	// Amount in the smallest indivisible unit of a currency.
 	CentAmount *int `json:"centAmount,omitempty"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// This field is optional for cent precision. If provided, it must be equal to the default number of fraction digits for the specified currency.
 	FractionDigits *int `json:"fractionDigits,omitempty"`
@@ -1588,7 +1624,7 @@ type HighPrecisionMoneyDraft struct {
 	//
 	// If `centAmount` is not provided, the API calculates the value automatically using the default rounding mode half even.
 	CentAmount *int `json:"centAmount,omitempty"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// Number of fraction digits for a specified high precision money. It must be greater than the default number of fraction digits for the specified currency.
 	FractionDigits int `json:"fractionDigits"`

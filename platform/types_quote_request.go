@@ -86,7 +86,7 @@ type QuoteRequest struct {
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// The [Cart](ctp:api:type:Cart) from which a Quote is requested.
 	Cart *CartReference `json:"cart,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request. Only available for [B2B](/../offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
@@ -379,10 +379,12 @@ func (obj QuoteRequestSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteRequestSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the QuoteRequest with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the QuoteRequest with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the QuoteRequest.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the QuoteRequest.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the QuoteRequest.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

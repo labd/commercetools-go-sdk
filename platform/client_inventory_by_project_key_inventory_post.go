@@ -56,9 +56,9 @@ func (rb *ByProjectKeyInventoryRequestMethodPost) WithHeaders(headers http.Heade
 }
 
 /**
-*	Creates an InventoryEntry in the Project.
+*	Creates an InventoryEntry in the Project. Only one InventoryEntry can be created for a combination of a SKU and a supply channel.
 *
-*	If quantity limits are provided, existing Line Items that reference a Product Variant with an SKU that matches the Inventory Entry can be affected. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*	If quantity limits are provided, existing Line Items that reference a Product Variant with an SKU that matches the Inventory Entry can be affected. For more information, see [Quantity limits](/../api/inventory-overview#quantity-limits).
 *
 *	Produces the [InventoryEntryCreated](ctp:api:type:InventoryEntryCreatedMessage) Message.
 *

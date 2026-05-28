@@ -9,7 +9,7 @@ import (
 )
 
 type PriceFunction struct {
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// To calculate a Price based on the score, use `+`, `-`, `*` and parentheses. The score is inserted with `x`. The function returns the cent amount.
 	//
@@ -516,6 +516,8 @@ func (obj ShippingMethodAddShippingRateAction) MarshalJSON() ([]byte, error) {
 
 type ShippingMethodAddZoneAction struct {
 	// Value to add to `zoneRates`.
+	//
+	// Adds a new [ZoneRate](ctp:api:type:ZoneRate) entry to the `zoneRates` array with the specified [Zone](ctp:api:type:Zone) and an empty `shippingRates` array. After adding the Zone, you can add [ShippingRates](ctp:api:type:ShippingRate) for this Zone using the [Add ShippingRate](ctp:api:type:ShippingMethodAddShippingRateAction) update action.
 	Zone ZoneResourceIdentifier `json:"zone"`
 }
 
@@ -610,6 +612,8 @@ func (obj ShippingMethodRemoveShippingRateAction) MarshalJSON() ([]byte, error) 
 
 type ShippingMethodRemoveZoneAction struct {
 	// Value to remove from `zoneRates`.
+	//
+	// Removes the entire [ZoneRate](ctp:api:type:ZoneRate) entry for the specified [Zone](ctp:api:type:Zone) from the `zoneRates` array. This action deletes both the Zone reference and all [ShippingRates](ctp:api:type:ShippingRate) associated with that Zone.
 	Zone ZoneResourceIdentifier `json:"zone"`
 }
 
@@ -647,10 +651,12 @@ func (obj ShippingMethodSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShippingMethodSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the ShippingMethod with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ShippingMethod with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ShippingMethod.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShippingMethod.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ShippingMethod.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

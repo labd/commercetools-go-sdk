@@ -18,15 +18,15 @@ type StandalonePriceImport struct {
 	Sku string `json:"sku"`
 	// Maps to `StandalonePrice.value`.
 	Value TypedMoney `json:"value"`
-	// Maps to `StandalonePrice.country`. This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
+	// Maps to `StandalonePrice.country`. This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](ctp:import:type:InvalidFieldsUpdateError) error.
 	Country *string `json:"country,omitempty"`
 	// Maps to `StandalonePrice.customerGroup`. If the referenced [CustomerGroup](ctp:api:type:CustomerGroup) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced CustomerGroup is created.
 	//
-	// This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
+	// This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](ctp:import:type:InvalidFieldsUpdateError) error.
 	CustomerGroup *CustomerGroupKeyReference `json:"customerGroup,omitempty"`
 	// Maps to `StandalonePrice.channel`. If the referenced [Channel](ctp:api:type:Channel) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Channel is created.
 	//
-	// This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](/import-export/error#invalidfieldsupdateerror) error.
+	// This value cannot be updated. Attempting to update this value will result in an [InvalidFieldsUpdate](ctp:import:type:InvalidFieldsUpdateError) error.
 	Channel *ChannelKeyReference `json:"channel,omitempty"`
 	// Maps to `StandalonePrice.validFrom`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
@@ -38,6 +38,10 @@ type StandalonePriceImport struct {
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Maps to `StandalonePrice.custom`.
 	Custom *Custom `json:"custom,omitempty"`
+	// Maps to `StandalonePrice.active`.
+	//
+	// To exclude the StandalonePrice from [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection), set to `false`.
+	Active *bool `json:"active,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based

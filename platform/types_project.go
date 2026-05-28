@@ -126,6 +126,18 @@ type ExternalOAuth struct {
 }
 
 /**
+*	Inventory configuration settings for a Project.
+*
+ */
+type InventoryConfiguration struct {
+	// The number of minutes after which a [Reservation](ctp:api:type:Reservation) expires. To use the [ReserveOnCart](ctp:api:type:InventoryMode) inventory mode, this field must be set.
+	ReservationExpirationInMinutes *int `json:"reservationExpirationInMinutes,omitempty"`
+	// If set to `true`, [Reservations](ctp:api:type:Reservation) are marked as `Expired` once their
+	// `reservationExpirationInMinutes` is reached. The reserved inventory is then made available. If set to `false`, tracking Line Items with expired reservations becomes your responsibility.
+	ReleaseExpiredReservations bool `json:"releaseExpiredReservations"`
+}
+
+/**
 *	Specifies the status of the [Order Search](/../api/projects/order-search) index.
  */
 type OrderSearchStatus string
@@ -173,6 +185,8 @@ type Project struct {
 	SearchIndexing *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
 	// Holds configuration specific to [Business Units](ctp:api:type:BusinessUnit).
 	BusinessUnits *BusinessUnitConfiguration `json:"businessUnits,omitempty"`
+	// Holds configuration specific to inventory.
+	Inventory InventoryConfiguration `json:"inventory"`
 	// Holds configuration specific to discounts, including how Product and Cart Discounts are combined in every Cart of the Project.
 	Discounts DiscountsConfiguration `json:"discounts"`
 }
@@ -345,6 +359,18 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 		return obj, nil
 	case "setExternalOAuth":
 		obj := ProjectSetExternalOAuthAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setReleaseExpiredReservations":
+		obj := ProjectSetReleaseExpiredReservationsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setReservationExpirationInMinutes":
+		obj := ProjectSetReservationExpirationInMinutesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -790,6 +816,47 @@ func (obj ProjectSetExternalOAuthAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setExternalOAuth", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	If set to `true`, [Reservations](ctp:api:type:Reservation) are marked as `Expired` once their
+*	`reservationExpirationInMinutes` is reached. The reserved inventory is then made available. If set to `false`, tracking Line Items with expired reservations becomes your responsibility.
+*
+ */
+type ProjectSetReleaseExpiredReservationsAction struct {
+	// Value to set.
+	ReleaseExpiredReservations bool `json:"releaseExpiredReservations"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetReleaseExpiredReservationsAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetReleaseExpiredReservationsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setReleaseExpiredReservations", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	To use the [ReserveOnCart](ctp:api:type:InventoryMode) Line Item inventory mode, you must set the `reservationExpirationInMinutes` field on the [Project](ctp:api:type:Project) using this update action.
+*
+*	To override the Project setting, use the [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action on specific [InventoryEntries](ctp:api:type:InventoryEntry).
+*
+ */
+type ProjectSetReservationExpirationInMinutesAction struct {
+	// Value to set.
+	ReservationExpirationInMinutes int `json:"reservationExpirationInMinutes"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetReservationExpirationInMinutesAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetReservationExpirationInMinutesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setReservationExpirationInMinutes", Alias: (*Alias)(&obj)})
 }
 
 type ProjectSetShippingRateInputTypeAction struct {

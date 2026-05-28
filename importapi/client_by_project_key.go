@@ -91,6 +91,12 @@ func (rb *ByProjectKeyRequestBuilder) ProductSelections() *ByProjectKeyProductSe
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyRequestBuilder) ProductTailorings() *ByProjectKeyProductTailoringsRequestBuilder {
+	return &ByProjectKeyProductTailoringsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) Orders() *ByProjectKeyOrdersRequestBuilder {
 	return &ByProjectKeyOrdersRequestBuilder{
 		projectKey: rb.projectKey,

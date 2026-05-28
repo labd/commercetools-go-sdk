@@ -58,7 +58,7 @@ func (rb *ByProjectKeyOrdersRequestMethodPost) WithHeaders(headers http.Header) 
 /**
 *	Creates an Order from a Cart.
 *
-*	The Cart must have a shipping address and an active Shipping Method set.
+*	The Cart must have a shipping address set.
 *
 *	The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
 *

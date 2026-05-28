@@ -846,6 +846,7 @@ const (
 	ImportResourceTypeProduct             ImportResourceType = "product"
 	ImportResourceTypeProductDraft        ImportResourceType = "product-draft"
 	ImportResourceTypeProductSelection    ImportResourceType = "product-selection"
+	ImportResourceTypeProductTailoring    ImportResourceType = "product-tailoring"
 	ImportResourceTypeProductType         ImportResourceType = "product-type"
 	ImportResourceTypeProductVariant      ImportResourceType = "product-variant"
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
@@ -898,6 +899,7 @@ const (
 	ProcessingStateImported             ProcessingState = "imported"
 	ProcessingStateRejected             ProcessingState = "rejected"
 	ProcessingStateCanceled             ProcessingState = "canceled"
+	ProcessingStatePartiallyImported    ProcessingState = "partiallyImported"
 )
 
 type Address struct {

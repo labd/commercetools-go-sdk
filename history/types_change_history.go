@@ -38,7 +38,7 @@ type Record struct {
 	Resource ResourceIdentifier `json:"resource"`
 	// References to the [Stores](ctp:api:type:Store) associated with the [Change](ctp:history:type:Change).
 	Stores []KeyReference `json:"stores"`
-	// Reference to the [Business Unit](ctp:api:type:BusinessUnit) associated with the [Change](ctp:history:type:Change). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// Reference to the [Business Unit](ctp:api:type:BusinessUnit) associated with the [Change](ctp:history:type:Change). Only available for [B2B](/../offering/commerce-b2b)-enabled Projects.
 	BusinessUnit KeyReference `json:"businessUnit,omitempty"`
 	// `true` if no change was detected.
 	//
@@ -235,7 +235,7 @@ type ModifiedBy struct {
 	//
 	// Present only if the change was made using a token from the [password flow](/authorization#password-flow).
 	Customer Reference `json:"customer,omitempty"`
-	// The [Associate](ctp:api:type:Associate) who made the change in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// The [Associate](ctp:api:type:Associate) who made the change in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate Reference `json:"associate,omitempty"`
 }
 
@@ -584,6 +584,7 @@ const (
 	UpdateTypeSetReferences                               UpdateType = "setReferences"
 	UpdateTypeSetReservations                             UpdateType = "setReservations"
 	UpdateTypeSetRestockableInDays                        UpdateType = "setRestockableInDays"
+	UpdateTypeSetReservationExpirationInMinutes           UpdateType = "setReservationExpirationInMinutes"
 	UpdateTypeSetReturnInfo                               UpdateType = "setReturnInfo"
 	UpdateTypeSetReturnItemCustomField                    UpdateType = "setReturnItemCustomField"
 	UpdateTypeSetReturnItemCustomType                     UpdateType = "setReturnItemCustomType"

@@ -2743,13 +2743,13 @@ type ProductVariant struct {
 	// May not contain the latest Inventory State (it is [eventually consistent](/general-concepts#eventual-consistency)).
 	Availability *ProductVariantAvailability `json:"availability,omitempty"`
 	// `true` if the Product Variant matches the search query.
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request.
+	// Only available in response to a [Product Projection Search](/../api/projects/product-projection-search) request.
 	IsMatchingVariant *bool `json:"isMatchingVariant,omitempty"`
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request
+	// Only available in response to a [Product Projection Search](/../api/projects/product-projection-search) request
 	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	// Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
 	ScopedPrice *ScopedPrice `json:"scopedPrice,omitempty"`
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
+	// Only available in response to a [Product Projection Search](/../api/projects/product-projection-search) request
 	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
 	// Only available when [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) is used.
@@ -3038,7 +3038,7 @@ type ClientLogging struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 }
 

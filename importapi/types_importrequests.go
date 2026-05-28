@@ -115,6 +115,12 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "product-tailoring":
+		obj := ProductTailoringImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "business-unit":
 		obj := BusinessUnitImportRequest{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -424,6 +430,25 @@ func (obj ProductSelectionImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "product-selection", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Product Tailoring](ctp:import:endpoint:/{projectKey}/product-tailorings/import-containers/{importContainerKey}:POST). Contains data for [Product Tailoring](ctp:api:type:ProductTailoring) to be created or updated in a Project.
+*
+ */
+type ProductTailoringImportRequest struct {
+	// The Product Tailoring import resources of this request.
+	Resources []ProductTailoringImport `json:"resources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "product-tailoring", Alias: (*Alias)(&obj)})
 }
 
 /**

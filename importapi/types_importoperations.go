@@ -24,7 +24,7 @@ type ImportOperation struct {
 	State ProcessingState `json:"state"`
 	// The `version` of the imported resource when the import was successful.
 	ResourceVersion *int `json:"resourceVersion,omitempty"`
-	// Contains errors if the import was unsuccessful. See [Errors](/import-export/error).
+	// Contains errors if the import was unsuccessful. See [Errors](/api/errors#import-api-specific-errors).
 	Errors []ErrorObject `json:"errors"`
 	// If the resource being imported contains references to resources which do not exist, these references are contained within this array.
 	UnresolvedReferences []UnresolvedReferences `json:"unresolvedReferences"`
