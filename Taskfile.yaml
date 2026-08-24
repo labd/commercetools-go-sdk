@@ -34,6 +34,7 @@ tasks:
 #      - task: generate-frontend
       - task: generate-platform
       - task: generate-history
+      - task: generate-insights
 
   generate-checkout:
     cmds:
@@ -64,6 +65,19 @@ tasks:
     cmds:
       - task: generate-api
         vars: {apiName: history, path: history}
+
+  generate-insights:
+    cmds:
+      # Not using generate-api: the Datadog `US1-FED` enum value is emitted by
+      # rmf-codegen as the invalid Go identifier `DatadogSiteUS1-FED`, which has
+      # to be repaired before goimports/go fmt will parse the file.
+      - rmf-codegen generate {{ .apiSpecsDir }}/insights/api.raml -b insights -o {{ .generatedDir }}/ -t GO_CLIENT
+      - perl -p -i -e 's/^DatadogSiteUS1-FED\b/DatadogSiteUS1FED/' {{ .generatedDir }}/insights/types_configuration.go
+      - goimports -w {{ .generatedDir }}/insights/
+      - go fmt {{ .generatedDir }}/insights/
+      - rm -rf insights/
+      - mv {{ .generatedDir }}/insights .
+      - perl -p -i -e 's/const Version = "1.0.1"/const Version = "{{ .versionId }}"/' insights/client.go
 
   generate-api:
     cmds:
