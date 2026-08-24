@@ -14,17 +14,17 @@ import (
 *
  */
 type PagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// The resources matching the query predicate.
 	// Each query endpoint returns resources of its specific type.
@@ -186,7 +186,7 @@ type BaseAddress struct {
 	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
 	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
-	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
+	// User-defined identifier of the Address. Must be unique among the addresses in a [BusinessUnit](ctp:api:type:BusinessUnit), [Customer](ctp:api:type:Customer), or in the `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
 	Key *string `json:"key,omitempty"`
 	// Name of the country.
 	Country string `json:"country"`
@@ -247,7 +247,7 @@ type Address struct {
 	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
 	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
-	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
+	// User-defined identifier of the Address. Must be unique among the addresses in a [BusinessUnit](ctp:api:type:BusinessUnit), [Customer](ctp:api:type:Customer), or in the `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
 	Key *string `json:"key,omitempty"`
 	// Name of the country.
 	Country string `json:"country"`
@@ -310,7 +310,7 @@ type AddressDraft struct {
 	// It is not recommended to set it manually since the API overwrites this ID when creating an Address for a [Customer](ctp:api:type:Customer).
 	// Use `key` instead and omit this field from the request to let the API generate the ID for the Address.
 	ID *string `json:"id,omitempty"`
-	// User-defined identifier of the Address that must be unique when multiple addresses are referenced in [BusinessUnits](ctp:api:type:BusinessUnit), [Customers](ctp:api:type:Customer), and `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
+	// User-defined identifier of the Address. Must be unique among the addresses in a [BusinessUnit](ctp:api:type:BusinessUnit), [Customer](ctp:api:type:Customer), or in the `itemShippingAddresses` (LineItem-specific addresses) of a [Cart](ctp:api:type:Cart), [Order](ctp:api:type:Order), [QuoteRequest](ctp:api:type:QuoteRequest), or [Quote](ctp:api:type:Quote).
 	Key *string `json:"key,omitempty"`
 	// Name of the country.
 	Country string `json:"country"`
@@ -370,19 +370,19 @@ type BaseResource struct {
 }
 
 /**
-*	These objects represent information about which [API Client](/../api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/../api/general-concepts#client-logging).
+*	These objects represent information about which [API Client](/api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/api/general-concepts#client-logging).
 *
  */
 type ClientLogging struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	// [External user ID](/api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
@@ -392,13 +392,13 @@ type ClientLogging struct {
 type CreatedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/general-concepts#external-user-ids) provided by the `X-External-User-ID` HTTP Header or `external_user_id:{externalUserId}` [scope](/../api/scopes#external-oauth).
+	// [External user ID](/api/general-concepts#external-user-ids) provided by the `X-External-User-ID` HTTP Header or `external_user_id:{externalUserId}` [scope](/api/scopes#external-oauth).
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who created the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was created.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Project when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/offering/commerce-b2b)-enabled Project when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 	// Indicates if the resource was created indirectly.
 	AttributedTo *Attribution `json:"attributedTo,omitempty"`
@@ -406,6 +406,12 @@ type CreatedBy struct {
 
 type DiscountedPrice struct {
 	// Money value of the discounted price.
+	//
+	// - When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) applies and the fractional part of the resulting discounted price is 0.5, the discounted price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
+	//
+	//   For example, a price of €1.01 (`centAmount: 101`) with a 50% discount (`permyriad: 5000`) calculates to €0.505. Since the fractional half-cent is exactly 0.5, it rounds down to €0.50 (`centAmount: 50`).
+	//
+	// - When an [absolute Product Discount](ctp:api:type:ProductDiscountValueAbsolute) exceeds the price of the Product Variant, the resulting discounted price is set to `0`.
 	Value TypedMoney `json:"value"`
 	// [ProductDiscount](ctp:api:type:ProductDiscount) related to the discounted price.
 	Discount ProductDiscountReference `json:"discount"`
@@ -542,13 +548,13 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 type LastModifiedBy struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which modified the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/general-concepts#external-user-ids) provided by the `X-External-User-ID` HTTP Header or `external_user_id:{externalUserId}` [scope](/../api/scopes#external-oauth).
+	// [External user ID](/api/general-concepts#external-user-ids) provided by the `X-External-User-ID` HTTP Header or `external_user_id:{externalUserId}` [scope](/api/scopes#external-oauth).
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates the [anonymous session](ctp:api:type:AnonymousSession) during which the resource was modified.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 	// Indicates if the resource was modified indirectly.
 	AttributedTo *Attribution `json:"attributedTo,omitempty"`
@@ -569,9 +575,9 @@ type Money struct {
 	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
 	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	//
-	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](ctp:api:type:MoneyOverflowError) error will be returned.
 	CentAmount int `json:"centAmount"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 }
 
@@ -583,6 +589,23 @@ type MoneyType string
 const (
 	MoneyTypeCentPrecision MoneyType = "centPrecision"
 	MoneyTypeHighPrecision MoneyType = "highPrecision"
+)
+
+/**
+*	Currencies whose fraction digits are not compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+*
+*	These currencies are treated separately (from their ISO equivalents); for example, a Product Discount for `HUF0` will not apply to a `HUF` price.
+*
+ */
+type NonStandardCurrency string
+
+const (
+	NonStandardCurrencyCZK0 NonStandardCurrency = "CZK0"
+	NonStandardCurrencyHUF0 NonStandardCurrency = "HUF0"
+	NonStandardCurrencyILS0 NonStandardCurrency = "ILS0"
+	NonStandardCurrencyKZT0 NonStandardCurrency = "KZT0"
+	NonStandardCurrencyTRY0 NonStandardCurrency = "TRY0"
+	NonStandardCurrencyTWD0 NonStandardCurrency = "TWD0"
 )
 
 /**
@@ -606,11 +629,7 @@ type Price struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists.
-	// If set, the API uses the DiscountedPrice value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
-	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
-	//
-	// If an [absolute discount](ctp:api:type:ProductDiscountValueAbsolute) value exceeds the price of the Product Variant, the discounted price is a negative value.
+	// Set if a [ProductDiscount](ctp:api:type:ProductDiscount) applies. When present, the API uses the DiscountedPrice value for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
 	//
@@ -669,6 +688,8 @@ func (obj Price) MarshalJSON() ([]byte, error) {
  */
 type PriceDraft struct {
 	// User-defined identifier for the Price. It must be unique per [ProductVariant](ctp:api:type:ProductVariant).
+	//
+	// If the value is used by another Embedded Price on the same ProductVariant, a [DuplicatePriceKey](ctp:api:type:DuplicatePriceKeyError) error is returned.
 	Key *string `json:"key,omitempty"`
 	// Money value of this Price.
 	//
@@ -731,7 +752,7 @@ func (obj PriceDraft) MarshalJSON() ([]byte, error) {
 *	A Price tier is selected instead of the default Price when a certain quantity of the [ProductVariant](ctp:api:type:ProductVariant) is [added to a Cart](/projects/carts#add-lineitem) and ordered.
 *	_For example: the Price can be lower if more than 10 items are ordered._
 *	If no Price tier is found for the Order quantity, the base Price is used.
-*	A Price tier is applied for the entire quantity of a Product Variant put as [LineItem](/projects/carts#lineitem) in a Cart as soon as the minimum quantity for the Price tier is reached.
+*	A Price tier is applied for the entire quantity of a Product Variant put as [LineItem](ctp:api:type:LineItem) in a Cart as soon as the minimum quantity for the Price tier is reached.
 *	The Price tier is applied per Line Item of the Product Variant. If, for example, the same Product Variant appears in the same Cart as several Line Items, (what can be achieved by different values of a Custom Field on the Line Items) for each Line Item the minimum quantity must be reached to get the Price tier.
 *
  */
@@ -894,6 +915,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "reservation":
+		obj := ReservationReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "category":
 		obj := CategoryReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -944,6 +971,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 		return obj, nil
 	case "discount-group":
 		obj := DiscountGroupReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "extension":
+		obj := ExtensionReference{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1086,6 +1119,12 @@ func mapDiscriminatorReference(input interface{}) (Reference, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "variant":
+		obj := VariantReference{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "zone":
 		obj := ZoneReference{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1136,6 +1175,7 @@ const (
 	ReferenceTypeIdQuoteRequest          ReferenceTypeId = "quote-request"
 	ReferenceTypeIdRecurrencePolicy      ReferenceTypeId = "recurrence-policy"
 	ReferenceTypeIdRecurringOrder        ReferenceTypeId = "recurring-order"
+	ReferenceTypeIdReservation           ReferenceTypeId = "reservation"
 	ReferenceTypeIdReview                ReferenceTypeId = "review"
 	ReferenceTypeIdShippingMethod        ReferenceTypeId = "shipping-method"
 	ReferenceTypeIdShoppingList          ReferenceTypeId = "shopping-list"
@@ -1146,6 +1186,7 @@ const (
 	ReferenceTypeIdSubscription          ReferenceTypeId = "subscription"
 	ReferenceTypeIdTaxCategory           ReferenceTypeId = "tax-category"
 	ReferenceTypeIdType                  ReferenceTypeId = "type"
+	ReferenceTypeIdVariant               ReferenceTypeId = "variant"
 	ReferenceTypeIdZone                  ReferenceTypeId = "zone"
 )
 
@@ -1231,6 +1272,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 		return obj, nil
 	case "discount-group":
 		obj := DiscountGroupResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "extension":
+		obj := ExtensionResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1361,6 +1408,12 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 			return nil, err
 		}
 		return obj, nil
+	case "variant":
+		obj := VariantResourceIdentifier{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "zone":
 		obj := ZoneResourceIdentifier{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1373,7 +1426,7 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 
 /**
 *	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/../api/pricing-and-discounts-overview#scoped-price-search) is used.
+*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/api/pricing-and-discounts-overview#scoped-price-search) is used.
 *
  */
 type ScopedPrice struct {
@@ -1395,7 +1448,7 @@ type ScopedPrice struct {
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Is set when a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItemAction).
 	//
-	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down) in favor of the Customer.
+	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields of the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -1469,9 +1522,9 @@ type CentPrecisionMoney struct {
 	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
 	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	//
-	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](ctp:api:type:MoneyOverflowError) error will be returned.
 	CentAmount int `json:"centAmount"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// The number of default fraction digits for the given currency, like `2` for EUR or `0` for JPY.
 	FractionDigits int `json:"fractionDigits"`
@@ -1496,9 +1549,9 @@ type HighPrecisionMoney struct {
 	// * Cents for EUR and USD, pence for GBP, or centime for CHF (5 CHF is specified as `500`).
 	// * The value in the major unit for currencies without minor units, like JPY (5 JPY is specified as `5`).
 	//
-	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](ctp:api:type:MoneyOverflowError) error will be returned.
 	CentAmount int `json:"centAmount"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// Number of digits after the decimal separator, greater than the default number of fraction digits for a currency.
 	FractionDigits int `json:"fractionDigits"`
@@ -1560,7 +1613,7 @@ func mapDiscriminatorTypedMoneyDraft(input interface{}) (TypedMoneyDraft, error)
 type CentPrecisionMoneyDraft struct {
 	// Amount in the smallest indivisible unit of a currency.
 	CentAmount *int `json:"centAmount,omitempty"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// This field is optional for cent precision. If provided, it must be equal to the default number of fraction digits for the specified currency.
 	FractionDigits *int `json:"fractionDigits,omitempty"`
@@ -1584,17 +1637,17 @@ type HighPrecisionMoneyDraft struct {
 	//
 	// A Price of 1.015 USD can be rounded either to 1.01 USD or 1.02 USD. If it lies outside of this range, an error message stating that centAmount must be rounded correctly will be returned.
 	//
-	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
+	// `centAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](ctp:api:type:MoneyOverflowError) error will be returned.
 	//
 	// If `centAmount` is not provided, the API calculates the value automatically using the default rounding mode half even.
 	CentAmount *int `json:"centAmount,omitempty"`
-	// Currency code compliant to [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217).
+	// A currency code compliant with [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) or a [non-standard currency](ctp:api:type:NonStandardCurrency).
 	CurrencyCode string `json:"currencyCode"`
 	// Number of fraction digits for a specified high precision money. It must be greater than the default number of fraction digits for the specified currency.
 	FractionDigits int `json:"fractionDigits"`
 	// Amount in 1 / (10 ^ `fractionDigits`) of a currency.
 	//
-	// `preciseAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](/errors#moneyoverflow) error will be returned.
+	// `preciseAmount` is represented as 64-bit integers. If this limit is exceeded, a [MoneyOverflow](ctp:api:type:MoneyOverflowError) error will be returned.
 	PreciseAmount int `json:"preciseAmount"`
 }
 

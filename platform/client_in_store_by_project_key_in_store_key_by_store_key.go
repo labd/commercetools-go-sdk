@@ -49,6 +49,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Customers() *ByProject
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) DiscountCodes() *ByProjectKeyInStoreKeyByStoreKeyDiscountCodesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyDiscountCodesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Me() *ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyMeRequestBuilder{
 		projectKey: rb.projectKey,
@@ -142,10 +149,23 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) ShoppingLists() *ByPro
 }
 
 /**
-*	A staged quote holds the negotiation between the [Buyer](/../api/quotes-overview#buyer) and the [Seller](/../api/quotes-overview#seller).
+*	A staged quote holds the negotiation between the [Buyer](/api/quotes-overview#buyer) and the [Seller](/api/quotes-overview#seller).
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) StagedQuotes() *ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder {
 	return &ByProjectKeyInStoreKeyByStoreKeyStagedQuotesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	A Variant Projection is a lightweight, read-only representation of a single Product Variant
+*	with embedded Product data such as name, slug, and description, scoped to a specific [Store](ctp:api:type:Store).
+*
+ */
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) VariantProjections() *ByProjectKeyInStoreKeyByStoreKeyVariantProjectionsRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyVariantProjectionsRequestBuilder{
 		projectKey: rb.projectKey,
 		storeKey:   rb.storeKey,
 		client:     rb.client,

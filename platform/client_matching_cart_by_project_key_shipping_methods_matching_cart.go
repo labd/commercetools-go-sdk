@@ -27,7 +27,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingCartRequestBuilder) Get() *ByProjec
 }
 
 /**
-*	Checks if an active ShippingMethod exists for the provided Cart. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if an active ShippingMethod exists for the provided Cart. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsMatchingCartRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingCartRequestMethodHead {
 	return &ByProjectKeyShippingMethodsMatchingCartRequestMethodHead{

@@ -64,6 +64,13 @@ func (rb *ByProjectKeyStoresByIDRequestMethodDelete) WithHeaders(headers http.He
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If the Store is referenced by a resource, a [ReferenceExists](ctp:api:type:ReferenceExistsError) error is returned.
+*
+*	To avoid dependency conflicts, first delete all active and anonymous Carts that reference the Store, then delete all Orders.
+*
+ */
 func (rb *ByProjectKeyStoresByIDRequestMethodDelete) Execute(ctx context.Context) (result *Store, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

@@ -68,6 +68,18 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "BulkOperationMaxItemsExceeded":
+		obj := BulkOperationMaxItemsExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "CircularDependency":
+		obj := CircularDependencyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ConcurrentModification":
 		obj := ConcurrentModificationError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -207,6 +219,24 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ExtensionChainTooDeep":
+		obj := ExtensionChainTooDeepError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionChainTooWide":
+		obj := ExtensionChainTooWideError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionDependencyExists":
+		obj := ExtensionDependencyExistsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ExtensionNoResponse":
 		obj := ExtensionNoResponseError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -315,6 +345,18 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "LineItemQuantityAboveLimit":
+		obj := LineItemQuantityAboveLimitError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "LineItemQuantityBelowLimit":
+		obj := LineItemQuantityBelowLimitError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "LockedField":
 		obj := LockedFieldError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -347,6 +389,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "MaxStoreReferencesReached":
 		obj := MaxStoreReferencesReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MissingDependency":
+		obj := MissingDependencyError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -389,6 +437,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 		return obj, nil
 	case "OverCapacity":
 		obj := OverCapacityError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OverlappingPriceValidity":
+		obj := OverlappingPriceValidityError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -538,6 +592,12 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "Unauthorized":
+		obj := UnauthorizedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ValidityLockConflict":
 		obj := ValidityLockConflictError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -624,7 +684,7 @@ func (obj AnonymousIdAlreadyInUseError) Error() string {
 }
 
 /**
-*	Returned when an [Associate](/projects/business-units#associate) is missing a [Permission](/projects/associate-roles#ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources).
+*	Returned when an [Associate](ctp:api:type:Associate) is missing a [Permission](ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources).
 *
  */
 type AssociateMissingPermissionError struct {
@@ -1032,6 +1092,160 @@ func (obj BadGatewayError) Error() string {
 }
 
 /**
+*	Returned when a bulk request contains more items than the allowed maximum.
+*
+*	Reduce the number of items in the request to at most `limit` and retry.
+*
+ */
+type BulkOperationMaxItemsExceededError struct {
+	// `"The bulk request exceeds the maximum allowed items of $limit."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Maximum number of items allowed in a single bulk request.
+	Limit int `json:"limit"`
+	// Number of items provided in the request.
+	Provided int `json:"provided"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *BulkOperationMaxItemsExceededError) UnmarshalJSON(data []byte) error {
+	type Alias BulkOperationMaxItemsExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "limit")
+	delete(obj.ExtraValues, "provided")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj BulkOperationMaxItemsExceededError) MarshalJSON() ([]byte, error) {
+	type Alias BulkOperationMaxItemsExceededError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "BulkOperationMaxItemsExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *BulkOperationMaxItemsExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj BulkOperationMaxItemsExceededError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown BulkOperationMaxItemsExceededError: failed to parse error response"
+}
+
+/**
+*	Returned when a circular reference is detected among Extension dependencies.
+*
+ */
+type CircularDependencyError struct {
+	// `"Circular dependency detected: [ext-1, ext-2, ext-1]"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CircularDependencyError) UnmarshalJSON(data []byte) error {
+	type Alias CircularDependencyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CircularDependencyError) MarshalJSON() ([]byte, error) {
+	type Alias CircularDependencyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "CircularDependency", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *CircularDependencyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj CircularDependencyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown CircularDependencyError: failed to parse error response"
+}
+
+/**
 *	Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
 *	The client application should resolve the conflict (with or without involving the end user) before retrying the request.
 *
@@ -1373,7 +1587,7 @@ func (obj DiscountCodeNonApplicableError) Error() string {
 }
 
 /**
-*	Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/api/projects/products#update-product) request.
 *
  */
 type DuplicateAttributeValueError struct {
@@ -1449,7 +1663,7 @@ func (obj DuplicateAttributeValueError) Error() string {
 }
 
 /**
-*	Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/api/projects/products#update-product) request.
 *
  */
 type DuplicateAttributeValuesError struct {
@@ -1847,7 +2061,7 @@ func (obj DuplicatePriceKeyError) Error() string {
 }
 
 /**
-*	Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when a Price scope conflicts with an existing one during an [Update Product](/api/projects/products#update-product) request.
 *
 *	Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
 *
@@ -2025,7 +2239,7 @@ func (obj DuplicateStandalonePriceScopeError) Error() string {
 }
 
 /**
-*	Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/api/projects/products#update-product) request.
 *
  */
 type DuplicateVariantValuesError struct {
@@ -2947,6 +3161,225 @@ func (obj ExtensionBadResponseError) Error() string {
 	return "unknown ExtensionBadResponseError: failed to parse error response"
 }
 
+/**
+*	Returned when the Extension dependency chain exceeds 3 layers.
+*
+ */
+type ExtensionChainTooDeepError struct {
+	// `"The dependency chain depth 4 exceeds the maximum allowed depth of 3"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionChainTooDeepError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionChainTooDeepError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionChainTooDeepError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionChainTooDeepError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionChainTooDeep", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExtensionChainTooDeepError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExtensionChainTooDeepError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionChainTooDeepError: failed to parse error response"
+}
+
+/**
+*	Returned when an Extension declares more than 5 direct dependencies.
+*
+ */
+type ExtensionChainTooWideError struct {
+	// `"Extension chain breadth exceeds the maximum allowed breadth of 5"`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionChainTooWideError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionChainTooWideError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionChainTooWideError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionChainTooWideError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionChainTooWide", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExtensionChainTooWideError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExtensionChainTooWideError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionChainTooWideError: failed to parse error response"
+}
+
+/**
+*	Returned when attempting to delete an Extension that is a prerequisite for other Extensions.
+*
+ */
+type ExtensionDependencyExistsError struct {
+	// `"The extension cannot be deleted because it is a prerequisite for: [ext-2, ext-3]."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *ExtensionDependencyExistsError) UnmarshalJSON(data []byte) error {
+	type Alias ExtensionDependencyExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionDependencyExistsError) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionDependencyExistsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionDependencyExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *ExtensionDependencyExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj ExtensionDependencyExistsError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown ExtensionDependencyExistsError: failed to parse error response"
+}
+
 type ExtensionError struct {
 	// Error code caused by the Extension. For example, `InvalidField`.
 	Code string `json:"code"`
@@ -3011,7 +3444,7 @@ func (obj ExtensionError) Error() string {
 }
 
 /**
-*	Returned when the API Extension does not respond within the [time limit](/../api/projects/api-extensions#time-limits), or could not be reached.
+*	Returned when the API Extension does not respond within the [time limit](/api/projects/api-extensions#time-limits), or could not be reached.
 *
  */
 type ExtensionNoResponseError struct {
@@ -3249,7 +3682,7 @@ func (obj ExtensionUpdateActionsFailedError) Error() string {
 }
 
 /**
-*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#request-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
+*	Returned when an [external OAuth Introspection endpoint](/api/authorization#request-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
 *
  */
 type ExternalOAuthFailedError struct {
@@ -3397,7 +3830,7 @@ func (obj FeatureRemovedError) Error() string {
 /**
 *	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
-*	If you encounter this error, report it to the [Composable Commerce support team](https://support.commercetools.com).
+*	If you encounter this error, report it to the [commercetools support team](https://support.commercetools.com).
 *
  */
 type GeneralError struct {
@@ -3470,7 +3903,7 @@ func (obj GeneralError) Error() string {
 }
 
 /**
-*	This error occurs when your [API Client](/../api/projects/api-clients) does not have the [OAuth scope](/../api/scopes) required for the endpoint.
+*	This error occurs when your [API Client](/api/projects/api-clients) does not have the [OAuth scope](/api/scopes) required for the endpoint.
 *	Use an API Client with the required permissions for this endpoint instead.
 *
  */
@@ -4390,6 +4823,170 @@ func (obj LanguageUsedInStoresError) Error() string {
 }
 
 /**
+*	Returned when attempting to create or update a [Cart](ctp:api:type:Cart) with a Line Item whose quantity exceeds the `maxCartQuantity` limit defined in the [InventoryEntry](ctp:api:type:InventoryEntry) for that Line Item's SKU.
+*
+ */
+type LineItemQuantityAboveLimitError struct {
+	// `"Quantity '$quantity' greater than maximum '$maxCartQuantity'."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// The quantity that was requested.
+	Quantity int `json:"quantity"`
+	// The maximum quantity allowed for this Line Item.
+	MaxCartQuantity int `json:"maxCartQuantity"`
+	// Reference to the Line Item that caused the error.
+	LineItem *string `json:"lineItem,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *LineItemQuantityAboveLimitError) UnmarshalJSON(data []byte) error {
+	type Alias LineItemQuantityAboveLimitError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "quantity")
+	delete(obj.ExtraValues, "maxCartQuantity")
+	delete(obj.ExtraValues, "lineItem")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LineItemQuantityAboveLimitError) MarshalJSON() ([]byte, error) {
+	type Alias LineItemQuantityAboveLimitError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LineItemQuantityAboveLimit", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *LineItemQuantityAboveLimitError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj LineItemQuantityAboveLimitError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown LineItemQuantityAboveLimitError: failed to parse error response"
+}
+
+/**
+*	Returned when attempting to create or update a [Cart](ctp:api:type:Cart) with a Line Item whose quantity is below the `minCartQuantity` limit defined in the [InventoryEntry](ctp:api:type:InventoryEntry) for that Line Item's SKU.
+*
+ */
+type LineItemQuantityBelowLimitError struct {
+	// `"Quantity '$quantity' less than minimum '$minCartQuantity'."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// The quantity that was requested.
+	Quantity int `json:"quantity"`
+	// The minimum quantity required for this Line Item.
+	MinCartQuantity int `json:"minCartQuantity"`
+	// Reference to the Line Item that caused the error.
+	LineItem *string `json:"lineItem,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *LineItemQuantityBelowLimitError) UnmarshalJSON(data []byte) error {
+	type Alias LineItemQuantityBelowLimitError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "quantity")
+	delete(obj.ExtraValues, "minCartQuantity")
+	delete(obj.ExtraValues, "lineItem")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj LineItemQuantityBelowLimitError) MarshalJSON() ([]byte, error) {
+	type Alias LineItemQuantityBelowLimitError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LineItemQuantityBelowLimit", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *LineItemQuantityBelowLimitError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj LineItemQuantityBelowLimitError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown LineItemQuantityBelowLimitError: failed to parse error response"
+}
+
+/**
 *	Returned when two [Customers](ctp:api:type:Customer) are simultaneously created or updated with the same email address.
 *
 *	To confirm if the operation was successful, repeat the request.
@@ -4572,12 +5169,13 @@ func (obj MatchingPriceNotFoundError) Error() string {
 }
 
 /**
-*	Returned when a Cart Discount cannot be created or activated as the [limit](/../api/limits#cart-discounts) for active Cart Discounts has been reached.
+*	Returned when an action fails because the Project has reached its [limit](/api/limits#cart-discounts) for active Cart Discounts.
 *
 *	The error is returned as a failed response to:
 *
 *	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
 *	- [Change IsActive](ctp:api:type:CartDiscountChangeIsActiveAction) update action
+*	- [Change RequiresDiscountCode](ctp:api:type:CartDiscountChangeRequiresDiscountCodeAction) update action
 *
  */
 type MaxCartDiscountsReachedError struct {
@@ -4650,7 +5248,7 @@ func (obj MaxCartDiscountsReachedError) Error() string {
 }
 
 /**
-*	Returned when a Discount Group cannot be created or activated as the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached.
+*	Returned when a Discount Group cannot be created or activated as the [limit](/api/limits#discount-groups) for active Discount Groups has been reached.
 *
 *	The error is returned as a failed response to:
 *
@@ -4728,7 +5326,7 @@ func (obj MaxDiscountGroupsReachedError) Error() string {
 }
 
 /**
-*	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
+*	Returned when a resource type cannot be created as it has reached its [limits](/api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
 *
@@ -4806,7 +5404,7 @@ func (obj MaxResourceLimitExceededError) Error() string {
 }
 
 /**
-*	Returned when a Store cannot be added to a Cart Discount as the [limit](/../api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
+*	Returned when a Store cannot be added to a Cart Discount as the [limit](/api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
 *
 *	The error is returned as a failed response to:
 *
@@ -4881,6 +5479,79 @@ func (obj MaxStoreReferencesReachedError) Error() string {
 		return obj.Message
 	}
 	return "unknown MaxStoreReferencesReachedError: failed to parse error response"
+}
+
+/**
+*	Returned when a referenced Extension does not exist or is not applicable to the same trigger.
+*
+ */
+type MissingDependencyError struct {
+	// `"The extensions '[ext-1, ext-2]' referenced in 'dependencies' do not exist."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *MissingDependencyError) UnmarshalJSON(data []byte) error {
+	type Alias MissingDependencyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj MissingDependencyError) MarshalJSON() ([]byte, error) {
+	type Alias MissingDependencyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MissingDependency", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *MissingDependencyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj MissingDependencyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown MissingDependencyError: failed to parse error response"
 }
 
 /**
@@ -5215,7 +5886,7 @@ func (obj NoMatchingProductDiscountFoundError) Error() string {
 }
 
 /**
-*	Returned if the requested resource was not found or the Product Search index is [inactive](/../api/projects/product-search#activate-the-product-search-api).
+*	Returned if the requested resource was not found or the Product Search index is [inactive](/api/projects/product-search#activate-the-product-search-api).
 *
  */
 type ObjectNotFoundError struct {
@@ -5451,6 +6122,109 @@ func (obj OverCapacityError) Error() string {
 
 /**
 *	Returned when a given Price validity period conflicts with an existing one.
+*	Every Price of a Product Variant with the same combination of currency, country, Customer Group, and Channel must have non-overlapping validity periods (`validFrom` and `validUntil`).
+*
+*	The error is returned as a failed response to the [Create Product](ctp:api:endpoint:/{projectKey}/products:POST) or [Update Product](/api/projects/products#update-product) request.
+*
+ */
+type OverlappingPriceValidityError struct {
+	// `"Two prices have overlapping validity periods."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the conflicting Embedded Price.
+	ConflictingPrice string `json:"conflictingPrice"`
+	// Currency code of the Price.
+	Currency string `json:"currency"`
+	// Country code of the Price.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Embedded Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Embedded Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Date and time (UTC) from which the conflicting Embedded Price is valid.
+	ConflictingValidFrom *time.Time `json:"conflictingValidFrom,omitempty"`
+	// Date and time (UTC) until which the conflicting Embedded Price is valid.
+	ConflictingValidUntil *time.Time `json:"conflictingValidUntil,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OverlappingPriceValidityError) UnmarshalJSON(data []byte) error {
+	type Alias OverlappingPriceValidityError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "conflictingPrice")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "conflictingValidFrom")
+	delete(obj.ExtraValues, "conflictingValidUntil")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OverlappingPriceValidityError) MarshalJSON() ([]byte, error) {
+	type Alias OverlappingPriceValidityError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "OverlappingPriceValidity", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *OverlappingPriceValidityError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj OverlappingPriceValidityError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown OverlappingPriceValidityError: failed to parse error response"
+}
+
+/**
+*	Returned when a given Price validity period conflicts with an existing one.
 *	Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
 *
 *	The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
@@ -5559,7 +6333,7 @@ func (obj OverlappingStandalonePriceValidityError) Error() string {
 *	Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
 *
 *	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
-*	If the error persists, report it to the [Composable Commerce support team](https://support.commercetools.com).
+*	If the error persists, report it to the [commercetools support team](https://support.commercetools.com).
 *
  */
 type PendingOperationError struct {
@@ -5650,7 +6424,7 @@ type PriceChangedError struct {
 	ExtraValues map[string]interface{} `json:"-"`
 	// Unique identifiers of the Line Items for which the Price or [TaxRate](ctp:api:type:TaxRate) has changed.
 	LineItems []string `json:"lineItems"`
-	// `true` if the [ShippingRate](ctp:api:type:ShippingRate) has changed.
+	// Whether the [ShippingRate](ctp:api:type:ShippingRate) has changed.
 	Shipping bool `json:"shipping"`
 }
 
@@ -5799,7 +6573,7 @@ func (obj ProductAssignmentMissingError) Error() string {
 }
 
 /**
-*	Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
+*	Returned when a Product is already assigned to a [Product Selection](/api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
 *
 *	The error is returned as a failed response either to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) or to the [Exclude Product](ctp:api:type:ProductSelectionExcludeProductAction) update action.
 *
@@ -5811,7 +6585,7 @@ type ProductPresentWithDifferentVariantSelectionError struct {
 	ExtraValues map[string]interface{} `json:"-"`
 	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
 	Product ProductReference `json:"product"`
-	// Existing Product Variant Selection or Exclusion for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+	// Existing Product Variant Selection or Exclusion for the [Product](/api/projects/products) in the [Product Selection](/api/projects/product-selections).
 	ExistingVariantSelection ProductVariantSelection `json:"existingVariantSelection"`
 }
 
@@ -6039,7 +6813,7 @@ func (obj QueryComplexityLimitExceededError) Error() string {
 /**
 *	Returned when the query times out.
 *
-*	If a query constantly times out, please check if it follows the [performance best practices](/../api/predicates/query#performance-considerations).
+*	If a query constantly times out, please check if it follows the [performance best practices](/api/predicates/query#performance-considerations).
 *
  */
 type QueryTimedOutError struct {
@@ -6935,7 +7709,7 @@ func (obj SearchNotReadyError) Error() string {
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions) is not semantically correct.
+*	Returned when a [Discount predicate](/api/predicates/predicate-operators) or [API Extension predicate](/api/predicates/query#use-predicates-in-conditional-api-extensions) is not semantically correct.
 *
  */
 type SemanticErrorError struct {
@@ -7089,7 +7863,7 @@ func (obj ShippingMethodDoesNotMatchCartError) Error() string {
 }
 
 /**
-*	Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/../api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
+*	Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
 *
 *	The error is returned as a failed response to:
 *
@@ -7170,7 +7944,7 @@ func (obj StoreCartDiscountsLimitReachedError) Error() string {
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions), or [search query](/../api/projects/product-projection-search) does not have the correct syntax.
+*	Returned when a [Discount predicate](/api/predicates/predicate-operators), [API Extension predicate](/api/predicates/query#use-predicates-in-conditional-api-extensions), or [search query](/api/projects/product-projection-search) does not have the correct syntax.
 *
  */
 type SyntaxErrorError struct {
@@ -7240,6 +8014,91 @@ func (obj SyntaxErrorError) Error() string {
 		return obj.Message
 	}
 	return "unknown SyntaxErrorError: failed to parse error response"
+}
+
+/**
+*	Returned when one of the following conditions occurs:
+*
+*	- A Customer reference (for example, `associates[*].customer` or `inheritedAssociates[*].customer`) is expanded on the [My Business Unit](/api/projects/me-business-units) endpoint.
+*	- A [Cart Discount](ctp:api:type:CartDiscount) cannot be modified due to missing permissions for its assigned [Stores](ctp:api:type:Store).
+*
+ */
+type UnauthorizedError struct {
+	// `"Customer reference expansion not permitted on my business unit"` or `"Not allowed to edit this CartDiscount."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Keys of [Stores](ctp:api:type:Store) for which the required permission to modify is missing.
+	//
+	// This field is returned only for [Cart Discounts](ctp:api:type:CartDiscount).
+	StoresWithoutPermission []string `json:"storesWithoutPermission"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *UnauthorizedError) UnmarshalJSON(data []byte) error {
+	type Alias UnauthorizedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+	delete(obj.ExtraValues, "storesWithoutPermission")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj UnauthorizedError) MarshalJSON() ([]byte, error) {
+	type Alias UnauthorizedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "Unauthorized", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["storesWithoutPermission"] == nil {
+		delete(raw, "storesWithoutPermission")
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *UnauthorizedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj UnauthorizedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown UnauthorizedError: failed to parse error response"
 }
 
 /**
@@ -7401,6 +8260,18 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "BulkOperationMaxItemsExceeded":
+		obj := GraphQLBulkOperationMaxItemsExceededError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "CircularDependency":
+		obj := GraphQLCircularDependencyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ConcurrentModification":
 		obj := GraphQLConcurrentModificationError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7540,6 +8411,24 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "ExtensionChainTooDeep":
+		obj := GraphQLExtensionChainTooDeepError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionChainTooWide":
+		obj := GraphQLExtensionChainTooWideError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ExtensionDependencyExists":
+		obj := GraphQLExtensionDependencyExistsError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ExtensionNoResponse":
 		obj := GraphQLExtensionNoResponseError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7648,6 +8537,18 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "LineItemQuantityAboveLimit":
+		obj := GraphQLLineItemQuantityAboveLimitError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "LineItemQuantityBelowLimit":
+		obj := GraphQLLineItemQuantityBelowLimitError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "LockedField":
 		obj := GraphQLLockedFieldError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7680,6 +8581,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "MaxStoreReferencesReached":
 		obj := GraphQLMaxStoreReferencesReachedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "MissingDependency":
+		obj := GraphQLMissingDependencyError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7722,6 +8629,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 		return obj, nil
 	case "OverCapacity":
 		obj := GraphQLOverCapacityError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "OverlappingPriceValidity":
+		obj := GraphQLOverlappingPriceValidityError{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -7871,6 +8784,12 @@ func mapDiscriminatorGraphQLErrorObject(input interface{}) (GraphQLErrorObject, 
 			return nil, err
 		}
 		return obj, nil
+	case "Unauthorized":
+		obj := GraphQLUnauthorizedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ValidityLockConflict":
 		obj := GraphQLValidityLockConflictError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -7947,7 +8866,7 @@ func (obj *GraphQLAnonymousIdAlreadyInUseError) DecodeStruct(src map[string]inte
 }
 
 /**
-*	Returned when an [Associate](/projects/business-units#associate) is missing a [Permission](/projects/associate-roles#ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources).
+*	Returned when an [Associate](ctp:api:type:Associate) is missing a [Permission](ctp:api:type:Permission) on a [B2B resource](/associates-overview#b2b-resources).
 *
  */
 type GraphQLAssociateMissingPermissionError struct {
@@ -8303,6 +9222,140 @@ func (obj *GraphQLBadGatewayError) DecodeStruct(src map[string]interface{}) erro
 }
 
 /**
+*	Returned when a bulk request contains more items than the allowed maximum.
+*
+*	Reduce the number of items in the request to at most `limit` and retry.
+*
+ */
+type GraphQLBulkOperationMaxItemsExceededError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Maximum number of items allowed in a single bulk request.
+	Limit int `json:"limit"`
+	// Number of items provided in the request.
+	Provided int `json:"provided"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLBulkOperationMaxItemsExceededError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLBulkOperationMaxItemsExceededError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "limit")
+	delete(obj.ExtraValues, "provided")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLBulkOperationMaxItemsExceededError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLBulkOperationMaxItemsExceededError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "BulkOperationMaxItemsExceeded", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLBulkOperationMaxItemsExceededError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a circular reference is detected among Extension dependencies.
+*
+ */
+type GraphQLCircularDependencyError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLCircularDependencyError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLCircularDependencyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLCircularDependencyError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLCircularDependencyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "CircularDependency", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLCircularDependencyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when the request conflicts with the current state of the involved resources. Typically, the request attempts to modify a resource that is out of date (that is modified by another client since it was last retrieved).
 *	The client application should resolve the conflict (with or without involving the end user) before retrying the request.
 *
@@ -8604,7 +9657,7 @@ func (obj *GraphQLDiscountCodeNonApplicableError) DecodeStruct(src map[string]in
 }
 
 /**
-*	Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when the `Unique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/api/projects/products#update-product) request.
 *
  */
 type GraphQLDuplicateAttributeValueError struct {
@@ -8670,7 +9723,7 @@ func (obj *GraphQLDuplicateAttributeValueError) DecodeStruct(src map[string]inte
 }
 
 /**
-*	Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when the `CombinationUnique` [AttributeConstraint](ctp:api:type:AttributeConstraintEnum) criteria are not met during an [Update Product](/api/projects/products#update-product) request.
 *
  */
 type GraphQLDuplicateAttributeValuesError struct {
@@ -9018,7 +10071,7 @@ func (obj *GraphQLDuplicatePriceKeyError) DecodeStruct(src map[string]interface{
 }
 
 /**
-*	Returned when a Price scope conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when a Price scope conflicts with an existing one during an [Update Product](/api/projects/products#update-product) request.
 *
 *	Every Price of a Product Variant must have a distinct combination of currency, Customer Group, country, and Channel that constitute the scope of a Price.
 *
@@ -9176,7 +10229,7 @@ func (obj *GraphQLDuplicateStandalonePriceScopeError) DecodeStruct(src map[strin
 }
 
 /**
-*	Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/../api/projects/products#update-product) request.
+*	Returned when a [Product Variant](ctp:api:type:ProductVariant) value conflicts with an existing one during an [Update Product](/api/projects/products#update-product) request.
 *
  */
 type GraphQLDuplicateVariantValuesError struct {
@@ -9893,7 +10946,196 @@ func (obj *GraphQLExtensionBadResponseError) DecodeStruct(src map[string]interfa
 }
 
 /**
-*	Returned when the API Extension does not respond within the [time limit](/../api/projects/api-extensions#time-limits), or could not be reached.
+*	Returned when the Extension dependency chain exceeds 3 layers.
+*
+ */
+type GraphQLExtensionChainTooDeepError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionChainTooDeepError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionChainTooDeepError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionChainTooDeepError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionChainTooDeepError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionChainTooDeep", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionChainTooDeepError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when an Extension declares more than 5 direct dependencies.
+*
+ */
+type GraphQLExtensionChainTooWideError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionChainTooWideError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionChainTooWideError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionChainTooWideError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionChainTooWideError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionChainTooWide", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionChainTooWideError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when attempting to delete an Extension that is a prerequisite for other Extensions.
+*
+ */
+type GraphQLExtensionDependencyExistsError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLExtensionDependencyExistsError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLExtensionDependencyExistsError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLExtensionDependencyExistsError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLExtensionDependencyExistsError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "ExtensionDependencyExists", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLExtensionDependencyExistsError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when the API Extension does not respond within the [time limit](/api/projects/api-extensions#time-limits), or could not be reached.
 *
  */
 type GraphQLExtensionNoResponseError struct {
@@ -10101,7 +11343,7 @@ func (obj *GraphQLExtensionUpdateActionsFailedError) DecodeStruct(src map[string
 }
 
 /**
-*	Returned when an [external OAuth Introspection endpoint](/../api/authorization#request-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/../api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
+*	Returned when an [external OAuth Introspection endpoint](/api/authorization#request-an-access-token-using-an-external-oauth-server) does not return a response within the [time limit](/api/authorization#time-limits), or the response isn't compliant with [RFC 7662](https://www.rfc-editor.org/rfc/rfc7662.html) (for example, an HTTP status code like `500`).
 *
  */
 type GraphQLExternalOAuthFailedError struct {
@@ -10229,7 +11471,7 @@ func (obj *GraphQLFeatureRemovedError) DecodeStruct(src map[string]interface{}) 
 /**
 *	Returned when a server-side problem occurs before or after data persistence. In some cases, the requested action may successfully complete after the error is returned. Therefore, it is recommended to verify the status of the requested resource after receiving a 500 error.
 *
-*	If you encounter this error, report it to the [Composable Commerce support team](https://support.commercetools.com).
+*	If you encounter this error, report it to the [commercetools support team](https://support.commercetools.com).
 *
  */
 type GraphQLGeneralError struct {
@@ -10292,7 +11534,7 @@ func (obj *GraphQLGeneralError) DecodeStruct(src map[string]interface{}) error {
 }
 
 /**
-*	This error occurs when your [API Client](/../api/projects/api-clients) does not have the [OAuth scope](/../api/scopes) required for the endpoint.
+*	This error occurs when your [API Client](/api/projects/api-clients) does not have the [OAuth scope](/api/scopes) required for the endpoint.
 *	Use an API Client with the required permissions for this endpoint instead.
 *
  */
@@ -11092,6 +12334,150 @@ func (obj *GraphQLLanguageUsedInStoresError) DecodeStruct(src map[string]interfa
 }
 
 /**
+*	Returned when attempting to create or update a [Cart](ctp:api:type:Cart) with a Line Item whose quantity exceeds the `maxCartQuantity` limit defined in the [InventoryEntry](ctp:api:type:InventoryEntry) for that Line Item's SKU.
+*
+ */
+type GraphQLLineItemQuantityAboveLimitError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// The quantity that was requested.
+	Quantity int `json:"quantity"`
+	// The maximum quantity allowed for this Line Item.
+	MaxCartQuantity int `json:"maxCartQuantity"`
+	// Reference to the Line Item that caused the error.
+	LineItem *string `json:"lineItem,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLLineItemQuantityAboveLimitError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLLineItemQuantityAboveLimitError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "quantity")
+	delete(obj.ExtraValues, "maxCartQuantity")
+	delete(obj.ExtraValues, "lineItem")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLLineItemQuantityAboveLimitError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLLineItemQuantityAboveLimitError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LineItemQuantityAboveLimit", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLLineItemQuantityAboveLimitError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when attempting to create or update a [Cart](ctp:api:type:Cart) with a Line Item whose quantity is below the `minCartQuantity` limit defined in the [InventoryEntry](ctp:api:type:InventoryEntry) for that Line Item's SKU.
+*
+ */
+type GraphQLLineItemQuantityBelowLimitError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// The quantity that was requested.
+	Quantity int `json:"quantity"`
+	// The minimum quantity required for this Line Item.
+	MinCartQuantity int `json:"minCartQuantity"`
+	// Reference to the Line Item that caused the error.
+	LineItem *string `json:"lineItem,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLLineItemQuantityBelowLimitError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLLineItemQuantityBelowLimitError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "quantity")
+	delete(obj.ExtraValues, "minCartQuantity")
+	delete(obj.ExtraValues, "lineItem")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLLineItemQuantityBelowLimitError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLLineItemQuantityBelowLimitError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "LineItemQuantityBelowLimit", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLLineItemQuantityBelowLimitError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
 *	Returned when two [Customers](ctp:api:type:Customer) are simultaneously created or updated with the same email address.
 *
 *	To confirm if the operation was successful, repeat the request.
@@ -11254,12 +12640,13 @@ func (obj *GraphQLMatchingPriceNotFoundError) DecodeStruct(src map[string]interf
 }
 
 /**
-*	Returned when a Cart Discount cannot be created or activated as the [limit](/../api/limits#cart-discounts) for active Cart Discounts has been reached.
+*	Returned when an action fails because the Project has reached its [limit](/api/limits#cart-discounts) for active Cart Discounts.
 *
 *	The error is returned as a failed response to:
 *
 *	- [Create CartDiscount](ctp:api:endpoint:/{projectKey}/cart-discounts:POST) and [Create CartDiscount in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/cart-discounts:POST) requests
 *	- [Change IsActive](ctp:api:type:CartDiscountChangeIsActiveAction) update action
+*	- [Change RequiresDiscountCode](ctp:api:type:CartDiscountChangeRequiresDiscountCodeAction) update action
 *
  */
 type GraphQLMaxCartDiscountsReachedError struct {
@@ -11322,7 +12709,7 @@ func (obj *GraphQLMaxCartDiscountsReachedError) DecodeStruct(src map[string]inte
 }
 
 /**
-*	Returned when a Discount Group cannot be created or activated as the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached.
+*	Returned when a Discount Group cannot be created or activated as the [limit](/api/limits#discount-groups) for active Discount Groups has been reached.
 *
 *	The error is returned as a failed response to:
 *
@@ -11390,7 +12777,7 @@ func (obj *GraphQLMaxDiscountGroupsReachedError) DecodeStruct(src map[string]int
 }
 
 /**
-*	Returned when a resource type cannot be created as it has reached its [limits](/../api/limits).
+*	Returned when a resource type cannot be created as it has reached its [limits](/api/limits).
 *
 *	The limits must be adjusted for this resource before sending the request again.
 *
@@ -11458,7 +12845,7 @@ func (obj *GraphQLMaxResourceLimitExceededError) DecodeStruct(src map[string]int
 }
 
 /**
-*	Returned when a Store cannot be added to a Cart Discount as the [limit](/../api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
+*	Returned when a Store cannot be added to a Cart Discount as the [limit](/api/limits#cart-discounts-stores) for Stores configured for a Cart Discount has been reached.
 *
 *	The error is returned as a failed response to:
 *
@@ -11513,6 +12900,69 @@ func (obj GraphQLMaxStoreReferencesReachedError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLMaxStoreReferencesReachedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a referenced Extension does not exist or is not applicable to the same trigger.
+*
+ */
+type GraphQLMissingDependencyError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLMissingDependencyError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLMissingDependencyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLMissingDependencyError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLMissingDependencyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "MissingDependency", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLMissingDependencyError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {
@@ -11817,7 +13267,7 @@ func (obj *GraphQLNoMatchingProductDiscountFoundError) DecodeStruct(src map[stri
 }
 
 /**
-*	Returned if the requested resource was not found or the Product Search index is [inactive](/../api/projects/product-search#activate-the-product-search-api).
+*	Returned if the requested resource was not found or the Product Search index is [inactive](/api/projects/product-search#activate-the-product-search-api).
 *
  */
 type GraphQLObjectNotFoundError struct {
@@ -12021,6 +13471,99 @@ func (obj *GraphQLOverCapacityError) DecodeStruct(src map[string]interface{}) er
 
 /**
 *	Returned when a given Price validity period conflicts with an existing one.
+*	Every Price of a Product Variant with the same combination of currency, country, Customer Group, and Channel must have non-overlapping validity periods (`validFrom` and `validUntil`).
+*
+*	The error is returned as a failed response to the [Create Product](ctp:api:endpoint:/{projectKey}/products:POST) or [Update Product](/api/projects/products#update-product) request.
+*
+ */
+type GraphQLOverlappingPriceValidityError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Unique identifier of the conflicting Embedded Price.
+	ConflictingPrice string `json:"conflictingPrice"`
+	// Currency code of the Price.
+	Currency string `json:"currency"`
+	// Country code of the Price.
+	Country *string `json:"country,omitempty"`
+	// [CustomerGroup](ctp:api:type:CustomerGroup) for which the Price is valid.
+	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
+	// [Channel](ctp:api:type:Channel) for which the Price is valid.
+	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
+	// Date and time (UTC) from which the Embedded Price is valid.
+	ValidFrom *time.Time `json:"validFrom,omitempty"`
+	// Date and time (UTC) until which the Embedded Price is valid.
+	ValidUntil *time.Time `json:"validUntil,omitempty"`
+	// Date and time (UTC) from which the conflicting Embedded Price is valid.
+	ConflictingValidFrom *time.Time `json:"conflictingValidFrom,omitempty"`
+	// Date and time (UTC) until which the conflicting Embedded Price is valid.
+	ConflictingValidUntil *time.Time `json:"conflictingValidUntil,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLOverlappingPriceValidityError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLOverlappingPriceValidityError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "conflictingPrice")
+	delete(obj.ExtraValues, "currency")
+	delete(obj.ExtraValues, "country")
+	delete(obj.ExtraValues, "customerGroup")
+	delete(obj.ExtraValues, "channel")
+	delete(obj.ExtraValues, "validFrom")
+	delete(obj.ExtraValues, "validUntil")
+	delete(obj.ExtraValues, "conflictingValidFrom")
+	delete(obj.ExtraValues, "conflictingValidUntil")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLOverlappingPriceValidityError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLOverlappingPriceValidityError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "OverlappingPriceValidity", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLOverlappingPriceValidityError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when a given Price validity period conflicts with an existing one.
 *	Every Standalone Price associated with the same SKU and with the same combination of currency, country, Customer Group, and Channel, must have non-overlapping validity periods (`validFrom` and `validUntil`).
 *
 *	The error is returned as a failed response to the [Create StandalonePrice](ctp:api:endpoint:/{projectKey}/standalone-prices:POST) request.
@@ -12119,7 +13662,7 @@ func (obj *GraphQLOverlappingStandalonePriceValidityError) DecodeStruct(src map[
 *	Returned when a previous conflicting operation is still pending and needs to finish before the request can succeed.
 *
 *	The client application should retry the request with exponential backoff up to a point where further delay is unacceptable.
-*	If the error persists, report it to the [Composable Commerce support team](https://support.commercetools.com).
+*	If the error persists, report it to the [commercetools support team](https://support.commercetools.com).
 *
  */
 type GraphQLPendingOperationError struct {
@@ -12198,7 +13741,7 @@ type GraphQLPriceChangedError struct {
 	ExtraValues map[string]interface{} `json:"-"`
 	// Unique identifiers of the Line Items for which the Price or [TaxRate](ctp:api:type:TaxRate) has changed.
 	LineItems []string `json:"lineItems"`
-	// `true` if the [ShippingRate](ctp:api:type:ShippingRate) has changed.
+	// Whether the [ShippingRate](ctp:api:type:ShippingRate) has changed.
 	Shipping bool `json:"shipping"`
 }
 
@@ -12326,7 +13869,7 @@ func (obj *GraphQLProductAssignmentMissingError) DecodeStruct(src map[string]int
 }
 
 /**
-*	Returned when a Product is already assigned to a [Product Selection](/../api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
+*	Returned when a Product is already assigned to a [Product Selection](/api/projects/product-selections), but the Product Selection has either a different [Product Variant Selection](ctp:api:type:ProductVariantSelection) or a different [Product Variant Exclusion](ctp:api:type:ProductVariantExclusion).
 *
 *	The error is returned as a failed response either to the [Add Product](ctp:api:type:ProductSelectionAddProductAction) or to the [Exclude Product](ctp:api:type:ProductSelectionExcludeProductAction) update action.
 *
@@ -12336,7 +13879,7 @@ type GraphQLProductPresentWithDifferentVariantSelectionError struct {
 	ExtraValues map[string]interface{} `json:"-"`
 	// [Reference](ctp:api:type:Reference) to the [Product](ctp:api:type:Product) for which the error was returned.
 	Product ProductReference `json:"product"`
-	// Existing Product Variant Selection or Exclusion for the [Product](/../api/projects/products) in the [Product Selection](/../api/projects/product-selections).
+	// Existing Product Variant Selection or Exclusion for the [Product](/api/projects/products) in the [Product Selection](/api/projects/product-selections).
 	ExistingVariantSelection ProductVariantSelection `json:"existingVariantSelection"`
 }
 
@@ -12537,7 +14080,7 @@ func (obj *GraphQLQueryComplexityLimitExceededError) DecodeStruct(src map[string
 /**
 *	Returned when the query times out.
 *
-*	If a query constantly times out, please check if it follows the [performance best practices](/../api/predicates/query#performance-considerations).
+*	If a query constantly times out, please check if it follows the [performance best practices](/api/predicates/query#performance-considerations).
 *
  */
 type GraphQLQueryTimedOutError struct {
@@ -13313,7 +14856,7 @@ func (obj *GraphQLSearchNotReadyError) DecodeStruct(src map[string]interface{}) 
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators) or [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions) is not semantically correct.
+*	Returned when a [Discount predicate](/api/predicates/predicate-operators) or [API Extension predicate](/api/predicates/query#use-predicates-in-conditional-api-extensions) is not semantically correct.
 *
  */
 type GraphQLSemanticErrorError struct {
@@ -13447,7 +14990,7 @@ func (obj *GraphQLShippingMethodDoesNotMatchCartError) DecodeStruct(src map[stri
 }
 
 /**
-*	Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/../api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
+*	Returned when a Cart Discount cannot be created or assigned to a Store as the [limit](/api/limits#cart-discounts) for active Cart Discounts in a Store has been reached for one or more Stores in the request.
 *
 *	The error is returned as a failed response to:
 *
@@ -13518,7 +15061,7 @@ func (obj *GraphQLStoreCartDiscountsLimitReachedError) DecodeStruct(src map[stri
 }
 
 /**
-*	Returned when a [Discount predicate](/../api/predicates/predicate-operators), [API Extension predicate](/../api/predicates/query#use-predicates-in-conditional-api-extensions), or [search query](/../api/projects/product-projection-search) does not have the correct syntax.
+*	Returned when a [Discount predicate](/api/predicates/predicate-operators), [API Extension predicate](/api/predicates/query#use-predicates-in-conditional-api-extensions), or [search query](/api/projects/product-projection-search) does not have the correct syntax.
 *
  */
 type GraphQLSyntaxErrorError struct {
@@ -13568,6 +15111,81 @@ func (obj GraphQLSyntaxErrorError) MarshalJSON() ([]byte, error) {
 }
 
 func (obj *GraphQLSyntaxErrorError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+/**
+*	Returned when one of the following conditions occurs:
+*
+*	- A Customer reference (for example, `associates[*].customer` or `inheritedAssociates[*].customer`) is expanded on the [My Business Unit](/api/projects/me-business-units) endpoint.
+*	- A [Cart Discount](ctp:api:type:CartDiscount) cannot be modified due to missing permissions for its assigned [Stores](ctp:api:type:Store).
+*
+ */
+type GraphQLUnauthorizedError struct {
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+	// Keys of [Stores](ctp:api:type:Store) for which the required permission to modify is missing.
+	//
+	// This field is returned only for [Cart Discounts](ctp:api:type:CartDiscount).
+	StoresWithoutPermission []string `json:"storesWithoutPermission"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *GraphQLUnauthorizedError) UnmarshalJSON(data []byte) error {
+	type Alias GraphQLUnauthorizedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "storesWithoutPermission")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj GraphQLUnauthorizedError) MarshalJSON() ([]byte, error) {
+	type Alias GraphQLUnauthorizedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "Unauthorized", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["storesWithoutPermission"] == nil {
+		delete(raw, "storesWithoutPermission")
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *GraphQLUnauthorizedError) DecodeStruct(src map[string]interface{}) error {
 	{
 		obj.ExtraValues = make(map[string]interface{})
 		for key, value := range src {

@@ -52,21 +52,21 @@ type ApprovalFlowApproval struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ApprovalFlow](ctp:api:type:ApprovalFlow).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [ApprovalFlow](ctp:api:type:ApprovalFlow).
 *
  */
 type ApprovalFlowPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Approval Flows matching the query.
 	Results []ApprovalFlow `json:"results"`
@@ -226,7 +226,9 @@ type ApprovalFlowSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the ApprovalFlow with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ApprovalFlow.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](ctp:api:type:CustomFields) fields for the ApprovalFlow.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ApprovalFlow.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

@@ -74,8 +74,8 @@ type RecurringOrder struct {
 	// The referenced Cart will have the `RecurringOrder` [CartOrigin](ctp:api:type:CartOrigin).
 	Cart CartReference `json:"cart"`
 	// [Reference](ctp:api:type:Reference) to the original [Order](ctp:api:type:Order) that generated this RecurringOrder.
-	// This field is automatically populated when the RecurringOrder is created via the [Create Order from Cart](/../api/projects/orders#create-order-from-cart) endpoint and the Cart contains Line Items with defined `recurrenceInfo`.
-	// When the RecurringOrder is created directly via the [Create RecurringOrder](/../api/projects/recurring-orders#create-recurringorder) endpoint, this field remains empty.
+	// This field is automatically populated when the RecurringOrder is created via the [Create Order from Cart](/api/projects/orders#create-order-from-cart) endpoint and the Cart contains Line Items with defined `recurrenceInfo`.
+	// When the RecurringOrder is created directly via the [Create RecurringOrder](/api/projects/recurring-orders#create-recurringorder) endpoint, this field remains empty.
 	OriginOrder OrderReference `json:"originOrder"`
 	// Date and time (UTC) when the RecurringOrder starts creating new Orders.
 	StartsAt time.Time `json:"startsAt"`
@@ -158,21 +158,21 @@ type RecurringOrderDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [RecurringOrder](ctp:api:type:RecurringOrder).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [RecurringOrder](ctp:api:type:RecurringOrder).
 *
  */
 type RecurringOrderPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [RecurringOrders](ctp:api:type:RecurringOrder) matching the query.
 	Results []RecurringOrder `json:"results"`
@@ -186,7 +186,7 @@ type RecurringOrderReference struct {
 	// Unique identifier of the referenced [RecurringOrder](ctp:api:type:RecurringOrder).
 	ID string `json:"id"`
 	// Contains the representation of the expanded RecurringOrder.
-	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for RecurringOrders.
+	// Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for RecurringOrders.
 	Obj *RecurringOrder `json:"obj,omitempty"`
 }
 
@@ -201,7 +201,7 @@ func (obj RecurringOrderReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [RecurringOrder](ctp:api:type:RecurringOrder). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [RecurringOrder](ctp:api:type:RecurringOrder). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type RecurringOrderResourceIdentifier struct {
@@ -804,7 +804,7 @@ func (obj RecurringOrdersOnlyDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type RecurringOrderSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -827,10 +827,12 @@ func (obj RecurringOrderSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type RecurringOrderSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the RecurringOrder with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the RecurringOrder with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the RecurringOrder.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the RecurringOrder.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the RecurringOrder.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -849,7 +851,7 @@ func (obj RecurringOrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type RecurringOrderSetExpiresAtAction struct {
-	// Date and time (UTC) the Recurring Order should expire. If empty, any existing value will be removed.
+	// Date and time (UTC) the Recurring Order should expire. If omitted, any existing value is removed.
 	//
 	// If the date or time is extended or removed when the [RecurringOrderState](ctp:api:type:RecurringOrderState) is `Expired`, the state will be updated to `Active`.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
@@ -871,7 +873,7 @@ func (obj RecurringOrderSetExpiresAtAction) MarshalJSON() ([]byte, error) {
  */
 type RecurringOrderSetKeyAction struct {
 	// Value to set.
-	// If empty, any existing key will be removed.
+	// If omitted, any existing key is removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -1008,7 +1010,7 @@ type RecurringOrderTransitionStateAction struct {
 	// Value to set.
 	// If there is no State yet, the new State must be an initial State.
 	State StateResourceIdentifier `json:"state"`
-	// Set to `true` to turn off validation.
+	// Whether to turn off validation.
 	Force *bool `json:"force,omitempty"`
 }
 

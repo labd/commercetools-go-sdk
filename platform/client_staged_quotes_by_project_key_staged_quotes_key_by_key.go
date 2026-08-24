@@ -23,7 +23,7 @@ func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeySta
 }
 
 /**
-*	Checks if a StagedQuote exists with the provided `key`. Returns a `200 OK` status if the StagedQuote exists, or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if a StagedQuote exists with the provided `key`. Returns a `200 OK` status if the StagedQuote exists, or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyStagedQuotesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyStagedQuotesKeyByKeyRequestMethodHead{
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeySt
 }
 
 /**
-*	Updates a StagedQuote in the Project using one or more [update actions](/../api/projects/staged-quotes#update-actions).
+*	Updates a StagedQuote in the Project using one or more [update actions](/api/projects/staged-quotes#update-actions).
  */
 func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestBuilder) Post(body StagedQuoteUpdate) *ByProjectKeyStagedQuotesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyStagedQuotesKeyByKeyRequestMethodPost{

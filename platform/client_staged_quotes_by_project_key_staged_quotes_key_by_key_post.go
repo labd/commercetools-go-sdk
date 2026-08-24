@@ -56,7 +56,7 @@ func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestMethodPost) WithHeaders(headers
 }
 
 /**
-*	Updates a StagedQuote in the Project using one or more [update actions](/../api/projects/staged-quotes#update-actions).
+*	Updates a StagedQuote in the Project using one or more [update actions](/api/projects/staged-quotes#update-actions).
  */
 func (rb *ByProjectKeyStagedQuotesKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *StagedQuote, err error) {
 	data, err := serializeInput(rb.body)

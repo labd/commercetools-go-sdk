@@ -64,6 +64,11 @@ func (rb *ByProjectKeyTaxCategoriesByIDRequestMethodDelete) WithHeaders(headers 
 	rb.headers = headers
 	return rb
 }
+
+/**
+*	If the TaxCategory is referenced by a resource, a [ReferenceExists](ctp:api:type:ReferenceExistsError) error is returned.
+*
+ */
 func (rb *ByProjectKeyTaxCategoriesByIDRequestMethodDelete) Execute(ctx context.Context) (result *TaxCategory, err error) {
 	var queryParams url.Values
 	if rb.params != nil {

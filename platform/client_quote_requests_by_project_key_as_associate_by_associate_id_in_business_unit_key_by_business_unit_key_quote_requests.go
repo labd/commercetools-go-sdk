@@ -43,7 +43,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Checks if one or more QuoteRequests exist for the provided query predicate in a BusinessUnit. Returns a `200 OK` status if any QuoteRequests match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if one or more QuoteRequests exist for the provided query predicate in a BusinessUnit. Returns a `200 OK` status if any QuoteRequests match the query predicate, or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsRequestMethodHead {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsRequestMethodHead{

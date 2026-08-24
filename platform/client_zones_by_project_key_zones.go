@@ -37,7 +37,7 @@ func (rb *ByProjectKeyZonesRequestBuilder) Get() *ByProjectKeyZonesRequestMethod
 }
 
 /**
-*	Checks if one or more Zones exist for the provided query predicate. Returns a `200 OK` status if any Zones match the query predicate, or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if one or more Zones exist for the provided query predicate. Returns a `200 OK` status if any Zones match the query predicate, or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyZonesRequestBuilder) Head() *ByProjectKeyZonesRequestMethodHead {
 	return &ByProjectKeyZonesRequestMethodHead{

@@ -23,7 +23,7 @@ func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Get() *ByProjectKeyQuotesKey
 }
 
 /**
-*	Checks if a Quote exists with the provided `key`. Returns a `200 OK` status if the Quote exists, or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if a Quote exists with the provided `key`. Returns a `200 OK` status if the Quote exists, or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyQuotesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyQuotesKeyByKeyRequestMethodHead{
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Head() *ByProjectKeyQuotesKe
 }
 
 /**
-*	Updates a Quote in the Project using one or more [update actions](/../api/projects/quotes#update-actions).
+*	Updates a Quote in the Project using one or more [update actions](/api/projects/quotes#update-actions).
  */
 func (rb *ByProjectKeyQuotesKeyByKeyRequestBuilder) Post(body QuoteUpdate) *ByProjectKeyQuotesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyQuotesKeyByKeyRequestMethodPost{

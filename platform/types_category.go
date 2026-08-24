@@ -26,7 +26,7 @@ type Category struct {
 	// User-defined identifier used as a deep-link URL to the related Category per [Locale](ctp:api:type:Locale).
 	// A Category can have the same slug for different Locales, but they are unique across the [Project](ctp:api:type:Project).
 	// Valid slugs match the pattern `^[A-Za-z0-9_-]{2,256}+$`.
-	// For [good performance](/../api/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set in a Project.
+	// For [good performance](/api/predicates/query#performance-considerations), indexes are provided for the first 15 `languages` set in a Project.
 	Slug LocalizedString `json:"slug"`
 	// Description of the Category.
 	Description *LocalizedString `json:"description,omitempty"`
@@ -105,7 +105,7 @@ type CategoryDraft struct {
 	Assets []AssetDraft `json:"assets"`
 	// User-defined unique identifier for the Category.
 	//
-	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Categories with the [Import API](/../api/import-export/overview) and the [Merchant Center](/../merchant-center/import-data).
+	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Categories with the [Import API](/api/import-export/overview) and the [Merchant Center](/merchant-center/import-data).
 	Key *string `json:"key,omitempty"`
 }
 
@@ -134,21 +134,21 @@ func (obj CategoryDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Category](ctp:api:type:Category).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Category](ctp:api:type:Category).
 *
  */
 type CategoryPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Category](ctp:api:type:Category) matching the query.
 	Results []Category `json:"results"`
@@ -161,7 +161,7 @@ type CategoryPagedQueryResponse struct {
 type CategoryReference struct {
 	// Unique identifier of the referenced [Category](ctp:api:type:Category).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Category. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Categories.
+	// Contains the representation of the expanded Category. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Categories.
 	Obj *Category `json:"obj,omitempty"`
 }
 
@@ -176,7 +176,7 @@ func (obj CategoryReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Category](ctp:api:type:Category). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type CategoryResourceIdentifier struct {
@@ -515,7 +515,7 @@ type CategorySetAssetCustomFieldAction struct {
 	AssetId *string `json:"assetId,omitempty"`
 	// New value to set. Either `assetId` or `assetKey` is required.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -538,10 +538,12 @@ type CategorySetAssetCustomTypeAction struct {
 	AssetId *string `json:"assetId,omitempty"`
 	// New value to set. Either `assetId` or `assetKey` is required.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Asset.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Asset.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -560,7 +562,7 @@ type CategorySetAssetDescriptionAction struct {
 	AssetId *string `json:"assetId,omitempty"`
 	// New value to set. Either `assetId` or `assetKey` is required.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -581,7 +583,7 @@ func (obj CategorySetAssetDescriptionAction) MarshalJSON() ([]byte, error) {
 type CategorySetAssetKeyAction struct {
 	// Value to set.
 	AssetId string `json:"assetId"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
@@ -649,7 +651,7 @@ func (obj CategorySetAssetTagsAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -668,10 +670,12 @@ func (obj CategorySetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Category with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Category with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Category.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Category.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Category.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -686,7 +690,7 @@ func (obj CategorySetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -705,7 +709,7 @@ func (obj CategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CategorySetExternalIdAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	ExternalId *string `json:"externalId,omitempty"`
 }
 
@@ -720,7 +724,7 @@ func (obj CategorySetExternalIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategorySetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 

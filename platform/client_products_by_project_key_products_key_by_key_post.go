@@ -128,7 +128,7 @@ func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) WithHeaders(headers htt
 }
 
 /**
-*	A failed response can return a [DuplicatePriceScope](ctp:api:type:DuplicatePriceScopeError), [DuplicateVariantValues](ctp:api:type:DuplicateVariantValuesError), [DuplicateAttributeValue](ctp:api:type:DuplicateAttributeValueError), or [DuplicateAttributeValues](ctp:api:type:DuplicateAttributeValuesError) error.
+*	A failed response can return a [DuplicatePriceScope](ctp:api:type:DuplicatePriceScopeError), [OverlappingPriceValidity](ctp:api:type:OverlappingPriceValidityError), [DuplicateVariantValues](ctp:api:type:DuplicateVariantValuesError), [DuplicateAttributeValue](ctp:api:type:DuplicateAttributeValueError), or [DuplicateAttributeValues](ctp:api:type:DuplicateAttributeValuesError) error.
  */
 func (rb *ByProjectKeyProductsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Product, err error) {
 	data, err := serializeInput(rb.body)

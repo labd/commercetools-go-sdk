@@ -12,7 +12,7 @@ type ByProjectKeyShippingMethodsMatchingLocationRequestBuilder struct {
 }
 
 /**
-*	Retrieves the active ShippingMethods that can ship to the provided [Location](/projects/zones#location).
+*	Retrieves the active ShippingMethods that can ship to the provided [Location](ctp:api:type:Location).
 *
 *	The following applies:
 *
@@ -31,7 +31,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestBuilder) Get() *ByPr
 }
 
 /**
-*	Checks if an active ShippingMethod that can ship to the provided [Location](ctp:api:type:Location) exists. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if an active ShippingMethod that can ship to the provided [Location](ctp:api:type:Location) exists. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestBuilder) Head() *ByProjectKeyShippingMethodsMatchingLocationRequestMethodHead {
 	return &ByProjectKeyShippingMethodsMatchingLocationRequestMethodHead{

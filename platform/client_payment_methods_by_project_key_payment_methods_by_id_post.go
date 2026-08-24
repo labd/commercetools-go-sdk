@@ -56,7 +56,7 @@ func (rb *ByProjectKeyPaymentMethodsByIDRequestMethodPost) WithHeaders(headers h
 }
 
 /**
-*	Updates a PaymentMethod in the Project using one or more [update actions](/../api/projects/payment-methods#update-actions).
+*	Updates a PaymentMethod in the Project using one or more [update actions](/api/projects/payment-methods#update-actions).
 *
  */
 func (rb *ByProjectKeyPaymentMethodsByIDRequestMethodPost) Execute(ctx context.Context) (result *PaymentMethod, err error) {

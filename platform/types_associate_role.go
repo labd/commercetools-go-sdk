@@ -23,7 +23,7 @@ type AssociateRole struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique and immutable identifier of the AssociateRole.
 	Key string `json:"key"`
-	// Whether the AssociateRole can be assigned to an Associate by a [buyer](/../api/associates-overview#buyer). If false, the AssociateRole can only be assigned using the [general endpoint](/../api/associates-overview#through-the-general-endpoints).
+	// Whether the AssociateRole can be assigned to an Associate by a [buyer](/api/associates-overview#buyer). If false, the AssociateRole can only be assigned using the [general endpoint](/api/associates-overview#through-the-general-endpoints).
 	BuyerAssignable bool `json:"buyerAssignable"`
 	// Name of the AssociateRole.
 	Name *string `json:"name,omitempty"`
@@ -38,7 +38,7 @@ type AssociateRoleDraft struct {
 	Key string `json:"key"`
 	// Name of the AssociateRole.
 	Name *string `json:"name,omitempty"`
-	// Whether the AssociateRole can be assigned to an Associate by a [buyer](/../api/associates-overview#buyer).
+	// Whether the AssociateRole can be assigned to an Associate by a [buyer](/api/associates-overview#buyer).
 	BuyerAssignable *bool `json:"buyerAssignable,omitempty"`
 	// List of Permissions for the AssociateRole.
 	Permissions []Permission `json:"permissions"`
@@ -90,21 +90,21 @@ func (obj AssociateRoleKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [AssociateRole](ctp:api:type:AssociateRole).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [AssociateRole](ctp:api:type:AssociateRole).
 *
  */
 type AssociateRolePagedQueryResponse struct {
-	// Number of requested [results](/../api/general-concepts#limit).
+	// Number of requested [results](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of elements [skipped](/../api/general-concepts#offset).
+	// Number of elements [skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [AssociateRoles](ctp:api:type:AssociateRole) matching the query.
 	Results []AssociateRole `json:"results"`
@@ -117,7 +117,7 @@ type AssociateRolePagedQueryResponse struct {
 type AssociateRoleReference struct {
 	// Unique identifier of the referenced [AssociateRole](ctp:api:type:AssociateRole).
 	ID string `json:"id"`
-	// Contains the representation of the expanded AssociateRole. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for AssociateRole.
+	// Contains the representation of the expanded AssociateRole. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for AssociateRole.
 	Obj *AssociateRole `json:"obj,omitempty"`
 }
 
@@ -132,7 +132,7 @@ func (obj AssociateRoleReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:TypeResourceIdentifier) of an [AssociateRole](ctp:api:type:AssociateRole). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:TypeResourceIdentifier) of an [AssociateRole](ctp:api:type:AssociateRole). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type AssociateRoleResourceIdentifier struct {
@@ -374,7 +374,9 @@ type AssociateRoleSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the AssociateRole with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the AssociateRole.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](ctp:api:type:CustomFields) for the AssociateRole.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the AssociateRole.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

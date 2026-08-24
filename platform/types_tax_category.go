@@ -9,7 +9,7 @@ import (
 )
 
 /**
-*	It is used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order.
+*	It is used to calculate the [taxPortions](/api/projects/carts#taxedprice) field in a Cart or Order.
  */
 type SubRate struct {
 	// Name of the SubRate.
@@ -42,12 +42,16 @@ type TaxCategory struct {
 
 type TaxCategoryDraft struct {
 	// Name of the TaxCategory.
+	//
+	// If the provided name is used by another TaxCategory in the Project, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Name string `json:"name"`
 	// Description of the TaxCategory.
 	Description *string `json:"description,omitempty"`
 	// Tax rates and subrates of states and countries.
 	Rates []TaxRateDraft `json:"rates"`
 	// User-defined unique identifier for the TaxCategory.
+	//
+	// If the value is used by another TaxCategory in the Project, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -76,21 +80,21 @@ func (obj TaxCategoryDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [TaxCategory](ctp:api:type:TaxCategory).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [TaxCategory](ctp:api:type:TaxCategory).
 *
  */
 type TaxCategoryPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [TaxCategories](ctp:api:type:TaxCategory) matching the query.
 	Results []TaxCategory `json:"results"`
@@ -103,7 +107,7 @@ type TaxCategoryPagedQueryResponse struct {
 type TaxCategoryReference struct {
 	// Unique identifier of the referenced [TaxCategory](ctp:api:type:TaxCategory).
 	ID string `json:"id"`
-	// Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for TaxCategories.
+	// Contains the representation of the expanded TaxCategory. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for TaxCategories.
 	Obj *TaxCategory `json:"obj,omitempty"`
 }
 
@@ -118,7 +122,7 @@ func (obj TaxCategoryReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [TaxCategory](ctp:api:type:TaxCategory). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type TaxCategoryResourceIdentifier struct {
@@ -222,18 +226,19 @@ type TaxRate struct {
 	// Present if the TaxRate is part of a [TaxCategory](ctp:api:type:TaxCategory).
 	// Absent for external TaxRates in [LineItem](ctp:api:type:LineItem), [CustomLineItem](ctp:api:type:CustomLineItem), and [ShippingInfo](ctp:api:type:ShippingInfo).
 	ID *string `json:"id,omitempty"`
-	// User-defined unique identifier of the TaxRate.
+	// User-defined identifier of the TaxRate. Unique within the TaxCategory containing it.
 	// Present when set using [TaxRateDraft](ctp:api:type:TaxRateDraft). Not available for external TaxRates created using [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
 	Key *string `json:"key,omitempty"`
 	// Name of the TaxRate.
 	Name string `json:"name"`
 	// Tax rate. If subrates are used, the amount is the sum of all rates in `subRates`.
 	Amount float64 `json:"amount"`
-	// If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+	// Whether tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
+	// The value is case-sensitive and must use the same casing as the `state` value in the Cart `shippingAddress`.
 	State *string `json:"state,omitempty"`
 	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
 	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
@@ -268,19 +273,26 @@ type TaxRateDraft struct {
 	// Name of the TaxRate.
 	Name string `json:"name"`
 	// Tax rate.
-	// Must be supplied if no `subRates` are specified.
-	// If `subRates` are specified, this field can be omitted or it must be the sum of amounts of all `subRates`.
+	//
+	// Either `amount` or `subRates` must be defined. If both are defined, the value of this field must be equal to the sum of the `subRates` amounts; otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Amount *float64 `json:"amount,omitempty"`
-	// If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+	// Whether tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
+	//
+	// If the provided combination of `country` and `state` exists for the TaxCategory, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
+	// The value is case-sensitive and must use the same casing as the `state` value in the Cart `shippingAddress`. Empty strings are treated as if `state` was omitted.
+	//
+	// If the provided combination of `country` and `state` exists for the TaxCategory, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	State *string `json:"state,omitempty"`
-	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
+	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). If `amount` is defined, the total of all subrates must equal `amount`.
 	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
 	SubRates []SubRate `json:"subRates"`
-	// User-defined unique identifier of the TaxRate.
+	// User-defined identifier of the TaxRate.
+	//
+	// If the provided key is used by another TaxRate in the TaxCategory, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -324,7 +336,9 @@ func (obj TaxCategoryAddTaxRateAction) MarshalJSON() ([]byte, error) {
 }
 
 type TaxCategoryChangeNameAction struct {
-	// New value to set. Must not be empty.
+	// New value to set.
+	//
+	// If the provided name is used by another TaxCategory in the Project, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Name string `json:"name"`
 }
 
@@ -339,11 +353,13 @@ func (obj TaxCategoryChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type TaxCategoryRemoveTaxRateAction struct {
-	// ID of the TaxRate to remove.
-	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	// ID of the TaxRate to remove. Either `taxRateId` or `taxRateKey` must be provided.
+	//
+	// If the referenced TaxRate does not exist within the TaxCategory, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	TaxRateId *string `json:"taxRateId,omitempty"`
-	// Key of the TaxRate to remove.
-	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	// Key of the TaxRate to remove. Either `taxRateId` or `taxRateKey` must be provided.
+	//
+	// If the referenced TaxRate does not exist within the TaxCategory, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	TaxRateKey *string `json:"taxRateKey,omitempty"`
 }
 
@@ -359,10 +375,14 @@ func (obj TaxCategoryRemoveTaxRateAction) MarshalJSON() ([]byte, error) {
 
 type TaxCategoryReplaceTaxRateAction struct {
 	// ID of the TaxRate to replace.
-	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	// Either `taxRateId` or `taxRateKey` must be provided.
+	//
+	// If the referenced TaxRate does not exist within the TaxCategory, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	TaxRateId *string `json:"taxRateId,omitempty"`
 	// Key of the TaxRate to replace.
-	// Either `taxRateId` or `taxRateKey` is required for this update action.
+	// Either `taxRateId` or `taxRateKey` must be provided.
+	//
+	// If the referenced TaxRate does not exist within the TaxCategory, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	TaxRateKey *string `json:"taxRateKey,omitempty"`
 	// New TaxRate to replace with.
 	TaxRate TaxRateDraft `json:"taxRate"`
@@ -379,7 +399,7 @@ func (obj TaxCategoryReplaceTaxRateAction) MarshalJSON() ([]byte, error) {
 }
 
 type TaxCategorySetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *string `json:"description,omitempty"`
 }
 
@@ -394,7 +414,9 @@ func (obj TaxCategorySetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type TaxCategorySetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
+	//
+	// If the value is used by another TaxCategory in the Project, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 }
 

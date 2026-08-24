@@ -56,12 +56,12 @@ func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodPost) WithHeaders(head
 }
 
 /**
-*	Updates a ShoppingList for the authenticated Customer or anonymous user using one or more [update actions](/../api/projects/me-shoppingLists#update-actions).  Returns a `200` status if successful.
+*	Updates a ShoppingList for the authenticated Customer or anonymous user using one or more [update actions](/api/projects/me-shoppingLists#update-actions).  Returns a `200` status if successful.
 *
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no ShoppingList exists for the provided `key`.
-*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeShoppingListsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {

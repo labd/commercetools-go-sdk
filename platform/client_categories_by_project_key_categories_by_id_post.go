@@ -56,7 +56,7 @@ func (rb *ByProjectKeyCategoriesByIDRequestMethodPost) WithHeaders(headers http.
 }
 
 /**
-*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*	Either the [scope](/api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
 *
  */
 func (rb *ByProjectKeyCategoriesByIDRequestMethodPost) Execute(ctx context.Context) (result *Category, err error) {

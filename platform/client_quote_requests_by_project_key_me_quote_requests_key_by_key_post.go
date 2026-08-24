@@ -56,7 +56,7 @@ func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodPost) WithHeaders(head
 }
 
 /**
-*	Updates a QuoteRequest for the authenticated Customer using one or more [update actions](/../api/projects/quote-requests#update-actions).
+*	Updates a QuoteRequest for the authenticated Customer using one or more [update actions](/api/projects/quote-requests#update-actions).
 *
  */
 func (rb *ByProjectKeyMeQuoteRequestsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *QuoteRequest, err error) {

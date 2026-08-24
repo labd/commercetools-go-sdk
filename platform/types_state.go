@@ -71,6 +71,10 @@ func (obj State) MarshalJSON() ([]byte, error) {
 
 type StateDraft struct {
 	// User-defined unique identifier for the State.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If the value is used by another State in the Project, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key string `json:"key"`
 	// Specify to which resource or object type the State is assigned to.
 	Type StateTypeEnum `json:"type"`
@@ -119,21 +123,21 @@ func (obj StateDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [State](ctp:api:type:State).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [State](ctp:api:type:State).
 *
  */
 type StatePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [States](ctp:api:type:State) matching the query.
 	Results []State `json:"results"`
@@ -146,7 +150,7 @@ type StatePagedQueryResponse struct {
 type StateReference struct {
 	// Unique identifier of the referenced [State](ctp:api:type:State).
 	ID string `json:"id"`
-	// Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for States.
+	// Contains the representation of the expanded State. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for States.
 	Obj *State `json:"obj,omitempty"`
 }
 
@@ -161,7 +165,7 @@ func (obj StateReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type StateResourceIdentifier struct {
@@ -310,6 +314,10 @@ func mapDiscriminatorStateUpdateAction(input interface{}) (StateUpdateAction, er
 
 type StateAddRolesAction struct {
 	// Value to append to the array.
+	//
+	// If the specified roles are already present, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If a specified role is not applicable to the State's `type`, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Roles []StateRoleEnum `json:"roles"`
 }
 
@@ -324,7 +332,9 @@ func (obj StateAddRolesAction) MarshalJSON() ([]byte, error) {
 }
 
 type StateChangeInitialAction struct {
-	// Set to `true` for defining the State as initial State in a state machine and making it the first step in a workflow.
+	// Whether to define the State as the initial State in a state machine and make it the first step in a workflow.
+	//
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Initial bool `json:"initial"`
 }
 
@@ -340,7 +350,10 @@ func (obj StateChangeInitialAction) MarshalJSON() ([]byte, error) {
 
 type StateChangeKeyAction struct {
 	// New value to set.
-	// Must not be empty.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If the value is used by another State in the Project, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key string `json:"key"`
 }
 
@@ -357,6 +370,8 @@ func (obj StateChangeKeyAction) MarshalJSON() ([]byte, error) {
 type StateChangeTypeAction struct {
 	// Resource or object types the State shall be assigned to.
 	// Must not be empty.
+	//
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Type StateTypeEnum `json:"type"`
 }
 
@@ -372,6 +387,8 @@ func (obj StateChangeTypeAction) MarshalJSON() ([]byte, error) {
 
 type StateRemoveRolesAction struct {
 	// Roles to remove from the State.
+	//
+	// If none of the specified roles are already present, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Roles []StateRoleEnum `json:"roles"`
 }
 
@@ -387,7 +404,9 @@ func (obj StateRemoveRolesAction) MarshalJSON() ([]byte, error) {
 
 type StateSetDescriptionAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// Set to an empty object to remove any existing value.
 	Description LocalizedString `json:"description"`
 }
 
@@ -403,7 +422,9 @@ func (obj StateSetDescriptionAction) MarshalJSON() ([]byte, error) {
 
 type StateSetNameAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// Set to an empty object to remove any existing value.
 	Name LocalizedString `json:"name"`
 }
 
@@ -419,7 +440,10 @@ func (obj StateSetNameAction) MarshalJSON() ([]byte, error) {
 
 type StateSetRolesAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	// If a specified role is not applicable to the State's `type`, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// Set to an empty array to remove any existing value.
 	Roles []StateRoleEnum `json:"roles"`
 }
 
@@ -435,7 +459,7 @@ func (obj StateSetRolesAction) MarshalJSON() ([]byte, error) {
 
 type StateSetTransitionsAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	//
 	// Possible transformations of the current State to other States of the same `type` (for example, _Initial_ -> _Shipped_).
 	// When performing a `transitionState` update action and `transitions` is set, the currently referenced State must have a transition to the new State.
@@ -444,6 +468,8 @@ type StateSetTransitionsAction struct {
 	// If `transitions` is not set, the validation is turned off.
 	//
 	// When performing a `transitionState` update action, any other State of the same `type` can be transitioned to.
+	//
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Transitions []StateResourceIdentifier `json:"transitions"`
 }
 

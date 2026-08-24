@@ -13,7 +13,7 @@ type ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder struct {
 }
 
 /**
-*	Use this method to retrieve a global Customer's details by using the email token during their [email verification process](/../api/customers-overview#customer-email-verification).
+*	Use this method to retrieve a global Customer's details by using the email token during their [email verification process](/api/customers-overview#customer-email-verification).
 *
  */
 func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestBuilder) Get() *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet {

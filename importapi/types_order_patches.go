@@ -20,7 +20,7 @@ const (
 )
 
 type ReturnItemDraft struct {
-	// Number of Line Items or Custom Line Items to return.
+	// Quantity of Line Items or Custom Line Items to return.
 	Quantity int `json:"quantity"`
 	// `id` of the [LineItem](ctp:api:type:LineItem) to return.
 	//

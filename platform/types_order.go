@@ -597,16 +597,16 @@ type Hit struct {
 type OrderPagedSearchResponse struct {
 	// Total number of results matching the query.
 	Total int `json:"total"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset *int `json:"offset,omitempty"`
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit *int `json:"limit,omitempty"`
 	// Actual results.
 	Hits []Hit `json:"hits"`
 }
 
 /**
-*	Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+*	Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
  */
 type OrderSearchCustomType string
 
@@ -640,14 +640,14 @@ const (
 type OrderSearchQueryExpressionValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 }
 
 type OrderSearchAnyValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType      *OrderSearchCustomType `json:"customType,omitempty"`
 	Value           interface{}            `json:"value"`
 	Language        *string                `json:"language,omitempty"`
@@ -657,7 +657,7 @@ type OrderSearchAnyValue struct {
 type OrderSearchDateRangeValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Gte        *time.Time             `json:"gte,omitempty"`
 	Lte        *time.Time             `json:"lte,omitempty"`
@@ -666,7 +666,7 @@ type OrderSearchDateRangeValue struct {
 type OrderSearchFullTextValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Value      string                 `json:"value"`
 	Language   *string                `json:"language,omitempty"`
@@ -676,7 +676,7 @@ type OrderSearchFullTextValue struct {
 type OrderSearchLongRangeValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Gte        *int                   `json:"gte,omitempty"`
 	Lte        *int                   `json:"lte,omitempty"`
@@ -685,7 +685,7 @@ type OrderSearchLongRangeValue struct {
 type OrderSearchNumberRangeValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType *OrderSearchCustomType `json:"customType,omitempty"`
 	Gte        *float64               `json:"gte,omitempty"`
 	Lte        *float64               `json:"lte,omitempty"`
@@ -710,7 +710,7 @@ const (
 type OrderSearchStringValue struct {
 	Field string `json:"field"`
 	Boost *int   `json:"boost,omitempty"`
-	// Possible values for the `customType` property on [simple expressions](/../api/projects/order-search#simple-expressions) indicating the data type of the `field`.
+	// Possible values for the `customType` property on [simple expressions](/api/projects/order-search#simple-expressions) indicating the data type of the `field`.
 	CustomType      *OrderSearchCustomType `json:"customType,omitempty"`
 	Value           string                 `json:"value"`
 	Language        *string                `json:"language,omitempty"`
@@ -724,11 +724,11 @@ type OrderSearchStringValue struct {
 type CustomLineItemImportDraft struct {
 	// Name of the Custom Line Item.
 	Name LocalizedString `json:"name"`
-	// User-defined unique identifier of the Custom Line Item.
+	// User-defined identifier of the Custom Line Item. Must be unique among Custom Line Items in the Order.
 	Key *string `json:"key,omitempty"`
 	// User-defined identifier used in a deep-link URL for the Custom Line Item. This value should match the pattern `[a-zA-Z0-9_-]{2,256}`.
 	Slug string `json:"slug"`
-	// The number of items in the Custom Line Item. Can be a negative value.
+	// Quantity of items in the Custom Line Item. Can be a negative value.
 	Quantity int `json:"quantity"`
 	// The cost of individual items in the Custom Line Item. The amount can be negative.
 	//
@@ -780,7 +780,7 @@ func (obj CustomLineItemImportDraft) MarshalJSON() ([]byte, error) {
 type Delivery struct {
 	// Unique identifier of the Delivery.
 	ID string `json:"id"`
-	// User-defined unique identifier of the Delivery.
+	// User-defined identifier of the Delivery. Unique among Deliveries in the Order.
 	Key *string `json:"key,omitempty"`
 	// Date and time (UTC) the Delivery was created.
 	CreatedAt time.Time `json:"createdAt"`
@@ -795,7 +795,7 @@ type Delivery struct {
 }
 
 type DeliveryDraft struct {
-	// User-defined unique identifier of the Delivery.
+	// User-defined identifier of the Delivery. Must be unique among Deliveries in the Order.
 	Key *string `json:"key,omitempty"`
 	// Line Items or Custom Line Items to deliver.
 	// It can also be specified individually for each [Parcel](ctp:api:type:Parcel).
@@ -839,7 +839,7 @@ func (obj DeliveryDraft) MarshalJSON() ([]byte, error) {
 type DeliveryItem struct {
 	// `id` of the [LineItem](ctp:api:type:LineItem) or [CustomLineItem](ctp:api:type:CustomLineItem) delivered.
 	ID string `json:"id"`
-	// Number of Line Items or Custom Line Items delivered.
+	// Quantity of Line Items or Custom Line Items delivered.
 	Quantity int `json:"quantity"`
 }
 
@@ -851,7 +851,7 @@ type DiscountedLineItemPriceDraft struct {
 }
 
 type ItemState struct {
-	// Number of Line Items or Custom Line Items in this State.
+	// Quantity of Line Items or Custom Line Items in this State.
 	Quantity int `json:"quantity"`
 	// State of the Line Items or Custom Line Items in a custom workflow.
 	State StateReference `json:"state"`
@@ -864,7 +864,7 @@ type ItemState struct {
 type LineItemImportDraft struct {
 	// Name of the Line Item.
 	Name LocalizedString `json:"name"`
-	// User-defined unique identifier of the Line Item.
+	// User-defined identifier of the Line Item. Must be unique among Line Items in the Order.
 	Key *string `json:"key,omitempty"`
 	// The Product Variant to use as a [Line Item](ctp:api:type:LineItem).
 	Variant ProductVariantImportDraft `json:"variant"`
@@ -872,13 +872,13 @@ type LineItemImportDraft struct {
 	//
 	// If provided, you must also set `variant.id`.
 	ProductId *string `json:"productId,omitempty"`
-	// The number of Product Variants in the LineItem. Can be a negative value.
+	// Quantity of the Product Variant. Can be a negative value.
 	Quantity int `json:"quantity"`
 	// The Line Item price for `quantity` = `1`. The amount can be negative.
 	Price PriceDraft `json:"price"`
 	// The tax rate used to calculate the `taxedPrice` of the Order.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
-	// The Channel used to [select a Price](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	// The Channel used to [select a Price](/api/pricing-and-discounts-overview#line-item-price-selection).
 	// This Channel must have the `ProductDistribution` role.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	// The Channel used to supply Line Items.
@@ -933,18 +933,18 @@ type Order struct {
 	OrderNumber *string `json:"orderNumber,omitempty"`
 	// User-defined identifier of a purchase Order.
 	//
-	// It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	// It is typically set by the [Buyer](ctp:api:type:Buyer) and can be used with [Quotes](/quotes-overview) to track the purchase Order during the [quote and order flow](/api/quotes-overview#intended-workflow).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// `id` of the [Customer](ctp:api:type:Customer) that the Order belongs to.
 	CustomerId *string `json:"customerId,omitempty"`
 	// Email address of the Customer that the Order belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Order belongs to.
-	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// [Reference](ctp:api:type:Reference) to a Business Unit the Order belongs to. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// [Reference](ctp:api:type:Reference) to a Store the Order belongs to.
 	Store *StoreKeyReference `json:"store,omitempty"`
@@ -1015,7 +1015,7 @@ type Order struct {
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Order.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
-	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	Country *string `json:"country,omitempty"`
 	// Languages of the Order.
 	// Can only contain languages supported by the [Project](ctp:api:type:Project).
@@ -1133,7 +1133,7 @@ type OrderFromCartDraft struct {
 	OrderNumber *string `json:"orderNumber,omitempty"`
 	// User-defined identifier for a purchase order.
 	//
-	// It is typically set by the [Buyer](ctp:api:type:Buyer) or Merchant to track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	// It is typically set by the [Buyer](ctp:api:type:Buyer) or Merchant to track the purchase order during the [quote and order flow](/api/quotes-overview#intended-workflow).
 	//
 	// If not provided, the `purchaseOrderNumber` from the referenced [Cart](ctp:api:type:Cart) is used.
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
@@ -1160,7 +1160,7 @@ type OrderFromQuoteDraft struct {
 	Quote QuoteResourceIdentifier `json:"quote"`
 	// `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
 	Version int `json:"version"`
-	// If `true`, the `quoteState` of the referenced [Quote](ctp:api:type:Quote) will be set to `Accepted`.
+	// Whether the `quoteState` of the referenced [Quote](ctp:api:type:Quote) will be set to `Accepted`.
 	QuoteStateToAccepted *bool `json:"quoteStateToAccepted,omitempty"`
 	// User-defined identifier for the Order that is unique across a Project.
 	// Once set, the value cannot be changed.
@@ -1192,7 +1192,7 @@ type OrderImportDraft struct {
 	// The Customer Group of the Customer the Order belongs to.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Order should belong to.
-	// When the `customerId` of the Order is also set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// When the `customerId` of the Order is also set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// The Store the Order belongs to.
 	// Used for [filtering](#filtering).
@@ -1281,21 +1281,21 @@ func (obj OrderImportDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Order](ctp:api:type:Order).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [Order](ctp:api:type:Order).
 *
  */
 type OrderPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Orders](ctp:api:type:Order) matching the query.
 	Results []Order `json:"results"`
@@ -1308,7 +1308,7 @@ type OrderPagedQueryResponse struct {
 type OrderReference struct {
 	// Unique identifier of the referenced [Order](ctp:api:type:Order).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Order. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Orders.
+	// Contains the representation of the expanded Order. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Orders.
 	Obj *Order `json:"obj,omitempty"`
 }
 
@@ -1651,6 +1651,12 @@ func mapDiscriminatorOrderUpdateAction(input interface{}) (OrderUpdateAction, er
 		return obj, nil
 	case "setDeliveryItems":
 		obj := OrderSetDeliveryItemsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setEstimatedDelivery":
+		obj := OrderSetEstimatedDeliveryAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -2072,9 +2078,9 @@ func mapDiscriminatorReturnItem(input interface{}) (ReturnItem, error) {
 type CustomLineItemReturnItem struct {
 	// Unique identifier of the Return Item.
 	ID string `json:"id"`
-	// User-defined unique identifier of the CustomLineItemReturnItem.
+	// User-defined identifier of the CustomLineItemReturnItem. Must be unique among Return Items in the Order.
 	Key *string `json:"key,omitempty"`
-	// Number of Custom Line Items returned.
+	// Quantity of Custom Line Items returned.
 	Quantity int `json:"quantity"`
 	// User-defined description for the return.
 	Comment *string `json:"comment,omitempty"`
@@ -2108,9 +2114,9 @@ func (obj CustomLineItemReturnItem) MarshalJSON() ([]byte, error) {
 type LineItemReturnItem struct {
 	// Unique identifier of the Return Item.
 	ID string `json:"id"`
-	// User-defined unique identifier of the LineItemReturnItem.
+	// User-defined identifier of the LineItemReturnItem. Must be unique among Return Items in the Order.
 	Key *string `json:"key,omitempty"`
-	// Number of Line Items returned.
+	// Quantity of Line Items returned.
 	Quantity int `json:"quantity"`
 	// User-defined description for the return.
 	Comment *string `json:"comment,omitempty"`
@@ -2142,9 +2148,9 @@ func (obj LineItemReturnItem) MarshalJSON() ([]byte, error) {
 }
 
 type ReturnItemDraft struct {
-	// User-defined unique identifier of the Return Item.
+	// User-defined identifier of the Return Item. Must be unique among Return Items in the Order.
 	Key *string `json:"key,omitempty"`
-	// Number of Line Items or Custom Line Items to return.
+	// Quantity of Line Items or Custom Line Items to return.
 	Quantity int `json:"quantity"`
 	// `id` of the [LineItem](ctp:api:type:LineItem) to return.
 	//
@@ -2280,8 +2286,7 @@ type TrackingData struct {
 	Provider *string `json:"provider,omitempty"`
 	// Transaction identifier with the `provider`.
 	ProviderTransaction *string `json:"providerTransaction,omitempty"`
-	// - If `true`, the Parcel is being returned.
-	// - If `false`, the Parcel is being delivered to the customer.
+	// Whether the Parcel is being returned. If `false`, the Parcel is being delivered to the customer.
 	IsReturn *bool `json:"isReturn,omitempty"`
 }
 
@@ -2289,7 +2294,7 @@ type TrackingData struct {
 *	A [Delivery](ctp:api:type:Delivery) can only be added to an [Order](ctp:api:type:Order) if
 *	its `shippingInfo` (for `shippingMode` = `Single`), or its `shipping` (for `shippingMode` = `Multiple`) exists.
 *
-*	Multiple Deliveries can be added to the same Order to represent split or partial shipments. However, the API doesn't validate that the cumulative quantities of Line Items or Custom Line Items across all Deliveries match or stay within the originally ordered quantities. For more information, see [Multiple Deliveries](/../api/shipping-delivery-overview#multiple-deliveries) on the Shipping and Delivery overview page.
+*	Multiple Deliveries can be added to the same Order to represent split or partial shipments. However, the API doesn't validate that the cumulative quantities of Line Items or Custom Line Items across all Deliveries match or stay within the originally ordered quantities. For more information, see [Multiple Deliveries](/api/shipping-delivery-overview#multiple-deliveries) on the Shipping and Delivery overview page.
 *
 *	Produces the [Delivery Added](ctp:api:type:DeliveryAddedMessage) Message.
 *
@@ -2659,7 +2664,7 @@ func (obj OrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetBillingAddressAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2674,7 +2679,7 @@ func (obj OrderSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetBillingAddressCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2693,10 +2698,12 @@ func (obj OrderSetBillingAddressCustomFieldAction) MarshalJSON() ([]byte, error)
 }
 
 type OrderSetBillingAddressCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `billingAddress` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `billingAddress` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `billingAddress`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `billingAddress`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `billingAddress`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2717,7 +2724,7 @@ func (obj OrderSetBillingAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 *
  */
 type OrderSetBusinessUnitAction struct {
-	// New Business Unit to assign to the Order. If empty, any existing value is removed.
+	// New Business Unit to assign to the Order. If omitted, any existing value is removed.
 	//
 	// If the referenced Business Unit does not exist, a [ReferencedResourceNotFound](ctp:api:type:ReferencedResourceNotFoundError) error is returned.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
@@ -2734,7 +2741,7 @@ func (obj OrderSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2757,7 +2764,7 @@ type OrderSetCustomLineItemCustomFieldAction struct {
 	CustomLineItemId *string `json:"customLineItemId,omitempty"`
 	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
 	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2780,10 +2787,12 @@ type OrderSetCustomLineItemCustomTypeAction struct {
 	CustomLineItemId *string `json:"customLineItemId,omitempty"`
 	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
 	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Custom Line Item with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Custom Line Item with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Custom Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Custom Line Item.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Custom Line Item.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2803,7 +2812,7 @@ type OrderSetCustomLineItemShippingDetailsAction struct {
 	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
 	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -2818,10 +2827,12 @@ func (obj OrderSetCustomLineItemShippingDetailsAction) MarshalJSON() ([]byte, er
 }
 
 type OrderSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Order with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Order with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Order.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Order.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Order.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2843,7 +2854,7 @@ func (obj OrderSetCustomTypeAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetCustomerEmailAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Email *string `json:"email,omitempty"`
 }
 
@@ -2866,7 +2877,7 @@ func (obj OrderSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetCustomerIdAction struct {
 	// `id` of an existing [Customer](ctp:api:type:Customer).
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	CustomerId *string `json:"customerId,omitempty"`
 }
 
@@ -2894,7 +2905,7 @@ type OrderSetDeliveryAddressAction struct {
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2917,7 +2928,7 @@ type OrderSetDeliveryAddressCustomFieldAction struct {
 	//
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2944,10 +2955,12 @@ type OrderSetDeliveryAddressCustomTypeAction struct {
 	//
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the [Delivery](ctp:api:type:Delivery) `address` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the [Delivery](ctp:api:type:Delivery) `address` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the [Delivery](ctp:api:type:Delivery) `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the [Delivery](ctp:api:type:Delivery) `address`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the [Delivery](ctp:api:type:Delivery) `address`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2970,7 +2983,7 @@ type OrderSetDeliveryCustomFieldAction struct {
 	//
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2997,10 +3010,12 @@ type OrderSetDeliveryCustomTypeAction struct {
 	//
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Delivery with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Delivery.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Delivery.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Delivery.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3028,7 +3043,7 @@ type OrderSetDeliveryItemsAction struct {
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// Set to an empty array to remove any existing value.
 	Items []DeliveryItem `json:"items"`
 }
 
@@ -3042,10 +3057,35 @@ func (obj OrderSetDeliveryItemsAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setDeliveryItems", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Sets the estimated delivery window on the Order's [ShippingInfo](ctp:api:type:ShippingInfo).
+*
+*	This update action produces the [OrderEstimatedDeliverySet](ctp:api:type:OrderEstimatedDeliverySetMessage) Message.
+*
+ */
+type OrderSetEstimatedDeliveryAction struct {
+	// `key` of the [Shipping](ctp:api:type:Shipping) to update.
+	// This is required and valid only for Orders with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	// An [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned if `shippingKey` is provided for Orders with `Single` ShippingMode, or omitted for Orders with `Multiple` ShippingMode.
+	ShippingKey *string `json:"shippingKey,omitempty"`
+	// Value to set. If empty, any existing value is removed.
+	EstimatedDelivery *EstimatedDelivery `json:"estimatedDelivery,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderSetEstimatedDeliveryAction) MarshalJSON() ([]byte, error) {
+	type Alias OrderSetEstimatedDeliveryAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setEstimatedDelivery", Alias: (*Alias)(&obj)})
+}
+
 type OrderSetItemShippingAddressCustomFieldAction struct {
 	// `key` of the [Address](ctp:api:type:Address) in `itemShippingAddresses`.
 	AddressKey string `json:"addressKey"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3066,10 +3106,12 @@ func (obj OrderSetItemShippingAddressCustomFieldAction) MarshalJSON() ([]byte, e
 type OrderSetItemShippingAddressCustomTypeAction struct {
 	// `key` of the [Address](ctp:api:type:Address) in `itemShippingAddresses`.
 	AddressKey string `json:"addressKey"`
-	// Defines the [Type](ctp:api:type:Type) that extends the `itemShippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `itemShippingAddress` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `itemShippingAddress`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `itemShippingAddress`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `itemShippingAddress`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3088,7 +3130,7 @@ type OrderSetLineItemCustomFieldAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3111,10 +3153,12 @@ type OrderSetLineItemCustomTypeAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Line Item with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Line Item with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Line Item.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Line Item.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3134,7 +3178,7 @@ type OrderSetLineItemShippingDetailsAction struct {
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
-	// If empty, the existing value is removed.
+	// If omitted, the existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -3151,7 +3195,7 @@ func (obj OrderSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) {
 type OrderSetLocaleAction struct {
 	// Value to set.
 	// Must be one of the [Project](ctp:api:type:Project)'s languages.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Locale *string `json:"locale,omitempty"`
 }
 
@@ -3191,7 +3235,7 @@ type OrderSetParcelCustomFieldAction struct {
 	//
 	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3218,10 +3262,12 @@ type OrderSetParcelCustomTypeAction struct {
 	//
 	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Parcel with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Parcel.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Parcel.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Parcel.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3249,7 +3295,7 @@ type OrderSetParcelItemsAction struct {
 	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// Set to an empty array to remove any existing value.
 	Items []DeliveryItem `json:"items"`
 }
 
@@ -3277,7 +3323,7 @@ type OrderSetParcelMeasurementsAction struct {
 	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Measurements *ParcelMeasurements `json:"measurements,omitempty"`
 }
 
@@ -3305,7 +3351,7 @@ type OrderSetParcelTrackingDataAction struct {
 	// Either `parcelId` or `parcelKey` must be provided.
 	ParcelKey *string `json:"parcelKey,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	TrackingData *TrackingData `json:"trackingData,omitempty"`
 }
 
@@ -3325,7 +3371,7 @@ func (obj OrderSetParcelTrackingDataAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetPurchaseOrderNumberAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 }
 
@@ -3345,7 +3391,7 @@ func (obj OrderSetPurchaseOrderNumberAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetReturnInfoAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Items []ReturnInfoDraft `json:"items"`
 }
 
@@ -3379,7 +3425,7 @@ type OrderSetReturnItemCustomFieldAction struct {
 	ReturnItemId *string `json:"returnItemId,omitempty"`
 	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
 	ReturnItemKey *string `json:"returnItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3402,10 +3448,12 @@ type OrderSetReturnItemCustomTypeAction struct {
 	ReturnItemId *string `json:"returnItemId,omitempty"`
 	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
 	ReturnItemKey *string `json:"returnItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Return Item with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Return Item with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Return Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Return Item.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Return Item.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3454,6 +3502,8 @@ type OrderSetReturnShipmentStateAction struct {
 	// `key` of the [ReturnItem](ctp:api:type:ReturnItem) to update. Either `returnItemId` or `returnItemKey` is required.
 	ReturnItemKey *string `json:"returnItemKey,omitempty"`
 	// New shipment state of the [ReturnItem](ctp:api:type:ReturnItem).
+	//
+	// This update action can only transition Return Items from the `Returned` state to `BackInStock` or `Unusable`. The initial `Advised` and `Returned` states can only be set at creation time on [ReturnItemDraft](ctp:api:type:ReturnItemDraft).
 	ShipmentState ReturnShipmentState `json:"shipmentState"`
 }
 
@@ -3476,7 +3526,7 @@ func (obj OrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetShippingAddressAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -3491,7 +3541,7 @@ func (obj OrderSetShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 type OrderSetShippingAddressCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3510,10 +3560,12 @@ func (obj OrderSetShippingAddressCustomFieldAction) MarshalJSON() ([]byte, error
 }
 
 type OrderSetShippingAddressCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `shippingAddress` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `shippingAddress` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `shippingAddress`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingAddress`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `shippingAddress`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3532,7 +3584,7 @@ type OrderSetShippingCustomFieldAction struct {
 	// on a Order with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	// Leave this empty to customize the one and only ShippingMethod on a `Single` ShippingMode Order.
 	ShippingKey *string `json:"shippingKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3559,10 +3611,12 @@ type OrderSetShippingCustomTypeAction struct {
 	// on a Order with `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 	// Leave this empty to customize the one and only ShippingMethod on a `Single` ShippingMode Order.
 	ShippingKey *string `json:"shippingKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the specified ShippingMethod with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the specified ShippingMethod with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ShippingMethod.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `shippingMethod`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `shippingMethod`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3587,7 +3641,7 @@ func (obj OrderSetShippingCustomTypeAction) MarshalJSON() ([]byte, error) {
  */
 type OrderSetStoreAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	//
 	// If `store` references the same Store the Order is currently assigned to or if you try to remove the value when no Store is currently assigned, a `400` error is returned.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -3612,7 +3666,7 @@ type OrderTransitionCustomLineItemStateAction struct {
 	CustomLineItemId *string `json:"customLineItemId,omitempty"`
 	// `key` of the [CustomLineItem](ctp:api:type:CustomLineItem) to update. Either `customLineItemId` or `customLineItemKey` is required.
 	CustomLineItemKey *string `json:"customLineItemKey,omitempty"`
-	// Number of Custom Line Items that should transition [State](ctp:api:type:State).
+	// Quantity of Custom Line Items that should transition [State](ctp:api:type:State).
 	Quantity int `json:"quantity"`
 	// [State](ctp:api:type:State) the Custom Line Item should transition from.
 	FromState StateResourceIdentifier `json:"fromState"`
@@ -3641,7 +3695,7 @@ type OrderTransitionLineItemStateAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Number of Line Items that should transition [State](ctp:api:type:State).
+	// Quantity of Line Items that should transition [State](ctp:api:type:State).
 	Quantity int `json:"quantity"`
 	// [State](ctp:api:type:State) the Line Item should transition from.
 	FromState StateResourceIdentifier `json:"fromState"`
@@ -3672,7 +3726,7 @@ type OrderTransitionStateAction struct {
 	// Value to set.
 	// If there is no State yet, the new State must be an initial State.
 	State StateResourceIdentifier `json:"state"`
-	// Set to `true` to turn off validation.
+	// Whether to turn off validation.
 	Force *bool `json:"force,omitempty"`
 }
 

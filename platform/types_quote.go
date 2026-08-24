@@ -27,7 +27,7 @@ type Quote struct {
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
 	// Staged Quote related to the Quote.
 	StagedQuote StagedQuoteReference `json:"stagedQuote"`
-	// The [Buyer](/../api/quotes-overview#buyer) who owns the Quote.
+	// The [Buyer](/api/quotes-overview#buyer) who owns the Quote.
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Set automatically when `customer` is set and the Customer is a member of a Customer Group.
 	// Not updated if Customer is changed after Quote creation.
@@ -35,11 +35,11 @@ type Quote struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// Expiration date for the Quote. Once a Quote expires, it cannot be ordered.
 	ValidTo *time.Time `json:"validTo,omitempty"`
-	// Message from the [Seller](/../api/quotes-overview#seller) included in the offer.
+	// Message from the [Seller](/api/quotes-overview#seller) included in the offer.
 	SellerComment *string `json:"sellerComment,omitempty"`
-	// Message from the [Buyer](/../api/quotes-overview#buyer) included in the [renegotiation request](ctp:api:type:QuoteRequestQuoteRenegotiationAction).
+	// Message from the [Buyer](/api/quotes-overview#buyer) included in the [renegotiation request](ctp:api:type:QuoteRequestQuoteRenegotiationAction).
 	BuyerComment *string `json:"buyerComment,omitempty"`
-	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
+	// The Store to which the [Buyer](/api/quotes-overview#buyer) belongs.
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// The Line Items for which the Quote is requested.
 	LineItems []LineItem `json:"lineItems"`
@@ -90,9 +90,9 @@ type Quote struct {
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
 	// The purchase order number is typically set by the [Buyer](/quotes-overview#buyer) on a [QuoteRequest](ctp:api:type:QuoteRequest) to
-	// track the purchase order during the [quote and order flow](/../api/quotes-overview#intended-workflow).
+	// track the purchase order during the [quote and order flow](/api/quotes-overview#intended-workflow).
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
@@ -156,34 +156,34 @@ type QuoteDraft struct {
 	StagedQuote StagedQuoteResourceIdentifier `json:"stagedQuote"`
 	// Current version of the StagedQuote.
 	StagedQuoteVersion int `json:"stagedQuoteVersion"`
-	// If `true`, the `stagedQuoteState` of the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) will be set to `Sent`.
+	// Whether the `stagedQuoteState` of the referenced [StagedQuote](ctp:api:type:StagedQuote) will be set to `Sent`.
 	StagedQuoteStateToSent *bool `json:"stagedQuoteStateToSent,omitempty"`
 	// [State](ctp:api:type:State) of the Quote.
 	// This reference can point to a State in a custom workflow.
 	State *StateReference `json:"state,omitempty"`
-	// [Custom Fields](/../api/projects/custom-fields) to be added to the Quote.
+	// [Custom Fields](ctp:api:type:CustomFields) to be added to the Quote.
 	//
-	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) and added to the Quote.
-	// - If empty, the Custom Fields on the referenced [StagedQuote](/../api/projects/staged-quotes#stagedquote) are added to the Quote automatically.
+	// - If specified, the Custom Fields are merged with the Custom Fields on the referenced [StagedQuote](ctp:api:type:StagedQuote) and added to the Quote.
+	// - If empty, the Custom Fields on the referenced [StagedQuote](ctp:api:type:StagedQuote) are added to the Quote automatically.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Quote](ctp:api:type:Quote).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Quote](ctp:api:type:Quote).
 *
  */
 type QuotePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Quotes matching the query.
 	Results []Quote `json:"results"`
@@ -197,7 +197,7 @@ type QuoteReference struct {
 	// Unique ID of the referenced resource.
 	ID string `json:"id"`
 	// Contains the representation of the expanded Quote.
-	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Quote.
+	// Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Quote.
 	Obj *Quote `json:"obj,omitempty"`
 }
 
@@ -383,7 +383,7 @@ func (obj QuoteRequestQuoteRenegotiationAction) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -402,10 +402,12 @@ func (obj QuoteSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Quote with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Quote with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Quote.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Quote.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Quote.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

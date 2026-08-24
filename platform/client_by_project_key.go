@@ -293,7 +293,7 @@ func (rb *ByProjectKeyRequestBuilder) QuoteRequests() *ByProjectKeyQuoteRequests
 }
 
 /**
-*	A staged quote holds the negotiation between the [Buyer](/../api/quotes-overview#buyer) and the [Seller](/../api/quotes-overview#seller).
+*	A staged quote holds the negotiation between the [Buyer](/api/quotes-overview#buyer) and the [Seller](/api/quotes-overview#seller).
  */
 func (rb *ByProjectKeyRequestBuilder) StagedQuotes() *ByProjectKeyStagedQuotesRequestBuilder {
 	return &ByProjectKeyStagedQuotesRequestBuilder{
@@ -397,6 +397,24 @@ func (rb *ByProjectKeyRequestBuilder) Types() *ByProjectKeyTypesRequestBuilder {
 }
 
 /**
+*	A Variant Projection is a lightweight, read-only representation of a single Product Variant
+*	with embedded Product data such as name, slug, and description.
+*
+ */
+func (rb *ByProjectKeyRequestBuilder) VariantProjections() *ByProjectKeyVariantProjectionsRequestBuilder {
+	return &ByProjectKeyVariantProjectionsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+func (rb *ByProjectKeyRequestBuilder) Variants() *ByProjectKeyVariantsRequestBuilder {
+	return &ByProjectKeyVariantsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
 *	Zones allow defining ShippingRates for specific Locations.
  */
 func (rb *ByProjectKeyRequestBuilder) Zones() *ByProjectKeyZonesRequestBuilder {
@@ -472,6 +490,16 @@ func (rb *ByProjectKeyRequestBuilder) InBusinessUnitKeyWithBusinessUnitKeyValue(
  */
 func (rb *ByProjectKeyRequestBuilder) AttributeGroups() *ByProjectKeyAttributeGroupsRequestBuilder {
 	return &ByProjectKeyAttributeGroupsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
+
+/**
+*	Manage MCP Server configurations for a Project.
+ */
+func (rb *ByProjectKeyRequestBuilder) McpServers() *ByProjectKeyMcpServersRequestBuilder {
+	return &ByProjectKeyMcpServersRequestBuilder{
 		projectKey: rb.projectKey,
 		client:     rb.client,
 	}

@@ -56,7 +56,7 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestMethodPost) WithHeaders(headers http
 }
 
 /**
-*	Updates an OrderEdit in the Project using one or more [update actions](/../api/projects/order-edits#update-actions).
+*	Updates an OrderEdit in the Project using one or more [update actions](/api/projects/order-edits#update-actions).
  */
 func (rb *ByProjectKeyOrdersEditsByIDRequestMethodPost) Execute(ctx context.Context) (result *OrderEdit, err error) {
 	data, err := serializeInput(rb.body)

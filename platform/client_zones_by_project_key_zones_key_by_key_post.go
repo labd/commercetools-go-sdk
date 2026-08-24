@@ -56,7 +56,7 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestMethodPost) WithHeaders(headers http.H
 }
 
 /**
-*	Updates a Zone in the Project using one or more [update actions](/../api/projects/zones#update-actions).
+*	Updates a Zone in the Project using one or more [update actions](/api/projects/zones#update-actions).
  */
 func (rb *ByProjectKeyZonesKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Zone, err error) {
 	data, err := serializeInput(rb.body)

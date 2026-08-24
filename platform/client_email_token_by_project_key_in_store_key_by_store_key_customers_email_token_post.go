@@ -29,7 +29,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCustomersEmailTokenRequestMethodPost) 
 }
 
 /**
-*	Use this method to create an email token for a Store-specific Customer during their [email verification process](/../api/customers-overview#customer-email-verification).
+*	Use this method to create an email token for a Store-specific Customer during their [email verification process](/api/customers-overview#customer-email-verification).
 *
 *	If the Customer exists in the Project but the `stores` field references a different Store, this method returns a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error.
 *

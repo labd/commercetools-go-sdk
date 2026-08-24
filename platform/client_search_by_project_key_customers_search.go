@@ -13,7 +13,7 @@ type ByProjectKeyCustomersSearchRequestBuilder struct {
 
 /**
 *	If the initial indexing is in progress or the feature is inactive, a [SearchNotReady](ctp:api:type:SearchNotReadyError) error is returned.
-*	If inactive, you can [reactivate](/../api/projects/customer-search#reactivate) it.
+*	If inactive, you can [reactivate](/api/projects/customer-search#reactivate) it.
 *
  */
 func (rb *ByProjectKeyCustomersSearchRequestBuilder) Post(body CustomerSearchRequest) *ByProjectKeyCustomersSearchRequestMethodPost {

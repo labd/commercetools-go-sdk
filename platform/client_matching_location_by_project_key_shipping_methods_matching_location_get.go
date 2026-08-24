@@ -101,7 +101,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingLocationRequestMethodGet) WithHeade
 }
 
 /**
-*	Retrieves the active ShippingMethods that can ship to the provided [Location](/projects/zones#location).
+*	Retrieves the active ShippingMethods that can ship to the provided [Location](ctp:api:type:Location).
 *
 *	The following applies:
 *

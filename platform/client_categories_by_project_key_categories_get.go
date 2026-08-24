@@ -134,7 +134,7 @@ func (rb *ByProjectKeyCategoriesRequestMethodGet) WithHeaders(headers http.Heade
 }
 
 /**
-*	Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
+*	Either the [scope](/api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
 *
  */
 func (rb *ByProjectKeyCategoriesRequestMethodGet) Execute(ctx context.Context) (result *CategoryPagedQueryResponse, err error) {

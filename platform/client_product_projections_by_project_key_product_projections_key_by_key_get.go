@@ -179,10 +179,10 @@ func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestMethodGet) WithHeaders(he
 }
 
 /**
-*	Retrieves the [projected](/../api/projects/productProjections#projection-dimensions) representation of a [Product](ctp:api:type:Product) by its Key.
+*	Retrieves the [projected](/api/projects/productProjections#projection-dimensions) representation of a [Product](ctp:api:type:Product) by its Key.
 *
 *	By default, this endpoint returns the `current` representation of Products where the `published` flag is `true`.
-*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/../api/errors#404-not-found) error.
+*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/api/errors#404-not-found) error.
 *
 *	Required access scopes:
 *

@@ -70,7 +70,9 @@ func (rb *ByProjectKeyCartsRequestBuilder) Head() *ByProjectKeyCartsRequestMetho
 *
 *	Creates a Cart in the Project.
 *
-*	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, or if the Shipping Method is not active, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*	When using [InventoryMode](ctp:api:type:InventoryMode) `ReserveOnCart`:
+*	- If only some Line Items can be reserved, the Cart creation succeeds, however, the items that could not be reserved are removed and reservation warnings are returned in the response.
+*	- If none of the Line Items can be reserved, the Cart creation fails with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 *
 *	Specific Error Codes:
 *
@@ -78,6 +80,11 @@ func (rb *ByProjectKeyCartsRequestBuilder) Head() *ByProjectKeyCartsRequestMetho
 *	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
 *	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
 *	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*	- [InvalidOperation](ctp:api:type:InvalidOperationError) is returned in several cases, including the following:
+*	    - The referenced Shipping Method has a predicate that does not match the Cart.
+*	    - The referenced Shipping Method is not active.
+*	    - The referenced Shipping Method is scoped to a Store that differs from the Cart's Store.
+*	    - The referenced Shipping Method is scoped to a Store, but the Cart does not belong to a Store.
 *
  */
 func (rb *ByProjectKeyCartsRequestBuilder) Post(body CartDraft) *ByProjectKeyCartsRequestMethodPost {

@@ -12,11 +12,19 @@ type ByProjectKeyProductProjectionsKeyByKeyRequestBuilder struct {
 	client     *Client
 }
 
+func (rb *ByProjectKeyProductProjectionsKeyByKeyRequestBuilder) VariantAttributes() *ByProjectKeyProductProjectionsKeyByKeyVariantAttributesRequestBuilder {
+	return &ByProjectKeyProductProjectionsKeyByKeyVariantAttributesRequestBuilder{
+		projectKey: rb.projectKey,
+		key:        rb.key,
+		client:     rb.client,
+	}
+}
+
 /**
-*	Retrieves the [projected](/../api/projects/productProjections#projection-dimensions) representation of a [Product](ctp:api:type:Product) by its Key.
+*	Retrieves the [projected](/api/projects/productProjections#projection-dimensions) representation of a [Product](ctp:api:type:Product) by its Key.
 *
 *	By default, this endpoint returns the `current` representation of Products where the `published` flag is `true`.
-*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/../api/errors#404-not-found) error.
+*	If a Product is unpublished (`published=false`), the endpoint returns a [Not Found](/api/errors#404-not-found) error.
 *
 *	Required access scopes:
 *

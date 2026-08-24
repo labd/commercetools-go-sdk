@@ -56,9 +56,7 @@ func (rb *ByProjectKeyRecurrencePoliciesByIDRequestMethodPost) WithHeaders(heade
 }
 
 /**
-*	Updates a Recurrence Policy using one or more [update actions](/../api/projects/recurrence-policies#update-actions).
-*
-*	The `manage_recurring_orders:{projectKey}` scope is deprecated for use on this endpoint. Update your clients to use the `manage_recurrence_policies:{projectKey}` scope instead. For more information, see the [Deprecations and removals](/api/deprecations-and-removals#recurrence-policies) list.
+*	Updates a Recurrence Policy using one or more [update actions](/api/projects/recurrence-policies#update-actions).
 *
  */
 func (rb *ByProjectKeyRecurrencePoliciesByIDRequestMethodPost) Execute(ctx context.Context) (result *RecurrencePolicy, err error) {

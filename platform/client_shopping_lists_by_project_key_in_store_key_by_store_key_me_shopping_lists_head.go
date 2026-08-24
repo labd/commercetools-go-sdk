@@ -57,11 +57,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) With
 /**
 *	Checks if one or more ShoppingLists exist for the provided query predicate for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store). Returns `200 OK` status if successful.
 *
-*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
+*	A [Not Found](/api/errors#404-not-found) error is returned in the following scenarios:
 *
 *	- If no ShoppingLists exist for the provided query predicate in a Store.
 *	- If a ShoppingList matches the query predicate but does not have a `store` specified, or the `store` field references a different Store.
-*	- If a ShoppingList exists in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If a ShoppingList exists in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsRequestMethodHead) Execute(ctx context.Context) error {

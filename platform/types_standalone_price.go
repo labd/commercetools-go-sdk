@@ -89,23 +89,20 @@ type StandalonePrice struct {
 	Channel *ChannelReference `json:"channel,omitempty"`
 	// Date from which the Price is valid.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Date until the Price is valid. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
+	// Date until the Price is valid. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/api/projects/standalone-prices#delete-standaloneprice) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Price tiers if any are defined.
 	//
 	// If `discounted` is present, the tiered Price is ignored for a Product Variant.
 	Tiers []PriceTier `json:"tiers"`
-	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
-	// When a [relative discount](/../api/projects/productDiscounts#productdiscountvaluerelative) is applied and the fraction part of the `discounted` price is 0.5, the discounted price is rounded in favor of the customer with the [half down rounding](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
-	//
-	// If an [absolute discount](ctp:api:type:ProductDiscountValueAbsolute) value exceeds the price of the Product Variant, the discounted price is a negative value.
+	// Set if a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the API uses the `discounted` value for the [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields of the StandalonePrice.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Staged changes of the StandalonePrice. Only present if the StandalonePrice has some changes staged.
 	Staged *StagedStandalonePrice `json:"staged,omitempty"`
-	// If set to `true`, the StandalonePrice is considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
-	// If set to `false`, the StandalonePrice is not considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) and any associated Line Items in a Cart cannot be ordered.
+	// Whether the StandalonePrice is considered during [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
+	// If set to `false`, the StandalonePrice is not considered during [Product price selection](/api/pricing-and-discounts-overview#product-price-selection) and any associated Line Items in a Cart cannot be ordered.
 	Active bool `json:"active"`
 	// [RecurrencePolicy](ctp:api:type:RecurrencePolicy) for which this Price is valid.
 	RecurrencePolicy *RecurrencePolicyReference `json:"recurrencePolicy,omitempty"`
@@ -155,6 +152,8 @@ func (obj StandalonePrice) MarshalJSON() ([]byte, error) {
 
 type StandalonePriceDraft struct {
 	// User-defined unique identifier for the StandalonePrice.
+	//
+	// If the value is used by another Standalone Price, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 	// Specifies to which [ProductVariant](ctp:api:type:ProductVariant) the API associates this Price.
 	// It is not validated to exist in product variants.
@@ -168,10 +167,12 @@ type StandalonePriceDraft struct {
 	// Sets the [CustomerGroup](ctp:api:type:CustomerGroup) for which this Price is valid.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// Sets the product distribution [Channel](ctp:api:type:Channel) for which this Price is valid.
+	//
+	// If the referenced Channel does not contain the `ProductDistribution` role, a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error is returned.
 	Channel *ChannelResourceIdentifier `json:"channel,omitempty"`
 	// Sets the date from which the Price is valid. Must be at least 1 ms earlier than `validUntil`.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
-	// Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/../api/projects/standalone-prices#delete-standaloneprice) if necessary.
+	// Sets the date until the Price is valid. Must be at least 1 ms later than `validFrom`. Standalone Prices that are no longer valid are not automatically deleted, but they can be [deleted](/api/projects/standalone-prices#delete-standaloneprice) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Sets price tiers.
 	//
@@ -185,7 +186,7 @@ type StandalonePriceDraft struct {
 	RecurrencePolicy *RecurrencePolicyResourceIdentifier `json:"recurrencePolicy,omitempty"`
 	// Staged changes for the StandalonePrice.
 	Staged *StagedPriceDraft `json:"staged,omitempty"`
-	// Set to `false`, if the StandalonePrice should not be considered during [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
+	// Set to `false`, if the StandalonePrice should not be considered during [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -225,10 +226,10 @@ type StandalonePricePagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [StandalonePrices](ctp:api:type:StandalonePrice) matching the query.
 	Results []StandalonePrice `json:"results"`
@@ -241,7 +242,7 @@ type StandalonePricePagedQueryResponse struct {
 type StandalonePriceReference struct {
 	// Unique ID of the referenced resource.
 	ID string `json:"id"`
-	// Contains the representation of the expanded StandalonePrice. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for StandalonePrice.
+	// Contains the representation of the expanded StandalonePrice. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for StandalonePrice.
 	Obj *StandalonePrice `json:"obj,omitempty"`
 }
 
@@ -472,7 +473,7 @@ type StandalonePriceChangeValueAction struct {
 	//
 	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Value Money `json:"value"`
-	// If set to `true` the update action applies to the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). If set to `false`, the update action applies to the current [StandalonePrice](ctp:api:type:StandalonePrice).
+	// Whether the update action applies to the [StagedStandalonePrice](ctp:api:type:StagedStandalonePrice). If set to `false`, the update action applies to the current [StandalonePrice](ctp:api:type:StandalonePrice).
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -524,7 +525,7 @@ func (obj StandalonePriceRemoveStagedChangesAction) MarshalJSON() ([]byte, error
 }
 
 type StandalonePriceSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -543,10 +544,12 @@ func (obj StandalonePriceSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type StandalonePriceSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the StandalonePrice with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the StandalonePrice with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the StandalonePrice.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the StandalonePrice.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the StandalonePrice.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -568,7 +571,7 @@ func (obj StandalonePriceSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type StandalonePriceSetDiscountedPriceAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	//
 	// The referenced [ProductDiscount](ctp:api:type:ProductDiscount) must be of type external, active, and its predicate must match the referenced Price.
 	Discounted *DiscountedPriceDraft `json:"discounted,omitempty"`
@@ -589,7 +592,9 @@ func (obj StandalonePriceSetDiscountedPriceAction) MarshalJSON() ([]byte, error)
 *
  */
 type StandalonePriceSetKeyAction struct {
-	// Value to set. Must be unique. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
+	//
+	// If the value is used by another Standalone Price, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -608,7 +613,7 @@ func (obj StandalonePriceSetKeyAction) MarshalJSON() ([]byte, error) {
 *
  */
 type StandalonePriceSetPriceTiersAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. Set to an empty array to remove any existing value.
 	// The `minimumQuantity` of the PriceTiers must be unique and greater than `1`, otherwise an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	Tiers []PriceTierDraft `json:"tiers"`
 }
@@ -628,12 +633,14 @@ func (obj StandalonePriceSetPriceTiersAction) MarshalJSON() ([]byte, error) {
 *
 *	As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
 *
-*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) or a [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
+*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) error is returned.
+*
+*	If a modification is already in progress for the combination of SKU and price scope fields (but potentially different validity period), a [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
 *
  */
 type StandalonePriceSetValidFromAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
@@ -652,15 +659,17 @@ func (obj StandalonePriceSetValidFromAction) MarshalJSON() ([]byte, error) {
 *
 *	As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
 *
-*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) or a [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
+*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) error is returned.
+*
+*	If a modification is already in progress for the combination of SKU and price scope fields (but potentially different validity period), a [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
 *
  */
 type StandalonePriceSetValidFromAndUntilAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
@@ -679,12 +688,14 @@ func (obj StandalonePriceSetValidFromAndUntilAction) MarshalJSON() ([]byte, erro
 *
 *	As the validity dates are part of the price scope and are not allowed to overlap, this update might return the [DuplicateStandalonePriceScope](ctp:api:type:DuplicateStandalonePriceScopeError) and [OverlappingStandalonePriceValidity](ctp:api:type:OverlappingStandalonePriceValidityError) errors, respectively. A Price without validity period does not conflict with a Price defined for a time period.
 *
-*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) or a [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
+*	If a modification is already in progress for the exact combination of SKU and price scope fields, an [ExactLockConflict](ctp:api:type:ExactLockConflictError) error is returned.
+*
+*	If a modification is already in progress for the combination of SKU and price scope fields (but potentially different validity period), a [ValidityLockConflict](ctp:api:type:ValidityLockConflictError) error is returned.
 *
  */
 type StandalonePriceSetValidUntilAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 

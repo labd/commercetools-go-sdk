@@ -31,7 +31,7 @@ func (rb *ByProjectKeyMeOrdersRequestBuilder) OrderQuote() *ByProjectKeyMeOrders
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Orders exist for the provided query predicate.
-*	- If an Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If an Order exists but does not have a `customerId` that matches the [customer:{id}](/scopes#internal-oauth) scope, or `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeOrdersRequestBuilder) Get() *ByProjectKeyMeOrdersRequestMethodGet {
@@ -44,10 +44,10 @@ func (rb *ByProjectKeyMeOrdersRequestBuilder) Get() *ByProjectKeyMeOrdersRequest
 /**
 *	Checks if one or more Orders exist for the provided query predicate for the authenticated Customer or anonymous user. Returns a `200` status if successful.
 *
-*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
+*	A [Not Found](/api/errors#404-not-found) error is returned in the following scenarios:
 *
 *	- If no Orders exist that match the provided query predicate.
-*	- If one or more Orders exist but don't have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If one or more Orders exist but don't have either a `customerId` that matches the [customer:{id}](/scopes#internal-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeOrdersRequestBuilder) Head() *ByProjectKeyMeOrdersRequestMethodHead {
@@ -59,11 +59,13 @@ func (rb *ByProjectKeyMeOrdersRequestBuilder) Head() *ByProjectKeyMeOrdersReques
 
 /**
 *
-*	Creates an Order from a Cart for the Customer or anonymous user. The `customerId` or `anonymousId` field on the Order is automatically set based on the [customer:{id}](/scopes#composable-commerce-oauth) or [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	Creates an Order from a Cart for the Customer or anonymous user. The `customerId` or `anonymousId` field on the Order is automatically set based on the [customer:{id}](/scopes#internal-oauth) or [anonymous_id:{id}](/scopes#internal-oauth) scope.
 *
-*	The Cart must have a shipping address and an active Shipping Method set. When creating [B2B Orders](/associates-overview#b2b-resources), the Customer must have the `CreateMyOrdersFromMyCarts` [Permission](ctp:api:type:Permission).
+*	The Cart must have a shipping address set.
 *
-*	If the Cart's `customerId` does not match the [customer:{id}](/scopes#composable-commerce-oauth) scope, or the `anonymousId` does not match the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
+*	When creating [B2B Orders](/associates-overview#b2b-resources), the Customer must have the `CreateMyOrdersFromMyCarts` [Permission](ctp:api:type:Permission).
+*
+*	If the Cart's `customerId` does not match the [customer:{id}](/scopes#internal-oauth) scope, or the `anonymousId` does not match the [anonymous_id:{id}](/scopes#internal-oauth) scope, a [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
 *
 *	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
 *

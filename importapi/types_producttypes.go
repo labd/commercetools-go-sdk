@@ -14,7 +14,7 @@ type AttributeDefinition struct {
 	Name string `json:"name"`
 	// Human-readable label for the Attribute.
 	Label LocalizedString `json:"label"`
-	// If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
+	// Whether the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
 	// Specifies how Attributes are validated across all variants of a Product.
 	AttributeConstraint *AttributeConstraintEnum `json:"attributeConstraint,omitempty"`
@@ -22,7 +22,7 @@ type AttributeDefinition struct {
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint *TextInputHint `json:"inputHint,omitempty"`
-	// If `true`, the Attribute's values are available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
+	// Whether the Attribute's values are available in the [Product Search](/api/projects/product-search) or the [Product Projection Search](/api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
 	IsSearchable *bool           `json:"isSearchable,omitempty"`
 	Level        *AttributeLevel `json:"level,omitempty"`
 }

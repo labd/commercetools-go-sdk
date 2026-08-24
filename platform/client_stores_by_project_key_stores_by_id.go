@@ -37,6 +37,12 @@ func (rb *ByProjectKeyStoresByIDRequestBuilder) Post(body StoreUpdate) *ByProjec
 	}
 }
 
+/**
+*	If the Store is referenced by a resource, a [ReferenceExists](ctp:api:type:ReferenceExistsError) error is returned.
+*
+*	To avoid dependency conflicts, first delete all active and anonymous Carts that reference the Store, then delete all Orders.
+*
+ */
 func (rb *ByProjectKeyStoresByIDRequestBuilder) Delete() *ByProjectKeyStoresByIDRequestMethodDelete {
 	return &ByProjectKeyStoresByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/stores/%s", rb.projectKey, rb.id),

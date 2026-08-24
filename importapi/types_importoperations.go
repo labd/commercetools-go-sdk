@@ -24,7 +24,7 @@ type ImportOperation struct {
 	State ProcessingState `json:"state"`
 	// The `version` of the imported resource when the import was successful.
 	ResourceVersion *int `json:"resourceVersion,omitempty"`
-	// Contains errors if the import was unsuccessful. See [Errors](/import-export/error).
+	// Contains errors if the import was unsuccessful. See [Errors](/api/errors#import-api-specific-errors).
 	Errors []ErrorObject `json:"errors"`
 	// If the resource being imported contains references to resources which do not exist, these references are contained within this array.
 	UnresolvedReferences []UnresolvedReferences `json:"unresolvedReferences"`
@@ -83,13 +83,13 @@ func (obj ImportOperation) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) for Import Operations.
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) for Import Operations.
 *
  */
 type ImportOperationPagedResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// The actual number of results returned.
 	Count int `json:"count"`

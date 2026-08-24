@@ -11,14 +11,14 @@ import (
 type ProductSelectionSetting struct {
 	// Reference to a ProductSelection.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
-	// If `true`, all Products assigned to this Product Selection are part of the Store's assortment.
+	// Whether all Products assigned to this Product Selection are part of the Store's assortment.
 	Active bool `json:"active"`
 }
 
 type ProductSelectionSettingDraft struct {
 	// Resource Identifier of a ProductSelection.
 	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
-	// Set to `true` if all Products assigned to the Product Selection should become part of the Store's assortment.
+	// Whether all Products assigned to the Product Selection should become part of the Store's assortment.
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -56,6 +56,8 @@ type Store struct {
 	ProductSelections []ProductSelectionSetting `json:"productSelections"`
 	// Custom fields for the Store.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Customer-facing URLs and policy links for the Store's storefront.
+	Storefront *Storefront `json:"storefront,omitempty"`
 }
 
 type StoreDraft struct {
@@ -65,12 +67,18 @@ type StoreDraft struct {
 	// Name of the Store.
 	Name *LocalizedString `json:"name,omitempty"`
 	// Languages defined in [Project](ctp:api:type:Project). Only languages defined in the Project can be used.
+	//
+	// If a language is not configured for the Project, a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error is returned.
 	Languages []string `json:"languages"`
 	// Countries defined for the Store.
 	Countries []StoreCountry `json:"countries"`
 	// ResourceIdentifier of a Channel with `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	//
+	// If the referenced Channel does not have this role, a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error is returned.
 	DistributionChannels []ChannelResourceIdentifier `json:"distributionChannels"`
 	// ResourceIdentifier of a Channel with `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	//
+	// If the referenced Channel does not have this role, a [MissingRoleOnChannel](ctp:api:type:MissingRoleOnChannelError) error is returned.
 	SupplyChannels []ChannelResourceIdentifier `json:"supplyChannels"`
 	// Controls availability of Products for this Store via active/inactive Product Selections:
 	//
@@ -81,6 +89,8 @@ type StoreDraft struct {
 	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
 	// Custom fields for the Store.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
+	// Customer-facing URLs and policy links for the Store's storefront.
+	Storefront *Storefront `json:"storefront,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -143,21 +153,21 @@ func (obj StoreKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Store](ctp:api:type:Store).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Store](ctp:api:type:Store).
 *
  */
 type StorePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Stores](ctp:api:type:Store) matching the query.
 	Results []Store `json:"results"`
@@ -170,7 +180,7 @@ type StorePagedQueryResponse struct {
 type StoreReference struct {
 	// Unique ID of the referenced [Store](ctp:api:type:Store).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Store. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Stores.
+	// Contains the representation of the expanded Store. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Stores.
 	Obj *Store `json:"obj,omitempty"`
 }
 
@@ -185,7 +195,7 @@ func (obj StoreReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Store](ctp:api:type:Store). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Store](ctp:api:type:Store). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type StoreResourceIdentifier struct {
@@ -299,6 +309,24 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "setCheckoutUrlTemplate":
+		obj := StoreSetCheckoutUrlTemplateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setContactUrl":
+		obj := StoreSetContactUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setCookiePolicyUrl":
+		obj := StoreSetCookiePolicyUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCountries":
 		obj := StoreSetCountriesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -323,6 +351,18 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "setFaqUrl":
+		obj := StoreSetFaqUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setImprintUrl":
+		obj := StoreSetImprintUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setLanguages":
 		obj := StoreSetLanguagesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -335,8 +375,32 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "setOrderUrlTemplate":
+		obj := StoreSetOrderUrlTemplateAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setPrivacyPolicyUrl":
+		obj := StoreSetPrivacyPolicyUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setProductSelections":
 		obj := StoreSetProductSelectionsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setRefundPolicyUrl":
+		obj := StoreSetRefundPolicyUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setShippingPolicyUrl":
+		obj := StoreSetShippingPolicyUrlAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -347,8 +411,44 @@ func mapDiscriminatorStoreUpdateAction(input interface{}) (StoreUpdateAction, er
 			return nil, err
 		}
 		return obj, nil
+	case "setTermsOfServiceUrl":
+		obj := StoreSetTermsOfServiceUrlAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
+}
+
+/**
+*	Customer-facing URLs and policy links for the Store's storefront.
+*	All fields are optional and only present when set.
+*
+ */
+type Storefront struct {
+	// [RFC 6570](https://datatracker.ietf.org/doc/html/rfc6570) URI template for the customer-facing checkout page.
+	// Must contain the `checkoutId` variable, for example `https://example.com/checkout/{checkoutId}`.
+	CheckoutUrlTemplate *string `json:"checkoutUrlTemplate,omitempty"`
+	// [RFC 6570](https://datatracker.ietf.org/doc/html/rfc6570) URI template for the customer-facing order status page.
+	// Must contain the `orderId` variable, for example `https://example.com/orders/{orderId}`.
+	OrderUrlTemplate *string `json:"orderUrlTemplate,omitempty"`
+	// Absolute `https` URL of the storefront's terms of service page.
+	TermsOfServiceUrl *string `json:"termsOfServiceUrl,omitempty"`
+	// Absolute `https` URL of the storefront's privacy policy page.
+	PrivacyPolicyUrl *string `json:"privacyPolicyUrl,omitempty"`
+	// Absolute `https` URL of the storefront's refund policy page.
+	RefundPolicyUrl *string `json:"refundPolicyUrl,omitempty"`
+	// Absolute `https` URL of the storefront's shipping policy page.
+	ShippingPolicyUrl *string `json:"shippingPolicyUrl,omitempty"`
+	// Absolute `https` URL of the storefront's cookie policy page.
+	CookiePolicyUrl *string `json:"cookiePolicyUrl,omitempty"`
+	// Absolute `https` URL of the storefront's imprint (legal notice) page.
+	ImprintUrl *string `json:"imprintUrl,omitempty"`
+	// Absolute `https` URL of the storefront's FAQ page.
+	FaqUrl *string `json:"faqUrl,omitempty"`
+	// Absolute `https` URL of the storefront's contact page.
+	ContactUrl *string `json:"contactUrl,omitempty"`
 }
 
 /**
@@ -394,13 +494,13 @@ func (obj StoreAddDistributionChannelAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	To make all included Products available to your customers of a given Store, add the [Product Selections](/../api/projects/product-selections) to the respective Store. This action has no effect if the given Product Selection is already present in the Store and has the same `active` flag.
+*	To make all included Products available to your customers of a given Store, add the [Product Selections](/api/projects/product-selections) to the respective Store. This action has no effect if the given Product Selection is already present in the Store and has the same `active` flag.
 *
  */
 type StoreAddProductSelectionAction struct {
 	// Product Selection to add to the Store either activated or deactivated.
 	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
-	// Set to `true` to make all Products assigned to the referenced Product Selection available in the Store.
+	// Whether to make all Products assigned to the referenced Product Selection available in the Store.
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -444,7 +544,7 @@ func (obj StoreAddSupplyChannelAction) MarshalJSON() ([]byte, error) {
 type StoreChangeProductSelectionAction struct {
 	// Current Product Selection of the Store to be activated or deactivated.
 	ProductSelection ProductSelectionResourceIdentifier `json:"productSelection"`
-	// Set to `true` if all Products assigned to the Product Selection should become part of the Store's assortment.
+	// Whether all Products assigned to the Product Selection should become part of the Store's assortment.
 	Active *bool `json:"active,omitempty"`
 }
 
@@ -536,6 +636,64 @@ func (obj StoreRemoveSupplyChannelAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	This update action produces the [StoreCheckoutUrlTemplateSet](ctp:api:type:StoreCheckoutUrlTemplateSetMessage) Message.
+*
+ */
+type StoreSetCheckoutUrlTemplateAction struct {
+	// Value to set. Must be an [RFC 6570](https://datatracker.ietf.org/doc/html/rfc6570) URI template containing the `checkoutId` variable.
+	// If empty, any existing value is removed.
+	CheckoutUrlTemplate *string `json:"checkoutUrlTemplate,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetCheckoutUrlTemplateAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetCheckoutUrlTemplateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCheckoutUrlTemplate", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action produces the [StoreContactUrlSet](ctp:api:type:StoreContactUrlSetMessage) Message.
+*
+ */
+type StoreSetContactUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	ContactUrl *string `json:"contactUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetContactUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetContactUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setContactUrl", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action produces the [StoreCookiePolicyUrlSet](ctp:api:type:StoreCookiePolicyUrlSetMessage) Message.
+*
+ */
+type StoreSetCookiePolicyUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	CookiePolicyUrl *string `json:"cookiePolicyUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetCookiePolicyUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetCookiePolicyUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setCookiePolicyUrl", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	This update action produces the [StoreCountriesChanged](ctp:api:type:StoreCountriesChangedMessage) Message.
 *
  */
@@ -570,7 +728,7 @@ func (obj StoreSetCountriesAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -589,10 +747,12 @@ func (obj StoreSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type StoreSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Store with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Store with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Store.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Store.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Store.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -644,12 +804,51 @@ func (obj StoreSetDistributionChannelsAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	This update action produces the [StoreFaqUrlSet](ctp:api:type:StoreFaqUrlSetMessage) Message.
+*
+ */
+type StoreSetFaqUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	FaqUrl *string `json:"faqUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetFaqUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetFaqUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setFaqUrl", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action produces the [StoreImprintUrlSet](ctp:api:type:StoreImprintUrlSetMessage) Message.
+*
+ */
+type StoreSetImprintUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	ImprintUrl *string `json:"imprintUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetImprintUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetImprintUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setImprintUrl", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	This update action produces the [StoreLanguagesChanged](ctp:api:type:StoreLanguagesChangedMessage) Message.
-*	Adding a language other than the ones defined in the [Project](ctp:api:type:Project) returns a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error.
 *
  */
 type StoreSetLanguagesAction struct {
 	// Value to set.
+	//
+	// If a language is not configured for the Project, a [ProjectNotConfiguredForLanguages](ctp:api:type:ProjectNotConfiguredForLanguagesError) error is returned.
 	Languages []string `json:"languages"`
 }
 
@@ -698,14 +897,53 @@ func (obj StoreSetNameAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Instead of adding or removing [Product Selections](/../api/projects/product-selections) individually, you can also change all the Store's Product Selections in one go using this update action. The Store will only contain the Product Selections specified in the request.
+*	This update action produces the [StoreOrderUrlTemplateSet](ctp:api:type:StoreOrderUrlTemplateSetMessage) Message.
+*
+ */
+type StoreSetOrderUrlTemplateAction struct {
+	// Value to set. Must be an [RFC 6570](https://datatracker.ietf.org/doc/html/rfc6570) URI template containing the `orderId` variable.
+	// If empty, any existing value is removed.
+	OrderUrlTemplate *string `json:"orderUrlTemplate,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetOrderUrlTemplateAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetOrderUrlTemplateAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setOrderUrlTemplate", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action produces the [StorePrivacyPolicyUrlSet](ctp:api:type:StorePrivacyPolicyUrlSetMessage) Message.
+*
+ */
+type StoreSetPrivacyPolicyUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	PrivacyPolicyUrl *string `json:"privacyPolicyUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetPrivacyPolicyUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetPrivacyPolicyUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setPrivacyPolicyUrl", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Instead of adding or removing [Product Selections](/api/projects/product-selections) individually, you can also change all the Store's Product Selections in one go using this update action. The Store will only contain the Product Selections specified in the request.
 *
  */
 type StoreSetProductSelectionsAction struct {
 	// Value to set.
 	//
 	// - If provided, Product Selections for which `active` is set to `true` are available in the Store.
-	// - If not provided or provided as empty array, the action removes all Product Selections from this Store, meaning all Products in the [Project](ctp:api:type:Project) are available in this Store.
+	// - If omitted or provided as empty array, the action removes all Product Selections from this Store, meaning all Products in the [Project](ctp:api:type:Project) are available in this Store.
 	ProductSelections []ProductSelectionSettingDraft `json:"productSelections"`
 }
 
@@ -732,6 +970,44 @@ func (obj StoreSetProductSelectionsAction) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(raw)
 
+}
+
+/**
+*	This update action produces the [StoreRefundPolicyUrlSet](ctp:api:type:StoreRefundPolicyUrlSetMessage) Message.
+*
+ */
+type StoreSetRefundPolicyUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	RefundPolicyUrl *string `json:"refundPolicyUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetRefundPolicyUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetRefundPolicyUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setRefundPolicyUrl", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This update action produces the [StoreShippingPolicyUrlSet](ctp:api:type:StoreShippingPolicyUrlSetMessage) Message.
+*
+ */
+type StoreSetShippingPolicyUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	ShippingPolicyUrl *string `json:"shippingPolicyUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetShippingPolicyUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetShippingPolicyUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setShippingPolicyUrl", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -769,4 +1045,23 @@ func (obj StoreSetSupplyChannelsAction) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(raw)
 
+}
+
+/**
+*	This update action produces the [StoreTermsOfServiceUrlSet](ctp:api:type:StoreTermsOfServiceUrlSetMessage) Message.
+*
+ */
+type StoreSetTermsOfServiceUrlAction struct {
+	// Value to set. Must be an absolute `https` URL. If empty, any existing value is removed.
+	TermsOfServiceUrl *string `json:"termsOfServiceUrl,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSetTermsOfServiceUrlAction) MarshalJSON() ([]byte, error) {
+	type Alias StoreSetTermsOfServiceUrlAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setTermsOfServiceUrl", Alias: (*Alias)(&obj)})
 }

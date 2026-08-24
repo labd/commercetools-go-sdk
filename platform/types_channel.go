@@ -59,10 +59,14 @@ func (obj *Channel) UnmarshalJSON(data []byte) error {
 
 type ChannelDraft struct {
 	// User-defined unique identifier for the Channel.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If the value is used by another Channel in the Project, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key string `json:"key"`
 	// Roles of the Channel.
-	// Each channel must have at least one role.
-	// If not specified, then `InventorySupply` is assigned by default.
+	//
+	// The Channel must have at least one role. If set to an empty array, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Roles []ChannelRoleEnum `json:"roles"`
 	// Name of the Channel.
 	Name *LocalizedString `json:"name,omitempty"`
@@ -120,21 +124,21 @@ func (obj ChannelDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Channel](ctp:api:type:Channel).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Channel](ctp:api:type:Channel).
 *
  */
 type ChannelPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Channels](ctp:api:type:Channel) matching the query.
 	Results []Channel `json:"results"`
@@ -148,7 +152,7 @@ type ChannelReference struct {
 	// Unique identifier of the referenced [Channel](ctp:api:type:Channel).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Channel.
-	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Channels.
+	// Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Channels.
 	Obj *Channel `json:"obj,omitempty"`
 }
 
@@ -163,7 +167,7 @@ func (obj ChannelReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Channel](ctp:api:type:Channel). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type ChannelResourceIdentifier struct {
@@ -184,7 +188,7 @@ func (obj ChannelResourceIdentifier) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Describes the purpose and type of the Channel. A Channel can have one or more roles.
+*	Describes how a Channel is used. A Channel can have one or more roles.
 *
  */
 type ChannelRoleEnum string
@@ -322,6 +326,8 @@ func mapDiscriminatorChannelUpdateAction(input interface{}) (ChannelUpdateAction
 
 type ChannelAddRolesAction struct {
 	// Value to append to the array.
+	//
+	// If the specified roles are already present, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
@@ -336,7 +342,11 @@ func (obj ChannelAddRolesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelChangeDescriptionAction struct {
-	// New value to set. Must not be empty.
+	// New value to set.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Description LocalizedString `json:"description"`
 }
 
@@ -351,7 +361,11 @@ func (obj ChannelChangeDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelChangeKeyAction struct {
-	// New value to set. Must not be empty.
+	// New value to set.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If the value is used by another Channel in the Project, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key string `json:"key"`
 }
 
@@ -366,7 +380,11 @@ func (obj ChannelChangeKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelChangeNameAction struct {
-	// New value to set. Must not be empty.
+	// New value to set.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Name LocalizedString `json:"name"`
 }
 
@@ -382,6 +400,10 @@ func (obj ChannelChangeNameAction) MarshalJSON() ([]byte, error) {
 
 type ChannelRemoveRolesAction struct {
 	// Value to remove from the array.
+	//
+	// If none of the specified roles are already present, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If all roles from the Channel are removed, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 
@@ -396,7 +418,7 @@ func (obj ChannelRemoveRolesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetAddressAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -410,8 +432,12 @@ func (obj ChannelSetAddressAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAddress", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To set a Custom Field for a Channel, `Channel.address` must be set; otherwise, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+*
+ */
 type ChannelSetAddressCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// Specifies the format of the value of the Custom Field defined by `name`.
 	// If `value` is absent or `null`, this field will be removed, if it exists.
@@ -429,11 +455,17 @@ func (obj ChannelSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setAddressCustomField", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	To set a Custom Type for a Channel, `Channel.address` must be set; otherwise, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+*
+ */
 type ChannelSetAddressCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `address`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -448,7 +480,7 @@ func (obj ChannelSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -467,10 +499,12 @@ func (obj ChannelSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Channel with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Channel with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Channel.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Channel.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Channel.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -518,7 +552,9 @@ func (obj ChannelSetGeoLocationAction) MarshalJSON() ([]byte, error) {
 }
 
 type ChannelSetRolesAction struct {
-	// Value to set. If not specified, then `InventorySupply` is assigned by default.
+	// Value to set. If set to an empty array, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	//  If the new value is the same as the current value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	Roles []ChannelRoleEnum `json:"roles"`
 }
 

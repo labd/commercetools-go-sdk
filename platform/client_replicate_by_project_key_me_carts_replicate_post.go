@@ -45,6 +45,10 @@ func (rb *ByProjectKeyMeCartsReplicateRequestMethodPost) WithHeaders(headers htt
 *
 *	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
 *	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
+*	- [InvalidOperation](ctp:api:type:InvalidOperationError) is returned in several cases, including the following:
+*	    - The referenced Shipping Method is not active.
+*	    - The referenced Shipping Method is scoped to a Store that differs from the Cart's Store.
+*	    - The referenced Shipping Method is scoped to a Store, but the Cart does not belong to a Store.
 *
  */
 func (rb *ByProjectKeyMeCartsReplicateRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {

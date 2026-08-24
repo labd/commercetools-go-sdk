@@ -59,7 +59,7 @@ func (rb *ByProjectKeyDiscountGroupsRequestMethodPost) WithHeaders(headers http.
 *	Creates a DiscountGroup in the Project.
 *	This request generates the [DiscountGroupCreated](ctp:api:type:DiscountGroupCreatedMessage) Message.
 *
-*	If the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached, a [MaxDiscountGroupsReached](ctp:api:type:MaxDiscountGroupsReachedError) error is returned.
+*	If the [limit](/api/limits#discount-groups) for active Discount Groups has been reached, a [MaxDiscountGroupsReached](ctp:api:type:MaxDiscountGroupsReachedError) error is returned.
 *
  */
 func (rb *ByProjectKeyDiscountGroupsRequestMethodPost) Execute(ctx context.Context) (result *DiscountGroup, err error) {

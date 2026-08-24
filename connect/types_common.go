@@ -153,6 +153,8 @@ type DeploymentConfigurationApplication struct {
 	StandardConfiguration []ConfigurationValue `json:"standardConfiguration"`
 	// Contains values of secret keys. Cannot be accessed after being set.
 	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
+	// Cron expression that overrides the default schedule defined in the `connect.yaml` file for `job` applications. If not set, the default schedule from the `connect.yaml` file is used.
+	Schedule *string `json:"schedule,omitempty"`
 }
 
 /**
@@ -233,7 +235,7 @@ type ConnectorReference struct {
 	ID *string `json:"id,omitempty"`
 	// User-defined unique identifier of the referenced Connector.
 	Key *string `json:"key,omitempty"`
-	// If `true`, a previewable [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be referenced in `id` or `key` instead of the published Connector. The `isPreviewable` field of the [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be `true` to reference a previewable ConnectorStaged.
+	// Whether a previewable [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be referenced in `id` or `key` instead of the published Connector. The `isPreviewable` field of the [ConnectorStaged](ctp:connect:type:ConnectorStaged) must be `true` to reference a previewable ConnectorStaged.
 	Staged *bool `json:"staged,omitempty"`
 	// Version of the referenced Connector.
 	Version *int `json:"version,omitempty"`
@@ -284,7 +286,7 @@ type DeploymentConnector struct {
 	Configurations []ConnectorConfigurationApplication `json:"configurations"`
 	// Global configuration applied to all applications in the deployment.
 	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
-	// If `true`, the Connector is certified.
+	// Whether the Connector is certified.
 	Certified bool `json:"certified"`
 	// If not empty, Connectors can only be deployed in these Regions. If empty, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts).
 	SupportedRegions []Region `json:"supportedRegions"`
@@ -472,6 +474,8 @@ const (
 	RegionEuropeWest1Gcp         Region = "europe-west1.gcp"
 	RegionUsCentral1Gcp          Region = "us-central1.gcp"
 	RegionAustraliaSoutheast1Gcp Region = "australia-southeast1.gcp"
+	RegionUsEast2Aws             Region = "us-east-2.aws"
+	RegionEuCentral1Aws          Region = "eu-central-1.aws"
 )
 
 /**

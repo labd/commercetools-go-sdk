@@ -29,7 +29,7 @@ type ApprovalRule struct {
 	Description *string `json:"description,omitempty"`
 	// Indicates whether the Approval Rule should be matched against [Orders](ctp:api:type:Order) or not.
 	Status ApprovalRuleStatus `json:"status"`
-	// The [Order Predicate](/../api/projects/predicates#order-predicates) describing the [Orders](ctp:api:type:Order) the Approval Rule should match against.
+	// The [Order Predicate](/api/projects/predicates#order-predicates) describing the [Orders](ctp:api:type:Order) the Approval Rule should match against.
 	Predicate string `json:"predicate"`
 	// The hierarchy of approvers within the Approval Rule.
 	Approvers ApproverHierarchy `json:"approvers"`
@@ -50,7 +50,7 @@ type ApprovalRuleDraft struct {
 	Description *string `json:"description,omitempty"`
 	// Indicates whether the Approval Rule should be matched against [Orders](ctp:api:type:Order) or not.
 	Status ApprovalRuleStatus `json:"status"`
-	// The [predicate](/../api/predicates/predicate-operators) describing the [Orders](ctp:api:type:Order) the Approval Rule should match against.
+	// The [predicate](/api/predicates/predicate-operators) describing the [Orders](ctp:api:type:Order) the Approval Rule should match against.
 	Predicate string `json:"predicate"`
 	// The hierarchy of approvers within the Approval Rule.
 	Approvers ApproverHierarchyDraft `json:"approvers"`
@@ -59,21 +59,21 @@ type ApprovalRuleDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ApprovalRule](ctp:api:type:ApprovalRule).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [ApprovalRule](ctp:api:type:ApprovalRule).
 *
  */
 type ApprovalRulePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Approval Rules matching the query.
 	Results []ApprovalRule `json:"results"`
@@ -288,7 +288,9 @@ type ApprovalRuleSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the ApprovalRule with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ApprovalRule.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](ctp:api:type:CustomFields) fields for the ApprovalRule.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ApprovalRule.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -326,7 +328,7 @@ func (obj ApprovalRuleSetDescriptionAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ApprovalRuleSetKeyAction struct {
-	// Value to set. Must be unique within a Business Unit. If empty, any existing value will be removed.
+	// Value to set. Must be unique within a Business Unit. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -360,11 +362,11 @@ func (obj ApprovalRuleSetNameAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting the [Order Predicate](/../api/projects/predicates#order-predicates) for an [Approval Rule](ctp:api:type:ApprovalRule) generates an [ApprovalRulePredicateSet](ctp:api:type:ApprovalRulePredicateSetMessage) Message.
+*	Setting the [Order Predicate](/api/projects/predicates#order-predicates) for an [Approval Rule](ctp:api:type:ApprovalRule) generates an [ApprovalRulePredicateSet](ctp:api:type:ApprovalRulePredicateSetMessage) Message.
 *
  */
 type ApprovalRuleSetPredicateAction struct {
-	// A valid [Order Predicate](/../api/projects/predicates#order-predicates) to set for the Approval Rule.
+	// A valid [Order Predicate](/api/projects/predicates#order-predicates) to set for the Approval Rule.
 	Predicate string `json:"predicate"`
 }
 

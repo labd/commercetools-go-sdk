@@ -29,11 +29,11 @@ type CartDiscount struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// Effect of the CartDiscount on the `target`.
 	Value CartDiscountValue `json:"value"`
-	// Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
+	// Valid [Cart Predicate](/api/projects/predicates#cart-predicates).
 	CartPredicate string `json:"cartPredicate"`
 	// Segment of the Cart that is discounted.
 	//
-	// Empty, if the `value` is `giftLineItem`.
+	// Absent if the `value` is `giftLineItem`.
 	Target CartDiscountTarget `json:"target,omitempty"`
 	// Value between `0` and `1` that determines the order in which the CartDiscounts are applied; a CartDiscount with a higher value is prioritized.
 	//
@@ -110,12 +110,14 @@ type CartDiscountDraft struct {
 	// Name of the CartDiscount.
 	Name LocalizedString `json:"name"`
 	// User-defined unique identifier for the CartDiscount.
+	//
+	// If the value is used by another Cart Discount, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 	// Description of the CartDiscount.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Effect of the CartDiscount on the `target`.
 	Value CartDiscountValueDraft `json:"value"`
-	// Valid [Cart Predicate](/../api/projects/predicates#cart-predicates).
+	// Valid [Cart Predicate](/api/projects/predicates#cart-predicates).
 	CartPredicate string `json:"cartPredicate"`
 	// Segment of the Cart that will be discounted.
 	//
@@ -123,19 +125,19 @@ type CartDiscountDraft struct {
 	Target CartDiscountTarget `json:"target,omitempty"`
 	// Value between `0` and `1` that determines the order in which the CartDiscounts will be applied; a CartDiscount with a higher value will be prioritized.
 	//
-	// It must be unique among all CartDiscounts and DiscountGroups.
+	// If the value is used by another Cart Discount or Discount Group, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	//
 	// If the CartDiscount is part of a DiscountGroup, it will use the sort order of the DiscountGroup.
 	SortOrder *string `json:"sortOrder,omitempty"`
 	// - If defined, the Cart Discount applies on [Carts](ctp:api:type:Cart) having a [Store](ctp:api:type:Store) matching any Store defined for this field.
 	// - If not defined, the Cart Discount applies on all Carts, irrespective of a Store.
 	//
-	// If the referenced Stores exceed the [limit](/../api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
+	// If the referenced Stores exceed the [limit](/api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
 	//
-	// If the referenced Stores exceed the [limit](/../api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
+	// If the referenced Stores exceed the [limit](/api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
 	Stores []StoreResourceIdentifier `json:"stores"`
 	// Only active Discounts can be applied to the Cart.
-	// If the [limit](/../api/limits#cart-discounts) for active Cart Discounts is reached, a [MaxCartDiscountsReached](ctp:api:type:MaxCartDiscountsReachedError) error is returned.
+	// If the [limit](/api/limits#cart-discounts) for active Cart Discounts is reached, a [MaxCartDiscountsReached](ctp:api:type:MaxCartDiscountsReachedError) error is returned.
 	IsActive *bool `json:"isActive,omitempty"`
 	// Date and time (UTC) from which the Discount is effective.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
@@ -148,6 +150,8 @@ type CartDiscountDraft struct {
 	// Custom Fields for the CartDiscount.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Reference to a DiscountGroup that the CartDiscount must belong to.
+	//
+	// A CartDiscount can only be added to a DiscountGroup if its `target.type` is `lineItems`, `customLineItems`, `multiBuyLineItems`, `multiBuyCustomLineItems`, or `pattern`; otherwise, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
 	DiscountGroup *DiscountGroupResourceIdentifier `json:"discountGroup,omitempty"`
 	// Scope of the Cart Discount for Recurring Orders.
 	//
@@ -212,21 +216,21 @@ func (obj CartDiscountDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [CartDiscount](ctp:api:type:CartDiscount).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [CartDiscount](ctp:api:type:CartDiscount).
 *
  */
 type CartDiscountPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [CartDiscounts](ctp:api:type:CartDiscount) matching the query.
 	Results []CartDiscount `json:"results"`
@@ -239,7 +243,7 @@ type CartDiscountPagedQueryResponse struct {
 type CartDiscountReference struct {
 	// Unique identifier of the referenced [CartDiscount](ctp:api:type:CartDiscount).
 	ID string `json:"id"`
-	// Contains the representation of the expanded CartDiscount. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CartDiscounts.
+	// Contains the representation of the expanded CartDiscount. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for CartDiscounts.
 	Obj *CartDiscount `json:"obj,omitempty"`
 }
 
@@ -254,7 +258,7 @@ func (obj CartDiscountReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CartDiscount](ctp:api:type:CartDiscount). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type CartDiscountResourceIdentifier struct {
@@ -353,7 +357,7 @@ func mapDiscriminatorCartDiscountTarget(input interface{}) (CartDiscountTarget, 
 *
  */
 type CartDiscountCustomLineItemsTarget struct {
-	// Valid [CustomLineItem target predicate](/../api/projects/predicates#customlineitem-field-identifiers).
+	// Valid [CustomLineItem target predicate](/api/projects/predicates#customlineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 }
 
@@ -372,7 +376,7 @@ func (obj CartDiscountCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 *
  */
 type CartDiscountLineItemsTarget struct {
-	// Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers).
+	// Valid [LineItem target predicate](/api/projects/predicates#lineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 }
 
@@ -1007,7 +1011,7 @@ const (
 *
  */
 type MultiBuyCustomLineItemsTarget struct {
-	// Valid [CustomLineItems target predicate](/../api/projects/predicates#customlineitem-field-identifiers). The Discount will be applied to Custom Line Items that are matched by the predicate.
+	// Valid [CustomLineItems target predicate](/api/projects/predicates#customlineitem-field-identifiers). The Discount will be applied to Custom Line Items that are matched by the predicate.
 	Predicate string `json:"predicate"`
 	// Number of Custom Line Items to be present in order to trigger an application of this Discount.
 	TriggerQuantity int `json:"triggerQuantity"`
@@ -1032,11 +1036,11 @@ func (obj MultiBuyCustomLineItemsTarget) MarshalJSON() ([]byte, error) {
 }
 
 type MultiBuyLineItemsTarget struct {
-	// Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers). The Discount will be applied to Line Items that are matched by the predicate.
+	// Valid [LineItem target predicate](/api/projects/predicates#lineitem-field-identifiers). The Discount will be applied to Line Items that are matched by the predicate.
 	Predicate string `json:"predicate"`
-	// Number of Line Items to be present in order to trigger an application of this Discount.
+	// Quantity of Line Items required to trigger an application of this Discount.
 	TriggerQuantity int `json:"triggerQuantity"`
-	// Number of Line Items that are discounted per application of this Discount.
+	// Quantity of Line Items discounted per application of this Discount.
 	// It must be less than or equal to the `triggerQuantity`.
 	DiscountedQuantity int `json:"discountedQuantity"`
 	// Maximum number of times this Discount can be applied.
@@ -1091,7 +1095,7 @@ func mapDiscriminatorPatternComponent(input interface{}) (PatternComponent, erro
 }
 
 type CountOnCustomLineItemUnits struct {
-	// Valid [CustomLineItem predicate](/../api/projects/predicates#customlineitem-field-identifiers) that determines the units participating in the Discount.
+	// Valid [CustomLineItem predicate](/api/projects/predicates#customlineitem-field-identifiers) that determines the units participating in the Discount.
 	Predicate string `json:"predicate"`
 	// Minimum number of units of a Custom Line Item that match the predicate.
 	MinCount *int `json:"minCount,omitempty"`
@@ -1122,7 +1126,7 @@ func (obj CountOnCustomLineItemUnits) MarshalJSON() ([]byte, error) {
 }
 
 type CountOnLineItemUnits struct {
-	// Valid [LineItem predicate](/../api/projects/predicates#lineitem-field-identifiers) that determines the units participating in the Discount.
+	// Valid [LineItem predicate](/api/projects/predicates#lineitem-field-identifiers) that determines the units participating in the Discount.
 	Predicate string `json:"predicate"`
 	// Minimum number of units of a Line Item that match the predicate.
 	MinCount *int `json:"minCount,omitempty"`
@@ -1183,10 +1187,9 @@ const (
 type CartDiscountAddStoreAction struct {
 	// [Store](ctp:api:type:Store) to add.
 	//
-	// A failed update can return the following errors:
+	// If the referenced Stores exceed the [limit](/api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
 	//
-	// - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
-	// - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
+	// If the referenced Stores exceed the [limit](/api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
 	Store StoreResourceIdentifier `json:"store"`
 }
 
@@ -1249,8 +1252,9 @@ func (obj CartDiscountChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountChangeRequiresDiscountCodeAction struct {
-	// New value to set.
-	// If set to `true`, the Discount can only be used in connection with a [DiscountCode](ctp:api:type:DiscountCode).
+	// New value to set. If `true`, the Cart Discount can only be used with a [DiscountCode](ctp:api:type:DiscountCode).
+	//
+	// When set to `false`, if the number of active Cart Discounts without a Discount Code exceeds the [limit](/api/limits#cart-discounts), a [MaxCartDiscountsReached](ctp:api:type:MaxCartDiscountsReachedError) error is returned.
 	RequiresDiscountCode bool `json:"requiresDiscountCode"`
 }
 
@@ -1267,6 +1271,8 @@ func (obj CartDiscountChangeRequiresDiscountCodeAction) MarshalJSON() ([]byte, e
 type CartDiscountChangeSortOrderAction struct {
 	// New value to set (between `0` and `1`).
 	// A Discount with a higher sortOrder is prioritized.
+	//
+	// If the value is used by another Cart Discount or Discount Group, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	SortOrder string `json:"sortOrder"`
 }
 
@@ -1394,7 +1400,7 @@ func (obj CartDiscountRemoveStoreAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1413,10 +1419,12 @@ func (obj CartDiscountSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the CartDiscount with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the CartDiscount with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the CartDiscount.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CartDiscount.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the CartDiscount.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1431,7 +1439,7 @@ func (obj CartDiscountSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -1446,8 +1454,10 @@ func (obj CartDiscountSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetDiscountGroupAction struct {
-	// Reference to a DiscountGroup that the Cart Discount must belong to.
-	// If empty, any existing value will be removed.
+	// Reference to a DiscountGroup that the CartDiscount must belong to.
+	// If omitted, any existing value is removed.
+	//
+	// A CartDiscount can only be added to a DiscountGroup if its `target.type` is `lineItems`, `customLineItems`, `multiBuyLineItems`, `multiBuyCustomLineItems`, or `pattern`; otherwise, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
 	DiscountGroup *DiscountGroupResourceIdentifier `json:"discountGroup,omitempty"`
 	// New value to set (between `0` and `1`) that determines the order in which the CartDiscounts are applied; a CartDiscount with a higher value is prioritized.
 	//
@@ -1466,7 +1476,9 @@ func (obj CartDiscountSetDiscountGroupAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartDiscountSetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
+	//
+	// If the value is used by another Cart Discount, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -1526,12 +1538,11 @@ func (obj CartDiscountSetRecurringOrderScopeAction) MarshalJSON() ([]byte, error
 type CartDiscountSetStoresAction struct {
 	// [Stores](ctp:api:type:Store) to set.
 	// Overrides the current list of Stores.
-	// If empty, any existing values will be removed.
+	// Set to an empty array to remove all existing values.
 	//
-	// A failed update can return the following errors:
+	// If the referenced Stores exceed the [limit](/api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
 	//
-	// - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts-stores), a [MaxStoreReferencesReached](ctp:api:type:MaxStoreReferencesReachedError) error is returned.
-	// - If the referenced Stores exceed the [limit](/../api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
+	// If the referenced Stores exceed the [limit](/api/limits#cart-discounts) for Cart Discounts that do not require a Discount Code, a [StoreCartDiscountsLimitReached](ctp:api:type:StoreCartDiscountsLimitReachedError) error is returned.
 	Stores []StoreResourceIdentifier `json:"stores"`
 }
 
@@ -1547,7 +1558,7 @@ func (obj CartDiscountSetStoresAction) MarshalJSON() ([]byte, error) {
 
 type CartDiscountSetValidFromAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 }
 
@@ -1563,10 +1574,10 @@ func (obj CartDiscountSetValidFromAction) MarshalJSON() ([]byte, error) {
 
 type CartDiscountSetValidFromAndUntilAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 
@@ -1582,7 +1593,7 @@ func (obj CartDiscountSetValidFromAndUntilAction) MarshalJSON() ([]byte, error) 
 
 type CartDiscountSetValidUntilAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 }
 

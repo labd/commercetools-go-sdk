@@ -36,7 +36,7 @@ func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Head() *ByProjectKeyMeQ
 }
 
 /**
-*	Updates a QuoteRequest for the authenticated Customer using one or more [update actions](/../api/projects/quote-requests#update-actions).
+*	Updates a QuoteRequest for the authenticated Customer using one or more [update actions](/api/projects/quote-requests#update-actions).
 *
  */
 func (rb *ByProjectKeyMeQuoteRequestsByIDRequestBuilder) Post(body MyQuoteRequestUpdate) *ByProjectKeyMeQuoteRequestsByIDRequestMethodPost {

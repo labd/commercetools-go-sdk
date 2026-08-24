@@ -33,7 +33,7 @@ func (rb *ByProjectKeyOrdersByIDRequestBuilder) Head() *ByProjectKeyOrdersByIDRe
 }
 
 /**
-*	Updates an Order in the Project using one or more [update actions](/../api/projects/orders#update-actions).
+*	Updates an Order in the Project using one or more [update actions](/api/projects/orders#update-actions).
  */
 func (rb *ByProjectKeyOrdersByIDRequestBuilder) Post(body OrderUpdate) *ByProjectKeyOrdersByIDRequestMethodPost {
 	return &ByProjectKeyOrdersByIDRequestMethodPost{

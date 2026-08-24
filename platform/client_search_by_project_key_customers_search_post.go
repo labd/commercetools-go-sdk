@@ -30,7 +30,7 @@ func (rb *ByProjectKeyCustomersSearchRequestMethodPost) WithHeaders(headers http
 
 /**
 *	If the initial indexing is in progress or the feature is inactive, a [SearchNotReady](ctp:api:type:SearchNotReadyError) error is returned.
-*	If inactive, you can [reactivate](/../api/projects/customer-search#reactivate) it.
+*	If inactive, you can [reactivate](/api/projects/customer-search#reactivate) it.
 *
  */
 func (rb *ByProjectKeyCustomersSearchRequestMethodPost) Execute(ctx context.Context) (result *CustomerPagedSearchResponse, err error) {

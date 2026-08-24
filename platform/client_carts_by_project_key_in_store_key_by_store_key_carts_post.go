@@ -58,8 +58,6 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodPost) WithHeaders(he
 /**
 *	Creates a Cart in a [Store](ctp:api:type:Store).
 *
-*	If the referenced [ShippingMethod](ctp:api:type:ShippingMethod) in the [CartDraft](ctp:api:type:CartDraft) has a predicate that does not match, or if the Shipping Method is not active, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
-*
 *	Specific Error Codes:
 *
 *	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
@@ -67,6 +65,10 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodPost) WithHeaders(he
 *	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
 *	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
 *	- [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError)
+*	- [InvalidOperation](ctp:api:type:InvalidOperationError) is returned in several cases, including the following:
+*	    - The referenced Shipping Method has a predicate that does not match the Cart.
+*	    - The referenced Shipping Method is not active.
+*	    - The referenced Shipping Method is scoped to a Store that differs from the Cart's Store.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyCartsRequestMethodPost) Execute(ctx context.Context) (result *Cart, err error) {

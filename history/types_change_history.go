@@ -9,13 +9,13 @@ import (
 /**
 *	Captures the differences between the previous and next version of a resource.
 *
-*	The maximum number of Records that can be stored and their retention period are subject to a [limit](/../api/limits#change-history).
+*	The maximum number of Records that can be stored and their retention period are subject to a [limit](/api/limits#change-history).
 *
  */
 type Record struct {
 	// Version of the resource after the change.
 	//
-	// For more information on how the version is incremented, see [Optimistic Concurrency Control](/../api/general-concepts#optimistic-concurrency-control).
+	// For more information on how the version is incremented, see [Optimistic Concurrency Control](/api/general-concepts#optimistic-concurrency-control).
 	Version int `json:"version"`
 	// Version of the resource before the change.
 	PreviousVersion int `json:"previousVersion"`
@@ -38,9 +38,9 @@ type Record struct {
 	Resource ResourceIdentifier `json:"resource"`
 	// References to the [Stores](ctp:api:type:Store) associated with the [Change](ctp:history:type:Change).
 	Stores []KeyReference `json:"stores"`
-	// Reference to the [Business Unit](ctp:api:type:BusinessUnit) associated with the [Change](ctp:history:type:Change). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// Reference to the [Business Unit](ctp:api:type:BusinessUnit) associated with the [Change](ctp:history:type:Change). Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit KeyReference `json:"businessUnit,omitempty"`
-	// `true` if no change was detected.
+	// Whether no change was detected.
 	//
 	// The version number of the resource can be increased even without any change in the resource.
 	WithoutChanges bool `json:"withoutChanges"`
@@ -93,18 +93,19 @@ func (obj *Record) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Record](ctp:history:type:Record).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [Record](ctp:history:type:Record).
 *
  */
 type RecordPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation and not [strongly consistent](/../api/general-concepts#strong-consistency).
-	Total int `json:"total"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// This number is an estimation and not [strongly consistent](/api/general-concepts#strong-consistency).
+	// Returned only when `withTotal` is set to `true` on the query.
+	Total *int `json:"total,omitempty"`
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Records matching the query.
 	Results []Record `json:"results"`
@@ -213,7 +214,7 @@ func (obj ErrorResponse) Error() string {
 *
  */
 type ModifiedBy struct {
-	// `true` if the change was made using the Merchant Center.
+	// Whether the change was made using the Merchant Center.
 	IsPlatformClient bool `json:"isPlatformClient"`
 	// [ID](/general-concepts#identifier) of the Merchant Center user who made the change.
 	//
@@ -235,7 +236,7 @@ type ModifiedBy struct {
 	//
 	// Present only if the change was made using a token from the [password flow](/authorization#password-flow).
 	Customer Reference `json:"customer,omitempty"`
-	// The [Associate](ctp:api:type:Associate) who made the change in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// The [Associate](ctp:api:type:Associate) who made the change in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate Reference `json:"associate,omitempty"`
 }
 
@@ -584,6 +585,7 @@ const (
 	UpdateTypeSetReferences                               UpdateType = "setReferences"
 	UpdateTypeSetReservations                             UpdateType = "setReservations"
 	UpdateTypeSetRestockableInDays                        UpdateType = "setRestockableInDays"
+	UpdateTypeSetReservationExpirationInMinutes           UpdateType = "setReservationExpirationInMinutes"
 	UpdateTypeSetReturnInfo                               UpdateType = "setReturnInfo"
 	UpdateTypeSetReturnItemCustomField                    UpdateType = "setReturnItemCustomField"
 	UpdateTypeSetReturnItemCustomType                     UpdateType = "setReturnItemCustomType"

@@ -190,21 +190,21 @@ type PaymentMethodInfoDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Payment](ctp:api:type:Payment).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [Payment](ctp:api:type:Payment).
 *
  */
 type PaymentPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// [Payments](ctp:api:type:Payment) matching the query.
 	Results []Payment `json:"results"`
@@ -217,7 +217,7 @@ type PaymentPagedQueryResponse struct {
 type PaymentReference struct {
 	// Unique identifier of the referenced [Payment](ctp:api:type:Payment).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Payment. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Payments.
+	// Contains the representation of the expanded Payment. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Payments.
 	Obj *Payment `json:"obj,omitempty"`
 }
 
@@ -232,7 +232,7 @@ func (obj PaymentReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Payment](ctp:api:type:Payment). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type PaymentResourceIdentifier struct {
@@ -566,7 +566,9 @@ const (
 type PaymentAddInterfaceInteractionAction struct {
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type).
 	Type TypeResourceIdentifier `json:"type"`
-	// [Custom Fields](/../api/projects/custom-fields) as per [FieldDefinitions](ctp:api:type:FieldDefinition) of the [Type](ctp:api:type:Type).
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the InterfaceInteraction.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -708,7 +710,7 @@ func (obj PaymentSetAmountRefundedAction) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentSetAnonymousIdAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -739,7 +741,7 @@ func (obj PaymentSetAuthorizationAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -758,10 +760,12 @@ func (obj PaymentSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Payment with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Payment with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Payment.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Payment.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Payment.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -777,7 +781,7 @@ func (obj PaymentSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 type PaymentSetCustomerAction struct {
 	// Value to set.
-	// If empty, any existing reference is removed.
+	// If omitted, any existing reference is removed.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
@@ -855,27 +859,27 @@ type PaymentSetMethodInfoAction struct {
 	// Setting this field is equivalent to the `setMethodInfoInterface` action and will generate the [PaymentMethodInfoInterfaceSet](ctp:api:type:PaymentMethodInfoInterfaceSetMessage) Message.
 	PaymentInterface *string `json:"paymentInterface,omitempty"`
 	// Payment method to use—for example, a credit card or direct debit.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	//
 	// Setting this field is equivalent to the `setMethodInfoMethod` action and will generate the [PaymentMethodInfoMethodSet](ctp:api:type:PaymentMethodInfoMethodSetMessage) Message.
 	Method *string `json:"method,omitempty"`
 	// Name of the Payment Method.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	//
 	// Setting this field is equivalent to the `setMethodInfoName` action and will generate the [PaymentMethodInfoNameSet](ctp:api:type:PaymentMethodInfoNameSetMessage) Message.
 	Name *LocalizedString `json:"name,omitempty"`
 	// Tokenized payment method information of the Payment Method.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	//
 	// Setting this field is equivalent to the `setMethodInfoToken` action and will generate the [PaymentMethodInfoTokenSet](ctp:api:type:PaymentMethodInfoTokenSetMessage) Message.
 	Token *PaymentMethodToken `json:"token,omitempty"`
 	// Account or instance of the payment interface when multiple accounts are used (per interface).
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	//
 	// Setting this field is equivalent to the `setMethodInfoInterfaceAccount` action and will generate the [PaymentMethodInfoInterfaceAccountSet](ctp:api:type:PaymentMethodInfoInterfaceAccountSetMessage) Message.
 	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
 	// Custom Fields for the PaymentMethodInfo.
-	// If not provided, any existing Custom Fields will be removed, including the Custom Type.
+	// If omitted, any existing Custom Fields are removed, including the Custom Type.
 	//
 	// Setting this field is equivalent to the `setMethodInfoCustomType` and `setMethodInfoCustomField` actions, and will generate the following Messages:
 	//
@@ -899,7 +903,7 @@ func (obj PaymentSetMethodInfoAction) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentSetMethodInfoCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// If `value` is provided, it is set for the field defined by `name`.
@@ -922,9 +926,11 @@ func (obj PaymentSetMethodInfoCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentSetMethodInfoCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](ctp:api:type:CustomFields).
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `paymentMethodInfo`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `paymentMethodInfo`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -944,7 +950,7 @@ func (obj PaymentSetMethodInfoCustomTypeAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentSetMethodInfoInterfaceAccountAction struct {
 	// New account or instance of the payment interface.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
 }
 
@@ -984,7 +990,7 @@ func (obj PaymentSetMethodInfoInterfaceAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentSetMethodInfoMethodAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Method *string `json:"method,omitempty"`
 }
 
@@ -1004,7 +1010,7 @@ func (obj PaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentSetMethodInfoNameAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -1024,7 +1030,7 @@ func (obj PaymentSetMethodInfoNameAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentSetMethodInfoTokenAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Token *PaymentMethodToken `json:"token,omitempty"`
 }
 
@@ -1042,7 +1048,7 @@ func (obj PaymentSetMethodInfoTokenAction) MarshalJSON() ([]byte, error) {
 *	Produces the [PaymentStatusInterfaceCodeSet](ctp:api:type:PaymentStatusInterfaceCodeSetMessage) Message.
  */
 type PaymentSetStatusInterfaceCodeAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	InterfaceCode *string `json:"interfaceCode,omitempty"`
 }
 
@@ -1057,7 +1063,7 @@ func (obj PaymentSetStatusInterfaceCodeAction) MarshalJSON() ([]byte, error) {
 }
 
 type PaymentSetStatusInterfaceTextAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. Set to an empty string to remove any existing value.
 	InterfaceText string `json:"interfaceText"`
 }
 
@@ -1074,7 +1080,7 @@ func (obj PaymentSetStatusInterfaceTextAction) MarshalJSON() ([]byte, error) {
 type PaymentSetTransactionCustomFieldAction struct {
 	// Unique identifier of the [Transaction](ctp:api:type:Transaction).
 	TransactionId string `json:"transactionId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1095,10 +1101,12 @@ func (obj PaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error) 
 type PaymentSetTransactionCustomTypeAction struct {
 	// Unique identifier of the [Transaction](ctp:api:type:Transaction). If the specified `transactionId` does not exist, the request will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 	TransactionId string `json:"transactionId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Transaction with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Transaction with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Transaction.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Transaction.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Transaction.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1145,7 +1153,7 @@ func (obj PaymentSetTransactionInterfaceIdAction) MarshalJSON() ([]byte, error) 
 type PaymentTransitionStateAction struct {
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [State](ctp:api:type:State).
 	State StateResourceIdentifier `json:"state"`
-	// Set to `true` to skip validations when transitioning to the new State.
+	// Whether to skip validations when transitioning to the new State.
 	Force *bool `json:"force,omitempty"`
 }
 

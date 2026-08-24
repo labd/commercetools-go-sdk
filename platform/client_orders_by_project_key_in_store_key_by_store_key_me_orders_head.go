@@ -57,11 +57,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestMethodHead) WithHeaders
 /**
 *	Checks if one or more Orders exist for the provided query predicate in a [Store](ctp:api:type:Store) for the authenticated Customer or anonymous user. Returns a `200` status if successful.
 *
-*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
+*	A [Not Found](/api/errors#404-not-found) error is returned in the following scenarios:
 *
 *	- If no Orders exist in the Store that match the Query Predicate.
 *	- If an Order matches the Query Predicate, but no `store` is specified, or the `store` field references a different Store.
-*	- If an Order matches the Query Predicate, but does not have a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If an Order matches the Query Predicate, but does not have a `customerId` that matches the [customer:{id}](/scopes#internal-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeOrdersRequestMethodHead) Execute(ctx context.Context) error {

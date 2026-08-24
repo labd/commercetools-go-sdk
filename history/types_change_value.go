@@ -147,7 +147,7 @@ type AttributeValue struct {
 }
 
 type ChangeTargetCustomLineItemsChangeValue struct {
-	// Valid [CustomLineItem target predicate](/../api/projects/predicates#customlineitem-field-identifiers).
+	// Valid [CustomLineItem target predicate](/api/projects/predicates#customlineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 }
 
@@ -162,7 +162,7 @@ func (obj ChangeTargetCustomLineItemsChangeValue) MarshalJSON() ([]byte, error) 
 }
 
 type ChangeTargetLineItemsChangeValue struct {
-	// Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers).
+	// Valid [LineItem target predicate](/api/projects/predicates#lineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 }
 
@@ -177,7 +177,7 @@ func (obj ChangeTargetLineItemsChangeValue) MarshalJSON() ([]byte, error) {
 }
 
 type ChangeTargetMultiBuyCustomLineItemsChangeValue struct {
-	// Valid [CustomLineItem target predicate](/../api/projects/predicates#customlineitem-field-identifiers).
+	// Valid [CustomLineItem target predicate](/api/projects/predicates#customlineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 	// Quantity of Custom Line Items that triggered the application of the discount.
 	TriggerQuantity int `json:"triggerQuantity"`
@@ -200,7 +200,7 @@ func (obj ChangeTargetMultiBuyCustomLineItemsChangeValue) MarshalJSON() ([]byte,
 }
 
 type ChangeTargetMultiBuyLineItemsChangeValue struct {
-	// Valid [LineItem target predicate](/../api/projects/predicates#lineitem-field-identifiers).
+	// Valid [LineItem target predicate](/api/projects/predicates#lineitem-field-identifiers).
 	Predicate string `json:"predicate"`
 	// Quantity of Line Items that triggered the application of the discount.
 	TriggerQuantity int `json:"triggerQuantity"`

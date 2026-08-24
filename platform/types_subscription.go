@@ -101,7 +101,7 @@ type CloudEventsPayload struct {
 	Sequence *string `json:"sequence,omitempty"`
 	// `"Integer"`
 	Sequencetype *string `json:"sequencetype,omitempty"`
-	// The URI from which the message can be retrieved if messages are [enabled](/../api/projects/messages#enable-querying-messages-via-the-api). Only set for [MessageSubscriptions](ctp:api:type:MessageSubscription).
+	// The URI from which the message can be retrieved if messages are [enabled](/api/projects/messages#enable-querying-messages-via-the-api). Only set for [MessageSubscriptions](ctp:api:type:MessageSubscription).
 	Dataref *string `json:"dataref,omitempty"`
 	// [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload), [ResourceCreatedDeliveryPayload](ctp:api:type:ResourceCreatedDeliveryPayload), [ResourceUpdatedDeliveryPayload](ctp:api:type:ResourceUpdatedDeliveryPayload), or [ResourceDeletedDeliveryPayload](ctp:api:type:ResourceDeletedDeliveryPayload), [EventDeliveryPayload](ctp:api:type:EventDeliveryPayload).
 	Data DeliveryPayload `json:"data"`
@@ -460,7 +460,7 @@ func (obj IronMqDestination) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Messages will be delivered even if the Messages Query HTTP API [is not enabled](/../api/projects/messages#enable-querying-messages-via-the-api).
+*	Messages will be delivered even if the Messages Query HTTP API [is not enabled](/api/projects/messages#enable-querying-messages-via-the-api).
 *
 *	For MessageSubscriptions, the format of the payload is [MessageDeliveryPayload](ctp:api:type:MessageDeliveryPayload).
 *
@@ -536,7 +536,7 @@ type PayloadNotIncluded struct {
 }
 
 /**
-*	The PlatformFormat uses constructs that are similar to the ones used in the REST API, for example, on the [Messages Query HTTP API](/../api/projects/messages).
+*	The PlatformFormat uses constructs that are similar to the ones used in the REST API, for example, on the [Messages Query HTTP API](/api/projects/messages).
 *
  */
 type PlatformFormat struct {
@@ -1009,7 +1009,7 @@ type ResourceDeletedDeliveryPayload struct {
 	Version int `json:"version"`
 	// Date and time (UTC) the resource was last deleted.
 	ModifiedAt time.Time `json:"modifiedAt"`
-	// `true` if the `dataErasure` [parameter](/../api/gdpr#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
+	// Whether the `dataErasure` [parameter](/api/gdpr#data-erasure-of-personal-data) on the `DELETE` request was set to `true`.
 	DataErasure *bool `json:"dataErasure,omitempty"`
 }
 
@@ -1090,21 +1090,21 @@ func (obj ResourceUpdatedDeliveryPayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Subscription](ctp:api:type:Subscription).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [Subscription](ctp:api:type:Subscription).
 *
  */
 type SubscriptionPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Subscriptions matching the query.
 	Results []Subscription `json:"results"`
@@ -1289,7 +1289,7 @@ func (obj SubscriptionSetEventsAction) MarshalJSON() ([]byte, error) {
 }
 
 type SubscriptionSetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 

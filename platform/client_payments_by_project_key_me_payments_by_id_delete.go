@@ -66,7 +66,7 @@ func (rb *ByProjectKeyMePaymentsByIDRequestMethodDelete) WithHeaders(headers htt
 }
 
 /**
-*	Deletes a [Payment](/projects/me-payments#mypayment) with the provided `id` for the authenticated Customer or anonymous user.
+*	Deletes a Payment with the provided `id` for the authenticated Customer or anonymous user.
 *	You can only delete a Payment if it has no [Transactions](ctp:api:type:Transaction).
 *
  */

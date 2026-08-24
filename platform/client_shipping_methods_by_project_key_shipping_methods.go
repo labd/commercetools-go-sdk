@@ -77,7 +77,7 @@ func (rb *ByProjectKeyShippingMethodsRequestBuilder) Get() *ByProjectKeyShipping
 }
 
 /**
-*	Checks if one or more ShippingMethods exist for the provided query predicate. Returns a `200 OK` status if any ShippingMethods match the query predicate or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if one or more ShippingMethods exist for the provided query predicate. Returns a `200 OK` status if any ShippingMethods match the query predicate or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsRequestBuilder) Head() *ByProjectKeyShippingMethodsRequestMethodHead {
 	return &ByProjectKeyShippingMethodsRequestMethodHead{

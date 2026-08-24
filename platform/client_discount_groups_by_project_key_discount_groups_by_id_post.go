@@ -56,7 +56,7 @@ func (rb *ByProjectKeyDiscountGroupsByIDRequestMethodPost) WithHeaders(headers h
 }
 
 /**
-*	Updates a DiscountGroup in the Project using one or more [update actions](/../api/projects/discount-groups#update-actions).
+*	Updates a DiscountGroup in the Project using one or more [update actions](/api/projects/discount-groups#update-actions).
 *
  */
 func (rb *ByProjectKeyDiscountGroupsByIDRequestMethodPost) Execute(ctx context.Context) (result *DiscountGroup, err error) {

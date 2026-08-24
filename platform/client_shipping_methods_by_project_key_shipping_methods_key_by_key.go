@@ -23,7 +23,7 @@ func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestBuilder) Get() *ByProjectKey
 }
 
 /**
-*	Checks if a ShippingMethod exists with the provided `key`. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if a ShippingMethod exists with the provided `key`. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestBuilder) Head() *ByProjectKeyShippingMethodsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyShippingMethodsKeyByKeyRequestMethodHead{
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestBuilder) Head() *ByProjectKe
 }
 
 /**
-*	Updates a ShippingMethod in the Project using one or more [update actions](/../api/projects/shippingMethods#update-actions).
+*	Updates a ShippingMethod in the Project using one or more [update actions](/api/projects/shippingMethods#update-actions).
  */
 func (rb *ByProjectKeyShippingMethodsKeyByKeyRequestBuilder) Post(body ShippingMethodUpdate) *ByProjectKeyShippingMethodsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyShippingMethodsKeyByKeyRequestMethodPost{

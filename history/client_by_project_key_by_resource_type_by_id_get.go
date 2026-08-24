@@ -42,6 +42,7 @@ type ByProjectKeyByResourceTypeByIDRequestMethodGetInput struct {
 	Stores                          []string
 	ExcludePlatformInitiatedChanges []PlatformInitiatedChange
 	Expand                          *bool
+	WithTotal                       *bool
 }
 
 func (input *ByProjectKeyByResourceTypeByIDRequestMethodGetInput) Values() url.Values {
@@ -93,6 +94,13 @@ func (input *ByProjectKeyByResourceTypeByIDRequestMethodGetInput) Values() url.V
 			values.Add("expand", "true")
 		} else {
 			values.Add("expand", "false")
+		}
+	}
+	if input.WithTotal != nil {
+		if *input.WithTotal {
+			values.Add("withTotal", "true")
+		} else {
+			values.Add("withTotal", "false")
 		}
 	}
 	return values
@@ -215,6 +223,14 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) Expand(v bool) *ByProj
 		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
 	}
 	rb.params.Expand = &v
+	return rb
+}
+
+func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) WithTotal(v bool) *ByProjectKeyByResourceTypeByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
+	}
+	rb.params.WithTotal = &v
 	return rb
 }
 

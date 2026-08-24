@@ -31,4 +31,6 @@ type OperationStates struct {
 	Rejected int `json:"rejected"`
 	// The number of ImportOperations in the `canceled` state.
 	Canceled int `json:"canceled"`
+	// The number of ImportOperations in the `partiallyImported` state.
+	PartiallyImported int `json:"partiallyImported"`
 }

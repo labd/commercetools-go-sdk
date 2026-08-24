@@ -56,9 +56,9 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodPost
 }
 
 /**
-*	Updates a ShoppingList in a [Store](ctp:api:type:Store) using one or more [update actions](/../api/projects/shoppingLists#update-actions).
+*	Updates a ShoppingList in a [Store](ctp:api:type:Store) using one or more [update actions](/api/projects/shoppingLists#update-actions).
 *	If a ShoppingList exists in a Project but does _not_ have the `store` field, or the `store` field references a different Store,
-*	the [ResourceNotFound](/errors#404-not-found-1) error is returned.
+*	the [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyShoppingListsKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *ShoppingList, err error) {

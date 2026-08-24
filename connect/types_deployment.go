@@ -29,14 +29,14 @@ type Deployment struct {
 	DeployedRegion string `json:"deployedRegion"`
 	// Application deployments needed by the connector for hosting and configuration, refer to Connector configurations for details.
 	Applications []ApplicationDeployment `json:"applications"`
-	// If `true`, the Deployment is a preview.
+	// Whether the Deployment is a preview.
 	Preview bool `json:"preview"`
 	// The current status of the Deployment.
 	Status string `json:"status"`
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Deployment](ctp:connect:type:Deployment).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Deployment](ctp:connect:type:Deployment).
 *
  */
 type DeploymentPagedQueryResponse struct {
@@ -133,8 +133,10 @@ func mapDiscriminatorDeploymentUpdateAction(input interface{}) (DeploymentUpdate
 type DeploymentRedeployAction struct {
 	// Whether the scripts execution should be skipped during redeployment.
 	SkipScripts *bool `json:"skipScripts,omitempty"`
-	// New configuration values for Deployment. If empty, any existing value is unchanged.
+	// New configuration values for Deployment. If omitted, any existing value is unchanged.
 	ConfigurationValues []DeploymentConfigurationApplication `json:"configurationValues"`
+	// Global configuration applied to all applications in the deployment. If omitted, any existing value is unchanged.
+	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// Whether the Deployment Connector should be updated to its latest state during redeployment.
 	UpdateConnector *bool `json:"updateConnector,omitempty"`
 }

@@ -79,16 +79,16 @@ func (obj *AssignedProductSelection) UnmarshalJSON(data []byte) error {
 *
  */
 type AssignedProductSelectionPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
 	// Present only when the `withTotal` query parameter is set to `true`.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// References to ProductSelection that are assigned to the Product.
 	Results []AssignedProductSelection `json:"results"`
@@ -103,9 +103,9 @@ type ProductSelection struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ProductSelection was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Present on resources updated after 1/02/2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// Present on resources updated after 1/02/2019 except for [events not tracked](/api/general-concepts#events-tracked).
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
-	// Present on resources created after 1/02/2019 except for [events not tracked](/../api/general-concepts#events-tracked).
+	// Present on resources created after 1/02/2019 except for [events not tracked](/api/general-concepts#events-tracked).
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique identifier of the ProductSelection.
 	Key *string `json:"key,omitempty"`
@@ -139,13 +139,13 @@ type ProductSelectionAssignment struct {
 	// If undefined all Variants of the referenced Product are included.
 	//
 	// This field is only available for assignments to a Product Selection with `Individual` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
-	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
+	// The list of SKUs will be updated automatically on any published change of those performed on the respective Product itself. Staged changes do not affect this field.
 	VariantSelection ProductVariantSelection `json:"variantSelection,omitempty"`
 	// Defines which particular Variants of the Product are excluded from the Product Selection.
 	// If undefined all Variants of the referenced Product are excluded.
 	//
 	// This field is only available for assignments to a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
-	// The list of SKUs will be updated automatically on any change of those performed on the respective Product itself.
+	// The list of SKUs will be updated automatically on any published change of those performed on the respective Product itself. Staged changes do not affect this field.
 	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
 }
 
@@ -196,9 +196,9 @@ const (
 *
  */
 type ProductSelectionPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
@@ -217,16 +217,16 @@ type ProductSelectionPagedQueryResponse struct {
 *
  */
 type ProductSelectionProductPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
 	// Present only when the `withTotal` query parameter is set to `true`.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// References to Products that are assigned to the ProductSelection.
 	Results []AssignedProductReference `json:"results"`
@@ -239,7 +239,7 @@ type ProductSelectionProductPagedQueryResponse struct {
 type ProductSelectionReference struct {
 	// Unique identifier of the referenced [ProductSelection](ctp:api:type:ProductSelection).
 	ID string `json:"id"`
-	// Contains the representation of the expanded ProductSelection. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductSelections.
+	// Contains the representation of the expanded ProductSelection. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for ProductSelections.
 	Obj *ProductSelection `json:"obj,omitempty"`
 }
 
@@ -254,7 +254,7 @@ func (obj ProductSelectionReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductSelection](ctp:api:type:ProductSelection). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type ProductSelectionResourceIdentifier struct {
@@ -455,11 +455,11 @@ func mapDiscriminatorProductSelectionUpdateAction(input interface{}) (ProductSel
 }
 
 /**
-*	Only Product Variants with the explicitly listed SKUs are part of a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+*	Defines the Product Variants that are excluded from a Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode). Product Variants not listed remain available in the Product Selection.
 *
  */
 type ProductVariantExclusion struct {
-	// Non-empty array of SKUs representing Product Variants to be included in the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	// Non-empty array of SKUs representing Product Variants to be excluded from the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	Skus []string `json:"skus"`
 }
 
@@ -599,16 +599,16 @@ const (
 *
  */
 type ProductsInStorePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
 	// Present only when the `withTotal` query parameter is set to `true`.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// ProductSelectionAssignments matching the query.
 	Results []ProductSelectionAssignment `json:"results"`
@@ -711,7 +711,7 @@ func (obj ProductSelectionRemoveProductAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -730,10 +730,12 @@ func (obj ProductSelectionSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductSelectionSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the ProductSelection with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ProductSelection with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ProductSelection.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ProductSelection.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ProductSelection.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -772,7 +774,7 @@ func (obj ProductSelectionSetKeyAction) MarshalJSON() ([]byte, error) {
 type ProductSelectionSetVariantExclusionAction struct {
 	// ResourceIdentifier of the Product
 	Product ProductResourceIdentifier `json:"product"`
-	// Determines which Variants of the previously excluded Product are to be included in the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
+	// Determines which Variants of the previously excluded Product are to be excluded from the Product Selection with `IndividualExclusion` [ProductSelectionMode](ctp:api:type:ProductSelectionMode).
 	// Leave it empty to unset an existing Variant Exclusion.
 	VariantExclusion *ProductVariantExclusion `json:"variantExclusion,omitempty"`
 }

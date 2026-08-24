@@ -9,8 +9,7 @@ tasks:
     cmd: task --list-all
 
   install:
-    platforms:
-      - linux/amd64
+    desc: Install the official rmf-codegen CLI (jar from Maven Central) into ~/.local/bin
     cmds:
       - bash install-script.sh
 

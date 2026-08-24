@@ -43,7 +43,7 @@ type AttributeGroupDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [AttributeGroup](ctp:api:type:AttributeGroup).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [AttributeGroup](ctp:api:type:AttributeGroup).
 *
  */
 type AttributeGroupPagedQueryResponse struct {
@@ -55,10 +55,10 @@ type AttributeGroupPagedQueryResponse struct {
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [AttributeGroups](ctp:api:type:AttributeGroup) matching the query.
 	Results []AttributeGroup `json:"results"`
@@ -71,7 +71,7 @@ type AttributeGroupPagedQueryResponse struct {
 type AttributeGroupReference struct {
 	// Platform-generated unique identifier of the referenced [AttributeGroup](ctp:api:type:AttributeGroup).
 	ID string `json:"id"`
-	// Contains the representation of the expanded AttributeGroup. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for AttributeGroup.
+	// Contains the representation of the expanded AttributeGroup. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for AttributeGroup.
 	Obj *AttributeGroup `json:"obj,omitempty"`
 }
 
@@ -86,7 +86,7 @@ func (obj AttributeGroupReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [AttributeGroup](ctp:api:type:AttributeGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type AttributeGroupResourceIdentifier struct {
@@ -254,7 +254,7 @@ func (obj AttributeGroupSetAttributesAction) MarshalJSON() ([]byte, error) {
 
 type AttributeGroupSetDescriptionAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

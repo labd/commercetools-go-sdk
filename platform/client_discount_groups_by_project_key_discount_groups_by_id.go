@@ -36,7 +36,7 @@ func (rb *ByProjectKeyDiscountGroupsByIDRequestBuilder) Head() *ByProjectKeyDisc
 }
 
 /**
-*	Updates a DiscountGroup in the Project using one or more [update actions](/../api/projects/discount-groups#update-actions).
+*	Updates a DiscountGroup in the Project using one or more [update actions](/api/projects/discount-groups#update-actions).
 *
  */
 func (rb *ByProjectKeyDiscountGroupsByIDRequestBuilder) Post(body DiscountGroupUpdate) *ByProjectKeyDiscountGroupsByIDRequestMethodPost {

@@ -35,7 +35,7 @@ func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Head() *ByProjectKeyCartsKeyB
 }
 
 /**
-*	Updates a Cart in the Project using one or more [update actions](/../api/projects/carts#update-actions).
+*	Updates a Cart in the Project using one or more [update actions](/api/projects/carts#update-actions).
  */
 func (rb *ByProjectKeyCartsKeyByKeyRequestBuilder) Post(body CartUpdate) *ByProjectKeyCartsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyCartsKeyByKeyRequestMethodPost{

@@ -31,7 +31,7 @@ type ProductTailoring struct {
 	Store StoreKeyReference `json:"store"`
 	// Reference to the Product the ProductTailoring belongs to.
 	Product ProductReference `json:"product"`
-	// If `true`, the tailored information contained in the `current` [ProductTailoringData](ctp:api:type:ProductTailoringData) is provided when [retrieving the ProductProjection in Store](/../api/projects/product-tailoring#retrieve-product-projection-with-tailored-information).
+	// Whether the tailored information contained in the `current` [ProductTailoringData](ctp:api:type:ProductTailoringData) is provided when [retrieving the ProductProjection in Store](/api/projects/product-tailoring#retrieve-product-projection-with-tailored-information).
 	// For information not part of the ProductTailoringData, the original information contained in the [ProductData](ctp:api:type:ProductData) is provided.
 	// If `false`, only the original information contained in the ProductData is provided.
 	Published bool `json:"published"`
@@ -39,7 +39,7 @@ type ProductTailoring struct {
 	Current ProductTailoringData `json:"current"`
 	// Staged data of the ProductTailoring. This data is not returned in the Product Projection response by default.
 	Staged ProductTailoringData `json:"staged"`
-	// `true` if the `staged` data is different from the `current` data.
+	// Whether the `staged` data is different from the `current` data.
 	HasStagedChanges bool `json:"hasStagedChanges"`
 	// Warnings about processing of a request.
 	// Appears in response to requests with response status code `202 Accepted`.
@@ -186,7 +186,7 @@ type ProductTailoringDraft struct {
 	// User-defined identifier used in a deep-link URL for the ProductTailoring.
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug *LocalizedString `json:"slug,omitempty"`
-	// Set to `true` to [publish](/../api/projects/product-tailoring#stage-and-publish-tailored-product-information) the ProductTailoring immediately.
+	// Whether to [publish](/api/projects/product-tailoring#stage-and-publish-tailored-product-information) the ProductTailoring immediately.
 	// Otherwise, the tailored product information is just staged.
 	Publish *bool `json:"publish,omitempty"`
 	// Tailored Variants of the Product.
@@ -246,7 +246,7 @@ type ProductTailoringInStoreDraft struct {
 	// User-defined identifier used in a deep-link URL for the ProductTailoring.
 	// Matches the pattern `[a-zA-Z0-9_\\-]{2,256}`.
 	Slug *LocalizedString `json:"slug,omitempty"`
-	// If `true`, the ProductTailoring is published immediately.
+	// Whether the ProductTailoring is published immediately.
 	Publish *bool `json:"publish,omitempty"`
 	// Tailored Variants of the Product.
 	Variants []ProductVariantTailoringDraft `json:"variants"`
@@ -284,20 +284,20 @@ func (obj ProductTailoringInStoreDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ProductTailoring](ctp:api:type:ProductTailoring).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [ProductTailoring](ctp:api:type:ProductTailoring).
 *
  */
 type ProductTailoringPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
 	// Present only when the `withTotal` query parameter is set to `true`.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [ProductTailoring](ctp:api:type:ProductTailoring) list matching the query.
 	Results []ProductTailoring `json:"results"`
@@ -310,7 +310,7 @@ type ProductTailoringPagedQueryResponse struct {
 type ProductTailoringReference struct {
 	// Unique identifier of the referenced [ProductTailoring](ctp:api:type:ProductTailoring).
 	ID string `json:"id"`
-	// Contains the representation of the expanded ProductTailoring. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductTailoring.
+	// Contains the representation of the expanded ProductTailoring. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for ProductTailoring.
 	Obj *ProductTailoring `json:"obj,omitempty"`
 }
 
@@ -485,6 +485,12 @@ func mapDiscriminatorProductTailoringUpdateAction(input interface{}) (ProductTai
 			return nil, err
 		}
 		return obj, nil
+	case "setKey":
+		obj := ProductTailoringSetKeyAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setMetaAttributes":
 		obj := ProductTailoringSetMetaAttributesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -538,23 +544,22 @@ func mapDiscriminatorProductTailoringUpdateAction(input interface{}) (ProductTai
 }
 
 /**
-*	The tailoring of a [ProductVariant](ctp:api:type:ProductVariant).
+*	The tailoring of a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)).
 *
  */
 type ProductVariantTailoring struct {
-	// The `id` of the tailored [ProductVariant](ctp:api:type:ProductVariant).
+	// The `id` of the tailored [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)).
 	ID int `json:"id"`
 	// Images of the tailored Product Variant.
-	// If present, these images will override the images of the corresponding [ProductVariant](ctp:api:type:ProductVariant) in total.
+	// If present, these images will override the images of the corresponding [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) in total.
 	Images []Image `json:"images"`
 	// Media assets of the tailored Product Variant.
-	// If present, these assets will override the assets of the corresponding [ProductVariant](ctp:api:type:ProductVariant) in total.
+	// If present, these assets will override the assets of the corresponding [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) in total.
 	Assets []Asset `json:"assets"`
 	// Attributes of the tailored Product Variant.
-	// If present, these Attributes are selectively merged into the `attributes` of the corresponding [ProductVariant](ctp:api:type:ProductVariant):
+	// If present, these Attributes are selectively merged into the `attributes` of the corresponding [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)):
 	//
-	// - If the ProductVariant contains an Attribute with the same `name`, its `value` is overwritten,
-	// - otherwise the Attribute and its value are added to the ProductVariant.
+	// - If the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) contains an Attribute with the same `name`, its `value` is overwritten. Otherwise, the Attribute and its value are added to the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)).
 	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
@@ -591,23 +596,22 @@ func (obj ProductVariantTailoring) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `id` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `id` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *
  */
 type ProductVariantTailoringDraft struct {
-	// The `id` of the [ProductVariant](ctp:api:type:ProductVariant) to be tailored.
+	// The `id` of the [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) to be tailored.
 	ID *int `json:"id,omitempty"`
-	// The `sku` of the [ProductVariant](ctp:api:type:ProductVariant) to be tailored.
+	// The `sku` of the [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) to be tailored.
 	Sku *string `json:"sku,omitempty"`
 	// Images of the tailored Product Variant.
 	Images []Image `json:"images"`
 	// Media assets of the tailored Product Variant.
 	Assets []Asset `json:"assets"`
 	// Attributes of the tailored Product Variant according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
-	// If provided, these Attributes are selectively merged into the `attributes` of the corresponding [ProductVariant](ctp:api:type:ProductVariant):
+	// If provided, these Attributes are selectively merged into the `attributes` of the corresponding [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)):
 	//
-	// - If the ProductVariant contains an Attribute with the same `name`, its `value` is overwritten,
-	// - otherwise the Attribute and its value are added to the ProductVariant.
+	// - If the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) contains an Attribute with the same `name`, its `value` is overwritten. Otherwise, the Attribute and its value are added to the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)).
 	Attributes []ProductTailoringAttribute `json:"attributes"`
 }
 
@@ -644,15 +648,15 @@ func (obj ProductVariantTailoringDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *
  */
 type ProductTailoringAddAssetAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged `assets` are updated. If `false`, both the current and staged `assets` are updated.
+	// Whether only the staged `assets` are updated. If `false`, both the current and staged `assets` are updated.
 	Staged *bool `json:"staged,omitempty"`
 	// Value to append.
 	Asset AssetDraft `json:"asset"`
@@ -671,17 +675,17 @@ func (obj ProductTailoringAddAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImageAdded](/projects/messages/product-catalog-messages#product-tailoring-image-added) Message.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists. Produces the [ProductTailoringImageAdded](/projects/messages/product-catalog-messages#product-tailoring-image-added) Message.
 *
  */
 type ProductTailoringAddExternalImageAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
 	// Value to add to `images`.
 	Image Image `json:"image"`
-	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	// Whether only the staged `images` is updated. If `false`, both the current and staged `images` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -696,14 +700,14 @@ func (obj ProductTailoringAddExternalImageAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Either `id` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `id` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *	Produces the [ProductVariantTailoringAdded](ctp:api:type:ProductVariantTailoringAddedMessage) Message.
 *
  */
 type ProductTailoringAddVariantAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	ID *int `json:"id,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
 	// Images for the Product Variant Tailoring.
 	Images []Image `json:"images"`
@@ -711,7 +715,7 @@ type ProductTailoringAddVariantAction struct {
 	Assets []AssetDraft `json:"assets"`
 	// Attributes for the Product Variant Tailoring.
 	Attributes []ProductTailoringAttribute `json:"attributes"`
-	// If `true` the new Product Variant Tailoring is only staged. If `false` the new Product Variant Tailoring is both current and staged.
+	// Whether the new Product Variant Tailoring is only staged. If `false` the new Product Variant Tailoring is both current and staged.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -758,7 +762,7 @@ type ProductTailoringChangeAssetNameAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId *string `json:"assetId,omitempty"`
@@ -787,7 +791,7 @@ type ProductTailoringChangeAssetOrderAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged `assets` is updated. If `false`, both the current and staged `assets` are updated.
+	// Whether only the staged `assets` is updated. If `false`, both the current and staged `assets` are updated.
 	Staged *bool `json:"staged,omitempty"`
 	// All existing Asset `id`s of the ProductVariantTailoring in the desired new order.
 	AssetOrder []string `json:"assetOrder"`
@@ -804,19 +808,19 @@ func (obj ProductTailoringChangeAssetOrderAction) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *
  */
 type ProductTailoringMoveImageToPositionAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
 	// The URL of the image to update.
 	ImageUrl string `json:"imageUrl"`
 	// Position in `images` where the image should be moved. Must be between `0` and the total number of images minus `1`.
 	Position int `json:"position"`
-	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	// Whether only the staged `images` is updated. If `false`, both the current and staged `images` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -849,16 +853,16 @@ func (obj ProductTailoringPublishAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *	The Asset to remove must be specified using either `assetId` or `assetKey`.
 *
  */
 type ProductTailoringRemoveAssetAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is removed. If `false`, both the current and staged Asset is removed.
+	// Whether only the staged Asset is removed. If `false`, both the current and staged Asset is removed.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to remove.
 	AssetId *string `json:"assetId,omitempty"`
@@ -877,17 +881,17 @@ func (obj ProductTailoringRemoveAssetAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *
  */
 type ProductTailoringRemoveImageAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
 	// The URL of the image to remove.
 	ImageUrl string `json:"imageUrl"`
-	// If `true`, only the staged image is removed. If `false`, both the current and staged image is removed.
+	// Whether only the staged image is removed. If `false`, both the current and staged image is removed.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -907,11 +911,11 @@ func (obj ProductTailoringRemoveImageAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductTailoringRemoveVariantAction struct {
-	// The `id` of the ProductVariant to remove from the Tailoring.
+	// The `id` of the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to remove from the Tailoring.
 	ID *int `json:"id,omitempty"`
-	// The `sku` of the ProductVariant to remove from the Tailoring.
+	// The `sku` of the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to remove from the Tailoring.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Product Variant Tailoring is removed. If `false`, both the current and staged Product Variant Tailoring is removed.
+	// Whether only the staged Product Variant Tailoring is removed. If `false`, both the current and staged Product Variant Tailoring is removed.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -935,13 +939,13 @@ type ProductTailoringSetAssetCustomFieldAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId *string `json:"assetId,omitempty"`
 	// The `key` of the Asset to update.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -969,16 +973,18 @@ type ProductTailoringSetAssetCustomTypeAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId *string `json:"assetId,omitempty"`
 	// The `key` of the Asset to update.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Asset.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Asset.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1002,13 +1008,13 @@ type ProductTailoringSetAssetDescriptionAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId *string `json:"assetId,omitempty"`
 	// The `key` of the Asset to update.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -1031,11 +1037,11 @@ type ProductTailoringSetAssetKeyAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId string `json:"assetId"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	AssetKey *string `json:"assetKey,omitempty"`
 }
 
@@ -1059,7 +1065,7 @@ type ProductTailoringSetAssetSourcesAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false` both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId *string `json:"assetId,omitempty"`
@@ -1089,7 +1095,7 @@ type ProductTailoringSetAssetTagsAction struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// The `sku` of the tailored ProductVariant to update.
 	Sku *string `json:"sku,omitempty"`
-	// If `true`, only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
+	// Whether only the staged Asset is updated. If `false`, both the current and staged Asset is updated.
 	Staged *bool `json:"staged,omitempty"`
 	// The `id` of the Asset to update.
 	AssetId *string `json:"assetId,omitempty"`
@@ -1129,15 +1135,15 @@ func (obj ProductTailoringSetAssetTagsAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductTailoringSetAttributeAction struct {
-	// The `id` of the ProductVariant to update.
+	// The `id` of the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	// Required if `sku` is absent.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the ProductVariant to update.
+	// The `sku` of the ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	// Required if `variantId` is absent.
 	Sku *string `json:"sku,omitempty"`
 	// The name of the Attribute to set.
 	Name string `json:"name"`
-	// Value to set for the Attribute. If empty, any existing value will be removed.
+	// Value to set for the Attribute. If omitted, any existing value is removed.
 	//
 	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
 	//
@@ -1151,7 +1157,7 @@ type ProductTailoringSetAttributeAction struct {
 	//
 	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is **not supported**.
 	Value interface{} `json:"value,omitempty"`
-	// If `true`, only the staged Attribute is set. If `false`, both current and staged Attribute is set.
+	// Whether only the staged Attribute is set. If `false`, both current and staged Attribute is set.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1172,7 +1178,7 @@ func (obj ProductTailoringSetAttributeAction) MarshalJSON() ([]byte, error) {
 type ProductTailoringSetAttributeInAllVariantsAction struct {
 	// The name of the Attribute to set.
 	Name string `json:"name"`
-	// Value to set for the Attributes. If empty, any existing value will be removed.
+	// Value to set for the Attributes. If omitted, any existing value is removed.
 	//
 	// The [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
 	//
@@ -1186,7 +1192,7 @@ type ProductTailoringSetAttributeInAllVariantsAction struct {
 	//
 	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is **not supported**.
 	Value interface{} `json:"value,omitempty"`
-	// If `true`, only the staged Attributes are set. If `false`, both the current and staged Attributes are set.
+	// Whether only the staged Attributes are set. If `false`, both the current and staged Attributes are set.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1205,9 +1211,9 @@ func (obj ProductTailoringSetAttributeInAllVariantsAction) MarshalJSON() ([]byte
 *
  */
 type ProductTailoringSetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
-	// If `true`, only the staged `description` is updated. If `false`, both the current and staged `description` are updated.
+	// Whether only the staged `description` is updated. If `false`, both the current and staged `description` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1222,20 +1228,20 @@ func (obj ProductTailoringSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists. Produces the [ProductTailoringImagesSet](/projects/messages/product-catalog-messages#product-tailoring-images-set) Message.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists. Produces the [ProductTailoringImagesSet](/projects/messages/product-catalog-messages#product-tailoring-images-set) Message.
 *
  */
 type ProductTailoringSetExternalImagesAction struct {
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
-	// Images of the tailored ProductVariant.
+	// Images of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)).
 	//
-	// Don't provide this field if you want to remove all images from the tailored Product Variant.
-	// Set to `[]` (empty) if you want to hide all images of the original ProductVariant on the tailored ProductVariant.
+	// Don't provide this field if you want to remove all images from the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)).
+	// Set to `[]` (empty) if you want to hide all images of the original ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) on the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)).
 	Images []Image `json:"images"`
-	// If `true`, only the staged `images` is updated. If `false`, both the current and staged `images` is updated.
+	// Whether only the staged `images` is updated. If `false`, both the current and staged `images` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1265,19 +1271,19 @@ func (obj ProductTailoringSetExternalImagesAction) MarshalJSON() ([]byte, error)
 }
 
 /**
-*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) that exists.
+*	Either `variantId` or `sku` is required to reference a [ProductVariant](ctp:api:type:ProductVariant) or [Variant](ctp:api:type:Variant) ([BETA](/offering/compatibility#public-beta)) that exists.
 *
  */
 type ProductTailoringSetImageLabelAction struct {
-	// The `sku` of the tailored ProductVariant to update.
+	// The `sku` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	Sku *string `json:"sku,omitempty"`
-	// The `id` of the tailored ProductVariant to update.
+	// The `id` of the tailored ProductVariant or Variant ([BETA](/offering/compatibility#public-beta)) to update.
 	VariantId *int `json:"variantId,omitempty"`
 	// The URL of the image to set the label.
 	ImageUrl string `json:"imageUrl"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Label *string `json:"label,omitempty"`
-	// If `true`, only the staged image is updated. If `false`, both the current and staged image is updated.
+	// Whether only the staged image is updated. If `false`, both the current and staged image is updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1292,16 +1298,35 @@ func (obj ProductTailoringSetImageLabelAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Generates the [ProductTailoringKeySet](ctp:api:type:ProductTailoringKeySetMessage) Message.
+*
+ */
+type ProductTailoringSetKeyAction struct {
+	// Value to set. Must be unique. If omitted, any existing value is removed.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringSetKeyAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringSetKeyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Updates all meta attributes at the same time.
  */
 type ProductTailoringSetMetaAttributesAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	// If `true`, only the staged attributes are updated. If `false`, both the current and staged attributes are updated.
+	// Whether only the staged attributes are updated. If `false`, both the current and staged attributes are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1316,9 +1341,9 @@ func (obj ProductTailoringSetMetaAttributesAction) MarshalJSON() ([]byte, error)
 }
 
 type ProductTailoringSetMetaDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	MetaDescription *LocalizedString `json:"metaDescription,omitempty"`
-	// If `true`, only the staged `metaDescription` is updated. If `false`, both the current and staged `metaDescription` are updated.
+	// Whether only the staged `metaDescription` is updated. If `false`, both the current and staged `metaDescription` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1333,9 +1358,9 @@ func (obj ProductTailoringSetMetaDescriptionAction) MarshalJSON() ([]byte, error
 }
 
 type ProductTailoringSetMetaKeywordsAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	MetaKeywords *LocalizedString `json:"metaKeywords,omitempty"`
-	// If `true`, only the staged `metaKeywords` is updated. If `false`, both the current and staged `metaKeywords` are updated.
+	// Whether only the staged `metaKeywords` is updated. If `false`, both the current and staged `metaKeywords` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1350,9 +1375,9 @@ func (obj ProductTailoringSetMetaKeywordsAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTailoringSetMetaTitleAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	MetaTitle *LocalizedString `json:"metaTitle,omitempty"`
-	// If `true`, only the staged `metaTitle` is updated. If `false`, both the current and staged `metaTitle` are updated.
+	// Whether only the staged `metaTitle` is updated. If `false`, both the current and staged `metaTitle` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1371,9 +1396,9 @@ func (obj ProductTailoringSetMetaTitleAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ProductTailoringSetNameAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Name *LocalizedString `json:"name,omitempty"`
-	// If `true`, only the staged `name` is updated. If `false`, both the current and staged `name` are updated.
+	// Whether only the staged `name` is updated. If `false`, both the current and staged `name` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1390,7 +1415,7 @@ func (obj ProductTailoringSetNameAction) MarshalJSON() ([]byte, error) {
 type ProductTailoringSetProductAttributeAction struct {
 	// Name of the Attribute to set.
 	Name string `json:"name"`
-	// Value to set for the Attribute. If empty, then any existing value will be removed.
+	// Value to set for the Attribute. If omitted, then any existing value is removed.
 	//
 	// [AttributeType](ctp:api:type:AttributeType) determines the format of the Attribute `value` to be provided:
 	//
@@ -1403,7 +1428,7 @@ type ProductTailoringSetProductAttributeAction struct {
 	//
 	// Tailoring of [Nested Type](ctp:api:type:AttributeNestedType) Attributes is **not supported**.
 	Value interface{} `json:"value,omitempty"`
-	// If `true`, then only the staged Attribute is set. If `false`, then both the current and staged Attributes are set.
+	// Whether only the staged Attribute is set. If `false`, both the current and staged Attributes are set.
 	Staged *bool `json:"staged,omitempty"`
 }
 
@@ -1422,9 +1447,9 @@ func (obj ProductTailoringSetProductAttributeAction) MarshalJSON() ([]byte, erro
 *
  */
 type ProductTailoringSetSlugAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Slug *LocalizedString `json:"slug,omitempty"`
-	// If `true`, only the staged `slug` is updated. If `false`, both the current and staged `slug` are updated.
+	// Whether only the staged `slug` is updated. If `false`, both the current and staged `slug` are updated.
 	Staged *bool `json:"staged,omitempty"`
 }
 

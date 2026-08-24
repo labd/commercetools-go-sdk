@@ -13,7 +13,7 @@ type ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestBuilder struct {
 }
 
 /**
-*	Use this method to retrieve the details of a global Customer by using the password token during their [password reset process](/../api/customers-overview#customer-password-reset).
+*	Use this method to retrieve the details of a global Customer by using the password token during their [password reset process](/api/customers-overview#customer-password-reset).
 *
  */
 func (rb *ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestBuilder) Get() *ByProjectKeyCustomersPasswordTokenByPasswordTokenRequestMethodGet {

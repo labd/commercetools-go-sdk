@@ -37,6 +37,10 @@ func (rb *ByProjectKeyTaxCategoriesByIDRequestBuilder) Post(body TaxCategoryUpda
 	}
 }
 
+/**
+*	If the TaxCategory is referenced by a resource, a [ReferenceExists](ctp:api:type:ReferenceExistsError) error is returned.
+*
+ */
 func (rb *ByProjectKeyTaxCategoriesByIDRequestBuilder) Delete() *ByProjectKeyTaxCategoriesByIDRequestMethodDelete {
 	return &ByProjectKeyTaxCategoriesByIDRequestMethodDelete{
 		url:    fmt.Sprintf("/%s/tax-categories/%s", rb.projectKey, rb.id),

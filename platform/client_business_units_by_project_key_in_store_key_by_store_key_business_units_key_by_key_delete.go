@@ -27,17 +27,33 @@ func (r *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDelet
 }
 
 type ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDeleteInput struct {
-	Version int
-	Expand  []string
+	DataErasure *bool
+	Version     int
+	Expand      []string
 }
 
 func (input *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDeleteInput) Values() url.Values {
 	values := url.Values{}
+	if input.DataErasure != nil {
+		if *input.DataErasure {
+			values.Add("dataErasure", "true")
+		} else {
+			values.Add("dataErasure", "false")
+		}
+	}
 	values.Add("version", strconv.Itoa(input.Version))
 	for _, v := range input.Expand {
 		values.Add("expand", fmt.Sprintf("%v", v))
 	}
 	return values
+}
+
+func (rb *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDelete) DataErasure(v bool) *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDelete {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDeleteInput{}
+	}
+	rb.params.DataErasure = &v
+	return rb
 }
 
 func (rb *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDelete) Version(v int) *ByProjectKeyInStoreKeyByStoreKeyBusinessUnitsKeyByKeyRequestMethodDelete {

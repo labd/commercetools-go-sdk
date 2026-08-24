@@ -846,10 +846,12 @@ const (
 	ImportResourceTypeProduct             ImportResourceType = "product"
 	ImportResourceTypeProductDraft        ImportResourceType = "product-draft"
 	ImportResourceTypeProductSelection    ImportResourceType = "product-selection"
+	ImportResourceTypeProductTailoring    ImportResourceType = "product-tailoring"
 	ImportResourceTypeProductType         ImportResourceType = "product-type"
 	ImportResourceTypeProductVariant      ImportResourceType = "product-variant"
 	ImportResourceTypeProductVariantPatch ImportResourceType = "product-variant-patch"
 	ImportResourceTypeStandalonePrice     ImportResourceType = "standalone-price"
+	ImportResourceTypeVariant             ImportResourceType = "variant"
 	ImportResourceTypeType                ImportResourceType = "type"
 )
 
@@ -877,6 +879,7 @@ const (
 	ReferenceTypeProductDiscount  ReferenceType = "product-discount"
 	ReferenceTypeProductType      ReferenceType = "product-type"
 	ReferenceTypeProductVariant   ReferenceType = "product-variant"
+	ReferenceTypeVariant          ReferenceType = "variant"
 	ReferenceTypeShippingMethod   ReferenceType = "shipping-method"
 	ReferenceTypeState            ReferenceType = "state"
 	ReferenceTypeStore            ReferenceType = "store"
@@ -898,6 +901,7 @@ const (
 	ProcessingStateImported             ProcessingState = "imported"
 	ProcessingStateRejected             ProcessingState = "rejected"
 	ProcessingStateCanceled             ProcessingState = "canceled"
+	ProcessingStatePartiallyImported    ProcessingState = "partiallyImported"
 )
 
 type Address struct {

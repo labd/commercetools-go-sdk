@@ -235,21 +235,21 @@ func (obj BusinessUnitKeyReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [BusinessUnit](ctp:api:type:BusinessUnit).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [BusinessUnit](ctp:api:type:BusinessUnit).
 *
  */
 type BusinessUnitPagedQueryResponse struct {
-	// Number of requested [results](/../api/general-concepts#limit).
+	// Number of requested [results](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of elements [skipped](/../api/general-concepts#offset).
+	// Number of elements [skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [BusinessUnits](ctp:api:type:BusinessUnit) matching the query.
 	Results []BusinessUnit `json:"results"`
@@ -280,7 +280,7 @@ func (obj *BusinessUnitPagedQueryResponse) UnmarshalJSON(data []byte) error {
 type BusinessUnitReference struct {
 	// Unique identifier of the referenced [BusinessUnit](ctp:api:type:BusinessUnit).
 	ID string `json:"id"`
-	// Contains the representation of the expanded BusinessUnit. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for BusinessUnit.
+	// Contains the representation of the expanded BusinessUnit. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for BusinessUnit.
 	Obj BusinessUnit `json:"obj,omitempty"`
 }
 
@@ -313,7 +313,7 @@ func (obj BusinessUnitReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type BusinessUnitResourceIdentifier struct {
@@ -616,7 +616,7 @@ type Company struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique and immutable identifier of the Business Unit.
 	Key string `json:"key"`
-	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
+	// Indicates whether the Business Unit can be edited and used in [Orders](/api/projects/orders).
 	Status BusinessUnitStatus `json:"status"`
 	// References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Only present when `storeMode` is `Explicit`.
 	//
@@ -624,7 +624,7 @@ type Company struct {
 	//
 	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must not belong to any Store.
 	Stores []StoreKeyReference `json:"stores"`
-	// Stores that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `storeMode` is set to `FromParent`.
+	// Stores that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/api/general-concepts#eventual-consistency) and is only present when the `storeMode` is set to `FromParent`.
 	InheritedStores []StoreKeyReference `json:"inheritedStores"`
 	// The value of this field is always `Explicit` because a Company cannot have a parent Business Unit that Stores can be inherited from.
 	StoreMode BusinessUnitStoreMode `json:"storeMode"`
@@ -636,7 +636,7 @@ type Company struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Customer Groups assigned to the Business Unit.
 	//
-	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Addresses used by the Business Unit.
 	Addresses []Address `json:"addresses"`
@@ -652,7 +652,7 @@ type Company struct {
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
 	// Associates that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []Associate `json:"associates"`
-	// Associates that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
+	// Associates that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
 	InheritedAssociates []InheritedAssociate `json:"inheritedAssociates"`
 	// Parent unit of the Business Unit. Only present when the `unitType` is `Division`.
 	ParentUnit *BusinessUnitKeyReference `json:"parentUnit,omitempty"`
@@ -706,7 +706,7 @@ func (obj Company) MarshalJSON() ([]byte, error) {
 type CompanyDraft struct {
 	// User-defined unique and immutable identifier for the Business Unit.
 	Key string `json:"key"`
-	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
+	// Indicates whether the Business Unit can be edited and used in [Orders](/api/projects/orders).
 	Status *BusinessUnitStatus `json:"status,omitempty"`
 	// Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
 	// Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
@@ -747,7 +747,7 @@ type CompanyDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Customer Groups to assign the Business Unit to.
 	//
-	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 }
 
@@ -816,7 +816,7 @@ type Division struct {
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// User-defined unique and immutable identifier of the Business Unit.
 	Key string `json:"key"`
-	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
+	// Indicates whether the Business Unit can be edited and used in [Orders](/api/projects/orders).
 	Status BusinessUnitStatus `json:"status"`
 	// References to [Stores](ctp:api:type:Store) the Business Unit is associated with. Only present when `storeMode` is `Explicit`.
 	//
@@ -824,7 +824,7 @@ type Division struct {
 	//
 	// If the Business Unit has no Stores, then all of its [Carts](ctp:api:type:Cart), [Orders](ctp:api:type:Order), [Recurring Orders](ctp:api:type:RecurringOrder), [Quotes](ctp:api:type:Quote), [Quote Requests](ctp:api:type:QuoteRequest), or [Shopping Lists](ctp:api:type:ShoppingList) must not belong to any Store.
 	Stores []StoreKeyReference `json:"stores"`
-	// Stores that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `storeMode` is set to `FromParent`.
+	// Stores that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/api/general-concepts#eventual-consistency) and is only present when the `storeMode` is set to `FromParent`.
 	InheritedStores []StoreKeyReference `json:"inheritedStores"`
 	// Defines whether the Stores of the Division are set explicitly or inherited from a parent Business Unit.
 	StoreMode BusinessUnitStoreMode `json:"storeMode"`
@@ -836,7 +836,7 @@ type Division struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Customer Groups assigned to the Business Unit.
 	//
-	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Addresses used by the Business Unit.
 	Addresses []Address `json:"addresses"`
@@ -852,7 +852,7 @@ type Division struct {
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
 	// Associates that are part of the Business Unit in specific [roles](ctp:api:type:AssociateRole).
 	Associates []Associate `json:"associates"`
-	// Associates that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/../api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
+	// Associates that are inherited from a parent Business Unit. The value of this field is [eventually consistent](/api/general-concepts#eventual-consistency) and is only present when the `associateMode` is set to `ExplicitAndFromParent`.
 	InheritedAssociates []InheritedAssociate `json:"inheritedAssociates"`
 	// Parent unit of the Division.
 	ParentUnit BusinessUnitKeyReference `json:"parentUnit"`
@@ -907,7 +907,7 @@ func (obj Division) MarshalJSON() ([]byte, error) {
 type DivisionDraft struct {
 	// User-defined unique and immutable identifier for the Business Unit.
 	Key string `json:"key"`
-	// Indicates whether the Business Unit can be edited and used in [Orders](/../api/projects/orders).
+	// Indicates whether the Business Unit can be edited and used in [Orders](/api/projects/orders).
 	Status *BusinessUnitStatus `json:"status,omitempty"`
 	// Sets the [Stores](ctp:api:type:Store) the Business Unit is associated with. Can only be set when `storeMode` is `Explicit`.
 	// Defaults to empty for [Companies](ctp:api:type:BusinessUnitType) and not set for [Divisions](ctp:api:type:BusinessUnitType).
@@ -945,7 +945,7 @@ type DivisionDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Customer Groups to assign the Business Unit to.
 	//
-	// They are considered during [line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 	// The parent unit of this Division. Can be a Company or a Division.
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
@@ -1204,7 +1204,7 @@ func (obj BusinessUnitChangeAssociateAction) MarshalJSON() ([]byte, error) {
 type BusinessUnitChangeAssociateModeAction struct {
 	// The new value for `associateMode`.
 	AssociateMode BusinessUnitAssociateMode `json:"associateMode"`
-	// If set to `true` during a change to `associateMode="Explicit"`, all inherited Associates will be converted to explicit Associates.
+	// Whether all inherited Associates are converted to explicit Associates during a change to `associateMode="Explicit"`.
 	MakeInheritedAssociatesExplicit bool `json:"makeInheritedAssociatesExplicit"`
 }
 
@@ -1245,7 +1245,7 @@ type BusinessUnitChangeParentUnitAction struct {
 	// New parent unit of the [Business Unit](ctp:api:type:BusinessUnit).
 	// It must be associated with the same Stores, as the old parent unit.
 	//
-	// The Business Unit `inheritedAssociates` and `inheritedStores` field values will be [eventually consistent](/../api/general-concepts#eventual-consistency).
+	// The Business Unit `inheritedAssociates` and `inheritedStores` field values will be [eventually consistent](/api/general-concepts#eventual-consistency).
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`
 }
 
@@ -1412,7 +1412,7 @@ func (obj BusinessUnitRemoveStoreAction) MarshalJSON() ([]byte, error) {
 type BusinessUnitSetAddressCustomFieldAction struct {
 	// ID of the address to be extended.
 	AddressId string `json:"addressId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1435,10 +1435,12 @@ func (obj BusinessUnitSetAddressCustomFieldAction) MarshalJSON() ([]byte, error)
 *
  */
 type BusinessUnitSetAddressCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) for the `address`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `address`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 	// ID of the address to be extended.
 	AddressId string `json:"addressId"`
@@ -1459,7 +1461,7 @@ func (obj BusinessUnitSetAddressCustomTypeAction) MarshalJSON() ([]byte, error) 
 *
  */
 type BusinessUnitSetAssociatesAction struct {
-	// The new list of Associates. If empty, existing values will be removed.
+	// The new list of Associates. Set to an empty array to remove all existing values.
 	Associates []AssociateDraft `json:"associates"`
 }
 
@@ -1498,7 +1500,7 @@ func (obj BusinessUnitSetContactEmailAction) MarshalJSON() ([]byte, error) {
 *
  */
 type BusinessUnitSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields) to add, update, or remove.
+	// Name of the [Custom Field](/api/projects/custom-fields) to add, update, or remove.
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1524,7 +1526,9 @@ type BusinessUnitSetCustomTypeAction struct {
 	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) for the BusinessUnit.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the BusinessUnit.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

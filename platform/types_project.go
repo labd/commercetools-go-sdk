@@ -42,7 +42,7 @@ type BusinessUnitConfiguration struct {
 }
 
 /**
-*	Default value for [Business Unit Status](ctp:api:type:BusinessUnitStatus) configured though [Project settings](/../api/projects/project#change-my-business-unit-status-on-creation).
+*	Default value for [Business Unit Status](ctp:api:type:BusinessUnitStatus) configured though [Project settings](/api/projects/project#change-my-business-unit-status-on-creation).
  */
 type BusinessUnitConfigurationStatus string
 
@@ -52,7 +52,7 @@ const (
 )
 
 /**
-*	Specifies the status of the [Business Unit Search](/../api/projects/business-unit-search) index.
+*	Specifies the status of the [Business Unit Search](/api/projects/business-unit-search) index.
 *	You can change the status using the [Change Business Unit Search Status](ctp:api:type:ProjectChangeBusinessUnitSearchStatusAction) update action.
 *
  */
@@ -81,7 +81,7 @@ type CartsConfiguration struct {
 }
 
 /**
-*	Specifies the status of the [Customer Search](/../api/projects/customer-search) index.
+*	Specifies the status of the [Customer Search](/api/projects/customer-search) index.
 *	You can change the status using the [Change Customer Search Status](ctp:api:type:ProjectChangeCustomerSearchStatusAction) update action.
 *
  */
@@ -113,9 +113,13 @@ type DiscountsConfiguration struct {
 }
 
 /**
-*	Represents a RFC 7662 compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint. For more information, see [Requesting an access token using an external OAuth 2.0 server](/../api/authorization#request-an-access-token-using-an-external-oauth-server).
+*	Represents an RFC 7662-compliant [OAuth 2.0 Token Introspection](https://datatracker.ietf.org/doc/html/rfc7662) endpoint.
+*	For more information, see [Requesting an access token using an external OAuth 2.0 server](/api/authorization#request-an-access-token-using-an-external-oauth-server).
 *
-*	You can only configure **one** external OAuth 2.0 endpoint per Project. To authenticate using multiple external services (such as social network logins), use a middle layer authentication service.
+*	You can only configure **one** external OAuth 2.0 endpoint per Project.
+*	To authenticate using multiple external services (such as social network logins), use a middle layer authentication service that delegates to those services and exposes a single RFC 7662-compliant OAuth 2.0 Token Introspection endpoint to the commercetools APIs.
+*	This middle layer is a custom service that you build and host.
+*	It receives the token introspection request from the APIs, routes the token validation to the appropriate external service, and returns the introspection response in the expected format.
 *
  */
 type ExternalOAuth struct {
@@ -126,13 +130,36 @@ type ExternalOAuth struct {
 }
 
 /**
-*	Specifies the status of the [Order Search](/../api/projects/order-search) index.
+*	Inventory configuration settings for a Project.
+*
+ */
+type InventoryConfiguration struct {
+	// The number of minutes after which a [Reservation](ctp:api:type:Reservation) expires. To use the [ReserveOnCart](ctp:api:type:InventoryMode) inventory mode, this field must be set.
+	ReservationExpirationInMinutes *int `json:"reservationExpirationInMinutes,omitempty"`
+	// Whether [Reservations](ctp:api:type:Reservation) are marked as `Expired` once their
+	// `reservationExpirationInMinutes` is reached. The reserved inventory is then made available. If set to `false`, tracking Line Items with expired reservations becomes your responsibility.
+	ReleaseExpiredReservations bool `json:"releaseExpiredReservations"`
+}
+
+/**
+*	Specifies the status of the [Order Search](/api/projects/order-search) index.
  */
 type OrderSearchStatus string
 
 const (
 	OrderSearchStatusActivated   OrderSearchStatus = "Activated"
 	OrderSearchStatusDeactivated OrderSearchStatus = "Deactivated"
+)
+
+/**
+*	Determines how Product Variants are managed in the Project.
+*
+ */
+type ProductCatalogModel string
+
+const (
+	ProductCatalogModelClassic ProductCatalogModel = "Classic"
+	ProductCatalogModelModular ProductCatalogModel = "Modular"
 )
 
 type ProductSearchIndexingMode string
@@ -159,11 +186,11 @@ type Project struct {
 	CreatedAt time.Time `json:"createdAt"`
 	// Date in YYYY-MM format specifying when the trial period for the Project ends. Only present on Projects in trial period.
 	TrialUntil *string `json:"trialUntil,omitempty"`
-	// Holds the configuration for the [Messages Query](/../api/projects/messages) feature.
+	// Holds the configuration for the [Messages Query](/api/projects/messages) feature.
 	Messages MessagesConfiguration `json:"messages"`
-	// Holds the configuration for the [Carts](/../api/projects/carts) feature.
+	// Holds the configuration for the [Carts](/api/projects/carts) feature.
 	Carts CartsConfiguration `json:"carts"`
-	// Holds the configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature.
+	// Holds the configuration for the [Shopping Lists](/api/projects/shoppingLists) feature.
 	ShoppingLists *ShoppingListsConfiguration `json:"shoppingLists,omitempty"`
 	// Holds the configuration for the [tiered shipping rates](ctp:api:type:ShippingRatePriceTier) feature.
 	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
@@ -173,8 +200,13 @@ type Project struct {
 	SearchIndexing *SearchIndexingConfiguration `json:"searchIndexing,omitempty"`
 	// Holds configuration specific to [Business Units](ctp:api:type:BusinessUnit).
 	BusinessUnits *BusinessUnitConfiguration `json:"businessUnits,omitempty"`
+	// Holds configuration specific to inventory.
+	Inventory InventoryConfiguration `json:"inventory"`
 	// Holds configuration specific to discounts, including how Product and Cart Discounts are combined in every Cart of the Project.
 	Discounts DiscountsConfiguration `json:"discounts"`
+	// Determines how Product Variants are managed in the Project.
+	// If not set, defaults to `Classic` behavior.
+	ProductCatalogModel *ProductCatalogModel `json:"productCatalogModel,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -349,6 +381,24 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 			return nil, err
 		}
 		return obj, nil
+	case "setProductCatalogModel":
+		obj := ProjectSetProductCatalogModelAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setReleaseExpiredReservations":
+		obj := ProjectSetReleaseExpiredReservationsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setReservationExpirationInMinutes":
+		obj := ProjectSetReservationExpirationInMinutesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setShippingRateInputType":
 		obj := ProjectSetShippingRateInputTypeAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -371,15 +421,15 @@ func mapDiscriminatorProjectUpdateAction(input interface{}) (ProjectUpdateAction
 *
  */
 type SearchIndexingConfiguration struct {
-	// Configuration for the [Product Projection Search](/../api/projects/product-projection-search) and [Search Term Suggestions](/../api/projects/search-term-suggestions) APIs.
+	// Configuration for the [Product Projection Search](/api/projects/product-projection-search) and [Search Term Suggestions](/api/projects/search-term-suggestions) APIs.
 	Products *SearchIndexingConfigurationValues `json:"products,omitempty"`
-	// Configuration for the [Product Search](/../api/projects/product-search) feature.
+	// Configuration for the [Product Search](/api/projects/product-search) feature.
 	ProductsSearch *SearchIndexingConfigurationValues `json:"productsSearch,omitempty"`
-	// Configuration for the [Order Search](/../api/projects/order-search) feature.
+	// Configuration for the [Order Search](/api/projects/order-search) feature.
 	Orders *SearchIndexingConfigurationValues `json:"orders,omitempty"`
-	// Configuration for the [Customer Search](/../api/projects/customer-search) feature.
+	// Configuration for the [Customer Search](/api/projects/customer-search) feature.
 	Customers *SearchIndexingConfigurationValues `json:"customers,omitempty"`
-	// Configuration for the [Business Unit Search](/../api/projects/business-unit-search) feature.
+	// Configuration for the [Business Unit Search](/api/projects/business-unit-search) feature.
 	BusinessUnits *SearchIndexingConfigurationValues `json:"businessUnits,omitempty"`
 }
 
@@ -532,7 +582,7 @@ func (obj ProjectChangeBusinessUnitStatusOnCreationAction) MarshalJSON() ([]byte
 }
 
 type ProjectChangeCartsConfigurationAction struct {
-	// Configuration for the [Carts](/../api/projects/carts) feature.
+	// Configuration for the [Carts](/api/projects/carts) feature.
 	CartsConfiguration CartsConfiguration `json:"cartsConfiguration"`
 }
 
@@ -592,7 +642,7 @@ func (obj ProjectChangeCurrenciesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeCustomerSearchStatusAction struct {
-	// Activates or deactivates the [Customer Search](/../api/projects/customer-search) feature. Activation will trigger building a search index for the Customers in the Project.
+	// Activates or deactivates the [Customer Search](/api/projects/customer-search) feature. Activation will trigger building a search index for the Customers in the Project.
 	Status CustomerSearchStatus `json:"status"`
 }
 
@@ -606,12 +656,12 @@ func (obj ProjectChangeCustomerSearchStatusAction) MarshalJSON() ([]byte, error)
 	}{Action: "changeCustomerSearchStatus", Alias: (*Alias)(&obj)})
 }
 
-/**
-*	Removing a language used by a [Store](ctp:api:type:Store) returns a [LanguageUsedInStores](ctp:api:type:LanguageUsedInStoresError) error.
-*
- */
 type ProjectChangeLanguagesAction struct {
-	// New value to set. Must not be empty.
+	// New value to set.
+	//
+	// If set to an empty value, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	//
+	// If a language in use by a [Store](ctp:api:type:Store) is removed, a [LanguageUsedInStores](ctp:api:type:LanguageUsedInStoresError) error is returned.
 	Languages []string `json:"languages"`
 }
 
@@ -626,7 +676,7 @@ func (obj ProjectChangeLanguagesAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeMessagesConfigurationAction struct {
-	// Configuration for the [Messages Query](/../api/projects/messages) feature.
+	// Configuration for the [Messages Query](/api/projects/messages) feature.
 	MessagesConfiguration MessagesConfigurationDraft `json:"messagesConfiguration"`
 }
 
@@ -670,7 +720,7 @@ func (obj ProjectChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeOrderSearchStatusAction struct {
-	// Activates or deactivates the [Order Search](/../api/projects/order-search) feature. Activation will trigger building a search index for the Orders in the Project.
+	// Activates or deactivates the [Order Search](/api/projects/order-search) feature. Activation will trigger building a search index for the Orders in the Project.
 	Status OrderSearchStatus `json:"status"`
 }
 
@@ -700,10 +750,10 @@ func (obj ProjectChangePriceRoundingModeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProjectChangeProductSearchIndexingEnabledAction struct {
-	// - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/../api/projects/product-projection-search) as well as the [Search Term Suggestions](/../api/projects/search-term-suggestions) API will no longer be available for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
-	// - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/../api/projects/product-projection-search) as well as the [Search Term Suggestions](/../api/projects/search-term-suggestions) API will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned APIs fully available for this Project.
+	// - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/api/projects/product-projection-search) as well as the [Search Term Suggestions](/api/projects/search-term-suggestions) API will no longer be available for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
+	// - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/api/projects/product-projection-search) as well as the [Search Term Suggestions](/api/projects/search-term-suggestions) API will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned APIs fully available for this Project.
 	Enabled bool `json:"enabled"`
-	// Controls whether the action should apply to [Product Projection Search](/../api/projects/product-projection-search) or to [Product Search](/../api/projects/product-search).
+	// Controls whether the action should apply to [Product Projection Search](/api/projects/product-projection-search) or to [Product Search](/api/projects/product-search).
 	Mode *ProductSearchIndexingMode `json:"mode,omitempty"`
 }
 
@@ -718,7 +768,7 @@ func (obj ProjectChangeProductSearchIndexingEnabledAction) MarshalJSON() ([]byte
 }
 
 type ProjectChangeShoppingListsConfigurationAction struct {
-	// Configuration for the [Shopping Lists](/../api/projects/shoppingLists) feature.
+	// Configuration for the [Shopping Lists](/api/projects/shoppingLists) feature.
 	ShoppingListsConfiguration ShoppingListsConfiguration `json:"shoppingListsConfiguration"`
 }
 
@@ -778,7 +828,7 @@ func (obj ProjectSetDiscountsConfigurationAction) MarshalJSON() ([]byte, error) 
 }
 
 type ProjectSetExternalOAuthAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	ExternalOAuth *ExternalOAuth `json:"externalOAuth,omitempty"`
 }
 
@@ -792,8 +842,75 @@ func (obj ProjectSetExternalOAuthAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setExternalOAuth", Alias: (*Alias)(&obj)})
 }
 
+type ProjectSetProductCatalogModelAction struct {
+	// Configuration for the Product catalog model in the Project.
+	//
+	// When set to `Classic`, Product Variants are embedded in the Product.
+	//
+	// When set to `Modular`, Product Variants are managed as standalone entities.
+	// In this mode:
+	// - Variant-related update actions on Products return a `400` error.
+	// - Products must be created without `masterVariant` and `variants`.
+	// - Products cannot be deleted while Variants reference them.
+	// - Products cannot be unpublished while they have published Variants.
+	// - [Carts](/projects/carts) read variant data from the Variant API instead of embedded Product Variants.
+	// - `priceMode` on Products is set to `Standalone`.
+	ProductCatalogModel ProductCatalogModel `json:"productCatalogModel"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetProductCatalogModelAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetProductCatalogModelAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setProductCatalogModel", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	If set to `true`, [Reservations](ctp:api:type:Reservation) are marked as `Expired` once their
+*	`reservationExpirationInMinutes` is reached. The reserved inventory is then made available. If set to `false`, tracking Line Items with expired reservations becomes your responsibility.
+*
+ */
+type ProjectSetReleaseExpiredReservationsAction struct {
+	// Value to set.
+	ReleaseExpiredReservations bool `json:"releaseExpiredReservations"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetReleaseExpiredReservationsAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetReleaseExpiredReservationsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setReleaseExpiredReservations", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	To use the [ReserveOnCart](ctp:api:type:InventoryMode) Line Item inventory mode, you must set the `reservationExpirationInMinutes` field on the [Project](ctp:api:type:Project) using this update action.
+*
+*	To override the Project setting, use the [Set Reservation Expiration In Minutes](ctp:api:type:InventoryEntrySetReservationExpirationInMinutesAction) update action on specific [InventoryEntries](ctp:api:type:InventoryEntry).
+*
+ */
+type ProjectSetReservationExpirationInMinutesAction struct {
+	// Value to set.
+	ReservationExpirationInMinutes int `json:"reservationExpirationInMinutes"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProjectSetReservationExpirationInMinutesAction) MarshalJSON() ([]byte, error) {
+	type Alias ProjectSetReservationExpirationInMinutesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setReservationExpirationInMinutes", Alias: (*Alias)(&obj)})
+}
+
 type ProjectSetShippingRateInputTypeAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	ShippingRateInputType ShippingRateInputType `json:"shippingRateInputType,omitempty"`
 }
 

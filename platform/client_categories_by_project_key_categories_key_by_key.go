@@ -13,7 +13,7 @@ type ByProjectKeyCategoriesKeyByKeyRequestBuilder struct {
 }
 
 /**
-*	Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
+*	Either the [scope](/api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
 *
  */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Get() *ByProjectKeyCategoriesKeyByKeyRequestMethodGet {
@@ -34,7 +34,7 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Head() *ByProjectKeyCate
 }
 
 /**
-*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*	Either the [scope](/api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
 *
  */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Post(body CategoryUpdate) *ByProjectKeyCategoriesKeyByKeyRequestMethodPost {
@@ -46,7 +46,7 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Post(body CategoryUpdate
 }
 
 /**
-*	Either the [scope](/../api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
+*	Either the [scope](/api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
 *
  */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestBuilder) Delete() *ByProjectKeyCategoriesKeyByKeyRequestMethodDelete {

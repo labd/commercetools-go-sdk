@@ -403,7 +403,7 @@ type CheckoutMessagePaymentsPayloadBaseData struct {
 	ProjectKey string `json:"projectKey"`
 	// The [Payment](ctp:api:type:Payment) on which the change or action was performed.
 	Payment PaymentReference `json:"payment"`
-	// `id` of the [Transaction](/../api/projects/payments#transaction).
+	// `id` of the [Transaction](ctp:api:type:Transaction).
 	TransactionId string `json:"transactionId"`
 	// The [Cart](ctp:api:type:Cart) on which the change or action was performed.
 	Cart *CartReference `json:"cart,omitempty"`

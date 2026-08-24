@@ -55,7 +55,7 @@ func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet) WithHeade
 }
 
 /**
-*	Use this method to retrieve a global Customer's details by using the email token during their [email verification process](/../api/customers-overview#customer-email-verification).
+*	Use this method to retrieve a global Customer's details by using the email token during their [email verification process](/api/customers-overview#customer-email-verification).
 *
  */
 func (rb *ByProjectKeyCustomersEmailTokenByEmailTokenRequestMethodGet) Execute(ctx context.Context) (result *Customer, err error) {

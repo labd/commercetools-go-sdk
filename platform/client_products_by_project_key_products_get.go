@@ -206,7 +206,7 @@ func (rb *ByProjectKeyProductsRequestMethodGet) WithHeaders(headers http.Header)
 }
 
 /**
-*	If [Product price selection query parameters](/../api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
+*	If [Product price selection query parameters](/api/pricing-and-discounts-overview#product-price-selection) are provided, the selected Prices are added to the response.
  */
 func (rb *ByProjectKeyProductsRequestMethodGet) Execute(ctx context.Context) (result *ProductPagedQueryResponse, err error) {
 	var queryParams url.Values

@@ -27,7 +27,7 @@ func (rb *ByProjectKeySubscriptionsByIDHealthRequestMethodGet) WithHeaders(heade
 }
 
 /**
-*	This endpoint can be polled by a monitoring or alerting system that checks the health of your Subscriptions. To ease integration with such systems this endpoint does not require [Authorization](/../api/authorization).
+*	This endpoint can be polled by a monitoring or alerting system that checks the health of your Subscriptions. To ease integration with such systems this endpoint does not require [Authorization](/api/authorization).
 *
  */
 func (rb *ByProjectKeySubscriptionsByIDHealthRequestMethodGet) Execute(ctx context.Context) error {

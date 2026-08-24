@@ -27,7 +27,7 @@ type PaymentMethod struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Reference to a BusinessUnit associated with the PaymentMethod.
 	//
-	// Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// Payment Method used for the Payment—for example, a credit card or direct debit.
 	Method *string `json:"method,omitempty"`
@@ -62,7 +62,7 @@ type PaymentMethodDraft struct {
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 	// Reference to a BusinessUnit the PaymentMethod should belong to.
 	//
-	// Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// Payment method to use for the Payment—for example, a credit card or direct debit.
 	Method *string `json:"method,omitempty"`
@@ -74,7 +74,7 @@ type PaymentMethodDraft struct {
 	Token *PaymentMethodToken `json:"token,omitempty"`
 	// Status of the PaymentMethod.
 	PaymentMethodStatus *PaymentMethodStatus `json:"paymentMethodStatus,omitempty"`
-	// Set to `true` if the PaymentMethod should be the default.
+	// Whether the PaymentMethod should be the default.
 	//
 	// The default applies per Customer, Business Unit, or the combination of both (Associate).
 	Default *bool `json:"default,omitempty"`
@@ -83,21 +83,21 @@ type PaymentMethodDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [PaymentMethod](ctp:api:type:PaymentMethod).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [PaymentMethod](ctp:api:type:PaymentMethod).
 *
  */
 type PaymentMethodPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [PaymentMethods](ctp:api:type:PaymentMethod) matching the query.
 	Results []PaymentMethod `json:"results"`
@@ -110,7 +110,7 @@ type PaymentMethodPagedQueryResponse struct {
 type PaymentMethodReference struct {
 	// Unique identifier of the referenced [PaymentMethod](ctp:api:type:PaymentMethod).
 	ID string `json:"id"`
-	// Contains the representation of the expanded PaymentMethod. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for PaymentMethods.
+	// Contains the representation of the expanded PaymentMethod. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for PaymentMethods.
 	Obj *PaymentMethod `json:"obj,omitempty"`
 }
 
@@ -250,7 +250,7 @@ func mapDiscriminatorPaymentMethodUpdateAction(input interface{}) (PaymentMethod
 *
  */
 type PaymentMethodSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields) to add, update, or remove.
+	// Name of the [Custom Field](/api/projects/custom-fields) to add, update, or remove.
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -273,10 +273,12 @@ func (obj PaymentMethodSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type PaymentMethodSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the PaymentMethod with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the PaymentMethod with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the PaymentMethod.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the PaymentMethod.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the PaymentMethod.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -317,7 +319,7 @@ func (obj PaymentMethodSetDefaultAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentMethodSetInterfaceAccountAction struct {
 	// New account or instance of the payment interface.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
 }
 
@@ -337,7 +339,7 @@ func (obj PaymentMethodSetInterfaceAccountAction) MarshalJSON() ([]byte, error) 
  */
 type PaymentMethodSetKeyAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -357,7 +359,7 @@ func (obj PaymentMethodSetKeyAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentMethodSetMethodAction struct {
 	// New payment method—for example, a credit card or direct debit.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Method *string `json:"method,omitempty"`
 }
 
@@ -377,7 +379,7 @@ func (obj PaymentMethodSetMethodAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentMethodSetNameAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -397,7 +399,7 @@ func (obj PaymentMethodSetNameAction) MarshalJSON() ([]byte, error) {
  */
 type PaymentMethodSetPaymentInterfaceAction struct {
 	// New payment service that processes the Payment—for example, a PSP.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	PaymentInterface *string `json:"paymentInterface,omitempty"`
 }
 

@@ -27,7 +27,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Checks if a QuoteRequest exists with the provided `key` in a BusinessUnit. Returns a `200 OK` status if the QuoteRequest exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if a QuoteRequest exists with the provided `key` in a BusinessUnit. Returns a `200 OK` status if the QuoteRequest exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsKeyByKeyRequestBuilder) Head() *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsKeyByKeyRequestMethodHead {
 	return &ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKeyQuoteRequestsKeyByKeyRequestMethodHead{
@@ -37,7 +37,7 @@ func (rb *ByProjectKeyAsAssociateByAssociateIdInBusinessUnitKeyByBusinessUnitKey
 }
 
 /**
-*	Updates a QuoteRequest in a BusinessUnit using one or more [update actions](/../api/projects/quote-requests#update-actions).
+*	Updates a QuoteRequest in a BusinessUnit using one or more [update actions](/api/projects/quote-requests#update-actions).
 *	If the QuoteRequest exists in the [Project](ctp:api:type:Project) but does not reference the requested [BusinessUnit](ctp:api:type:BusinessUnit), this method returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
 *
  */

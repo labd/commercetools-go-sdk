@@ -67,6 +67,12 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "variant":
+		obj := VariantImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "order":
 		obj := OrderImportRequest{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -111,6 +117,12 @@ func mapDiscriminatorImportRequest(input interface{}) (ImportRequest, error) {
 		return obj, nil
 	case "product-selection":
 		obj := ProductSelectionImportRequest{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "product-tailoring":
+		obj := ProductTailoringImportRequest{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -237,7 +249,7 @@ func (obj ProductVariantImportRequest) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The request body to [import Embedded Prices](ctp:import:endpoint:/{projectKey}/prices/import-containers/{importContainerKey}:POST). Contains data for [Embedded Prices](/../api/types#price) to be created or updated in a Project.
+*	The request body to [import Embedded Prices](ctp:import:endpoint:/{projectKey}/prices/import-containers/{importContainerKey}:POST). Contains data for [Embedded Prices](/api/types#price) to be created or updated in a Project.
 *
  */
 type PriceImportRequest struct {
@@ -272,6 +284,27 @@ func (obj StandalonePriceImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "standalone-price", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Variants](ctp:import:endpoint:/{projectKey}/variants/import-containers/{importContainerKey}:POST). Contains data for Variants to be created or updated in a Project.
+*
+*	This import resource is only available for Projects with `productCatalogModel` set to `Modular`.
+*
+ */
+type VariantImportRequest struct {
+	// The Variant import resources of this request.
+	Resources []VariantImport `json:"resources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj VariantImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias VariantImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "variant", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -424,6 +457,25 @@ func (obj ProductSelectionImportRequest) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "product-selection", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The request body to [import Product Tailoring](ctp:import:endpoint:/{projectKey}/product-tailorings/import-containers/{importContainerKey}:POST). Contains data for [Product Tailoring](ctp:api:type:ProductTailoring) to be created or updated in a Project.
+*
+ */
+type ProductTailoringImportRequest struct {
+	// The Product Tailoring import resources of this request.
+	Resources []ProductTailoringImport `json:"resources"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTailoringImportRequest) MarshalJSON() ([]byte, error) {
+	type Alias ProductTailoringImportRequest
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "product-tailoring", Alias: (*Alias)(&obj)})
 }
 
 /**

@@ -39,33 +39,35 @@ type DiscountGroupDraft struct {
 	// Name of the DiscountGroup.
 	Name *LocalizedString `json:"name,omitempty"`
 	// User-defined unique identifier for the DiscountGroup.
+	//
+	// If the value is used by another Discount Group, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key string `json:"key"`
 	// Description for the DiscountGroup.
 	Description *LocalizedString `json:"description,omitempty"`
 	// Value between `0` and `1` that determines the order in which the CartDiscount from the DiscountGroup will be applied; a CartDiscount with a higher value will be prioritized.
 	//
-	// The sort order must be unique among all DiscountGroups and CartDiscounts.
+	// If the value is used by another Cart Discount or Discount Group, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	SortOrder string `json:"sortOrder"`
 	// A DiscountGroup must be active for its CartDiscounts to be considered during discount application.
 	IsActive *bool `json:"isActive,omitempty"`
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [DiscountGroup](ctp:api:type:DiscountGroup).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [DiscountGroup](ctp:api:type:DiscountGroup).
 *
  */
 type DiscountGroupPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// DiscountGroups matching the query.
 	Results []DiscountGroup `json:"results"`
@@ -79,7 +81,7 @@ type DiscountGroupReference struct {
 	// Unique identifier of the referenced [DiscountGroup](ctp:api:type:DiscountGroup).
 	ID string `json:"id"`
 	// Contains the representation of the expanded DiscountGroup.
-	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for DiscountGroups.
+	// Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for DiscountGroups.
 	Obj *DiscountGroup `json:"obj,omitempty"`
 }
 
@@ -95,7 +97,7 @@ func (obj DiscountGroupReference) MarshalJSON() ([]byte, error) {
 
 /**
 *	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [DiscountGroup](ctp:api:type:DiscountGroup). Either `id` or `key` is required.
-*	If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type DiscountGroupResourceIdentifier struct {
@@ -193,7 +195,7 @@ func mapDiscriminatorDiscountGroupUpdateAction(input interface{}) (DiscountGroup
 
 type DiscountGroupSetDescriptionAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -210,7 +212,7 @@ func (obj DiscountGroupSetDescriptionAction) MarshalJSON() ([]byte, error) {
 /**
 *	This action generates the [DiscountGroupIsActiveSet](ctp:api:type:DiscountGroupIsActiveSetMessage) Message.
 *
-*	If the [limit](/../api/limits#discount-groups) for active Discount Groups has been reached, a [MaxDiscountGroupsReached](ctp:api:type:MaxDiscountGroupsReachedError) error is returned.
+*	If the [limit](/api/limits#discount-groups) for active Discount Groups has been reached, a [MaxDiscountGroupsReached](ctp:api:type:MaxDiscountGroupsReachedError) error is returned.
 *
  */
 type DiscountGroupSetIsActiveAction struct {
@@ -236,6 +238,8 @@ func (obj DiscountGroupSetIsActiveAction) MarshalJSON() ([]byte, error) {
  */
 type DiscountGroupSetKeyAction struct {
 	// New value to set.
+	//
+	// If the value is used by another Discount Group, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key string `json:"key"`
 }
 
@@ -251,7 +255,7 @@ func (obj DiscountGroupSetKeyAction) MarshalJSON() ([]byte, error) {
 
 type DiscountGroupSetNameAction struct {
 	// New value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -273,7 +277,7 @@ type DiscountGroupSetSortOrderAction struct {
 	// New value to set (between `0` and `1`).
 	// A CartDiscount with a higher value will be prioritized.
 	//
-	// The sort order must be unique among all DiscountGroups and CartDiscounts.
+	// If the value is used by another Cart Discount or Discount Group, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	SortOrder string `json:"sortOrder"`
 }
 

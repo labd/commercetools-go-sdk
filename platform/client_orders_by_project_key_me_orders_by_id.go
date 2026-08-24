@@ -18,7 +18,7 @@ type ByProjectKeyMeOrdersByIDRequestBuilder struct {
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no Order exists for the provided `id`.
-*	- If the Order exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If the Order exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#internal-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeOrdersByIDRequestBuilder) Get() *ByProjectKeyMeOrdersByIDRequestMethodGet {
@@ -31,10 +31,10 @@ func (rb *ByProjectKeyMeOrdersByIDRequestBuilder) Get() *ByProjectKeyMeOrdersByI
 /**
 *	Checks if an Order exists with the provided `id` for the authenticated Customer or anonymous user. Returns a `200` status if successful.
 *
-*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
+*	A [Not Found](/api/errors#404-not-found) error is returned in the following scenarios:
 *
 *	- If no Order exists for the provided `id`.
-*	- If the Order exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If the Order exists but does not have either a `customerId` that matches the [customer:{id}](/scopes#internal-oauth) scope, or an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeOrdersByIDRequestBuilder) Head() *ByProjectKeyMeOrdersByIDRequestMethodHead {

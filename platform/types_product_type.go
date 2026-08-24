@@ -34,7 +34,7 @@ type AttributeDefinition struct {
 	Name string `json:"name"`
 	// Human-readable label for the Attribute.
 	Label LocalizedString `json:"label"`
-	// If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
+	// Whether the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
 	// Specifies whether the Attribute is defined at the Product or Variant level.
 	Level AttributeLevelEnum `json:"level"`
@@ -44,12 +44,14 @@ type AttributeDefinition struct {
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint TextInputHint `json:"inputHint"`
-	// If `true`, the Attribute's values are available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
+	// Whether the Attribute's values are available in the [Product Search](/api/projects/product-search) or the [Product Projection Search](/api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
 	// However, if an Attribute's `level` is set as `Product`, then Product Projection Search does **not support** the Attribute.
+	// To use the Attribute in search, filters, or facets, set `isSearchable` to `true` for all AttributeDefinitions with the same `name` across different ProductTypes.
+	// If the `isSearchable` values are different, the Attribute isn't available for search, filters, or facets.
 	//
 	// The exact features that are available with this flag depend on the specific [AttributeType](ctp:api:type:AttributeType).
-	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
-	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/../api/projects/products#update-product).
+	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/api/limits#field-content-size).
+	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/api/projects/products#update-product).
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
@@ -81,14 +83,14 @@ type AttributeDefinitionDraft struct {
 	//
 	// When the `type` is different for an AttributeDefinition using the same name in multiple ProductTypes, an [AttributeDefinitionTypeConflict](ctp:api:type:AttributeDefinitionTypeConflictError) error is returned.
 	Type AttributeType `json:"type"`
-	// User-defined name of the Attribute that is unique to the [Project](ctp:api:type:Project).
+	// User-defined name of the Attribute that must be unique within the ProductType.
 	//
-	// When using the same `name` for an Attribute in multiple ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes, else an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
-	// An exception to this are the values of an `enum` or `lenum` Type and sets thereof.
+	// To use the same `name` in multiple ProductTypes, each AttributeDefinition must have the same `type`; otherwise, an [AttributeDefinitionTypeConflict](ctp:api:type:AttributeDefinitionTypeConflictError) error is returned.
+	// For `enum` or `lenum` Types and sets of these AttributeTypes, the enum values can be different for each ProductType.
 	Name string `json:"name"`
 	// Human-readable label for the Attribute.
 	Label LocalizedString `json:"label"`
-	// Set to `true` if the Attribute is required to have a value on a [ProductVariant](ctp:api:type:ProductVariant).
+	// Whether the Attribute is required to have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
 	// Specifies whether the Attribute is defined at the Product or Variant level.
 	Level *AttributeLevelEnum `json:"level,omitempty"`
@@ -99,12 +101,13 @@ type AttributeDefinitionDraft struct {
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint *TextInputHint `json:"inputHint,omitempty"`
-	// Set as `true` if you want the Attribute's values to be available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API and can be used in full-text search queries, filters, and facets.
+	// Set as `true` if you want the Attribute's values to be available in the [Product Search](/api/projects/product-search) or the [Product Projection Search](/api/projects/product-projection-search) API and can be used in full-text search queries, filters, and facets.
 	// If an Attribute's `level` is set as `Product`, then Product Projection Search does **not support** the Attribute.
-	//
+	// To use the Attribute in search, filters, or facets, set `isSearchable` to `true` for all AttributeDefinitions with the same `name` across different ProductTypes.
+	// If the `isSearchable` values are different, the Attribute isn't available for search, filters, or facets.
 	//
 	// Which exact features are available with this flag depends on the specific [AttributeType](ctp:api:type:AttributeType).
-	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
+	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/api/limits#field-content-size).
 	// This constraint is enforced at both Product creation and Product update.
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable *bool `json:"isSearchable,omitempty"`
@@ -179,6 +182,7 @@ const (
 	AttributeReferenceTypeIdReview           AttributeReferenceTypeId = "review"
 	AttributeReferenceTypeIdShippingMethod   AttributeReferenceTypeId = "shipping-method"
 	AttributeReferenceTypeIdState            AttributeReferenceTypeId = "state"
+	AttributeReferenceTypeIdVariant          AttributeReferenceTypeId = "variant"
 	AttributeReferenceTypeIdZone             AttributeReferenceTypeId = "zone"
 )
 
@@ -620,21 +624,21 @@ func (obj ProductTypeDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ProductType](ctp:api:type:ProductType).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [ProductType](ctp:api:type:ProductType).
 *
  */
 type ProductTypePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [ProductTypes](ctp:api:type:ProductType) matching the query.
 	Results []ProductType `json:"results"`
@@ -647,7 +651,7 @@ type ProductTypePagedQueryResponse struct {
 type ProductTypeReference struct {
 	// Unique identifier of the referenced [ProductType](ctp:api:type:ProductType).
 	ID string `json:"id"`
-	// Contains the representation of the expanded ProductType. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ProductTypes.
+	// Contains the representation of the expanded ProductType. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for ProductTypes.
 	Obj *ProductType `json:"obj,omitempty"`
 }
 
@@ -662,7 +666,7 @@ func (obj ProductTypeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ProductType](ctp:api:type:ProductType). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type ProductTypeResourceIdentifier struct {
@@ -950,10 +954,10 @@ func (obj ProductTypeChangeAttributeConstraintAction) MarshalJSON() ([]byte, err
 type ProductTypeChangeAttributeNameAction struct {
 	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// New user-defined name of the Attribute that is unique to the [Project](ctp:api:type:Project).
+	// New user-defined name of the Attribute that must be unique within the ProductType.
 	//
-	// When using the same `name` for an Attribute in two or more ProductTypes, all fields of the AttributeDefinition of this Attribute must be the same across the ProductTypes. If not, an [AttributeDefinitionAlreadyExists](ctp:api:type:AttributeDefinitionAlreadyExistsError) error is returned.
-	// An exception to this are the values of an `enum` or `lenum` type and sets thereof.
+	// To use the same `name` in multiple ProductTypes, each AttributeDefinition must have the same `type`; otherwise, an [AttributeDefinitionTypeConflict](ctp:api:type:AttributeDefinitionTypeConflictError) error is returned.
+	// For `enum` or `lenum` Types and sets of these AttributeTypes, the enum values can be different for each ProductType.
 	NewAttributeName string `json:"newAttributeName"`
 }
 
@@ -1061,6 +1065,7 @@ func (obj ProductTypeChangeInputHintAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	Following this update the Products are reindexed asynchronously to reflect this change on the search endpoint. When enabling search on an existing Attribute type definition, the constraint regarding the maximum size of a searchable Attribute will not be enforced. Instead, AttributeDefinitions exceeding this limit will be treated as not searchable and will not be available for full-text search.
+*	To use the Attribute in search, filters, or facets, set `isSearchable` to `true` for all AttributeDefinitions with the same `name` across different ProductTypes. If the `isSearchable` values are different, the Attribute isn't available for search, filters, or facets.
 *
  */
 type ProductTypeChangeIsSearchableAction struct {
@@ -1203,6 +1208,8 @@ func (obj ProductTypeChangePlainEnumValueOrderAction) MarshalJSON() ([]byte, err
 /**
 *	Removes an AttributeDefinition and also deletes all corresponding Attributes on all [Products](/projects/products) with this ProductType. The removal of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
 *
+*	Do not remove an AttributeDefinition and add a new AttributeDefinition with the same `name` in the same update request. Because the removal is eventually consistent, wait until it is complete before sending another update request for the ProductType.
+*
 *	The `CombinationUnique` constraint is not checked when an Attribute is removed, and uniqueness violations may occur when you remove an Attribute with a `CombinationUnique` constraint.
 *
  */
@@ -1247,7 +1254,7 @@ func (obj ProductTypeRemoveEnumValuesAction) MarshalJSON() ([]byte, error) {
 type ProductTypeSetInputTipAction struct {
 	// Name of the AttributeDefinition to update.
 	AttributeName string `json:"attributeName"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 }
 
@@ -1262,7 +1269,7 @@ func (obj ProductTypeSetInputTipAction) MarshalJSON() ([]byte, error) {
 }
 
 type ProductTypeSetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 

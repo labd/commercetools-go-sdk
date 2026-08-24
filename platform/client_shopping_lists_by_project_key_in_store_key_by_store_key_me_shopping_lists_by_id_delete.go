@@ -88,7 +88,7 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodDelete
 *
 *	- If no ShoppingList matches the provided `id` in a Store.
 *	- If a ShoppingList matches the provided `id` but does not have a `store` specified, or the `store` field references a different Store.
-*	- If a ShoppingList matches the provided `id` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If a ShoppingList matches the provided `id` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsByIDRequestMethodDelete) Execute(ctx context.Context) (result *ShoppingList, err error) {

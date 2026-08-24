@@ -2661,6 +2661,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetTransactionInterfaceIdChange":
+		obj := SetTransactionInterfaceIdChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ShippingMethodAddShippingRateChange":
 		obj := ShippingMethodAddShippingRateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -3121,7 +3127,7 @@ func (obj AddFieldDefinitionChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This change is initiated by background processes after the [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action is performed (if [Associates are inherited](/../api/associates-overview#inheritance-of-associates-and-their-roles)).
+*	This change is initiated by background processes after the [Add Associate](ctp:api:type:BusinessUnitAddAssociateAction) update action is performed (if [Associates are inherited](/api/associates-overview#inheritance-of-associates-and-their-roles)).
  */
 type AddInheritedAssociateChange struct {
 	Change string `json:"change"`
@@ -4141,7 +4147,7 @@ func (obj ChangeGroupsChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the [Change Associate](ctp:api:type:BusinessUnitChangeAssociateAction) update action on a parent of a Business Unit in cases where [inheritance applies](/../api/associates-overview#conditions-for-inheritance).
+*	Change triggered by the [Change Associate](ctp:api:type:BusinessUnitChangeAssociateAction) update action on a parent of a Business Unit in cases where [inheritance applies](/api/associates-overview#conditions-for-inheritance).
  */
 type ChangeInheritedAssociateChange struct {
 	Change string `json:"change"`
@@ -4384,6 +4390,13 @@ type ChangeLocalizedNameChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 	// Value after the change.
 	NextValue LocalizedString `json:"nextValue"`
+	// Product data that was updated.
+	//
+	// - `staged`, if the staged [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	// - `current`, if the current [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	//
+	// This field is only present if the change is related to the Product entity.
+	CatalogData string `json:"catalogData"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -5703,7 +5716,7 @@ func (obj RemoveImageChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This change is initiated by background processes after the [Remove Associate](ctp:api:type:BusinessUnitRemoveAssociateAction) update action is performed (if [Associates are inherited](/../api/associates-overview#inheritance-of-associates-and-their-roles)).
+*	This change is initiated by background processes after the [Remove Associate](ctp:api:type:BusinessUnitRemoveAssociateAction) update action is performed (if [Associates are inherited](/api/associates-overview#inheritance-of-associates-and-their-roles)).
  */
 type RemoveInheritedAssociateChange struct {
 	Change string `json:"change"`
@@ -6109,7 +6122,7 @@ type RequestQuoteRenegotiationChange struct {
 	PreviousValue QuoteState `json:"previousValue"`
 	// Value after the change.
 	NextValue QuoteState `json:"nextValue"`
-	// Message from the [Buyer](/../api/quotes-overview#buyer) regarding the [Quote](ctp:api:type:Quote) renegotiation request.
+	// Message from the [Buyer](/api/quotes-overview#buyer) regarding the [Quote](ctp:api:type:Quote) renegotiation request.
 	BuyerComment string `json:"buyerComment"`
 }
 
@@ -6233,7 +6246,7 @@ type SetAssetCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -6670,7 +6683,7 @@ type SetCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -6699,7 +6712,7 @@ type SetCustomLineItemCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// Name of the updated [CustomLineItem](ctp:api:type:CustomLineItem).
 	CustomLineItem LocalizedString `json:"customLineItem"`
@@ -7638,7 +7651,7 @@ func (obj SetLastNameChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This change is initiated by background processes after the [Delete Product](/../api/projects/products#delete-product) request or [Remove ProductVariant](ctp:api:type:ProductRemoveVariantAction) update action is performed.
+*	This change is initiated by background processes after the [Delete Product](/api/projects/products#delete-product) request or [Remove ProductVariant](ctp:api:type:ProductRemoveVariantAction) update action is performed.
  */
 type SetLineItemDeactivatedAtChange struct {
 	Change string `json:"change"`
@@ -8018,6 +8031,13 @@ type SetLocalizedDescriptionChange struct {
 	PreviousValue LocalizedString `json:"previousValue"`
 	// Value after the change.
 	NextValue LocalizedString `json:"nextValue"`
+	// Product data that was updated.
+	//
+	// - `staged`, if the staged [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	// - `current`, if the current [ProductCatalogData](ctp:api:type:ProductCatalogData) was updated.
+	//
+	// This field is only present if the change is related to the Product entity.
+	CatalogData string `json:"catalogData"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8279,7 +8299,7 @@ type SetOrderLineItemCustomFieldChange struct {
 	NextValue interface{} `json:"nextValue"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// Name of the [Product](ctp:api:type:Product) the Line Item is based on.
 	LineItem LocalizedString `json:"lineItem"`
@@ -8607,7 +8627,7 @@ type SetProductPriceCustomFieldChange struct {
 	PriceId string `json:"priceId"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 }
 
@@ -9117,7 +9137,7 @@ type SetShoppingListLineItemCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -9633,7 +9653,7 @@ type SetTextLineItemCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -10501,7 +10521,7 @@ func (obj SetAncestorsChange) MarshalJSON() ([]byte, error) {
  */
 type SetBillingAddressCustomFieldChange struct {
 	Change string `json:"change"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -10672,7 +10692,7 @@ type SetDeliveryAddressCustomFieldChange struct {
 	DeliveryId string `json:"deliveryId"`
 	// `id` of the updated [Address](ctp:api:type:Address).
 	AddressId string `json:"addressId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -10724,7 +10744,7 @@ type SetDeliveryCustomFieldChange struct {
 	Change string `json:"change"`
 	// `id` of the updated [Delivery](ctp:api:type:Delivery).
 	DeliveryId string `json:"deliveryId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -10859,7 +10879,7 @@ type SetItemShippingAddressCustomFieldChange struct {
 	Change string `json:"change"`
 	// `id` of the updated [Address](ctp:api:type:Address).
 	AddressId string `json:"addressId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -10953,7 +10973,7 @@ type SetParcelCustomFieldChange struct {
 	Parcel ParcelChangeValue `json:"parcel"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// Value before the change.
 	PreviousValue interface{} `json:"previousValue"`
@@ -10995,7 +11015,7 @@ func (obj SetParcelCustomTypeChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Change triggered by the [Change password of Customer](/../api/projects/customers#change-password-of-customer) or [Change password of Customer in Store](/../api/projects/customers#change-password-of-customer-in-store) request.
+*	Change triggered by the [Change password of Customer](/api/projects/customers#change-password-of-customer) or [Change password of Customer in Store](/api/projects/customers#change-password-of-customer-in-store) request.
  */
 type SetPasswordChange struct {
 	Change string `json:"change"`
@@ -11120,7 +11140,7 @@ type SetReturnItemCustomLineItemCustomFieldChange struct {
 	CustomLineItem LocalizedString `json:"customLineItem"`
 	// `id` of the updated [CustomLineItem](ctp:api:type:CustomLineItem).
 	CustomLineItemId string `json:"customLineItemId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -11178,7 +11198,7 @@ type SetReturnItemLineItemCustomFieldChange struct {
 	LineItem LocalizedString `json:"lineItem"`
 	// `id` of the updated [LineItem](ctp:api:type:LineItem).
 	LineItemId string `json:"lineItemId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -11232,7 +11252,7 @@ func (obj SetReturnItemLineItemCustomTypeChange) MarshalJSON() ([]byte, error) {
  */
 type SetShippingAddressCustomFieldChange struct {
 	Change string `json:"change"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -11280,7 +11300,7 @@ type SetShippingCustomFieldChange struct {
 	Change string `json:"change"`
 	// `shippingKey` of the updated [Shipping](ctp:api:type:Shipping).
 	ShippingKey string `json:"shippingKey"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -11330,7 +11350,7 @@ type SetTransactionCustomFieldChange struct {
 	Change string `json:"change"`
 	// Holds information about the updated Transaction.
 	Transaction TransactionChangeValue `json:"transaction"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`
@@ -11484,7 +11504,7 @@ func (obj SetAssociatesChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This change is initiated by background processes after the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) or [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action is performed (if [Associates are inherited](/../api/associates-overview#inheritance-of-associates-and-their-roles)).
+*	This change is initiated by background processes after the [Change Parent Unit](ctp:api:type:BusinessUnitChangeParentUnitAction) or [Set Unit Type](ctp:api:type:BusinessUnitSetUnitTypeAction) update action is performed (if [Associates are inherited](/api/associates-overview#inheritance-of-associates-and-their-roles)).
  */
 type SetInheritedAssociatesChange struct {
 	Change string `json:"change"`
@@ -11804,6 +11824,29 @@ func (obj SetTaxedShippingPriceChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetTaxedShippingPriceChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set Transaction InterfaceId](ctp:api:type:PaymentSetTransactionInterfaceIdAction) update action.
+ */
+type SetTransactionInterfaceIdChange struct {
+	Change string `json:"change"`
+	// Holds information about the updated Transaction.
+	Transaction TransactionChangeValue `json:"transaction"`
+	// Value before the change.
+	PreviousValue string `json:"previousValue"`
+	// Value after the change.
+	NextValue string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetTransactionInterfaceIdChange) MarshalJSON() ([]byte, error) {
+	type Alias SetTransactionInterfaceIdChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetTransactionInterfaceIdChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -12256,7 +12299,7 @@ func (obj StandalonePriceChangeValueChange) MarshalJSON() ([]byte, error) {
  */
 type StandalonePriceSetCustomFieldChange struct {
 	Change string `json:"change"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// `id` of the referenced [Type](ctp:api:type:Type).
 	CustomTypeId string `json:"customTypeId"`

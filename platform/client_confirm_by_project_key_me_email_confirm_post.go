@@ -29,9 +29,9 @@ func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) WithHeaders(headers http.
 }
 
 /**
-*	This is the last step in the [email verification process of a Customer](/../api/projects/customers#email-verification-of-customer).
+*	This is the last step in the [email verification process of a Customer](/api/projects/customers#email-verification-of-customer).
 *
-*	After the email is verified, all email tokens issued previously through the [email verification flow](/../api/projects/customers#email-verification-of-customer) are invalidated. This invalidation of tokens is [eventually consistent](/../api/general-concepts#eventual-consistency).
+*	After the email is verified, all email tokens issued previously through the [email verification flow](/api/projects/customers#email-verification-of-customer) are invalidated. This invalidation of tokens is [eventually consistent](/api/general-concepts#eventual-consistency).
 *
  */
 func (rb *ByProjectKeyMeEmailConfirmRequestMethodPost) Execute(ctx context.Context) (result *Customer, err error) {

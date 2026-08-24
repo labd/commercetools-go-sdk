@@ -23,7 +23,7 @@ func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Get() *ByProjectKeyShip
 }
 
 /**
-*	Checks if a ShippingMethod exists with the provided `id`. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if a ShippingMethod exists with the provided `id`. Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Head() *ByProjectKeyShippingMethodsByIDRequestMethodHead {
 	return &ByProjectKeyShippingMethodsByIDRequestMethodHead{
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Head() *ByProjectKeyShi
 }
 
 /**
-*	Updates a ShippingMethod in the Project using one or more [update actions](/../api/projects/shippingMethods#update-actions).
+*	Updates a ShippingMethod in the Project using one or more [update actions](/api/projects/shippingMethods#update-actions).
  */
 func (rb *ByProjectKeyShippingMethodsByIDRequestBuilder) Post(body ShippingMethodUpdate) *ByProjectKeyShippingMethodsByIDRequestMethodPost {
 	return &ByProjectKeyShippingMethodsByIDRequestMethodPost{

@@ -44,17 +44,17 @@ type CustomerGroupDraft struct {
 *
  */
 type CustomerGroupPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [CustomerGroups](ctp:api:type:CustomerGroup) matching the query.
 	Results []CustomerGroup `json:"results"`
@@ -67,7 +67,7 @@ type CustomerGroupPagedQueryResponse struct {
 type CustomerGroupReference struct {
 	// Unique identifier of the referenced [CustomerGroup](ctp:api:type:CustomerGroup).
 	ID string `json:"id"`
-	// Contains the representation of the expanded CustomerGroup. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for CustomerGroups.
+	// Contains the representation of the expanded CustomerGroup. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for CustomerGroups.
 	Obj *CustomerGroup `json:"obj,omitempty"`
 }
 
@@ -82,7 +82,7 @@ func (obj CustomerGroupReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [CustomerGroup](ctp:api:type:CustomerGroup). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type CustomerGroupResourceIdentifier struct {
@@ -186,7 +186,7 @@ func (obj CustomerGroupChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerGroupSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -206,14 +206,16 @@ func (obj CustomerGroupSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	This action sets or removes the custom type for an existing CustomerGroup.
-*	If present, this action overwrites any existing [custom](/../api/projects/custom-fields) type and fields.
+*	If present, this action overwrites any existing [custom](/api/projects/custom-fields) type and fields.
 *
  */
 type CustomerGroupSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the CustomerGroup with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the CustomerGroup with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the CustomerGroup.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the CustomerGroup.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the CustomerGroup.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

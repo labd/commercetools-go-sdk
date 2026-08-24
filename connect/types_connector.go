@@ -28,13 +28,13 @@ type Connector struct {
 	Configurations []ConnectorConfigurationApplication `json:"configurations"`
 	// Configuration for the API Client used for automatically generating API Client credentials.
 	ApiClient *ConnectorApiClient `json:"apiClient,omitempty"`
-	// If `true`, only Composable Commerce Projects specified in `privateProjects` can access the Connector.
+	// Whether only Composable Commerce Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
 	// Global configuration applied to all applications in the Deployment.
 	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
-	// If `true`, the Connector is certified.
+	// Whether the Connector is certified.
 	Certified bool `json:"certified"`
 	// URL to the documentation of the Connector.
 	DocumentationUrl *string `json:"documentationUrl,omitempty"`
@@ -87,7 +87,7 @@ type ConnectorStaged struct {
 	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// Configuration for the API Client used for generating API Client credentials.
 	ApiClient *ConnectorApiClient `json:"apiClient,omitempty"`
-	// If `true`, only Composable Commerce Projects specified in `privateProjects` can access the Connector.
+	// Whether only Composable Commerce Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
 	// If `private` is true, only these Composable Commerce Projects can access the Connector.
 	PrivateProjects []string `json:"privateProjects"`
@@ -99,9 +99,9 @@ type ConnectorStaged struct {
 	Status string `json:"status"`
 	// The publishing request report of the Connector.
 	PublishingReport *ConnectorReport `json:"publishingReport,omitempty"`
-	// If `true`, the Connector is published and ready for use.
+	// Whether the Connector is published and ready for use.
 	AlreadyListed bool `json:"alreadyListed"`
-	// If `true`, the ConnectorStaged data is different from the production [Connector](ctp:connect:type:Connector) data.
+	// Whether the ConnectorStaged data is different from the production [Connector](ctp:connect:type:Connector) data.
 	HasChanges bool `json:"hasChanges"`
 	// The previewable status of the ConnectorStaged.
 	IsPreviewable string `json:"isPreviewable"`
@@ -165,7 +165,7 @@ func (obj ConnectorStagedDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ConnectorStaged](ctp:connect:type:ConnectorStaged).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [ConnectorStaged](ctp:connect:type:ConnectorStaged).
 *
  */
 type ConnectorStagedPagedQueryResponse struct {
@@ -182,7 +182,7 @@ type ConnectorStagedPagedQueryResponse struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Connector](ctp:connect:type:Connector).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Connector](ctp:connect:type:Connector).
 *
  */
 type ConnectorSearchPagedQueryResponse struct {
@@ -686,7 +686,7 @@ func (obj ConnectorAddCertificationCommentAction) MarshalJSON() ([]byte, error) 
 *	Requests the previewable status of a ConnectorStaged. Previewable ConnectorStaged should be deployed for testing and preview purposes. You can only deploy previewable ConnectorStaged to Projects listed in `privateProjects`.
 *
 *	After using this update action, the status of `isPreviewable` will change to `pending`. Following validation, the status of `isPreviewable` will change to `true` if the previewable status is granted, or `false` if it is rejected.
-*	In the case of a `false` status, contact the [Connect support team](https://support.commercetools.com/) regarding any issues raised during the validation process.
+*	In the case of a `false` status, contact the [commercetools support team](https://support.commercetools.com/) regarding any issues raised during the validation process.
 *
 *	Requesting the previewable status for a ConnectorStaged that is currently being reviewed returns the [ConnectorStagedPreviewRequestUnderProcess](ctp:connect:type:ConnectorStagedPreviewRequestUnderProcessError) error.
 *

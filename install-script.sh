@@ -13,6 +13,7 @@ COMMAND_SYM_LINK=~/.local/bin/rmf-codegen
 installVrapCli(){
     uninstallVrapCli
     mkdir -p $LIB_FOLDER
+    mkdir -p $(dirname $COMMAND_SYM_LINK)
     echo 'Downloading artifacts...'
     curl -# -L $DOWNLOAD_LINK -o $JAR_FILE_PATH --fail
     cat >$SCRIPT_PATH <<EOL

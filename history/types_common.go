@@ -150,7 +150,7 @@ type AttributeDefinition struct {
 	Name string `json:"name"`
 	// Human-readable label for the Attribute.
 	Label LocalizedString `json:"label"`
-	// If `true`, the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
+	// Whether the Attribute must have a value on a [ProductVariant](ctp:api:type:ProductVariant).
 	IsRequired bool `json:"isRequired"`
 	// Specifies whether the Attribute is defined at the Product or Variant level.
 	Level AttributeLevelEnum `json:"level"`
@@ -160,12 +160,12 @@ type AttributeDefinition struct {
 	InputTip *LocalizedString `json:"inputTip,omitempty"`
 	// Provides a visual representation directive for values of this Attribute (only relevant for [AttributeTextType](ctp:api:type:AttributeTextType) and [AttributeLocalizableTextType](ctp:api:type:AttributeLocalizableTextType)).
 	InputHint TextInputHint `json:"inputHint"`
-	// If `true`, the Attribute's values are available in the [Product Search](/../api/projects/product-search) or the [Product Projection Search](/../api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
+	// Whether the Attribute's values are available in the [Product Search](/api/projects/product-search) or the [Product Projection Search](/api/projects/product-projection-search) API for use in full-text search queries, filters, and facets.
 	// However, if an Attribute's `level` is set as `Product`, then Product Projection Search does **not support** the Attribute.
 	//
 	// The exact features that are available with this flag depend on the specific [AttributeType](ctp:api:type:AttributeType).
-	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/../api/limits#field-content-size).
-	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/../api/projects/products#update-product).
+	// The maximum size of a searchable field is **restricted** by the [Field content size limit](/api/limits#field-content-size).
+	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/api/projects/products#update-product).
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable bool `json:"isSearchable"`
 }
@@ -265,7 +265,7 @@ const (
 type CustomFields struct {
 	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// Object containing the Custom Fields of the [customized resource or data type](/../api/projects/types#resourcetypeid).
+	// Object containing the Custom Fields of the [customized resource or data type](/api/projects/types#resourcetypeid).
 	Fields FieldContainer `json:"fields"`
 }
 
@@ -362,7 +362,7 @@ type Delivery struct {
 type DeliveryItem struct {
 	// `id` of the [LineItem](ctp:api:type:LineItem) or [CustomLineItem](ctp:api:type:CustomLineItem) delivered.
 	ID string `json:"id"`
-	// Number of Line Items or Custom Line Items delivered.
+	// Quantity of Line Items or Custom Line Items delivered.
 	Quantity int `json:"quantity"`
 }
 
@@ -377,7 +377,7 @@ type DirectDiscount struct {
 	Value CartDiscountValue `json:"value"`
 	// Segment of the Cart that is discounted.
 	//
-	// Empty when the `value` is set to `giftLineItem`.
+	// Absent if the `value` is `giftLineItem`.
 	Target *CartDiscountTarget `json:"target,omitempty"`
 }
 
@@ -466,7 +466,7 @@ func (obj *DiscountedLineItemPrice) UnmarshalJSON(data []byte) error {
 }
 
 type DiscountedLineItemPriceForQuantity struct {
-	// Number of Line Items or Custom Line Items in the Cart.
+	// Quantity of Line Items or Custom Line Items in the Cart.
 	Quantity int `json:"quantity"`
 	// Discounted price of the Line Item or Custom Line Item.
 	DiscountedPrice DiscountedLineItemPrice `json:"discountedPrice"`
@@ -539,8 +539,8 @@ func (obj Stacking) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Defines a [Custom Field](/../api/projects/custom-fields) and its meta-information.
-*	This FieldDefinition is similar to an [AttributeDefinition](ctp:api:type:AttributeDefinition) of [Product Types](/../api/projects/productTypes).
+*	Defines a [Custom Field](/api/projects/custom-fields) and its meta-information.
+*	This FieldDefinition is similar to an [AttributeDefinition](ctp:api:type:AttributeDefinition) of [Product Types](/api/projects/productTypes).
 *
  */
 type FieldDefinition struct {
@@ -596,8 +596,7 @@ type InheritedAssociateRoleAssignment struct {
 type ItemShippingDetails struct {
 	// Holds information on the quantity of Line Items or Custom Line Items and the address it is shipped.
 	Targets []ItemShippingTarget `json:"targets"`
-	// - `true` if the quantity of Line Items or Custom Line Items is equal to the sum of sub-quantities defined in `targets`.
-	// - `false` if the quantity of Line Items or Custom Line Items is not equal to the sum of sub-quantities defined in `targets`.
+	// Whether the quantity of Line Items or Custom Line Items is equal to the sum of sub-quantities defined in `targets`.
 	//   Ordering a Cart when the value is `false` returns an [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError) error.
 	Valid bool `json:"valid"`
 }
@@ -624,7 +623,7 @@ type ItemShippingTarget struct {
 }
 
 type ItemState struct {
-	// Number of Line Items or Custom Line Items in this State.
+	// Quantity of Line Items or Custom Line Items in this State.
 	Quantity int `json:"quantity"`
 	// State of the Line Items or Custom Line Items in a custom workflow.
 	State StateReference `json:"state"`
@@ -671,7 +670,7 @@ func mapDiscriminatorKeyReference(input interface{}) (KeyReference, error) {
 }
 
 /**
-*	The representation of a [Line Item](/../api/carts-orders-overview#line-items) in a [Cart](ctp:api:type:Cart) or in an [Order](ctp:api:type:Order).
+*	The representation of a [Line Item](/api/carts-orders-overview#line-items) in a [Cart](ctp:api:type:Cart) or in an [Order](ctp:api:type:Order).
 *
  */
 type LineItem struct {
@@ -693,7 +692,7 @@ type LineItem struct {
 	// Name of the Product.
 	Name LocalizedString `json:"name"`
 	// `slug` of the current version of the Product. Updated automatically if the `slug` changes. Empty if the Product has been deleted.
-	// The `productSlug` field of LineItem is not expanded when using [Reference Expansion](/../api/general-concepts#reference-expansion).
+	// The `productSlug` field of LineItem is not expanded when using [Reference Expansion](/api/general-concepts#reference-expansion).
 	ProductSlug *LocalizedString `json:"productSlug,omitempty"`
 	// Product Type of the Product.
 	ProductType ProductTypeReference `json:"productType"`
@@ -704,7 +703,7 @@ type LineItem struct {
 	Variant ProductVariant `json:"variant"`
 	// Price of a Line Item selected from the Product Variant according to the [Product](ctp:api:type:Product) `priceMode`. If the `priceMode` is `Embedded` [ProductPriceMode](ctp:api:type:ProductPriceModeEnum) and the `variant` field hasn't been updated, the price may not correspond to a price in `variant.prices`.
 	Price Price `json:"price"`
-	// Number of Line Items of the given Product Variant present in the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order).
+	// Quantity of Line Items of the given Product Variant present in the [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order).
 	Quantity int `json:"quantity"`
 	// Total price of this Line Item equalling `price` multiplied by `quantity`. If the Line Item is discounted, the total price is the `discountedPricePerQuantity` multiplied by `quantity`.
 	// Includes taxes if the [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true`.
@@ -726,9 +725,9 @@ type LineItem struct {
 	// Tax Rate per Shipping Method for a Cart with `Multiple` [ShippingMode](ctp:api:type:ShippingMode). For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode) it is automatically set after the [Shipping Method is added](ctp:api:type:CartAddShippingMethodAction).
 	// For a Cart with `External` [TaxMode](ctp:api:type:TaxMode), the Tax Rate must be set with [ExternalTaxRateDraft](ctp:api:type:ExternalTaxRateDraft).
 	PerMethodTaxRate []MethodTaxRate `json:"perMethodTaxRate"`
-	// Identifies [Inventory entries](/../api/projects/inventory) that are reserved. The referenced Channel has the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// Identifies [Inventory entries](/api/projects/inventory) that are reserved. The referenced Channel has the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 	// Indicates how the Price for the Line Item is set.
 	PriceMode LineItemPriceMode `json:"priceMode"`
@@ -947,9 +946,7 @@ type Price struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Is set if a [ProductDiscount](ctp:api:type:ProductDiscount) has been applied.
-	// If set, the API uses the DiscountedPrice value for the [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
-	// When a [relative discount](ctp:api:type:ProductDiscountValueRelative) has been applied and the fraction part of the DiscountedPrice `value` is 0.5, the `value` is rounded in favor of the customer with [half-down rounding](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
+	// Set if a [ProductDiscount](ctp:api:type:ProductDiscount) applies. When present, the API uses the DiscountedPrice value for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
 	//
@@ -1006,7 +1003,7 @@ func (obj Price) MarshalJSON() ([]byte, error) {
 type ProductSelectionSetting struct {
 	// Reference to a ProductSelection.
 	ProductSelection ProductSelectionReference `json:"productSelection"`
-	// If `true`, all Products assigned to this Product Selection are part of the Store's assortment.
+	// Whether all Products assigned to this Product Selection are part of the Store's assortment.
 	Active bool `json:"active"`
 }
 
@@ -1043,7 +1040,7 @@ type ProductVariantChannelAvailability struct {
 }
 
 /**
-*	JSON object where the keys are supply [Channel](/projects/channels) `id`, and the values are [ProductVariantChannelAvailability](/projects/products#productvariantchannelavailability).
+*	JSON object where the keys are supply [Channel](/projects/channels) `id`, and the values are [ProductVariantChannelAvailability](ctp:api:type:ProductVariantChannelAvailability).
 *
  */
 type ProductVariantChannelAvailabilityMap map[string]ProductVariantChannelAvailability
@@ -1317,7 +1314,7 @@ type ReturnItem struct {
 	ID string `json:"id"`
 	// User-defined unique identifier of the Return Item.
 	Key *string `json:"key,omitempty"`
-	// Number of Line Items or Custom Line Items returned.
+	// Quantity of Line Items or Custom Line Items returned.
 	Quantity int    `json:"quantity"`
 	Type     string `json:"type"`
 	// User-defined description for the return.
@@ -1428,9 +1425,9 @@ const (
 type ShippingRate struct {
 	// Currency amount of the ShippingRate.
 	Price CentPrecisionMoney `json:"price"`
-	// [Free shipping](/../api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
+	// [Free shipping](/api/shipping-delivery-overview#free-shipping) is applied if the sum of the (Custom) Line Item Prices reaches the specified value.
 	FreeAbove *CentPrecisionMoney `json:"freeAbove,omitempty"`
-	// `true` if the ShippingRate matches given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
+	// Whether the ShippingRate matches the given [Cart](ctp:api:type:Cart) or [Location](ctp:api:type:Location).
 	// Only appears in response to requests for [Get ShippingMethods for a Cart](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-cart:GET) or
 	// [Get ShippingMethods for a Location](ctp:api:endpoint:/{projectKey}/shipping-methods/matching-location:GET).
 	IsMatching *bool `json:"isMatching,omitempty"`
@@ -1508,7 +1505,7 @@ type StoreCountry struct {
 }
 
 /**
-*	It is used to calculate the [taxPortions](/../api/projects/carts#taxedprice) field in a Cart or Order.
+*	It is used to calculate the [taxPortions](/api/projects/carts#taxedprice) field in a Cart or Order.
  */
 type SubRate struct {
 	// Name of the SubRate.
@@ -1568,7 +1565,7 @@ type TaxRate struct {
 	Name string `json:"name"`
 	// Tax rate. If subrates are used, the amount is the sum of all rates in `subRates`.
 	Amount float64 `json:"amount"`
-	// If `true`, tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
+	// Whether tax is included in [Embedded Prices](ctp:api:type:Price) or [Standalone Prices](ctp:api:type:StandalonePrice), and the `taxedPrice` is present on [LineItems](ctp:api:type:LineItem). In this case, the `totalNet` price on [TaxedPrice](ctp:api:type:TaxedPrice) includes the TaxRate.
 	IncludedInPrice bool `json:"includedInPrice"`
 	// Country in which the tax rate is applied in [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) format.
 	Country string `json:"country"`
@@ -1677,8 +1674,7 @@ type TrackingData struct {
 	Provider *string `json:"provider,omitempty"`
 	// Transaction identifier with the `provider`.
 	ProviderTransaction *string `json:"providerTransaction,omitempty"`
-	// - If `true`, the Parcel is being returned.
-	// - If `false`, the Parcel is being delivered to the customer.
+	// Whether the Parcel is being returned. If `false`, the Parcel is being delivered to the customer.
 	IsReturn *bool `json:"isReturn,omitempty"`
 }
 
@@ -1761,7 +1757,7 @@ const (
 )
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [BusinessUnit](ctp:api:type:BusinessUnit). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type BusinessUnitResourceIdentifier struct {
@@ -1903,8 +1899,8 @@ func (obj *DiscountedTotalPricePortion) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	This mode determines the type of Prices used for [price selection](/../api/pricing-and-discounts-overview#price-selection) by Line Items and Products.
-*	For more information about the difference between the Prices, see [Pricing](/../api/pricing-and-discounts-overview).
+*	This mode determines the type of Prices used for [price selection](/api/pricing-and-discounts-overview#price-selection) by Line Items and Products.
+*	For more information about the difference between the Prices, see [Pricing](/api/pricing-and-discounts-overview).
 *
  */
 type ProductPriceModeEnum string
@@ -2105,6 +2101,9 @@ func (obj CentPrecisionMoney) MarshalJSON() ([]byte, error) {
 
 type DiscountedPrice struct {
 	// Money value of the discounted price.
+	//
+	// - When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) applies and the fractional part of the resulting discounted price is 0.5, the discounted price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
+	// - When an [absolute Product Discount](ctp:api:type:ProductDiscountValueAbsolute) exceeds the price of the Product Variant, the resulting discounted price is set to `0`.
 	Value TypedMoney `json:"value"`
 	// [ProductDiscount](ctp:api:type:ProductDiscount) related to the discounted price.
 	Discount ProductDiscountReference `json:"discount"`
@@ -2599,7 +2598,7 @@ const (
 /**
 *	A Price tier is selected instead of the default Price when a certain quantity of the [ProductVariant](ctp:api:type:ProductVariant) is [added to a Cart](/projects/carts#add-lineitem) and ordered.
 *	_For   If no Price tier is found for the Order quantity, the base Price is used.
-*	A Price tier is applied for the entire quantity of a Product Variant put as [LineItem](/projects/carts#lineitem) in a Cart as soon as the minimum quantity for the Price tier is reached.
+*	A Price tier is applied for the entire quantity of a Product Variant put as [LineItem](ctp:api:type:LineItem) in a Cart as soon as the minimum quantity for the Price tier is reached.
 *	The Price tier is applied per Line Item of the Product Variant. If, for example, the same Product Variant appears in the same Cart as several Line Items, (what can be achieved by different values of a Custom Field on the Line Items) for each Line Item the minimum quantity must be reached to get the Price tier.
 *
  */
@@ -2731,7 +2730,7 @@ type ProductVariant struct {
 	Prices []Price `json:"prices"`
 	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
-	// Only available when [price selection](/../api/pricing-and-discounts-overview#price-selection) is used.
+	// Only available when [price selection](/api/pricing-and-discounts-overview#price-selection) is used.
 	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
 	Price *Price `json:"price,omitempty"`
 	// Images of the Product Variant.
@@ -2742,17 +2741,17 @@ type ProductVariant struct {
 	// Can be used as an optimization to reduce calls to the Inventory service.
 	// May not contain the latest Inventory State (it is [eventually consistent](/general-concepts#eventual-consistency)).
 	Availability *ProductVariantAvailability `json:"availability,omitempty"`
-	// `true` if the Product Variant matches the search query.
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request.
+	// Whether the Product Variant matches the search query.
+	// Only available in response to a [Product Projection Search](/api/projects/product-projection-search) request.
 	IsMatchingVariant *bool `json:"isMatchingVariant,omitempty"`
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearch) request
-	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
+	// Only available in response to a [Product Projection Search](/api/projects/product-projection-search) request
+	// with [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
 	// Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
 	ScopedPrice *ScopedPrice `json:"scopedPrice,omitempty"`
-	// Only available in response to a [Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request
-	// with [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection).
+	// Only available in response to a [Product Projection Search](/api/projects/product-projection-search) request
+	// with [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
-	// Only available when [Product price selection](/../api/pricing-and-discounts-overview#product-price-selection) is used.
+	// Only available when [Product price selection](/api/pricing-and-discounts-overview#product-price-selection) is used.
 	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
 	RecurrencePrices []Price `json:"recurrencePrices"`
 }
@@ -2862,7 +2861,7 @@ const (
 
 /**
 *	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/../api/pricing-and-discounts-overview#scoped-price-search) is used.
+*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/api/pricing-and-discounts-overview#scoped-price-search) is used.
 *
  */
 type ScopedPrice struct {
@@ -2884,7 +2883,7 @@ type ScopedPrice struct {
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
 	// Is set when a matching [ProductDiscount](ctp:api:type:ProductDiscount) exists. If set, the [Cart](ctp:api:type:Cart) uses the discounted value for the [Cart Price calculation](ctp:api:type:CartAddLineItemAction).
 	//
-	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down) in favor of the Customer.
+	// When a [relative Product Discount](ctp:api:type:ProductDiscountValueRelative) is applied and the fractional part of the discounted Price is 0.5, the discounted Price is [rounded half down](https://en.wikipedia.org/wiki/Rounding#Rounding_half_down).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Custom Fields of the Price.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -3026,24 +3025,24 @@ func (obj TypeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	These objects represent information about which [API Client](/../api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/../api/general-concepts#client-logging).
+*	These objects represent information about which [API Client](/api/projects/api-clients) created or modified a resource. For more information, see [Client Logging](/api/general-concepts#client-logging).
 *
  */
 type ClientLogging struct {
 	// `id` of the [API Client](ctp:api:type:ApiClient) which created the resource.
 	ClientId *string `json:"clientId,omitempty"`
-	// [External user ID](/../api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header.
+	// [External user ID](/api/general-concepts#external-user-ids) provided by `X-External-User-ID` HTTP Header.
 	ExternalUserId *string `json:"externalUserId,omitempty"`
 	// Indicates the [Customer](ctp:api:type:Customer) who modified the resource using a token from the [password flow](/authorization#password-flow).
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Indicates that the resource was modified during an [anonymous session](ctp:api:type:AnonymousSession) with the logged ID.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
+	// Indicates the [Customer](ctp:api:type:Customer) who created or modified the resource in the context of a [Business Unit](ctp:api:type:BusinessUnit). Only available for [B2B](/offering/commerce-b2b)-enabled Projects when an Associate acts on behalf of a company using the [associate endpoints](/associates-overview#on-the-associate-endpoints).
 	Associate *CustomerReference `json:"associate,omitempty"`
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Zone](ctp:api:type:Zone). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Zone](ctp:api:type:Zone). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type ZoneResourceIdentifier struct {

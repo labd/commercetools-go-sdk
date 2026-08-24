@@ -299,7 +299,7 @@ func (obj ProductLabel) MarshalJSON() ([]byte, error) {
 type QuoteLabel struct {
 	// User-defined unique identifier of the Quote.
 	Key string `json:"key"`
-	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
+	// The [Buyer](/api/quotes-overview#buyer) who requested the Quote.
 	Customer Reference `json:"customer"`
 	// Staged Quote related to the Quote.
 	StagedQuote Reference `json:"stagedQuote"`
@@ -352,7 +352,7 @@ func (obj QuoteLabel) MarshalJSON() ([]byte, error) {
 type QuoteRequestLabel struct {
 	// User-defined unique identifier of the Quote Request.
 	Key string `json:"key"`
-	// The [Buyer](/../api/quotes-overview#buyer) who raised the Quote Request.
+	// The [Buyer](/api/quotes-overview#buyer) who raised the Quote Request.
 	Customer Reference `json:"customer"`
 }
 
@@ -421,7 +421,7 @@ func (obj ShippingMethodLabel) MarshalJSON() ([]byte, error) {
 type StagedQuoteLabel struct {
 	// User-defined unique identifier of the Staged Quote.
 	Key string `json:"key"`
-	// The [Buyer](/../api/quotes-overview#buyer) who requested the Quote.
+	// The [Buyer](/api/quotes-overview#buyer) who requested the Quote.
 	Customer Reference `json:"customer"`
 	// Quote Request related to the Staged Quote.
 	QuoteRequest Reference `json:"quoteRequest"`

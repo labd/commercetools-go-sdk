@@ -71,7 +71,7 @@ func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) WithHeaders(header
 *	A [ResourceNotFound](ctp:api:type:ResourceNotFoundError) error is returned in the following scenarios:
 *
 *	- If no ShoppingList exists with the provided `id`.
-*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If a ShoppingList exists but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyMeShoppingListsByIDRequestMethodDelete) Execute(ctx context.Context) (result *ShoppingList, err error) {

@@ -75,7 +75,7 @@ func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodHead) WithHea
 }
 
 /**
-*	Checks if an active ShippingMethod that can ship to the provided [Location](ctp:api:type:Location) exists for the provided [OrderEdit](ctp:api:type:OrderEdit). Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if an active ShippingMethod that can ship to the provided [Location](ctp:api:type:Location) exists for the provided [OrderEdit](ctp:api:type:OrderEdit). Returns a `200 OK` status if the ShippingMethod exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyShippingMethodsMatchingOrdereditRequestMethodHead) Execute(ctx context.Context) error {
 	var queryParams url.Values

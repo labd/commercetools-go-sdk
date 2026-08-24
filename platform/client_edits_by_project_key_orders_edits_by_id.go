@@ -41,7 +41,7 @@ func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Head() *ByProjectKeyOrdersE
 }
 
 /**
-*	Updates an OrderEdit in the Project using one or more [update actions](/../api/projects/order-edits#update-actions).
+*	Updates an OrderEdit in the Project using one or more [update actions](/api/projects/order-edits#update-actions).
  */
 func (rb *ByProjectKeyOrdersEditsByIDRequestBuilder) Post(body OrderEditUpdate) *ByProjectKeyOrdersEditsByIDRequestMethodPost {
 	return &ByProjectKeyOrdersEditsByIDRequestMethodPost{

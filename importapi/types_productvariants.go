@@ -832,7 +832,7 @@ type ProductVariantImport struct {
 	// If `publish` is not set, the staged projection is set to the provided import data, but the current projection stays unchanged.
 	// However, if the import data contains no update, that is, if it matches the staged projection of the existing Product, the import induces no change in the existing Product whether `publish` is set or not.
 	Publish *bool `json:"publish,omitempty"`
-	// - Set to `false` to update both the [current and staged projections](/../api/projects/productProjections#current--staged) of the [Product](ctp:api:type:Product) with the new Product Variant data.
+	// - Set to `false` to update both the [current and staged projections](/api/projects/productProjections#current--staged) of the [Product](ctp:api:type:Product) with the new Product Variant data.
 	// - Leave empty or set to `true` to only update the staged projection.
 	Staged *bool `json:"staged,omitempty"`
 	// The [Product](ctp:api:type:ProductVariant) containing this ProductVariant. If the referenced Product does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced Product is created.

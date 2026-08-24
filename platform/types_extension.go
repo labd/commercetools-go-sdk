@@ -31,8 +31,16 @@ type Extension struct {
 	// If no timeout is provided, the default value is used for all [types of Extensions](ctp:api:type:ExtensionResourceTypeId).
 	//
 	// The limit of 10000 ms (10 seconds) can be increased per Project after we review the performance impact.
-	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
+	// Please contact the [commercetools support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
+	// References to other Extensions that must complete before this Extension is called. The Extension receives the resource state after all transitive ancestors' update actions have been applied. Maximum 5 entries.
+	Dependencies []ExtensionReference `json:"dependencies"`
+	// [Expansion paths](/api/general-concepts#expansion-paths) used for reference expansion of the payload.
+	//
+	// Be aware of the [limits](/api/limits#api-extensions) of this feature and its [performance impact](/api/performance-tips#api-extensions).
+	ExpansionPaths []string `json:"expansionPaths"`
+	// Configures additional information included in the payload sent to the API Extension.
+	AdditionalContext *ExtensionAdditionalContext `json:"additionalContext,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -53,6 +61,34 @@ func (obj *Extension) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj Extension) MarshalJSON() ([]byte, error) {
+	type Alias Extension
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["dependencies"] == nil {
+		delete(raw, "dependencies")
+	}
+
+	if raw["expansionPaths"] == nil {
+		delete(raw, "expansionPaths")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 /**
 *	An Extension gets called during any of the following requests of an API call, but before the result is persisted.
 *
@@ -63,6 +99,26 @@ const (
 	ExtensionActionCreate ExtensionAction = "Create"
 	ExtensionActionUpdate ExtensionAction = "Update"
 )
+
+/**
+*	Configures additional information included in the payload sent to the API Extension.
+*
+ */
+type ExtensionAdditionalContext struct {
+	// Whether the payload sent to the API Extension should include an [`oldResource`](ctp:api:type:ExtensionInput) field with the state of the resource before the update.
+	// This only applies to `Update` actions. For `Create` actions, `oldResource` is not included.
+	IncludeOldResource bool `json:"includeOldResource"`
+}
+
+/**
+*	Draft for [ExtensionAdditionalContext](ctp:api:type:ExtensionAdditionalContext).
+*
+ */
+type ExtensionAdditionalContextDraft struct {
+	// Whether the payload sent to the API Extension should include an [`oldResource`](ctp:api:type:ExtensionInput) field with the state of the resource before the update.
+	// This only applies to `Update` actions. For `Create` actions, `oldResource` is not included.
+	IncludeOldResource *bool `json:"includeOldResource,omitempty"`
+}
 
 /**
 *	Generic type for destinations.
@@ -145,8 +201,16 @@ type ExtensionDraft struct {
 	// We recommend keeping the timeout as low as possible to avoid performance issues.
 	//
 	// The limit of 10000 ms (10 seconds) can be increased per Project after we review the performance impact.
-	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
+	// Please contact the [commercetools support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
+	// Extensions that must complete before this Extension is called, identified by `id` or `key`. Maximum 5 entries. If omitted, the Extension has no dependencies and may run concurrently with other independent Extensions.
+	Dependencies []ExtensionResourceIdentifier `json:"dependencies"`
+	// [Expansion paths](/api/general-concepts#expansion-paths) used for reference expansion of the payload.
+	//
+	// Be aware of the [limits](/api/limits#api-extensions) of this feature and its [performance impact](/api/performance-tips#api-extensions).
+	ExpansionPaths []string `json:"expansionPaths"`
+	// Configures additional information included in the payload sent to the API Extension.
+	AdditionalContext *ExtensionAdditionalContextDraft `json:"additionalContext,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -167,11 +231,41 @@ func (obj *ExtensionDraft) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionDraft) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionDraft
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["dependencies"] == nil {
+		delete(raw, "dependencies")
+	}
+
+	if raw["expansionPaths"] == nil {
+		delete(raw, "expansionPaths")
+	}
+
+	return json.Marshal(raw)
+
+}
+
 type ExtensionInput struct {
 	// `Create` or `Update` request.
 	Action ExtensionAction `json:"action"`
 	// Expanded reference to the resource that triggered the Extension.
 	Resource Reference `json:"resource"`
+	// Expanded reference to the resource as it was before the update. Only included when [`additionalContext.includeOldResource`](ctp:api:type:ExtensionAdditionalContext) is `true` on the [Extension](ctp:api:type:Extension) and the `action` is `Update`.
+	OldResource Reference `json:"oldResource,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -188,29 +282,78 @@ func (obj *ExtensionInput) UnmarshalJSON(data []byte) error {
 			return err
 		}
 	}
+	if obj.OldResource != nil {
+		var err error
+		obj.OldResource, err = mapDiscriminatorReference(obj.OldResource)
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Extension](ctp:api:type:Extension).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [Extension](ctp:api:type:Extension).
 *
  */
 type ExtensionPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Extensions matching the query.
 	Results []Extension `json:"results"`
+}
+
+/**
+*	[Reference](ctp:api:type:Reference) to an [Extension](ctp:api:type:Extension).
+*
+ */
+type ExtensionReference struct {
+	// Unique identifier of the referenced [Extension](ctp:api:type:Extension).
+	ID string `json:"id"`
+	// Contains the representation of the expanded Extension. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Extensions.
+	Obj *Extension `json:"obj,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionReference) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionReference
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "extension", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to an [Extension](ctp:api:type:Extension). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
+*
+ */
+type ExtensionResourceIdentifier struct {
+	// Unique identifier of the referenced [Extension](ctp:api:type:Extension). Required if `key` is absent.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the referenced [Extension](ctp:api:type:Extension). Required if `id` is absent.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionResourceIdentifier
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "extension", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -238,7 +381,7 @@ type ExtensionTrigger struct {
 	ResourceTypeId ExtensionResourceTypeId `json:"resourceTypeId"`
 	// `Create` and `Update` requests are supported.
 	Actions []ExtensionAction `json:"actions"`
-	// Valid [predicate](/../api/predicates/query) that controls the conditions under which the API Extension is called. The Extension is not triggered when the specified condition is not fulfilled.
+	// Valid [predicate](/api/predicates/query) that controls the conditions under which the API Extension is called. The Extension is not triggered when the specified condition is not fulfilled.
 	Condition *string `json:"condition,omitempty"`
 }
 
@@ -297,6 +440,24 @@ func mapDiscriminatorExtensionUpdateAction(input interface{}) (ExtensionUpdateAc
 		return obj, nil
 	case "changeTriggers":
 		obj := ExtensionChangeTriggersAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setAdditionalContext":
+		obj := ExtensionSetAdditionalContextAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setDependencies":
+		obj := ExtensionSetDependenciesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setExpansionPaths":
+		obj := ExtensionSetExpansionPathsAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -496,8 +657,55 @@ func (obj ExtensionChangeTriggersAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeTriggers", Alias: (*Alias)(&obj)})
 }
 
+type ExtensionSetAdditionalContextAction struct {
+	// New value to set.
+	AdditionalContext ExtensionAdditionalContextDraft `json:"additionalContext"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionSetAdditionalContextAction) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionSetAdditionalContextAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setAdditionalContext", Alias: (*Alias)(&obj)})
+}
+
+type ExtensionSetDependenciesAction struct {
+	// Extensions this Extension depends on, identified by `id` or `key`. Set to an empty array to remove all dependencies. Maximum 5 entries.
+	Dependencies []ExtensionResourceIdentifier `json:"dependencies"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionSetDependenciesAction) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionSetDependenciesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDependencies", Alias: (*Alias)(&obj)})
+}
+
+type ExtensionSetExpansionPathsAction struct {
+	// [Expansion paths](/api/general-concepts#expansion-paths) used for reference expansion of the payload.
+	//
+	// Be aware of the [limits](/api/limits#api-extensions) of this feature and its [performance impact](/api/performance-tips#api-extensions).
+	ExpansionPaths []string `json:"expansionPaths"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ExtensionSetExpansionPathsAction) MarshalJSON() ([]byte, error) {
+	type Alias ExtensionSetExpansionPathsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setExpansionPaths", Alias: (*Alias)(&obj)})
+}
+
 type ExtensionSetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -517,7 +725,7 @@ type ExtensionSetTimeoutInMsAction struct {
 	// We recommend keeping the timeout as low as possible to avoid performance issues.
 	//
 	// The limit of 10000 ms (10 seconds) can be increased per Project after we review the performance impact.
-	// Please contact the [Composable Commerce support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
+	// Please contact the [commercetools support team](https://support.commercetools.com) and provide the Region, Project key, and use case.
 	TimeoutInMs *int `json:"timeoutInMs,omitempty"`
 }
 

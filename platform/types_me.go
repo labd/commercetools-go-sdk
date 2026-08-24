@@ -201,7 +201,7 @@ func mapDiscriminatorMyBusinessUnitUpdateAction(input interface{}) (MyBusinessUn
 }
 
 /**
-*	The `customerId` is determined by a [password flow token](/../api/authorization#password-flow) and
+*	The `customerId` is determined by a [password flow token](/api/authorization#password-flow) and
 *	automatically set on the resulting [Cart](ctp:api:type:Cart).
 *	The `anonymousId` is determined by a [token for an anonymous session](ctp:api:type:AnonymousSession) and
 *	automatically set on the resulting [Cart](ctp:api:type:Cart).
@@ -212,7 +212,7 @@ type MyCartDraft struct {
 	Currency string `json:"currency"`
 	// Email address of the Customer the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Business Unit the Cart should belong to. The [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Store the Cart should belong to. Once set, it cannot be updated.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
@@ -238,7 +238,7 @@ type MyCartDraft struct {
 	ShippingMode *ShippingMode `json:"shippingMode,omitempty"`
 	// `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
 	DiscountCodes []string `json:"discountCodes"`
-	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	// If used for [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST), the provided country must be one of the [Store's](ctp:api:type:Store) `countries`.
 	Country *string `json:"country,omitempty"`
 	// Language of the Cart. Must be one of the languages supported by the [Project](ctp:api:type:Project).
@@ -564,7 +564,7 @@ func (obj MyCompanyDraft) MarshalJSON() ([]byte, error) {
 }
 
 type MyCustomerDraft struct {
-	// Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or Store the Customer is assigned to.
+	// Email address of the Customer that is [unique](/api/customers-overview#customer-uniqueness) for an entire Project or Store the Customer is assigned to.
 	// It is the mandatory unique identifier of a Customer.
 	Email string `json:"email"`
 	// Password of the Customer.
@@ -867,7 +867,7 @@ func (obj MyDivisionDraft) MarshalJSON() ([]byte, error) {
 *
  */
 type MyLineItemDraft struct {
-	// User-defined unique identifier of the LineItem.
+	// User-defined identifier of the LineItem. Must be unique among LineItems in the Cart.
 	Key *string `json:"key,omitempty"`
 	// `id` of the [Product](ctp:api:type:Product).
 	ProductId *string `json:"productId,omitempty"`
@@ -876,17 +876,17 @@ type MyLineItemDraft struct {
 	VariantId *int `json:"variantId,omitempty"`
 	// `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
 	Sku *string `json:"sku,omitempty"`
-	// Number of Product Variants to add to the Cart.
+	// Quantity of Product Variants to add to the Cart.
 	Quantity *int `json:"quantity,omitempty"`
-	// Date and time (UTC) the Product Variant is added to the Cart.
+	// Date and time (UTC) the Product Variant was added to the Cart.
 	// If not set, it defaults to the current date and time.
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to identify [Inventory entries](/../api/projects/inventory) that must be reserved.
+	// Used to identify [Inventory entries](/api/projects/inventory) that must be reserved.
 	// The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	//
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set,
@@ -912,7 +912,7 @@ type MyOrderFromQuoteDraft struct {
 	ID string `json:"id"`
 	// Current `version` of the [Quote](ctp:api:type:Quote) from which the Order is created.
 	Version int `json:"version"`
-	// Set to `true`, if the `quoteState` of the referenced [Quote](ctp:api:type:Quote) should be set to `Accepted`.
+	// Whether the `quoteState` of the referenced [Quote](ctp:api:type:Quote) should be set to `Accepted`.
 	QuoteStateToAccepted *bool `json:"quoteStateToAccepted,omitempty"`
 }
 
@@ -921,7 +921,7 @@ type MyPayment struct {
 	ID string `json:"id"`
 	// Current version of the Payment.
 	Version int `json:"version"`
-	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment. Set automatically with a [password flow token](/../api/authorization#password-flow). Either `customer` or `anonymousId` is present.
+	// Reference to a [Customer](ctp:api:type:Customer) associated with the Payment. Set automatically with a [password flow token](/api/authorization#password-flow). Either `customer` or `anonymousId` is present.
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Payment. Set automatically with a [token for an anonymous session](ctp:api:type:AnonymousSession). Either `customer` or `anonymousId` is present.
 	AnonymousId *string `json:"anonymousId,omitempty"`
@@ -949,21 +949,21 @@ type MyPaymentDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [MyPayment](ctp:api:type:MyPayment).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [MyPayment](ctp:api:type:MyPayment).
 *
  */
 type MyPaymentPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// [MyPayments](ctp:api:type:MyPayment) matching the query.
 	Results []MyPayment `json:"results"`
@@ -1654,7 +1654,7 @@ func (obj MyBusinessUnitRemoveShippingAddressIdAction) MarshalJSON() ([]byte, er
 type MyBusinessUnitSetAddressCustomFieldAction struct {
 	// ID of the `address` to be extended.
 	AddressId string `json:"addressId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1677,10 +1677,12 @@ func (obj MyBusinessUnitSetAddressCustomFieldAction) MarshalJSON() ([]byte, erro
 *
  */
 type MyBusinessUnitSetAddressCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `address`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 	// ID of the `address` to be extended.
 	AddressId string `json:"addressId"`
@@ -1721,7 +1723,7 @@ func (obj MyBusinessUnitSetContactEmailAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyBusinessUnitSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Trying to remove a field that does not exist will fail with an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -1744,10 +1746,12 @@ func (obj MyBusinessUnitSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyBusinessUnitSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the BusinessUnit with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the BusinessUnit.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) for the BusinessUnit.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the BusinessUnit.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1804,13 +1808,13 @@ func (obj MyBusinessUnitSetDefaultShippingAddressAction) MarshalJSON() ([]byte, 
 }
 
 /**
-*	Adds a [DiscountCode](ctp:api:type:DiscountCode) to the Cart to activate the related [CartDiscounts](/../api/projects/cartDiscounts).
+*	Adds a [DiscountCode](ctp:api:type:DiscountCode) to the Cart to activate the related [CartDiscounts](/api/projects/cartDiscounts).
 *	If the related Cart Discounts are inactive or invalid, or belong to a different Store than the Cart, a [DiscountCodeNonApplicableError](ctp:api:type:DiscountCodeNonApplicableError) is returned.
 *
 *	A Discount Code can be added only if no [DirectDiscount](ctp:api:type:DirectDiscount) has been applied to the Cart.
 *	For [frozen Carts](ctp:api:type:FrozenCarts), the [DiscountCodeState](ctp:api:type:DiscountCodeState) must be `DoesNotMatchCart` when adding a Discount Code.
 *
-*	The maximum number of Discount Codes in a Cart is restricted by a [limit](/../api/limits#carts).
+*	The maximum number of Discount Codes in a Cart is restricted by a [limit](/api/limits#carts).
 *
 *	Specific Error Code: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
 *
@@ -1852,9 +1856,9 @@ func (obj MyCartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](/../api/projects/custom-fields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
+*	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](ctp:api:type:CustomFields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 *
 *	If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
@@ -1862,7 +1866,7 @@ func (obj MyCartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartAddLineItemAction struct {
-	// User-defined unique identifier of the LineItem.
+	// User-defined identifier of the LineItem. Must be unique among LineItems in the Cart.
 	Key *string `json:"key,omitempty"`
 	// `id` of the [Product](ctp:api:type:Product).
 	//
@@ -1878,18 +1882,18 @@ type MyCartAddLineItemAction struct {
 	//
 	// Either the `productId` and `variantId`, or `sku` must be provided.
 	Sku *string `json:"sku,omitempty"`
-	// Number of Line Items to add to the Cart.
+	// Quantity of Line Items to add to the Cart.
 	Quantity *int `json:"quantity,omitempty"`
 	// Date and time (UTC) the Line Item was added to the Cart.
 	// If not set, it defaults to the current date and time.
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](/../api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set, the Channel must match one of the Store's distribution channels.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
-	// Used to identify [Inventory entries](/../api/projects/inventory) that must be reserved.
+	// Used to identify [Inventory entries](/api/projects/inventory) that must be reserved.
 	// The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
 	// Container for Line Item-specific addresses.
@@ -1964,7 +1968,10 @@ func (obj MyCartApplyDeltaToLineItemShippingDetailsTargetsAction) MarshalJSON() 
 *	it will be changed to `ExternalPrice` and the existing `externalPrice` value, i.e. `LineItem.price`, will be retained.
 *	The LineItem total will be calculated by the system instead, so that the `externalTotalPrice` will be dropped.
 *
-*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/api/inventory-overview#quantity-limits).
+*
+*	If using [InventoryMode](ctp:api:type:InventoryMode) `ReserveOnCart`:
+*	- If the requested quantity cannot be reserved, the Line Item quantity does not change and a reservation warning is returned in the Cart response.
 *
  */
 type MyCartChangeLineItemQuantityAction struct {
@@ -2028,7 +2035,7 @@ func (obj MyCartChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	This update action does not set any Cart field in particular, but it triggers several [Cart updates](/../api/carts-orders-overview#update-a-cart)
+*	This update action does not set any Cart field in particular, but it triggers several [Cart updates](/api/carts-orders-overview#update-a-cart)
 *	to bring prices and discounts to the latest state. Those can become stale over time when no Cart updates have been performed for a while and
 *	prices on related Products have changed in the meanwhile.
 *
@@ -2037,8 +2044,8 @@ func (obj MyCartChangeTaxModeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartRecalculateAction struct {
-	// - Leave empty or set to `false` to only update the Prices and TaxRates of the Line Items.
-	// - Set to `true` to update the Line Items' product data (like `name`, `variant` and `productType`) also.
+	// - Leave empty or set as `false` to update only the Prices and TaxRates of the Line Items. Prices inside the `variant` are only updated if `updateProductData` is `true`.
+	// - Set as `true` to update the Product data (such as `name`, `variant`, `productType`, and Product Attributes) of the Line Items.
 	UpdateProductData *bool `json:"updateProductData,omitempty"`
 }
 
@@ -2087,7 +2094,7 @@ func (obj MyCartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type MyCartRemoveLineItemAction struct {
@@ -2135,7 +2142,7 @@ func (obj MyCartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 
 type MyCartSetBillingAddressAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
 
@@ -2154,8 +2161,8 @@ func (obj MyCartSetBillingAddressAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartSetBusinessUnitAction struct {
-	// New Business Unit to assign to the Cart, which must have access to the [Store](/../api/projects/stores) that is set on the Cart.
-	// Additionally, the authenticated user must be an [Associate](/projects/business-units#associate) in the [Business Unit](/projects/business-units#businessunit).
+	// New Business Unit to assign to the Cart, which must have access to the [Store](/api/projects/stores) that is set on the Cart.
+	// Additionally, the authenticated user must be an [Associate](ctp:api:type:Associate) in the [Business Unit](/projects/business-units#businessunit).
 	BusinessUnit BusinessUnitResourceIdentifier `json:"businessUnit"`
 }
 
@@ -2175,7 +2182,7 @@ func (obj MyCartSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
  */
 type MyCartSetCountryAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	//
 	// If the Cart is bound to a `store`, the provided value must be included in the [Store's](ctp:api:type:Store) `countries`.
 	// Otherwise a [CountryNotConfiguredInStore](ctp:api:type:CountryNotConfiguredInStoreError) error is returned.
@@ -2193,7 +2200,7 @@ func (obj MyCartSetCountryAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2212,10 +2219,12 @@ func (obj MyCartSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Cart with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Cart with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Cart.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Cart.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Cart.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2231,7 +2240,7 @@ func (obj MyCartSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 
 type MyCartSetCustomerEmailAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Email *string `json:"email,omitempty"`
 }
 
@@ -2253,7 +2262,7 @@ func (obj MyCartSetCustomerEmailAction) MarshalJSON() ([]byte, error) {
  */
 type MyCartSetDeleteDaysAfterLastModificationAction struct {
 	// Value to set.
-	// If not provided, the default value for this field configured in [Project settings](ctp:api:type:CartsConfiguration) is assigned.
+	// If omitted, the default value for this field configured in [Project settings](ctp:api:type:CartsConfiguration) is assigned.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
@@ -2272,7 +2281,7 @@ type MyCartSetLineItemCustomFieldAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2295,10 +2304,12 @@ type MyCartSetLineItemCustomTypeAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the LineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Line Item.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Line Item.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Line Item.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2313,7 +2324,7 @@ func (obj MyCartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 *
  */
 type MyCartSetLineItemDistributionChannelAction struct {
@@ -2343,7 +2354,7 @@ type MyCartSetLineItemShippingDetailsAction struct {
 	// `key` of the [LineItem](ctp:api:type:LineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
 	// Value to set.
-	// If empty, the existing value is removed.
+	// If omitted, the existing value is removed.
 	ShippingDetails *ItemShippingDetailsDraft `json:"shippingDetails,omitempty"`
 }
 
@@ -2360,7 +2371,7 @@ func (obj MyCartSetLineItemShippingDetailsAction) MarshalJSON() ([]byte, error) 
 /**
 *	Performing this action does not reserve stock. Stock is only reserved at Order creation if the [InventoryMode](ctp:api:type:InventoryMode) of the Cart is `TrackOnly` or `ReserveOnOrder`.
 *
-*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/../api/carts-orders-overview#quantity-limits).
+*	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/api/inventory-overview#quantity-limits).
 *
  */
 type MyCartSetLineItemSupplyChannelAction struct {
@@ -2387,7 +2398,7 @@ func (obj MyCartSetLineItemSupplyChannelAction) MarshalJSON() ([]byte, error) {
 type MyCartSetLocaleAction struct {
 	// Value to set.
 	// Must be one of the [Project](ctp:api:type:Project)'s `languages`.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Locale *string `json:"locale,omitempty"`
 }
 
@@ -2404,7 +2415,7 @@ func (obj MyCartSetLocaleAction) MarshalJSON() ([]byte, error) {
 /**
 *	Setting the shipping address also sets the [TaxRate](ctp:api:type:TaxRate) of Line Items and calculates the [TaxedPrice](ctp:api:type:TaxedPrice).
 *
-*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection),
+*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection),
 *	a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
 *	If you want to allow shipping to states inside a country that are not explicitly covered by a TaxRate,
@@ -2434,9 +2445,13 @@ func (obj MyCartSetShippingAddressAction) MarshalJSON() ([]byte, error) {
  */
 type MyCartSetShippingMethodAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	//
-	// If the referenced Shipping Method has a predicate that does not match the Cart, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+	// [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned in one of the following cases:
+	//   1. If the referenced Shipping Method has a predicate that does not match the Cart.
+	//   2. If the referenced Shipping Method is not active.
+	//   3. If the referenced Shipping Method is associated with a Store that is different from the Cart's Store.
+	//   4. If the referenced Shipping Method is associated with a Store and the Cart is not associated with any Store.
 	ShippingMethod *ShippingMethodResourceIdentifier `json:"shippingMethod,omitempty"`
 	// An external Tax Rate can be set if the Cart has the `External` [TaxMode](ctp:api:type:TaxMode).
 	ExternalTaxRate *ExternalTaxRateDraft `json:"externalTaxRate,omitempty"`
@@ -2649,7 +2664,7 @@ func (obj MyCustomerRemoveShippingAddressIdAction) MarshalJSON() ([]byte, error)
  */
 type MyCustomerSetCompanyNameAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	CompanyName *string `json:"companyName,omitempty"`
 }
 
@@ -2668,7 +2683,7 @@ func (obj MyCustomerSetCompanyNameAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCustomerSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// If `value` is provided, it is set for the field defined by `name`.
@@ -2691,10 +2706,12 @@ func (obj MyCustomerSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCustomerSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the MyCustomer with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the MyCustomer.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyCustomer.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the MyCustomer.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -2714,7 +2731,7 @@ func (obj MyCustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
  */
 type MyCustomerSetDateOfBirthAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
@@ -2778,7 +2795,7 @@ func (obj MyCustomerSetDefaultShippingAddressAction) MarshalJSON() ([]byte, erro
  */
 type MyCustomerSetFirstNameAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	FirstName *string `json:"firstName,omitempty"`
 }
 
@@ -2798,7 +2815,7 @@ func (obj MyCustomerSetFirstNameAction) MarshalJSON() ([]byte, error) {
  */
 type MyCustomerSetLastNameAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	LastName *string `json:"lastName,omitempty"`
 }
 
@@ -2830,7 +2847,7 @@ func (obj MyCustomerSetLocaleAction) MarshalJSON() ([]byte, error) {
 
 type MyCustomerSetMiddleNameAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	MiddleName *string `json:"middleName,omitempty"`
 }
 
@@ -2846,7 +2863,7 @@ func (obj MyCustomerSetMiddleNameAction) MarshalJSON() ([]byte, error) {
 
 type MyCustomerSetSalutationAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Salutation *string `json:"salutation,omitempty"`
 }
 
@@ -2866,7 +2883,7 @@ func (obj MyCustomerSetSalutationAction) MarshalJSON() ([]byte, error) {
  */
 type MyCustomerSetTitleAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	Title *string `json:"title,omitempty"`
 }
 
@@ -2882,7 +2899,7 @@ func (obj MyCustomerSetTitleAction) MarshalJSON() ([]byte, error) {
 
 type MyCustomerSetVatIdAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	VatId *string `json:"vatId,omitempty"`
 }
 
@@ -2936,7 +2953,7 @@ func (obj MyPaymentChangeAmountPlannedAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyPaymentSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -2959,7 +2976,7 @@ func (obj MyPaymentSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyPaymentSetMethodInfoCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// If `value` is provided, it is set for the field defined by `name`.
@@ -2982,9 +2999,11 @@ func (obj MyPaymentSetMethodInfoCustomFieldAction) MarshalJSON() ([]byte, error)
 *
  */
 type MyPaymentSetMethodInfoCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `paymentMethodInfo` with [Custom Fields](ctp:api:type:CustomFields).
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `paymentMethodInfo`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `paymentMethodInfo`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3004,7 +3023,7 @@ func (obj MyPaymentSetMethodInfoCustomTypeAction) MarshalJSON() ([]byte, error) 
  */
 type MyPaymentSetMethodInfoInterfaceAccountAction struct {
 	// New account or instance of the payment interface.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	InterfaceAccount *string `json:"interfaceAccount,omitempty"`
 }
 
@@ -3036,7 +3055,7 @@ func (obj MyPaymentSetMethodInfoInterfaceAction) MarshalJSON() ([]byte, error) {
 
 type MyPaymentSetMethodInfoMethodAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Method *string `json:"method,omitempty"`
 }
 
@@ -3052,7 +3071,7 @@ func (obj MyPaymentSetMethodInfoMethodAction) MarshalJSON() ([]byte, error) {
 
 type MyPaymentSetMethodInfoNameAction struct {
 	// Value to set.
-	// If empty, any existing value will be removed.
+	// If omitted, any existing value is removed.
 	Name *LocalizedString `json:"name,omitempty"`
 }
 
@@ -3067,7 +3086,7 @@ func (obj MyPaymentSetMethodInfoNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyPaymentSetTransactionCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3086,7 +3105,7 @@ func (obj MyPaymentSetTransactionCustomFieldAction) MarshalJSON() ([]byte, error
 }
 
 /**
-*	When accepting, declining, or renegotiating [B2B Quotes](/../api/associates-overview#b2b-resources), the Customer must have the `AcceptMyQuotes`, `DeclineMyQuotes`, or `RenegotiateMyQuotes` [Permission](ctp:api:type:Permission), respectively. If the required [Permission](/projects/associate-roles#permission) is missing, an [AssociateMissingPermission](/errors#associatemissingpermission) error is returned.
+*	When accepting, declining, or renegotiating [B2B Quotes](/api/associates-overview#b2b-resources), the Customer must have the `AcceptMyQuotes`, `DeclineMyQuotes`, or `RenegotiateMyQuotes` [Permission](ctp:api:type:Permission), respectively. If the required [Permission](ctp:api:type:Permission) is missing, an [AssociateMissingPermission](ctp:api:type:AssociateMissingPermissionError) error is returned.
  */
 type MyQuoteChangeMyQuoteStateAction struct {
 	// New state to be set for the Quote.
@@ -3313,7 +3332,7 @@ func (obj MyShoppingListRemoveTextLineItemAction) MarshalJSON() ([]byte, error) 
 }
 
 type MyShoppingListSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3332,10 +3351,12 @@ func (obj MyShoppingListSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyShoppingListSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the MyShoppingList with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the MyShoppingList with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the MyShoppingList.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the MyShoppingList.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the MyShoppingList.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3354,7 +3375,7 @@ func (obj MyShoppingListSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyShoppingListSetDeleteDaysAfterLastModificationAction struct {
-	// Value to set. If not provided, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
+	// Value to set. If omitted, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
@@ -3369,7 +3390,7 @@ func (obj MyShoppingListSetDeleteDaysAfterLastModificationAction) MarshalJSON() 
 }
 
 type MyShoppingListSetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -3388,7 +3409,7 @@ type MyShoppingListSetLineItemCustomFieldAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3409,10 +3430,12 @@ func (obj MyShoppingListSetLineItemCustomFieldAction) MarshalJSON() ([]byte, err
 type MyShoppingListSetLineItemCustomTypeAction struct {
 	// Unique identifier of an existing [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) in the [ShoppingList](ctp:api:type:ShoppingList).
 	LineItemId string `json:"lineItemId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ShoppingListLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingListLineItem.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ShoppingListLineItem.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3431,7 +3454,7 @@ type MyShoppingListSetTextLineItemCustomFieldAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -3454,10 +3477,12 @@ type MyShoppingListSetTextLineItemCustomTypeAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the TextLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the TextLineItem.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the TextLineItem.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -3476,7 +3501,7 @@ type MyShoppingListSetTextLineItemDescriptionAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

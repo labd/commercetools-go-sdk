@@ -9,7 +9,7 @@ import (
 )
 
 /**
-*	Determines how an anonymous Cart is handled when a Customer signs in. For more information, see [Cart merge during sign-in and sign-up](/../api/customers-overview#cart-merge-during-sign-in-and-sign-up).
+*	Determines how an anonymous Cart is handled when a Customer signs in. For more information, see [Cart merge during sign-in and sign-up](/api/customers-overview#cart-merge-during-sign-in-and-sign-up).
 *
  */
 type AnonymousCartSignInMode string
@@ -51,7 +51,7 @@ type Customer struct {
 	LastModifiedBy *LastModifiedBy `json:"lastModifiedBy,omitempty"`
 	// IDs and references that created the Customer.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
-	// Email address of the Customer that is [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
+	// Email address of the Customer that is [unique](/api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
 	// It is the mandatory unique identifier of a Customer.
 	Email string `json:"email"`
 	// Present only when `authenticationMode` is set to `Password`.
@@ -86,7 +86,7 @@ type Customer struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// Customer Groups that the Customer belongs to.
 	//
-	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Custom Fields of the Customer.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -96,8 +96,8 @@ type Customer struct {
 	Salutation *string `json:"salutation,omitempty"`
 	// [Stores](ctp:api:type:Store) to which the Customer is assigned to.
 	//
-	// - If `stores` is empty, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/../api/authorization#password-flow-for-global-customers).
-	// - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/../api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
+	// - If `stores` is empty, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/api/authorization#password-flow-for-global-customers).
+	// - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
 	Stores []StoreKeyReference `json:"stores"`
 	// Indicates whether the `password` is required for the Customer.
 	AuthenticationMode AuthenticationMode `json:"authenticationMode"`
@@ -123,16 +123,16 @@ type CustomerCreateEmailToken struct {
 	Version *int `json:"version,omitempty"`
 	// Validity period of the generated token in minutes.
 	TtlMinutes int `json:"ttlMinutes"`
-	// If set to `true`, all email tokens issued previously for the Customer will be invalidated.
+	// Whether all email tokens issued previously for the Customer will be invalidated.
 	InvalidateOlderTokens *bool `json:"invalidateOlderTokens,omitempty"`
 }
 
 type CustomerCreatePasswordResetToken struct {
-	// Email address of the Customer treated as [case-insensitive](/../api/customers-overview#email-case-insensitivity).
+	// Email address of the Customer treated as [case-insensitive](/api/customers-overview#email-case-insensitivity).
 	Email string `json:"email"`
 	// Validity period of the generated token in minutes.
 	TtlMinutes *int `json:"ttlMinutes,omitempty"`
-	// If set to `true`, all password tokens issued previously for the Customer will be invalidated.
+	// Whether all password tokens issued previously for the Customer will be invalidated.
 	InvalidateOlderTokens *bool `json:"invalidateOlderTokens,omitempty"`
 }
 
@@ -140,7 +140,7 @@ type CustomerDraft struct {
 	// User-defined unique identifier for the Customer.
 	// The `key` field is preferred over `customerNumber` as it is mutable and provides more flexibility.
 	//
-	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Customers with the [Import API](/../api/import-export/overview).
+	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Customers with the [Import API](/api/import-export/overview).
 	Key *string `json:"key,omitempty"`
 	// User-defined unique identifier for a Customer.
 	// Once set, it cannot be changed.
@@ -149,7 +149,7 @@ type CustomerDraft struct {
 	CustomerNumber *string `json:"customerNumber,omitempty"`
 	// Optional identifier for use in external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
-	// Email address of the Customer that must be [unique](/../api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
+	// Email address of the Customer that must be [unique](/api/customers-overview#customer-uniqueness) for an entire Project or to a Store the Customer is assigned to.
 	// It is the mandatory unique identifier of a Customer.
 	Email string `json:"email"`
 	// Required when `authenticationMode` is set to `Password`.
@@ -191,7 +191,7 @@ type CustomerDraft struct {
 	// Indices of the billing addresses in the `addresses` array.
 	// The `billingAddressIds` of the Customer will be set to the IDs of these addresses.
 	BillingAddresses []int `json:"billingAddresses"`
-	// Set to `true` if the email address of the Customer has been verified already.
+	// Whether the email address of the Customer has been verified already.
 	// The intended use is to leave this field unset upon sign-up of the Customer and initiate the [email verification](#email-verification-of-customer) afterwards.
 	IsEmailVerified *bool `json:"isEmailVerified,omitempty"`
 	// Sets the [CustomerGroup](ctp:api:type:CustomerGroup) for the Customer.
@@ -200,7 +200,7 @@ type CustomerDraft struct {
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// Customer Groups to assign the Customer to.
 	//
-	// Used for [Line Item price selection](/../api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
 	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 	// Custom Fields for the Customer.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -211,8 +211,8 @@ type CustomerDraft struct {
 	Salutation *string `json:"salutation,omitempty"`
 	// Sets the [Stores](ctp:api:type:Store) for the Customer.
 	//
-	// - If no Stores are specified, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/../api/authorization#password-flow-for-global-customers).
-	// - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/../api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
+	// - If no Stores are specified, the Customer is a global customer, and can log in using the [Password Flow for global Customers](/api/authorization#password-flow-for-global-customers).
+	// - If any Stores are specified, the Customer can only log in using the [Password Flow for Customers in a Store](/api/authorization#password-flow-for-customers-in-a-store) for those specific Stores.
 	Stores []StoreResourceIdentifier `json:"stores"`
 	// - Set to `Password` to make the `password` field required for the Customer.
 	// - Set to `ExternalAuth` when the password is not required for the Customer.
@@ -296,21 +296,21 @@ type CustomerGroupAssignmentDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Customer](ctp:api:type:Customer).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Customer](ctp:api:type:Customer).
 *
  */
 type CustomerPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Customers](ctp:api:type:Customer) matching the query.
 	Results []Customer `json:"results"`
@@ -366,7 +366,7 @@ type CustomerResetPassword struct {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Customer](ctp:api:type:Customer). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type CustomerResourceIdentifier struct {
@@ -394,12 +394,12 @@ type CustomerSignInResult struct {
 	// The Cart is recalculated to remove invalid Line Items and apply the latest prices, taxes, and discounts.
 	// During these updates, the following errors can be returned: [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) and [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError).
 	//
-	// For more information, see [Cart updates](/../api/carts-orders-overview#update-a-cart).
+	// For more information, see [Cart updates](/api/carts-orders-overview#update-a-cart).
 	Cart *Cart `json:"cart,omitempty"`
 }
 
 type CustomerSignin struct {
-	// Email address of the Customer treated as [case-insensitive](/../api/customers-overview#email-case-insensitivity).
+	// Email address of the Customer treated as [case-insensitive](/api/customers-overview#email-case-insensitivity).
 	Email string `json:"email"`
 	// Password of the Customer.
 	Password string `json:"password"`
@@ -414,8 +414,7 @@ type CustomerSignin struct {
 	//
 	// If `anonymousCart` is provided, this value must match the `anonymousId` of the anonymous [Cart](ctp:api:type:Cart); otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
 	AnonymousId *string `json:"anonymousId,omitempty"`
-	// - If `true`, the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart will be updated.
-	// - If `false`, only the prices, discounts, and tax rates will be updated.
+	// Whether the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart will be updated. If `false`, only the prices, discounts, and tax rates will be updated.
 	UpdateProductData *bool `json:"updateProductData,omitempty"`
 }
 
@@ -428,7 +427,7 @@ type CustomerToken struct {
 	Value string `json:"value"`
 	// Date and time (UTC) the token expires.
 	ExpiresAt time.Time `json:"expiresAt"`
-	// If `true`, all tokens issued previously for the Customer will be invalidated.
+	// Whether all tokens issued previously for the Customer will be invalidated.
 	InvalidateOlderTokens bool `json:"invalidateOlderTokens"`
 	// Date and time (UTC) the token was initially created.
 	CreatedAt time.Time `json:"createdAt"`
@@ -708,15 +707,14 @@ type MyCustomerResetPassword struct {
 }
 
 type MyCustomerSignin struct {
-	// Email address of the Customer treated as [case-insensitive](/../api/customers-overview#email-case-insensitivity).
+	// Email address of the Customer treated as [case-insensitive](/api/customers-overview#email-case-insensitivity).
 	Email string `json:"email"`
 	// Password of the Customer.
 	Password string `json:"password"`
 	// - If `MergeWithExistingCustomerCart`, [LineItems](ctp:api:type:LineItem) of the anonymous Cart are merged with the recently modified active Customer Cart.
 	// - If `UseAsNewActiveCustomerCart`, the anonymous Cart is used as the new active Customer Cart, and no [LineItems](ctp:api:type:LineItem) are merged.
 	ActiveCartSignInMode *AnonymousCartSignInMode `json:"activeCartSignInMode,omitempty"`
-	// - If `true`, the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart is updated.
-	// - If `false`, only the prices, discounts, and tax rates are updated.
+	// Whether the [LineItem](ctp:api:type:LineItem) Product data (`name`, `variant`, and `productType`) of the returned Cart is updated. If `false`, only the prices, discounts, and tax rates are updated.
 	UpdateProductData *bool `json:"updateProductData,omitempty"`
 }
 
@@ -951,7 +949,7 @@ func (obj CustomerRemoveShippingAddressIdAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	Removes the association to a Store from the Customer.
-*	If no more Stores are assigned, the Customer becomes a [global Customer](/../api/customers-overview#global-versus-store-specific-customers).
+*	If no more Stores are assigned, the Customer becomes a [global Customer](/api/customers-overview#global-versus-store-specific-customers).
 *
  */
 type CustomerRemoveStoreAction struct {
@@ -976,7 +974,7 @@ func (obj CustomerRemoveStoreAction) MarshalJSON() ([]byte, error) {
 type CustomerSetAddressCustomFieldAction struct {
 	// User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
 	AddressId string `json:"addressId"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// If `value` is provided, it is set for the field defined by `name`.
@@ -1001,10 +999,12 @@ func (obj CustomerSetAddressCustomFieldAction) MarshalJSON() ([]byte, error) {
 type CustomerSetAddressCustomTypeAction struct {
 	// User-defined unique identifier of the [Address](ctp:api:type:Address) to be updated.
 	AddressId string `json:"addressId"`
-	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the `address` with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the `address`.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the `address`.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the `address`.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1042,7 +1042,7 @@ func (obj CustomerSetAuthenticationModeAction) MarshalJSON() ([]byte, error) {
  */
 type CustomerSetCompanyNameAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	CompanyName *string `json:"companyName,omitempty"`
 }
 
@@ -1061,7 +1061,7 @@ func (obj CustomerSetCompanyNameAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CustomerSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// If `value` is provided, it is set for the field defined by `name`.
@@ -1084,10 +1084,12 @@ func (obj CustomerSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CustomerSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Customer with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Customer with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Customer.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Customer.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Customer.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -1109,7 +1111,7 @@ func (obj CustomerSetCustomTypeAction) MarshalJSON() ([]byte, error) {
  */
 type CustomerSetCustomerGroupAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 }
 
@@ -1168,7 +1170,7 @@ func (obj CustomerSetCustomerNumberAction) MarshalJSON() ([]byte, error) {
  */
 type CustomerSetDateOfBirthAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	DateOfBirth *Date `json:"dateOfBirth,omitempty"`
 }
 
@@ -1236,7 +1238,7 @@ func (obj CustomerSetDefaultShippingAddressAction) MarshalJSON() ([]byte, error)
  */
 type CustomerSetExternalIdAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	ExternalId *string `json:"externalId,omitempty"`
 }
 
@@ -1255,7 +1257,7 @@ func (obj CustomerSetExternalIdAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CustomerSetFirstNameAction struct {
-	// Value to set. If empty, any existing value is removed.
+	// Value to set. If omitted, any existing value is removed.
 	FirstName *string `json:"firstName,omitempty"`
 }
 
@@ -1289,7 +1291,7 @@ func (obj CustomerSetKeyAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CustomerSetLastNameAction struct {
-	// Value to set. If empty, any existing value is removed.
+	// Value to set. If omitted, any existing value is removed.
 	LastName *string `json:"lastName,omitempty"`
 }
 
@@ -1320,7 +1322,7 @@ func (obj CustomerSetLocaleAction) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerSetMiddleNameAction struct {
-	// Value to set. If empty, any existing value is removed.
+	// Value to set. If omitted, any existing value is removed.
 	MiddleName *string `json:"middleName,omitempty"`
 }
 
@@ -1335,7 +1337,7 @@ func (obj CustomerSetMiddleNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type CustomerSetSalutationAction struct {
-	// Value to set. If empty, any existing value is removed.
+	// Value to set. If omitted, any existing value is removed.
 	Salutation *string `json:"salutation,omitempty"`
 }
 
@@ -1351,7 +1353,7 @@ func (obj CustomerSetSalutationAction) MarshalJSON() ([]byte, error) {
 
 /**
 *	Sets the Stores the Customer account is associated with.
-*	If no Stores are specified, the Customer becomes a [global Customer](/../api/customers-overview#global-versus-store-specific-customers).
+*	If no Stores are specified, the Customer becomes a [global Customer](/api/customers-overview#global-versus-store-specific-customers).
 *
 *	This action generates the [CustomerStoresSet](ctp:api:type:CustomerStoresSetMessage) Message.
 *
@@ -1376,7 +1378,7 @@ func (obj CustomerSetStoresAction) MarshalJSON() ([]byte, error) {
 *
  */
 type CustomerSetTitleAction struct {
-	// Value to set. If empty, any existing value is removed.
+	// Value to set. If omitted, any existing value is removed.
 	Title *string `json:"title,omitempty"`
 }
 
@@ -1392,7 +1394,7 @@ func (obj CustomerSetTitleAction) MarshalJSON() ([]byte, error) {
 
 type CustomerSetVatIdAction struct {
 	// Value to set.
-	// If empty, any existing value is removed.
+	// If omitted, any existing value is removed.
 	VatId *string `json:"vatId,omitempty"`
 }
 

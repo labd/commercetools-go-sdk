@@ -23,7 +23,7 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Get() *ByProjectKeyZonesKeyBy
 }
 
 /**
-*	Checks if a Zone exists with the provided `key`. Returns a `200 OK` status if the Zone exists or a [Not Found](/../api/errors#404-not-found) error otherwise.
+*	Checks if a Zone exists with the provided `key`. Returns a `200 OK` status if the Zone exists or a [Not Found](/api/errors#404-not-found) error otherwise.
  */
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Head() *ByProjectKeyZonesKeyByKeyRequestMethodHead {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodHead{
@@ -33,7 +33,7 @@ func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Head() *ByProjectKeyZonesKeyB
 }
 
 /**
-*	Updates a Zone in the Project using one or more [update actions](/../api/projects/zones#update-actions).
+*	Updates a Zone in the Project using one or more [update actions](/api/projects/zones#update-actions).
  */
 func (rb *ByProjectKeyZonesKeyByKeyRequestBuilder) Post(body ZoneUpdate) *ByProjectKeyZonesKeyByKeyRequestMethodPost {
 	return &ByProjectKeyZonesKeyByKeyRequestMethodPost{

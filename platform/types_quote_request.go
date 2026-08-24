@@ -27,13 +27,13 @@ type QuoteRequest struct {
 	QuoteRequestState QuoteRequestState `json:"quoteRequestState"`
 	// Message from the Buyer included in the Quote Request.
 	Comment *string `json:"comment,omitempty"`
-	// The [Buyer](/../api/quotes-overview#buyer) who owns the request.
+	// The [Buyer](/api/quotes-overview#buyer) who owns the request.
 	Customer CustomerReference `json:"customer"`
 	// Set automatically when `customer` is set and the Customer is a member of a Customer Group.
 	// Not updated if Customer is changed after Quote Request creation.
 	// Used for Product Variant price selection.
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
-	// The Store to which the [Buyer](/../api/quotes-overview#buyer) belongs.
+	// The Store to which the [Buyer](/api/quotes-overview#buyer) belongs.
 	Store *StoreKeyReference `json:"store,omitempty"`
 	// The Line Items for which a Quote is requested.
 	LineItems []LineItem `json:"lineItems"`
@@ -86,7 +86,7 @@ type QuoteRequest struct {
 	PurchaseOrderNumber *string `json:"purchaseOrderNumber,omitempty"`
 	// The [Cart](ctp:api:type:Cart) from which a Quote is requested.
 	Cart *CartReference `json:"cart,omitempty"`
-	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// The [BusinessUnit](ctp:api:type:BusinessUnit) for the Quote Request. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 }
 
@@ -167,21 +167,21 @@ type QuoteRequestDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [QuoteRequest](ctp:api:type:QuoteRequest).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [QuoteRequest](ctp:api:type:QuoteRequest).
 *
  */
 type QuoteRequestPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// Quote Requests matching the query.
 	Results []QuoteRequest `json:"results"`
@@ -195,7 +195,7 @@ type QuoteRequestReference struct {
 	// Unique ID of the referenced resource.
 	ID string `json:"id"`
 	// Contains the representation of the expanded QuoteRequest.
-	// Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for QuoteRequest.
+	// Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for QuoteRequest.
 	Obj *QuoteRequest `json:"obj,omitempty"`
 }
 
@@ -360,7 +360,7 @@ func (obj QuoteRequestChangeQuoteRequestStateAction) MarshalJSON() ([]byte, erro
 }
 
 type QuoteRequestSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -379,10 +379,12 @@ func (obj QuoteRequestSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type QuoteRequestSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the QuoteRequest with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the QuoteRequest with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the QuoteRequest.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the QuoteRequest.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the QuoteRequest.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

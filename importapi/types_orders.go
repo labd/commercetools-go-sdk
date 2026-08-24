@@ -9,7 +9,7 @@ import (
 )
 
 type ItemState struct {
-	// Number of Line Items or Custom Line Items in this State.
+	// Quantity of Line Items or Custom Line Items in this State.
 	Quantity int `json:"quantity"`
 	// State of the Line Items or Custom Line Items in a custom workflow. If the referenced [State](ctp:api:type:State) does not exist, the `state` of the [ImportOperation](ctp:import:type:ImportOperation) will be set to `unresolved` until the referenced State is created.
 	State StateKeyReference `json:"state"`
@@ -362,15 +362,14 @@ type TrackingData struct {
 	Provider *string `json:"provider,omitempty"`
 	// Transaction identifier with the `provider`.
 	ProviderTransaction *string `json:"providerTransaction,omitempty"`
-	// - If `true`, the Parcel is being returned.
-	// - If `false`, the Parcel is being delivered to the customer.
+	// Whether the Parcel is being returned. If `false`, the Parcel is being delivered to the customer.
 	IsReturn *bool `json:"isReturn,omitempty"`
 }
 
 type DeliveryItem struct {
 	// `id` of the [LineItem](ctp:api:type:LineItem) or [CustomLineItem](ctp:api:type:CustomLineItem) delivered.
 	ID string `json:"id"`
-	// Number of Line Items or Custom Line Items delivered.
+	// Quantity of Line Items or Custom Line Items delivered.
 	Quantity int `json:"quantity"`
 }
 

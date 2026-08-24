@@ -39,7 +39,7 @@ type ShoppingList struct {
 	AnonymousId *string `json:"anonymousId,omitempty"`
 	// Store to which the ShoppingList is assigned.
 	Store *StoreKeyReference `json:"store,omitempty"`
-	// [Reference](ctp:api:type:Reference) to the Business Unit the Shopping List belongs to. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// [Reference](ctp:api:type:Reference) to the Business Unit the Shopping List belongs to. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitKeyReference `json:"businessUnit,omitempty"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -72,7 +72,7 @@ type ShoppingListDraft struct {
 	TextLineItems []TextLineItemDraft `json:"textLineItems"`
 	// Assigns the new ShoppingList to the [Store](ctp:api:type:Store).
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of the Business Unit the Shopping List should belong to. When the `customer` of the Shopping List is set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/../offering/composable-commerce#composable-commerce-for-b2b)-enabled Projects.
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) of the Business Unit the Shopping List should belong to. When the `customer` of the Shopping List is set, the [Customer](ctp:api:type:Customer) must be an [Associate](ctp:api:type:Associate) of the Business Unit. Only available for [B2B](/offering/commerce-b2b)-enabled Projects.
 	BusinessUnit *BusinessUnitResourceIdentifier `json:"businessUnit,omitempty"`
 	// Custom Fields defined for the ShoppingList.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -117,7 +117,7 @@ type ShoppingListLineItem struct {
 	AddedAt time.Time `json:"addedAt"`
 	// Custom Fields of the ShoppingListLineItem.
 	Custom *CustomFields `json:"custom,omitempty"`
-	// If the Product or Product Variant is deleted, `deactivatedAt` is the date and time (UTC) of deletion.
+	// If the Product or Product Variant is deleted or unpublished, `deactivatedAt` is the date and time (UTC) this occurred.
 	//
 	// This data is updated in an [eventual consistent manner](/general-concepts#eventual-consistency) when the Product Variant cannot be ordered anymore.
 	DeactivatedAt *time.Time `json:"deactivatedAt,omitempty"`
@@ -140,6 +140,8 @@ type ShoppingListLineItem struct {
 	// Number of Products in the ShoppingListLineItem.
 	Quantity int `json:"quantity"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) the ShoppingListLineItem refers to. If not set, the ShoppingListLineItem refers to the Master Variant.
+	//
+	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) (BETA) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (BETA) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
 	VariantId *int `json:"variantId,omitempty"`
 	// Data of the [ProductVariant](ctp:api:type:ProductVariant).  This data includes all the Product Attributes and Variant Attributes to ensure the full Attribute context of the Product Variant.
 	//
@@ -161,6 +163,8 @@ type ShoppingListLineItemDraft struct {
 	// Unique identifier of a [Product](ctp:api:type:Product).
 	ProductId *string `json:"productId,omitempty"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
+	//
+	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) (BETA) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (BETA) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
 	VariantId *int `json:"variantId,omitempty"`
 	// `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
 	Sku *string `json:"sku,omitempty"`
@@ -173,17 +177,17 @@ type ShoppingListLineItemDraft struct {
 }
 
 type ShoppingListPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// [ShoppingLists](ctp:api:type:ShoppingList) matching the query.
 	Results []ShoppingList `json:"results"`
@@ -196,7 +200,7 @@ type ShoppingListPagedQueryResponse struct {
 type ShoppingListReference struct {
 	// Unique identifier of the referenced [ShoppingList](ctp:api:type:ShoppingList).
 	ID string `json:"id"`
-	// Contains the representation of the expanded ShoppingList. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for ShoppingLists.
+	// Contains the representation of the expanded ShoppingList. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for ShoppingLists.
 	Obj *ShoppingList `json:"obj,omitempty"`
 }
 
@@ -211,7 +215,7 @@ func (obj ShoppingListReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [ShoppingList](ctp:api:type:ShoppingList). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type ShoppingListResourceIdentifier struct {
@@ -479,6 +483,8 @@ type ShoppingListAddLineItemAction struct {
 	// Unique identifier of a [Product](ctp:api:type:Product).
 	ProductId *string `json:"productId,omitempty"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
+	//
+	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) (BETA) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (BETA) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
 	VariantId *int `json:"variantId,omitempty"`
 	// Number of Products in the ShoppingListLineItem.
 	Quantity *int `json:"quantity,omitempty"`
@@ -672,7 +678,7 @@ func (obj ShoppingListRemoveTextLineItemAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ShoppingListSetAnonymousIdAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	AnonymousId *string `json:"anonymousId,omitempty"`
 }
 
@@ -691,7 +697,7 @@ func (obj ShoppingListSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ShoppingListSetBusinessUnitAction struct {
-	// The Business Unit to assign to the Shopping List, which must have access to the [Store](/../api/projects/stores) that is set on the Shopping List.
+	// The Business Unit to assign to the Shopping List, which must have access to the [Store](/api/projects/stores) that is set on the Shopping List.
 	BusinessUnit BusinessUnitResourceIdentifier `json:"businessUnit"`
 }
 
@@ -706,7 +712,7 @@ func (obj ShoppingListSetBusinessUnitAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -725,10 +731,12 @@ func (obj ShoppingListSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingList with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingList with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ShoppingList.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingList.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ShoppingList.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -743,7 +751,7 @@ func (obj ShoppingListSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetCustomerAction struct {
-	// The [Customer](ctp:api:type:Customer) the ShoppingList should be associated to. If empty, any existing value will be removed.
+	// The [Customer](ctp:api:type:Customer) the ShoppingList should be associated to. If omitted, any existing value is removed.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
@@ -762,7 +770,7 @@ func (obj ShoppingListSetCustomerAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ShoppingListSetDeleteDaysAfterLastModificationAction struct {
-	// Value to set. If not provided, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
+	// Value to set. If omitted, the default value for this field configured in [Project settings](ctp:api:type:ShoppingListsConfiguration) is assigned.
 	DeleteDaysAfterLastModification *int `json:"deleteDaysAfterLastModification,omitempty"`
 }
 
@@ -777,7 +785,7 @@ func (obj ShoppingListSetDeleteDaysAfterLastModificationAction) MarshalJSON() ([
 }
 
 type ShoppingListSetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 
@@ -792,7 +800,7 @@ func (obj ShoppingListSetDescriptionAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -811,7 +819,7 @@ type ShoppingListSetLineItemCustomFieldAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -834,10 +842,12 @@ type ShoppingListSetLineItemCustomTypeAction struct {
 	LineItemId *string `json:"lineItemId,omitempty"`
 	// The `key` of the [ShoppingListLineItem](ctp:api:type:ShoppingListLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	LineItemKey *string `json:"lineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the ShoppingListLineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the ShoppingListLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the ShoppingListLineItem.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the ShoppingListLineItem.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -852,7 +862,7 @@ func (obj ShoppingListSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error)
 }
 
 type ShoppingListSetSlugAction struct {
-	// Value to set. If empty, any existing value will be removed. Each slug is unique across a Project, but a ShoppingList can have the same slug for different languages. Must match the pattern `^[A-Za-z0-9_-]{2,256}+$`
+	// Value to set. If omitted, any existing value is removed. Each slug is unique across a Project, but a ShoppingList can have the same slug for different languages. Must match the pattern `^[A-Za-z0-9_-]{2,256}+$`
 	Slug *LocalizedString `json:"slug,omitempty"`
 }
 
@@ -867,7 +877,7 @@ func (obj ShoppingListSetSlugAction) MarshalJSON() ([]byte, error) {
 }
 
 type ShoppingListSetStoreAction struct {
-	// The [Store](ctp:api:type:Store) the ShoppingList should be assigned to. If empty, any existing value will be removed.
+	// The [Store](ctp:api:type:Store) the ShoppingList should be assigned to. If omitted, any existing value is removed.
 	Store *StoreResourceIdentifier `json:"store,omitempty"`
 }
 
@@ -886,7 +896,7 @@ type ShoppingListSetTextLineItemCustomFieldAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -909,10 +919,12 @@ type ShoppingListSetTextLineItemCustomTypeAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the TextLineItem with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the TextLineItem.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the TextLineItem.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the TextLineItem.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -931,7 +943,7 @@ type ShoppingListSetTextLineItemDescriptionAction struct {
 	TextLineItemId *string `json:"textLineItemId,omitempty"`
 	// The `key` of the [TextLineItem](ctp:api:type:TextLineItem) to update. Either `lineItemId` or `lineItemKey` is required.
 	TextLineItemKey *string `json:"textLineItemKey,omitempty"`
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

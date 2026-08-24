@@ -33,7 +33,7 @@ func (rb *ByProjectKeyShoppingListsKeyByKeyRequestBuilder) Head() *ByProjectKeyS
 }
 
 /**
-*	Updates a ShoppingList in the Project using one or more [update actions](/../api/projects/shoppingLists#update-actions).
+*	Updates a ShoppingList in the Project using one or more [update actions](/api/projects/shoppingLists#update-actions).
  */
 func (rb *ByProjectKeyShoppingListsKeyByKeyRequestBuilder) Post(body ShoppingListUpdate) *ByProjectKeyShoppingListsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyShoppingListsKeyByKeyRequestMethodPost{

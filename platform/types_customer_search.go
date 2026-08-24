@@ -19,9 +19,9 @@ type CustomerIndexingProgress struct {
 type CustomerPagedSearchResponse struct {
 	// Total number of results matching the query.
 	Total int `json:"total"`
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Search result containing the Customers matching the search query.
 	Results []CustomerSearchResult `json:"results"`

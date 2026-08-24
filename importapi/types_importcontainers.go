@@ -18,7 +18,10 @@ const (
 )
 
 /**
-*	The retention policy of the ImportContainer. If not set, the ImportContainer does not expire.
+*	Defines how long an [ImportContainer](ctp:import:type:ImportContainer) is kept before it is automatically deleted.
+*	When you set `retentionPolicy` on an [ImportContainerDraft](ctp:import:type:ImportContainerDraft), the `timeToLive` value controls expiry.
+*	When you omit `retentionPolicy` on create, the Import API applies a **default time to live of 72 hours** (see `expiresAt` on [ImportContainer](ctp:import:type:ImportContainer)).
+*
  */
 type RetentionPolicy interface{}
 
@@ -70,6 +73,8 @@ func (obj TimeToLiveRetentionPolicy) MarshalJSON() ([]byte, error) {
 /**
 *	Contains the resources to be imported. Unless `resourceType` is specified, the ImportContainer can import all of the supported [ImportResourceTypes](ctp:import:type:ImportResourceType).
 *
+*	If the container was created **without** a `retentionPolicy`, it **expires 72 hours** after `createdAt`. If a `TimeToLiveRetentionPolicy` was set, expiry follows the configured `timeToLive` (between the minimum and maximum allowed values). The `expiresAt` field holds the calculated deletion time.
+*
  */
 type ImportContainer struct {
 	// User-defined unique identifier of the ImportContainer.
@@ -78,13 +83,14 @@ type ImportContainer struct {
 	ResourceType *ImportResourceType `json:"resourceType,omitempty"`
 	// Current version of the ImportContainer.
 	Version int `json:"version"`
-	// The retention policy of the ImportContainer.
+	// Retention policy for this ImportContainer. If not set, the ImportContainer will expire **72 hours** after creation.
 	RetentionPolicy RetentionPolicy `json:"retentionPolicy,omitempty"`
 	// Date and time (UTC) the ImportContainer was initially created.
 	CreatedAt time.Time `json:"createdAt"`
 	// Date and time (UTC) the ImportContainer was last updated.
 	LastModifiedAt time.Time `json:"lastModifiedAt"`
-	// Date and time (UTC) the ImportContainer is automatically deleted. Only present if a `retentionPolicy` is set. ImportContainers without `expiresAt` are permanent until [manually deleted](#delete-importcontainer).
+	// Date and time (UTC) when the ImportContainer is automatically deleted.
+	// If no `retentionPolicy` was set at creation, this is **72 hours** after `createdAt`. If a `TimeToLiveRetentionPolicy` was set, it is derived from `timeToLive`.
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 }
 
@@ -107,7 +113,9 @@ func (obj *ImportContainer) UnmarshalJSON(data []byte) error {
 }
 
 /**
-*	The representation sent to the server to create an [ImportContainer](#importcontainer).
+*	The representation sent to the server to create an [ImportContainer](ctp:import:type:ImportContainer).
+*
+*	If you **omit** `retentionPolicy`, the new ImportContainer uses the default **72-hour** time to live. Set a [TimeToLiveRetentionPolicy](ctp:import:type:TimeToLiveRetentionPolicy) to use a custom duration (within the allowed minimum and maximum).
 *
  */
 type ImportContainerDraft struct {
@@ -116,7 +124,8 @@ type ImportContainerDraft struct {
 	// The resource type the ImportContainer will accept.
 	// If not specified, the ImportContainer can import all of the supported ImportResourceTypes.
 	ResourceType *ImportResourceType `json:"resourceType,omitempty"`
-	// Set a retention policy to automatically delete the ImportContainer after a defined period.
+	// Optional. When set, defines how long the ImportContainer is kept before automatic deletion.
+	// When omitted, the ImportContainer receives the default **72-hour** lifetime.
 	RetentionPolicy RetentionPolicy `json:"retentionPolicy,omitempty"`
 }
 
@@ -151,13 +160,13 @@ type ImportContainerUpdateDraft struct {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [ImportContainer](ctp:import:type:ImportContainer).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [ImportContainer](ctp:import:type:ImportContainer).
 *
  */
 type ImportContainerPagedResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`

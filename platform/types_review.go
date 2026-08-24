@@ -41,7 +41,7 @@ type Review struct {
 	IncludedInStatistics bool `json:"includedInStatistics"`
 	// Rating of the Product or Channel.
 	Rating *int `json:"rating,omitempty"`
-	// State of the Review. Used for approval processes, see [Review approval process](/../tutorials/review-ratings#review-approval-process) for details.
+	// State of the Review. Used for approval processes, see [Review approval process](/tutorials/review-ratings#review-approval-process) for details.
 	State *StateReference `json:"state,omitempty"`
 	// Customer who created the Review.
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -69,7 +69,7 @@ type ReviewDraft struct {
 	Text *string `json:"text,omitempty"`
 	// Identifies the target of the Review. Can be a [Product](ctp:api:type:Product) or a [Channel](ctp:api:type:Channel), specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively.
 	Target interface{} `json:"target,omitempty"`
-	// State of the Review. Used for approval processes, see [Review approval process](/../tutorials/review-ratings#review-approval-process) for details.
+	// State of the Review. Used for approval processes, see [Review approval process](/tutorials/review-ratings#review-approval-process) for details.
 	State *StateResourceIdentifier `json:"state,omitempty"`
 	// Rating of the targeted Product or Channel.
 	// This rating can represent the number of stars, a percentage, or a like (+1)/dislike (-1).
@@ -82,17 +82,17 @@ type ReviewDraft struct {
 }
 
 type ReviewPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// [Reviews](ctp:api:type:Review) matching the query.
 	Results []Review `json:"results"`
@@ -121,7 +121,7 @@ type ReviewRatingStatistics struct {
 type ReviewReference struct {
 	// Unique identifier of the referenced [Review](ctp:api:type:Review).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Reviews.
+	// Contains the representation of the expanded Review. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Reviews.
 	Obj *Review `json:"obj,omitempty"`
 }
 
@@ -136,7 +136,7 @@ func (obj ReviewReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Review](ctp:api:type:Review). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type ReviewResourceIdentifier struct {
@@ -266,7 +266,7 @@ func mapDiscriminatorReviewUpdateAction(input interface{}) (ReviewUpdateAction, 
 }
 
 type ReviewSetAuthorNameAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	AuthorName *string `json:"authorName,omitempty"`
 }
 
@@ -281,7 +281,7 @@ func (obj ReviewSetAuthorNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetCustomFieldAction struct {
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -300,10 +300,12 @@ func (obj ReviewSetCustomFieldAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetCustomTypeAction struct {
-	// Defines the [Type](ctp:api:type:Type) that extends the Review with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Review with [Custom Fields](ctp:api:type:CustomFields).
 	// If absent, any existing Type and Custom Fields are removed from the Review.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Review.
+	// Object containing the [Custom Fields](ctp:api:type:CustomFields) fields for the Review.
+	//
+	// Required if at least one Custom Field is defined as required in the `fieldDefinitions` of the referenced [Type](ctp:api:type:Type).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
@@ -318,7 +320,7 @@ func (obj ReviewSetCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetCustomerAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Customer *CustomerResourceIdentifier `json:"customer,omitempty"`
 }
 
@@ -333,7 +335,7 @@ func (obj ReviewSetCustomerAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetKeyAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Key *string `json:"key,omitempty"`
 }
 
@@ -348,7 +350,7 @@ func (obj ReviewSetKeyAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetLocaleAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Locale *string `json:"locale,omitempty"`
 }
 
@@ -367,7 +369,7 @@ func (obj ReviewSetLocaleAction) MarshalJSON() ([]byte, error) {
 *
  */
 type ReviewSetRatingAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Rating *int `json:"rating,omitempty"`
 }
 
@@ -382,7 +384,7 @@ func (obj ReviewSetRatingAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetTargetAction struct {
-	// Value to set, specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively. If empty, any existing value will be removed.
+	// Value to set, specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively.
 	Target interface{} `json:"target"`
 }
 
@@ -397,7 +399,7 @@ func (obj ReviewSetTargetAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetTextAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Text *string `json:"text,omitempty"`
 }
 
@@ -412,7 +414,7 @@ func (obj ReviewSetTextAction) MarshalJSON() ([]byte, error) {
 }
 
 type ReviewSetTitleAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Title *string `json:"title,omitempty"`
 }
 

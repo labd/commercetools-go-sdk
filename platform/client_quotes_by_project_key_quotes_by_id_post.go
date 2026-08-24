@@ -56,7 +56,7 @@ func (rb *ByProjectKeyQuotesByIDRequestMethodPost) WithHeaders(headers http.Head
 }
 
 /**
-*	Updates a Quote in the Project using one or more [update actions](/../api/projects/quotes#update-actions).
+*	Updates a Quote in the Project using one or more [update actions](/api/projects/quotes#update-actions).
  */
 func (rb *ByProjectKeyQuotesByIDRequestMethodPost) Execute(ctx context.Context) (result *Quote, err error) {
 	data, err := serializeInput(rb.body)

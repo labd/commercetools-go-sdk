@@ -54,6 +54,7 @@ const (
 	CustomFieldReferenceValueReview           CustomFieldReferenceValue = "review"
 	CustomFieldReferenceValueState            CustomFieldReferenceValue = "state"
 	CustomFieldReferenceValueShippingMethod   CustomFieldReferenceValue = "shipping-method"
+	CustomFieldReferenceValueVariant          CustomFieldReferenceValue = "variant"
 	CustomFieldReferenceValueZone             CustomFieldReferenceValue = "zone"
 )
 
@@ -64,26 +65,26 @@ const (
 type CustomFields struct {
 	// Reference to the [Type](ctp:api:type:Type) that holds the [FieldDefinitions](ctp:api:type:FieldDefinition) for the Custom Fields.
 	Type TypeReference `json:"type"`
-	// Object containing the Custom Fields of the [customized resource or data type](/../api/projects/types#resourcetypeid).
+	// Object containing the Custom Fields of the [customized resource or data type](/api/projects/types#resourcetypeid).
 	Fields FieldContainer `json:"fields"`
 }
 
 /**
-*	The representation used when creating or updating a [customizable data type](/../api/projects/types#resourcetypeid) with Custom Fields.
+*	The representation used when creating or updating a [customizable data type](/api/projects/types#resourcetypeid) with Custom Fields.
 *
  */
 type CustomFieldsDraft struct {
 	// `id` or `key` of the [Type](ctp:api:type:Type).
 	Type TypeResourceIdentifier `json:"type"`
-	// Object containing the Custom Fields for the [customized resource or data type](/../api/projects/types#resourcetypeid).
+	// Object containing the Custom Fields for the [customized resource or data type](/api/projects/types#resourcetypeid).
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 
 type FieldContainer map[string]interface{}
 
 /**
-*	Defines a [Custom Field](/../api/projects/custom-fields) and its meta-information.
-*	This FieldDefinition is similar to an [AttributeDefinition](ctp:api:type:AttributeDefinition) of [Product Types](/../api/projects/productTypes).
+*	Defines a [Custom Field](/api/projects/custom-fields) and its meta-information.
+*	This FieldDefinition is similar to an [AttributeDefinition](ctp:api:type:AttributeDefinition) of [Product Types](/api/projects/productTypes).
 *
  */
 type FieldDefinition struct {
@@ -482,6 +483,7 @@ const (
 	ResourceTypeIdProductSelection            ResourceTypeId = "product-selection"
 	ResourceTypeIdProductTailoring            ResourceTypeId = "product-tailoring"
 	ResourceTypeIdQuote                       ResourceTypeId = "quote"
+	ResourceTypeIdReservation                 ResourceTypeId = "reservation"
 	ResourceTypeIdReview                      ResourceTypeId = "review"
 	ResourceTypeIdRecurringOrder              ResourceTypeId = "recurring-order"
 	ResourceTypeIdShipping                    ResourceTypeId = "shipping"
@@ -556,21 +558,21 @@ func (obj TypeDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with `results` containing an array of [Types](ctp:api:type:Type).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with `results` containing an array of [Types](ctp:api:type:Type).
 *
  */
 type TypePagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Types](ctp:api:type:Type) matching the query.
 	Results []Type `json:"results"`
@@ -599,7 +601,7 @@ func (obj TypeReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) of a [Type](ctp:api:type:Type). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type TypeResourceIdentifier struct {
@@ -1024,7 +1026,7 @@ func (obj TypeChangeNameAction) MarshalJSON() ([]byte, error) {
 
 type TypeRemoveFieldDefinitionAction struct {
 	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to remove.
-	// The removal of a FieldDefinition deletes [asynchronously](/../api/general-concepts#eventual-consistency) all Custom Fields using the FieldDefinition as well.
+	// The removal of a FieldDefinition deletes [asynchronously](/api/general-concepts#eventual-consistency) all Custom Fields using the FieldDefinition as well.
 	FieldName string `json:"fieldName"`
 }
 
@@ -1039,7 +1041,7 @@ func (obj TypeRemoveFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 }
 
 type TypeSetDescriptionAction struct {
-	// Value to set. If empty, any existing value will be removed.
+	// Value to set. If omitted, any existing value is removed.
 	Description *LocalizedString `json:"description,omitempty"`
 }
 

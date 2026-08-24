@@ -82,11 +82,11 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Head() *ByProjectKeyOrdersRequestMet
 /**
 *	Creates an Order from a Cart.
 *
-*	The Cart must have a shipping address and an active Shipping Method set.
+*	The Cart must have a shipping address set, regardless of the [TaxMode](ctp:api:type:TaxMode).
 *
-*	The shipping address is used for tax calculation for a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode).
+*	For a Cart with `Platform` [TaxMode](ctp:api:type:TaxMode), the shipping address is used for tax calculation.
 *
-*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message. If the Order is created from a Recurring Order schedule, the [OrderCreatedFromRecurringOrder](ctp:api:type:OrderCreatedFromRecurringOrderMessage) Message is generated.
+*	Creating an Order produces the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message. If the Order is created from a Recurring Order schedule, the [OrderCreatedFromRecurringOrder](ctp:api:type:OrderCreatedFromRecurringOrderMessage) Message is generated instead of the [OrderCreated](ctp:api:type:OrderCreatedMessage) Message.
 *
 *	If a server-side problem occurs, indicated by a 500 Internal Server Error HTTP response, the Order creation may still successfully complete after the error is returned.
 *	If you receive this error, you should verify the status of the Order by querying a unique identifier supplied during the creation request, such as the Order number.
@@ -98,7 +98,10 @@ func (rb *ByProjectKeyOrdersRequestBuilder) Head() *ByProjectKeyOrdersRequestMet
 *	- [DiscountCodeNonApplicable](ctp:api:type:DiscountCodeNonApplicableError)
 *	- [ShippingMethodDoesNotMatchCart](ctp:api:type:ShippingMethodDoesNotMatchCartError)
 *	- [InvalidItemShippingDetails](ctp:api:type:InvalidItemShippingDetailsError)
-*	- [InvalidOperation](ctp:api:type:InvalidOperationError)
+*	- [InvalidOperation](ctp:api:type:InvalidOperationError) is returned in several cases, including the following:
+*	    - The referenced Shipping Method is not active.
+*	    - The referenced Shipping Method is scoped to a Store that differs from the Cart's Store.
+*	    - The referenced Shipping Method is scoped to a Store, but the Cart does not belong to a Store.
 *	- [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError)
 *	- [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError)
 *

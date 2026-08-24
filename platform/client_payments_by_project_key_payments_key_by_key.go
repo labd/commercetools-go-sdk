@@ -33,7 +33,7 @@ func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Head() *ByProjectKeyPaymen
 }
 
 /**
-*	Updates a Payment in the Project using one or more [update actions](/../api/projects/payments#update-actions).
+*	Updates a Payment in the Project using one or more [update actions](/api/projects/payments#update-actions).
  */
 func (rb *ByProjectKeyPaymentsKeyByKeyRequestBuilder) Post(body PaymentUpdate) *ByProjectKeyPaymentsKeyByKeyRequestMethodPost {
 	return &ByProjectKeyPaymentsKeyByKeyRequestMethodPost{

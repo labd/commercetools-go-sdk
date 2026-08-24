@@ -30,11 +30,11 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodHe
 /**
 *	Checks if a ShoppingList exists with the provided `key` for the authenticated Customer or anonymous user in a [Store](ctp:api:type:Store). Returns a `200` status if successful.
 *
-*	A [Not Found](/../api/errors#404-not-found) error is returned in the following scenarios:
+*	A [Not Found](/api/errors#404-not-found) error is returned in the following scenarios:
 *
 *	- If no ShoppingList exists that matches the provided `key` in a Store.
 *	- If a ShoppingList matches the provided `key` but does not have a `store` specified, or the `store` field references a different Store.
-*	- If a ShoppingList matches the provided `key` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#composable-commerce-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#composable-commerce-oauth) scope.
+*	- If a ShoppingList matches the provided `key` in a Store but does not contain either an `anonymousId` that matches the [anonymous_id:{id}](/scopes#internal-oauth) scope, or a `customer` with `id` value that matches the [customer:{id}](/scopes#internal-oauth) scope.
 *
  */
 func (rb *ByProjectKeyInStoreKeyByStoreKeyMeShoppingListsKeyByKeyRequestMethodHead) Execute(ctx context.Context) error {

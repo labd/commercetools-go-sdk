@@ -55,7 +55,7 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodGet) WithHeaders(headers ht
 }
 
 /**
-*	Either the [scope](/../api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
+*	Either the [scope](/api/scopes) `view_products:{projectKey}` or `view_categories:{projectKey}` is required.
 *
  */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodGet) Execute(ctx context.Context) (result *Category, err error) {

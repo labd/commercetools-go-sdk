@@ -7,16 +7,16 @@ import (
 )
 
 type ApiClient struct {
-	// The OAuth2 `client_id` that can be used to [obtain an access token](/../api/authorization#request-an-access-token-using-the-composable-commerce-oauth-20-service).
+	// The OAuth2 `client_id` that can be used to [obtain an access token](/api/authorization#request-an-access-token-using-the-internal-oauth-20-service).
 	ID string `json:"id"`
 	// Name of the APIClient.
 	Name string `json:"name"`
-	// Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#request-an-access-token-using-the-composable-commerce-oauth-20-service).
+	// Whitespace-separated list of [OAuth scopes](/api/scopes) that can be used when [obtaining an access token](/api/authorization#request-an-access-token-using-the-internal-oauth-20-service).
 	Scope string `json:"scope"`
 	// Only shown once in the response of creating the APIClient.
-	// This is the OAuth2 `client_secret` that can be used to [obtain an access token](/../api/authorization#request-an-access-token-using-the-composable-commerce-oauth-20-service).
+	// This is the OAuth2 `client_secret` that can be used to [obtain an access token](/api/authorization#request-an-access-token-using-the-internal-oauth-20-service).
 	Secret *string `json:"secret,omitempty"`
-	// Date of the last day this APIClient was used to [obtain an access token](/../api/authorization#request-an-access-token-using-the-composable-commerce-oauth-20-service).
+	// Date of the last day this APIClient was used to [obtain an access token](/api/authorization#request-an-access-token-using-the-internal-oauth-20-service).
 	LastUsedAt *Date `json:"lastUsedAt,omitempty"`
 	// If set, the Client will be deleted on (or shortly after) this point in time.
 	DeleteAt *time.Time `json:"deleteAt,omitempty"`
@@ -31,7 +31,7 @@ type ApiClient struct {
 type ApiClientDraft struct {
 	// Name of the APIClient.
 	Name string `json:"name"`
-	// Whitespace-separated list of [OAuth scopes](/../api/scopes) that can be used when [obtaining an access token](/../api/authorization#request-an-access-token-using-the-composable-commerce-oauth-20-service).
+	// Whitespace-separated list of [OAuth scopes](/api/scopes) that can be used when [obtaining an access token](/api/authorization#request-an-access-token-using-the-internal-oauth-20-service).
 	Scope string `json:"scope"`
 	// If set, the Client will be deleted after the specified amount of days.
 	DeleteDaysAfterCreation *int `json:"deleteDaysAfterCreation,omitempty"`
@@ -46,17 +46,17 @@ type ApiClientDraft struct {
 *
  */
 type ApiClientPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// APIClients matching the query.
 	Results []ApiClient `json:"results"`
