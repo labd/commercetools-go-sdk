@@ -356,7 +356,7 @@ type ProductPagedQueryResponse struct {
 	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Products](ctp:api:type:Product) matching the query.
 	Results []Product `json:"results"`
@@ -364,7 +364,7 @@ type ProductPagedQueryResponse struct {
 
 /**
 *
-*	This mode determines the type of Prices used for [price selection](/../api/pricing-and-discounts-overview#price-selection) by Line Items and Products.
+*	This mode determines the type of Prices used for [price selection](/api/pricing-and-discounts-overview#price-selection) by Line Items and Products.
 *	For more information about the difference between the Prices, see [Pricing](/api/pricing-and-discounts-overview).
 *
 *	In Projects with the [ProductCatalogModel](ctp:api:type:ProductCatalogModel) `Classic`, you can configure the price mode.
@@ -887,7 +887,7 @@ type ProductVariant struct {
 	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
 	// Only present when [price selection](/api/pricing-and-discounts-overview#price-selection) is applied.
-	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	// Cannot be used in a [Query Predicate](/api/predicates/query).
 	Price *Price `json:"price,omitempty"`
 	// Images of the Product Variant.
 	Images []Image `json:"images"`
@@ -908,7 +908,7 @@ type ProductVariant struct {
 	// with [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
 	// Only available when [Product price selection](/api/pricing-and-discounts-overview#product-price-selection) is used.
-	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	// Cannot be used in a [Query Predicate](/api/predicates/query).
 	RecurrencePrices []Price `json:"recurrencePrices"`
 }
 

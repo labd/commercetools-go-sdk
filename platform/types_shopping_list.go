@@ -141,7 +141,7 @@ type ShoppingListLineItem struct {
 	Quantity int `json:"quantity"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant) the ShoppingListLineItem refers to. If not set, the ShoppingListLineItem refers to the Master Variant.
 	//
-	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) (BETA) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (BETA) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
+	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
 	VariantId *int `json:"variantId,omitempty"`
 	// Data of the [ProductVariant](ctp:api:type:ProductVariant).  This data includes all the Product Attributes and Variant Attributes to ensure the full Attribute context of the Product Variant.
 	//
@@ -164,7 +164,7 @@ type ShoppingListLineItemDraft struct {
 	ProductId *string `json:"productId,omitempty"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
 	//
-	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) (BETA) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (BETA) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
+	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
 	VariantId *int `json:"variantId,omitempty"`
 	// `sku` of the [ProductVariant](ctp:api:type:ProductVariant).
 	Sku *string `json:"sku,omitempty"`
@@ -484,7 +484,7 @@ type ShoppingListAddLineItemAction struct {
 	ProductId *string `json:"productId,omitempty"`
 	// `id` of the [ProductVariant](ctp:api:type:ProductVariant). If not set, the ShoppingListLineItem refers to the Master Variant.
 	//
-	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) (BETA) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (BETA) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
+	// For a Project with [ProductCatalogModel](ctp:api:type:ProductCatalogModel) set to `Modular`, when `variantId` is not set, the ShoppingListLineItem refers to the Product's default [Variant](ctp:api:type:Variant) (`defaultVariant`) instead of the Master Variant. If no default Variant is set, the ShoppingListLineItem refers to the Variant with the lowest `variantId`.
 	VariantId *int `json:"variantId,omitempty"`
 	// Number of Products in the ShoppingListLineItem.
 	Quantity *int `json:"quantity,omitempty"`

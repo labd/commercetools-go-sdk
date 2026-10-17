@@ -29,7 +29,7 @@ type StagedQuote struct {
 	Customer *CustomerReference `json:"customer,omitempty"`
 	// Quote Request related to the Staged Quote.
 	QuoteRequest QuoteRequestReference `json:"quoteRequest"`
-	// [Cart](ctp:api:type:Cart) containing the offered items. May contain either [DirectDiscounts](ctp:api:type:DirectDiscount) or [CartDiscounts](ctp:api:type:CartDiscount).
+	// [Cart](ctp:api:type:Cart) containing the offered items.
 	QuotationCart CartReference `json:"quotationCart"`
 	// Expiration date for the Quote. Once a Quote expires, it cannot be ordered.
 	ValidTo *time.Time `json:"validTo,omitempty"`

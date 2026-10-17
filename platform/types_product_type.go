@@ -54,6 +54,11 @@ type AttributeDefinition struct {
 	// This constraint is enforced at both [Product creation](ctp:api:endpoint:/{projectKey}/products:POST) and [Product update](/api/projects/products#update-product).
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable bool `json:"isSearchable"`
+	// Whether the Attribute value is copied onto the [LineItem](ctp:api:type:LineItem) when the Product is added to a Cart.
+	// When `false`, the Attribute value is excluded from the Line Item variant. Line Items already in a Cart are not immediately affected by a change to this value. Existing Line Items are updated the next time their Product data is refreshed, such as when a [Recalculate](ctp:api:type:CartRecalculateAction) update action is performed with `updateProductData` set to `true`, or on a Cart update that triggers an API Extension. Replicating a Cart creates a new Cart that contains the current Product data; it does not update the original Cart.
+	//
+	// When `savedToLineItem` is `false`, [LineItem predicates](/api/projects/predicates#lineitem-field-identifiers) that reference this Attribute, such as those in Cart Discounts and Shipping Methods, evaluate as if the Attribute is not set.
+	SavedToLineItem bool `json:"savedToLineItem"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -111,6 +116,11 @@ type AttributeDefinitionDraft struct {
 	// This constraint is enforced at both Product creation and Product update.
 	// If the length of the input exceeds the maximum size, an [InvalidField](ctp:api:type:InvalidFieldError) error is returned.
 	IsSearchable *bool `json:"isSearchable,omitempty"`
+	// Whether the Attribute value is copied onto the [LineItem](ctp:api:type:LineItem) when the Product is added to a Cart.
+	// When `false`, the Attribute value is excluded from the Line Item variant. Line Items already in a Cart are not immediately affected by a change to this value. Existing Line Items are updated the next time their Product data is refreshed, such as when a [Recalculate](ctp:api:type:CartRecalculateAction) update action is performed with `updateProductData` set to `true`, or on a Cart update that triggers an API Extension. Replicating a Cart creates a new Cart that contains the current Product data; it does not update the original Cart.
+	//
+	// When `savedToLineItem` is `false`, [LineItem predicates](/api/projects/predicates#lineitem-field-identifiers) that reference this Attribute, such as those in Cart Discounts and Shipping Methods, evaluate as if the Attribute is not set.
+	SavedToLineItem *bool `json:"savedToLineItem,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -852,6 +862,12 @@ func mapDiscriminatorProductTypeUpdateAction(input interface{}) (ProductTypeUpda
 			return nil, err
 		}
 		return obj, nil
+	case "setSavedToLineItem":
+		obj := ProductTypeSetSavedToLineItemAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -1206,7 +1222,7 @@ func (obj ProductTypeChangePlainEnumValueOrderAction) MarshalJSON() ([]byte, err
 }
 
 /**
-*	Removes an AttributeDefinition and also deletes all corresponding Attributes on all [Products](/projects/products) with this ProductType. The removal of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
+*	Removes an AttributeDefinition and also deletes all corresponding Attributes on all [Products](/projects/products) with this ProductType. Data from deleted Attributes cannot be recovered. The removal of the Attributes is [eventually consistent](/general-concepts#eventual-consistency).
 *
 *	Do not remove an AttributeDefinition and add a new AttributeDefinition with the same `name` in the same update request. Because the removal is eventually consistent, wait until it is complete before sending another update request for the ProductType.
 *
@@ -1281,4 +1297,33 @@ func (obj ProductTypeSetKeyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Sets the `savedToLineItem` property of an [AttributeDefinition](ctp:api:type:AttributeDefinition) on a [ProductType](ctp:api:type:ProductType).
+*	This update action controls whether the Attribute value is copied onto a [LineItem](ctp:api:type:LineItem) when a Product is added to a Cart.
+*
+*	Changing this value does not immediately affect Line Items already in a Cart. Existing Line Items are updated the next time their Product data is refreshed, such as when a [Recalculate](ctp:api:type:CartRecalculateAction) update action is performed with `updateProductData` set to `true`, or on a Cart update that triggers an API Extension. Replicating a Cart creates a new Cart that contains the current Product data; it does not update the original Cart.
+*
+*	When `savedToLineItem` is `false`, [LineItem predicates](/api/projects/predicates#lineitem-field-identifiers) that reference this Attribute, such as those in Cart Discounts and Shipping Methods, evaluate as if the Attribute is not set.
+*
+ */
+type ProductTypeSetSavedToLineItemAction struct {
+	// Name of the AttributeDefinition to update.
+	AttributeName string `json:"attributeName"`
+	// Whether the Attribute value is copied onto a [LineItem](ctp:api:type:LineItem) when the Product is added to a Cart.
+	// See [AttributeDefinition](ctp:api:type:AttributeDefinition) for details.
+	//
+	// It has no effect if the Attribute already has the given value.
+	SavedToLineItem bool `json:"savedToLineItem"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ProductTypeSetSavedToLineItemAction) MarshalJSON() ([]byte, error) {
+	type Alias ProductTypeSetSavedToLineItemAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setSavedToLineItem", Alias: (*Alias)(&obj)})
 }

@@ -32,6 +32,7 @@ type ByProjectKeyByResourceTypeByIDRequestMethodGetInput struct {
 	Limit                           *int
 	Offset                          *int
 	UserId                          *string
+	UserIds                         []string
 	ClientId                        *string
 	CustomerId                      *string
 	AssociateId                     *string
@@ -61,6 +62,9 @@ func (input *ByProjectKeyByResourceTypeByIDRequestMethodGetInput) Values() url.V
 	}
 	if input.UserId != nil {
 		values.Add("userId", fmt.Sprintf("%v", *input.UserId))
+	}
+	for _, v := range input.UserIds {
+		values.Add("userIds", fmt.Sprintf("%v", v))
 	}
 	if input.ClientId != nil {
 		values.Add("clientId", fmt.Sprintf("%v", *input.ClientId))
@@ -143,6 +147,14 @@ func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) UserId(v string) *ByPr
 		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
 	}
 	rb.params.UserId = &v
+	return rb
+}
+
+func (rb *ByProjectKeyByResourceTypeByIDRequestMethodGet) UserIds(v []string) *ByProjectKeyByResourceTypeByIDRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyByResourceTypeByIDRequestMethodGetInput{}
+	}
+	rb.params.UserIds = v
 	return rb
 }
 

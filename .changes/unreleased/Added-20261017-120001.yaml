@@ -1,0 +1,3 @@
+kind: Added
+body: 'New `integrationlayer` package for the Commerce Integration Layer management API: session defaults, checkout rules, field visibility, IdP login, extension config and allowlist. It is generated from `specs/integration-layer/api.raml` until the official spec in commercetools-api-reference covers the management API'
+time: 2026-10-17T12:00:01.000000+02:00

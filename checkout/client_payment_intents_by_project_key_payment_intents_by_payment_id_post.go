@@ -11,7 +11,7 @@ import (
 )
 
 type ByProjectKeyPaymentIntentsByPaymentIdRequestMethodPost struct {
-	body    Payment
+	body    PaymentIntent
 	url     string
 	client  *Client
 	headers http.Header
@@ -29,13 +29,16 @@ func (rb *ByProjectKeyPaymentIntentsByPaymentIdRequestMethodPost) WithHeaders(he
 }
 
 /**
+*	Requests to the payment [Connector](/checkout/connectors-and-applications#payment-connectors) time out after 30 seconds.
+*
 *	Specific Error Codes:
 *	- [MultipleActionsNotAllowed](ctp:checkout:type:MultipleActionsNotAllowedError)
 *	- [RequiredField](ctp:checkout:type:RequiredFieldError)
 *	- [ResourceNotFound](ctp:checkout:type:ResourceNotFoundError)
+*	- [ConnectorTimeout](ctp:checkout:type:ConnectorTimeoutError)
 *
  */
-func (rb *ByProjectKeyPaymentIntentsByPaymentIdRequestMethodPost) Execute(ctx context.Context) (result *interface{}, err error) {
+func (rb *ByProjectKeyPaymentIntentsByPaymentIdRequestMethodPost) Execute(ctx context.Context) (result *PaymentIntentResponse, err error) {
 	data, err := serializeInput(rb.body)
 	if err != nil {
 		return nil, err
@@ -64,6 +67,20 @@ func (rb *ByProjectKeyPaymentIntentsByPaymentIdRequestMethodPost) Execute(ctx co
 			return nil, err
 		}
 		return result, nil
+	case 400:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
+	case 504:
+		errorObj := ErrorResponse{}
+		err = json.Unmarshal(content, &errorObj)
+		if err != nil {
+			return nil, err
+		}
+		return nil, errorObj
 	default:
 		result := GenericRequestError{
 			StatusCode: resp.StatusCode,

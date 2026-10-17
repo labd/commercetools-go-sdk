@@ -708,7 +708,7 @@ type LineItem struct {
 	// Total price of this Line Item equalling `price` multiplied by `quantity`. If the Line Item is discounted, the total price is the `discountedPricePerQuantity` multiplied by `quantity`.
 	// Includes taxes if the [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true`.
 	//
-	// If `ExternalPrice` [LineItemPriceMode](#ctp:api:type:LineItemPriceMode) is used with high-precision money, then the total price is rounded by using the `HalfEven` rounding mode.
+	// If `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode) is used with high-precision money, then the total price is rounded by using the `HalfEven` rounding mode.
 	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// Discounted price of a single quantity of the Line Item.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
@@ -2731,7 +2731,7 @@ type ProductVariant struct {
 	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
 	// Only available when [price selection](/api/pricing-and-discounts-overview#price-selection) is used.
-	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	// Cannot be used in a [Query Predicate](/api/predicates/query).
 	Price *Price `json:"price,omitempty"`
 	// Images of the Product Variant.
 	Images []Image `json:"images"`
@@ -2752,7 +2752,7 @@ type ProductVariant struct {
 	// with [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
 	// Only available when [Product price selection](/api/pricing-and-discounts-overview#product-price-selection) is used.
-	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	// Cannot be used in a [Query Predicate](/api/predicates/query).
 	RecurrencePrices []Price `json:"recurrencePrices"`
 }
 

@@ -11,6 +11,16 @@ type ByProjectKeyRequestBuilder struct {
 	client     *Client
 }
 
+/**
+*	Agents interpret unstructured input and produce structured commerce objects.
+*
+ */
+func (rb *ByProjectKeyRequestBuilder) Agents() *ByProjectKeyAgentsRequestBuilder {
+	return &ByProjectKeyAgentsRequestBuilder{
+		projectKey: rb.projectKey,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyRequestBuilder) AsAssociate() *ByProjectKeyAsAssociateRequestBuilder {
 	return &ByProjectKeyAsAssociateRequestBuilder{
 		projectKey: rb.projectKey,

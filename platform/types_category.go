@@ -34,7 +34,7 @@ type Category struct {
 	Ancestors []CategoryReference `json:"ancestors"`
 	// Parent Category of this Category.
 	Parent *CategoryReference `json:"parent,omitempty"`
-	// Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
+	// A decimal value between 0 and 1 used to order Categories within the same level of the category tree. When sorted in ascending order, Categories with a lower `orderHint` appear before those with a higher value (for example, `0.05` before `0.07`).
 	OrderHint string `json:"orderHint"`
 	// Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
@@ -50,6 +50,12 @@ type Category struct {
 	Assets []Asset `json:"assets"`
 	// User-defined unique identifier of the Category.
 	Key *string `json:"key,omitempty"`
+	// [Stores](ctp:api:type:Store) to which the Category is assigned and that you have permission to access.
+	//
+	// If `stores` is empty, the Category is global and available in every [Store](ctp:api:type:Store).
+	//
+	// If the Category is created via the [Store-specific endpoint](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/categories:POST), the Store specified in the request path is automatically added to the field value.
+	Stores []StoreKeyReference `json:"stores"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -88,8 +94,8 @@ type CategoryDraft struct {
 	// Parent Category of the Category.
 	// The parent can be set by its `id` or `key`.
 	Parent *CategoryResourceIdentifier `json:"parent,omitempty"`
-	// Decimal value between 0 and 1. Frontend applications can use this value for ordering Categories within the same level in the category tree.
-	// If not set, a random value will be assigned.
+	// A decimal value between 0 and 1 used to order Categories within the same level of the category tree. When sorted in ascending order, Categories with a lower `orderHint` appear before those with a higher value (for example, `0.05` before `0.07`).
+	// If not set, a random value is assigned.
 	OrderHint *string `json:"orderHint,omitempty"`
 	// Additional identifier for external systems like customer relationship management (CRM) or enterprise resource planning (ERP).
 	ExternalId *string `json:"externalId,omitempty"`
@@ -107,6 +113,13 @@ type CategoryDraft struct {
 	//
 	// This field is optional for backwards compatibility reasons, but we strongly recommend setting it. Keys are mandatory for importing Categories with the [Import API](/api/import-export/overview) and the [Merchant Center](/merchant-center/import-data).
 	Key *string `json:"key,omitempty"`
+	// [Stores](ctp:api:type:Store) to assign the Category to.
+	//
+	// - If not defined or set to an empty array, the Category is global.
+	// - If defined, you must have access to each referenced Store; otherwise, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+	//
+	//   If the Category has a parent category, and the parent is assigned to Stores, this value must be a non-empty subset of the parent's Stores.
+	Stores []StoreResourceIdentifier `json:"stores"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -127,6 +140,10 @@ func (obj CategoryDraft) MarshalJSON() ([]byte, error) {
 
 	if raw["assets"] == nil {
 		delete(raw, "assets")
+	}
+
+	if raw["stores"] == nil {
+		delete(raw, "stores")
 	}
 
 	return json.Marshal(raw)
@@ -242,6 +259,12 @@ func mapDiscriminatorCategoryUpdateAction(input interface{}) (CategoryUpdateActi
 			return nil, err
 		}
 		return obj, nil
+	case "addStore":
+		obj := CategoryAddStoreAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "changeAssetName":
 		obj := CategoryChangeAssetNameAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -280,6 +303,12 @@ func mapDiscriminatorCategoryUpdateAction(input interface{}) (CategoryUpdateActi
 		return obj, nil
 	case "removeAsset":
 		obj := CategoryRemoveAssetAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeStore":
+		obj := CategoryRemoveStoreAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -368,6 +397,12 @@ func mapDiscriminatorCategoryUpdateAction(input interface{}) (CategoryUpdateActi
 			return nil, err
 		}
 		return obj, nil
+	case "setStores":
+		obj := CategorySetStoresAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	}
 	return nil, nil
 }
@@ -387,6 +422,27 @@ func (obj CategoryAddAssetAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "addAsset", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action locks the Category and its parent Category. For details, see [Category tree locking](/api/projects/categories#category-tree-locking).
+*
+ */
+type CategoryAddStoreAction struct {
+	// Value to add to the Category's `stores`.
+	//
+	// When called through an [in-Store endpoint](#update-category-in-store), the caller must have permission for the referenced [Store](ctp:api:type:Store).
+	Store StoreResourceIdentifier `json:"store"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategoryAddStoreAction) MarshalJSON() ([]byte, error) {
+	type Alias CategoryAddStoreAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addStore", Alias: (*Alias)(&obj)})
 }
 
 type CategoryChangeAssetNameAction struct {
@@ -443,7 +499,7 @@ func (obj CategoryChangeNameAction) MarshalJSON() ([]byte, error) {
 }
 
 type CategoryChangeOrderHintAction struct {
-	// New value to set. Must be a decimal value between 0 and 1.
+	// New value to set. Must be a decimal value between 0 and 1. When sorted in ascending order, Categories with a lower `orderHint` appear before those with a higher value (for example, `0.05` before `0.07`).
 	OrderHint string `json:"orderHint"`
 }
 
@@ -457,6 +513,10 @@ func (obj CategoryChangeOrderHintAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeOrderHint", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	This action locks the entire Category tree in the Project for the duration of the request. For details, see [Category tree locking](/api/projects/categories#category-tree-locking).
+*
+ */
 type CategoryChangeParentAction struct {
 	// New value to set as parent.
 	Parent CategoryResourceIdentifier `json:"parent"`
@@ -508,6 +568,30 @@ func (obj CategoryRemoveAssetAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeAsset", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action locks the Category and its parent Category. For details, see [Category tree locking](/api/projects/categories#category-tree-locking).
+*
+*	Every direct child Category must be assigned to at least one Store in that set; otherwise, the action is rejected.
+*
+*	- When updating a Category via the [general endpoint](#update-category), all Stores can be removed as a global Category is accessible in all Stores.
+*	- When updating a Category via the [Store-specific endpoint](#update-category-in-store), you can remove the last Store only if at least one Store remains; otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned. If you do not have permission for the referenced [Store](ctp:api:type:Store), an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+*
+ */
+type CategoryRemoveStoreAction struct {
+	// Value to remove from the Category's `stores`.
+	Store StoreResourceIdentifier `json:"store"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategoryRemoveStoreAction) MarshalJSON() ([]byte, error) {
+	type Alias CategoryRemoveStoreAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeStore", Alias: (*Alias)(&obj)})
 }
 
 type CategorySetAssetCustomFieldAction struct {
@@ -781,4 +865,32 @@ func (obj CategorySetMetaTitleAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setMetaTitle", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	This action locks the Category and its parent Category. For details, see [Category tree locking](/api/projects/categories#category-tree-locking).
+*
+*	Every direct child Category must be assigned to at least one Store in that set; otherwise, the action is rejected.
+*
+*	- When updating a Category via the [general endpoint](#update-category), all Stores can be removed as a global Category is accessible in all Stores.
+*	- When updating a Category via the [Store-specific endpoint](#update-category-in-store), the `stores` field cannot be empty; otherwise, an [InvalidOperation](ctp:api:type:InvalidOperationError) error is returned.
+*
+*	  If you do not have permission for every Store currently assigned to the Category, an [Unauthorized](ctp:api:type:UnauthorizedError) error is returned.
+*
+ */
+type CategorySetStoresAction struct {
+	// Value to set. It replaces the entire set of [Stores](ctp:api:type:Store) assigned to the Category.
+	//
+	// If the `stores` field contains a Store that you do not have permission for, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+	Stores []StoreResourceIdentifier `json:"stores"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CategorySetStoresAction) MarshalJSON() ([]byte, error) {
+	type Alias CategorySetStoresAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setStores", Alias: (*Alias)(&obj)})
 }

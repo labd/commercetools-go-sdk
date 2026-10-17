@@ -26,22 +26,22 @@ func (r *ByProjectKeyProductTypesRequestMethodHead) Dump() map[string]interface{
 }
 
 type ByProjectKeyProductTypesRequestMethodHeadInput struct {
-	Where *string
+	Where []string
 }
 
 func (input *ByProjectKeyProductTypesRequestMethodHeadInput) Values() url.Values {
 	values := url.Values{}
-	if input.Where != nil {
-		values.Add("where", fmt.Sprintf("%v", *input.Where))
+	for _, v := range input.Where {
+		values.Add("where", fmt.Sprintf("%v", v))
 	}
 	return values
 }
 
-func (rb *ByProjectKeyProductTypesRequestMethodHead) Where(v string) *ByProjectKeyProductTypesRequestMethodHead {
+func (rb *ByProjectKeyProductTypesRequestMethodHead) Where(v []string) *ByProjectKeyProductTypesRequestMethodHead {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyProductTypesRequestMethodHeadInput{}
 	}
-	rb.params.Where = &v
+	rb.params.Where = v
 	return rb
 }
 
