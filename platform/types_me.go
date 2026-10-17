@@ -2141,7 +2141,8 @@ func (obj MyCartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetBillingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -2424,7 +2425,8 @@ func (obj MyCartSetLocaleAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartSetShippingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If not set, the shipping address is unset, and the `taxedPrice` and `taxRate` are unset in all Line Items.
 	Address *BaseAddress `json:"address,omitempty"`
 }

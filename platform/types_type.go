@@ -572,7 +572,7 @@ type TypePagedQueryResponse struct {
 	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Types](ctp:api:type:Type) matching the query.
 	Results []Type `json:"results"`
@@ -586,7 +586,7 @@ type TypeReference struct {
 	// Unique identifier of the referenced [Type](ctp:api:type:Type).
 	ID string `json:"id"`
 	// Contains the representation of the expanded Type.
-	// Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Types.
+	// Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Types.
 	Obj *Type `json:"obj,omitempty"`
 }
 
@@ -750,8 +750,20 @@ func mapDiscriminatorTypeUpdateAction(input interface{}) (TypeUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "removeEnumValues":
+		obj := TypeRemoveEnumValuesAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "removeFieldDefinition":
 		obj := TypeRemoveFieldDefinitionAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeLocalizedEnumValues":
+		obj := TypeRemoveLocalizedEnumValuesAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1024,6 +1036,30 @@ func (obj TypeChangeNameAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changeName", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Removes EnumValues from an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition.
+*	This update action can be used to update an [EnumType](ctp:api:type:CustomFieldEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [EnumType](ctp:api:type:CustomFieldEnumType).
+*
+*	This update action is always allowed, even if the FieldDefinition is `required` and even if a resource still has a Custom Field value referencing one of the removed keys. Existing Custom Field values are not updated or removed by this update action, and are returned unchanged until they are explicitly updated. Note that a subsequent update of a single Custom Field on such a resource can fail, because that update revalidates all Custom Field values on the resource.
+*
+ */
+type TypeRemoveEnumValuesAction struct {
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// Keys of the [EnumValues](ctp:api:type:CustomFieldEnumValue) to remove. An empty array results in no change.
+	Keys []string `json:"keys"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TypeRemoveEnumValuesAction) MarshalJSON() ([]byte, error) {
+	type Alias TypeRemoveEnumValuesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeEnumValues", Alias: (*Alias)(&obj)})
+}
+
 type TypeRemoveFieldDefinitionAction struct {
 	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to remove.
 	// The removal of a FieldDefinition deletes [asynchronously](/api/general-concepts#eventual-consistency) all Custom Fields using the FieldDefinition as well.
@@ -1038,6 +1074,30 @@ func (obj TypeRemoveFieldDefinitionAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "removeFieldDefinition", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Removes LocalizedEnumValues from a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition.
+*	This update action can be used to update a [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType) FieldDefinition and a [SetType](ctp:api:type:CustomFieldSetType) FieldDefinition of [LocalizedEnumType](ctp:api:type:CustomFieldLocalizedEnumType).
+*
+*	This update action is always allowed, even if the FieldDefinition is `required` and even if a resource still has a Custom Field value referencing one of the removed keys. Existing Custom Field values are not updated or removed by this update action, and are returned unchanged until they are explicitly updated. Note that a subsequent update of a single Custom Field on such a resource can fail, because that update revalidates all Custom Field values on the resource.
+*
+ */
+type TypeRemoveLocalizedEnumValuesAction struct {
+	// `name` of the [FieldDefinition](ctp:api:type:FieldDefinition) to update.
+	FieldName string `json:"fieldName"`
+	// Keys of the [LocalizedEnumValues](ctp:api:type:CustomFieldLocalizedEnumValue) to remove. An empty array results in no change.
+	Keys []string `json:"keys"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj TypeRemoveLocalizedEnumValuesAction) MarshalJSON() ([]byte, error) {
+	type Alias TypeRemoveLocalizedEnumValuesAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeLocalizedEnumValues", Alias: (*Alias)(&obj)})
 }
 
 type TypeSetDescriptionAction struct {

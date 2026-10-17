@@ -1,0 +1,3 @@
+kind: Fixed
+body: '`checkout.Application.Description` and `checkout.ApplicationDraft.Description` are now a `LocalizedString`, as the API returns and the `setDescription` action takes, instead of a string as the spec types it'
+time: 2026-10-17T16:00:00.000000+02:00

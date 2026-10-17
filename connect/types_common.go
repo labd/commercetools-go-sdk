@@ -26,7 +26,7 @@ type CertificationInfo struct {
 *
  */
 type CertificationInfoComment struct {
-	// The commercetools Composable Commerce Project key associated with the person making the comment.
+	// The commercetools Project key associated with the person making the comment.
 	UserId string `json:"userId"`
 	// Date and time (UTC) the comment was added.
 	Datetime time.Time `json:"datetime"`
@@ -465,7 +465,7 @@ const (
 )
 
 /**
-*	The Region of a commercetools Composable Commerce Project or Deployment. For more information, see [Hosts](/hosts-and-authorization#hosts).
+*	The Region of a commercetools Project or Deployment. For more information, see [Hosts](/hosts-and-authorization#hosts).
 *
  */
 type Region string

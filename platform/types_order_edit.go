@@ -581,11 +581,16 @@ type StagedOrder struct {
 	// Eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
 	// Discount Codes added to the Order.
-	// An Order that has `directDiscounts` cannot have `discountCodes`.
+	//
+	// If `directDiscountsIgnoreCartDiscounts` is `true`, an Order that has `directDiscounts` cannot have `discountCodes`.
 	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
 	// Direct Discounts added to the Order.
-	// An Order that has `discountCodes` cannot have `directDiscounts`.
+	//
+	// If `directDiscountsIgnoreCartDiscounts` is `true`, an Order that has `discountCodes` cannot have `directDiscounts`.
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
+	// - If `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Order. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	// - If `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Order.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
 	// Automatically set when a Line Item with `GiftLineItem` [LineItemMode](ctp:api:type:LineItemMode) is [removed](ctp:api:type:StagedOrderRemoveLineItemAction) from the Order.
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Order.
@@ -1617,7 +1622,8 @@ func (obj StagedOrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
 *
  */
 type StagedOrderSetBillingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -1987,7 +1993,8 @@ type StagedOrderSetDeliveryAddressAction struct {
 	//
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -2141,8 +2148,9 @@ func (obj StagedOrderSetDeliveryItemsAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Adds a [DirectDiscount](ctp:api:type:DirectDiscount), but only if no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Order.
-*	Either a Discount Code or a Direct Discount can exist on a Order at the same time.
+*	Adds a [DirectDiscount](ctp:api:type:DirectDiscount) to the Order.
+*
+*	If [Order](ctp:api:type:Order) `directDiscountsIgnoreCartDiscounts` is `true`, Direct Discounts can only be added when no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Order.
 *
  */
 type StagedOrderSetDirectDiscountsAction struct {
@@ -2160,6 +2168,28 @@ func (obj StagedOrderSetDirectDiscountsAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDirectDiscounts", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Determines whether the [Direct Discounts](ctp:api:type:DirectDiscount) on the Order replace the [Cart Discounts](ctp:api:type:CartDiscount) of the [Project](ctp:api:type:Project), or apply alongside them.
+*
+ */
+type StagedOrderSetDirectDiscountsIgnoreCartDiscountsAction struct {
+	// - If `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Order. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	//
+	// The value can be set to `true` only if the Order does not have both `discountCodes` and `directDiscounts`.
+	// - If `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Order.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StagedOrderSetDirectDiscountsIgnoreCartDiscountsAction) MarshalJSON() ([]byte, error) {
+	type Alias StagedOrderSetDirectDiscountsIgnoreCartDiscountsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDirectDiscountsIgnoreCartDiscounts", Alias: (*Alias)(&obj)})
 }
 
 type StagedOrderSetItemShippingAddressCustomFieldAction struct {
@@ -2770,7 +2800,8 @@ func (obj StagedOrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error)
 *
  */
 type StagedOrderSetShippingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }

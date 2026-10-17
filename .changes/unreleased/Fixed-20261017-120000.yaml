@@ -1,0 +1,3 @@
+kind: Fixed
+body: '`connect.DeploymentRedeployAction.GlobalConfiguration` is now a `DeploymentGlobalConfiguration`, the values a redeploy sends, instead of the connector''s key definitions as the spec types it'
+time: 2026-10-17T12:00:00.000000+02:00

@@ -1,0 +1,3 @@
+kind: Added
+body: 'Regenerate every API from commercetools-api-reference (commit 91078d1, 16 Oct 2026), and generate the Checkout API again: applications, payment integrations, transactions and recurring payments. Breaking: in checkout, the payment intent body `Payment` is now `PaymentIntent` and the old error types are replaced by the spec''s; in platform, `CircularDependencyError`, `MissingDependencyError`, their GraphQL variants and `Where` on a product types HEAD request are gone, as in the spec'
+time: 2026-10-17T12:00:00.000000+02:00

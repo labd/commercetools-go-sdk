@@ -1,0 +1,389 @@
+#%RAML 1.0
+---
+# The management API of the Commerce Integration Layer, for the routes the
+# Terraform provider manages. commercetools-api-reference does not describe it
+# yet: this file follows what the commercetools CLI's client sends and reads,
+# and gives way to the official spec once api-specs/cil carries it.
+title: Commerce Integration Layer Management API
+annotationTypes: !include annotations.raml
+(products):
+  - Commerce Integration Layer
+baseUri: https://extensions.integration-layer.{region}.commercetools.com
+(sdkBaseUri): https://extensions.integration-layer.europe-west1.gcp.commercetools.com
+baseUriParameters:
+  region:
+    type: string
+    enum:
+      - europe-west1.gcp
+      - us-central1.gcp
+      - australia-southeast1.gcp
+      - us-east-2.aws
+      - eu-central-1.aws
+version: v1
+mediaType: application/json
+securitySchemes:
+  oauth_2_0:
+    type: OAuth 2.0
+    describedBy:
+      headers:
+        Authorization:
+          type: string
+    settings:
+      accessTokenUri: https://auth.europe-west1.gcp.commercetools.com/oauth/token
+      authorizationGrants: [client_credentials]
+      scopes:
+        - 'manage_project:{projectKey}'
+securedBy: [oauth_2_0]
+
+traits:
+  errorable:
+    responses:
+      400:
+        body:
+          application/json:
+            type: ErrorResponse
+      401:
+        body:
+          application/json:
+            type: ErrorResponse
+      403:
+        body:
+          application/json:
+            type: ErrorResponse
+      # Without a body, so the client answers ErrNotFound as the generated
+      # clients of the other APIs do.
+      404:
+resourceTypes:
+  base:
+    get?:
+      is: [errorable]
+    put?:
+      is: [errorable]
+    patch?:
+      is: [errorable]
+    delete?:
+      is: [errorable]
+
+types:
+  ErrorResponse:
+    (package): Error
+    type: object
+    description: An error, as every management route answers one.
+    properties:
+      error?:
+        type: string
+      error_description?:
+        type: string
+
+  ProjectSettings:
+    (package): Settings
+    type: object
+    description: The language, currency and country a new session starts with, and the Project's label.
+    properties:
+      label: string
+      language: string
+      currency: string
+      country: string
+  ProjectSection:
+    (package): Settings
+    type: object
+    description: The project section as read. A Project created before a setting existed may lack it.
+    properties:
+      label?: string
+      language?: string
+      currency?: string
+      country?: string
+      checkout?: CheckoutConfig
+  PlatformSettings:
+    (package): Settings
+    type: object
+    properties:
+      regionId: string
+  ProjectPresentment:
+    (package): Settings
+    type: object
+    description: The values the commercetools Project offers.
+    properties:
+      languages: string[]
+      countries: string[]
+      currencies: string[]
+  ProjectSettingsView:
+    (package): Settings
+    type: object
+    properties:
+      project: ProjectSection
+      platform: PlatformSettings
+      presentment?: ProjectPresentment
+      version: integer
+  ProjectSettingsReplaceResult:
+    (package): Settings
+    type: object
+    properties:
+      project: ProjectSettings
+      version: integer
+
+  CheckoutMode:
+    (package): Checkout
+    type: string
+    enum: [COMPLETE, PAYMENT_ONLY]
+  CheckoutRule:
+    (package): Checkout
+    type: object
+    properties:
+      countries?:
+        type: string[]
+        description: ISO 3166-1 alpha-2 codes; absent matches any.
+      stores?:
+        type: string[]
+        description: Store keys; absent matches any.
+      applicationKey: string
+      mode: CheckoutMode
+  CheckoutConfig:
+    (package): Checkout
+    type: object
+    properties:
+      rules:
+        type: CheckoutRule[]
+        description: In order; the first match wins, and a catch-all rule must be last.
+  CheckoutConfigReplaceResult:
+    (package): Checkout
+    type: object
+    properties:
+      checkout: CheckoutConfig
+      version: integer
+
+  SourceCoordinateSpace:
+    (package): FieldVisibility
+    type: string
+    enum: [customField, attribute]
+  SourceCoordinate:
+    (package): FieldVisibility
+    type: object
+    properties:
+      space: SourceCoordinateSpace
+      typeKey: string
+      fieldName: string
+  FieldVisibilityRow:
+    (package): FieldVisibility
+    type: object
+    description: A field the Project has or a stored rule names. A rule exists for it when it is active or has a reason.
+    properties:
+      coordinate: SourceCoordinate
+      fieldType?: string
+      active: boolean
+      reason?: string
+  FieldVisibilityView:
+    (package): FieldVisibility
+    type: object
+    properties:
+      fields: FieldVisibilityRow[]
+      version: integer
+  FieldVisibilityReplaceResult:
+    (package): FieldVisibility
+    type: object
+    properties:
+      hiddenFields: SourceCoordinate[]
+      version: integer
+      publishPending:
+        type: boolean
+        description: The rules are stored, but republishing the schema failed.
+
+  IdpMatchStrategy:
+    (package): Idp
+    type: string
+    enum: [externalId, email]
+  IdpClaimMapping:
+    (package): Idp
+    type: object
+    properties:
+      externalId: string
+      email: string
+      firstName: string
+      lastName: string
+      phone: string
+  IdpConfig:
+    (package): Idp
+    type: object
+    description: The IdP login configuration, as read. The client secret is never returned.
+    properties:
+      issuer: string
+      tokenEndpoint: string
+      revocationEndpoint: string
+      jwksUri: string
+      authorizationEndpoint?: string
+      clientId: string
+      redirectUri: string
+      claims: IdpClaimMapping
+      matchStrategy: IdpMatchStrategy
+      hasClientSecret: boolean
+  IdpConfigInput:
+    (package): Idp
+    type: object
+    properties:
+      issuer: string
+      tokenEndpoint: string
+      revocationEndpoint: string
+      jwksUri: string
+      authorizationEndpoint?: string
+      clientId: string
+      redirectUri: string
+      claims: IdpClaimMapping
+      matchStrategy: IdpMatchStrategy
+      clientSecret:
+        type: string
+        description: An empty string keeps the stored secret; the first write needs one.
+
+  ConfigEntry:
+    (package): ExtensionConfig
+    type: object
+    properties:
+      key: string
+      value?:
+        type: string | nil
+        description: Withheld for a secret entry.
+      secret: boolean
+  ConfigEntryPatch:
+    (package): ExtensionConfig
+    type: object
+    properties:
+      key: string
+      value:
+        type: string | nil
+        description: '`null` deletes the entry.'
+      secret?: boolean
+  ExtensionConfig:
+    (package): ExtensionConfig
+    type: object
+    properties:
+      entries: ConfigEntry[]
+      maskExtensionGraphQLErrors?: boolean
+  ExtensionConfigPatch:
+    (package): ExtensionConfig
+    type: object
+    properties:
+      entries?: ConfigEntryPatch[]
+
+  Allowlist:
+    (package): Allowlist
+    type: object
+    properties:
+      allow: string[]
+      deny?:
+        type: string[]
+        description: Set by commercetools; read-only.
+  AllowlistReplaceResult:
+    (package): Allowlist
+    type: object
+    properties:
+      allow: string[]
+      version: integer
+
+/{projectKey}:
+  (methodName): withProjectKey
+  type: base
+  uriParameters:
+    projectKey:
+      type: string
+  /main:
+    type: base
+    /settings:
+      type: base
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: ProjectSettingsView
+      put:
+        body:
+          application/json:
+            type: ProjectSettings
+        responses:
+          200:
+            body:
+              application/json:
+                type: ProjectSettingsReplaceResult
+    /checkout:
+      type: base
+      put:
+        body:
+          application/json:
+            type: CheckoutConfig
+        responses:
+          200:
+            body:
+              application/json:
+                type: CheckoutConfigReplaceResult
+    /schema:
+      /visibility:
+        type: base
+        get:
+          responses:
+            200:
+              body:
+                application/json:
+                  type: FieldVisibilityView
+        put:
+          body:
+            application/json:
+              type: SourceCoordinate[]
+          responses:
+            200:
+              body:
+                application/json:
+                  type: FieldVisibilityReplaceResult
+    /idp:
+      type: base
+      get:
+        responses:
+          200:
+            body:
+              application/json:
+                type: IdpConfig
+      put:
+        body:
+          application/json:
+            type: IdpConfigInput
+        responses:
+          200:
+            body:
+              application/json:
+                type: IdpConfig
+      delete:
+        responses:
+          204:
+    /extension:
+      /config:
+        type: base
+        get:
+          responses:
+            200:
+              body:
+                application/json:
+                  type: ExtensionConfig
+        patch:
+          body:
+            application/json:
+              type: ExtensionConfigPatch
+          responses:
+            200:
+              body:
+                application/json:
+                  type: ExtensionConfig
+      /allowlist:
+        type: base
+        get:
+          responses:
+            200:
+              body:
+                application/json:
+                  type: Allowlist
+        put:
+          body:
+            application/json:
+              type: string[]
+          responses:
+            200:
+              body:
+                application/json:
+                  type: AllowlistReplaceResult

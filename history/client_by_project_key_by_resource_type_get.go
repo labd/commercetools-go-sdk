@@ -32,6 +32,8 @@ type ByProjectKeyByResourceTypeRequestMethodGetInput struct {
 	Limit                           *int
 	Offset                          *int
 	UserId                          *string
+	UserIds                         []string
+	ResourceIds                     []string
 	ClientId                        *string
 	CustomerId                      *string
 	AssociateId                     *string
@@ -62,6 +64,12 @@ func (input *ByProjectKeyByResourceTypeRequestMethodGetInput) Values() url.Value
 	}
 	if input.UserId != nil {
 		values.Add("userId", fmt.Sprintf("%v", *input.UserId))
+	}
+	for _, v := range input.UserIds {
+		values.Add("userIds", fmt.Sprintf("%v", v))
+	}
+	for _, v := range input.ResourceIds {
+		values.Add("resourceIds", fmt.Sprintf("%v", v))
 	}
 	if input.ClientId != nil {
 		values.Add("clientId", fmt.Sprintf("%v", *input.ClientId))
@@ -147,6 +155,22 @@ func (rb *ByProjectKeyByResourceTypeRequestMethodGet) UserId(v string) *ByProjec
 		rb.params = &ByProjectKeyByResourceTypeRequestMethodGetInput{}
 	}
 	rb.params.UserId = &v
+	return rb
+}
+
+func (rb *ByProjectKeyByResourceTypeRequestMethodGet) UserIds(v []string) *ByProjectKeyByResourceTypeRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyByResourceTypeRequestMethodGetInput{}
+	}
+	rb.params.UserIds = v
+	return rb
+}
+
+func (rb *ByProjectKeyByResourceTypeRequestMethodGet) ResourceIds(v []string) *ByProjectKeyByResourceTypeRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyByResourceTypeRequestMethodGetInput{}
+	}
+	rb.params.ResourceIds = v
 	return rb
 }
 

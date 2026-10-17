@@ -28,7 +28,7 @@ type Connector struct {
 	Configurations []ConnectorConfigurationApplication `json:"configurations"`
 	// Configuration for the API Client used for automatically generating API Client credentials.
 	ApiClient *ConnectorApiClient `json:"apiClient,omitempty"`
-	// Whether only Composable Commerce Projects specified in `privateProjects` can access the Connector.
+	// Whether only commercetools Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
 	// Global configuration applied to all applications in the Deployment.
 	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
@@ -87,9 +87,9 @@ type ConnectorStaged struct {
 	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// Configuration for the API Client used for generating API Client credentials.
 	ApiClient *ConnectorApiClient `json:"apiClient,omitempty"`
-	// Whether only Composable Commerce Projects specified in `privateProjects` can access the Connector.
+	// Whether only commercetools Projects specified in `privateProjects` can access the Connector.
 	Private bool `json:"private"`
-	// If `private` is true, only these Composable Commerce Projects can access the Connector.
+	// If `private` is true, only these commercetools Projects can access the Connector.
 	PrivateProjects []string `json:"privateProjects"`
 	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
@@ -126,7 +126,7 @@ type ConnectorStagedDraft struct {
 	Repository Repository `json:"repository"`
 	// If provided, Connectors can only be deployed in these Regions. If not provided, Connectors can be deployed in any [supported Region](hosts-and-authorization#hosts). For faster request processing, we recommend adding only the required Region.
 	SupportedRegions []Region `json:"supportedRegions"`
-	// Composable Commerce Projects that can access the Connector. If empty, only the creator can access this Connector.
+	// commercetools Projects that can access the Connector. If empty, only the creator can access this Connector.
 	PrivateProjects []string `json:"privateProjects"`
 	// URL to the documentation of the Connector.
 	DocumentationUrl *string `json:"documentationUrl,omitempty"`
@@ -527,13 +527,13 @@ func (obj ConnectorSetCreatorNoOfContributorsAction) MarshalJSON() ([]byte, erro
 }
 
 /**
-*	Allow a Composable Commerce Project to access a private Connector.
+*	Allow a commercetools Project to access a private Connector.
 *
 *	Attempting to add a `privateProject` to a non-private ConnectorStaged returns the [ConnectorStagedNotPrivate](ctp:connect:type:ConnectorStagedNotPrivateError) error.
 *
  */
 type ConnectorAddPrivateProjectAction struct {
-	// The Composable Commerce Project to add to `privateProjects`.
+	// The commercetools Project to add to `privateProjects`.
 	PrivateProject string `json:"privateProject"`
 }
 
@@ -548,13 +548,13 @@ func (obj ConnectorAddPrivateProjectAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Remove a Composable Commerce Project's access to a private Connector.
+*	Remove a commercetools Project's access to a private Connector.
 *
 *	Attempting to remove a `privateProject` from a non-private ConnectorStaged returns the [ConnectorStagedNotPrivate](ctp:connect:type:ConnectorStagedNotPrivateError) error.
 *
  */
 type ConnectorRemovePrivateProjectAction struct {
-	// The Composable Commerce Project to remove from `privateProjects`.
+	// The commercetools Project to remove from `privateProjects`.
 	PrivateProject string `json:"privateProject"`
 }
 

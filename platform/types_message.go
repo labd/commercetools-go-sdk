@@ -14101,7 +14101,7 @@ func (obj OrderDiscountCodeRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after the [DiscountCodeState](ctp:api:type:DiscountCodeState) changes due to a [recalculation](/api/projects/carts#recalculate).
+*	Generated after the [DiscountCodeState](ctp:api:type:DiscountCodeState) changes due to a [recalculation](ctp:api:type:CartRecalculateAction).
 *
  */
 type OrderDiscountCodeStateSetMessage struct {
@@ -14470,7 +14470,7 @@ func (obj OrderLineItemDiscountSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Set LineItem DistributionChannel](/api/projects/order-edits#set-lineitem-distributionchannel) update action.
+*	Generated after a successful [Set LineItem DistributionChannel](ctp:api:type:StagedOrderSetLineItemDistributionChannelAction) update action.
 *
  */
 type OrderLineItemDistributionChannelSetMessage struct {
@@ -17740,7 +17740,7 @@ func (obj ProductDeletedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Add External Image](ctp:api:type:ProductAddExternalImageAction) update action or after the successful [upload of an image](/api/projects/products#upload-product-image).
+*	Generated after a successful [Add External Image](ctp:api:type:ProductAddExternalImageAction) update action or after the successful [upload of an image](ctp:api:endpoint:/{projectKey}/products/{id}/images:POST).
 *
  */
 type ProductImageAddedMessage struct {
@@ -19383,8 +19383,8 @@ func (obj ProductStateTransitionMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create Product Tailoring](/api/projects/product-tailoring#create-producttailoring) or
-*	[Create Product Tailoring in Store](/api/projects/product-tailoring#create-producttailoring-in-store) request.
+*	Generated after a successful [Create Product Tailoring](ctp:api:endpoint:/{projectKey}/product-tailoring:POST) or
+*	[Create Product Tailoring in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/product-tailoring:POST) request.
 *
  */
 type ProductTailoringCreatedMessage struct {
@@ -24907,7 +24907,7 @@ type UserProvidedIdentifiers struct {
 }
 
 /**
-*	Generated after a successful [Create Variant](/../api/projects/variants#create-variant) request.
+*	Generated after a successful [Create Variant](ctp:api:endpoint:/{projectKey}/variants:POST) request.
 *
  */
 type VariantCreatedMessage struct {
@@ -24932,8 +24932,8 @@ type VariantCreatedMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Unique identifier of the Product to which the Variant belongs.
-	ProductId string `json:"productId"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// Unique identifier of the Variant within its parent Product.
 	VariantId int `json:"variantId"`
 	// User-defined unique identifier of the Variant.
@@ -25002,7 +25002,7 @@ func (obj VariantCreatedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Delete Variant](/../api/projects/variants#delete-variant) request.
+*	Generated after a successful [Delete Variant](/api/projects/variants#delete-variant) request.
 *
  */
 type VariantDeletedMessage struct {
@@ -25027,6 +25027,8 @@ type VariantDeletedMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -25083,6 +25085,8 @@ type VariantImageAddedMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// [Image](ctp:api:type:Image) that was added.
 	Image Image `json:"image"`
 	// Whether the update was only applied to the staged Variant.
@@ -25143,6 +25147,8 @@ type VariantImagesSetMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// The images that were set on the Variant.
 	Images []Image `json:"images"`
 	// The previous images of the Variant.
@@ -25205,6 +25211,8 @@ type VariantKeySetMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// The key that was set on the Variant.
 	Key *string `json:"key,omitempty"`
 	// The previous key of the Variant.
@@ -25240,7 +25248,7 @@ func (obj VariantKeySetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Publish](/../api/projects/variants#publish) update action.
+*	Generated after a successful [Publish](ctp:api:type:VariantPublishAction) update action.
 *
  */
 type VariantPublishedMessage struct {
@@ -25265,6 +25273,8 @@ type VariantPublishedMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -25321,6 +25331,8 @@ type VariantSkuSetMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// The SKU that was set on the Variant.
 	Sku *string `json:"sku,omitempty"`
 	// The previous SKU of the Variant.
@@ -25358,7 +25370,7 @@ func (obj VariantSkuSetMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Staged Changes Removed](/../api/projects/variants#remove-staged-changes) update action.
+*	Generated after a successful [Staged Changes Removed](ctp:api:type:VariantRemoveStagedChangesAction) update action.
 *
  */
 type VariantStagedChangesRemovedMessage struct {
@@ -25383,6 +25395,8 @@ type VariantStagedChangesRemovedMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -25414,7 +25428,7 @@ func (obj VariantStagedChangesRemovedMessage) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Unpublish](/../api/projects/variants#unpublish) update action.
+*	Generated after a successful [Unpublish](ctp:api:type:VariantUnpublishAction) update action.
 *
  */
 type VariantUnpublishedMessage struct {
@@ -25439,7 +25453,7 @@ type VariantUnpublishedMessage struct {
 	ResourceVersion int `json:"resourceVersion"`
 	// User-provided identifiers of the resource, such as `key` or `externalId`. Only present if the resource has such identifiers.
 	ResourceUserProvidedIdentifiers *UserProvidedIdentifiers `json:"resourceUserProvidedIdentifiers,omitempty"`
-	// Reference to the Product containing the Variant that was unpublished.
+	// Reference to the Product containing the Variant.
 	Product ProductReference `json:"product"`
 }
 
@@ -30938,7 +30952,7 @@ func (obj OrderDiscountCodeRemovedMessagePayload) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Generated after the [DiscountCodeState](ctp:api:type:DiscountCodeState) changes due to a [recalculation](/api/projects/carts#recalculate).
+*	Generated after the [DiscountCodeState](ctp:api:type:DiscountCodeState) changes due to a [recalculation](ctp:api:type:CartRecalculateAction).
 *
  */
 type OrderDiscountCodeStateSetMessagePayload struct {
@@ -31073,7 +31087,7 @@ func (obj OrderLineItemDiscountSetMessagePayload) MarshalJSON() ([]byte, error) 
 }
 
 /**
-*	Generated after a successful [Set LineItem DistributionChannel](/api/projects/order-edits#set-lineitem-distributionchannel) update action.
+*	Generated after a successful [Set LineItem DistributionChannel](ctp:api:type:StagedOrderSetLineItemDistributionChannelAction) update action.
 *
  */
 type OrderLineItemDistributionChannelSetMessagePayload struct {
@@ -32248,7 +32262,7 @@ func (obj ProductDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Add External Image](ctp:api:type:ProductAddExternalImageAction) update action or after the successful [upload of an image](/api/projects/products#upload-product-image).
+*	Generated after a successful [Add External Image](ctp:api:type:ProductAddExternalImageAction) update action or after the successful [upload of an image](ctp:api:endpoint:/{projectKey}/products/{id}/images:POST).
 *
  */
 type ProductImageAddedMessagePayload struct {
@@ -32880,8 +32894,8 @@ func (obj ProductStateTransitionMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Create Product Tailoring](/api/projects/product-tailoring#create-producttailoring) or
-*	[Create Product Tailoring in Store](/api/projects/product-tailoring#create-producttailoring-in-store) request.
+*	Generated after a successful [Create Product Tailoring](ctp:api:endpoint:/{projectKey}/product-tailoring:POST) or
+*	[Create Product Tailoring in Store](ctp:api:endpoint:/{projectKey}/in-store/key={storeKey}/product-tailoring:POST) request.
 *
  */
 type ProductTailoringCreatedMessagePayload struct {
@@ -35074,14 +35088,14 @@ func (obj StoreTermsOfServiceUrlSetMessagePayload) MarshalJSON() ([]byte, error)
 }
 
 /**
-*	Generated after a successful [Create Variant](/../api/projects/variants#create-variant) request.
+*	Generated after a successful [Create Variant](ctp:api:endpoint:/{projectKey}/variants:POST) request.
 *
  */
 type VariantCreatedMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// Unique identifier of the Variant.
 	ID string `json:"id"`
-	// Unique identifier of the Product to which the Variant belongs.
-	ProductId string `json:"productId"`
 	// Unique identifier of the Variant within its parent Product.
 	VariantId int `json:"variantId"`
 	// User-defined unique identifier of the Variant.
@@ -35132,10 +35146,12 @@ func (obj VariantCreatedMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Delete Variant](/../api/projects/variants#delete-variant) request.
+*	Generated after a successful [Delete Variant](/api/projects/variants#delete-variant) request.
 *
  */
 type VariantDeletedMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -35153,6 +35169,8 @@ func (obj VariantDeletedMessagePayload) MarshalJSON() ([]byte, error) {
 *
  */
 type VariantImageAddedMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// [Image](ctp:api:type:Image) that was added.
 	Image Image `json:"image"`
 	// Whether the update was only applied to the staged Variant.
@@ -35174,6 +35192,8 @@ func (obj VariantImageAddedMessagePayload) MarshalJSON() ([]byte, error) {
 *
  */
 type VariantImagesSetMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// The images that were set on the Variant.
 	Images []Image `json:"images"`
 	// The previous images of the Variant.
@@ -35197,6 +35217,8 @@ func (obj VariantImagesSetMessagePayload) MarshalJSON() ([]byte, error) {
 *
  */
 type VariantKeySetMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// The key that was set on the Variant.
 	Key *string `json:"key,omitempty"`
 	// The previous key of the Variant.
@@ -35214,10 +35236,12 @@ func (obj VariantKeySetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Publish](/../api/projects/variants#publish) update action.
+*	Generated after a successful [Publish](ctp:api:type:VariantPublishAction) update action.
 *
  */
 type VariantPublishedMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -35235,6 +35259,8 @@ func (obj VariantPublishedMessagePayload) MarshalJSON() ([]byte, error) {
 *
  */
 type VariantSkuSetMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 	// The SKU that was set on the Variant.
 	Sku *string `json:"sku,omitempty"`
 	// The previous SKU of the Variant.
@@ -35254,10 +35280,12 @@ func (obj VariantSkuSetMessagePayload) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Generated after a successful [Staged Changes Removed](/../api/projects/variants#remove-staged-changes) update action.
+*	Generated after a successful [Staged Changes Removed](ctp:api:type:VariantRemoveStagedChangesAction) update action.
 *
  */
 type VariantStagedChangesRemovedMessagePayload struct {
+	// Reference to the Product containing the Variant.
+	Product ProductReference `json:"product"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -35271,11 +35299,11 @@ func (obj VariantStagedChangesRemovedMessagePayload) MarshalJSON() ([]byte, erro
 }
 
 /**
-*	Generated after a successful [Unpublish](/../api/projects/variants#unpublish) update action.
+*	Generated after a successful [Unpublish](ctp:api:type:VariantUnpublishAction) update action.
 *
  */
 type VariantUnpublishedMessagePayload struct {
-	// Reference to the Product containing the Variant that was unpublished.
+	// Reference to the Product containing the Variant.
 	Product ProductReference `json:"product"`
 }
 

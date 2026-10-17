@@ -28,23 +28,40 @@ tasks:
 
   generate:
     cmds:
-#      - task: generate-checkout
+      - task: generate-checkout
       - task: generate-connect
       - task: generate-importapi
 #      - task: generate-frontend
       - task: generate-platform
       - task: generate-history
       - task: generate-insights
+      - task: generate-integrationlayer
 
   generate-checkout:
     cmds:
-      - task: generate-api
-        vars: {apiName: checkout, path: checkout}
+      # Not using generate-api: the spec types an Application's description as
+      # a string, where the API, its examples and the setDescription action use
+      # a LocalizedString, so the field's type is corrected.
+      - rmf-codegen generate {{ .apiSpecsDir }}/checkout/api.raml -b checkout -o {{ .generatedDir }}/ -t GO_CLIENT
+      - perl -p -i -e 's/^(\s*Description\s+)\*string(\s+`json:"description,omitempty"`)/$1*LocalizedString$2/' {{ .generatedDir }}/checkout/types_application.go
+      - goimports -w {{ .generatedDir }}/checkout/
+      - go fmt {{ .generatedDir }}/checkout/
+      - rm -rf checkout/
+      - mv {{ .generatedDir }}/checkout .
+      - perl -p -i -e 's/const Version = "1.0.1"/const Version = "{{ .versionId }}"/' checkout/client.go
 
   generate-connect:
     cmds:
-      - task: generate-api
-        vars: {apiName: connect, path: connect}
+      # Not using generate-api: the spec types the redeploy action's
+      # globalConfiguration as the connector's key definitions, where the API
+      # takes the deployment's values, so the field's type is corrected.
+      - rmf-codegen generate {{ .apiSpecsDir }}/connect/api.raml -b connect -o {{ .generatedDir }}/ -t GO_CLIENT
+      - perl -p -i -e 's/^(\s*GlobalConfiguration\s+)\*ConnectorGlobalConfiguration(\s+`json:"globalConfiguration,omitempty"`)/$1*DeploymentGlobalConfiguration$2/' {{ .generatedDir }}/connect/types_deployment.go
+      - goimports -w {{ .generatedDir }}/connect/
+      - go fmt {{ .generatedDir }}/connect/
+      - rm -rf connect/
+      - mv {{ .generatedDir }}/connect .
+      - perl -p -i -e 's/const Version = "1.0.1"/const Version = "{{ .versionId }}"/' connect/client.go
 
   generate-importapi:
     cmds:
@@ -78,6 +95,28 @@ tasks:
       - rm -rf insights/
       - mv {{ .generatedDir }}/insights .
       - perl -p -i -e 's/const Version = "1.0.1"/const Version = "{{ .versionId }}"/' insights/client.go
+
+  generate-integrationlayer:
+    cmds:
+      # The management API of the Commerce Integration Layer is not in
+      # commercetools-api-reference yet, so it is generated from the spec in
+      # specs/integration-layer until api-specs/cil carries it. Two things the
+      # generator does not write are copied in from specs/integration-layer/extra:
+      # an Error method for its errors, whose `error` field is renamed so it does
+      # not clash with the method, and a patch helper for its one PATCH route.
+      - rmf-codegen generate specs/integration-layer/api.raml -b integrationlayer -o {{ .generatedDir }}/ -t GO_CLIENT
+      - goimports -w {{ .generatedDir }}/integrationlayer/
+      - go fmt {{ .generatedDir }}/integrationlayer/
+      - perl -p -i -e 's/^(\s*)Error(\s+)\*string(\s+)`json:"error,omitempty"`/$1Message$2*string$3`json:"error,omitempty"`/' {{ .generatedDir }}/integrationlayer/types_error.go
+      # Kept as .go.txt there, so the module does not build them as a package of their own.
+      - for f in specs/integration-layer/extra/*.go.txt; do cp "$f" {{ .generatedDir }}/integrationlayer/$(basename "$f" .txt); done
+      # The generator sends no body for a PUT whose body is an array, which the
+      # allowlist and field visibility routes take; serialize it as for any other.
+      - perl -0 -p -i -e 's/(\) Execute\(ctx context\.Context\) \(result \*\w+, err error\) \{\n)(\tqueryParams := url\.Values\{\}\n\tresp, err := rb\.client\.put\(\n\t\tctx,\n\t\trb\.url,\n\t\tqueryParams,\n\t\trb\.headers,\n)\t\tnil,/$1\tdata, err := serializeInput(rb.body)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n$2\t\tdata,/' {{ .generatedDir }}/integrationlayer/client_*_put.go
+      - go fmt {{ .generatedDir }}/integrationlayer/
+      - rm -rf integrationlayer/
+      - mv {{ .generatedDir }}/integrationlayer .
+      - perl -p -i -e 's/const Version = "1.0.1"/const Version = "{{ .versionId }}"/' integrationlayer/client.go
 
   generate-api:
     cmds:

@@ -170,8 +170,11 @@ type Attribution struct {
 type AttributionSource string
 
 const (
-	AttributionSourceImport AttributionSource = "Import"
-	AttributionSourceExport AttributionSource = "Export"
+	AttributionSourceImport             AttributionSource = "Import"
+	AttributionSourceExport             AttributionSource = "Export"
+	AttributionSourceIntakeAgent        AttributionSource = "IntakeAgent"
+	AttributionSourcePromotionsAgent    AttributionSource = "PromotionsAgent"
+	AttributionSourceManagedCommerceMCP AttributionSource = "ManagedCommerceMCP"
 )
 
 /**
@@ -1161,6 +1164,7 @@ const (
 	ReferenceTypeIdExtension             ReferenceTypeId = "extension"
 	ReferenceTypeIdInventoryEntry        ReferenceTypeId = "inventory-entry"
 	ReferenceTypeIdKeyValueDocument      ReferenceTypeId = "key-value-document"
+	ReferenceTypeIdMcpServer             ReferenceTypeId = "mcp-server"
 	ReferenceTypeIdOrder                 ReferenceTypeId = "order"
 	ReferenceTypeIdOrderEdit             ReferenceTypeId = "order-edit"
 	ReferenceTypeIdPaymentMethod         ReferenceTypeId = "payment-method"
