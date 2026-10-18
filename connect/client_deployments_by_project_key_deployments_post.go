@@ -63,7 +63,7 @@ func (rb *ByProjectKeyDeploymentsRequestMethodPost) Execute(ctx context.Context)
 	}
 	defer resp.Body.Close()
 	switch resp.StatusCode {
-	case 201:
+	case 200, 201:
 		err = json.Unmarshal(content, &result)
 		if err != nil {
 			return nil, err

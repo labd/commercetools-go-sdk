@@ -54,9 +54,12 @@ tasks:
     cmds:
       # Not using generate-api: the spec types the redeploy action's
       # globalConfiguration as the connector's key definitions, where the API
-      # takes the deployment's values, so the field's type is corrected.
+      # takes the deployment's values, so the field's type is corrected. The
+      # spec also answers every create and update with 201, where the API
+      # answers 200, so both are taken as success.
       - rmf-codegen generate {{ .apiSpecsDir }}/connect/api.raml -b connect -o {{ .generatedDir }}/ -t GO_CLIENT
       - perl -p -i -e 's/^(\s*GlobalConfiguration\s+)\*ConnectorGlobalConfiguration(\s+`json:"globalConfiguration,omitempty"`)/$1*DeploymentGlobalConfiguration$2/' {{ .generatedDir }}/connect/types_deployment.go
+      - perl -p -i -e 's/^(\s*)case 201:$/$1case 200, 201:/' {{ .generatedDir }}/connect/*.go
       - goimports -w {{ .generatedDir }}/connect/
       - go fmt {{ .generatedDir }}/connect/
       - rm -rf connect/
