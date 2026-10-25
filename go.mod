@@ -1,6 +1,6 @@
 module github.com/labd/commercetools-go-sdk
 
-go 1.24.0
+go 1.27
 
 require (
 	github.com/mitchellh/mapstructure v1.5.0
