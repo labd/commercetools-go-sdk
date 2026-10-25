@@ -13,7 +13,7 @@ func TestDateSerialization(t *testing.T) {
 	data := struct {
 		String   string         `json:"string"`
 		Value    *platform.Date `json:"value"`
-		Optional *platform.Date `json:"optional",omitempty`
+		Optional *platform.Date `json:"optional,omitempty"`
 	}{}
 	data.String = "foobar"
 	data.Value = &platform.Date{Year: 1983, Month: 5, Day: 10}
@@ -47,7 +47,7 @@ func TestDateDeserialization(t *testing.T) {
 	data := struct {
 		String   string         `json:"string"`
 		Value    *platform.Date `json:"value"`
-		Optional *platform.Date `json:"optional",omitempty`
+		Optional *platform.Date `json:"optional,omitempty"`
 	}{}
 
 	value := `{"string":"foobar","value":"1983-05-10"}`
