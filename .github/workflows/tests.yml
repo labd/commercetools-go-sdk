@@ -26,12 +26,7 @@ jobs:
         args: --issues-exit-code=0 --timeout=5m
 
     - name: Run tests
-      run: go test -race -coverprofile=coverage.out -covermode=atomic -coverpkg=./... -v ./...
-
-    - name: Upload to codecov
-      uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5.5.4
-      with:
-        verbose: true
+      run: go test -race -v ./...
 
   changie:
     runs-on: ubuntu-latest
