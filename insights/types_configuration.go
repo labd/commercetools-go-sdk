@@ -482,11 +482,25 @@ func mapDiscriminatorProviderDraft(input interface{}) (ProviderDraft, error) {
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.Auth != nil {
+			var err error
+			obj.Auth, err = mapDiscriminatorOtlpAuthDraft(obj.Auth)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "OtlpHttp":
 		obj := OtlpHttpProviderDraft{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		if obj.Auth != nil {
+			var err error
+			obj.Auth, err = mapDiscriminatorOtlpAuthDraft(obj.Auth)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	}
@@ -584,6 +598,66 @@ func (obj DatadogProviderDraft) MarshalJSON() ([]byte, error) {
 	}{Action: "Datadog", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Authentication details used to connect to an OTLP provider.
+*
+ */
+type OtlpAuth interface{}
+
+func mapDiscriminatorOtlpAuth(input interface{}) (OtlpAuth, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "OAuth2":
+		obj := OtlpAuthOAuth2{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Supported authentication methods for connecting to an OTLP provider.
+*
+ */
+type OtlpAuthType string
+
+const (
+	OtlpAuthTypeOAuth2 OtlpAuthType = "OAuth2"
+)
+
+/**
+*	Authenticates with an OTLP provider using the OAuth 2.0 client credentials flow.
+*	The `clientSecret` used to obtain the access token is write-only and isn't returned in the response.
+*
+ */
+type OtlpAuthOAuth2 struct {
+	// Client ID used to authenticate with your OTLP provider using the OAuth 2.0 client credentials flow.
+	ClientId string `json:"clientId"`
+	// URL of the OAuth 2.0 token endpoint used to obtain an access token for your OTLP provider.
+	TokenUrl string `json:"tokenUrl"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OtlpAuthOAuth2) MarshalJSON() ([]byte, error) {
+	type Alias OtlpAuthOAuth2
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OAuth2", Alias: (*Alias)(&obj)})
+}
+
 type OtlpProviderHeader struct {
 	// Name of the header.
 	Name string `json:"name"`
@@ -598,6 +672,26 @@ type OtlpProviderDraft struct {
 	Endpoint string `json:"endpoint"`
 	// Headers configured for connecting to your OTLP provider.
 	Headers []OtlpProviderHeaderDraft `json:"headers"`
+	// Authentication details used to connect to an OTLP provider.
+	Auth OtlpAuthDraft `json:"auth,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OtlpProviderDraft) UnmarshalJSON(data []byte) error {
+	type Alias OtlpProviderDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Auth != nil {
+		var err error
+		obj.Auth, err = mapDiscriminatorOtlpAuthDraft(obj.Auth)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -625,6 +719,57 @@ func (obj OtlpProviderDraft) MarshalJSON() ([]byte, error) {
 
 }
 
+/**
+*	Authentication details used to connect to an OTLP provider.
+*
+ */
+type OtlpAuthDraft interface{}
+
+func mapDiscriminatorOtlpAuthDraft(input interface{}) (OtlpAuthDraft, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "OAuth2":
+		obj := OtlpAuthOAuth2Draft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Sets up OAuth 2.0 client credentials authentication for your OTLP provider.
+*
+ */
+type OtlpAuthOAuth2Draft struct {
+	// Client ID used to authenticate with your OTLP provider using the OAuth 2.0 client credentials flow.
+	ClientId string `json:"clientId"`
+	// Client secret used to authenticate with your OTLP provider using the OAuth 2.0 client credentials flow.
+	ClientSecret string `json:"clientSecret"`
+	// URL of the OAuth 2.0 token endpoint used to obtain an access token for your OTLP provider.
+	TokenUrl string `json:"tokenUrl"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OtlpAuthOAuth2Draft) MarshalJSON() ([]byte, error) {
+	type Alias OtlpAuthOAuth2Draft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "OAuth2", Alias: (*Alias)(&obj)})
+}
+
 type OtlpHttpProviderDraft struct {
 	// Whether this provider configuration is active.
 	Active *bool `json:"active,omitempty"`
@@ -634,6 +779,26 @@ type OtlpHttpProviderDraft struct {
 	Endpoint string `json:"endpoint"`
 	// Headers configured for connecting to your OTLP provider.
 	Headers []OtlpProviderHeaderDraft `json:"headers"`
+	// Authentication details used to connect to your OTLP provider.
+	Auth OtlpAuthDraft `json:"auth,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OtlpHttpProviderDraft) UnmarshalJSON(data []byte) error {
+	type Alias OtlpHttpProviderDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Auth != nil {
+		var err error
+		obj.Auth, err = mapDiscriminatorOtlpAuthDraft(obj.Auth)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -840,11 +1005,25 @@ func mapDiscriminatorProvider(input interface{}) (Provider, error) {
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
+		if obj.Auth != nil {
+			var err error
+			obj.Auth, err = mapDiscriminatorOtlpAuth(obj.Auth)
+			if err != nil {
+				return nil, err
+			}
+		}
 		return obj, nil
 	case "OtlpHttp":
 		obj := OtlpHttpProvider{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
+		}
+		if obj.Auth != nil {
+			var err error
+			obj.Auth, err = mapDiscriminatorOtlpAuth(obj.Auth)
+			if err != nil {
+				return nil, err
+			}
 		}
 		return obj, nil
 	case "NewRelic":
@@ -886,6 +1065,26 @@ type OtlpProvider struct {
 	Endpoint string `json:"endpoint"`
 	// Headers configured for connecting to your OTLP provider.
 	Headers []OtlpProviderHeader `json:"headers"`
+	// Authentication details used to connect to your OTLP provider.
+	Auth OtlpAuth `json:"auth,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OtlpProvider) UnmarshalJSON(data []byte) error {
+	type Alias OtlpProvider
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Auth != nil {
+		var err error
+		obj.Auth, err = mapDiscriminatorOtlpAuth(obj.Auth)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -909,6 +1108,26 @@ type OtlpHttpProvider struct {
 	Endpoint string `json:"endpoint"`
 	// Headers configured for connecting to your OTLP provider.
 	Headers []OtlpProviderHeader `json:"headers"`
+	// Authentication details used to connect to your OTLP provider.
+	Auth OtlpAuth `json:"auth,omitempty"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *OtlpHttpProvider) UnmarshalJSON(data []byte) error {
+	type Alias OtlpHttpProvider
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Auth != nil {
+		var err error
+		obj.Auth, err = mapDiscriminatorOtlpAuth(obj.Auth)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // MarshalJSON override to set the discriminator value or remove

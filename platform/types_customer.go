@@ -342,7 +342,7 @@ func (obj CustomerPasswordTokenReference) MarshalJSON() ([]byte, error) {
 type CustomerReference struct {
 	// Unique identifier of the referenced [Customer](ctp:api:type:Customer).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Customers.
+	// Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Customers.
 	Obj *Customer `json:"obj,omitempty"`
 }
 

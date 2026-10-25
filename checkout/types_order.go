@@ -1,0 +1,28 @@
+package checkout
+
+// Generated file, please do not change!!!
+
+import (
+	"encoding/json"
+)
+
+/**
+*	Resource identifier to an [Order](/api/projects/orders). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
+*
+ */
+type OrderResourceIdentifier struct {
+	// Unique identifier of the referenced [Order](/api/projects/orders). Required if `key` is absent.
+	ID *string `json:"id,omitempty"`
+	// User-defined unique identifier of the referenced [Order](/api/projects/orders). Required if `id` is absent.
+	Key *string `json:"key,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj OrderResourceIdentifier) MarshalJSON() ([]byte, error) {
+	type Alias OrderResourceIdentifier
+	return json.Marshal(struct {
+		Action string `json:"typeId"`
+		*Alias
+	}{Action: "order", Alias: (*Alias)(&obj)})
+}

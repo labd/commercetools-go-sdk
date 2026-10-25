@@ -97,7 +97,7 @@ func mapDiscriminatorMcpServerConfig(input interface{}) (McpServerConfig, error)
 }
 
 /**
-*	Connection configuration of a Commerce MCP Server. Exposes the [Commerce MCP Server tools](/../dev-tooling/mcp/commerce-mcp#available-tools) to AI agents.
+*	Connection configuration of a Commerce MCP Server. Exposes the [Commerce MCP Server tools](/dev-tooling/mcp/commerce-mcp#available-tools) to AI agents.
 *
  */
 type CommerceMcpServerConfig struct {
@@ -353,7 +353,7 @@ const (
 
 /**
 *	Identifies a tool that can be enabled on an MCP Server.
-*	For more information about the functions of each tool, see [Commerce MCP Server tools](/../dev-tooling/mcp/commerce-mcp#available-tools).
+*	For more information about the functions of each tool, see [Commerce MCP Server tools](/dev-tooling/mcp/commerce-mcp#available-tools).
 *
  */
 type McpServerTool string

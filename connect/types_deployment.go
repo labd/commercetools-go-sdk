@@ -136,7 +136,7 @@ type DeploymentRedeployAction struct {
 	// New configuration values for Deployment. If omitted, any existing value is unchanged.
 	ConfigurationValues []DeploymentConfigurationApplication `json:"configurationValues"`
 	// Global configuration applied to all applications in the deployment. If omitted, any existing value is unchanged.
-	GlobalConfiguration *ConnectorGlobalConfiguration `json:"globalConfiguration,omitempty"`
+	GlobalConfiguration *DeploymentGlobalConfiguration `json:"globalConfiguration,omitempty"`
 	// Whether the Deployment Connector should be updated to its latest state during redeployment.
 	UpdateConnector *bool `json:"updateConnector,omitempty"`
 }
