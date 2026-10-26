@@ -374,6 +374,7 @@ const (
 	ExtensionResourceTypeIdQuote         ExtensionResourceTypeId = "quote"
 	ExtensionResourceTypeIdBusinessUnit  ExtensionResourceTypeId = "business-unit"
 	ExtensionResourceTypeIdShoppingList  ExtensionResourceTypeId = "shopping-list"
+	ExtensionResourceTypeIdProduct       ExtensionResourceTypeId = "product"
 )
 
 type ExtensionTrigger struct {

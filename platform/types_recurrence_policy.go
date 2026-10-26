@@ -37,6 +37,13 @@ type RecurrencePolicy struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// Schedule of the RecurrencePolicy.
 	Schedule RecurrencePolicySchedule `json:"schedule"`
+	// Minimum number of days that must pass since the last Order of a [Recurring Order](ctp:api:type:RecurringOrder) before the [Request Order Now](ctp:api:type:RecurringOrderRequestOrderNowAction) update action is allowed. If not set, there is no limit.
+	//
+	// This value does not affect the recurrence schedule. For example, a weekly RecurrencePolicy with a value of `30` still creates Orders weekly.
+	// The time is measured in multiples of 24 hours from `lastOrderAt` of the Recurring Order, regardless of whether the last Order was created on schedule or early.
+	//
+	// The limit applies to all Recurring Orders that use this RecurrencePolicy, and changes take effect immediately. It is ignored when the RecurrencePolicy is attached to a Price.
+	MinDaysBetweenOrders *int `json:"minDaysBetweenOrders,omitempty"`
 	// IDs and references that created the RecurrencePolicy.
 	CreatedBy *CreatedBy `json:"createdBy,omitempty"`
 	// IDs and references that last modified the RecurrencePolicy.
@@ -70,6 +77,13 @@ type RecurrencePolicyDraft struct {
 	Description *LocalizedString `json:"description,omitempty"`
 	// Schedule where the recurrence is defined.
 	Schedule RecurrencePolicyScheduleDraft `json:"schedule"`
+	// Minimum number of days that must pass since the last Order of a [Recurring Order](ctp:api:type:RecurringOrder) before the [Request Order Now](ctp:api:type:RecurringOrderRequestOrderNowAction) update action is allowed. If not set, there is no limit.
+	//
+	// This value does not affect the recurrence schedule. For example, a weekly RecurrencePolicy with a value of `30` still creates Orders weekly.
+	// The time is measured in multiples of 24 hours from `lastOrderAt` of the Recurring Order, regardless of whether the last Order was created on schedule or early.
+	//
+	// The limit applies to all Recurring Orders that use this RecurrencePolicy, and changes take effect immediately. It is ignored when the RecurrencePolicy is attached to a Price.
+	MinDaysBetweenOrders *int `json:"minDaysBetweenOrders,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -310,6 +324,12 @@ func mapDiscriminatorRecurrencePolicyUpdateAction(input interface{}) (Recurrence
 			return nil, err
 		}
 		return obj, nil
+	case "setMinDaysBetweenOrders":
+		obj := RecurrencePolicySetMinDaysBetweenOrdersAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setName":
 		obj := RecurrencePolicySetNameAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -405,6 +425,27 @@ func (obj RecurrencePolicySetKeyAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setKey", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	The new value applies immediately to all [Recurring Orders](ctp:api:type:RecurringOrder) that use the RecurrencePolicy.
+*	It does not affect the recurrence schedule.
+*
+ */
+type RecurrencePolicySetMinDaysBetweenOrdersAction struct {
+	// Value to set. Must be greater than `0`.
+	// If omitted, any existing value is removed and there is no limit.
+	MinDaysBetweenOrders *int `json:"minDaysBetweenOrders,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurrencePolicySetMinDaysBetweenOrdersAction) MarshalJSON() ([]byte, error) {
+	type Alias RecurrencePolicySetMinDaysBetweenOrdersAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setMinDaysBetweenOrders", Alias: (*Alias)(&obj)})
 }
 
 type RecurrencePolicySetNameAction struct {

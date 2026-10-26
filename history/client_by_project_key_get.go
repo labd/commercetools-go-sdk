@@ -33,12 +33,14 @@ type ByProjectKeyRequestMethodGetInput struct {
 	Limit                           *int
 	Offset                          *int
 	UserId                          *string
+	UserIds                         []string
 	ClientId                        *string
 	CustomerId                      *string
 	AssociateId                     *string
 	BusinessUnit                    *string
 	Type                            *string
 	ResourceId                      *string
+	ResourceIds                     []string
 	ResourceKey                     *string
 	Source                          *Source
 	Changes                         []string
@@ -68,6 +70,9 @@ func (input *ByProjectKeyRequestMethodGetInput) Values() url.Values {
 	if input.UserId != nil {
 		values.Add("userId", fmt.Sprintf("%v", *input.UserId))
 	}
+	for _, v := range input.UserIds {
+		values.Add("userIds", fmt.Sprintf("%v", v))
+	}
 	if input.ClientId != nil {
 		values.Add("clientId", fmt.Sprintf("%v", *input.ClientId))
 	}
@@ -85,6 +90,9 @@ func (input *ByProjectKeyRequestMethodGetInput) Values() url.Values {
 	}
 	if input.ResourceId != nil {
 		values.Add("resourceId", fmt.Sprintf("%v", *input.ResourceId))
+	}
+	for _, v := range input.ResourceIds {
+		values.Add("resourceIds", fmt.Sprintf("%v", v))
 	}
 	if input.ResourceKey != nil {
 		values.Add("resourceKey", fmt.Sprintf("%v", *input.ResourceKey))
@@ -166,6 +174,14 @@ func (rb *ByProjectKeyRequestMethodGet) UserId(v string) *ByProjectKeyRequestMet
 	return rb
 }
 
+func (rb *ByProjectKeyRequestMethodGet) UserIds(v []string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.UserIds = v
+	return rb
+}
+
 func (rb *ByProjectKeyRequestMethodGet) ClientId(v string) *ByProjectKeyRequestMethodGet {
 	if rb.params == nil {
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
@@ -211,6 +227,14 @@ func (rb *ByProjectKeyRequestMethodGet) ResourceId(v string) *ByProjectKeyReques
 		rb.params = &ByProjectKeyRequestMethodGetInput{}
 	}
 	rb.params.ResourceId = &v
+	return rb
+}
+
+func (rb *ByProjectKeyRequestMethodGet) ResourceIds(v []string) *ByProjectKeyRequestMethodGet {
+	if rb.params == nil {
+		rb.params = &ByProjectKeyRequestMethodGetInput{}
+	}
+	rb.params.ResourceIds = v
 	return rb
 }
 

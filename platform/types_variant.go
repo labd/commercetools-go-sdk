@@ -384,21 +384,21 @@ func (obj VariantDraft) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[PagedQueryResult](/../api/general-concepts#pagedqueryresult) with results containing an array of [Variant](ctp:api:type:Variant).
+*	[PagedQueryResult](/api/general-concepts#pagedqueryresult) with results containing an array of [Variant](ctp:api:type:Variant).
 *
  */
 type VariantPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// Unless absolutely necessary, use the query parameter `withTotal=false` to improve performance by deactivating the calculation of this field.
-	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Variants](ctp:api:type:Variant) matching the query.
 	Results []Variant `json:"results"`
@@ -442,7 +442,7 @@ type VariantProjection struct {
 	Assets []Asset `json:"assets"`
 	// Attributes of the [Variant](ctp:api:type:Variant), including product-level Attributes merged at projection time.
 	Attributes []Attribute `json:"attributes"`
-	// The selected price based on the [price selection](/../api/projects/productProjections#prices) query parameters.
+	// The selected price based on the [price selection](/api/projects/productProjections#prices) query parameters.
 	// Only present when price selection parameters are provided.
 	Price *Price `json:"price,omitempty"`
 	// Whether this Variant is the default Variant of its [Product](ctp:api:type:Product) (see [Product.defaultVariant](/projects/products#product)).
@@ -450,17 +450,17 @@ type VariantProjection struct {
 }
 
 type VariantProjectionPagedQueryResponse struct {
-	// Number of [results requested](/../api/general-concepts#limit).
+	// Number of [results requested](/api/general-concepts#limit).
 	Limit int `json:"limit"`
 	// Actual number of results returned.
 	Count int `json:"count"`
 	// Total number of results matching the query.
-	// This number is an estimation that is not [strongly consistent](/../api/general-concepts#strong-consistency).
+	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](/../api/predicates/query), `total` is subject to a [limit](/../api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
-	// Number of [elements skipped](/../api/general-concepts#offset).
+	// Number of [elements skipped](/api/general-concepts#offset).
 	Offset int `json:"offset"`
 	// [VariantProjections](ctp:api:type:VariantProjection) matching the query.
 	Results []VariantProjection `json:"results"`
@@ -473,7 +473,7 @@ type VariantProjectionPagedQueryResponse struct {
 type VariantReference struct {
 	// Unique identifier of the referenced [Variant](ctp:api:type:Variant).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Variant. Only present in responses to requests with [Reference Expansion](/../api/general-concepts#reference-expansion) for Variants.
+	// Contains the representation of the expanded Variant. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Variants.
 	Obj *Variant `json:"obj,omitempty"`
 }
 
@@ -488,7 +488,7 @@ func (obj VariantReference) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Variant](ctp:api:type:Variant). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](/../api/errors#invalidjsoninput) error is returned.
+*	[ResourceIdentifier](ctp:api:type:ResourceIdentifier) to a [Variant](ctp:api:type:Variant). Either `id` or `key` is required. If both are set, an [InvalidJsonInput](ctp:api:type:InvalidJsonInputError) error is returned.
 *
  */
 type VariantResourceIdentifier struct {
@@ -895,7 +895,7 @@ type VariantSetAssetCustomFieldAction struct {
 	AssetId *string `json:"assetId,omitempty"`
 	// The `key` of the Asset to update.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Name of the [Custom Field](/../api/projects/custom-fields).
+	// Name of the [Custom Field](/api/projects/custom-fields).
 	Name string `json:"name"`
 	// If `value` is absent or `null`, this field will be removed if it exists.
 	// Removing a field that does not exist returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
@@ -924,10 +924,10 @@ type VariantSetAssetCustomTypeAction struct {
 	AssetId *string `json:"assetId,omitempty"`
 	// The `key` of the Asset to update.
 	AssetKey *string `json:"assetKey,omitempty"`
-	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/../api/projects/custom-fields).
+	// Defines the [Type](ctp:api:type:Type) that extends the Asset with [Custom Fields](/api/projects/custom-fields).
 	// If absent, any existing Type and Custom Fields are removed from the Asset.
 	Type *TypeResourceIdentifier `json:"type,omitempty"`
-	// Sets the [Custom Fields](/../api/projects/custom-fields) fields for the Asset.
+	// Sets the [Custom Fields](/api/projects/custom-fields) fields for the Asset.
 	Fields *FieldContainer `json:"fields,omitempty"`
 }
 

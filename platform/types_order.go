@@ -328,6 +328,12 @@ func mapDiscriminatorStagedOrderUpdateAction(input interface{}) (StagedOrderUpda
 			return nil, err
 		}
 		return obj, nil
+	case "setDirectDiscountsIgnoreCartDiscounts":
+		obj := StagedOrderSetDirectDiscountsIgnoreCartDiscountsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setItemShippingAddressCustomField":
 		obj := StagedOrderSetItemShippingAddressCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -734,8 +740,12 @@ type CustomLineItemImportDraft struct {
 	//
 	// To set the money value in high precision, use [HighPrecisionMoneyDraft](ctp:api:type:HighPrecisionMoneyDraft).
 	Money Money `json:"money"`
-	// The tax rate used to calculate the `taxedPrice` of the Order.
+	// The tax rate used to calculate the `taxedPrice` of the Custom Line Item if `taxedPrice` is not provided.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Taxed price of the Custom Line Item. If provided, the values are stored as-is on the resulting [CustomLineItem](ctp:api:type:CustomLineItem) instead of being derived from `money`, `quantity`, and `taxRate`.
+	//
+	// Can only be set if `taxRate` is also set.
+	TaxedPrice *TaxedPriceDraft `json:"taxedPrice,omitempty"`
 	// Include a value to associate a Tax Category with the Custom Line Item.
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	// - If `Standard`, Cart Discounts with a matching [CartDiscountCustomLineItemsTarget](ctp:api:type:CartDiscountCustomLineItemsTarget), [MultiBuyCustomLineItemsTarget](ctp:api:type:MultiBuyCustomLineItemsTarget), or [CartDiscountPatternTarget](ctp:api:type:CartDiscountPatternTarget) are applied to the Custom Line Item.
@@ -876,9 +886,13 @@ type LineItemImportDraft struct {
 	Quantity int `json:"quantity"`
 	// The Line Item price for `quantity` = `1`. The amount can be negative.
 	Price PriceDraft `json:"price"`
-	// The tax rate used to calculate the `taxedPrice` of the Order.
+	// The tax rate used to calculate the `taxedPrice` of the Line Item if `taxedPrice` is not provided.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
-	// The Channel used to [select a Price](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Taxed price of the Line Item. If provided, the values are stored as-is on the resulting [LineItem](ctp:api:type:LineItem) instead of being derived from `price`, `quantity`, and `taxRate`.
+	//
+	// Can only be set if `taxRate` is also set.
+	TaxedPrice *TaxedPriceDraft `json:"taxedPrice,omitempty"`
+	// The Channel used to [select a Price](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	// This Channel must have the `ProductDistribution` role.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
 	// The Channel used to supply Line Items.
@@ -940,7 +954,7 @@ type Order struct {
 	// Email address of the Customer that the Order belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
 	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Order belongs to.
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Order.
 	AnonymousId *string `json:"anonymousId,omitempty"`
@@ -1006,16 +1020,21 @@ type Order struct {
 	// Eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
 	// Discount Codes added to the Order.
-	// An Order that has `directDiscounts` cannot have `discountCodes`.
+	//
+	// If `directDiscountsIgnoreCartDiscounts` is `true`, an Order that has `directDiscounts` cannot have `discountCodes`.
 	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
 	// Direct Discounts added to the Order.
-	// An Order that has `discountCodes` cannot have `directDiscounts`.
+	//
+	// If `directDiscountsIgnoreCartDiscounts` is `true`, an Order that has `discountCodes` cannot have `directDiscounts`.
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
+	// - If `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Order. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	// - If `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Order.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
 	// Automatically set when a Line Item with `GiftLineItem` [LineItemMode](ctp:api:type:LineItemMode) is [removed](ctp:api:type:StagedOrderRemoveLineItemAction) from the Order.
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Order.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	Country *string `json:"country,omitempty"`
 	// Languages of the Order.
 	// Can only contain languages supported by the [Project](ctp:api:type:Project).
@@ -1295,7 +1314,7 @@ type OrderPagedQueryResponse struct {
 	// This number is an estimation that is not [strongly consistent](/api/general-concepts#strong-consistency).
 	// This field is returned by default.
 	// For improved performance, calculating this field can be deactivated by using the query parameter `withTotal=false`.
-	// When the results are filtered with a [Query Predicate](ctp:api:type:QueryPredicate), `total` is subject to a [limit](/api/limits#queries).
+	// When the results are filtered with a [Query Predicate](/api/predicates/query), `total` is subject to a [limit](/api/limits#queries).
 	Total *int `json:"total,omitempty"`
 	// [Orders](ctp:api:type:Order) matching the query.
 	Results []Order `json:"results"`
@@ -2217,6 +2236,8 @@ type ShippingInfoImportDraft struct {
 	ShippingRate ShippingRateDraft `json:"shippingRate"`
 	// Include a Tax Rate for the Shipping Method.
 	TaxRate *TaxRate `json:"taxRate,omitempty"`
+	// Taxed price of the Shipping Method. If provided, the values are stored as-is on the resulting [ShippingInfo](ctp:api:type:ShippingInfo) instead of being derived from `price` and `taxRate`.
+	TaxedPrice *TaxedPriceDraft `json:"taxedPrice,omitempty"`
 	// Include a value to associate a Tax Category with the shipping information.
 	TaxCategory *TaxCategoryResourceIdentifier `json:"taxCategory,omitempty"`
 	// Include a value to associate a Shipping Method with the Order.
@@ -2663,7 +2684,8 @@ func (obj OrderRemovePaymentAction) MarshalJSON() ([]byte, error) {
 *
  */
 type OrderSetBillingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -2904,7 +2926,8 @@ type OrderSetDeliveryAddressAction struct {
 	//
 	// Either `deliveryId` or `deliveryKey` must be provided.
 	DeliveryKey *string `json:"deliveryKey,omitempty"`
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -3525,7 +3548,8 @@ func (obj OrderSetReturnShipmentStateAction) MarshalJSON() ([]byte, error) {
 *
  */
 type OrderSetShippingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }

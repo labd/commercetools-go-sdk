@@ -33,6 +33,9 @@ type Deployment struct {
 	Preview bool `json:"preview"`
 	// The current status of the Deployment.
 	Status string `json:"status"`
+	// `revisionNumber` of the [DeploymentRevision](ctp:connect:type:DeploymentRevision) this version restored.
+	// Only present when the version was produced by a rollback.
+	RollbackRevision *int `json:"rollbackRevision,omitempty"`
 }
 
 /**
@@ -128,6 +131,8 @@ func mapDiscriminatorDeploymentUpdateAction(input interface{}) (DeploymentUpdate
 *	- [DeploymentConnectorUpdateFailure](ctp:connect:type:DeploymentConnectorUpdateFailureError)
 *	- [DeploymentUnknownGlobalConfigurationKeyError](ctp:connect:type:DeploymentUnknownGlobalConfigurationKeyError)
 *	- [DeploymentEmptyRequiredGlobalConfigurationKeyError](ctp:connect:type:DeploymentEmptyRequiredGlobalConfigurationKeyError)
+*	- [DeploymentInvalidRetryPolicy](ctp:connect:type:DeploymentInvalidRetryPolicyError)
+*	- [DeploymentRetryPolicyOverrideNotAllowed](ctp:connect:type:DeploymentRetryPolicyOverrideNotAllowedError)
 *
  */
 type DeploymentRedeployAction struct {
@@ -164,6 +169,36 @@ func (obj DeploymentRedeployAction) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(raw)
 
+}
+
+/**
+*	A previously deployed configuration of a [Deployment](ctp:connect:type:Deployment).
+*
+ */
+type DeploymentRevision struct {
+	// Version of the Deployment this revision was taken from.
+	RevisionNumber int `json:"revisionNumber"`
+	// Whether this revision is the current version of the Deployment.
+	CurrentRevision bool `json:"currentRevision"`
+	// Identity, version, and source repository of the Connector that was deployed.
+	Connector DeploymentRevisionConnector `json:"connector"`
+	// Global configuration applied to all applications at this revision.
+	GlobalConfiguration *DeploymentGlobalConfiguration `json:"globalConfiguration,omitempty"`
+	// Configuration of each application at this revision.
+	Applications []DeploymentRevisionApplication `json:"applications"`
+	// The revision this one restored. Only present when the revision was itself produced by a rollback.
+	RollbackRevision *int `json:"rollbackRevision,omitempty"`
+	// Date and time (UTC) the revision was created.
+	CreatedAt time.Time `json:"createdAt"`
+}
+
+/**
+*	Body of a rollback request. The revision to restore is given in the request path, so the body only carries the concurrency check.
+*
+ */
+type DeploymentRollback struct {
+	// Expected version of the Deployment on which the changes apply.
+	Version int `json:"version"`
 }
 
 /**

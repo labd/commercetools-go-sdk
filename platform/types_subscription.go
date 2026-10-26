@@ -76,6 +76,7 @@ const (
 	ChangeSubscriptionResourceTypeIdSubscription          ChangeSubscriptionResourceTypeId = "subscription"
 	ChangeSubscriptionResourceTypeIdTaxCategory           ChangeSubscriptionResourceTypeId = "tax-category"
 	ChangeSubscriptionResourceTypeIdType                  ChangeSubscriptionResourceTypeId = "type"
+	ChangeSubscriptionResourceTypeIdVariant               ChangeSubscriptionResourceTypeId = "variant"
 	ChangeSubscriptionResourceTypeIdZone                  ChangeSubscriptionResourceTypeId = "zone"
 )
 
@@ -526,6 +527,7 @@ const (
 	MessageSubscriptionResourceTypeIdStagedQuote           MessageSubscriptionResourceTypeId = "staged-quote"
 	MessageSubscriptionResourceTypeIdStandalonePrice       MessageSubscriptionResourceTypeId = "standalone-price"
 	MessageSubscriptionResourceTypeIdStore                 MessageSubscriptionResourceTypeId = "store"
+	MessageSubscriptionResourceTypeIdVariant               MessageSubscriptionResourceTypeId = "variant"
 )
 
 type PayloadNotIncluded struct {
@@ -915,7 +917,7 @@ type MessageDeliveryPayload struct {
 	SequenceNumber int `json:"sequenceNumber"`
 	// Version of the resource on which the update was performed.
 	ResourceVersion int `json:"resourceVersion"`
-	// If the payload does not fit into the size limit or its format is not accepted by the messaging service, the `payloadNotIncluded` field is present.
+	// Present when the payload exceeds the size limit of the message queue (the limit is often 256 KB) or its format is not accepted by the messaging service. If the payload exceeds the size limit, the additional Message fields are replaced with a [PayloadNotIncluded](ctp:api:type:PayloadNotIncluded) object. You can retrieve the full Message using the [Messages API](ctp:api:endpoint:/{projectKey}/messages/{id}:GET) if the feature is enabled.
 	PayloadNotIncluded *PayloadNotIncluded `json:"payloadNotIncluded,omitempty"`
 }
 

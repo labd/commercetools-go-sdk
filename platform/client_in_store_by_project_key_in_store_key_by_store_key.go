@@ -36,6 +36,13 @@ func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Carts() *ByProjectKeyI
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyInStoreKeyByStoreKeyRequestBuilder) Categories() *ByProjectKeyInStoreKeyByStoreKeyCategoriesRequestBuilder {
+	return &ByProjectKeyInStoreKeyByStoreKeyCategoriesRequestBuilder{
+		projectKey: rb.projectKey,
+		storeKey:   rb.storeKey,
+		client:     rb.client,
+	}
+}
 
 /**
 *	A Customer is a person purchasing products. Carts, Orders,

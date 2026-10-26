@@ -26,7 +26,7 @@ type CertificationInfo struct {
 *
  */
 type CertificationInfoComment struct {
-	// The commercetools Composable Commerce Project key associated with the person making the comment.
+	// The commercetools Project key associated with the person making the comment.
 	UserId string `json:"userId"`
 	// Date and time (UTC) the comment was added.
 	Datetime time.Time `json:"datetime"`
@@ -143,6 +143,27 @@ type DeploymentApiClient struct {
 }
 
 /**
+*	Configures how failed event delivery attempts are retried. Only applies to `event` applications.
+*
+*	`minBackoffSeconds`, `maxBackoffSeconds`, and `maxAttempts` only apply when `strategy` is `exponential-backoff`, and
+*	must not be set when `strategy` is `immediate`. `minBackoffSeconds` must be less than or equal to `maxBackoffSeconds`.
+*
+*	If not set, defaults to `exponential-backoff` with a `minBackoffSeconds` of 10, a `maxBackoffSeconds` of 120, and a
+*	`maxAttempts` of 10, unless the Connect application's `connect.yaml` file declares its own retry policy.
+*
+ */
+type RetryPolicy struct {
+	// The retry strategy to apply.
+	Strategy string `json:"strategy"`
+	// Minimum backoff delay, in seconds, before the first retry. Required when `strategy` is `exponential-backoff`.
+	MinBackoffSeconds *int `json:"minBackoffSeconds,omitempty"`
+	// Maximum backoff delay, in seconds, that the retry delay grows to and plateaus at. Required when `strategy` is `exponential-backoff`.
+	MaxBackoffSeconds *int `json:"maxBackoffSeconds,omitempty"`
+	// Maximum number of delivery attempts before the message delivery is considered failed. Only applies when `strategy` is `exponential-backoff`. If not set, the number of attempts defaults to 10 unless the Connect application's `connect.yaml` file declares its own retry policy.
+	MaxAttempts *int `json:"maxAttempts,omitempty"`
+}
+
+/**
 *	Describes the configuration set of a given application.
 *
  */
@@ -155,6 +176,8 @@ type DeploymentConfigurationApplication struct {
 	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
 	// Cron expression that overrides the default schedule defined in the `connect.yaml` file for `job` applications. If not set, the default schedule from the `connect.yaml` file is used.
 	Schedule *string `json:"schedule,omitempty"`
+	// Retry policy that overrides the default retry policy defined in the `connect.yaml` file for `event` applications. If not set, the default retry policy from the `connect.yaml` file is used.
+	RetryPolicy *RetryPolicy `json:"retryPolicy,omitempty"`
 }
 
 /**
@@ -176,6 +199,8 @@ type ApplicationDeployment struct {
 	Topic *string `json:"topic,omitempty"`
 	// Cron schedule for job applications.
 	Schedule *string `json:"schedule,omitempty"`
+	// Retry policy applied to event applications.
+	RetryPolicy *RetryPolicy `json:"retryPolicy,omitempty"`
 }
 
 /**
@@ -323,6 +348,67 @@ func (obj DeploymentConnector) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Configuration of an application as it was at a [DeploymentRevision](ctp:connect:type:DeploymentRevision).
+*
+ */
+type DeploymentRevisionApplication struct {
+	// Name of the application.
+	ApplicationName string `json:"applicationName"`
+	// Contains values of keys that are saved in plain text.
+	StandardConfiguration []ConfigurationValue `json:"standardConfiguration"`
+	// Contains keys of secret values. The values themselves are masked.
+	SecuredConfiguration []ConfigurationValue `json:"securedConfiguration"`
+	// Google Cloud Pub/Sub Topic when application type is event.
+	Topic *string `json:"topic,omitempty"`
+	// Cron schedule for when application type is job.
+	Schedule *string `json:"schedule,omitempty"`
+	// Retry policy applied when application type is event.
+	RetryPolicy *RetryPolicy `json:"retryPolicy,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentRevisionApplication) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentRevisionApplication
+	data, err := json.Marshal(struct {
+		*Alias
+	}{Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	if raw["standardConfiguration"] == nil {
+		delete(raw, "standardConfiguration")
+	}
+
+	if raw["securedConfiguration"] == nil {
+		delete(raw, "securedConfiguration")
+	}
+
+	return json.Marshal(raw)
+
+}
+
+/**
+*	Identity and source of the [Connector](ctp:connect:type:Connector) that was deployed at a [DeploymentRevision](ctp:connect:type:DeploymentRevision).
+*	Rolling back restores this Connector version.
+*
+ */
+type DeploymentRevisionConnector struct {
+	// `id` of the Connector.
+	ID string `json:"id"`
+	// Version of the Connector.
+	Version int `json:"version"`
+	// Details of the GitHub repository that contains the Connect applications.
+	Repository Repository `json:"repository"`
+}
+
+/**
 *	Global configuration applied to all applications in the deployment.
  */
 type DeploymentGlobalConfiguration struct {
@@ -465,7 +551,7 @@ const (
 )
 
 /**
-*	The Region of a commercetools Composable Commerce Project or Deployment. For more information, see [Hosts](/hosts-and-authorization#hosts).
+*	The Region of a commercetools Project or Deployment. For more information, see [Hosts](/hosts-and-authorization#hosts).
 *
  */
 type Region string

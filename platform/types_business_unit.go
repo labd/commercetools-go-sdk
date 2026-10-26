@@ -636,7 +636,7 @@ type Company struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Customer Groups assigned to the Business Unit.
 	//
-	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Addresses used by the Business Unit.
 	Addresses []Address `json:"addresses"`
@@ -747,7 +747,7 @@ type CompanyDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Customer Groups to assign the Business Unit to.
 	//
-	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 }
 
@@ -836,7 +836,7 @@ type Division struct {
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Customer Groups assigned to the Business Unit.
 	//
-	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Addresses used by the Business Unit.
 	Addresses []Address `json:"addresses"`
@@ -945,7 +945,7 @@ type DivisionDraft struct {
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
 	// Customer Groups to assign the Business Unit to.
 	//
-	// They are considered during [line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection), if provided (non-null).
+	// They are considered during [line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection), if provided (non-null).
 	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 	// The parent unit of this Division. Can be a Company or a Division.
 	ParentUnit BusinessUnitResourceIdentifier `json:"parentUnit"`

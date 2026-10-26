@@ -158,8 +158,9 @@ const (
 type ProductCatalogModel string
 
 const (
-	ProductCatalogModelClassic ProductCatalogModel = "Classic"
-	ProductCatalogModelModular ProductCatalogModel = "Modular"
+	ProductCatalogModelClassic     ProductCatalogModel = "Classic"
+	ProductCatalogModelInMigration ProductCatalogModel = "InMigration"
+	ProductCatalogModelModular     ProductCatalogModel = "Modular"
 )
 
 type ProductSearchIndexingMode string
@@ -205,7 +206,8 @@ type Project struct {
 	// Holds configuration specific to discounts, including how Product and Cart Discounts are combined in every Cart of the Project.
 	Discounts DiscountsConfiguration `json:"discounts"`
 	// Determines how Product Variants are managed in the Project.
-	// If not set, defaults to `Classic` behavior.
+	//
+	// The `x-catalog-model` request header can override the effective Catalog model for a single request to resources that resolve Variant data, such as Carts, Orders, and Shopping Lists, independent of the Project's configured Catalog model. Use it during [migration](/guides/migration-guides/modular-catalog-migration) to test Modular Catalog behavior on selected requests before changing the Project's configured Catalog model. It is intended as a migration aid, not as a permanent substitute for the Project configuration. It has no effect on Product update actions.
 	ProductCatalogModel *ProductCatalogModel `json:"productCatalogModel,omitempty"`
 }
 
@@ -749,9 +751,17 @@ func (obj ProjectChangePriceRoundingModeAction) MarshalJSON() ([]byte, error) {
 	}{Action: "changePriceRoundingMode", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	[Product Projection Search](/api/projects/product-projection-search) is **deprecated**.
+*	For Projects created after 31 August 2026, the `"ProductProjectionsSearch"` mode cannot be activated. Use `ProductsSearch` instead.
+*	For such Projects, setting `enabled` to `true` with `mode` `"ProductProjectionsSearch"` returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error.
+*
+ */
 type ProjectChangeProductSearchIndexingEnabledAction struct {
-	// - If `false`, the indexing of [Product](ctp:api:type:Product) information will stop and the [Product Projection Search](/api/projects/product-projection-search) as well as the [Search Term Suggestions](/api/projects/search-term-suggestions) API will no longer be available for this Project. The Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be changed to `"Deactivated"`.
-	// - If `true`, the indexing of [Product](ctp:api:type:Product) information will start and the [Product Projection Search](/api/projects/product-projection-search) as well as the [Search Term Suggestions](/api/projects/search-term-suggestions) API will become available soon after for this Project. Proportional to the amount of information being indexed, the Project's [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` for `products` will be shown as `"Indexing"` during this time. As soon as the indexing has finished, the configuration status will be changed to `"Activated"` making the aforementioned APIs fully available for this Project.
+	// Whether to enable product indexing for the storefront search APIs selected by `mode`.
+	//
+	// - If `true`, indexing starts for the selected API and the corresponding status changes to `"Indexing"`. After indexing finishes, the status changes to `"Activated"` and the selected API becomes available.
+	// - If `false`, indexing stops and the selected API become unavailable. The corresponding [SearchIndexingConfiguration](ctp:api:type:SearchIndexingConfiguration) `status` changes to `"Deactivated"`.
 	Enabled bool `json:"enabled"`
 	// Controls whether the action should apply to [Product Projection Search](/api/projects/product-projection-search) or to [Product Search](/api/projects/product-search).
 	Mode *ProductSearchIndexingMode `json:"mode,omitempty"`
@@ -842,19 +852,15 @@ func (obj ProjectSetExternalOAuthAction) MarshalJSON() ([]byte, error) {
 	}{Action: "setExternalOAuth", Alias: (*Alias)(&obj)})
 }
 
+/**
+*	Use this action to set the Product Catalog Model of a Project to `Classic`, `InMigration`, or `Modular` during a catalog migration, as described in the [Modular catalog migration guide](/guides/migration-guides/modular-catalog-migration).
+*
+ */
 type ProjectSetProductCatalogModelAction struct {
-	// Configuration for the Product catalog model in the Project.
-	//
-	// When set to `Classic`, Product Variants are embedded in the Product.
-	//
-	// When set to `Modular`, Product Variants are managed as standalone entities.
-	// In this mode:
-	// - Variant-related update actions on Products return a `400` error.
-	// - Products must be created without `masterVariant` and `variants`.
-	// - Products cannot be deleted while Variants reference them.
-	// - Products cannot be unpublished while they have published Variants.
-	// - [Carts](/projects/carts) read variant data from the Variant API instead of embedded Product Variants.
-	// - `priceMode` on Products is set to `Standalone`.
+	// For each migration step, see:
+	//   - [Change Product Catalog Model to InMigration](/guides/migration-guides/modular-catalog-migration#change-product-catalog-model-to-inmigration)
+	//   - [Change Product Catalog Model to Modular](/guides/migration-guides/modular-catalog-migration#change-product-catalog-model-to-modular)
+	//   - [Rollback to Classic](/guides/migration-guides/modular-catalog-migration#roll-back-to-classic)
 	ProductCatalogModel ProductCatalogModel `json:"productCatalogModel"`
 }
 

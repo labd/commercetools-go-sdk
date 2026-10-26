@@ -86,7 +86,7 @@ type Customer struct {
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// Customer Groups that the Customer belongs to.
 	//
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	CustomerGroupAssignments []CustomerGroupAssignment `json:"customerGroupAssignments"`
 	// Custom Fields of the Customer.
 	Custom *CustomFields `json:"custom,omitempty"`
@@ -200,7 +200,7 @@ type CustomerDraft struct {
 	CustomerGroup *CustomerGroupResourceIdentifier `json:"customerGroup,omitempty"`
 	// Customer Groups to assign the Customer to.
 	//
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	CustomerGroupAssignments []CustomerGroupAssignmentDraft `json:"customerGroupAssignments"`
 	// Custom Fields for the Customer.
 	Custom *CustomFieldsDraft `json:"custom,omitempty"`
@@ -342,7 +342,7 @@ func (obj CustomerPasswordTokenReference) MarshalJSON() ([]byte, error) {
 type CustomerReference struct {
 	// Unique identifier of the referenced [Customer](ctp:api:type:Customer).
 	ID string `json:"id"`
-	// Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](ctp:api:type:Expansion) for Customers.
+	// Contains the representation of the expanded Customer. Only present in responses to requests with [Reference Expansion](/api/general-concepts#reference-expansion) for Customers.
 	Obj *Customer `json:"obj,omitempty"`
 }
 

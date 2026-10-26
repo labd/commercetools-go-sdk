@@ -24,6 +24,18 @@ func mapDiscriminatorWarningObject(input interface{}) (WarningObject, error) {
 	}
 
 	switch discriminator {
+	case "FileNotProcessed":
+		obj := AgentFileNotProcessedWarning{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "ProductsNotFound":
+		obj := AgentProductsNotFoundWarning{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "CannotChangeReservationExpiry":
 		obj := CannotChangeReservationExpiryWarning{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -44,6 +56,12 @@ func mapDiscriminatorWarningObject(input interface{}) (WarningObject, error) {
 		return obj, nil
 	case "ImageProcessingOngoing":
 		obj := ImageProcessingOngoingWarning{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "StoreSettingOngoing":
+		obj := StoreSettingOngoingWarning{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -134,7 +152,7 @@ func (obj CannotUpdateReservationWarning) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Contained in responses to an [Upload Product image](/projects/products#upload-product-image), [Upload Variant image](/projects/variants#upload-variant-image) (BETA), or an [Upload Product Tailoring image](/projects/product-tailoring#upload-product-tailoring-image) request with response status code `202 Accepted`.
+*	Contained in responses to an [Upload Product image](/projects/products#upload-product-image), [Upload Variant image](/projects/variants#upload-variant-image), or an [Upload Product Tailoring image](/projects/product-tailoring#upload-product-tailoring-image) request with response status code `202 Accepted`.
 *	Indicates that the API is still creating the remaining sizes of the uploaded image. They will be available on the Content Delivery Network (CDN) soon.
 *
  */
@@ -151,4 +169,24 @@ func (obj ImageProcessingOngoingWarning) MarshalJSON() ([]byte, error) {
 		Action string `json:"code"`
 		*Alias
 	}{Action: "ImageProcessingOngoing", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Contained in responses to an [Update Category](/projects/categories#update-category) request with response status code `202 Accepted`. This is the case if the request contains a [Set Stores with Descendants](ctp:api:type:CategorySetStoresWithDescendantsAction), [Add Store with Descendants](ctp:api:type:CategoryAddStoreWithDescendantsAction), or [Remove Store with Descendants](ctp:api:type:CategoryRemoveStoreWithDescendantsAction) update action.
+*	Indicates that the API is still applying the Store change to the Category and its descendant Categories.
+*
+ */
+type StoreSettingOngoingWarning struct {
+	// `"The store setting is still ongoing."`
+	Message string `json:"message"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj StoreSettingOngoingWarning) MarshalJSON() ([]byte, error) {
+	type Alias StoreSettingOngoingWarning
+	return json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "StoreSettingOngoing", Alias: (*Alias)(&obj)})
 }

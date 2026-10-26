@@ -8,6 +8,112 @@ import (
 	"time"
 )
 
+/**
+*	Share of the Order total that a [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation) covers.
+*
+ */
+type Allocation interface{}
+
+func mapDiscriminatorAllocation(input interface{}) (Allocation, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "Absolute":
+		obj := AbsoluteAllocation{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "Relative":
+		obj := RelativeAllocation{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Allocates a fixed amount of the Order total to a Payment Method.
+*
+ */
+type AbsoluteAllocation struct {
+	// Amount of the Order total allocated to the Payment Method.
+	Amount HighPrecisionMoney `json:"amount"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AbsoluteAllocation) MarshalJSON() ([]byte, error) {
+	type Alias AbsoluteAllocation
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "Absolute", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Draft type that stores the share of the Order total that a [PaymentAllocationDraft](ctp:api:type:PaymentAllocationDraft) covers.
+*
+ */
+type AllocationDraft interface{}
+
+func mapDiscriminatorAllocationDraft(input interface{}) (AllocationDraft, error) {
+	var discriminator string
+	if data, ok := input.(map[string]interface{}); ok {
+		discriminator, ok = data["type"].(string)
+		if !ok {
+			return nil, errors.New("error processing discriminator field 'type'")
+		}
+	} else {
+		return nil, errors.New("invalid data")
+	}
+
+	switch discriminator {
+	case "Absolute":
+		obj := AbsoluteAllocationDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "Relative":
+		obj := RelativeAllocationDraft{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	}
+	return nil, nil
+}
+
+/**
+*	Allocates a fixed amount of the Order total to a Payment Method.
+*
+ */
+type AbsoluteAllocationDraft struct {
+	// Amount of the Order total allocated to the Payment Method.
+	Amount HighPrecisionMoneyDraft `json:"amount"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj AbsoluteAllocationDraft) MarshalJSON() ([]byte, error) {
+	type Alias AbsoluteAllocationDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "Absolute", Alias: (*Alias)(&obj)})
+}
+
 type Cart struct {
 	// Unique identifier of the Cart.
 	ID string `json:"id"`
@@ -23,7 +129,7 @@ type Cart struct {
 	CustomerId *string `json:"customerId,omitempty"`
 	// Email address of the Customer that the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Cart belongs to. Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// [Reference](ctp:api:type:Reference) to the Customer Group of the Customer that the Cart belongs to. Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	CustomerGroup *CustomerGroupReference `json:"customerGroup,omitempty"`
 	// [Anonymous session](ctp:api:type:AnonymousSession) associated with the Cart.
 	AnonymousId *string `json:"anonymousId,omitempty"`
@@ -92,15 +198,22 @@ type Cart struct {
 	//
 	// For Carts with `Single` [ShippingMode](ctp:api:type:ShippingMode): eligible Shipping Methods or applicable Tax Rates are determined by the address in `shippingAddress`, and not `itemShippingAddresses`.
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
-	// Discount Codes applied to the Cart. A Cart that has `directDiscounts` cannot have `discountCodes`.
+	// Discount Codes applied to the Cart.
+	//
+	// If `directDiscountsIgnoreCartDiscounts` is `true`, a Cart that has `directDiscounts` cannot have `discountCodes`.
 	DiscountCodes []DiscountCodeInfo `json:"discountCodes"`
-	// Direct Discounts added to the Cart. A Cart that has `discountCodes` cannot have `directDiscounts`.
+	// Direct Discounts added to the Cart.
+	//
+	// If `directDiscountsIgnoreCartDiscounts` is `true`, a Cart that has `discountCodes` cannot have `directDiscounts`.
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
+	// - If `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Cart. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	// - If `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Cart.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
 	// Automatically set when a Line Item with `GiftLineItem` [LineItemMode](ctp:api:type:LineItemMode) is [removed](ctp:api:type:CartRemoveLineItemAction) from the Cart.
 	RefusedGifts []CartDiscountReference `json:"refusedGifts"`
 	// Payment information related to the Cart.
 	PaymentInfo *PaymentInfo `json:"paymentInfo,omitempty"`
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	Country *string `json:"country,omitempty"`
 	// Language of the Cart. Must be one of the languages supported by the [Project](ctp:api:type:Project).
 	Locale *string `json:"locale,omitempty"`
@@ -108,6 +221,8 @@ type Cart struct {
 	Origin CartOrigin `json:"origin"`
 	// Custom Fields of the Cart.
 	Custom *CustomFields `json:"custom,omitempty"`
+	// Determines how the Orders generated by a [RecurringOrder](ctp:api:type:RecurringOrder) based on this Cart are paid for. Only evaluated on Carts with the `RecurringOrder` [CartOrigin](ctp:api:type:CartOrigin).
+	RecurringPaymentConfiguration *RecurringPaymentConfiguration `json:"recurringPaymentConfiguration,omitempty"`
 	// Indicates if a combination of discount types can apply on a Cart.
 	DiscountTypeCombination DiscountTypeCombination `json:"discountTypeCombination,omitempty"`
 	// Indicates whether the Cart has been [locked](/api/carts-orders-overview#lock-a-cart), preventing edits.
@@ -191,7 +306,7 @@ type CartDraft struct {
 	CustomerId *string `json:"customerId,omitempty"`
 	// Email address of the Customer that the Cart belongs to.
 	CustomerEmail *string `json:"customerEmail,omitempty"`
-	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Customer Group of the Customer that the Cart belongs to. Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// [ResourceIdentifier](ctp:api:type:ResourceIdentifier) to the Customer Group of the Customer that the Cart belongs to. Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	//
 	// You can set either a `customerId` or a `customerGroup`.
 	// If the Customer referenced in `customerId` belongs to a Customer Group then `customerGroup` is set automatically.
@@ -246,7 +361,10 @@ type CartDraft struct {
 	ItemShippingAddresses []BaseAddress `json:"itemShippingAddresses"`
 	// `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
 	DiscountCodes []string `json:"discountCodes"`
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// - If set to `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Cart. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	// - If set to `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Cart.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	// If used for [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/carts:POST), the provided country must be one of the [Store's](ctp:api:type:Store) `countries`.
 	Country *string `json:"country,omitempty"`
 	// Language of the Cart. Must be one of the languages supported by the [Project](ctp:api:type:Project).
@@ -524,6 +642,19 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "addRecurringPaymentAllocation":
+		obj := CartAddRecurringPaymentAllocationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		if obj.Allocation != nil {
+			var err error
+			obj.Allocation, err = mapDiscriminatorAllocationDraft(obj.Allocation)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return obj, nil
 	case "addShippingMethod":
 		obj := CartAddShippingMethodAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -653,6 +784,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		return obj, nil
 	case "removePayment":
 		obj := CartRemovePaymentAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "removeRecurringPaymentAllocation":
+		obj := CartRemoveRecurringPaymentAllocationAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -789,6 +926,12 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 			return nil, err
 		}
 		return obj, nil
+	case "setDirectDiscountsIgnoreCartDiscounts":
+		obj := CartSetDirectDiscountsIgnoreCartDiscountsAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setEstimatedDelivery":
 		obj := CartSetEstimatedDeliveryAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -887,6 +1030,18 @@ func mapDiscriminatorCartUpdateAction(input interface{}) (CartUpdateAction, erro
 		return obj, nil
 	case "setPurchaseOrderNumber":
 		obj := CartSetPurchaseOrderNumberAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setRecurringPaymentConfiguration":
+		obj := CartSetRecurringPaymentConfigurationAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "setRecurringPaymentStrategy":
+		obj := CartSetRecurringPaymentStrategyAction{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -1172,6 +1327,11 @@ type DirectDiscount struct {
 	//
 	// Absent if the `value` is `giftLineItem`.
 	Target CartDiscountTarget `json:"target,omitempty"`
+	// - If `true`, Direct Discounts compete against Product Discounts to apply the [best deal](/api/pricing-and-discounts-overview#best-deal).
+	// - If `false`, Direct Discounts are ignored when calculating the best deal comparison, and are applied on top of the discount type that offers the best deal.
+	//
+	// This applies only when the [DiscountCombinationMode](ctp:api:type:DiscountCombinationMode) for the [Project](ctp:api:type:Project) is `BestDeal`.
+	ParticipateInBestDealSelection *bool `json:"participateInBestDealSelection,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1202,7 +1362,7 @@ func (obj *DirectDiscount) UnmarshalJSON(data []byte) error {
 /**
 *	Represents a [CartDiscount](ctp:api:type:CartDiscount) that can only be associated with a single Cart or Order.
 *
-*	For an introduction to Direct Discounts and to understand how they work in Composable Commerce, see the [Direct Discounts overview](/pricing-and-discounts-overview#direct-discounts).
+*	For an introduction to Direct Discounts and to understand how they work, see the [Direct Discounts overview](/api/pricing-and-discounts-overview#direct-discounts).
 *
  */
 type DirectDiscountDraft struct {
@@ -1212,6 +1372,11 @@ type DirectDiscountDraft struct {
 	//
 	// If `value` is set to `giftLineItem`, this must not be set.
 	Target CartDiscountTarget `json:"target,omitempty"`
+	// - If set to `true`, Direct Discounts compete against Product Discounts to apply the [best deal](/api/pricing-and-discounts-overview#best-deal).
+	// - If set to `false`, Direct Discounts are ignored when calculating the best deal comparison, and are applied on top of the discount type that offers the best deal.
+	//
+	// This applies only when the [DiscountCombinationMode](ctp:api:type:DiscountCombinationMode) for the [Project](ctp:api:type:Project) is `BestDeal`.
+	ParticipateInBestDealSelection *bool `json:"participateInBestDealSelection,omitempty"`
 }
 
 // UnmarshalJSON override to deserialize correct attribute types based
@@ -1365,11 +1530,13 @@ func mapDiscriminatorDiscountTypeCombination(input interface{}) (DiscountTypeCom
 }
 
 /**
-*	Indicates if a Product Discount or Cart Discount offers the best deal for a Cart or Order.
+*	Indicates if a Product Discount, Cart Discount, or Direct Discount offers the best deal for a Cart or Order.
 *
  */
 type BestDeal struct {
 	// Discount type that offers the best deal; the value can be `ProductDiscount` or `CartDiscount`.
+	//
+	// [Direct Discounts](ctp:api:type:DirectDiscount) are indicated as `CartDiscount` when they offer the best deal.
 	ChosenDiscountType string `json:"chosenDiscountType"`
 }
 
@@ -1387,6 +1554,11 @@ type DiscountedLineItemPortion struct {
 	// A [CartDiscountReference](ctp:api:type:CartDiscountReference) or [DirectDiscountReference](ctp:api:type:DirectDiscountReference) of the applicable discount on the Line Item.
 	Discount Reference `json:"discount"`
 	// Money value of the applicable discount.
+	//
+	// When a Cart Discount with [CartDiscountPatternTarget](ctp:api:type:CartDiscountPatternTarget) is used:
+	//
+	// - The value is zero for a (Custom) Line Item matching the `triggerPattern`, indicating it participated in the discount as a trigger.
+	// - The value is the actual discount amount for a (Custom) Line Item matching the `targetPattern`.
 	DiscountedAmount TypedMoney `json:"discountedAmount"`
 }
 
@@ -1575,6 +1747,8 @@ type ExternalTaxRateDraft struct {
 	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
 	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
 	SubRates []SubRate `json:"subRates"`
+	// Determines whether the `taxRoundingMode` of the Cart or Order is applied to the net price or the tax amount when `includedInPrice` is `true`. The field is ignored if `includedInPrice` is `false`.
+	TaxRoundingTarget *TaxRoundingTarget `json:"taxRoundingTarget,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -1706,7 +1880,7 @@ type LineItem struct {
 	// Total price of this Line Item equalling `price` multiplied by `quantity`. If the Line Item is discounted, the total price is the `discountedPricePerQuantity` multiplied by `quantity`.
 	// Includes taxes if the [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true`.
 	//
-	// If `ExternalPrice` [LineItemPriceMode](#ctp:api:type:LineItemPriceMode) is used with high-precision money, then the total price is rounded by using the `HalfEven` rounding mode.
+	// If `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode) is used with high-precision money, then the total price is rounded by using the `HalfEven` rounding mode.
 	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// Discounted price of a single quantity of the Line Item.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
@@ -1725,7 +1899,7 @@ type LineItem struct {
 	PerMethodTaxRate []MethodTaxRate `json:"perMethodTaxRate"`
 	// Identifies [Inventory entries](/api/projects/inventory) that are reserved. The referenced Channel has the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// Used to [select](/api/pricing-and-discounts-apis-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 	// Indicates how the Price for the Line Item is set.
 	PriceMode LineItemPriceMode `json:"priceMode"`
@@ -1770,7 +1944,7 @@ type LineItemDraft struct {
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/api/pricing-and-discounts-apis-overview#line-item-price-selection) a Product Price.
 	// The referenced Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	//
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set,
@@ -1882,6 +2056,138 @@ type MethodTaxedPrice struct {
 	ShippingMethodKey string `json:"shippingMethodKey"`
 	// Total taxed price based on the quantity of the Line Item or Custom Line Item assigned to the Shipping Method identified by `shippingMethodKey`.
 	TaxedPrice *TaxedItemPrice `json:"taxedPrice,omitempty"`
+}
+
+/**
+*	Draft type that stores the data to create a [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation).
+*
+ */
+type PaymentAllocationDraft struct {
+	// Unique identifier of the resulting [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation) within the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration).
+	ID string `json:"id"`
+	// Payment Method charged for this share of the Order total.
+	PaymentMethod PaymentMethodReference `json:"paymentMethod"`
+	// Share of the Order total charged to the `paymentMethod`.
+	Allocation AllocationDraft `json:"allocation"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *PaymentAllocationDraft) UnmarshalJSON(data []byte) error {
+	type Alias PaymentAllocationDraft
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Allocation != nil {
+		var err error
+		obj.Allocation, err = mapDiscriminatorAllocationDraft(obj.Allocation)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+*	Determines how payment for the Orders generated by a [RecurringOrder](ctp:api:type:RecurringOrder) is collected.
+*
+ */
+type PaymentStrategy string
+
+const (
+	PaymentStrategyCheckout PaymentStrategy = "Checkout"
+)
+
+/**
+*	Assigns a share of the Order total to a specific [PaymentMethod](ctp:api:type:PaymentMethod).
+*
+ */
+type RecurringPaymentAllocation struct {
+	// Unique identifier of the RecurringPaymentAllocation within the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration). Use it to remove the allocation with the [Remove RecurringPaymentAllocation](ctp:api:type:CartRemoveRecurringPaymentAllocationAction) update action.
+	ID string `json:"id"`
+	// Payment Method charged for this share of the Order total.
+	PaymentMethod PaymentMethodReference `json:"paymentMethod"`
+	// Share of the Order total charged to the `paymentMethod`.
+	Allocation Allocation `json:"allocation"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *RecurringPaymentAllocation) UnmarshalJSON(data []byte) error {
+	type Alias RecurringPaymentAllocation
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Allocation != nil {
+		var err error
+		obj.Allocation, err = mapDiscriminatorAllocation(obj.Allocation)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+/**
+*	Determines how the Orders generated by a [RecurringOrder](ctp:api:type:RecurringOrder) are paid for. It is only evaluated on recurring Carts, that is Carts with the `RecurringOrder` [CartOrigin](ctp:api:type:CartOrigin).
+*
+ */
+type RecurringPaymentConfiguration struct {
+	// Determines how payment is collected for the Orders generated by the Recurring Order.
+	PaymentStrategy PaymentStrategy `json:"paymentStrategy"`
+	// Payment Methods charged for the Orders generated by the RecurringOrder, and the share of the Order total charged to each of them.
+	PaymentAllocations []RecurringPaymentAllocation `json:"paymentAllocations"`
+}
+
+/**
+*	Draft type that stores the data to create a [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration).
+*
+ */
+type RecurringPaymentConfigurationDraft struct {
+	// Determines how payment is collected for the Orders generated by the Recurring Order.
+	PaymentStrategy PaymentStrategy `json:"paymentStrategy"`
+	// Payment Methods charged for the Orders generated by the Recurring Order, and the share of the Order total charged to each of them.
+	PaymentAllocations []PaymentAllocationDraft `json:"paymentAllocations"`
+}
+
+/**
+*	Allocates a percentage of the Order total to a Payment Method.
+*
+ */
+type RelativeAllocation struct {
+	// Percentage of the Order total allocated to the Payment Method. For example, `100` allocates the entire Order total.
+	Percentage int `json:"percentage"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RelativeAllocation) MarshalJSON() ([]byte, error) {
+	type Alias RelativeAllocation
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "Relative", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Allocates a percentage of the Order total to a Payment Method.
+*
+ */
+type RelativeAllocationDraft struct {
+	// Percentage of the Order total allocated to the Payment Method. For example, `100` allocates the entire Order total.
+	Percentage int `json:"percentage"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RelativeAllocationDraft) MarshalJSON() ([]byte, error) {
+	type Alias RelativeAllocationDraft
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "Relative", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -2519,13 +2825,13 @@ func (obj CartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 *	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](ctp:api:type:CustomFields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
 *	A new Line Item is added when the `externalPrice` or `externalTotalPrice` is set in this update action.
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
 *	If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
 *	If the Line Items do not have a Price according to the [Product](ctp:api:type:Product) `priceMode` value for a selected currency and/or country, Customer Group, or Channel, a [MatchingPriceNotFound](ctp:api:type:MatchingPriceNotFoundError) error is returned.
 *
-*	The Product Variant that is to be added as a Line Item must be [available in a Store](/api/project-configuration-overview#products-available-in-store), otherwise an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+*	The Product Variant that is to be added as a Line Item must be [available in a Store](/api/project-configuration-apis-overview#products-available-in-store), otherwise an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
 *
  */
 type CartAddLineItemAction struct {
@@ -2551,7 +2857,7 @@ type CartAddLineItemAction struct {
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/api/pricing-and-discounts-apis-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set, the Channel must match one of the Store's distribution channels.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
@@ -2618,6 +2924,47 @@ func (obj CartAddPaymentAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "addPayment", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Adds a [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation) to the `paymentAllocations` of the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration).
+*
+ */
+type CartAddRecurringPaymentAllocationAction struct {
+	// Unique identifier of the new [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation) within the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration).
+	ID string `json:"id"`
+	// Payment Method charged for this share of the Order total.
+	PaymentMethod PaymentMethodReference `json:"paymentMethod"`
+	// Share of the Order total charged to the `paymentMethod`.
+	Allocation AllocationDraft `json:"allocation"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *CartAddRecurringPaymentAllocationAction) UnmarshalJSON(data []byte) error {
+	type Alias CartAddRecurringPaymentAllocationAction
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+	if obj.Allocation != nil {
+		var err error
+		obj.Allocation, err = mapDiscriminatorAllocationDraft(obj.Allocation)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartAddRecurringPaymentAllocationAction) MarshalJSON() ([]byte, error) {
+	type Alias CartAddRecurringPaymentAllocationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "addRecurringPaymentAllocation", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -2846,7 +3193,7 @@ func (obj CartChangeCustomLineItemQuantityAction) MarshalJSON() ([]byte, error) 
 *	use this update action in combination with the [Set LineItem ShippingDetails](ctp:api:type:CartSetLineItemShippingDetailsAction) update action
 *	in a single Cart update command.
 *
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
 *	This action is subject to [InventoryEntry](ctp:api:type:InventoryEntry) min/max restrictions when applicable. For more information, see [Quantity limits](/api/inventory-overview#quantity-limits).
 *
@@ -3109,7 +3456,7 @@ func (obj CartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
  */
 type CartRemoveLineItemAction struct {
@@ -3156,6 +3503,25 @@ func (obj CartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Removes a [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation) from the `paymentAllocations` of the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration).
+*
+ */
+type CartRemoveRecurringPaymentAllocationAction struct {
+	// `id` of the [RecurringPaymentAllocation](ctp:api:type:RecurringPaymentAllocation) to remove.
+	ID string `json:"id"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartRemoveRecurringPaymentAllocationAction) MarshalJSON() ([]byte, error) {
+	type Alias CartRemoveRecurringPaymentAllocationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "removeRecurringPaymentAllocation", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Removes a Shipping Method from a Cart that has the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
 *
  */
@@ -3195,7 +3561,8 @@ func (obj CartSetAnonymousIdAction) MarshalJSON() ([]byte, error) {
 }
 
 type CartSetBillingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -3639,8 +4006,9 @@ func (obj CartSetDeleteDaysAfterLastModificationAction) MarshalJSON() ([]byte, e
 }
 
 /**
-*	Adds a [DirectDiscount](ctp:api:type:DirectDiscount), but only if no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Cart.
-*	Either a Discount Code or a Direct Discount can exist on a Cart at the same time.
+*	Adds a [DirectDiscount](ctp:api:type:DirectDiscount) to the Cart.
+*
+*	If [Cart](ctp:api:type:Cart) `directDiscountsIgnoreCartDiscounts` is `true`, Direct Discounts can only be added when no [DiscountCode](ctp:api:type:DiscountCode) has been added to the Cart.
 *
  */
 type CartSetDirectDiscountsAction struct {
@@ -3658,6 +4026,28 @@ func (obj CartSetDirectDiscountsAction) MarshalJSON() ([]byte, error) {
 		Action string `json:"action"`
 		*Alias
 	}{Action: "setDirectDiscounts", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Determines whether the [Direct Discounts](ctp:api:type:DirectDiscount) on the Cart replace the [Cart Discounts](ctp:api:type:CartDiscount) of the [Project](ctp:api:type:Project), or apply alongside them.
+*
+ */
+type CartSetDirectDiscountsIgnoreCartDiscountsAction struct {
+	// - If `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Cart. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	//
+	// The value can be set to `true` only if the Cart does not have both `discountCodes` and `directDiscounts`.
+	// - If `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Cart.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartSetDirectDiscountsIgnoreCartDiscountsAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetDirectDiscountsIgnoreCartDiscountsAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setDirectDiscountsIgnoreCartDiscounts", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -3792,7 +4182,7 @@ func (obj CartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
  */
 type CartSetLineItemDistributionChannelAction struct {
@@ -4055,6 +4445,44 @@ func (obj CartSetPurchaseOrderNumberAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Sets the `paymentStrategy` and the `paymentAllocations` of the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration) together, replacing any existing configuration.
+*
+ */
+type CartSetRecurringPaymentConfigurationAction struct {
+	// Value to set. If omitted, any existing value is removed and the Orders generated by the [RecurringOrder](ctp:api:type:RecurringOrder) are created without collecting payment first.
+	RecurringPaymentConfiguration *RecurringPaymentConfigurationDraft `json:"recurringPaymentConfiguration,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartSetRecurringPaymentConfigurationAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetRecurringPaymentConfigurationAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setRecurringPaymentConfiguration", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Sets the `paymentStrategy` of the [RecurringPaymentConfiguration](ctp:api:type:RecurringPaymentConfiguration) without changing the existing `paymentAllocations`. To set both at once, use the [Set RecurringPaymentConfiguration](ctp:api:type:CartSetRecurringPaymentConfigurationAction) update action.
+*
+ */
+type CartSetRecurringPaymentStrategyAction struct {
+	// New value to set.
+	PaymentStrategy PaymentStrategy `json:"paymentStrategy"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj CartSetRecurringPaymentStrategyAction) MarshalJSON() ([]byte, error) {
+	type Alias CartSetRecurringPaymentStrategyAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "setRecurringPaymentStrategy", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Sets a new expiration date and time for all [ReserveOnCart](ctp:api:type:InventoryMode) Line Items with a [Reservation](ctp:api:type:Reservation). The Cart will return a [warning](ctp:api:type:WarningObject) for any Reservation that could not be changed.
 *
  */
@@ -4076,7 +4504,7 @@ func (obj CartSetReservationExpirationInMinutesAction) MarshalJSON() ([]byte, er
 /**
 *	Setting the shipping address also sets the [TaxRate](ctp:api:type:TaxRate) of Line Items and calculates the [TaxedPrice](ctp:api:type:TaxedPrice).
 *
-*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection),
+*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection),
 *	a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
 *	If you want to allow shipping to states inside a country that are not explicitly covered by a TaxRate,
@@ -4085,7 +4513,8 @@ func (obj CartSetReservationExpirationInMinutesAction) MarshalJSON() ([]byte, er
 *
  */
 type CartSetShippingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If not set, the shipping address is unset, and the `taxedPrice` and `taxRate` are unset in all Line Items of the Cart.
 	Address *BaseAddress `json:"address,omitempty"`
 }
