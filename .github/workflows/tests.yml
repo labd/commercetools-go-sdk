@@ -1,6 +1,10 @@
 name: Run Tests
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 permissions:
   contents: read
@@ -10,7 +14,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
         persist-credentials: false
 
@@ -29,6 +33,22 @@ jobs:
     - name: Run tests
       run: go test -race -v ./...
 
+  govulncheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          check-latest: true
+
+      - name: Run govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.9.0 ./...
+
   changie:
     runs-on: ubuntu-latest
     needs: test
@@ -38,13 +58,13 @@ jobs:
       pull-requests: write
       actions: write
     steps:
-      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Prepare release
-        uses: labd/changie-release-action@ac4d65e736733f1d2c363dd5d99b43a1add5aaef # v0.6.0
+        uses: labd/changie-release-action@43112f435367957ee3fefc64b3b712c7e672be33 # v0.6.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
