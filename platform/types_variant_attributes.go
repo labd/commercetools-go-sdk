@@ -27,7 +27,7 @@ type VariantAttributesAttributeMetadata struct {
 	// Name of the Attribute as defined in the [ProductType](ctp:api:type:ProductType).
 	Name string `json:"name"`
 	// Localized label of the Attribute as defined in the [ProductType](ctp:api:type:ProductType).
-	// Subject to [locale projection](/../api/projects/productProjections#locales) if `localeProjection` is specified.
+	// Subject to [locale projection](/api/projects/productProjections#locales) if `localeProjection` is specified.
 	Label LocalizedString `json:"label"`
 	// Name of the [AttributeType](ctp:api:type:AttributeType), for example `boolean`, `text`, `ltext`, `enum`, `lenum`, `number`, `money`, `date`, `time`, `datetime`, `reference`, `set`, or `nested`.
 	Type string `json:"type"`
@@ -38,8 +38,10 @@ type VariantAttributesAttributeMetadata struct {
 *
  */
 type VariantAttributesAvailability struct {
-	// Indicates whether the Variant is in stock.
+	// Whether the Variant is in stock.
 	IsOnStock *bool `json:"isOnStock,omitempty"`
+	// Number of days to restock the Variant once it is out of stock.
+	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Number of items of this Variant that are in stock.
 	AvailableQuantity *int `json:"availableQuantity,omitempty"`
 	// Per-channel availability for the requested supply [Channels](ctp:api:type:Channel).
@@ -52,8 +54,10 @@ type VariantAttributesAvailability struct {
 *
  */
 type VariantAttributesChannelAvailability struct {
-	// Indicates whether the Variant is in stock in the specified [Channel](ctp:api:type:Channel).
+	// Whether the Variant is in stock in the specified [Channel](ctp:api:type:Channel).
 	IsOnStock *bool `json:"isOnStock,omitempty"`
+	// Number of days to restock the Variant once it is out of stock in the specified [Channel](ctp:api:type:Channel).
+	RestockableInDays *int `json:"restockableInDays,omitempty"`
 	// Number of items of this Variant that are in stock in the specified [Channel](ctp:api:type:Channel).
 	AvailableQuantity *int `json:"availableQuantity,omitempty"`
 }

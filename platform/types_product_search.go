@@ -107,15 +107,15 @@ type ProductSearchProjectionParams struct {
 	Expand []string `json:"expand"`
 	// Whether to retrieve the [staged](/api/projects/productProjections#current--staged) Product Projection
 	Staged *bool `json:"staged,omitempty"`
-	// The currency used for [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
+	// The currency used for [Product price selection](/api/projects/productProjections#product-price-selection).
 	PriceCurrency *string `json:"priceCurrency,omitempty"`
-	// The country used for [Product price selection](/api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
+	// The country used for [Product price selection](/api/projects/productProjections#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceCountry *string `json:"priceCountry,omitempty"`
-	// `id` of an existing [CustomerGroup](ctp:api:type:CustomerGroup) used for [Product price selection](/api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
+	// `id` of an existing [CustomerGroup](ctp:api:type:CustomerGroup) used for [Product price selection](/api/projects/productProjections#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceCustomerGroup *string `json:"priceCustomerGroup,omitempty"`
-	// IDs of existing [CustomerGroups](ctp:api:type:CustomerGroup) used for [Product price selection](/api/pricing-and-discounts-overview#product-price-selection), when using [multiple Customer Groups](/api/customers-overview#customer-groups). It can be used only *in conjunction with* the `priceCurrency` parameter.
+	// IDs of existing [CustomerGroups](ctp:api:type:CustomerGroup) used for [Product price selection](/api/projects/productProjections#product-price-selection), when using [multiple Customer Groups](/api/customers-overview#customer-groups). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceCustomerGroupAssignments []string `json:"priceCustomerGroupAssignments"`
-	// `id` of an existing [Channel](ctp:api:type:Channel) used for [Product price selection](/api/pricing-and-discounts-overview#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
+	// `id` of an existing [Channel](ctp:api:type:Channel) used for [Product price selection](/api/projects/productProjections#product-price-selection). It can be used only *in conjunction with* the `priceCurrency` parameter.
 	PriceChannel *string `json:"priceChannel,omitempty"`
 	// Used for [locale-based projection](/api/projects/productProjections#locales).
 	LocaleProjection []string `json:"localeProjection"`
@@ -124,7 +124,7 @@ type ProductSearchProjectionParams struct {
 	// they are used for projections based on [locale](/api/projects/productProjections#locales), [price](/api/projects/productProjections#prices),
 	// and [inventory](/api/projects/productProjections#inventory-entries).
 	//
-	// For Projects with active [Product Selections](/api/projects/product-selections), the API does not take the [availability of the Product in the specified Store](/api/project-configuration-overview#products-available-in-store) into account.
+	// For Projects with active [Product Selections](/api/projects/product-selections), the API does not take the [availability of the Product in the specified Store](/api/project-configuration-apis-overview#products-available-in-store) into account.
 	//
 	// [Product Tailoring](/api/projects/product-tailoring) modifies the product information returned in API responses. However, you can only specify [query expressions](/api/search-query-language#simple-expressions) for the original Product data, not for tailored data.
 	StoreProjection *string `json:"storeProjection,omitempty"`

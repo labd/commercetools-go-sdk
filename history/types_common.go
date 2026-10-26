@@ -708,7 +708,7 @@ type LineItem struct {
 	// Total price of this Line Item equalling `price` multiplied by `quantity`. If the Line Item is discounted, the total price is the `discountedPricePerQuantity` multiplied by `quantity`.
 	// Includes taxes if the [TaxRate](ctp:api:type:TaxRate) `includedInPrice` is `true`.
 	//
-	// If `ExternalPrice` [LineItemPriceMode](#ctp:api:type:LineItemPriceMode) is used with high-precision money, then the total price is rounded by using the `HalfEven` rounding mode.
+	// If `ExternalPrice` [LineItemPriceMode](ctp:api:type:LineItemPriceMode) is used with high-precision money, then the total price is rounded by using the `HalfEven` rounding mode.
 	TotalPrice CentPrecisionMoney `json:"totalPrice"`
 	// Discounted price of a single quantity of the Line Item.
 	DiscountedPricePerQuantity []DiscountedLineItemPriceForQuantity `json:"discountedPricePerQuantity"`
@@ -727,7 +727,7 @@ type LineItem struct {
 	PerMethodTaxRate []MethodTaxRate `json:"perMethodTaxRate"`
 	// Identifies [Inventory entries](/api/projects/inventory) that are reserved. The referenced Channel has the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelReference `json:"supplyChannel,omitempty"`
-	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
+	// Used to [select](/api/pricing-and-discounts-apis-overview#line-item-price-selection) a Product Price. The referenced Channel has the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	DistributionChannel *ChannelReference `json:"distributionChannel,omitempty"`
 	// Indicates how the Price for the Line Item is set.
 	PriceMode LineItemPriceMode `json:"priceMode"`
@@ -946,7 +946,7 @@ type Price struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Set if a [ProductDiscount](ctp:api:type:ProductDiscount) applies. When present, the API uses the DiscountedPrice value for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Set if a [ProductDiscount](ctp:api:type:ProductDiscount) applies. When present, the API uses the DiscountedPrice value for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
 	//
@@ -2730,8 +2730,8 @@ type ProductVariant struct {
 	Prices []Price `json:"prices"`
 	// Variant Attributes according to the respective [AttributeDefinition](ctp:api:type:AttributeDefinition).
 	Attributes []Attribute `json:"attributes"`
-	// Only available when [price selection](/api/pricing-and-discounts-overview#price-selection) is used.
-	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	// Only available when [price selection](/api/pricing-and-discounts-apis-overview#price-selection-in-api-responses) is used.
+	// Cannot be used in a [Query Predicate](/api/predicates/query).
 	Price *Price `json:"price,omitempty"`
 	// Images of the Product Variant.
 	Images []Image `json:"images"`
@@ -2745,14 +2745,14 @@ type ProductVariant struct {
 	// Only available in response to a [Product Projection Search](/api/projects/product-projection-search) request.
 	IsMatchingVariant *bool `json:"isMatchingVariant,omitempty"`
 	// Only available in response to a [Product Projection Search](/api/projects/product-projection-search) request
-	// with [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
+	// with [Product price selection](/api/projects/productProjections#product-price-selection).
 	// Can be used to sort, [filter](ctp:api:type:ProductProjectionSearchFilterScopedPrice), and facet.
 	ScopedPrice *ScopedPrice `json:"scopedPrice,omitempty"`
 	// Only available in response to a [Product Projection Search](/api/projects/product-projection-search) request
-	// with [Product price selection](/api/pricing-and-discounts-overview#product-price-selection).
+	// with [Product price selection](/api/projects/productProjections#product-price-selection).
 	ScopedPriceDiscounted *bool `json:"scopedPriceDiscounted,omitempty"`
-	// Only available when [Product price selection](/api/pricing-and-discounts-overview#product-price-selection) is used.
-	// Cannot be used in a [Query Predicate](ctp:api:type:QueryPredicate).
+	// Only available when [Product price selection](/api/projects/productProjections#product-price-selection) is used.
+	// Cannot be used in a [Query Predicate](/api/predicates/query).
 	RecurrencePrices []Price `json:"recurrencePrices"`
 }
 
@@ -2861,7 +2861,7 @@ const (
 
 /**
 *	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/api/pricing-and-discounts-overview#scoped-price-search) is used.
+*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/api/pricing-and-discounts-apis-overview#scoped-price-search) is used.
 *
  */
 type ScopedPrice struct {

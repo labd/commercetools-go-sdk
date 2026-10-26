@@ -610,6 +610,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "ChangeSavedToLineItemChange":
+		obj := ChangeSavedToLineItemChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "ChangeShipmentStateChange":
 		obj := ChangeShipmentStateChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1536,6 +1542,24 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "SetMethodInfoCustomFieldChange":
+		obj := SetMethodInfoCustomFieldChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetMethodInfoCustomTypeChange":
+		obj := SetMethodInfoCustomTypeChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetMethodInfoInterfaceAccountChange":
+		obj := SetMethodInfoInterfaceAccountChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "SetMethodInfoInterfaceChange":
 		obj := SetMethodInfoInterfaceChange{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -1550,6 +1574,12 @@ func mapDiscriminatorChange(input interface{}) (Change, error) {
 		return obj, nil
 	case "SetMethodInfoNameChange":
 		obj := SetMethodInfoNameChange{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "SetMethodInfoTokenChange":
+		obj := SetMethodInfoTokenChange{}
 		if err := decodeStruct(input, &obj); err != nil {
 			return nil, err
 		}
@@ -3023,6 +3053,9 @@ type AddDeliveryChange struct {
 	PreviousValue DeliveryChangeValue `json:"previousValue"`
 	// Value after the change.
 	NextValue DeliveryChangeValue `json:"nextValue"`
+	// `shippingKey` of the [Shipping](ctp:api:type:Shipping) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -3262,6 +3295,9 @@ type AddParcelToDeliveryChange struct {
 	NextValue Parcel `json:"nextValue"`
 	// `id` of the [Delivery](ctp:api:type:Delivery) to which the Parcel was added.
 	DeliveryId string `json:"deliveryId"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -4864,6 +4900,29 @@ func (obj ChangeReviewRatingStatisticsChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Set AttributeDefinition SavedToLineItem](ctp:api:type:ProductTypeSetSavedToLineItemAction) update action.
+ */
+type ChangeSavedToLineItemChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue bool `json:"previousValue"`
+	// Value after the change.
+	NextValue bool `json:"nextValue"`
+	// Name of the updated [AttributeDefinition](ctp:api:type:AttributeDefinition).
+	AttributeName string `json:"attributeName"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj ChangeSavedToLineItemChange) MarshalJSON() ([]byte, error) {
+	type Alias ChangeSavedToLineItemChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "ChangeSavedToLineItemChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the following update actions:
 *
 *	- [Change ShipmentState](ctp:api:type:OrderChangeShipmentStateAction) on Orders.
@@ -5554,6 +5613,9 @@ type RemoveDeliveryItemsChange struct {
 	Change string `json:"change"`
 	// Value before the change.
 	PreviousValue DeliveryChangeValue `json:"previousValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -5829,6 +5891,9 @@ type RemoveParcelFromDeliveryChange struct {
 	PreviousValue Parcel `json:"previousValue"`
 	// `id` of the [Delivery](ctp:api:type:Delivery) from which the Parcel was removed.
 	DeliveryId string `json:"deliveryId"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -7255,6 +7320,9 @@ type SetDeliveryAddressChange struct {
 	NextValue Address `json:"nextValue"`
 	// `id` of the updated [Delivery](ctp:api:type:Delivery).
 	DeliveryId string `json:"deliveryId"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -7282,6 +7350,9 @@ type SetDeliveryItemsChange struct {
 	NextValue []DeliveryItem `json:"nextValue"`
 	// `id` of the updated [Delivery](ctp:api:type:Delivery).
 	DeliveryId string `json:"deliveryId"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8162,6 +8233,73 @@ func (obj SetMetaTitleChange) MarshalJSON() ([]byte, error) {
 }
 
 /**
+*	Change triggered by the [Set MethodInfo CustomField](ctp:api:type:PaymentSetMethodInfoCustomFieldAction) update action.
+ */
+type SetMethodInfoCustomFieldChange struct {
+	Change string `json:"change"`
+	// Name of the [Custom Field](/api/projects/custom-fields).
+	Name string `json:"name"`
+	// `id` of the referenced [Type](ctp:api:type:Type).
+	CustomTypeId string `json:"customTypeId"`
+	// Value before the change.
+	PreviousValue interface{} `json:"previousValue"`
+	// Value after the change.
+	NextValue interface{} `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetMethodInfoCustomFieldChange) MarshalJSON() ([]byte, error) {
+	type Alias SetMethodInfoCustomFieldChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetMethodInfoCustomFieldChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set MethodInfo CustomType](ctp:api:type:PaymentSetMethodInfoCustomTypeAction) update action.
+ */
+type SetMethodInfoCustomTypeChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue CustomFields `json:"previousValue"`
+	// Value after the change.
+	NextValue CustomFields `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetMethodInfoCustomTypeChange) MarshalJSON() ([]byte, error) {
+	type Alias SetMethodInfoCustomTypeChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetMethodInfoCustomTypeChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set MethodInfoInterfaceAccount](ctp:api:type:PaymentSetMethodInfoInterfaceAccountAction) update action.
+ */
+type SetMethodInfoInterfaceAccountChange struct {
+	Change string `json:"change"`
+	// Value before the change.
+	PreviousValue string `json:"previousValue"`
+	// Value after the change.
+	NextValue string `json:"nextValue"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetMethodInfoInterfaceAccountChange) MarshalJSON() ([]byte, error) {
+	type Alias SetMethodInfoInterfaceAccountChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetMethodInfoInterfaceAccountChange", Alias: (*Alias)(&obj)})
+}
+
+/**
 *	Change triggered by the [Set MethodInfoInterface](ctp:api:type:PaymentSetMethodInfoInterfaceAction) update action.
  */
 type SetMethodInfoInterfaceChange struct {
@@ -8222,6 +8360,23 @@ func (obj SetMethodInfoNameChange) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "SetMethodInfoNameChange", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Change triggered by the [Set MethodInfoToken](ctp:api:type:PaymentSetMethodInfoTokenAction) update action.
+ */
+type SetMethodInfoTokenChange struct {
+	Change string `json:"change"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj SetMethodInfoTokenChange) MarshalJSON() ([]byte, error) {
+	type Alias SetMethodInfoTokenChange
+	return json.Marshal(struct {
+		Action string `json:"type"`
+		*Alias
+	}{Action: "SetMethodInfoTokenChange", Alias: (*Alias)(&obj)})
 }
 
 /**
@@ -8458,6 +8613,9 @@ type SetParcelItemsChange struct {
 	NextValue []DeliveryItem `json:"nextValue"`
 	// Information about the updated Parcel.
 	Parcel ParcelChangeValue `json:"parcel"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8485,6 +8643,9 @@ type SetParcelMeasurementsChange struct {
 	NextValue ParcelMeasurements `json:"nextValue"`
 	// Information about the updated Parcel.
 	Parcel ParcelChangeValue `json:"parcel"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -8512,6 +8673,9 @@ type SetParcelTrackingDataChange struct {
 	NextValue TrackingData `json:"nextValue"`
 	// Information about the updated Parcel.
 	Parcel ParcelChangeValue `json:"parcel"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -10700,6 +10864,9 @@ type SetDeliveryAddressCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -10725,6 +10892,9 @@ type SetDeliveryAddressCustomTypeChange struct {
 	PreviousValue CustomFields `json:"previousValue"`
 	// Value after the change.
 	NextValue CustomFields `json:"nextValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -10752,6 +10922,9 @@ type SetDeliveryCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -10775,6 +10948,9 @@ type SetDeliveryCustomTypeChange struct {
 	PreviousValue CustomFields `json:"previousValue"`
 	// Value after the change.
 	NextValue CustomFields `json:"nextValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -10979,6 +11155,9 @@ type SetParcelCustomFieldChange struct {
 	PreviousValue interface{} `json:"previousValue"`
 	// Value after the change.
 	NextValue interface{} `json:"nextValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -11002,6 +11181,9 @@ type SetParcelCustomTypeChange struct {
 	PreviousValue CustomFields `json:"previousValue"`
 	// Value after the change.
 	NextValue CustomFields `json:"nextValue"`
+	// `key` of the [ShippingMethod](ctp:api:type:ShippingMethod) associated with the Delivery.
+	// Only present when the Order uses the `Multiple` [ShippingMode](ctp:api:type:ShippingMode).
+	ShippingKey *string `json:"shippingKey,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove

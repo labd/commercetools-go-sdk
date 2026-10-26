@@ -27,6 +27,8 @@ func (rb *ByProjectKeyDeploymentsRequestBuilder) WithKey(key string) *ByProjectK
 }
 
 /**
+*	The `manage_api_clients:{projectKey}` scope is required if the connector version uses commercetools managed API Client credentials.
+*
 *	Specific Error Codes:
 *	- [ConnectorStagedNotPreviewable](ctp:connect:type:ConnectorStagedNotPreviewableError)
 *	- [DeploymentUnsupportedRegion](ctp:connect:type:DeploymentUnsupportedRegionError)
@@ -34,8 +36,10 @@ func (rb *ByProjectKeyDeploymentsRequestBuilder) WithKey(key string) *ByProjectK
 *	- [DeploymentUnknownApplicationConfigurationKey](ctp:connect:type:DeploymentUnknownApplicationConfigurationKeyError)
 *	- [DeploymentInvalidType](ctp:connect:type:DeploymentInvalidTypeError)
 *	- [DeploymentProductionDeactivated](ctp:connect:type:DeploymentProductionDeactivatedError)
-*	|
-*	The `manage_api_clients:{projectKey}` scope is required if you use automatically generated API Client credentials.
+*	- [DeploymentInvalidRetryPolicy](ctp:connect:type:DeploymentInvalidRetryPolicyError)
+*	- [DeploymentRetryPolicyOverrideNotAllowed](ctp:connect:type:DeploymentRetryPolicyOverrideNotAllowedError)
+*
+*	The `manage_api_clients:{projectKey}` scope is required if you use [automatically generated API Client credentials](/connect/modify-connector).
 *
  */
 func (rb *ByProjectKeyDeploymentsRequestBuilder) Post(body DeploymentDraft) *ByProjectKeyDeploymentsRequestMethodPost {

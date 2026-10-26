@@ -41,7 +41,7 @@ type Review struct {
 	IncludedInStatistics bool `json:"includedInStatistics"`
 	// Rating of the Product or Channel.
 	Rating *int `json:"rating,omitempty"`
-	// State of the Review. Used for approval processes, see [Review approval process](/tutorials/review-ratings#review-approval-process) for details.
+	// State of the Review. Used for approval processes, see [Review approval process](/guides/review-ratings#review-approval-process) for details.
 	State *StateReference `json:"state,omitempty"`
 	// Customer who created the Review.
 	Customer *CustomerReference `json:"customer,omitempty"`
@@ -69,7 +69,7 @@ type ReviewDraft struct {
 	Text *string `json:"text,omitempty"`
 	// Identifies the target of the Review. Can be a [Product](ctp:api:type:Product) or a [Channel](ctp:api:type:Channel), specified as [ProductResourceIdentifier](ctp:api:type:ProductResourceIdentifier) or [ChannelResourceIdentifier](ctp:api:type:ChannelResourceIdentifier), respectively.
 	Target interface{} `json:"target,omitempty"`
-	// State of the Review. Used for approval processes, see [Review approval process](/tutorials/review-ratings#review-approval-process) for details.
+	// State of the Review. Used for approval processes, see [Review approval process](/guides/review-ratings#review-approval-process) for details.
 	State *StateResourceIdentifier `json:"state,omitempty"`
 	// Rating of the targeted Product or Channel.
 	// This rating can represent the number of stars, a percentage, or a like (+1)/dislike (-1).

@@ -393,6 +393,12 @@ func mapDiscriminatorRecurringOrderUpdateAction(input interface{}) (RecurringOrd
 	}
 
 	switch discriminator {
+	case "requestOrderNow":
+		obj := RecurringOrderRequestOrderNowAction{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "setCustomField":
 		obj := RecurringOrderSetCustomFieldAction{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -797,6 +803,41 @@ func (obj RecurringOrdersOnlyDraft) MarshalJSON() ([]byte, error) {
 		Action string `json:"type"`
 		*Alias
 	}{Action: "RecurringOrdersOnly", Alias: (*Alias)(&obj)})
+}
+
+/**
+*	Requests the creation of the next Order of the Recurring Order immediately, instead of waiting for `nextOrderAt`.
+*	The early Order consumes the upcoming occurrence: the number of Orders over time does not change, and the recurrence schedule does not shift.
+*
+*	The request is processed asynchronously. The response contains the updated Recurring Order with the original `nextOrderAt`. After the request is accepted, the [RecurringOrderNowRequested](ctp:api:type:RecurringOrderNowRequestedMessage) Message is generated.
+*	The Order is then created through the regular Recurring Order process, which generates the [OrderCreatedFromRecurringOrder](ctp:api:type:OrderCreatedFromRecurringOrderMessage) Message. Only after that, `lastOrderAt` and `nextOrderAt` are updated.
+*
+*	If the Order creation fails, the occurrence is not consumed and `nextOrderAt` remains unchanged.
+*
+*	Returns an [InvalidOperation](ctp:api:type:InvalidOperationError) error in the following situations:
+*
+*	- The Recurring Order is not active, has expired, or has not started yet.
+*	- There is no upcoming Order to bring forward, or the upcoming Order falls on or after `expiresAt`.
+*	- A [Skip Configuration](ctp:api:type:SkipConfiguration) still has Orders left to skip.
+*	- The Recurring Order is currently processing an Order, including one that awaits a Checkout payment.
+*	- Fewer days than the `minDaysBetweenOrders` value of the [RecurrencePolicy](ctp:api:type:RecurrencePolicy) have passed since `lastOrderAt`.
+*
+ */
+type RecurringOrderRequestOrderNowAction struct {
+	// Note recorded on the resulting [RecurringOrderNowRequested](ctp:api:type:RecurringOrderNowRequestedMessage) Message.
+	//
+	// If `reason` is longer than 256 characters, an [InvalidInput](ctp:api:type:InvalidInputError) error is returned.
+	Reason *string `json:"reason,omitempty"`
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj RecurringOrderRequestOrderNowAction) MarshalJSON() ([]byte, error) {
+	type Alias RecurringOrderRequestOrderNowAction
+	return json.Marshal(struct {
+		Action string `json:"action"`
+		*Alias
+	}{Action: "requestOrderNow", Alias: (*Alias)(&obj)})
 }
 
 /**

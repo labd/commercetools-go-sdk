@@ -239,10 +239,16 @@ type TaxRate struct {
 	Country string `json:"country"`
 	// State within the country, such as Texas in the United States.
 	// The value is case-sensitive and must use the same casing as the `state` value in the Cart `shippingAddress`.
+	//
+	// A TaxRate whose `state` is omitted does **not** act as a wildcard: it only matches a Cart whose `shippingAddress` also has no `state` value. To apply the same rate across states, either define an individual TaxRate for each state, or use the `region` field or a Custom Field on the shipping address as described in [Address matching](/learning-model-your-business-structure/model-your-taxes/tax-categories-and-tax-rates#address-matching).
 	State *string `json:"state,omitempty"`
 	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). The total of all subrates must equal the TaxRate `amount`.
 	// These subrates are used to calculate the `taxPortions` field of a [Cart](ctp:api:type:Cart) or [Order](ctp:api:type:Order) and the `taxedPrice` field of [LineItems](ctp:api:type:LineItem), [CustomLineItems](ctp:api:type:CustomLineItem), and [ShippingInfos](ctp:api:type:ShippingInfo).
 	SubRates []SubRate `json:"subRates"`
+	// Determines which of the net price and the tax amount the `taxRoundingMode` of the Cart or Order is applied to, when this TaxRate is included in the price. Ignored if `includedInPrice` is `false`.
+	//
+	// Always returned by the API. Can be omitted when a TaxRate is supplied as input, such as in [OrderImportDraft](ctp:api:type:OrderImportDraft), and then defaults to `Net`.
+	TaxRoundingTarget *TaxRoundingTarget `json:"taxRoundingTarget,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -285,6 +291,8 @@ type TaxRateDraft struct {
 	// State within the country, such as Texas in the United States.
 	// The value is case-sensitive and must use the same casing as the `state` value in the Cart `shippingAddress`. Empty strings are treated as if `state` was omitted.
 	//
+	// If `state` is omitted, the resulting TaxRate does **not** act as a wildcard: it only matches a Cart whose `shippingAddress` also has no `state` value. To apply the same rate across states, either define an individual TaxRate for each state, or use the `region` field or a Custom Field on the shipping address as described in [Address matching](/learning-model-your-business-structure/model-your-taxes/tax-categories-and-tax-rates#address-matching).
+	//
 	// If the provided combination of `country` and `state` exists for the TaxCategory, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	State *string `json:"state,omitempty"`
 	// Used when the total tax is a combination of multiple taxes (for example, local, state/provincial, and/or federal taxes). If `amount` is defined, the total of all subrates must equal `amount`.
@@ -294,6 +302,8 @@ type TaxRateDraft struct {
 	//
 	// If the provided key is used by another TaxRate in the TaxCategory, a [DuplicateField](ctp:api:type:DuplicateFieldError) error is returned.
 	Key *string `json:"key,omitempty"`
+	// Determines whether the `taxRoundingMode` of the Cart or Order is applied to the net price or the tax amount when this TaxRate is included in the price. The field is ignored if `includedInPrice` is `false`.
+	TaxRoundingTarget *TaxRoundingTarget `json:"taxRoundingTarget,omitempty"`
 }
 
 // MarshalJSON override to set the discriminator value or remove
@@ -319,6 +329,21 @@ func (obj TaxRateDraft) MarshalJSON() ([]byte, error) {
 	return json.Marshal(raw)
 
 }
+
+/**
+*	For a [TaxRate](ctp:api:type:TaxRate) that is included in the price, this value determines which of the two derived amounts the [RoundingMode](ctp:api:type:RoundingMode) set by `taxRoundingMode` is applied to. The other amount is the exact difference from the gross price, so `totalNet` plus `totalTax` on [TaxedPrice](ctp:api:type:TaxedPrice) always equals `totalGross`.
+*
+*	This field has no effect if `includedInPrice` is `false`. In that case, the net price is supplied exactly, so rounding the gross price and rounding the tax amount give the same result.
+*
+*	For more information, see [Tax rounding target](/api/carts-orders-overview#tax-rounding-target).
+*
+ */
+type TaxRoundingTarget string
+
+const (
+	TaxRoundingTargetNet TaxRoundingTarget = "Net"
+	TaxRoundingTargetTax TaxRoundingTarget = "Tax"
+)
 
 type TaxCategoryAddTaxRateAction struct {
 	// Value to append to the `rates` array.

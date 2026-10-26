@@ -238,7 +238,7 @@ type MyCartDraft struct {
 	ShippingMode *ShippingMode `json:"shippingMode,omitempty"`
 	// `code` of the existing [DiscountCodes](ctp:api:type:DiscountCode) to add to the Cart.
 	DiscountCodes []string `json:"discountCodes"`
-	// Used for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Used for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	// If used for [Create Cart in Store](ctp:api:endpoint:/{projectKey}/in-store/me/carts:POST), the provided country must be one of the [Store's](ctp:api:type:Store) `countries`.
 	Country *string `json:"country,omitempty"`
 	// Language of the Cart. Must be one of the languages supported by the [Project](ctp:api:type:Project).
@@ -886,7 +886,7 @@ type MyLineItemDraft struct {
 	// Used to identify [Inventory entries](/api/projects/inventory) that must be reserved.
 	// The Channel must have the `InventorySupply` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	SupplyChannel *ChannelResourceIdentifier `json:"supplyChannel,omitempty"`
-	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/api/pricing-and-discounts-apis-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	//
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set,
@@ -1858,7 +1858,7 @@ func (obj MyCartAddItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 /**
 *	If the Cart contains a [LineItem](ctp:api:type:LineItem) for a Product Variant with the same [LineItemMode](ctp:api:type:LineItemMode), [Custom Fields](ctp:api:type:CustomFields), supply and distribution channel, then only the quantity of the existing Line Item is increased.
 *	If [LineItem](ctp:api:type:LineItem) `shippingDetails` is set, it is merged. All addresses will be present afterwards and, for address keys present in both shipping details, the quantity will be summed up.
-*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is set as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
 *	If the Tax Rate is not set, a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
@@ -1889,7 +1889,7 @@ type MyCartAddLineItemAction struct {
 	//
 	// Optional for backwards compatibility reasons.
 	AddedAt *time.Time `json:"addedAt,omitempty"`
-	// Used to [select](/api/pricing-and-discounts-overview#line-item-price-selection) a Product Price.
+	// Used to [select](/api/pricing-and-discounts-apis-overview#line-item-price-selection) a Product Price.
 	// The Channel must have the `ProductDistribution` [ChannelRoleEnum](ctp:api:type:ChannelRoleEnum).
 	// If the Cart is bound to a [Store](ctp:api:type:Store) with `distributionChannels` set, the Channel must match one of the Store's distribution channels.
 	DistributionChannel *ChannelResourceIdentifier `json:"distributionChannel,omitempty"`
@@ -2094,7 +2094,7 @@ func (obj MyCartRemoveItemShippingAddressAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	The [LineItem](ctp:api:type:LineItem) price is updated as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
  */
 type MyCartRemoveLineItemAction struct {
@@ -2141,7 +2141,8 @@ func (obj MyCartRemovePaymentAction) MarshalJSON() ([]byte, error) {
 }
 
 type MyCartSetBillingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If omitted, any existing value is removed.
 	Address *BaseAddress `json:"address,omitempty"`
 }
@@ -2324,7 +2325,7 @@ func (obj MyCartSetLineItemCustomTypeAction) MarshalJSON() ([]byte, error) {
 }
 
 /**
-*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+*	Setting a distribution channel for a [LineItem](ctp:api:type:LineItem) can lead to an updated `price` as described in [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 *
  */
 type MyCartSetLineItemDistributionChannelAction struct {
@@ -2415,7 +2416,7 @@ func (obj MyCartSetLocaleAction) MarshalJSON() ([]byte, error) {
 /**
 *	Setting the shipping address also sets the [TaxRate](ctp:api:type:TaxRate) of Line Items and calculates the [TaxedPrice](ctp:api:type:TaxedPrice).
 *
-*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection),
+*	If a matching price cannot be found for the given shipping address during [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection),
 *	a [MissingTaxRateForCountry](ctp:api:type:MissingTaxRateForCountryError) error is returned.
 *
 *	If you want to allow shipping to states inside a country that are not explicitly covered by a TaxRate,
@@ -2424,7 +2425,8 @@ func (obj MyCartSetLocaleAction) MarshalJSON() ([]byte, error) {
 *
  */
 type MyCartSetShippingAddressAction struct {
-	// Value to set.
+	// Value to set. It replaces the entire address, including [Custom Fields](ctp:api:type:CustomFields) if `custom` is not included. To preserve Custom Fields, include the `custom` object in the request.
+	//
 	// If not set, the shipping address is unset, and the `taxedPrice` and `taxRate` are unset in all Line Items.
 	Address *BaseAddress `json:"address,omitempty"`
 }

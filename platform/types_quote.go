@@ -82,6 +82,9 @@ type Quote struct {
 	ItemShippingAddresses []Address `json:"itemShippingAddresses"`
 	// Discounts that are only valid for the Quote and cannot be associated to any other Cart or Order.
 	DirectDiscounts []DirectDiscount `json:"directDiscounts"`
+	// - If `true`, only [Direct Discounts](ctp:api:type:DirectDiscount) apply to the Quote. Matching [Cart Discounts](ctp:api:type:CartDiscount) are ignored, and Discount Codes cannot be added.
+	// - If `false`, Cart Discounts, Discount Codes, and Direct Discounts apply to the Quote.
+	DirectDiscountsIgnoreCartDiscounts *bool `json:"directDiscountsIgnoreCartDiscounts,omitempty"`
 	// Custom Fields on the Quote.
 	Custom *CustomFields `json:"custom,omitempty"`
 	// Predefined states tracking the status of the Quote.

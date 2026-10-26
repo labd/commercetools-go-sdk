@@ -19,6 +19,13 @@ func (rb *ByProjectKeyDeploymentsByIDRequestBuilder) Logs() *ByProjectKeyDeploym
 		client:     rb.client,
 	}
 }
+func (rb *ByProjectKeyDeploymentsByIDRequestBuilder) Revisions() *ByProjectKeyDeploymentsByIDRevisionsRequestBuilder {
+	return &ByProjectKeyDeploymentsByIDRevisionsRequestBuilder{
+		projectKey: rb.projectKey,
+		id:         rb.id,
+		client:     rb.client,
+	}
+}
 func (rb *ByProjectKeyDeploymentsByIDRequestBuilder) Get() *ByProjectKeyDeploymentsByIDRequestMethodGet {
 	return &ByProjectKeyDeploymentsByIDRequestMethodGet{
 		url:    fmt.Sprintf("/%s/deployments/%s", rb.projectKey, rb.id),

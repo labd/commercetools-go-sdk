@@ -58,6 +58,8 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodPost) WithHeaders(headers h
 /**
 *	Either the [scope](/api/scopes) `manage_products:{projectKey}` or `manage_categories:{projectKey}` is required.
 *
+*	The response status code is `200 OK`, unless the request contains a [Set Stores with Descendants](ctp:api:type:CategorySetStoresWithDescendantsAction), [Add Store with Descendants](ctp:api:type:CategoryAddStoreWithDescendantsAction), or [Remove Store with Descendants](ctp:api:type:CategoryRemoveStoreWithDescendantsAction) update action. In that case, the API responds with `202 Accepted`, and the returned Category contains a `warnings` field with a [StoreSettingOngoing](ctp:api:type:StoreSettingOngoingWarning) Warning.
+*
  */
 func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodPost) Execute(ctx context.Context) (result *Category, err error) {
 	data, err := serializeInput(rb.body)
@@ -88,6 +90,12 @@ func (rb *ByProjectKeyCategoriesKeyByKeyRequestMethodPost) Execute(ctx context.C
 	defer resp.Body.Close()
 	switch resp.StatusCode {
 	case 200:
+		err = json.Unmarshal(content, &result)
+		if err != nil {
+			return nil, err
+		}
+		return result, nil
+	case 202:
 		err = json.Unmarshal(content, &result)
 		if err != nil {
 			return nil, err

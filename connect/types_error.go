@@ -216,6 +216,24 @@ func mapDiscriminatorErrorObject(input interface{}) (ErrorObject, error) {
 			return nil, err
 		}
 		return obj, nil
+	case "DeploymentRollbackNotAllowed":
+		obj := DeploymentRollbackNotAllowedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentInvalidRetryPolicy":
+		obj := DeploymentInvalidRetryPolicyError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
+	case "DeploymentRetryPolicyOverrideNotAllowed":
+		obj := DeploymentRetryPolicyOverrideNotAllowedError{}
+		if err := decodeStruct(input, &obj); err != nil {
+			return nil, err
+		}
+		return obj, nil
 	case "DeploymentApplicationDoesNotExist":
 		obj := DeploymentApplicationDoesNotExistError{}
 		if err := decodeStruct(input, &obj); err != nil {
@@ -2699,6 +2717,231 @@ func (obj DeploymentProductionDeactivatedError) Error() string {
 		return obj.Message
 	}
 	return "unknown DeploymentProductionDeactivatedError: failed to parse error response"
+}
+
+/**
+*	Returned when the target revision cannot be applied to the current Deployment.
+*
+*	The error is returned as a failed response to a Rollback DeploymentRevision request.
+*
+ */
+type DeploymentRollbackNotAllowedError struct {
+	// Identifies the reason why the rollback is not allowed.
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentRollbackNotAllowedError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentRollbackNotAllowedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentRollbackNotAllowedError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentRollbackNotAllowedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentRollbackNotAllowed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentRollbackNotAllowedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentRollbackNotAllowedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentRollbackNotAllowedError: failed to parse error response"
+}
+
+/**
+*	Returned when the `retryPolicy` of an application does not satisfy its validation rules.
+*
+*	The error is returned as a failed response to the [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request and to the [Redeploy](ctp:connect:type:DeploymentRedeployAction) update action.
+*
+ */
+type DeploymentInvalidRetryPolicyError struct {
+	// Identifies the reason why the retry policy is invalid.
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentInvalidRetryPolicyError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentInvalidRetryPolicyError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentInvalidRetryPolicyError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentInvalidRetryPolicyError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentInvalidRetryPolicy", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentInvalidRetryPolicyError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentInvalidRetryPolicyError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentInvalidRetryPolicyError: failed to parse error response"
+}
+
+/**
+*	Returned when a `retryPolicy` override is submitted for an application that is not of type `event`.
+*
+*	The error is returned as a failed response to the [Create a Deployment](ctp:connect:endpoint:/{projectKey}/deployments:POST) request and to the [Redeploy](ctp:connect:type:DeploymentRedeployAction) update action.
+*
+ */
+type DeploymentRetryPolicyOverrideNotAllowedError struct {
+	// `"Retry policy override is only allowed for event applications. Application \"$applicationName\" is not of type \"event\"."`
+	Message string `json:"message"`
+	// Error-specific additional fields.
+	ExtraValues map[string]interface{} `json:"-"`
+}
+
+// UnmarshalJSON override to deserialize correct attribute types based
+// on the discriminator value
+func (obj *DeploymentRetryPolicyOverrideNotAllowedError) UnmarshalJSON(data []byte) error {
+	type Alias DeploymentRetryPolicyOverrideNotAllowedError
+	if err := json.Unmarshal(data, (*Alias)(obj)); err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(data, &obj.ExtraValues); err != nil {
+		return err
+	}
+	delete(obj.ExtraValues, "code")
+	delete(obj.ExtraValues, "message")
+
+	return nil
+}
+
+// MarshalJSON override to set the discriminator value or remove
+// optional nil slices
+func (obj DeploymentRetryPolicyOverrideNotAllowedError) MarshalJSON() ([]byte, error) {
+	type Alias DeploymentRetryPolicyOverrideNotAllowedError
+	data, err := json.Marshal(struct {
+		Action string `json:"code"`
+		*Alias
+	}{Action: "DeploymentRetryPolicyOverrideNotAllowed", Alias: (*Alias)(&obj)})
+	if err != nil {
+		return nil, err
+	}
+
+	raw := make(map[string]interface{})
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return nil, err
+	}
+
+	for key, value := range obj.ExtraValues {
+		raw[key] = value
+	}
+
+	return json.Marshal(raw)
+
+}
+
+func (obj *DeploymentRetryPolicyOverrideNotAllowedError) DecodeStruct(src map[string]interface{}) error {
+	{
+		obj.ExtraValues = make(map[string]interface{})
+		for key, value := range src {
+			//
+			if key != "code" {
+				obj.ExtraValues[key] = value
+			}
+		}
+	}
+	return nil
+}
+
+func (obj DeploymentRetryPolicyOverrideNotAllowedError) Error() string {
+	if obj.Message != "" {
+		return obj.Message
+	}
+	return "unknown DeploymentRetryPolicyOverrideNotAllowedError: failed to parse error response"
 }
 
 /**

@@ -170,8 +170,11 @@ type Attribution struct {
 type AttributionSource string
 
 const (
-	AttributionSourceImport AttributionSource = "Import"
-	AttributionSourceExport AttributionSource = "Export"
+	AttributionSourceImport             AttributionSource = "Import"
+	AttributionSourceExport             AttributionSource = "Export"
+	AttributionSourceIntakeAgent        AttributionSource = "IntakeAgent"
+	AttributionSourcePromotionsAgent    AttributionSource = "PromotionsAgent"
+	AttributionSourceManagedCommerceMCP AttributionSource = "ManagedCommerceMCP"
 )
 
 /**
@@ -629,7 +632,7 @@ type Price struct {
 	ValidFrom *time.Time `json:"validFrom,omitempty"`
 	// Date and time until this Price is valid. Prices that are no longer valid are not automatically removed, but they can be [removed](ctp:api:type:ProductRemovePriceAction) if necessary.
 	ValidUntil *time.Time `json:"validUntil,omitempty"`
-	// Set if a [ProductDiscount](ctp:api:type:ProductDiscount) applies. When present, the API uses the DiscountedPrice value for [Line Item price selection](/api/pricing-and-discounts-overview#line-item-price-selection).
+	// Set if a [ProductDiscount](ctp:api:type:ProductDiscount) applies. When present, the API uses the DiscountedPrice value for [Line Item price selection](/api/pricing-and-discounts-apis-overview#line-item-price-selection).
 	Discounted *DiscountedPrice `json:"discounted,omitempty"`
 	// Present if different Prices for certain [LineItem](ctp:api:type:LineItem) quantities have been specified.
 	//
@@ -1161,6 +1164,7 @@ const (
 	ReferenceTypeIdExtension             ReferenceTypeId = "extension"
 	ReferenceTypeIdInventoryEntry        ReferenceTypeId = "inventory-entry"
 	ReferenceTypeIdKeyValueDocument      ReferenceTypeId = "key-value-document"
+	ReferenceTypeIdMcpServer             ReferenceTypeId = "mcp-server"
 	ReferenceTypeIdOrder                 ReferenceTypeId = "order"
 	ReferenceTypeIdOrderEdit             ReferenceTypeId = "order-edit"
 	ReferenceTypeIdPaymentMethod         ReferenceTypeId = "payment-method"
@@ -1426,7 +1430,7 @@ func mapDiscriminatorResourceIdentifier(input interface{}) (ResourceIdentifier, 
 
 /**
 *	Scoped Price is contained in a [ProductVariant](ctp:api:type:ProductVariant) which is returned in response to a
-*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/api/pricing-and-discounts-overview#scoped-price-search) is used.
+*	[Product Projection Search](ctp:api:type:ProductProjectionSearchFilterScopedPrice) request when [Scoped Price Search](/api/pricing-and-discounts-apis-overview#scoped-price-search) is used.
 *
  */
 type ScopedPrice struct {
