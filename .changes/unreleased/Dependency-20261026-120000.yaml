@@ -1,3 +1,0 @@
-kind: Dependency
-body: Update dependencies (golang.org/x/oauth2 v0.37.0, golang.org/x/tools v0.52.0, testify v1.12.1)
-time: 2026-10-26T12:00:00.000000+01:00
